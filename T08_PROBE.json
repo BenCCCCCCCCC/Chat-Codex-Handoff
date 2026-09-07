@@ -1,0 +1,6 @@
+{
+  "task_id": "T08-001",
+  "purpose": "Validate minimum Chat-Codex handoff",
+  "status": "READY",
+  "scope": "DISPOSABLE_TEST_ONLY"
+}
