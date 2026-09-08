@@ -1,60 +1,99 @@
 # Active Handoff
 
+Updated: 2026-09-09  
+Role: MASTER
+
 ## Phase
 
-Source Maintenance Probe 01 — Private GitHub Canonical State.
+Post-Source-Maintenance-Probe hardening and combined-workflow preparation.
 
 ## Goal
 
-Test whether two stable files in a private GitHub repository can become the canonical source for frequently changing MASTER state, avoiding repeated ChatGPT Project Source delete/upload/version-suffix maintenance.
+Keep dynamic MASTER state out of repeated ChatGPT Project Source upload/delete cycles while preserving a lightweight Chat ↔ Codex workflow and user control.
 
-## Completed Before This Probe
+## Completed
 
 - Productization Spike 01 = PASS.
 - Official Existing-Chat → Codex Probe 01 = PASS.
 - Official Existing-Chat → Codex Probe 02 = PASS.
-- Preferred workflow established as official Chat → Codex context entry plus the existing Codex → Chat thin helper.
-- Custom Chat → Codex helper moved to Future Optional.
+- Source Maintenance Probe 01 = PASS.
+- Private GitHub repository is live and readable through the connected GitHub path.
+- MASTER independently read the canonical files and exact commit.
+- Dedicated dynamic-state branch `meta/master-state` has been created.
+- `docs/master/CURRENT_STATE.md` is updated on the dedicated state branch.
 
-## What This Probe Is Testing
+## Current Product Direction
 
-- Create `docs/master/CURRENT_STATE.md` and `docs/master/HANDOFF.md` at stable paths.
-- Commit only those files.
-- Create one private GitHub repository without a naming or remote collision.
-- Push only `prototype/lightweight-handoff-v0.1`.
-- Let MASTER recover the correct current state from GitHub without adding or deleting a Project Source.
+Use:
+
+`official existing Chat → Codex`
+→ `local repo execution`
+→ `Delivery Packet + Review Evidence`
+→ `Stop Hook materialization`
+→ `handoff.ps1`
+→ `origin MASTER`
+→ `manual paste / send`
+
+Do not build a second custom Chat → Codex bridge while the official path is sufficient.
+
+## Dynamic State Policy
+
+Authoritative dynamic state lives on private GitHub branch:
+
+`meta/master-state`
+
+Canonical paths:
+
+- `docs/master/CURRENT_STATE.md`
+- `docs/master/HANDOFF.md`
+
+Standing narrow permission:
+
+- MASTER may update these two canonical docs on `meta/master-state` as normal project maintenance.
+- This permission does not extend to product/code branch pushes.
+- No merge, force push, release, public visibility change, paid API use, or scope expansion is implied.
+
+Reason for the dedicated branch:
+
+A docs-only update on the active code branch could later push intervening code commits as part of normal Git history. Keeping state on a separate branch preserves the least-privilege boundary while keeping the user-facing workflow simple.
 
 ## Verified
 
-- Active repo: `F:\Chat-Codex-Handoff\validation-repo`.
-- Active branch: `prototype/lightweight-handoff-v0.1`.
-- Starting HEAD: `a48446f0572ecb5e94d35783dd1ace0eecb7c1ec`.
-- Existing unrelated untracked files are preserved and excluded from this probe's commit.
-- Project Source maintenance churn is a real observed cost.
+- Source Maintenance Probe 01 remote read = PASS.
+- Project Source add/delete for that update = 0.
+- wrong-version read = 0.
+- private repository = verified.
+- canonical state branch exists.
 
 ## Likely
 
-- Git commit/SHA identity and stable paths will provide a safer dynamic-state source than repeatedly versioning uploaded Project Source files.
+- One final Project Sources migration should be enough: keep stable bootstrap docs, remove versioned dynamic state/handoff snapshots, and add one stable pointer to the GitHub canonical state.
+- After that migration, future MASTER handoffs should no longer require routine Project Source maintenance.
 
-## Unknown
+## Unknown / Validation Gates
 
-- Whether MASTER can directly read both canonical files from the new private GitHub repository.
-- Whether the remote retrieval returns the exact intended commit without version confusion.
-- Final probe acceptance until MASTER performs that read.
+- A brand-new MASTER must still be tested against the one-time stable pointer.
+- A real modification task must still test the complete official Chat → Codex + existing Codex → Chat workflow.
+- Real Must Fix / Correction Packet remains unverified.
 
-## Current User Authorization Boundary
+## Next Smallest Steps
 
-Authorized only for this probe: create one private GitHub repository, add it as `origin`, create one focused commit containing the two canonical state files, and push the current productization branch once.
+Parallel preparation is allowed until validation is required:
 
-Not authorized: public visibility, merge, force push, other branches, tags, release, GitHub Actions, automatic future pushes, product feature expansion, or destructive remote changes.
+1. Prepare one-time Project Sources migration / stable pointer.
+2. Prepare Combined Lightweight Workflow Dogfood 01.
 
-## Next Smallest Step
-
-After the bounded push, return a complete Delivery Packet through `handoff-kit\handoff.ps1`; MASTER then reads both canonical paths from GitHub and decides PASS or FAIL.
+The next user-facing validation gate is the one-time Project Sources migration followed by a fresh-MASTER recovery check.
 
 ## Do Not Start Yet
 
-- Another productization spike.
-- Custom Chat → Codex helper development.
-- Project Source CRUD automation or history migration.
-- Merge, release, Actions, automatic push, public repository, GUI, daemon, Safe Prefill, automatic paste/send, or full bridge work.
+- Project Source CRUD automation
+- Browser/DOM/CDP automation
+- GUI / daemon / server
+- Safe Prefill
+- auto paste / auto send
+- full bridge
+- Work / multi-model / Open WebUI
+- paid API
+- code push without explicit policy/authorization
+- merge / force push / public release
