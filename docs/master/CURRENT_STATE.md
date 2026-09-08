@@ -5,52 +5,30 @@ Role: MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**Post-Alpha Internal Validation / Alpha Surface Freeze — Dogfood 02 READY**
+**Post-Alpha Internal Validation — Dogfood 02 return-target failure**
 
 The project remains in product validation + technical feasibility validation + bounded dogfooding. It has not entered Beta or full application development.
-
-Current status:
-
-- Gate 4 = **PIVOT**
-- Productization Spike 01 = **PASS**
-- Official Existing-Chat → Codex Probe 01 = **PASS**
-- Official Existing-Chat → Codex Probe 02 = **PASS**
-- Source Maintenance Probe 01 = **PASS**
-- Combined Lightweight Workflow Dogfood 01 = **FULL PASS**
-- Fresh MASTER Recovery Probe 01 = **PASS**
-- Post-Alpha Internal Review = **COMPLETE**
-- Repository / State Integrity Audit 01 = **PASS**
-- Pre-Gate5 Readiness Audit = **NOT READY**
-
-Alpha v0.1 remains PASS. No Spike 02 implementation is authorized.
 
 ## Active Repo / Version
 
 - repo: `F:\Chat-Codex-Handoff\validation-repo`
 - active code branch: `prototype/lightweight-handoff-v0.1`
-- local code HEAD last reported by Codex: `ddb74cbefeda621108ec209ce4fbc3b3f463329f`
+- local code HEAD last reported by Codex before Dogfood 02: `ddb74cbefeda621108ec209ce4fbc3b3f463329f`
 - pushed code-branch HEAD: `869414c77d227fe2f1675c7cfa08b04250520279`
 - private remote: `BenCCCCCCCCC/Chat-Codex-Handoff`
-- repository default branch: `prototype/lightweight-handoff-v0.1`
 
-The local/pushed split is intentional under the current no-code-push boundary. Any product/code push requires a separate user decision.
+No product/code push, merge, paid API use, or public release is authorized.
 
 ## Dynamic State Authority
-
-Authoritative dynamic MASTER state:
 
 - repository: `BenCCCCCCCCC/Chat-Codex-Handoff`
 - ref: `meta/master-state`
 - `docs/master/CURRENT_STATE.md`
 - `docs/master/HANDOFF.md`
 
-Project Sources remain low-frequency bootstrap material.
+## Product Direction
 
-MASTER has standing narrow permission to maintain only these two canonical docs on `meta/master-state`. This does not authorize product/code push, merge, force push, public release, paid API use, or scope expansion.
-
-## Current Product Direction
-
-Use the existing composed workflow unchanged:
+Preferred workflow remains:
 
 `official existing ChatGPT chat → Codex`
 → `local repo execution`
@@ -61,147 +39,119 @@ Use the existing composed workflow unchanged:
 → `manual paste / send`
 → `delta review`
 
-The product is no longer framed as “connecting Chat and Codex.” The official Existing Chat → Codex entry already covers initial context handoff for the validated cases.
+No full bridge, auto paste/send, GUI, daemon, installer, or custom Chat → Codex helper is justified.
 
-Remaining differentiated value is deliberately narrow:
+## Latest Real Validation — Dogfood 02
 
-- low configuration cost;
-- correct repo / target binding;
-- evidence-ready Codex → Chat return;
-- reduced manual copy/search/re-explanation;
-- fail-closed behavior;
-- preserved user control over paste/send.
+A real Dogfood 02 task was started to turn the validated Alpha into a clearer product skeleton / root README without adding product behavior.
 
-Do not build a second custom Chat → Codex bridge while the official path remains sufficient.
+During the Codex → Chat return step, a real failure was observed:
+
+- clipboard / pasted Delivery Packet content: **correct**;
+- opened Chat target: **incorrect**;
+- `handoff.ps1` opened the previous MASTER Chat instead of the current MASTER Chat.
+
+This is not a synthetic test and not a Future Optional UX issue. It violates the core correctness requirement that the return target must be the correct origin Chat.
+
+Dogfood 02 end-to-end status:
+
+> **BLOCKED / RETURN TARGET FAIL**
+
+Do not mark Dogfood 02 PASS until the target-binding problem is resolved and the real return path is re-verified.
 
 ## Verified
 
-- Official Existing Chat context supports a real bounded repo modification task.
-- Dogfood 01 full Task Packet copy = 0.
-- Dogfood 01 prompt rewrite = 0.
-- Dogfood 01 wrong repo / target = 0.
-- Dogfood 01 missing-review-evidence follow-up = 0.
-- Dogfood 01 Codex → Chat manual Delivery Packet copy = 0 in the confirmed return run.
-- `CLIPBOARD_EXACT=True` in the confirmed return run.
-- no auto paste = verified.
-- no auto send = verified.
-- Fresh MASTER recovery using stable pointer + GitHub canonical state = PASS.
-- Alpha implementation remains repo-local and fail-closed for its validated cases.
-- The private repository currently has exactly two branches relevant to this project state: `prototype/lightweight-handoff-v0.1` and `meta/master-state`.
-- Repository / State Integrity Audit 01: `meta/master-state` has merge base `869414c77d227fe2f1675c7cfa08b04250520279`, is ahead only by MASTER-state maintenance commits, and the branch compare shows changes only in `docs/master/CURRENT_STATE.md` and `docs/master/HANDOFF.md`.
-- No product-code branch mutation was introduced by MASTER dynamic-state maintenance.
+- Delivery Packet materialization / clipboard transport still worked in this run.
+- The wrong-target symptom is real: the helper opened the previous MASTER Chat instead of the current MASTER.
+- Current Alpha binding is repo-local and persistent under Git state.
+- Current `configure.ps1` intentionally refuses implicit rebinding when a different origin Chat is already bound.
+- Existing Alpha has no automatic mechanism to update the origin binding when MASTER transitions to a new Chat.
+- Earlier Fresh MASTER Recovery validated dynamic-state recovery, but it did not validate migration of the repo-local origin Chat binding.
 
-## Likely
+## Likely Root Cause
 
-- Best current product shape remains official Chat → Codex + thin local Codex → Chat return, not a standalone bridge.
-- Additional value, if real, is more likely to appear on evidence-heavy or multi-round tasks than on synthetic one-shot probes.
-- New feature work now would outpace validated user value.
+The persisted repo-local origin binding still points to the previous MASTER Chat. When the new MASTER was created, canonical state recovered correctly, but the handoff binding remained unchanged.
 
-## Unknown / Remaining Validation
-
-- Real Must Fix / Correction Packet value.
-- Net benefit on additional realistic tasks.
-- Existing Chat long-task refresh/synchronization behavior; current official material confirms adding an existing Chat but does not define automatic refresh after later originating-Chat messages.
-- Whether stale same-repo Stop metadata ever becomes a real operational failure.
-- External-user installability, comprehension, sustained use, and willingness to keep the workflow.
-
-## Observation Risks — Not Current Must Fix
-
-### Same-repo packet freshness
-
-The Stop Hook records `captured_at`, but current `handoff.ps1` has no explicit consumed/freshness token. No stale-packet misdelivery has been observed.
-
-Decision: observe naturally; do not manufacture a test or implementation.
-
-### Existing Chat refresh semantics
-
-Official documentation does not establish whether later messages from the originating Chat automatically refresh into an already-created Codex chat.
-
-Decision: observe naturally on a longer real task; do not create a standalone probe solely for coverage.
-
-## Repository / State Integrity Audit 01
-
-**PASS.**
-
-Findings:
-
-- only the product branch and dedicated MASTER-state branch are present;
-- product remote HEAD remains `869414c77d227fe2f1675c7cfa08b04250520279`;
-- MASTER-state branch remains separated from product code;
-- compare from product branch to `meta/master-state` changes only the two canonical MASTER docs;
-- no accidental product/code push, merge, or branch proliferation was found.
-
-## Pre-Gate5 Readiness Audit
-
-**NOT READY.**
-
-Reason:
-
-- the original Validation Plan allows Gate 5 only after Gate 4 shows clear benefit;
-- Gate 4 formally ended in PIVOT;
-- the composed Alpha workflow has one real combined modification-task FULL PASS, which is strong feasibility evidence but not enough evidence of repeated product value;
-- real multi-round Correction Packet value remains unverified;
-- external-user value remains unverified by definition.
-
-Do not invent a task count or KPI to force Gate 5.
-
-The next decision toward Gate 5 should occur only after natural real-task evidence shows repeated net benefit or repeated friction. At that point MASTER must stop for the user to choose among:
-
-- proceed toward Gate 5 external validation;
-- Pivot thinner;
-- Stop further productization.
+This root cause is strongly supported by the current implementation design, but the exact local binding value should be confirmed during the bounded fix / re-verification step rather than guessed.
 
 ## Must Fix
 
-None.
+### MF-01 — Current MASTER target rebinding
+
+The product must provide a safe, explicit way to move an existing repo binding from an old MASTER Chat to the current MASTER Chat.
+
+Requirements for any fix:
+
+- explicit user action only;
+- validate the new URL with the existing strict HTTPS / exact `chatgpt.com` conversation-target rules;
+- no silent rebinding;
+- preserve fail-closed behavior;
+- no token / credential access;
+- no auto paste / send;
+- no UI automation;
+- focused Windows PowerShell 5.1 tests;
+- re-run the real Dogfood 02 return path after the fix.
+
+## Bounded Fix Candidate
+
+Smallest candidate:
+
+> add an explicit `-Rebind` (or equivalently explicit, clearly named) switch to `handoff-kit/configure.ps1`.
+
+Expected UX:
+
+```powershell
+.\handoff-kit\configure.ps1 -OriginChat '<current MASTER URL>' -Rebind
+```
+
+Behavior:
+
+- without `-Rebind`, a different existing binding continues to fail closed;
+- with `-Rebind`, after full URL/repo validation, replace the old binding with the new current MASTER target;
+- invalid rebind attempts must leave the previous binding unchanged;
+- no automatic target discovery.
+
+This is a product-code change and is outside the README-only Dogfood 02 task scope, so it requires the user's scope decision before implementation.
 
 ## User Decision Needed
 
-None until a real user-facing validation gate is reached.
+Approve or reject **Bounded Fix 01 — Explicit Current-MASTER Rebind**.
 
-## Next Smallest Step
+Approval would authorize local implementation + focused tests only. It would **not** authorize product/code push, merge, public release, paid use, GUI/daemon/full bridge, or any other feature expansion.
 
-### Combined Lightweight Workflow Dogfood 02
+## Correction Packet Status
 
-Status: **READY / WAITING FOR NATURAL REAL TASK**.
+A natural Must Fix has now occurred for the first time.
 
-Do not fabricate a product change or bug to create this task.
+However, because the required fix changes product code outside the README-only Dogfood 02 implementation scope, do not send a Correction Packet to Codex until the user approves this bounded scope expansion.
 
-When a real bounded task naturally exists, stop for the user because Desktop/Codex execution is a real validation gate, then use the existing workflow unchanged and record:
+If approved, this becomes the first real Correction Packet validation:
 
-- full Task Packet copy;
-- prompt rewrite;
-- missing-review-evidence follow-up;
-- wrong repo / target;
-- helper extra actions;
-- review rounds;
-- Codex → Chat manual packet copy;
-- Must Fix;
-- User Decision Needed;
-- stale/incorrect packet symptom, if any;
-- Existing Chat refresh friction, if any.
-
-If a genuine Must Fix naturally appears, validate:
-
-`MASTER delta review`
+`MASTER Must Fix`
 → `concise Correction Packet`
-→ `codex://threads/<session_id>`
-→ `same Codex task`
+→ same Codex task where practical
+→ bounded fix + tests
+→ `handoff.ps1` real re-verification
+→ current MASTER delta review
 
-If no Must Fix appears, finish normally and do not manufacture one.
+## Not Done
+
+- Bounded Fix 01 implementation.
+- current MASTER binding reconfiguration.
+- Dogfood 02 successful return to the current MASTER.
+- Dogfood 02 delta review / final PASS-or-FAIL decision.
+- real Correction Packet validation.
+- Gate 5 external validation.
 
 ## Do Not Start Yet
 
-- fabricated Dogfood task
-- new productization spike
+- silent / automatic rebind
+- auto paste / send
 - custom Chat → Codex helper
-- Project Source CRUD automation
-- browser/DOM/CDP automation
-- ChatGPT client-internal mutation
 - global launcher / installer
 - GUI / daemon / server
-- Safe Prefill
-- auto paste / auto send
+- browser/DOM/CDP automation
+- ChatGPT client-internal mutation
 - full bridge / companion app
 - Work / multi-model / Open WebUI
 - paid API
