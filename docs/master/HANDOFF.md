@@ -5,110 +5,96 @@ Role: MASTER
 
 ## Phase
 
-**Dogfood 02 — PARTIAL / MF-02 README verification-status correction pending**
+**Dogfood 02 — MF-02 fixed / post-turn return sequencing verification pending**
 
 ## Completed
 
-- Original Dogfood 02 root README task evidence fully reconciled.
-- Original commit: `a0bf8d74568a3a955126281991180f8641114bf9`.
-- Original scope: root `README.md` only.
-- MF-01 wrong-return-target fixed through explicit safe `-Rebind`.
-- Windows PowerShell 5.1 suite = 30/30 PASS.
+- Original Dogfood 02 root README task evidence reconciled.
+- Original commit `a0bf8d74568a3a955126281991180f8641114bf9` created root `README.md` only.
+- MF-01 wrong-return-target fixed with explicit safe `-Rebind`.
+- 30/30 Windows PowerShell 5.1 tests PASS for MF-01.
 - real handoff returned to current MASTER with `CLIPBOARD_EXACT=True`.
 - first natural Correction Packet = PASS.
 - Attached-Chat Identity Probe 01 = PASS as negative capability result.
-- final evidence reconciliation was read-only: files_changed=0, commit_created=0, push=0.
+- MF-02 stale README verification-status claim fixed locally.
 
-## Dogfood 02 Original README Review
+## Version
 
-The recovered root README satisfies the requested product-skeleton structure:
+- repo: `F:\Chat-Codex-Handoff\validation-repo`
+- branch: `prototype/lightweight-handoff-v0.1`
+- local HEAD: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`
+- pushed code HEAD: `869414c77d227fe2f1675c7cfa08b04250520279`
 
-- explains the user problem;
-- defines the Alpha shape;
-- documents the official Existing Chat → Codex entry plus thin local return helper;
-- gives minimal usage;
-- keeps no auto paste/send explicit;
-- distinguishes Verified / Not Yet Verified;
-- lists current boundaries / non-goals;
-- links technical instructions.
+No product/code push is authorized.
 
-The original task was real product work and remains within approved scope.
+## MF-02 Final Review
 
-## Must Fix — MF-02
+MF-02 changed root `README.md` only:
 
-Current root README contains stale evidence status.
+- stale `Not yet verified` Correction Packet bullet removed;
+- concise Verified bullet added describing the actual MF-01 Correction Packet + explicit safe `-Rebind` evidence;
+- commit scope = `README.md` only;
+- one insertion / one deletion;
+- `git diff --check` PASS;
+- no product tests run because behavior did not change;
+- no push / merge.
 
-Under `Not yet verified`, it still says that the concise Correction Packet path has not naturally occurred / been verified.
+MF-02 content = **PASS**.
 
-That is now false because MF-01 produced the first natural Must Fix and the Correction Packet path completed successfully.
+## Latest Transport Observation
 
-Classification: **Must Fix**, because the README's Verified / Not Yet Verified split is an original acceptance criterion and must reflect current evidence accurately.
+After the MF-02 Codex response, the user reported that Ctrl+V produced the previously copied MF-02 Correction Packet prompt rather than the latest Codex Delivery Packet.
 
-### Bounded correction
+Do not yet classify this as a new code Must Fix.
 
-Modify root `README.md` only:
+The prior run sequence included Codex opening the MASTER tab during its own execution, which means `handoff.ps1` was being invoked before that same turn's final assistant response existed.
 
-- add/move the Correction Packet path into `Verified`;
-- remove the stale `Not yet verified` bullet;
-- optionally add the explicit safe `-Rebind` verification in concise evidence-backed wording;
-- do not change product behavior;
-- do not modify PowerShell/scripts/tests;
-- run `git diff --check`;
-- local commit only;
-- no push.
+The Stop Hook materializes the final `last_assistant_message` only after the Codex turn ends. A helper invocation inside the same turn cannot transport that future final reply.
 
-No new user decision is needed: this correction is inside the original README-only scope.
+Therefore the next verification must use the intended sequence:
 
-## Dogfood 02 Status
+1. Codex final response fully ends;
+2. user opens a separate external Windows PowerShell 5.1 session;
+3. user runs `.\handoff-kit\handoff.ps1` from the repo;
+4. user performs no later clipboard copy;
+5. user Ctrl+V in the Chat opened by the helper.
 
-> **PARTIAL / one documentation-accuracy Must Fix remaining**
+## Expected Result
 
-Do not mark FULL PASS until MF-02 is returned and reviewed.
+The pasted text must be the latest `# Delivery Packet — Dogfood 02 Correction MF-02` response.
 
-## Next Smallest Step — MF-02 Correction Packet
+If this succeeds:
 
-Send to the same Dogfood 02 Codex task:
+- transport is functioning under the documented post-turn sequence;
+- no new MF is opened;
+- Dogfood 02 can be closed FULL PASS;
+- note the post-turn external invocation requirement as current Alpha usage behavior.
 
-```text
-Dogfood 02 Correction — MF-02 only.
+If it fails and still produces stale/wrong content:
 
-Final evidence reconciliation found one stale documentation claim in the root README.md.
+- open a new real Must Fix for packet freshness / return transport;
+- first inspect Stop metadata, packet path/content, timestamps/turn IDs, and clipboard-vs-packet state read-only;
+- do not change product code until root cause is established and the user approves any scope expansion.
 
-The README currently says under `Not yet verified` that the concise Correction Packet path has not yet naturally occurred / been verified. That is now false: MF-01 produced the first natural Must Fix, and the concise Correction Packet path completed successfully in the same Dogfood 02 task.
+## Must Fix
 
-Fix only the evidence-status wording in root README.md:
+None newly confirmed.
 
-1. Move/add the Correction Packet result into `Verified` using concise evidence-backed wording.
-2. Remove the stale `Not yet verified` Correction Packet bullet.
-3. Optionally mention that explicit safe `-Rebind` was verified if it can be stated concisely and accurately.
-4. Do not change any product behavior.
-5. Do not modify PowerShell files, tests, hooks, or other docs.
-6. Run `git diff --check`.
-7. Create one local commit containing only root README.md.
-8. Do not push or merge.
+## User Decision Needed
 
-Final Delivery Packet:
-- before/after HEAD
-- exact commit scope
-- exact README diff
-- git diff --check result
-- working-tree status
-- Tests Not Run
-- Unverified
-- Blocking Issues
-- User Decision Needed
+No product/scope decision now. User action is required only for the real post-turn Desktop validation described above.
 
-Do not add Future Optional items or expand scope.
-```
+## Next Smallest Step
 
-After the corrected packet returns to current MASTER, perform final delta review. If no further issue appears, close Dogfood 02 as FULL PASS.
+Run the **Post-Turn Handoff Sequencing Verification** from a separate Windows PowerShell session after the Codex response has ended.
 
 ## Gate 5
 
-Still NOT READY pending Dogfood 02 closure and subsequent product-value reassessment.
+Still NOT READY pending Dogfood 02 closure and later product-value reassessment.
 
 ## Do Not Start Yet
 
+- packet freshness/replay code change before sequencing verification
 - automatic/silent current-Chat discovery
 - browser/DOM/CDP automation
 - ChatGPT client-internal mutation
