@@ -75,11 +75,11 @@ For command details, safety checks, and the focused compatibility command, see t
 - A real documentation task completed the combined workflow end to end: official existing Chat context, local execution, evidence-ready Delivery Packet, Stop Hook materialization, `handoff.ps1`, exact clipboard content, the correct origin MASTER Chat, and manual paste/send.
 - That dogfood run required no full Task Packet copy, prompt rewrite, wrong-repository correction, missing-evidence follow-up, or manual copying of the Codex Delivery Packet.
 - The helper remains repo-local and fail-closed, and automatic paste/send is absent.
+- MF-01 was the first natural Must Fix: a concise Correction Packet returned to this same Codex task, and the explicit safe `-Rebind` passed focused tests and real current-MASTER handoff re-verification.
 
 ## Not yet verified
 
 - Repeated net benefit across additional naturally occurring real tasks.
-- The concise Correction Packet path back to the exact same Codex task; no real Must Fix has naturally required it yet.
 - Whether an already-created Codex task automatically receives later updates made in the origin ChatGPT Chat.
 - External validation beyond the current private dogfood workflow.
 
