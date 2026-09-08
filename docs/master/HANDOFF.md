@@ -5,122 +5,107 @@ Role: MASTER
 
 ## Phase
 
-**Dogfood 02 — MF-01 closed / Attached-Chat Identity Probe 01 closed / Final Evidence Reconciliation pending**
+**Dogfood 02 — PARTIAL / MF-02 README verification-status correction pending**
 
 ## Completed
 
-- Real Dogfood 02 wrong-target MF-01 observed.
-- Bounded Fix 01 approved and implemented locally.
-- Explicit safe `-Rebind` added to `configure.ps1`.
-- `handoff.ps1` unchanged.
-- Windows PowerShell 5.1 focused suite = `30/30` PASS.
-- Binding moved from previous MASTER to current MASTER.
-- Real handoff retry returned to current MASTER.
-- `CLIPBOARD_EXACT=True` and the packet was pasted into current MASTER.
-- First natural Correction Packet validation = PASS.
-- Attached-Chat Identity Probe 01 executed read-only with zero commands/files/browser automation.
+- Original Dogfood 02 root README task evidence fully reconciled.
+- Original commit: `a0bf8d74568a3a955126281991180f8641114bf9`.
+- Original scope: root `README.md` only.
+- MF-01 wrong-return-target fixed through explicit safe `-Rebind`.
+- Windows PowerShell 5.1 suite = 30/30 PASS.
+- real handoff returned to current MASTER with `CLIPBOARD_EXACT=True`.
+- first natural Correction Packet = PASS.
+- Attached-Chat Identity Probe 01 = PASS as negative capability result.
+- final evidence reconciliation was read-only: files_changed=0, commit_created=0, push=0.
 
-## Version
+## Dogfood 02 Original README Review
 
-- repo: `F:\Chat-Codex-Handoff\validation-repo`
-- branch: `prototype/lightweight-handoff-v0.1`
-- local HEAD: `5cd04c811fad6f59f530bfd146a36148bdece98a`
-- pushed code HEAD: `869414c77d227fe2f1675c7cfa08b04250520279`
+The recovered root README satisfies the requested product-skeleton structure:
 
-No product/code push is authorized.
+- explains the user problem;
+- defines the Alpha shape;
+- documents the official Existing Chat → Codex entry plus thin local return helper;
+- gives minimal usage;
+- keeps no auto paste/send explicit;
+- distinguishes Verified / Not Yet Verified;
+- lists current boundaries / non-goals;
+- links technical instructions.
 
-## MF-01 Final Review
+The original task was real product work and remains within approved scope.
 
-### Must Fix
+## Must Fix — MF-02
 
-None remaining.
+Current root README contains stale evidence status.
 
-### Verified
+Under `Not yet verified`, it still says that the concise Correction Packet path has not naturally occurred / been verified.
 
-- previous MASTER binding was the real root cause;
-- explicit `-Rebind` safely changes target;
-- conflict without `-Rebind` still fails closed;
-- invalid rebind preserves the previous binding;
-- same-target configure remains idempotent;
-- real handoff after rebind opens the current target;
-- clipboard packet remains exact;
-- no auto paste/send.
+That is now false because MF-01 produced the first natural Must Fix and the Correction Packet path completed successfully.
 
-### Correction Packet
+Classification: **Must Fix**, because the README's Verified / Not Yet Verified split is an original acceptance criterion and must reflect current evidence accurately.
 
-**PASS.**
+### Bounded correction
 
-This was the first natural Must Fix and the correction packet stayed bounded to MF-01 without repeating full project history.
+Modify root `README.md` only:
 
-## Attached-Chat Identity Probe 01
+- add/move the Correction Packet path into `Verified`;
+- remove the stale `Not yet verified` bullet;
+- optionally add the explicit safe `-Rebind` verification in concise evidence-backed wording;
+- do not change product behavior;
+- do not modify PowerShell/scripts/tests;
+- run `git diff --check`;
+- local commit only;
+- no push.
 
-Observed result:
+No new user decision is needed: this correction is inside the original README-only scope.
+
+## Dogfood 02 Status
+
+> **PARTIAL / one documentation-accuracy Must Fix remaining**
+
+Do not mark FULL PASS until MF-02 is returned and reviewed.
+
+## Next Smallest Step — MF-02 Correction Packet
+
+Send to the same Dogfood 02 Codex task:
 
 ```text
-attached_context_readable = Yes
-exact_conversation_id_from_attachment = No
-exact_canonical_url_from_attachment = No
-identity_source = None
-source_status = None
-commands_run = 0
-files_changed = 0
-browser_automation = 0
+Dogfood 02 Correction — MF-02 only.
+
+Final evidence reconciliation found one stale documentation claim in the root README.md.
+
+The README currently says under `Not yet verified` that the concise Correction Packet path has not yet naturally occurred / been verified. That is now false: MF-01 produced the first natural Must Fix, and the concise Correction Packet path completed successfully in the same Dogfood 02 task.
+
+Fix only the evidence-status wording in root README.md:
+
+1. Move/add the Correction Packet result into `Verified` using concise evidence-backed wording.
+2. Remove the stale `Not yet verified` Correction Packet bullet.
+3. Optionally mention that explicit safe `-Rebind` was verified if it can be stated concisely and accurately.
+4. Do not change any product behavior.
+5. Do not modify PowerShell files, tests, hooks, or other docs.
+6. Run `git diff --check`.
+7. Create one local commit containing only root README.md.
+8. Do not push or merge.
+
+Final Delivery Packet:
+- before/after HEAD
+- exact commit scope
+- exact README diff
+- git diff --check result
+- working-tree status
+- Tests Not Run
+- Unverified
+- Blocking Issues
+- User Decision Needed
+
+Do not add Future Optional items or expand scope.
 ```
 
-### Decision
-
-Treat this as **PASS / negative capability result**.
-
-The attached Chat provides context, but no exact supported conversation identity/URL was exposed in the validated Codex path.
-
-Therefore:
-
-- explicit `-Rebind` remains the Alpha boundary when MASTER changes;
-- do not implement automatic/silent target discovery;
-- do not use browser/DOM/CDP automation, ChatGPT internal files, tokens, credentials, or guessed URL reconstruction;
-- the user's preference to avoid manual URL transfer remains a UX goal only if a future supported identity source appears.
-
-## Dogfood 02 Final Evidence Gap
-
-The original root-README Delivery Packet was sent to the previous MASTER during the wrong-target incident and is unavailable in the current MASTER context.
-
-The current correction packet proves the correction and current return path, but it is not sufficient to fully review the original root `README.md` product-skeleton acceptance criteria.
-
-Known pre-correction HEAD:
-
-`a0bf8d74568a3a955126281991180f8641114bf9`
-
-Do not infer the original README quality from the later correction diff.
-
-## Next Smallest Step — Dogfood 02 Final Evidence Reconciliation
-
-Run in the same Dogfood 02 Codex task, read-only.
-
-Retrieve:
-
-1. current branch + HEAD;
-2. full current root `README.md`;
-3. `git show --name-status --stat a0bf8d74568a3a955126281991180f8641114bf9`;
-4. the full root `README.md` at that commit, or the exact diff for that commit if it created/changed the file;
-5. current working-tree status;
-6. `git diff --check` or equivalent no-diff verification showing reconciliation changed nothing.
-
-Rules:
-
-- no file modification;
-- no commit;
-- no push;
-- no browser automation;
-- no paid API;
-- no scope expansion.
-
-Return evidence only.
-
-After the evidence is pasted into current MASTER, MASTER will complete Dogfood 02 delta review and classify the whole task as PASS / PARTIAL / FAIL.
+After the corrected packet returns to current MASTER, perform final delta review. If no further issue appears, close Dogfood 02 as FULL PASS.
 
 ## Gate 5
 
-Still **NOT READY**.
+Still NOT READY pending Dogfood 02 closure and subsequent product-value reassessment.
 
 ## Do Not Start Yet
 
