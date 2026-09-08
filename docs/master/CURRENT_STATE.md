@@ -15,6 +15,9 @@ Current product status:
 - Official Existing-Chat → Codex Probe 02 = PASS
 - Source Maintenance Probe 01 = PASS
 - Combined Lightweight Workflow Dogfood 01 = FULL PASS
+- Fresh MASTER Recovery Probe 01 = PASS
+
+The Fresh MASTER Recovery gate is now closed. Dynamic Current State/Handoff maintenance is operationally using the stable Project Source pointer + GitHub canonical state.
 
 ## Active Repo
 
@@ -65,6 +68,8 @@ Project Sources are low-frequency bootstrap material, not the storage mechanism 
 - README documents the official ChatGPT → Codex entry, repo-local Codex → Chat return helper, no full-history-merge claim, and manual paste/send boundary.
 - Dogfood 01 Delivery Packet included sufficient Review Evidence; MASTER did not need a missing-evidence follow-up.
 - Dogfood 01 transport was explicitly re-verified: `handoff.ps1` loaded the persistent binding, resolved the materialized packet automatically, opened the origin Chat, reported no auto paste/send, and an independent in-process comparison returned `CLIPBOARD_EXACT=True`.
+- Fresh MASTER Recovery Probe 01 succeeded in a brand-new MASTER Chat using stable bootstrap Project Sources + `22_DYNAMIC_STATE_POINTER.md` + the connected GitHub canonical docs on `meta/master-state`.
+- The new MASTER recovered the current phase, repo/branch/HEAD, latest completed gates, product direction, authority source, and next-step policy without a new uploaded Current State/Handoff, filename-suffix guessing, or user re-explanation.
 
 ## Verified
 
@@ -83,6 +88,7 @@ Project Sources are low-frequency bootstrap material, not the storage mechanism 
 - Dogfood 01 clipboard content exactly matched the materialized packet in the confirmed transport run.
 - No auto paste / no auto send remains the product boundary.
 - Project Source maintenance migration is materially in place: stable pointer present, dynamic Current State no longer Project-backed.
+- Fresh MASTER Recovery Probe 01 = PASS: canonical state recovery works without user re-explanation or repeated dynamic Project Source uploads.
 
 ## Decisions
 
@@ -94,7 +100,9 @@ Project Sources are low-frequency bootstrap material, not the storage mechanism 
 - This standing permission does not authorize code push, merge, force push, public visibility, release, paid API use, or product scope expansion.
 - A dedicated state branch preserves the no-code-push boundary.
 - Combined Lightweight Workflow Dogfood 01 = FULL PASS with no Must Fix.
+- Fresh MASTER Recovery Probe 01 = PASS; dynamic state maintenance via pointer + GitHub canonical docs is operationally accepted.
 - Clipboard overwrite after handoff is recorded as Future Optional UX risk, not a current Must Fix.
+- Do not create a new implementation target merely to keep development moving.
 
 ## Must Fix
 
@@ -113,27 +121,33 @@ None at the current stage.
 
 ## Unknown / Validation Gates
 
-- Whether a brand-new MASTER can recover the correct current state using stable bootstrap sources + `22_DYNAMIC_STATE_POINTER.md` + GitHub canonical state without user re-explanation.
 - Whether a real Must Fix can be handled by a concise Correction Packet without background repetition.
 - Whether from-any-directory launch or clipboard protection is worth implementing.
+- Net benefit across additional real, more complex dogfood tasks.
 
 ## Not Done
 
-- Fresh MASTER Recovery Probe 01.
 - Real Must Fix / Correction Packet validation.
 - Global launcher, Safe Prefill, auto paste/send, full bridge, Gate 5 external validation.
 
 ## Next Smallest Step
 
-Run **Fresh MASTER Recovery Probe 01**.
+Do **not** start a new implementation spike.
 
-Validation goal:
+Use the current combined lightweight workflow on the next real bounded project task when one naturally exists:
 
-> A brand-new Chat in this same ChatGPT Project should recover the current phase, active repo/branch, authoritative state source, latest completed gates, current product direction, and next step by reading stable bootstrap Project Sources + `22_DYNAMIC_STATE_POINTER.md` and then the GitHub canonical files on `meta/master-state`, without asking the user to upload a newer Current State/Handoff or re-explain project history.
+`official existing Chat → Codex`
+→ `local repo execution`
+→ `Delivery Packet + Review Evidence`
+→ `Stop Hook materialization`
+→ `handoff.ps1`
+→ `origin MASTER`
+→ `manual paste / send`
+→ `delta review`
 
-This is a genuine validation gate. Do not pre-claim PASS.
+If a natural **Must Fix** appears, validate the concise Correction Packet on the same Codex task. If no Must Fix appears, finish the task without manufacturing a correction case.
 
-After that probe, continue only from the recovered canonical state. Do not create a new implementation target merely to keep development moving.
+Before any new implementation candidate is approved, run the required latest official capability check + GitHub collision check and tie the change to a newly observed user cost.
 
 ## Do Not Start Yet
 
