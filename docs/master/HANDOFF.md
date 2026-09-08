@@ -5,21 +5,20 @@ Role: MASTER
 
 ## Phase
 
-**Post-Dogfood-02 correction / Current-MASTER Binding UX Research 01**
+**Current-MASTER Binding UX Research 01 → Attached-Chat Identity Probe 01**
 
 ## Completed
 
-- Dogfood 02 naturally exposed wrong-return-target Must Fix MF-01.
-- User approved Bounded Fix 01.
-- First real Correction Packet sent to the same Codex task.
-- Codex confirmed the persisted binding pointed to the previous MASTER.
-- `configure.ps1` gained explicit `-Rebind`; `handoff.ps1` stayed unchanged.
-- Focused Windows PowerShell 5.1 suite passed `30/30` after an initial compatibility correction.
-- Binding was explicitly moved to the current MASTER.
-- Real handoff retry reported current origin target opened.
-- `CLIPBOARD_EXACT=True`.
-- User actually pasted the resulting Delivery Packet into the current MASTER Chat.
-- No push / merge / paid use / public release.
+- Dogfood 02 exposed real wrong-target MF-01.
+- Bounded Fix 01 approved and implemented locally.
+- `configure.ps1` now supports explicit safe `-Rebind`.
+- `handoff.ps1` unchanged.
+- Windows PowerShell 5.1 focused suite = `30/30` PASS.
+- Real binding moved from previous MASTER to current MASTER.
+- Real handoff retry returned to the current MASTER.
+- `CLIPBOARD_EXACT=True` and the packet was actually pasted into the current MASTER.
+- First real Correction Packet validation = PASS.
+- Current-MASTER Binding UX Research 01 official + nearby-project review completed.
 
 ## Version
 
@@ -28,82 +27,91 @@ Role: MASTER
 - local HEAD: `5cd04c811fad6f59f530bfd146a36148bdece98a`
 - pushed code HEAD: `869414c77d227fe2f1675c7cfa08b04250520279`
 
-## MF-01 Delta Review
+## MASTER Review
 
 ### Must Fix
 
-None remaining.
+None remaining for MF-01.
 
 ### User Decision Needed
 
-None for MF-01 closure.
+The next step is a real read-only Desktop/Codex validation gate.
 
-### Future Optional / Verified UX Cost
+### Verified UX Cost
 
-The user does not want to manually edit/paste a Chat URL whenever a new MASTER is created.
+A new MASTER transition currently requires the user to provide the new Chat URL once for explicit `-Rebind`.
 
-Current corrected Alpha requires explicit `-Rebind` only on MASTER transition, not every normal handoff. That is safe enough to close MF-01, but manual target transfer is now a real observed UX cost.
+The user prefers to eliminate this manual URL transfer if it can be done through a supported, low-risk source.
 
-Do not silently turn this into automatic discovery. Research first.
+## Research Findings
 
-## Correction Packet Result
+### Official
 
-**PASS.**
+- Existing ChatGPT chat → Codex attachment is an official desktop workflow.
+- Reviewed official documentation does not publish a stable local API/metadata contract exposing the attached/current ChatGPT conversation URL or ID to repo-local scripts.
+- Codex remains a separate view/history.
+- The official in-app Browser can control a current page, but using it to infer the MASTER target would introduce browser automation rather than a stable target identity primitive.
 
-The first real correction branch demonstrated:
+### Existing patterns
 
-- concise delta-only correction;
-- same Codex task reuse;
-- no full-background repetition;
-- bounded scope;
-- focused evidence;
-- real re-verification back to the current MASTER.
+- `codex-web-review-relay`: user manually opens and Arms the intended ChatGPT tab; it deliberately does not select conversations automatically.
+- `codex-bridge-chatgpt`: browser-based handoff with explicit automation consent and browser/account-risk controls.
+- `codex-from-chatgpt`: heavier MCP/App Server orchestration; not a lightweight source of current Chat identity for this repo-local return helper.
 
-## Next Smallest Step
+## Product Decision
 
-**Current-MASTER Binding UX Research 01 — research only.**
+Do not implement automatic/silent current-MASTER rebinding from undocumented UI or internal state.
 
-Questions:
+Keep explicit `-Rebind` as the corrected Alpha boundary unless an official attached-chat identity can be observed and validated.
 
-1. Does OpenAI expose a supported way for the current Chat / originating Chat identity or URL to be passed to the local workflow?
-2. Can the official Existing Chat → Codex flow or another official Desktop/Codex surface provide a stable target anchor without user URL copy?
-3. Do nearby open-source handoff projects have a lower-risk pattern that avoids repeated URL entry without browser scraping or credential access?
-4. If no supported source exists, is explicit `-Rebind` the correct Alpha boundary rather than adding brittle automation?
+## Next Smallest Step — Attached-Chat Identity Probe 01
 
-Allowed now:
+Run in a Codex chat that has the **current MASTER Chat already attached through the official Existing ChatGPT chat flow**.
 
-- web / official documentation research;
-- read-only GitHub project research;
-- compare patterns and risks;
-- canonical state maintenance.
+Read-only goal:
 
-Not allowed without a new user decision:
+> Determine whether Codex can access and report a stable identity or canonical URL for the attached ChatGPT chat from official attachment context/metadata, without browser automation or internal-file access.
 
-- product-code implementation;
-- browser/DOM/CDP automation;
-- ChatGPT client-internal access;
-- token/credential access;
-- product/code push;
-- merge;
-- public release;
-- paid API;
-- GUI / daemon / installer / full bridge.
+Probe constraints:
 
-## Product Direction
+- no file changes;
+- no commands needed unless Codex explicitly needs a harmless read-only check unrelated to ChatGPT internals;
+- no commit;
+- no push;
+- no paid API;
+- no browser/DOM/CDP automation;
+- no ChatGPT client-internal files;
+- no cookies/tokens/credentials;
+- do not reconstruct or guess the URL from visible text;
+- distinguish `accessible exact identity`, `context-only/no identity`, and `unknown`.
 
-Keep the existing composed workflow:
+Expected report:
 
-`official existing ChatGPT chat → Codex`
-→ `local execution`
-→ `Delivery Packet + Review Evidence`
-→ `Stop Hook`
-→ `handoff.ps1`
-→ `origin MASTER`
-→ `manual paste / send`
-→ `delta review`.
+- attached MASTER context readable: Yes/No;
+- exact conversation ID accessible from attachment metadata: Yes/No;
+- exact canonical Chat URL accessible from attachment metadata: Yes/No;
+- source of identity if Yes;
+- whether that source appears documented/supported versus incidental/undocumented;
+- commands/files/browser automation used: must remain 0 for Chat identity discovery.
 
-Research may simplify MASTER-transition binding, but must not weaken correct-target guarantees.
+If exact supported identity is unavailable, stop: explicit `-Rebind` remains Alpha behavior and no automatic target-discovery implementation is opened.
+
+If a supported identity is available, return to MASTER for a bounded implementation decision before changing code.
 
 ## Gate 5
 
-Still **NOT READY**. Do not start external validation automatically.
+Still **NOT READY**.
+
+## Do Not Start Yet
+
+- automatic/silent current-Chat discovery implementation
+- browser/DOM/CDP automation
+- ChatGPT client-internal mutation
+- token/credential access
+- auto paste / send
+- global launcher / installer
+- GUI / daemon / server
+- full bridge / companion app
+- paid API
+- product/code push
+- merge / public release
