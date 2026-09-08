@@ -5,7 +5,7 @@ Role: MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**Post-Dogfood-02 correction / Attached-Chat Identity Probe 01 closed — Final Evidence Reconciliation pending**
+**Dogfood 02 — PARTIAL / MF-02 README verification-status correction pending**
 
 The project remains in product validation + technical feasibility validation + bounded dogfooding. It has not entered Beta or full application development.
 
@@ -26,117 +26,110 @@ No product/code push, merge, paid API use, or public release is authorized.
 - `docs/master/CURRENT_STATE.md`
 - `docs/master/HANDOFF.md`
 
-## Product Direction
+## Dogfood 02 Original Task — Evidence Reconciled
 
-Preferred workflow remains:
+The original product-skeleton commit is now fully recovered and reviewable:
 
-`official existing ChatGPT chat → Codex`
-→ `local repo execution`
-→ `Delivery Packet + Review Evidence`
-→ `Stop Hook materialization`
-→ `handoff.ps1`
-→ `origin MASTER`
-→ `manual paste / send`
-→ `delta review`
+- commit: `a0bf8d74568a3a955126281991180f8641114bf9`
+- message: `docs: add alpha product overview`
+- exact scope: root `README.md` only
+- current reconciliation changed no files and created no commit/push.
 
-No full bridge, auto paste/send, GUI, daemon, installer, or custom Chat → Codex helper is justified.
+The root README successfully provides:
 
-## Dogfood 02 / MF-01
+- problem statement;
+- current Alpha product shape;
+- official Existing Chat → Codex + local thin return workflow;
+- minimal use instructions;
+- no auto paste/send boundary;
+- Verified / Not yet verified sections;
+- explicit non-goals / product boundaries;
+- link to `handoff-kit/README.md`.
 
-A real Dogfood 02 product-skeleton task exposed a real wrong-return-target Must Fix.
+The original README task is therefore substantively correct and was a real product-shaping task rather than a synthetic probe.
 
-MF-01 was fixed through the first natural Correction Packet:
+## MF-01 / Correction Packet
 
-- explicit safe `-Rebind` added to `configure.ps1`;
-- `handoff.ps1` remained unchanged;
-- Windows PowerShell 5.1 focused suite = `30/30` PASS;
-- old binding confirmed as previous MASTER;
-- binding explicitly rebound to current MASTER;
-- real handoff retry opened the current bound target;
+MF-01 wrong-return-target was fixed and closed:
+
+- explicit safe `-Rebind` added;
+- 30/30 Windows PowerShell 5.1 tests PASS;
+- current MASTER binding verified;
+- real handoff retry opened current MASTER;
 - `CLIPBOARD_EXACT=True`;
-- user pasted the resulting Delivery Packet into the current MASTER;
-- correction commit = `5cd04c811fad6f59f530bfd146a36148bdece98a`;
-- no push / merge.
-
-### MF-01 status
-
-**PASS / CLOSED.**
-
-### Correction Packet validation
-
-**PASS.**
-
-A concise MF-01-only correction was sufficient; no full-background repetition or Future Optional expansion was needed.
+- first real concise Correction Packet = PASS.
 
 ## Attached-Chat Identity Probe 01
 
-Result from the real Desktop/Codex read-only probe:
+PASS as a negative capability result:
 
-- `attached_context_readable = Yes`
-- `exact_conversation_id_from_attachment = No`
-- `exact_canonical_url_from_attachment = No`
-- `identity_source = None`
-- `source_status = None`
-- `commands_run = 0`
-- `files_changed = 0`
-- `browser_automation = 0`
+- attached context readable = Yes;
+- exact conversation ID from attachment = No;
+- exact canonical URL from attachment = No;
+- no commands/files/browser automation used.
 
-### Product conclusion
+Decision: explicit `-Rebind` once per MASTER transition remains the current Alpha safety boundary. Do not implement silent/addressless rebinding without a supported identity source.
 
-This is a **PASS as a negative capability result**: the official Existing Chat → Codex attachment provides usable context but does not expose an exact attached-chat conversation ID or canonical URL to Codex in the validated path.
+## MF-02 — README Verification Status Is Stale
 
-Therefore:
+### Observation
 
-- do not implement silent/addressless current-MASTER rebind now;
-- do not use browser/DOM/CDP automation, ChatGPT internal files, tokens, credentials, or guessed URL reconstruction;
-- explicit `-Rebind` once per MASTER transition remains the correct Alpha safety boundary;
-- normal handoffs within the same MASTER still require no URL entry.
+Current root README still states under `Not yet verified` that:
 
-The user's preference to avoid manual URL transfer remains a valid UX goal, but there is currently no supported low-risk identity source to implement it.
+> the concise Correction Packet path has not yet been naturally verified.
 
-## Current Evidence Gap
+That statement became false after MF-01, because the first natural Correction Packet was executed successfully and is now verified.
 
-The original Dogfood 02 root `README.md` Delivery Packet was returned to the previous MASTER during the wrong-target incident and is not recoverable from the current MASTER/canonical context.
+This is a real documentation correctness defect against the original Dogfood 02 acceptance criterion to distinguish Verified from Not Yet Verified accurately.
 
-Known facts:
+### Classification
 
-- correction `Before HEAD` = `a0bf8d74568a3a955126281991180f8641114bf9`;
-- correction modified the already-existing root `README.md` only to add explicit rebind usage;
-- the current MASTER has sufficient evidence to close MF-01, but not enough evidence to perform a full acceptance review of the original root README product-skeleton task without guessing.
+**Must Fix — MF-02.**
 
-This is a real evidence-reconciliation need caused by the wrong-target incident, not a synthetic test.
+Smallest correction:
+
+- edit root `README.md` only;
+- move/update Correction Packet status into `Verified`;
+- remove the stale `Not yet verified` claim;
+- optionally mention explicit safe `-Rebind` as verified if wording stays concise and evidence-backed;
+- do not change product behavior or other files;
+- run `git diff --check`;
+- local commit only, no push.
+
+No new user scope decision is needed because this remains inside the original README-only Dogfood 02 acceptance scope.
+
+## Dogfood 02 Status
+
+**PARTIAL / BLOCKED ONLY BY MF-02 DOC ACCURACY.**
+
+Not FAIL: the original product-skeleton implementation and MF-01 correction are substantively successful.
+
+Do not mark FULL PASS until README verification status matches the now-verified correction evidence.
 
 ## Must Fix
 
-None currently.
+- MF-02 — update root README verification-status wording.
 
 ## User Decision Needed
 
-None for scope/product direction.
-
-The next action is a read-only real Codex evidence retrieval gate.
+None.
 
 ## Next Smallest Step
 
-**Dogfood 02 Final Evidence Reconciliation — read-only.**
+Send a concise MF-02 Correction Packet to the same Dogfood 02 Codex task:
 
-Use the same Dogfood 02 Codex task. Retrieve only evidence needed for final MASTER acceptance:
+- README.md only;
+- correct Verified / Not Yet Verified status;
+- `git diff --check`;
+- local commit;
+- Delivery Packet with exact diff and no unrelated changes;
+- no push.
 
-- current branch and HEAD;
-- full current root `README.md` content;
-- identify what commit `a0bf8d74568a3a955126281991180f8641114bf9` changed;
-- exact commit scope / `git show --stat` for that pre-correction commit;
-- root `README.md` content at that pre-correction commit or the exact diff that created/changed it;
-- `git diff --check` / relevant no-change verification;
-- confirm no files are modified by this reconciliation step.
-
-No implementation, commit, push, browser automation, or paid API.
-
-After that evidence returns to the current MASTER, perform the final Dogfood 02 delta review and decide PASS / PARTIAL / FAIL.
+After return to current MASTER, perform final delta review. If no further defect appears, mark Dogfood 02 FULL PASS.
 
 ## Gate 5
 
-Still **NOT READY** until Dogfood 02 is fully reconciled and additional real-task evidence justifies an external-validation decision.
+Still NOT READY until Dogfood 02 is closed and the MASTER reassesses repeated real-task value.
 
 ## Do Not Start Yet
 
