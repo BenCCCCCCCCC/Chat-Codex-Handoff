@@ -5,11 +5,29 @@ Role: MASTER
 
 ## Phase
 
-Combined Lightweight Workflow Dogfood 01 review + Project Source migration preparation.
+Fresh MASTER Recovery validation gate after Combined Lightweight Workflow Dogfood 01.
 
 ## Goal
 
-Validate the real combined lightweight flow:
+Validate that the current lightweight product/workflow state can be recovered by a brand-new MASTER without repeated Project Source uploads, version guessing, or user re-explanation.
+
+## Completed
+
+- Productization Spike 01 = PASS.
+- Official Existing-Chat → Codex Probe 01 = PASS.
+- Official Existing-Chat → Codex Probe 02 = PASS.
+- Source Maintenance Probe 01 = PASS.
+- Combined Lightweight Workflow Dogfood 01 = FULL PASS.
+- Private GitHub repository is live and readable through the connected GitHub path.
+- Dedicated dynamic-state branch `meta/master-state` exists.
+- `22_DYNAMIC_STATE_POINTER.md` is present as a stable Project Source.
+- Dynamic `05_CURRENT_STATE...` is no longer a Project-backed source on the current Project file surface.
+- Dogfood 01 real README task used official Existing Chat → Codex with full Task Packet copy = 0.
+- Dogfood 01 return transport was explicitly confirmed with `handoff.ps1` and `CLIPBOARD_EXACT=True`.
+
+## Current Product Direction
+
+Use:
 
 `official existing Chat → Codex`
 → `local repo execution`
@@ -19,51 +37,9 @@ Validate the real combined lightweight flow:
 → `origin MASTER`
 → `manual paste / send`
 
-while keeping dynamic MASTER state out of repeated ChatGPT Project Source upload/delete cycles.
+Do not build a second custom Chat → Codex bridge while the official path remains sufficient.
 
-## Completed
-
-- Productization Spike 01 = PASS.
-- Official Existing-Chat → Codex Probe 01 = PASS.
-- Official Existing-Chat → Codex Probe 02 = PASS.
-- Source Maintenance Probe 01 = PASS.
-- Private GitHub repository is live and readable through the connected GitHub path.
-- Dedicated dynamic-state branch `meta/master-state` exists.
-- `22_DYNAMIC_STATE_POINTER.md` has been prepared as the one-time stable Project Source pointer.
-- Combined Lightweight Workflow Dogfood 01 executed a real bounded README modification task.
-- Local product-branch commit: `ddb74cbefeda621108ec209ce4fbc3b3f463329f`.
-- Dogfood 01 changed only `handoff-kit/README.md` and did not push.
-- Delivery Packet included the full README and sufficient evidence for direct MASTER delta review.
-
-## MASTER Delta Review
-
-### Must Fix
-
-None.
-
-### User Decision Needed
-
-None for the README change.
-
-### Future Optional
-
-- from-any-directory launcher UX
-- Correction Packet validation only if a natural Must Fix appears
-- fresh-MASTER recovery validation using the stable pointer
-
-## Verified
-
-- Official existing-chat context was sufficient for a real modification task, not just marker/repo probes.
-- Full Task Packet copy = 0 for Dogfood 01.
-- Prompt rewrite = 0.
-- Wrong repo/target = 0.
-- Missing Review Evidence follow-up = 0.
-- Only one README file changed.
-- No product script/test/Hook/canonical-state code-path changes were made.
-- No code push was performed.
-- README correctly distinguishes official ChatGPT → Codex context entry from this repo's Codex → Chat helper and does not claim a full history merge.
-
-## Current Dynamic State Policy
+## Dynamic State Policy
 
 Authoritative dynamic state lives on private GitHub branch:
 
@@ -79,18 +55,78 @@ Standing narrow permission:
 - MASTER may update only these two canonical docs on `meta/master-state` as normal project maintenance.
 - This does not authorize product/code branch pushes, merge, force push, public release, paid API use, or scope expansion.
 
-## Unknown / Remaining Validation
+## MASTER Delta Review — Dogfood 01
 
-- Transport evidence for Dogfood 01 is pending only if the user manually copied the current Delivery Packet from Codex. If the user reached this MASTER by running `handoff.ps1` and then manually pasted/sent, the complete combined workflow is PASS.
-- A brand-new MASTER must still be tested against the one-time stable Project Source pointer.
-- Real Must Fix / Correction Packet remains unverified.
+### Must Fix
 
-## Next Smallest Steps
+None.
 
-1. Resolve Dogfood 01 transport status with no extra work if the current packet already came through `handoff.ps1`; otherwise do one real helper return.
-2. Perform the one-time Project Sources migration: keep stable bootstrap docs, add `22_DYNAMIC_STATE_POINTER.md`, and remove versioned dynamic Current State snapshots.
-3. Run a fresh-MASTER recovery check from the stable pointer.
-4. Continue multiple non-blocking preparation/research tracks in parallel; stop only at genuine validation or decision gates.
+### User Decision Needed
+
+None.
+
+### Future Optional
+
+- from-any-directory launch UX
+- clipboard-overwrite UX after packet preparation
+- Correction Packet validation only if a natural Must Fix appears
+
+## Verified
+
+- Official Existing Chat context supports a real repo modification task.
+- Chat → Codex full Task Packet copy = 0.
+- Prompt rewrite = 0.
+- Wrong repo/target = 0.
+- Missing Review Evidence follow-up = 0.
+- Codex → Chat manual Delivery Packet copy = 0 in the confirmed return run.
+- `handoff.ps1` automatically loaded the origin binding and resolved the materialized packet.
+- origin Chat opened = Yes.
+- auto paste = No.
+- auto send = No.
+- clipboard exact comparison = True.
+- Combined Lightweight Workflow Dogfood 01 = FULL PASS.
+
+## Remaining Validation Gate
+
+### Fresh MASTER Recovery Probe 01
+
+Create a brand-new Chat inside this same ChatGPT Project.
+
+The new MASTER should recover state using only:
+
+1. stable bootstrap Project Sources;
+2. `22_DYNAMIC_STATE_POINTER.md`;
+3. the connected GitHub repository `BenCCCCCCCCC/Chat-Codex-Handoff`;
+4. ref `meta/master-state`;
+5. `docs/master/CURRENT_STATE.md` and `docs/master/HANDOFF.md`.
+
+It must not require:
+
+- a newly uploaded Current State/Handoff;
+- version-suffix guessing;
+- the user re-explaining the project history;
+- a copied long handoff packet.
+
+Expected recovered facts include at least:
+
+- active repo = `F:\Chat-Codex-Handoff\validation-repo`;
+- active code branch = `prototype/lightweight-handoff-v0.1`;
+- local code HEAD after Dogfood 01 = `ddb74cbefeda621108ec209ce4fbc3b3f463329f`;
+- Source Maintenance Probe 01 = PASS;
+- Combined Lightweight Workflow Dogfood 01 = FULL PASS;
+- authoritative dynamic state = GitHub `meta/master-state` canonical docs;
+- preferred product route = official Chat → Codex + existing Codex → Chat thin helper;
+- custom Chat → Codex helper = Future Optional;
+- no auto paste/send;
+- next action is validation-driven, not automatic feature expansion.
+
+## Next Smallest Step
+
+Run Fresh MASTER Recovery Probe 01. This is the current genuine user-facing validation gate.
+
+If PASS, Project Source maintenance can be considered operationally closed for dynamic Current State/Handoff, and future MASTER transitions should use the stable pointer + GitHub canonical state.
+
+If FAIL, record exactly what the new MASTER could not recover before changing any implementation.
 
 ## Do Not Start Yet
 
