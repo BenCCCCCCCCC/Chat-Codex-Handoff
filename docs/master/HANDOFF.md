@@ -5,20 +5,20 @@ Role: MASTER
 
 ## Phase
 
-**Current-MASTER Binding UX Research 01 → Attached-Chat Identity Probe 01**
+**Dogfood 02 — MF-01 closed / Attached-Chat Identity Probe 01 closed / Final Evidence Reconciliation pending**
 
 ## Completed
 
-- Dogfood 02 exposed real wrong-target MF-01.
+- Real Dogfood 02 wrong-target MF-01 observed.
 - Bounded Fix 01 approved and implemented locally.
-- `configure.ps1` now supports explicit safe `-Rebind`.
+- Explicit safe `-Rebind` added to `configure.ps1`.
 - `handoff.ps1` unchanged.
 - Windows PowerShell 5.1 focused suite = `30/30` PASS.
-- Real binding moved from previous MASTER to current MASTER.
-- Real handoff retry returned to the current MASTER.
-- `CLIPBOARD_EXACT=True` and the packet was actually pasted into the current MASTER.
-- First real Correction Packet validation = PASS.
-- Current-MASTER Binding UX Research 01 official + nearby-project review completed.
+- Binding moved from previous MASTER to current MASTER.
+- Real handoff retry returned to current MASTER.
+- `CLIPBOARD_EXACT=True` and the packet was pasted into current MASTER.
+- First natural Correction Packet validation = PASS.
+- Attached-Chat Identity Probe 01 executed read-only with zero commands/files/browser automation.
 
 ## Version
 
@@ -27,76 +27,96 @@ Role: MASTER
 - local HEAD: `5cd04c811fad6f59f530bfd146a36148bdece98a`
 - pushed code HEAD: `869414c77d227fe2f1675c7cfa08b04250520279`
 
-## MASTER Review
+No product/code push is authorized.
+
+## MF-01 Final Review
 
 ### Must Fix
 
-None remaining for MF-01.
+None remaining.
 
-### User Decision Needed
+### Verified
 
-The next step is a real read-only Desktop/Codex validation gate.
+- previous MASTER binding was the real root cause;
+- explicit `-Rebind` safely changes target;
+- conflict without `-Rebind` still fails closed;
+- invalid rebind preserves the previous binding;
+- same-target configure remains idempotent;
+- real handoff after rebind opens the current target;
+- clipboard packet remains exact;
+- no auto paste/send.
 
-### Verified UX Cost
+### Correction Packet
 
-A new MASTER transition currently requires the user to provide the new Chat URL once for explicit `-Rebind`.
+**PASS.**
 
-The user prefers to eliminate this manual URL transfer if it can be done through a supported, low-risk source.
+This was the first natural Must Fix and the correction packet stayed bounded to MF-01 without repeating full project history.
 
-## Research Findings
+## Attached-Chat Identity Probe 01
 
-### Official
+Observed result:
 
-- Existing ChatGPT chat → Codex attachment is an official desktop workflow.
-- Reviewed official documentation does not publish a stable local API/metadata contract exposing the attached/current ChatGPT conversation URL or ID to repo-local scripts.
-- Codex remains a separate view/history.
-- The official in-app Browser can control a current page, but using it to infer the MASTER target would introduce browser automation rather than a stable target identity primitive.
+```text
+attached_context_readable = Yes
+exact_conversation_id_from_attachment = No
+exact_canonical_url_from_attachment = No
+identity_source = None
+source_status = None
+commands_run = 0
+files_changed = 0
+browser_automation = 0
+```
 
-### Existing patterns
+### Decision
 
-- `codex-web-review-relay`: user manually opens and Arms the intended ChatGPT tab; it deliberately does not select conversations automatically.
-- `codex-bridge-chatgpt`: browser-based handoff with explicit automation consent and browser/account-risk controls.
-- `codex-from-chatgpt`: heavier MCP/App Server orchestration; not a lightweight source of current Chat identity for this repo-local return helper.
+Treat this as **PASS / negative capability result**.
 
-## Product Decision
+The attached Chat provides context, but no exact supported conversation identity/URL was exposed in the validated Codex path.
 
-Do not implement automatic/silent current-MASTER rebinding from undocumented UI or internal state.
+Therefore:
 
-Keep explicit `-Rebind` as the corrected Alpha boundary unless an official attached-chat identity can be observed and validated.
+- explicit `-Rebind` remains the Alpha boundary when MASTER changes;
+- do not implement automatic/silent target discovery;
+- do not use browser/DOM/CDP automation, ChatGPT internal files, tokens, credentials, or guessed URL reconstruction;
+- the user's preference to avoid manual URL transfer remains a UX goal only if a future supported identity source appears.
 
-## Next Smallest Step — Attached-Chat Identity Probe 01
+## Dogfood 02 Final Evidence Gap
 
-Run in a Codex chat that has the **current MASTER Chat already attached through the official Existing ChatGPT chat flow**.
+The original root-README Delivery Packet was sent to the previous MASTER during the wrong-target incident and is unavailable in the current MASTER context.
 
-Read-only goal:
+The current correction packet proves the correction and current return path, but it is not sufficient to fully review the original root `README.md` product-skeleton acceptance criteria.
 
-> Determine whether Codex can access and report a stable identity or canonical URL for the attached ChatGPT chat from official attachment context/metadata, without browser automation or internal-file access.
+Known pre-correction HEAD:
 
-Probe constraints:
+`a0bf8d74568a3a955126281991180f8641114bf9`
 
-- no file changes;
-- no commands needed unless Codex explicitly needs a harmless read-only check unrelated to ChatGPT internals;
+Do not infer the original README quality from the later correction diff.
+
+## Next Smallest Step — Dogfood 02 Final Evidence Reconciliation
+
+Run in the same Dogfood 02 Codex task, read-only.
+
+Retrieve:
+
+1. current branch + HEAD;
+2. full current root `README.md`;
+3. `git show --name-status --stat a0bf8d74568a3a955126281991180f8641114bf9`;
+4. the full root `README.md` at that commit, or the exact diff for that commit if it created/changed the file;
+5. current working-tree status;
+6. `git diff --check` or equivalent no-diff verification showing reconciliation changed nothing.
+
+Rules:
+
+- no file modification;
 - no commit;
 - no push;
+- no browser automation;
 - no paid API;
-- no browser/DOM/CDP automation;
-- no ChatGPT client-internal files;
-- no cookies/tokens/credentials;
-- do not reconstruct or guess the URL from visible text;
-- distinguish `accessible exact identity`, `context-only/no identity`, and `unknown`.
+- no scope expansion.
 
-Expected report:
+Return evidence only.
 
-- attached MASTER context readable: Yes/No;
-- exact conversation ID accessible from attachment metadata: Yes/No;
-- exact canonical Chat URL accessible from attachment metadata: Yes/No;
-- source of identity if Yes;
-- whether that source appears documented/supported versus incidental/undocumented;
-- commands/files/browser automation used: must remain 0 for Chat identity discovery.
-
-If exact supported identity is unavailable, stop: explicit `-Rebind` remains Alpha behavior and no automatic target-discovery implementation is opened.
-
-If a supported identity is available, return to MASTER for a bounded implementation decision before changing code.
+After the evidence is pasted into current MASTER, MASTER will complete Dogfood 02 delta review and classify the whole task as PASS / PARTIAL / FAIL.
 
 ## Gate 5
 
@@ -104,7 +124,7 @@ Still **NOT READY**.
 
 ## Do Not Start Yet
 
-- automatic/silent current-Chat discovery implementation
+- automatic/silent current-Chat discovery
 - browser/DOM/CDP automation
 - ChatGPT client-internal mutation
 - token/credential access
