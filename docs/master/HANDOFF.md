@@ -5,26 +5,11 @@ Role: MASTER
 
 ## Phase
 
-Post-Source-Maintenance-Probe hardening and combined-workflow preparation.
+Combined Lightweight Workflow Dogfood 01 review + Project Source migration preparation.
 
 ## Goal
 
-Keep dynamic MASTER state out of repeated ChatGPT Project Source upload/delete cycles while preserving a lightweight Chat ↔ Codex workflow and user control.
-
-## Completed
-
-- Productization Spike 01 = PASS.
-- Official Existing-Chat → Codex Probe 01 = PASS.
-- Official Existing-Chat → Codex Probe 02 = PASS.
-- Source Maintenance Probe 01 = PASS.
-- Private GitHub repository is live and readable through the connected GitHub path.
-- MASTER independently read the canonical files and exact commit.
-- Dedicated dynamic-state branch `meta/master-state` has been created.
-- `docs/master/CURRENT_STATE.md` is updated on the dedicated state branch.
-
-## Current Product Direction
-
-Use:
+Validate the real combined lightweight flow:
 
 `official existing Chat → Codex`
 → `local repo execution`
@@ -34,9 +19,51 @@ Use:
 → `origin MASTER`
 → `manual paste / send`
 
-Do not build a second custom Chat → Codex bridge while the official path is sufficient.
+while keeping dynamic MASTER state out of repeated ChatGPT Project Source upload/delete cycles.
 
-## Dynamic State Policy
+## Completed
+
+- Productization Spike 01 = PASS.
+- Official Existing-Chat → Codex Probe 01 = PASS.
+- Official Existing-Chat → Codex Probe 02 = PASS.
+- Source Maintenance Probe 01 = PASS.
+- Private GitHub repository is live and readable through the connected GitHub path.
+- Dedicated dynamic-state branch `meta/master-state` exists.
+- `22_DYNAMIC_STATE_POINTER.md` has been prepared as the one-time stable Project Source pointer.
+- Combined Lightweight Workflow Dogfood 01 executed a real bounded README modification task.
+- Local product-branch commit: `ddb74cbefeda621108ec209ce4fbc3b3f463329f`.
+- Dogfood 01 changed only `handoff-kit/README.md` and did not push.
+- Delivery Packet included the full README and sufficient evidence for direct MASTER delta review.
+
+## MASTER Delta Review
+
+### Must Fix
+
+None.
+
+### User Decision Needed
+
+None for the README change.
+
+### Future Optional
+
+- from-any-directory launcher UX
+- Correction Packet validation only if a natural Must Fix appears
+- fresh-MASTER recovery validation using the stable pointer
+
+## Verified
+
+- Official existing-chat context was sufficient for a real modification task, not just marker/repo probes.
+- Full Task Packet copy = 0 for Dogfood 01.
+- Prompt rewrite = 0.
+- Wrong repo/target = 0.
+- Missing Review Evidence follow-up = 0.
+- Only one README file changed.
+- No product script/test/Hook/canonical-state code-path changes were made.
+- No code push was performed.
+- README correctly distinguishes official ChatGPT → Codex context entry from this repo's Codex → Chat helper and does not claim a full history merge.
+
+## Current Dynamic State Policy
 
 Authoritative dynamic state lives on private GitHub branch:
 
@@ -49,41 +76,21 @@ Canonical paths:
 
 Standing narrow permission:
 
-- MASTER may update these two canonical docs on `meta/master-state` as normal project maintenance.
-- This permission does not extend to product/code branch pushes.
-- No merge, force push, release, public visibility change, paid API use, or scope expansion is implied.
+- MASTER may update only these two canonical docs on `meta/master-state` as normal project maintenance.
+- This does not authorize product/code branch pushes, merge, force push, public release, paid API use, or scope expansion.
 
-Reason for the dedicated branch:
+## Unknown / Remaining Validation
 
-A docs-only update on the active code branch could later push intervening code commits as part of normal Git history. Keeping state on a separate branch preserves the least-privilege boundary while keeping the user-facing workflow simple.
-
-## Verified
-
-- Source Maintenance Probe 01 remote read = PASS.
-- Project Source add/delete for that update = 0.
-- wrong-version read = 0.
-- private repository = verified.
-- canonical state branch exists.
-
-## Likely
-
-- One final Project Sources migration should be enough: keep stable bootstrap docs, remove versioned dynamic state/handoff snapshots, and add one stable pointer to the GitHub canonical state.
-- After that migration, future MASTER handoffs should no longer require routine Project Source maintenance.
-
-## Unknown / Validation Gates
-
-- A brand-new MASTER must still be tested against the one-time stable pointer.
-- A real modification task must still test the complete official Chat → Codex + existing Codex → Chat workflow.
+- Transport evidence for Dogfood 01 is pending only if the user manually copied the current Delivery Packet from Codex. If the user reached this MASTER by running `handoff.ps1` and then manually pasted/sent, the complete combined workflow is PASS.
+- A brand-new MASTER must still be tested against the one-time stable Project Source pointer.
 - Real Must Fix / Correction Packet remains unverified.
 
 ## Next Smallest Steps
 
-Parallel preparation is allowed until validation is required:
-
-1. Prepare one-time Project Sources migration / stable pointer.
-2. Prepare Combined Lightweight Workflow Dogfood 01.
-
-The next user-facing validation gate is the one-time Project Sources migration followed by a fresh-MASTER recovery check.
+1. Resolve Dogfood 01 transport status with no extra work if the current packet already came through `handoff.ps1`; otherwise do one real helper return.
+2. Perform the one-time Project Sources migration: keep stable bootstrap docs, add `22_DYNAMIC_STATE_POINTER.md`, and remove versioned dynamic Current State snapshots.
+3. Run a fresh-MASTER recovery check from the stable pointer.
+4. Continue multiple non-blocking preparation/research tracks in parallel; stop only at genuine validation or decision gates.
 
 ## Do Not Start Yet
 
@@ -95,5 +102,5 @@ The next user-facing validation gate is the one-time Project Sources migration f
 - full bridge
 - Work / multi-model / Open WebUI
 - paid API
-- code push without explicit policy/authorization
+- product/code push without explicit authorization
 - merge / force push / public release
