@@ -5,7 +5,7 @@ Role: MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**Dogfood 02 — PARTIAL / MF-02 README verification-status correction pending**
+**Dogfood 02 — MF-02 implementation complete / post-turn return sequencing verification pending**
 
 The project remains in product validation + technical feasibility validation + bounded dogfooding. It has not entered Beta or full application development.
 
@@ -13,7 +13,7 @@ The project remains in product validation + technical feasibility validation + b
 
 - repo: `F:\Chat-Codex-Handoff\validation-repo`
 - active code branch: `prototype/lightweight-handoff-v0.1`
-- current local code HEAD reported by Codex: `5cd04c811fad6f59f530bfd146a36148bdece98a`
+- current local code HEAD reported by Codex: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`
 - pushed code-branch HEAD remains: `869414c77d227fe2f1675c7cfa08b04250520279`
 - private remote: `BenCCCCCCCCC/Chat-Codex-Handoff`
 
@@ -26,113 +26,87 @@ No product/code push, merge, paid API use, or public release is authorized.
 - `docs/master/CURRENT_STATE.md`
 - `docs/master/HANDOFF.md`
 
-## Dogfood 02 Original Task — Evidence Reconciled
+## Dogfood 02 Summary
 
-The original product-skeleton commit is now fully recovered and reviewable:
+The original root README product-skeleton task is substantively correct and fully evidence-reconciled.
 
-- commit: `a0bf8d74568a3a955126281991180f8641114bf9`
-- message: `docs: add alpha product overview`
-- exact scope: root `README.md` only
-- current reconciliation changed no files and created no commit/push.
+MF-01 wrong-return-target was fixed through explicit safe `-Rebind` and closed:
 
-The root README successfully provides:
-
-- problem statement;
-- current Alpha product shape;
-- official Existing Chat → Codex + local thin return workflow;
-- minimal use instructions;
-- no auto paste/send boundary;
-- Verified / Not yet verified sections;
-- explicit non-goals / product boundaries;
-- link to `handoff-kit/README.md`.
-
-The original README task is therefore substantively correct and was a real product-shaping task rather than a synthetic probe.
-
-## MF-01 / Correction Packet
-
-MF-01 wrong-return-target was fixed and closed:
-
-- explicit safe `-Rebind` added;
-- 30/30 Windows PowerShell 5.1 tests PASS;
-- current MASTER binding verified;
-- real handoff retry opened current MASTER;
+- 30/30 Windows PowerShell 5.1 focused tests PASS;
+- binding moved from previous MASTER to current MASTER;
+- real handoff opened current MASTER;
 - `CLIPBOARD_EXACT=True`;
-- first real concise Correction Packet = PASS.
+- first natural concise Correction Packet validation = PASS.
 
-## Attached-Chat Identity Probe 01
-
-PASS as a negative capability result:
+Attached-Chat Identity Probe 01 produced a negative capability result:
 
 - attached context readable = Yes;
-- exact conversation ID from attachment = No;
-- exact canonical URL from attachment = No;
-- no commands/files/browser automation used.
+- exact attached conversation ID / canonical URL exposed = No;
+- therefore explicit `-Rebind` once per MASTER transition remains the current Alpha safety boundary.
 
-Decision: explicit `-Rebind` once per MASTER transition remains the current Alpha safety boundary. Do not implement silent/addressless rebinding without a supported identity source.
+## MF-02 — README evidence status
 
-## MF-02 — README Verification Status Is Stale
+MF-02 implementation is complete locally:
 
-### Observation
+- before HEAD: `5cd04c811fad6f59f530bfd146a36148bdece98a`;
+- after HEAD: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`;
+- commit: `docs: reconcile correction evidence`;
+- exact scope: root `README.md` only;
+- change: one stale `Not yet verified` Correction Packet bullet removed and replaced with one concise Verified bullet describing the real MF-01 Correction Packet + safe `-Rebind` evidence;
+- `git diff --check` PASS;
+- no product/PowerShell tests run because only README wording changed;
+- no push / merge.
 
-Current root README still states under `Not yet verified` that:
+MF-02 content review = **PASS**.
 
-> the concise Correction Packet path has not yet been naturally verified.
+## Return-transport observation after MF-02
 
-That statement became false after MF-01, because the first natural Correction Packet was executed successfully and is now verified.
+The user reported that Ctrl+V still contained the previously copied MF-02 Correction Packet text rather than the latest Codex Delivery Packet.
 
-This is a real documentation correctness defect against the original Dogfood 02 acceptance criterion to distinguish Verified from Not Yet Verified accurately.
+This is a real symptom, but root cause is **not yet classified as a product defect** because the prior workflow also showed Codex invoking `handoff.ps1` during its own turn.
 
-### Classification
+Important sequencing rule:
 
-**Must Fix — MF-02.**
+> The Stop Hook materializes `last_assistant_message` only after the Codex turn ends. Therefore `handoff.ps1` must be invoked from an external/user PowerShell session **after** the final Codex response has fully ended if the goal is to transport that final response.
 
-Smallest correction:
+If Codex itself invokes `handoff.ps1` during the same turn, it cannot transport its own not-yet-produced final reply.
 
-- edit root `README.md` only;
-- move/update Correction Packet status into `Verified`;
-- remove the stale `Not yet verified` claim;
-- optionally mention explicit safe `-Rebind` as verified if wording stays concise and evidence-backed;
-- do not change product behavior or other files;
-- run `git diff --check`;
-- local commit only, no push.
-
-No new user scope decision is needed because this remains inside the original README-only Dogfood 02 acceptance scope.
-
-## Dogfood 02 Status
-
-**PARTIAL / BLOCKED ONLY BY MF-02 DOC ACCURACY.**
-
-Not FAIL: the original product-skeleton implementation and MF-01 correction are substantively successful.
-
-Do not mark FULL PASS until README verification status matches the now-verified correction evidence.
+The observed Ctrl+V content is also consistent with the final post-turn handoff not having overwritten the clipboard yet.
 
 ## Must Fix
 
-- MF-02 — update root README verification-status wording.
+None newly confirmed yet.
 
-## User Decision Needed
+MF-02 documentation defect is fixed.
 
-None.
+Do not promote the clipboard symptom to a new implementation Must Fix unless a correct **post-turn external handoff invocation** still returns stale/wrong clipboard content.
 
 ## Next Smallest Step
 
-Send a concise MF-02 Correction Packet to the same Dogfood 02 Codex task:
+**Post-Turn Handoff Sequencing Verification — real user validation.**
 
-- README.md only;
-- correct Verified / Not Yet Verified status;
-- `git diff --check`;
-- local commit;
-- Delivery Packet with exact diff and no unrelated changes;
-- no push.
+After the Codex MF-02 final response has fully ended:
 
-After return to current MASTER, perform final delta review. If no further defect appears, mark Dogfood 02 FULL PASS.
+1. do not ask Codex to run `handoff.ps1`;
+2. open a separate Windows PowerShell 5.1 session;
+3. `cd F:\Chat-Codex-Handoff\validation-repo`;
+4. run `./handoff-kit/handoff.ps1` (Windows form: `.\handoff-kit\handoff.ps1`);
+5. do not copy anything afterward;
+6. in the Chat that opens, press Ctrl+V and send.
+
+Expected clipboard content must begin with the latest MF-02 Delivery Packet, not the MF-02 Correction Packet prompt.
+
+If correct: close Dogfood 02 as FULL PASS and record the sequencing requirement as current Alpha usage behavior.
+
+If still stale/wrong: open a new real Must Fix for packet freshness/transport and perform read-only metadata diagnosis before any code change.
 
 ## Gate 5
 
-Still NOT READY until Dogfood 02 is closed and the MASTER reassesses repeated real-task value.
+Still NOT READY until Dogfood 02 is closed and product value is reassessed.
 
 ## Do Not Start Yet
 
+- packet freshness/replay implementation before post-turn sequencing is verified
 - automatic/silent current-Chat discovery
 - browser/DOM/CDP automation
 - ChatGPT client-internal mutation
@@ -141,7 +115,6 @@ Still NOT READY until Dogfood 02 is closed and the MASTER reassesses repeated re
 - global launcher / installer
 - GUI / daemon / server
 - full bridge / companion app
-- Work / multi-model / Open WebUI
 - paid API
 - product/code push without explicit authorization
-- merge / force push / public release
+- merge / public release
