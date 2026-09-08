@@ -5,35 +5,22 @@ Role: MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**Post-Dogfood-02 Product Value Review — Gate 5 decision ready**
+**USABILITY-SPIKE-01 — bounded guided local handoff panel / READY FOR CODEX**
 
-The project remains in product validation + technical feasibility validation. It has not entered Beta or full application development.
+Gate 5 external execution is **ON HOLD** following the user's current direction: no external participant is available, and the user wants a more understandable, usable visible prototype first.
 
-Current status:
-
-- Gate 4 = **PIVOT**
-- Productization Spike 01 = **PASS**
-- Combined Lightweight Workflow Dogfood 01 = **FULL PASS**
-- Fresh MASTER Recovery Probe 01 = **PASS**
-- Repository / State Integrity Audit 01 = **PASS**
-- MF-01 wrong-return-target correction = **PASS**
-- First natural Correction Packet validation = **PASS**
-- Attached-Chat Identity Probe 01 = **PASS / negative capability result**
-- MF-02 README evidence reconciliation = **PASS**
-- Post-Turn Handoff Sequencing Verification = **PASS**
-- Combined Lightweight Workflow Dogfood 02 = **FULL PASS**
-
-Alpha v0.1 remains the product level. No Beta promotion or new implementation spike is authorized.
+Alpha v0.1 remains the accepted technical baseline. This is still product/technical validation and bounded prototyping, not Beta or full application development. The UI has NOT been implemented or validated yet. MASTER has prepared the task; no local Codex execution has been started by this Chat.
 
 ## Active Repo / Version
 
 - repo: `F:\Chat-Codex-Handoff\validation-repo`
-- active code branch: `prototype/lightweight-handoff-v0.1`
-- current local code HEAD: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`
-- pushed code-branch HEAD remains: `869414c77d227fe2f1675c7cfa08b04250520279`
+- last confirmed active code branch: `prototype/lightweight-handoff-v0.1`
+- last Codex-reported local code HEAD: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`
+- last independently checked pushed code HEAD: `869414c77d227fe2f1675c7cfa08b04250520279`
 - private remote: `BenCCCCCCCCC/Chat-Codex-Handoff`
+- planned LOCAL task branch, not yet confirmed created: `prototype/usability-spike-01`
 
-The local/pushed split remains intentional. Product/code push, merge, public release, and paid API use remain unauthorized.
+Codex must verify local repo/branch/HEAD/worktree before writing. Do not treat the remote branch as the latest local code, and do not reset to it. Code push, merge, force push, external sharing, public release and paid API use remain unauthorized.
 
 ## Dynamic State Authority
 
@@ -42,191 +29,117 @@ The local/pushed split remains intentional. Product/code push, merge, public rel
 - `docs/master/CURRENT_STATE.md`
 - `docs/master/HANDOFF.md`
 
-## Current Product Shape
+MASTER may maintain only these two canonical paths on this state branch under standing permission. Product-branch copies of these paths are not current authority. Codex must not edit or merge the state branch as part of the UI task.
 
-Validated composed workflow:
+## Completed / Accepted Baseline
 
-`official existing ChatGPT chat → Codex`
-→ `local repo execution`
-→ `Delivery Packet + Review Evidence`
-→ `Codex turn ends / Stop Hook materializes final reply`
-→ `external user PowerShell runs handoff.ps1`
-→ `origin MASTER opens`
-→ `manual paste / send`
-→ `MASTER delta review`
-→ `concise Correction Packet to same Codex task when a real Must Fix exists`
+- Gate 4 = PIVOT; do not rewrite it as a later market-value PASS.
+- Productization Spike 01 = PASS.
+- Official Existing-Chat -> Codex Probes 01 and 02 = PASS.
+- Combined Lightweight Workflow Dogfood 01 = FULL PASS.
+- Source Maintenance Probe 01 and Fresh MASTER Recovery = PASS.
+- Repository / State Integrity Audit 01 = PASS at its recorded checkpoint.
+- Dogfood 02 original root README task = PASS, commit `a0bf8d74568a3a955126281991180f8641114bf9`.
+- MF-01 wrong-return-target = fixed via explicit safe `-Rebind`, commit `5cd04c811fad6f59f530bfd146a36148bdece98a`; 30/30 Windows PowerShell 5.1 focused tests were reported PASS.
+- First natural concise Correction Packet = PASS in the recorded same-task workflow.
+- Attached-Chat Identity Probe 01 = completed with negative identity result: context readable, no exact conversation ID/URL exposed in that tested path; zero commands/files/browser automation.
+- MF-02 stale README evidence wording = PASS, commit `a77cacdbda70bcd8b0808a4c4853740f481adbc0`.
+- Post-turn external handoff sequencing verification = PASS.
+- Combined Lightweight Workflow Dogfood 02 = FULL PASS after corrections and evidence reconciliation, not a friction-free first-pass run.
+- Gate 5 Micro Pilot protocol was prepared internally; no participant contact/sharing/execution occurred.
+- USABILITY-SPIKE-01 task, acceptance criteria, isolated-test plan, visual review plan and owner validation boundary are now prepared in canonical HANDOFF.
 
-Current Alpha deliberately remains:
+## User Direction / MASTER Scope Decision
 
-- repo-local;
-- low configuration;
-- fail-closed;
-- evidence-ready;
-- user-controlled at final paste/send;
-- not a full bridge, GUI, installer, daemon, SaaS, or automatic-send system.
+The user asked for a substantial Codex task while resting, remaining within this project, prioritizing ease of use, suitability and a visible product exterior before external users.
 
-## Dogfood 02 Final Result
+MASTER interprets that request narrowly as permission for one **repo-local, on-demand, user-operated GUI usability prototype**, using the existing CLI primitives. This is an explicit limited exception to the former no-GUI/no-launcher freeze, not permission for a full companion app or general platform.
 
-**FULL PASS.**
+Permitted: local UI implementation, a repo-local double-click entry, isolated regression tests, own-window demo rendering/screenshots, relevant usage documentation and bounded local checkpoint commits.
 
-The real product-skeleton task created the root `README.md`, then naturally exposed and resolved two real defects/evidence issues.
+Not permitted: server/daemon, installer/global launcher, auto-start, browser/ChatGPT automation, automatic target discovery, clipboard monitoring, auto paste/send, credential access, new external services/dependencies, paid API/credits, product push, merge, public or private external distribution.
 
-### Original product task
+Do not reinterpret 'a long task' as unlimited iterations or permission to fill time with new features. Codex should complete the bounded design -> implementation -> tests -> visual review -> evidence cycle, then stop.
 
-- commit: `a0bf8d74568a3a955126281991180f8641114bf9`
-- scope: root `README.md` only
-- result: product problem, Alpha shape, complete workflow, minimal use, Verified / Not Yet Verified, and explicit product boundaries documented.
+## User Hypothesis, Not Market Fact
 
-### MF-01 — wrong MASTER target
+The user proposes AI beginners/light users as an important audience. Treat this as a hypothesis for accessible language and interaction, not proof that most Chat/Codex users are beginners or that low-frequency users necessarily benefit.
 
-Real failure: Delivery Packet was correct but `handoff.ps1` opened the previous MASTER because the repo-local binding persisted across a MASTER transition.
+Working target: a non-specialist individual who actually needs Chat planning plus local Codex execution. For occasional one-shot edits, native tools/manual copy may remain cheaper than configuring this kit. UI should explain when it is unnecessary rather than force adoption.
 
-Resolution:
+## Verified / Likely / Unknown
 
-- explicit safe `-Rebind` added to `configure.ps1`;
-- default conflicting binding still fails closed;
-- invalid rebind preserves old binding;
-- same-target configure remains idempotent;
-- 30/30 Windows PowerShell 5.1 focused tests PASS;
-- binding moved from previous MASTER to current MASTER;
-- real return opened current MASTER;
-- `CLIPBOARD_EXACT=True`;
-- correction commit: `5cd04c811fad6f59f530bfd146a36148bdece98a`.
+### Verified within recorded evidence
 
-### First natural Correction Packet
+- The existing official Chat-context entry and local return helper work in the tested private workflow.
+- MASTER state recovery and repo binding are separate: recovering state did not migrate the old Chat URL.
+- Explicit rebind corrected the observed wrong-target case; default conflict refusal remains.
+- A final response must exist before it can be materialized/returned. The tested external post-turn sequence delivered the intended MF-02 packet.
+- Previous wrong-target, clipboard/retry, evidence-reconciliation and command/cwd steps created real user coordination costs; final PASS does not erase them.
+- Current attached-chat identity probe did not expose an exact identity. Do not generalize one negative probe into a universal impossibility claim.
+- Microsoft documents native .NET Windows Forms use from Windows PowerShell; the new UI's compatibility is still to be tested locally.
 
-**PASS.**
+### Likely / Design hypothesis
 
-A concise MF-01-only correction returned to the same Codex task and completed the fix without restating the full project background or adding Future Optional scope.
+A guided window may lower command/working-directory burden and make target/packet/timing visible while retaining manual send. This is not yet an observed usability improvement.
 
-### Attached-Chat Identity Probe 01
+### Unknown
 
-Read-only result:
+- Whether the proposed GUI actually reduces total effort rather than adding a new window.
+- Beginner comprehension and low-frequency user value.
+- UI runtime, scaling, keyboard usability and live integration on the user's machine.
+- Long-task Existing Chat refresh behavior.
+- Independent external value, installability and sustained use.
+- Earlier clipboard symptom's exact causal sequence was not independently logged; post-turn retry success does not prove all possible stale-packet cases impossible. No new persistent freshness subsystem is authorized.
 
-- attached context readable = Yes;
-- exact conversation ID exposed = No;
-- exact canonical Chat URL exposed = No;
-- commands/files/browser automation = 0.
+## Current Product Contract
 
-Decision: explicit `-Rebind` once per MASTER transition remains the correct Alpha boundary. No silent/addressless target discovery is justified without a supported identity source.
+Keep official Existing Chat -> Codex as the initial context path. The new GUI must only wrap existing repo-local configure/rebind/handoff behavior.
 
-### MF-02 — stale README evidence state
+- Single checkout; derive location from the launched script, not incidental cwd.
+- Read-only status/preview on launch and refresh; no clipboard/browser/binding side effects without an explicit action.
+- Show the stored target honestly; do not claim it has been automatically confirmed as the current MASTER.
+- No identity guessing. A new MASTER still requires one explicitly provided URL and confirmed rebind.
+- Show 'captured delivery' rather than 'task completed'. Stop/metadata alone does not prove current-turn completion or acceptance.
+- User confirms that Codex has ended and that the displayed packet/target is intended before return.
+- Preserve exact packet text, existing validation and the 64 KiB limit.
+- Never auto paste/send. Success means preparation/launch request, not independent browser verification or sent message.
+- Keep the accepted CLI fallback intact.
 
-The README still claimed Correction Packet had not been verified after MF-01 proved it had.
+## Freshness / Collision Check — 2026-09-09
 
-Resolution:
+MASTER read current primary sources for this scope:
 
-- root `README.md` only;
-- before HEAD: `5cd04c811fad6f59f530bfd146a36148bdece98a`;
-- after HEAD: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`;
-- one insertion / one deletion;
-- `git diff --check` PASS;
-- no push / merge.
+- OpenAI Desktop: `https://help.openai.com/en/articles/20001275/`.
+- Official Projects/chats: `https://learn.chatgpt.com/docs/projects`.
+- Official Hooks: `https://learn.chatgpt.com/docs/hooks`.
+- Microsoft PowerShell/Windows Forms: `https://learn.microsoft.com/en-us/powershell/scripting/samples/creating-a-custom-input-box?view=powershell-7.5`.
+- Current GitHub READMEs of `joseanu/codex-from-chatgpt`, `David-JA/codex-web-review-relay`, and `anightmonarch/codex-bridge-chatgpt` through the connected GitHub read path.
 
-### Post-turn sequencing verification
+The checked projects use MCP/App Server/tunnel or extension/browser-control paths, not a directly reusable no-service native GUI around this repo's approved primitives. No exact replacement was established in this bounded check; this is not a claim that none exists anywhere. Do not rebuild their bridge/transport features.
 
-A prior Ctrl+V symptom was not a stale-packet code defect. The helper had been invoked during the Codex turn before that turn's final assistant response existed.
+## Must Fix / User Decision Needed / Future Optional
 
-Real corrected sequence:
+Must Fix: none outstanding from the accepted Alpha task. UI implementation defects must be judged against this new bounded task, not retroactively added to Dogfood 02.
 
-1. Codex final MF-02 Delivery Packet fully ended;
-2. user opened a separate external Windows PowerShell 5.1 session;
-3. user ran `.\handoff-kit\handoff.ps1`;
-4. user copied nothing afterward;
-5. Ctrl+V in the Chat opened by the helper produced the latest MF-02 Delivery Packet.
+User Decision Needed: none to begin the bounded local work defined in HANDOFF under the current request. Stop for new scope, core-contract changes, permissions, installation, spending, external sharing or live owner validation.
 
-Result: **PASS**.
+Future Optional: addressless rebinding if a supported source emerges, global installation, multi-repo UI, persistent freshness/clipboard protection. Do not implement these now.
 
-Current usage contract:
+## Not Done
 
-> `handoff.ps1` must be invoked after the Codex turn has fully ended and the Stop Hook has materialized that final reply. Do not rely on a same-turn Codex invocation to transport that turn's future final response.
-
-No packet-freshness implementation is justified by the observed evidence.
-
-## Product Value Review
-
-### Verified value
-
-The combined workflow has now shown, in real private dogfood:
-
-- official Existing Chat → Codex can eliminate full Task Packet copying for bounded tasks;
-- the thin return helper can eliminate manual selection/copy of the Codex final Delivery Packet and manual searching for the origin Chat;
-- Delivery Packet + Review Evidence can avoid missing-evidence follow-up when prepared correctly;
-- exact repo/target checking matters: a real wrong-target defect was caught and fixed;
-- concise Correction Packet successfully reduced second-round background repetition in a real Must Fix;
-- canonical MASTER state recovery avoids repeated Project Source upload/delete churn;
-- final user control remains intact because paste/send is still manual.
-
-### Verified costs / friction
-
-- initial origin binding is required;
-- a MASTER transition requires one explicit URL `-Rebind` because official attached-chat metadata does not expose a stable exact target identity;
-- the user must run `handoff.ps1` externally after the Codex turn ends;
-- final paste/send remains manual by design;
-- the wrong-target failure showed that state migration and target correctness are real product risks, not theoretical concerns.
-
-### Assessment
-
-The evidence is now stronger than the original Gate 4 PIVOT because the previously unknown multi-round correction case has been naturally exercised and succeeded.
-
-However, evidence still comes from a single user's private workflow. External installability, comprehension, sustained use, and net benefit for another qualified user remain completely unverified.
-
-MASTER assessment:
-
-> **CONDITIONAL GO TO A SMALL GATE 5 DECISION.**
-
-This means there is now enough internal evidence to justify asking whether to run a small external validation. It does **not** mean Gate 5 has started, Beta is approved, or product/code may be pushed/shared.
-
-## Must Fix
-
-None.
-
-## User Decision Needed
-
-A genuine decision gate has now been reached:
-
-> whether to authorize preparation/execution of **Gate 5 — Small External Validation**.
-
-MASTER may prepare the bounded validation protocol without contacting anyone or sharing code. Any actual external-user recruitment/contact, product/code sharing or push, public release, paid use, or broader scope requires the user's explicit approval.
-
-## Unknown / Remaining Validation
-
-- external user setup/installability;
-- external comprehension of the product boundaries;
-- sustained-use value beyond the project owner;
-- whether users keep using the helper or revert to manual copy/paste;
-- longer-task Existing Chat refresh semantics;
-- net coordination benefit across different real projects/users.
+- Codex task dispatch/execution; planned local branch creation.
+- UI implementation, automated tests and screenshots.
+- Owner's real UI -> clipboard -> current MASTER acceptance.
+- Beginner/external validation and Beta decision.
+- Product/code push or distribution.
 
 ## Next Smallest Step
 
-Prepare a **bounded Gate 5 External Validation Protocol** internally only:
+User launches the prepared **USABILITY-SPIKE-01** in local Codex. The complete task is canonical HANDOFF, not a new Project Source upload.
 
-- 1–3 qualified users maximum;
-- real low-risk task, not a synthetic benchmark;
-- no public release;
-- no automatic send;
-- measure setup burden, copy/rewrite actions, wrong target/version, evidence follow-up, review rounds, and abandonment/bypass behavior;
-- define exactly what can be shared and what remains private;
-- do not contact participants or share/push product code until the user approves execution.
+Codex may autonomously finish the bounded local work and isolated self-tests, but must not change live binding, write the real clipboard, open the user's Chat, or run live handoff while the user rests. Real integration remains a later owner-controlled gate.
 
-After protocol preparation, stop for the user decision to **Proceed / Hold / Pivot / Stop**.
+Maximum self-delivery status: **IMPLEMENTED / SELF-TESTED / READY FOR OWNER VALIDATION**, or an honest PARTIAL/BLOCKED. Do not mark UI, market value or Gate 5 PASS.
 
-## Do Not Start Yet
-
-- external recruitment/contact without approval
-- product/code push or sharing without approval
-- public release
-- Beta promotion
-- new implementation spike
-- automatic/silent current-Chat discovery
-- browser/DOM/CDP automation
-- ChatGPT client-internal mutation
-- token/credential access
-- auto paste / send
-- global launcher / installer
-- GUI / daemon / server
-- full bridge / companion app
-- Work / multi-model / Open WebUI
-- paid API
-- merge / force push
+After the turn ends, the owner can open the local entry, confirm project/target/packet, explicitly prepare the return and manually paste/send for MASTER review. Then decide whether usability improved; no automatic next spike.
