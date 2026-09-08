@@ -5,9 +5,9 @@ Role: MASTER
 
 ## Phase
 
-**Dogfood 02 — BLOCKED on wrong return target**
+**Dogfood 02 — Bounded Fix 01 APPROVED / Correction Packet READY**
 
-## Latest Observation
+## Latest Real Failure
 
 A real Dogfood 02 return attempt produced:
 
@@ -18,9 +18,7 @@ A real Dogfood 02 return attempt produced:
 
 This is the first natural Must Fix in the post-Alpha combined workflow.
 
-## Classification
-
-### Must Fix
+## Must Fix
 
 **MF-01 — Current MASTER target rebinding**
 
@@ -28,92 +26,111 @@ The repo-local persistent origin binding does not automatically follow a MASTER 
 
 This violates the core no-wrong-target requirement.
 
-### User Decision Needed
+## User Decision
 
-Approve or reject a bounded product-code fix:
+Approved on 2026-09-09:
 
-**Bounded Fix 01 — Explicit Current-MASTER Rebind**
+> **Bounded Fix 01 — Explicit Current-MASTER Rebind**
 
-Smallest proposed change:
+Authorization:
 
-- add an explicit `-Rebind` switch (or equally explicit equivalent) to `handoff-kit/configure.ps1`;
-- preserve current fail-closed behavior by default;
-- only replace a different existing binding when the user explicitly supplies `-Rebind`;
-- validate the new target before replacement;
-- failed/invalid rebind must preserve the old binding;
-- add focused Windows PowerShell 5.1 tests;
-- update the relevant usage documentation only as needed;
-- no other product behavior changes.
+- local product-code implementation;
+- focused Windows PowerShell 5.1 tests;
+- directly relevant usage-doc update;
+- rebind to the current MASTER;
+- rerun the real Dogfood 02 return path.
 
-Approval authorizes local implementation + focused tests only.
-
-It does **not** authorize:
+Not authorized:
 
 - product/code push;
 - merge;
 - auto paste/send;
-- automatic target discovery;
-- GUI / daemon / installer;
+- automatic/silent target discovery;
 - browser/UI automation;
+- GUI / daemon / installer;
 - public release;
 - paid API;
-- broader scope expansion.
+- unrelated scope expansion.
 
-### Future Optional
+## UX Preference Captured
 
-- automatic/stale-binding detection beyond explicit rebind;
-- from-any-directory launch;
-- clipboard protection;
-- stale packet replay protection.
+The user prefers not to manually edit or paste a Chat URL every time.
 
-Do not mix these into the Must Fix.
+For this bounded fix:
 
-## Likely Root Cause
+- explicit rebind is the safe unblocker;
+- it should only be required when the MASTER Chat changes, not on every normal handoff;
+- removing manual URL entry entirely is a separate follow-up UX problem, not part of MF-01;
+- do not solve it through guessing, browser automation, client-internal access, tokens, or credentials.
 
-The persisted origin binding still points to the previous MASTER. This matches the current implementation: binding is repo-local/persistent and `configure.ps1` rejects a different existing target rather than silently replacing it.
+A future addressless/current-MASTER rebind path requires supported target-source research before implementation.
 
-Confirm the actual local binding during the fix/re-verification step.
+## Correction Packet — Send to Same Codex Task
 
-## Correction Packet Opportunity
+Use only the following correction scope:
 
-This is the first real natural Must Fix, but the original Dogfood 02 task was README-only. Changing `configure.ps1` expands that task's implementation scope, so MASTER must stop for user approval before sending the correction.
+```text
+Dogfood 02 Correction — MF-01 only.
 
-If approved, use a concise Correction Packet to the same Codex task where practical:
+A real return-target failure occurred: the Delivery Packet/clipboard content was correct, but handoff.ps1 opened the previous MASTER Chat instead of the current MASTER Chat.
 
-`MF-01 only`
-→ explicit rebind implementation
-→ focused tests
-→ configure binding to current MASTER
-→ rerun `handoff.ps1`
-→ verify correct current MASTER opens
-→ user paste/send
-→ MASTER delta review
+Bounded Fix 01 is approved.
 
-Do not repeat full history or include Future Optional items.
+Implement the smallest safe explicit current-MASTER rebind:
+
+1. First confirm the current local persisted binding and verify that it points to the previous MASTER.
+2. Add an explicit -Rebind switch (or equally explicit safe equivalent) to handoff-kit/configure.ps1.
+3. Preserve existing fail-closed behavior by default: a different existing binding must still fail when -Rebind is absent.
+4. With -Rebind, validate the new OriginChat using the existing strict URL rules before changing state.
+5. An invalid/failed rebind must leave the old binding unchanged.
+6. Add focused Windows PowerShell 5.1 tests covering:
+   - different binding without -Rebind still fails;
+   - valid -Rebind replaces the old target;
+   - invalid -Rebind preserves the old binding;
+   - same-target configure remains safe/idempotent.
+7. Update only directly relevant usage documentation if necessary.
+8. Do not modify handoff.ps1 unless the approved rebind cannot be implemented correctly without doing so; if that becomes necessary, stop and report before expanding scope.
+9. Do not implement automatic target discovery, browser/UI automation, auto paste/send, launcher, installer, daemon, GUI, or any Future Optional item.
+10. Do not push or merge.
+
+After implementation and focused tests, configure/rebind this repo to the current MASTER Chat URL supplied by the user, then rerun the existing handoff.ps1 path.
+
+Final Delivery Packet must include:
+- before/after HEAD
+- changed files
+- exact commit scope
+- git diff --stat
+- relevant complete diff/content
+- focused test commands + outputs
+- binding before/after target (redact nothing except credentials; there should be none)
+- real handoff re-verification result
+- Tests Not Run
+- Unverified
+- Blocking Issues
+- User Decision Needed
+
+Do not repeat the full project background and do not expand scope.
+```
 
 ## Dogfood 02 Status
 
-> **BLOCKED / RETURN TARGET FAIL**
+> **BLOCKED / FIX APPROVED / CORRECTION READY**
 
-Do not mark PASS until the return target is re-verified against the current MASTER.
-
-## Current Product Boundary
-
-Still preserve:
-
-- official Existing Chat → Codex for initial context handoff;
-- local execution;
-- Delivery Packet + Review Evidence;
-- Stop Hook materialization;
-- explicit helper invocation;
-- manual paste/send;
-- fail closed;
-- no full bridge.
+Do not mark PASS until the real return target is re-verified against the current MASTER.
 
 ## Next Smallest Step
 
-Wait for the user decision on **Bounded Fix 01 — Explicit Current-MASTER Rebind**.
+Send the correction above to the same Codex task.
 
-If approved: prepare the minimal Correction Packet and execute the bounded local fix through Codex.
+During the correction, the user will need to provide the **current MASTER Chat URL once** for the explicit rebind. This is a current Alpha limitation, not the desired long-term UX.
 
-If rejected: record Dogfood 02 as blocked by manual binding maintenance and reassess Pivot/Stop rather than implementing another workaround silently.
+After Codex finishes:
+
+1. run the approved focused tests;
+2. rebind to current MASTER;
+3. run `handoff.ps1`;
+4. verify current MASTER opens;
+5. user paste/send;
+6. MASTER performs delta review.
+
+If Codex discovers that implementing MF-01 requires broader product changes, stop for a new user scope decision.
