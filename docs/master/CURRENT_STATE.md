@@ -1,75 +1,118 @@
 # Current State
 
+Updated: 2026-09-09  
+Role: MASTER / authoritative dynamic state
+
 ## Current Stage
 
-Source Maintenance Probe 01 — Private GitHub Canonical State.
+The project remains in product validation + technical feasibility validation + bounded productization/dogfooding. It has not entered full application development.
 
-This is a bounded source-maintenance probe following the completed Lightweight Handoff Alpha v0.1 / Productization Spike 01. It is not a new productization spike.
+Current product status:
+
+- Gate 4 = PIVOT
+- Productization Spike 01 = PASS
+- Official Existing-Chat → Codex Probe 01 = PASS
+- Official Existing-Chat → Codex Probe 02 = PASS
+- Source Maintenance Probe 01 = PASS
 
 ## Active Repo
 
 `F:\Chat-Codex-Handoff\validation-repo`
 
-## Active Branch
+## Active Code Branch
 
 `prototype/lightweight-handoff-v0.1`
 
-## Current HEAD Before This Task
+Current pushed code-branch HEAD:
 
-`a48446f0572ecb5e94d35783dd1ace0eecb7c1ec`
+`869414c77d227fe2f1675c7cfa08b04250520279`
+
+Private remote:
+
+`BenCCCCCCCCC/Chat-Codex-Handoff`
+
+## Dynamic State Authority
+
+Authoritative dynamic MASTER state is moving to the dedicated GitHub branch:
+
+`meta/master-state`
+
+Canonical paths on that branch:
+
+- `docs/master/CURRENT_STATE.md`
+- `docs/master/HANDOFF.md`
+
+Project Sources should be treated as low-frequency bootstrap material, not as the storage mechanism for repeatedly versioned CURRENT_STATE/HANDOFF snapshots.
 
 ## Completed
 
-- Productization Spike 01 = PASS.
-- Official Existing-Chat → Codex Probe 01 = PASS.
-- Official Existing-Chat → Codex Probe 02 = PASS.
-- The lightweight Codex → Chat handoff helper is implemented and validated.
-- Official existing-Chat attachment has carried the MASTER context into Codex without copying the full Task Packet.
+- Persistent Binding + One-Command Return implemented and dogfooded.
+- Official existing ChatGPT chat → Codex context entry validated on the user's Windows Desktop.
+- Correct MASTER context + correct local repo runtime validated together.
+- Private GitHub repository created and verified private.
+- Stable current-state and handoff paths created and pushed.
+- MASTER independently read both canonical files from the connected GitHub repository at exact commit `869414c77d227fe2f1675c7cfa08b04250520279`.
+- Source Maintenance Probe 01 acceptance criteria for remote read, wrong-version avoidance, and zero Project Source add/delete for this state update are satisfied.
 
 ## Verified
 
-- The official Chat → Codex entry can expose the correct attached MASTER Chat context.
-- The attached MASTER context and the intended local repo runtime were verified together.
-- Repo root: `F:\Chat-Codex-Handoff\validation-repo`.
-- Branch before this probe: `prototype/lightweight-handoff-v0.1`.
-- HEAD before this probe: `a48446f0572ecb5e94d35783dd1ace0eecb7c1ec`.
-- `handoff-kit\handoff.ps1` exists and the prior productization acceptance checks passed.
-- Project Source maintenance churn is a newly observed real user cost.
-
-## Likely
-
-- The preferred lightweight workflow can use the official Chat → Codex context entry together with the existing Codex → Chat thin helper.
-- Stable state files in a private GitHub repository can reduce repeated Project Source deletion, upload, and version-suffix handling.
-
-## Unknown
-
-- Whether the MASTER can read these exact canonical files from the private GitHub repository after the bounded push.
-- Whether this source-maintenance approach eliminates wrong-version reads in continued real use.
-- Final Source Maintenance Probe 01 PASS remains pending MASTER's remote read.
+- GitHub repository visibility = private.
+- Remote code branch SHA = `869414c77d227fe2f1675c7cfa08b04250520279`.
+- `docs/master/CURRENT_STATE.md` and `docs/master/HANDOFF.md` are readable through the connected GitHub path.
+- Source Maintenance Probe 01 = PASS.
+- Full Task Packet copy can be 0 when using the official existing-chat attachment flow.
+- Codex → Chat manual Delivery Packet copy can be 0 when using Stop Hook + `handoff.ps1`.
+- No auto paste / no auto send remains the product boundary.
 
 ## Decisions
 
-- Preferred workflow: official Chat → Codex + existing Codex → Chat thin helper.
-- A custom Chat → Codex helper is Future Optional and is not currently needed unless new evidence changes that decision.
-- Project Sources remain for stable startup material; frequently changing MASTER state should use stable canonical repo paths if this probe passes.
-- Source Maintenance Probe 01 is the current active probe.
-- This probe authorizes one private GitHub repository, one focused documentation commit, and one bounded push of the current productization branch only.
+- Preferred workflow remains: official Chat → Codex context entry + local Codex execution + Delivery Packet/Review Evidence + Stop Hook + `handoff.ps1` + user-controlled paste/send.
+- Custom Chat → Codex helper is Future Optional unless new evidence shows the official path is insufficient.
+- Project Source Maintenance Churn is a verified user cost.
+- Frequently changing MASTER state should use stable GitHub canonical paths rather than version-suffixed uploaded Project Source files.
+- A narrow canonical-doc remote-write policy is approved: MASTER may maintain only `docs/master/CURRENT_STATE.md` and `docs/master/HANDOFF.md` on `meta/master-state` without requesting a new approval each time.
+- This policy does not authorize code push, merge, force push, public visibility, release, paid API use, or product scope expansion.
+- A dedicated state branch is used so canonical-doc maintenance does not implicitly carry future local code commits to the remote.
+
+## Likely
+
+- Dedicated state-branch maintenance is more stable than repeated Project Source replacement and preserves the no-code-push boundary.
+- A one-time Project Sources cleanup + stable pointer should remove the remaining manual source-maintenance burden.
+- The next valuable product validation is a real combined workflow dogfood rather than another handoff implementation.
+
+## Unknown
+
+- Whether the one-time Project Sources migration/pointer is clear enough for a brand-new MASTER without extra explanation.
+- Whether official added-chat context remains sufficient on a real modification task.
+- Whether a real Must Fix can be handled by a concise Correction Packet without background repetition.
+- Whether from-any-directory launch is worth implementing.
 
 ## Not Done
 
-- Source Maintenance Probe 01 has not yet received final MASTER acceptance.
-- No Project Source CRUD automation has been created.
-- No historical evidence migration has been performed.
-- No merge, release, GitHub Actions workflow, automatic push, or public publication has been performed.
+- One-time Project Sources cleanup/pointer migration.
+- Combined Lightweight Workflow Dogfood 01.
+- Real Must Fix / Correction Packet validation.
+- Global launcher, Safe Prefill, auto paste/send, full bridge, Gate 5 external validation.
 
-## Next Smallest Step
+## Next Smallest Steps
 
-Create and push this canonical state plus `docs/master/HANDOFF.md` to the approved private GitHub repository, return the Delivery Packet through the existing handoff flow, and have MASTER read both stable paths directly from GitHub.
+Two tracks may proceed in parallel until a real validation gate is reached:
+
+1. Prepare the one-time Project Sources migration to a stable GitHub pointer.
+2. Prepare Combined Lightweight Workflow Dogfood 01 using the already validated official Chat → Codex and Codex → Chat paths.
+
+Do not add new handoff functionality merely to create work.
 
 ## Do Not Start Yet
 
-- Do not start another productization spike.
-- Do not build a custom Chat → Codex helper.
-- Do not automate Project Source CRUD.
-- Do not merge, publish, release, enable GitHub Actions, or add automatic pushes.
-- Do not expand into GUI, daemon, Safe Prefill, automatic paste/send, full bridge, Work, Open WebUI, multi-model, or paid API scope.
+- Project Source CRUD automation
+- Browser/DOM/CDP automation
+- ChatGPT client-internal file mutation
+- GUI / daemon / server
+- Safe Prefill
+- auto paste / auto send
+- full bridge / companion app
+- Work / multi-model / Open WebUI
+- paid API
+- code push without separate authorization
+- merge / force push / public release
