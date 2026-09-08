@@ -15,6 +15,14 @@ From the repository, bind its origin MASTER Chat once:
 
 The binding is stored under this checkout's Git directory, so it persists without becoming product source or dirtying the normal worktree. A checkout will not silently use another repository's binding.
 
+If the repository must return to a different MASTER Chat, replace the existing binding explicitly:
+
+```powershell
+.\handoff-kit\configure.ps1 -OriginChat 'https://chatgpt.com/g/PROJECT_ID/c/NEW_CONVERSATION_ID' -Rebind
+```
+
+Without `-Rebind`, a different existing target still fails closed. The new URL is validated before the old binding is replaced; an invalid rebind leaves the old binding unchanged.
+
 ## Combined workflow
 
 1. Confirm the complete task, scope, and acceptance criteria in the MASTER Chat.

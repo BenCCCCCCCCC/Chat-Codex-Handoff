@@ -75,9 +75,13 @@ function New-TestRepository {
 }
 
 function Invoke-Configure {
-    param([string] $Repository, [string] $Origin)
+    param([string] $Repository, [string] $Origin, [switch] $Rebind)
+    $configureArguments = @('-OriginChat', $Origin)
+    if ($Rebind) {
+        $configureArguments += '-Rebind'
+    }
     Invoke-PS51 -FilePath (Join-Path $Repository 'handoff-kit\configure.ps1') `
-        -Arguments @('-OriginChat', $Origin) -WorkingDirectory $Repository -TempDirectory (Join-Path $Repository 'temp')
+        -Arguments $configureArguments -WorkingDirectory $Repository -TempDirectory (Join-Path $Repository 'temp')
 }
 
 function Write-Utf8Text {
@@ -186,6 +190,20 @@ exit $handoffExitCode
     $conflict = Invoke-Configure -Repository $conflictRepo -Origin $alternateOrigin
     $afterConflict = [System.IO.File]::ReadAllText((Join-Path $conflictRepo '.git\handoff-kit\origin-chat.json'))
     Assert-That (($firstBinding.ExitCode -eq 0) -and ($conflict.ExitCode -ne 0) -and ($beforeConflict -ceq $afterConflict)) 'Different existing binding is not silently overwritten' $conflict.Stderr
+
+    $validRebind = Invoke-Configure -Repository $conflictRepo -Origin $alternateOrigin -Rebind
+    $reboundBinding = [System.IO.File]::ReadAllText((Join-Path $conflictRepo '.git\handoff-kit\origin-chat.json')) | ConvertFrom-Json
+    Assert-That (($validRebind.ExitCode -eq 0) -and ($reboundBinding.origin_chat -ceq $alternateOrigin)) 'Valid explicit rebind replaces the old target' $validRebind.Stderr
+
+    $beforeInvalidRebind = [System.IO.File]::ReadAllText((Join-Path $conflictRepo '.git\handoff-kit\origin-chat.json'))
+    $invalidRebind = Invoke-Configure -Repository $conflictRepo -Origin 'https://evil.example/c/abc' -Rebind
+    $afterInvalidRebind = [System.IO.File]::ReadAllText((Join-Path $conflictRepo '.git\handoff-kit\origin-chat.json'))
+    Assert-That (($invalidRebind.ExitCode -ne 0) -and ($beforeInvalidRebind -ceq $afterInvalidRebind)) 'Invalid explicit rebind preserves the old binding' $invalidRebind.Stderr
+
+    $beforeIdempotentConfigure = [System.IO.File]::ReadAllText((Join-Path $conflictRepo '.git\handoff-kit\origin-chat.json'))
+    $idempotentConfigure = Invoke-Configure -Repository $conflictRepo -Origin $alternateOrigin
+    $afterIdempotentConfigure = [System.IO.File]::ReadAllText((Join-Path $conflictRepo '.git\handoff-kit\origin-chat.json'))
+    Assert-That (($idempotentConfigure.ExitCode -eq 0) -and ($beforeIdempotentConfigure -ceq $afterIdempotentConfigure)) 'Same-target configure remains safe and idempotent' $idempotentConfigure.Stderr
 
     $missingBindingRepo = New-TestRepository
     Write-Utf8Text -Path (Join-Path $missingBindingRepo 'handoff-kit\test-wrapper.ps1') -Text $wrapper

@@ -42,6 +42,14 @@ Run from the repository:
 
 `configure.ps1` validates the ChatGPT conversation URL and stores a repository-specific binding under the checkout's Git directory. The binding persists without becoming tracked product source, and a different origin Chat is not silently substituted or rebound.
 
+To deliberately replace that target with a new MASTER Chat, use the explicit rebind path:
+
+```powershell
+.\handoff-kit\configure.ps1 -OriginChat 'https://chatgpt.com/g/PROJECT_ID/c/NEW_CONVERSATION_ID' -Rebind
+```
+
+Without `-Rebind`, a different target continues to fail closed. An invalid rebind leaves the existing binding unchanged.
+
 ### 2. Start a bounded Codex task
 
 In Codex, create a new chat, add the existing MASTER Chat as context, select the correct local repository, and send a minimal trigger for the task already approved in MASTER. Codex performs only that bounded work and produces a Delivery Packet with Review Evidence.

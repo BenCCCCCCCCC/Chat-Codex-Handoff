@@ -1,7 +1,9 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $true)]
-    [string] $OriginChat
+    [string] $OriginChat,
+
+    [switch] $Rebind
 )
 
 $ErrorActionPreference = 'Stop'
@@ -12,15 +14,20 @@ try {
     $repository = Get-HandoffRepositoryContext
     $validatedOrigin = Assert-HandoffOriginChat -OriginChat $OriginChat
 
+    $replaceExisting = $false
     if (Test-Path -LiteralPath $repository.BindingPath) {
         $existing = Read-HandoffBinding -RepositoryContext $repository
-        if (-not [string]::Equals($existing.OriginChat, $validatedOrigin, [System.StringComparison]::Ordinal)) {
-            throw 'A different origin Chat is already bound. This spike does not support implicit rebinding.'
+        if ([string]::Equals($existing.OriginChat, $validatedOrigin, [System.StringComparison]::Ordinal)) {
+            Write-Output 'origin chat binding = Already configured'
+            Write-Output "binding path = $($repository.BindingPath)"
+            exit 0
         }
 
-        Write-Output 'origin chat binding = Already configured'
-        Write-Output "binding path = $($repository.BindingPath)"
-        exit 0
+        if (-not $Rebind) {
+            throw 'A different origin Chat is already bound. Use -Rebind to replace it explicitly.'
+        }
+
+        $replaceExisting = $true
     }
 
     $bindingDirectory = Split-Path -Parent $repository.BindingPath
@@ -33,9 +40,35 @@ try {
     } | ConvertTo-Json
 
     $utf8WithoutBom = New-Object System.Text.UTF8Encoding($false)
-    [System.IO.File]::WriteAllText($repository.BindingPath, $binding, $utf8WithoutBom)
+    $temporaryBindingPath = Join-Path $bindingDirectory ([System.IO.Path]::GetRandomFileName())
+    $backupBindingPath = $null
+    $replacementCompleted = $false
+    try {
+        [System.IO.File]::WriteAllText($temporaryBindingPath, $binding, $utf8WithoutBom)
+        if ($replaceExisting) {
+            $backupBindingPath = Join-Path $bindingDirectory ([System.IO.Path]::GetRandomFileName())
+            [System.IO.File]::Replace($temporaryBindingPath, $repository.BindingPath, $backupBindingPath)
+            $replacementCompleted = $true
+        }
+        else {
+            [System.IO.File]::Move($temporaryBindingPath, $repository.BindingPath)
+        }
+    }
+    finally {
+        if (Test-Path -LiteralPath $temporaryBindingPath) {
+            Remove-Item -LiteralPath $temporaryBindingPath -Force
+        }
+        if ($replacementCompleted -and (Test-Path -LiteralPath $backupBindingPath)) {
+            Remove-Item -LiteralPath $backupBindingPath -Force
+        }
+    }
 
-    Write-Output 'origin chat binding = Configured'
+    if ($replaceExisting) {
+        Write-Output 'origin chat binding = Rebound'
+    }
+    else {
+        Write-Output 'origin chat binding = Configured'
+    }
     Write-Output "binding path = $($repository.BindingPath)"
 }
 catch {
