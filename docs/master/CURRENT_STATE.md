@@ -5,7 +5,7 @@ Role: MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**Post-Dogfood-02 / MF-01 closed — Alpha v0.1 remains PASS**
+**Post-Dogfood-02 / MF-01 closed — Current-MASTER Binding UX Research 01**
 
 The project remains in product validation + technical feasibility validation + bounded dogfooding. It has not entered Beta or full application development.
 
@@ -43,64 +43,42 @@ No full bridge, auto paste/send, GUI, daemon, installer, or custom Chat → Code
 
 ## Dogfood 02 / MF-01 Result
 
-Dogfood 02 naturally exposed the first real Must Fix:
+MF-01 was a real wrong-return-target failure caused by the persistent repo binding remaining on the previous MASTER.
 
-> `handoff.ps1` opened the previous MASTER Chat because the repo-local persistent binding had not moved to the new MASTER.
-
-The user approved **Bounded Fix 01 — Explicit Current-MASTER Rebind**.
-
-Codex implemented and locally committed:
-
-- `configure.ps1` explicit `-Rebind`;
-- default conflicting binding still fails closed;
-- valid rebind replaces the old target only after validation;
-- invalid rebind preserves the old binding;
-- same-target configure remains idempotent;
-- focused Windows PowerShell 5.1 tests;
-- directly relevant README usage updates;
-- `handoff.ps1` unchanged.
-
-Correction commit:
+Bounded Fix 01 implemented explicit safe `-Rebind` and was locally committed as:
 
 `5cd04c811fad6f59f530bfd146a36148bdece98a`
 
-Commit message:
+Verified:
 
-`fix: support explicit origin chat rebind`
-
-## Verified
-
-- actual old binding pointed to the previous MASTER;
-- explicit rebind changed it to the current MASTER;
+- old binding = previous MASTER;
+- explicit rebind = current MASTER;
 - Windows PowerShell 5.1 focused suite = `30 passed / 0 failed`;
-- conflicting binding without `-Rebind` still fails;
-- valid explicit rebind replaces the target;
-- invalid explicit rebind preserves the old binding;
-- same-target configure remains safe/idempotent;
-- real handoff reported current origin target opened;
+- conflict without `-Rebind` still fails closed;
+- invalid rebind preserves old binding;
+- same-target configure remains idempotent;
+- real handoff retry opened the current bound target;
 - `CLIPBOARD_EXACT=True`;
-- user actually pasted the resulting packet into the current MASTER Chat;
-- no auto paste;
-- no auto send;
-- no product/code push or merge.
+- user pasted the resulting packet into the current MASTER;
+- no auto paste/send;
+- no push/merge.
 
 ## Correction Packet Validation
 
 **PASS.**
 
-This was the first natural Correction Packet branch:
+The first natural correction branch successfully used:
 
 `MASTER Must Fix`
 → concise MF-01-only Correction Packet
 → same Codex task
 → bounded local fix
 → focused tests
-→ explicit current-MASTER rebind
 → real handoff retry
 → current MASTER paste/send
 → MASTER delta review.
 
-The correction did not require repeating full project history or adding Future Optional scope.
+No full-background repetition or Future Optional expansion was needed.
 
 ## MASTER Delta Review
 
@@ -112,45 +90,63 @@ None remaining for MF-01.
 
 None for the completed correction.
 
-### Future Optional / Newly Verified User Cost
+### Verified UX Cost
 
-The user explicitly prefers not to manually edit/paste the current Chat URL whenever MASTER changes.
+The user prefers not to copy/edit a Chat URL whenever MASTER changes.
 
-Current Alpha behavior is improved but still requires one explicit URL rebind per MASTER transition.
+Current corrected Alpha requires one explicit URL rebind per MASTER transition, not per ordinary handoff.
 
-Classify this as a **verified UX cost**, not part of MF-01. Before any implementation:
+## Current-MASTER Binding UX Research 01
 
-1. check current OpenAI official capabilities for a supported current/origin Chat target source;
-2. check nearby GitHub projects / existing patterns;
-3. reject guessing, token/credential access, client-internal mutation, or brittle browser/UI automation as default solutions;
-4. return to the user before any scope-expanding product-code implementation.
+### Official findings
 
-## Dogfood 02 Status
+- OpenAI officially supports opening an existing ChatGPT chat from Codex `New chat` and adding it to a Codex chat.
+- Current official documentation reviewed does **not** expose a documented local-script contract for the attached/current ChatGPT conversation URL or conversation ID.
+- Current official Desktop documentation still keeps Codex as a separate view/history.
+- The official in-app Browser can work with a current page, but using browser control to infer/select the MASTER would move this product toward browser automation rather than a stable handoff identity contract.
 
-**PASS for the return-target correction path / product skeleton dogfood can proceed from the corrected Alpha.**
+### Nearby-project patterns
 
-The combined workflow has now naturally exercised both a successful one-round path and a real Must Fix → Correction Packet → same-task repair path.
+- `codex-web-review-relay` avoids automatic conversation selection: the user manually opens and Arms the intended ChatGPT tab; navigation/change invalidates the session.
+- `codex-bridge-chatgpt` uses the in-app Browser with explicit automation consent and acknowledges non-zero browser/account-policy risk.
+- `codex-from-chatgpt` solves a different problem through MCP + Codex App Server and does not provide a lightweight current-Chat identity source for this workflow.
 
-## Pre-Gate5 Status
+### Research conclusion
 
-Still **NOT READY**.
+No supported zero-input current-MASTER target source has been established yet.
 
-One corrected Dogfood 02 increases evidence, but external validation should not start automatically. First complete the bounded no-code research on addressless/current-MASTER rebinding and reassess whether the remaining friction warrants another product change or a thinner workflow.
+Therefore:
+
+- do **not** implement silent/automatic rebind now;
+- explicit `-Rebind` remains the correct Alpha safety boundary unless new official metadata is validated;
+- one promising no-code question remains: whether Codex can expose a stable identity/URL for the **existing ChatGPT chat already attached to that Codex chat**.
 
 ## Next Smallest Step
 
-Run **Current-MASTER Binding UX Research 01** — research only, no product-code change:
+**Attached-Chat Identity Probe 01 — read-only real Desktop validation.**
 
-- official OpenAI capability check;
-- nearby-project collision/pattern check;
-- identify whether a supported target source can remove manual URL entry safely;
-- compare against keeping explicit `-Rebind` as the Alpha boundary.
+Goal:
 
-Then classify the result as:
+Determine whether a Codex chat that already has the current MASTER attached can report a stable ChatGPT conversation identity/URL from official attachment metadata/context, without reading browser DOM, local ChatGPT internal files, credentials, or tokens.
 
-- no implementation needed;
-- bounded implementation candidate requiring user approval;
-- or Pivot/Stop if automation cost exceeds the saved work.
+Rules:
+
+- no file modification;
+- no commit;
+- no push;
+- no paid API;
+- no browser/DOM/CDP automation;
+- no client-internal file access;
+- no invented URL reconstruction from visible text;
+- report only what Codex can actually access from the attached-chat context/metadata.
+
+This is a real Desktop validation gate and requires the user to run it in Codex.
+
+If the probe cannot expose a supported stable identity, keep explicit `-Rebind` as Alpha behavior and do not add brittle automation.
+
+## Gate 5
+
+Still **NOT READY**.
 
 ## Do Not Start Yet
 
