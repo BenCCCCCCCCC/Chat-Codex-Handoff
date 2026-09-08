@@ -1,0 +1,176 @@
+﻿param()
+$ErrorActionPreference='Stop'
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+. (Join-Path $PSScriptRoot 'PanelAdapter.ps1')
+. (Join-Path $PSScriptRoot 'HandoffPanel.ps1')
+$repo=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
+$evidence=Join-Path $repo 'artifacts\usability-spike-01'
+[void][IO.Directory]::CreateDirectory($evidence)
+$fixture=Join-Path ([IO.Path]::GetTempPath()) ('handoff ui 中文 space ' + [guid]::NewGuid().ToString('N'))
+[void][IO.Directory]::CreateDirectory($fixture)
+& git init --quiet $fixture
+& git -C $fixture -c user.name=Fixture -c user.email=fixture@example.invalid commit --allow-empty --quiet -m fixture
+Copy-Item (Join-Path $repo 'handoff-kit') $fixture -Recurse
+$isolated=Join-Path $fixture 'isolated'; [void][IO.Directory]::CreateDirectory($isolated)
+$script:passed=0; $script:failed=0
+$script:log=New-Object Collections.Generic.List[string]
+function Check($ok,[string]$name) {
+    if($ok){$script:passed++; $line='PASS: '+$name}else{$script:failed++; $line='FAIL: '+$name}
+    $script:log.Add($line); Write-Output $line
+}
+function Write-Text($path,$value){[IO.File]::WriteAllText($path,$value,(New-Object Text.UTF8Encoding($false)))}
+$bindingPath=Join-Path $fixture '.git\handoff-kit\origin-chat.json'
+$metaPath=Join-Path $isolated 'chat-codex-t06-session.json'
+$packetPath=Join-Path $isolated 'packet.md'
+$url='https://chatgpt.com/c/demo-one'
+$other='https://chatgpt.com/c/demo-two'
+$packet="中文交付`r`nUnicode Ω ✓ →`n多行"
+$metadata=@{session_id='fixture-session';turn_id='fixture-turn';cwd=$fixture;hook_event_name='Stop';delivery_packet_path=$packetPath;delivery_packet_status='CAPTURED'}
+function Restore-Packet {Write-Text $packetPath $packet; Write-Text $metaPath ($metadata | ConvertTo-Json)}
+# Hash live files without recording their contents. No clipboard API is called by this test.
+$livePaths=@((Join-Path $repo '.git\handoff-kit\origin-chat.json'),(Join-Path $env:TEMP 'chat-codex-t06-session.json'),(Join-Path $repo '.codex\hooks.json'))
+if(Test-Path -LiteralPath $livePaths[1]){
+    $liveMeta=Get-Content -LiteralPath $livePaths[1] -Raw | ConvertFrom-Json
+    if($liveMeta.delivery_packet_path){$livePaths+= $liveMeta.delivery_packet_path}
+}
+$liveBefore=@{}; foreach($p in $livePaths){if(Test-Path -LiteralPath $p){$liveBefore[$p]=(Get-FileHash -LiteralPath $p).Hash}}
+foreach($file in Get-ChildItem $PSScriptRoot -Filter '*.ps1'){
+    $tokens=$null; $errors=$null; [void][Management.Automation.Language.Parser]::ParseFile($file.FullName,[ref]$tokens,[ref]$errors)
+    Check ($errors.Count -eq 0) ('PS5 parse '+$file.Name)
+}
+Check ($PSVersionTable.PSVersion.Major -eq 5 -and [Threading.Thread]::CurrentThread.ApartmentState -eq 'STA') 'Windows PowerShell 5.1 STA'
+Push-Location $isolated
+try {
+    Check (-not (Get-PanelSnapshot $fixture $isolated).Valid) 'Missing binding blocks preview from non-repo cwd'
+    $r=Invoke-PanelCore $fixture Configure -Origin 'https://evil.example/c/a' -TempDirectory $isolated
+    Check ($r.ExitCode -ne 0 -and -not(Test-Path $bindingPath)) 'Invalid URL does not save'
+    $r=Invoke-PanelCore $fixture Configure -Origin $url -TempDirectory $isolated
+    Check ($r.ExitCode -eq 0) 'Existing configure called in checkout with spaces and Chinese path'
+    $binding=[IO.File]::ReadAllText($bindingPath)
+    $r=Invoke-PanelCore $fixture Configure -Origin $other -TempDirectory $isolated
+    Check ($r.ExitCode -ne 0 -and [IO.File]::ReadAllText($bindingPath) -ceq $binding) 'No silent rebind'
+    $r=Invoke-PanelCore $fixture Configure -Origin $other -Rebind -TempDirectory $isolated
+    Check ($r.ExitCode -eq 0 -and ((Get-Content $bindingPath -Raw|ConvertFrom-Json).origin_chat -ceq $other)) 'Explicit rebind calls existing script'
+    Check (-not(Get-PanelSnapshot $fixture $isolated).Valid) 'Missing metadata blocks preview'
+    Restore-Packet
+    $snap=Get-PanelSnapshot $fixture $isolated
+    Check ($snap.Valid -and $snap.Packet -ceq $packet) 'Core validated Unicode exact preview without clipboard/browser'
+    $state=@{Snapshot=$snap;Confirmed=$false;Busy=$false}
+    try{Invoke-PanelReturn $state $fixture $isolated;Check $false 'Confirmation required'}catch{Check $true 'Confirmation required'}
+    $state.Confirmed=$true;Write-Text $packetPath 'changed'
+    try{Invoke-PanelReturn $state $fixture $isolated;Check $false 'Changed packet blocks action'}catch{Check (-not $state.Confirmed -and -not $state.Busy) 'Changed packet blocks action and clears confirmation'}
+    Restore-Packet
+    foreach($case in @('CorruptMetadata','WrongRepo','MissingPacket','EmptyPacket','OversizePacket','InvalidBinding')){
+        Restore-Packet; $saved=[IO.File]::ReadAllText($bindingPath)
+        switch($case){
+            CorruptMetadata {Write-Text $metaPath '{'}
+            WrongRepo {$wrong=$metadata.Clone();$wrong.cwd=$isolated;Write-Text $metaPath ($wrong|ConvertTo-Json)}
+            MissingPacket {$wrong=$metadata.Clone();$wrong.delivery_packet_path=Join-Path $isolated 'absent';Write-Text $metaPath ($wrong|ConvertTo-Json)}
+            EmptyPacket {Write-Text $packetPath ''}
+            OversizePacket {Write-Text $packetPath ('x'*65537)}
+            InvalidBinding {Write-Text $bindingPath '{}'}
+        }
+        Check (-not(Get-PanelSnapshot $fixture $isolated).Valid) ($case+' fails closed via existing core')
+        Write-Text $bindingPath $saved
+    }
+    Restore-Packet
+    $longUrl='https://chatgpt.com/c/' + ('long-target-'*30)
+    $r=Invoke-PanelCore $fixture Configure -Origin $longUrl -Rebind -TempDirectory $isolated
+    Check ($r.ExitCode -eq 0 -and (Get-PanelSnapshot $fixture $isolated).Target -ceq $longUrl) 'Long URL survives structured parameter transport'
+    $state.Snapshot=Get-PanelSnapshot $fixture $isolated;$state.Confirmed=$true
+    [void](Invoke-PanelCore $fixture Configure -Origin $other -Rebind -TempDirectory $isolated)
+    try{Invoke-PanelReturn $state $fixture $isolated;Check $false 'Changed target blocks action'}catch{Check (-not $state.Confirmed) 'Changed target blocks action'}
+    # In-process seam intercepts real Handoff only; Preview/Configure still run real core in fixture.
+    $script:originalCore=${function:Invoke-PanelCore};$script:calls=0;$script:failAction=$false;$script:changeDuring=$false
+    function Invoke-PanelCore {
+        param($Repository,$Action,$Origin='', [switch]$Rebind,$TempDirectory=$env:TEMP)
+        if($Action -eq 'Handoff'){
+            $script:calls++
+            if($script:changeDuring){Write-Text $packetPath 'changed during action'}
+            return [pscustomobject]@{ExitCode=[int]$script:failAction;Error='fixture failure';Output='mock handoff'}
+        }
+        & $script:originalCore $Repository $Action -Origin $Origin -Rebind:$Rebind -TempDirectory $TempDirectory
+    }
+    $state.Snapshot=Get-PanelSnapshot $fixture $isolated;$state.Confirmed=$true
+    $r=Invoke-PanelReturn $state $fixture $isolated
+    Check ($r.ExitCode -eq 0 -and $script:calls -eq 1) 'Confirmed stable action invokes handoff seam once'
+    $state.Confirmed=$true;$state.Busy=$true
+    try{Invoke-PanelReturn $state $fixture $isolated}catch{}
+    Check ($script:calls -eq 1) 'Busy guard rejects concurrent invocation'
+    $state.Busy=$false;$state.Confirmed=$true;$script:failAction=$true
+    try{Invoke-PanelReturn $state $fixture $isolated;Check $false 'Failed action not success'}catch{Check (-not $state.Busy -and -not $state.Confirmed) 'Failed action not success and clears confirmation'}
+    $script:failAction=$false;$script:changeDuring=$true;$state.Confirmed=$true
+    try{Invoke-PanelReturn $state $fixture $isolated;Check $false 'Mid-action change not success'}catch{Check ($_.Exception.Message -like '*during preparation*') 'Mid-action change not reported as complete success'}
+    Restore-Packet
+    ${function:Invoke-PanelCore}=$script:originalCore
+    $panel=New-HandoffPanel -Repository $fixture -Demo
+    $panel.Form.Show()
+    [Windows.Forms.Application]::DoEvents()
+    $graphics=$panel.Form.CreateGraphics();$script:log.Add("Rendered DPI: $($graphics.DpiX) x $($graphics.DpiY)");$graphics.Dispose()
+    Check ($panel.Form.SelectNextControl($null,$true,$true,$true,$true)) 'Native tab traversal finds focusable control'
+    $panel.Confirm.Checked=$true; & $panel.Reload
+    Check (-not $panel.Confirm.Checked -and -not $panel.Prepare.Enabled) 'Refresh invalidates confirmation'
+    function Save-Panel($name){
+        $panel.Form.PerformLayout();$panel.Form.CreateControl()
+        [Windows.Forms.Application]::DoEvents()
+        $bitmap=New-Object Drawing.Bitmap($panel.Form.Width,$panel.Form.Height)
+        try{$panel.Form.DrawToBitmap($bitmap,(New-Object Drawing.Rectangle(0,0,$bitmap.Width,$bitmap.Height)));$bitmap.Save((Join-Path $evidence ($name+'.png')))}finally{$bitmap.Dispose()}
+    }
+    foreach($view in @('Unconfigured','Captured','Error')){$panel.State.Snapshot=New-DemoSnapshot $view;& $panel.Render;Save-Panel $view}
+    $panel.State.Snapshot=New-DemoSnapshot;& $panel.Render
+    $panel.Confirm.Checked=$true
+    # PerformClick requires a visible selectable control; use its actual registered event via OnClick.
+    $click=[Windows.Forms.Control].GetMethod('OnClick',[Reflection.BindingFlags]'Instance,NonPublic')
+    $click.Invoke($panel.Prepare,@([EventArgs]::Empty))
+    Check ($panel.Status.Text -like '演示成功*') 'Demo prepare uses actual event with zero OS effects'
+    Save-Panel 'Success'
+    $panel.Form.ClientSize=New-Object Drawing.Size(740,560);Save-Panel 'Small-window'
+    $panel.Form.ClientSize=New-Object Drawing.Size(960,640)
+    # Capture only our own settings dialog using a UI timer, then cancel without saving.
+    $timer=New-Object Windows.Forms.Timer;$timer.Interval=250
+    $timer.Add_Tick({
+        foreach($window in @([Windows.Forms.Application]::OpenForms)){
+            if($window.Text -eq '设置 / 更换返回对话'){
+                $bitmap=New-Object Drawing.Bitmap($window.Width,$window.Height)
+                $window.DrawToBitmap($bitmap,(New-Object Drawing.Rectangle(0,0,$bitmap.Width,$bitmap.Height)))
+                $bitmap.Save((Join-Path $evidence 'Rebind-dialog.png'));$bitmap.Dispose();$window.Close();$timer.Stop()
+            }
+        }
+    }.GetNewClosure())
+    $beforeCancel=[IO.File]::ReadAllText($bindingPath)
+    $timer.Start();$click.Invoke($panel.Settings,@([EventArgs]::Empty));$timer.Dispose()
+    Check ([IO.File]::ReadAllText($bindingPath) -ceq $beforeCancel) 'Cancel target dialog preserves fixture binding'
+    $timer=New-Object Windows.Forms.Timer;$timer.Interval=250
+    $timer.Add_Tick({
+        foreach($window in @([Windows.Forms.Application]::OpenForms)){
+            if($window.Text -eq '确认更换返回对话'){
+                $bitmap=New-Object Drawing.Bitmap($window.Width,$window.Height)
+                $window.DrawToBitmap($bitmap,(New-Object Drawing.Rectangle(0,0,$bitmap.Width,$bitmap.Height)))
+                $bitmap.Save((Join-Path $evidence 'Rebind-confirmation.png'));$bitmap.Dispose();$window.Close();$timer.Stop()
+            }
+        }
+    }.GetNewClosure())
+    $timer.Start();$accepted=Confirm-PanelRebind $panel.Form $url $other -Demo;$timer.Dispose()
+    Check (-not $accepted -and [IO.File]::ReadAllText($bindingPath) -ceq $beforeCancel) 'Explicit old/new confirmation cancelled without writes'
+    $panel.Form.Dispose();Check $panel.Form.IsDisposed 'Window disposed; no background worker'
+    $launch=New-Object Diagnostics.ProcessStartInfo
+    $launch.FileName="$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
+    $launch.Arguments='-NoProfile -STA -File "' + (Join-Path $fixture 'handoff-kit\ui\Start-Handoff.ps1') + '" -Demo'
+    $launch.WorkingDirectory=$isolated;$launch.UseShellExecute=$false;$launch.CreateNoWindow=$true
+    $child=[Diagnostics.Process]::Start($launch)
+    try{
+        $deadline=[DateTime]::UtcNow.AddSeconds(15)
+        do {Start-Sleep -Milliseconds 200; $child.Refresh()} while(-not $child.HasExited -and $child.MainWindowHandle -eq [IntPtr]::Zero -and [DateTime]::UtcNow -lt $deadline)
+        Check (-not $child.HasExited -and $child.MainWindowHandle -ne [IntPtr]::Zero) 'Demo entry starts from foreign cwd and spaced checkout'
+        $closed=$child.CloseMainWindow()
+        Check ($closed -and $child.WaitForExit(15000)) 'Closing entry window exits its own process'
+    }finally{$child.Dispose()}
+    foreach($p in $liveBefore.Keys){Check ((Get-FileHash -LiteralPath $p).Hash -ceq $liveBefore[$p]) ('Live file unchanged: '+[IO.Path]::GetFileName($p))}
+}
+finally{Pop-Location}
+$summary="RESULT: passed=$script:passed failed=$script:failed"
+$script:log.Add($summary);Write-Output $summary
+$script:log.Add('Fixture retained in OS TEMP; no live clipboard/browser actions. Screenshots use demo only.')
+Write-Text (Join-Path $evidence 'ui-tests.txt') ($script:log -join "`r`n")
+if($script:failed -gt 0){exit 1}
