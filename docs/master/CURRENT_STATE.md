@@ -5,66 +5,52 @@ Role: MASTER / authoritative dynamic state
 
 ## Current Stage
 
-The project remains in product validation + technical feasibility validation + bounded productization/dogfooding. It has not entered full application development.
+**Post-Alpha Internal Validation / Alpha Surface Freeze — Dogfood 02 READY**
 
-Current phase:
+The project remains in product validation + technical feasibility validation + bounded dogfooding. It has not entered Beta or full application development.
 
-> **Post-Alpha Internal Validation / Alpha Surface Freeze — Dogfood 02 READY**
+Current status:
 
-Current product status:
+- Gate 4 = **PIVOT**
+- Productization Spike 01 = **PASS**
+- Official Existing-Chat → Codex Probe 01 = **PASS**
+- Official Existing-Chat → Codex Probe 02 = **PASS**
+- Source Maintenance Probe 01 = **PASS**
+- Combined Lightweight Workflow Dogfood 01 = **FULL PASS**
+- Fresh MASTER Recovery Probe 01 = **PASS**
+- Post-Alpha Internal Review = **COMPLETE**
+- Repository / State Integrity Audit 01 = **PASS**
+- Pre-Gate5 Readiness Audit = **NOT READY**
 
-- Gate 4 = PIVOT
-- Productization Spike 01 = PASS
-- Official Existing-Chat → Codex Probe 01 = PASS
-- Official Existing-Chat → Codex Probe 02 = PASS
-- Source Maintenance Probe 01 = PASS
-- Combined Lightweight Workflow Dogfood 01 = FULL PASS
-- Fresh MASTER Recovery Probe 01 = PASS
-- Post-Alpha Internal Review = COMPLETE
-- Post-Alpha autonomous readiness work = COMPLETE
-
-Alpha v0.1 remains PASS. It is not promoted to Beta. No Spike 02 implementation is authorized.
+Alpha v0.1 remains PASS. No Spike 02 implementation is authorized.
 
 ## Active Repo / Version
 
-Active repo:
+- repo: `F:\Chat-Codex-Handoff\validation-repo`
+- active code branch: `prototype/lightweight-handoff-v0.1`
+- local code HEAD last reported by Codex: `ddb74cbefeda621108ec209ce4fbc3b3f463329f`
+- pushed code-branch HEAD: `869414c77d227fe2f1675c7cfa08b04250520279`
+- private remote: `BenCCCCCCCCC/Chat-Codex-Handoff`
+- repository default branch: `prototype/lightweight-handoff-v0.1`
 
-`F:\Chat-Codex-Handoff\validation-repo`
-
-Active code branch:
-
-`prototype/lightweight-handoff-v0.1`
-
-Current local code-branch HEAD reported by Codex:
-
-`ddb74cbefeda621108ec209ce4fbc3b3f463329f`
-
-Current pushed code-branch HEAD:
-
-`869414c77d227fe2f1675c7cfa08b04250520279`
-
-Private remote:
-
-`BenCCCCCCCCC/Chat-Codex-Handoff`
-
-The local/pushed split remains intentional under the no-code-push boundary. Any product/code push still requires separate user authorization.
+The local/pushed split is intentional under the current no-code-push boundary. Any product/code push requires a separate user decision.
 
 ## Dynamic State Authority
 
-Authoritative dynamic state lives on private GitHub branch:
+Authoritative dynamic MASTER state:
 
-`meta/master-state`
-
-Canonical paths:
-
+- repository: `BenCCCCCCCCC/Chat-Codex-Handoff`
+- ref: `meta/master-state`
 - `docs/master/CURRENT_STATE.md`
 - `docs/master/HANDOFF.md`
 
 Project Sources remain low-frequency bootstrap material.
 
+MASTER has standing narrow permission to maintain only these two canonical docs on `meta/master-state`. This does not authorize product/code push, merge, force push, public release, paid API use, or scope expansion.
+
 ## Current Product Direction
 
-Preferred composed workflow:
+Use the existing composed workflow unchanged:
 
 `official existing ChatGPT chat → Codex`
 → `local repo execution`
@@ -75,132 +61,95 @@ Preferred composed workflow:
 → `manual paste / send`
 → `delta review`
 
-The product is not framed as “connecting Chat and Codex.” The official Existing Chat → Codex entry already covers the initial context handoff for the validated cases.
+The product is no longer framed as “connecting Chat and Codex.” The official Existing Chat → Codex entry already covers initial context handoff for the validated cases.
 
-Remaining differentiated value:
+Remaining differentiated value is deliberately narrow:
 
 - low configuration cost;
 - correct repo / target binding;
 - evidence-ready Codex → Chat return;
-- reduced manual packet copying / chat searching / re-explanation;
-- user-controlled paste/send;
-- fail-closed behavior.
+- reduced manual copy/search/re-explanation;
+- fail-closed behavior;
+- preserved user control over paste/send.
 
 Do not build a second custom Chat → Codex bridge while the official path remains sufficient.
 
-## Post-Alpha Internal Review — Verdict
-
-**CONTINUE INTERNAL VALIDATION / HOLD FEATURE EXPANSION.**
-
-Alpha v0.1 has sufficient evidence for technical feasibility and one real end-to-end dogfood path. It does not yet have enough evidence for Beta promotion, full app development, or Gate 5 external validation.
-
-Current Alpha implementation remains appropriately narrow:
-
-- repo-local binding under Git state;
-- HTTPS + exact `chatgpt.com` conversation-target validation;
-- conflicting binding is not silently overwritten;
-- metadata / repo / packet validation fails closed;
-- packet size bounded to 64 KiB;
-- Windows PowerShell 5.1 validated;
-- no automatic paste;
-- no automatic send.
-
-No implementation change is justified by the current review.
-
-## Latest Autonomous Research — Existing Chat Refresh Semantics
-
-Official material currently confirms that Codex `New chat` can open an existing ChatGPT chat and add it to a Codex chat.
-
-However, the reviewed official documentation does **not** specify whether messages added later to the originating Chat are automatically refreshed into an already-created Codex chat.
-
-Classification:
-
-- Existing Chat → Codex entry exists: **Verified external + real Desktop verified**.
-- Context sufficient for the previously tested real bounded task: **Verified real Desktop**.
-- Ongoing refresh/synchronization semantics after later Chat messages: **Unknown / undocumented in reviewed official material**.
-
-Decision:
-
-- do not create a standalone refresh-semantics test;
-- observe it naturally in the next longer real task;
-- do not build a custom Chat → Codex helper to pre-empt an undocumented problem.
-
-## Latent / Unverified Implementation Risk
-
-Static review still identifies one non-observed risk:
-
-> `handoff.ps1` uses the fixed same-repo Stop Hook metadata record but has no explicit packet-consumed/freshness token.
-
-The Stop Hook does record `captured_at`, but current `handoff.ps1` does not use a freshness/consumption check.
-
-There is no real stale-packet misdelivery evidence.
-
-Decision:
-
-- Future Optional / observation risk only;
-- do not manufacture a regression task;
-- do not implement replay/freshness state without observed user cost or a later release-gate requirement.
-
-## Completed
-
-- Persistent Binding + One-Command Return implemented and dogfooded.
-- Official Existing Chat → Codex context entry validated on the user's Windows Desktop.
-- Correct MASTER context + correct local repo runtime validated together.
-- Private GitHub canonical dynamic-state route established.
-- Source Maintenance Probe 01 = PASS.
-- Combined Lightweight Workflow Dogfood 01 = FULL PASS.
-- Dogfood 01 full Task Packet copy = 0.
-- Dogfood 01 prompt rewrite = 0.
-- Dogfood 01 wrong repo/target = 0.
-- Dogfood 01 missing-review-evidence follow-up = 0.
-- Dogfood 01 Codex → Chat manual Delivery Packet copy = 0 in the confirmed return run.
-- Dogfood 01 `CLIPBOARD_EXACT=True`.
-- Fresh MASTER Recovery Probe 01 = PASS.
-- Post-Alpha Internal Review = COMPLETE.
-- Current pushed Alpha tree / handoff source boundary reviewed.
-- Latest official refresh-semantics research completed; refresh behavior remains undocumented/Unknown.
-- Dogfood 02 readiness rules and metrics are fixed; no new product file or feature is required.
-
 ## Verified
 
-- GitHub repository visibility = private.
-- Current pushed code branch SHA = `869414c77d227fe2f1675c7cfa08b04250520279`.
-- Current local code HEAD reported by Codex = `ddb74cbefeda621108ec209ce4fbc3b3f463329f`.
-- Official Existing Chat context supports a real repo modification task.
-- `handoff.ps1` loads persistent origin binding and resolves the materialized packet automatically.
-- origin Chat opened = Yes.
-- clipboard exact = True in the confirmed run.
+- Official Existing Chat context supports a real bounded repo modification task.
+- Dogfood 01 full Task Packet copy = 0.
+- Dogfood 01 prompt rewrite = 0.
+- Dogfood 01 wrong repo / target = 0.
+- Dogfood 01 missing-review-evidence follow-up = 0.
+- Dogfood 01 Codex → Chat manual Delivery Packet copy = 0 in the confirmed return run.
+- `CLIPBOARD_EXACT=True` in the confirmed return run.
 - no auto paste = verified.
 - no auto send = verified.
-- dynamic MASTER recovery via pointer + GitHub canonical state = verified.
+- Fresh MASTER recovery using stable pointer + GitHub canonical state = PASS.
+- Alpha implementation remains repo-local and fail-closed for its validated cases.
+- The private repository currently has exactly two branches relevant to this project state: `prototype/lightweight-handoff-v0.1` and `meta/master-state`.
+- Repository / State Integrity Audit 01: `meta/master-state` has merge base `869414c77d227fe2f1675c7cfa08b04250520279`, is ahead only by MASTER-state maintenance commits, and the branch compare shows changes only in `docs/master/CURRENT_STATE.md` and `docs/master/HANDOFF.md`.
+- No product-code branch mutation was introduced by MASTER dynamic-state maintenance.
 
 ## Likely
 
-- Best current product shape remains a composed workflow, not a standalone bridge.
-- Incremental value, if meaningful, should appear on real evidence-heavy or multi-round tasks rather than trivial edits.
-- More feature work now would outpace validated product value.
+- Best current product shape remains official Chat → Codex + thin local Codex → Chat return, not a standalone bridge.
+- Additional value, if real, is more likely to appear on evidence-heavy or multi-round tasks than on synthetic one-shot probes.
+- New feature work now would outpace validated user value.
 
-## Unknown / Validation Gates
+## Unknown / Remaining Validation
 
-- Net benefit across additional realistic tasks.
 - Real Must Fix / Correction Packet value.
-- Long-task official Existing Chat context sufficiency and refresh behavior.
-- Whether stale same-repo Stop metadata ever becomes an operational failure.
-- Whether from-any-directory launch or clipboard protection is worth implementing.
-- External-user installability, comprehension, and sustained-use value.
+- Net benefit on additional realistic tasks.
+- Existing Chat long-task refresh/synchronization behavior; current official material confirms adding an existing Chat but does not define automatic refresh after later originating-Chat messages.
+- Whether stale same-repo Stop metadata ever becomes a real operational failure.
+- External-user installability, comprehension, sustained use, and willingness to keep the workflow.
 
-## Decisions
+## Observation Risks — Not Current Must Fix
 
-- Alpha v0.1 remains PASS.
-- Current phase = Post-Alpha Internal Validation / Alpha Surface Freeze.
-- Dogfood 02 readiness = COMPLETE.
-- No Beta promotion.
-- No Spike 02 implementation.
-- No new implementation candidate is open.
-- Custom Chat → Codex helper remains Future Optional.
-- MASTER may maintain only the two canonical state docs on `meta/master-state` under standing permission.
-- This does not authorize product/code push, merge, force push, public release, paid API use, or scope expansion.
-- Do not create a task merely to keep development moving.
+### Same-repo packet freshness
+
+The Stop Hook records `captured_at`, but current `handoff.ps1` has no explicit consumed/freshness token. No stale-packet misdelivery has been observed.
+
+Decision: observe naturally; do not manufacture a test or implementation.
+
+### Existing Chat refresh semantics
+
+Official documentation does not establish whether later messages from the originating Chat automatically refresh into an already-created Codex chat.
+
+Decision: observe naturally on a longer real task; do not create a standalone probe solely for coverage.
+
+## Repository / State Integrity Audit 01
+
+**PASS.**
+
+Findings:
+
+- only the product branch and dedicated MASTER-state branch are present;
+- product remote HEAD remains `869414c77d227fe2f1675c7cfa08b04250520279`;
+- MASTER-state branch remains separated from product code;
+- compare from product branch to `meta/master-state` changes only the two canonical MASTER docs;
+- no accidental product/code push, merge, or branch proliferation was found.
+
+## Pre-Gate5 Readiness Audit
+
+**NOT READY.**
+
+Reason:
+
+- the original Validation Plan allows Gate 5 only after Gate 4 shows clear benefit;
+- Gate 4 formally ended in PIVOT;
+- the composed Alpha workflow has one real combined modification-task FULL PASS, which is strong feasibility evidence but not enough evidence of repeated product value;
+- real multi-round Correction Packet value remains unverified;
+- external-user value remains unverified by definition.
+
+Do not invent a task count or KPI to force Gate 5.
+
+The next decision toward Gate 5 should occur only after natural real-task evidence shows repeated net benefit or repeated friction. At that point MASTER must stop for the user to choose among:
+
+- proceed toward Gate 5 external validation;
+- Pivot thinner;
+- Stop further productization.
 
 ## Must Fix
 
@@ -208,42 +157,17 @@ None.
 
 ## User Decision Needed
 
-The project has now reached the next genuine user-facing validation gate, but that gate may only run when a **real bounded project task naturally exists**.
-
-No scope/product decision is needed until such a task exists or another explicit gate is reached.
-
-## Future Optional
-
-- from-any-directory launch UX
-- clipboard-overwrite UX
-- same-repo packet freshness/replay protection if real evidence appears
-- Existing Chat refresh investigation only if real friction appears
-- historical evidence cleanup only if it becomes a real maintenance burden
-
-## Not Done
-
-- Combined Lightweight Workflow Dogfood 02 on a naturally occurring real task.
-- Real Must Fix / Correction Packet validation.
-- Gate 5 external validation.
-- Global launcher / installer, Safe Prefill, auto paste/send, GUI/daemon/full bridge.
-- Product/code push of the current local Dogfood 01 HEAD.
+None until a real user-facing validation gate is reached.
 
 ## Next Smallest Step
 
-**Dogfood 02 is READY but must not be fabricated.**
+### Combined Lightweight Workflow Dogfood 02
 
-When the next real bounded project task naturally exists, stop for the user/Desktop gate and execute the existing workflow unchanged:
+Status: **READY / WAITING FOR NATURAL REAL TASK**.
 
-`official existing Chat → Codex`
-→ `real local task`
-→ `Delivery Packet + Review Evidence`
-→ `Stop Hook`
-→ `handoff.ps1`
-→ `origin MASTER`
-→ `manual paste / send`
-→ `delta review`
+Do not fabricate a product change or bug to create this task.
 
-Record:
+When a real bounded task naturally exists, stop for the user because Desktop/Codex execution is a real validation gate, then use the existing workflow unchanged and record:
 
 - full Task Packet copy;
 - prompt rewrite;
@@ -255,24 +179,31 @@ Record:
 - Must Fix;
 - User Decision Needed;
 - stale/incorrect packet symptom, if any;
-- official-context refresh friction, if any.
+- Existing Chat refresh friction, if any.
 
-If a genuine Must Fix appears, validate the concise Correction Packet against the same Codex task. If no Must Fix appears, finish normally.
+If a genuine Must Fix naturally appears, validate:
+
+`MASTER delta review`
+→ `concise Correction Packet`
+→ `codex://threads/<session_id>`
+→ `same Codex task`
+
+If no Must Fix appears, finish normally and do not manufacture one.
 
 ## Do Not Start Yet
 
-- fabricated Dogfood 02 task
+- fabricated Dogfood task
 - new productization spike
 - custom Chat → Codex helper
-- global launcher / installer
 - Project Source CRUD automation
-- Browser/DOM/CDP automation
+- browser/DOM/CDP automation
 - ChatGPT client-internal mutation
+- global launcher / installer
 - GUI / daemon / server
 - Safe Prefill
 - auto paste / auto send
 - full bridge / companion app
 - Work / multi-model / Open WebUI
 - paid API
-- product/code push without separate authorization
+- product/code push without explicit authorization
 - merge / force push / public release
