@@ -3,16 +3,16 @@
     $state = @{ Busy=$false; Confirmed=$false; Snapshot=$null; Demo=[bool]$Demo }
     $form = New-Object Windows.Forms.Form
     $form.Text = '轻量交接 · 本地实验版'
-    $form.ClientSize = New-Object Drawing.Size(960,640)
-    $form.MinimumSize = New-Object Drawing.Size(740,560)
+    $form.ClientSize = New-Object Drawing.Size(960,740)
+    $form.MinimumSize = New-Object Drawing.Size(740,660)
     $form.StartPosition = 'CenterScreen'
     $form.Font = New-Object Drawing.Font('Microsoft YaHei UI',10)
     $form.BackColor = [Drawing.Color]::FromArgb(247,249,252)
     $form.AutoScaleMode = 'Font'
     $layout = New-Object Windows.Forms.TableLayoutPanel
     $layout.Dock = 'Fill'; $layout.Padding = New-Object Windows.Forms.Padding(24)
-    $layout.ColumnCount = 1; $layout.RowCount = 9
-    foreach ($height in @(38,62,54,52,38,0,40,42,52)) {
+    $layout.ColumnCount = 1; $layout.RowCount = 10
+    foreach ($height in @(38,62,54,52,38,112,0,40,42,52)) {
         $style = New-Object Windows.Forms.RowStyle
         if ($height -eq 0) { $style.SizeType='Percent'; $style.Height=100 }
         else { $style.SizeType='Absolute'; $style.Height=$height }
@@ -39,22 +39,30 @@
     $settings=New-Object Windows.Forms.Button; $settings.Text='设置 / 更换返回对话'; $settings.Dock='Fill'
     $targetRow.Controls.Add($target,0,0); $targetRow.Controls.Add($settings,1,0); $layout.Controls.Add($targetRow,0,3)
     $status=Add-Label '正在读取…' 4
+    $summary=New-Object Windows.Forms.TextBox; $summary.Multiline=$true; $summary.ReadOnly=$true; $summary.ScrollBars='Both'; $summary.WordWrap=$false; $summary.Dock='Fill'; $summary.AccessibleName='交付身份摘要'
+    $layout.Controls.Add($summary,0,5)
     $preview=New-Object Windows.Forms.TextBox; $preview.Multiline=$true; $preview.ReadOnly=$true; $preview.ScrollBars='Both'; $preview.Dock='Fill'; $preview.WordWrap=$false; $preview.BackColor=[Drawing.Color]::White; $preview.AccessibleName='已捕获的交付预览'
-    $layout.Controls.Add($preview,0,5)
-    $confirm=New-Object Windows.Forms.CheckBox; $confirm.Text='我确认本轮 Codex 已结束，目标正确，准备返回上面这份交付'; $confirm.Dock='Fill'; $layout.Controls.Add($confirm,0,6)
+    $layout.Controls.Add($preview,0,6)
+    $confirm=New-Object Windows.Forms.CheckBox; $confirm.Text='我确认本轮 Codex 已结束，目标正确，准备返回上面这份交付'; $confirm.Dock='Fill'; $layout.Controls.Add($confirm,0,7)
     $buttons=New-Object Windows.Forms.FlowLayoutPanel; $buttons.Dock='Fill'
-    $prepare=New-Object Windows.Forms.Button; $prepare.Text='准备交付并打开 Chat'; $prepare.Size=New-Object Drawing.Size(240,36); $prepare.BackColor=[Drawing.Color]::FromArgb(32,90,170); $prepare.ForeColor=[Drawing.Color]::White; $prepare.FlatStyle='Flat'
+    $prepare=New-Object Windows.Forms.Button; $prepare.Text='仅复制交付'; $prepare.Size=New-Object Drawing.Size(150,36); $prepare.BackColor=[Drawing.Color]::FromArgb(32,90,170); $prepare.ForeColor=[Drawing.Color]::White; $prepare.FlatStyle='Flat'
+    $openWeb=New-Object Windows.Forms.Button; $openWeb.Text='复制并打开网页对话'; $openWeb.Size=New-Object Drawing.Size(200,36)
     $refresh=New-Object Windows.Forms.Button; $refresh.Text='刷新'; $refresh.Size=New-Object Drawing.Size(90,36)
     $help=New-Object Windows.Forms.Button; $help.Text='使用说明'; $help.Size=New-Object Drawing.Size(110,36)
-    $buttons.Controls.AddRange(@($prepare,$refresh,$help)); $layout.Controls.Add($buttons,0,7)
-    $footer=Add-Label '仅显示已保存目标，未自动确认当前 MASTER。捕获记录不代表任务已完成或验收。不会自动粘贴或发送。' 8
+    $buttons.Controls.AddRange(@($prepare,$openWeb,$refresh,$help)); $layout.Controls.Add($buttons,0,8)
+    $footer=Add-Label '仅显示已保存目标，未自动确认当前 MASTER。捕获记录不代表任务已完成或验收。不会自动粘贴或发送。' 9
     if ($Demo) { $form.Text += ' · 演示数据，不连接真实交接'; $title.Text='演示数据，不连接真实交接' }
     $render = {
         $confirm.Checked=$false; $state.Confirmed=$false
         $snap=$state.Snapshot
         $target.Text=$snap.Target
         $preview.Text=$snap.Packet
-        $confirm.Enabled=$snap.Valid; $prepare.Enabled=$false
+        $confirm.Enabled=$snap.Valid; $prepare.Enabled=$false; $openWeb.Enabled=$false
+        $summary.Text='交付身份：未提供'
+        if($snap.Valid){
+            $s=$snap.Summary
+            $summary.Text="交付标题：$($s.Title)`r`n交付版本：$($s.Version)  ·  $($s.Relation)`r`n当前项目版本：$($s.CheckoutHead)`r`n交付指纹 SHA-256：$($s.Fingerprint.Substring(0,12))"
+        }
         if ($snap.Valid) { $status.Text='发现已捕获交付 · ' + $snap.Stamp }
         elseif (-not $snap.Target) { $status.Text='未配置有效目标 · 请设置返回对话'; $preview.Text=$snap.Error }
         else { $status.Text='无有效交付 / 记录不完整或不匹配'; $preview.Text='请等 Codex 回复完全结束后刷新。配置存在不代表 Hook 已运行或已受信任。' + "`r`n" + $snap.Error }
@@ -66,7 +74,7 @@
         & $render
     }.GetNewClosure()
     $refresh.Add_Click($reload)
-    $confirm.Add_CheckedChanged({ $state.Confirmed=$confirm.Checked; $prepare.Enabled=$confirm.Checked -and $state.Snapshot.Valid -and -not $state.Busy }.GetNewClosure())
+    $confirm.Add_CheckedChanged({ $state.Confirmed=$confirm.Checked; $prepare.Enabled=$confirm.Checked -and $state.Snapshot.Valid -and -not $state.Busy; $openWeb.Enabled=$prepare.Enabled }.GetNewClosure())
     $details.Add_Click({ [void][Windows.Forms.MessageBox]::Show($form, "$Repository`r`nBranch: $($state.Snapshot.Branch)`r`nHEAD: $($state.Snapshot.Head)", '当前项目') }.GetNewClosure())
     $help.Add_Click({ [void][Windows.Forms.MessageBox]::Show($form, "使用说明：$Repository\handoff-kit\ui\README.md`r`nCLI 回退：在项目中运行 .\handoff-kit\handoff.ps1`r`n需要已配置并受信任的现有 Stop Hook；本窗口不安装 Hook。", '使用说明') }.GetNewClosure())
     $settings.Add_Click({
@@ -98,20 +106,24 @@
         }.GetNewClosure())
         [void]$dialog.ShowDialog($form); $dialog.Dispose()
     }.GetNewClosure())
-    $prepare.Add_Click({
+    $returnAction={
+        param([bool]$copyOnly)
         if ($state.Busy -or -not $state.Confirmed) { return }
-        $prepare.Enabled=$false; $refresh.Enabled=$false; $settings.Enabled=$false
+        $prepare.Enabled=$false; $openWeb.Enabled=$false; $refresh.Enabled=$false; $settings.Enabled=$false
         $status.Text='正在准备…'; $status.Refresh()
         try {
             if ($state.Demo) { $state.Confirmed=$false }
-            else { [void](Invoke-PanelReturn $state $Repository) }
+            else { [void](Invoke-PanelReturn $state $Repository -CopyOnly:$copyOnly) }
             $status.Text='交付已准备；已请求打开目标 Chat，请手动粘贴并发送。'
-            if ($state.Demo) { $status.Text='演示成功 · 未写剪贴板，未打开 Chat，未发送。' }
+            if($copyOnly){$status.Text='已复制；请切换到你确认的网页 / Desktop Chat，手动粘贴发送。'}
+            if ($state.Demo) { $status.Text='演示成功 · ' + $(if($copyOnly){'仅复制路线'}else{'复制并打开网页路线'}) + '；未写剪贴板、未打开 Chat、未发送。' }
         } catch { $status.Text='准备失败 · 请阅读下方错误并刷新后重试'; $preview.Text=$_.Exception.Message }
         finally { $confirm.Checked=$false; $refresh.Enabled=$true; $settings.Enabled=$true }
-    }.GetNewClosure())
+    }.GetNewClosure()
+    $prepare.Add_Click({ & $returnAction $true }.GetNewClosure())
+    $openWeb.Add_Click({ & $returnAction $false }.GetNewClosure())
     & $reload
-    [pscustomobject]@{ Form=$form; State=$state; Render=$render; Reload=$reload; Status=$status; Preview=$preview; Confirm=$confirm; Prepare=$prepare; Settings=$settings }
+    [pscustomobject]@{ Form=$form; State=$state; Render=$render; Reload=$reload; Status=$status; Summary=$summary; Preview=$preview; Confirm=$confirm; Prepare=$prepare; OpenWeb=$openWeb; Settings=$settings }
 }
 
 function Confirm-PanelRebind {
@@ -132,5 +144,7 @@ function New-DemoSnapshot {
     $snap=[pscustomobject]@{ Target='https://chatgpt.com/c/demo-current-master'; Packet="演示交付 · USABILITY-SPIKE-01`r`n`r`n已完成：中文窗口与现有脚本集成。`r`n自测：隔离数据，不连接真实交接。`r`n下一步：由用户确认目标并手动发送。`r`n`r`nUnicode: 中文 ✓ Ω →"; Stamp='演示捕获时间 2026-09-09 10:30'; Valid=$true; Error=''; Identity='demo'; Branch='prototype/usability-spike-01'; Head='demo — not a real commit' }
     if ($View -eq 'Unconfigured') { $snap.Target=''; $snap.Packet=''; $snap.Valid=$false; $snap.Error='请用“设置 / 更换返回对话”填写一次明确的 Chat URL。' }
     if ($View -eq 'Error') { $snap.Valid=$false; $snap.Error='演示错误：记录来自另一个项目，不能准备交付。' }
+    $snap.Packet="# 演示交付 · UX-02 / UX-03`r`nFinal HEAD: 1234567890abcdef1234567890abcdef12345678`r`n`r`n"+$snap.Packet
+    $snap | Add-Member -NotePropertyName Summary -NotePropertyValue (Get-DeliverySummary $snap.Packet ([Text.Encoding]::UTF8.GetBytes($snap.Packet)) $snap.Head)
     return $snap
 }

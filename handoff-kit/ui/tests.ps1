@@ -56,6 +56,18 @@ try {
     Restore-Packet
     $snap=Get-PanelSnapshot $fixture $isolated
     Check ($snap.Valid -and $snap.Packet -ceq $packet) 'Core validated Unicode exact preview without clipboard/browser'
+    $sha='1234567890abcdef1234567890abcdef12345678'
+    $declared="# 中文交付 ✓`r`n- Before HEAD: aaaaaaa`r`n- **Final HEAD**: ``$sha```r`nAfter HEAD: $sha"
+    $bytes=[Text.Encoding]::UTF8.GetBytes($declared)
+    $s=Get-DeliverySummary $declared $bytes $sha
+    Check ($s.Title -ceq '中文交付 ✓' -and $s.Version -ceq $sha -and $s.Relation -eq '与当前项目一致') 'Summary uses actual heading and final only, not Before'
+    $none=Get-DeliverySummary 'prose aaaaaaa' ([byte[]]@(1,2)) $sha
+    Check ($none.Title -eq '未提供' -and $none.Version -eq '未提供' -and $none.Relation -eq '无法判断') 'Missing declarations never inferred from checkout'
+    $conflict=Get-DeliverySummary ($declared+"`nCurrent HEAD: bbbbbbb") $bytes $sha
+    Check ($conflict.Version -like '不明确*') 'Conflicting declared versions stay ambiguous'
+    $different=Get-DeliverySummary $declared $bytes ('b'*40)
+    Check ($different.CheckoutHead -ceq ('b'*40) -and $different.Version -ceq $sha -and $different.Relation -eq '与当前项目不同') 'Checkout version remains separate; mismatch informational'
+    Check ($s.Fingerprint -ceq (Get-DeliverySummary $declared $bytes $sha).Fingerprint -and $s.Fingerprint -cne (Get-DeliverySummary $declared ($bytes+[byte]0) $sha).Fingerprint) 'Fingerprint hashes exact bytes, stable and changes including invisible byte'
     $state=@{Snapshot=$snap;Confirmed=$false;Busy=$false}
     try{Invoke-PanelReturn $state $fixture $isolated;Check $false 'Confirmation required'}catch{Check $true 'Confirmation required'}
     $state.Confirmed=$true;Write-Text $packetPath 'changed'
@@ -84,13 +96,13 @@ try {
     # In-process seam intercepts real Handoff only; Preview/Configure still run real core in fixture.
     $script:originalCore=${function:Invoke-PanelCore};$script:calls=0;$script:failAction=$false;$script:changeDuring=$false
     function Invoke-PanelCore {
-        param($Repository,$Action,$Origin='', [switch]$Rebind,$TempDirectory=$env:TEMP)
+        param($Repository,$Action,$Origin='', [switch]$Rebind,$TempDirectory=$env:TEMP,[switch]$CopyOnly)
         if($Action -eq 'Handoff'){
             $script:calls++
             if($script:changeDuring){Write-Text $packetPath 'changed during action'}
             return [pscustomobject]@{ExitCode=[int]$script:failAction;Error='fixture failure';Output='mock handoff'}
         }
-        & $script:originalCore $Repository $Action -Origin $Origin -Rebind:$Rebind -TempDirectory $TempDirectory
+        & $script:originalCore $Repository $Action -Origin $Origin -Rebind:$Rebind -TempDirectory $TempDirectory -CopyOnly:$CopyOnly
     }
     $state.Snapshot=Get-PanelSnapshot $fixture $isolated;$state.Confirmed=$true
     $r=Invoke-PanelReturn $state $fixture $isolated
@@ -104,6 +116,35 @@ try {
     try{Invoke-PanelReturn $state $fixture $isolated;Check $false 'Mid-action change not success'}catch{Check ($_.Exception.Message -like '*during preparation*') 'Mid-action change not reported as complete success'}
     Restore-Packet
     ${function:Invoke-PanelCore}=$script:originalCore
+    # Fixture-only OS-effect spies. The adapter still forwards to the actual core -CopyOnly.
+    $fixtureCore=Join-Path $fixture 'handoff-kit\handoff.ps1'
+    $coreText=[IO.File]::ReadAllText($fixtureCore)
+    $spies=@'
+if ($d.Action -eq 'Handoff') {
+    function Set-Clipboard { param([string]$Value) [IO.File]::WriteAllText((Join-Path $env:TEMP 'copied.txt'),$Value) }
+    function Start-Process { param([string]$FilePath) [IO.File]::WriteAllText((Join-Path $env:TEMP 'opened.txt'),$FilePath) }
+}
+'@
+    Write-Text $fixtureCore ($coreText.Replace('$ErrorActionPreference = ''Stop''', $spies+"`r`n"+'$ErrorActionPreference = ''Stop'''))
+    foreach($copyOnly in @($true,$false)){
+        $state.Snapshot=Get-PanelSnapshot $fixture $isolated;$state.Confirmed=$false
+        try{Invoke-PanelReturn $state $fixture $isolated -CopyOnly:$copyOnly;Check $false 'Route needs confirmation'}catch{Check $true "Confirmation gated CopyOnly=$copyOnly"}
+        $state.Confirmed=$true;Write-Text $packetPath 'changed'
+        try{Invoke-PanelReturn $state $fixture $isolated -CopyOnly:$copyOnly;Check $false 'Changed route packet'}catch{Check (-not $state.Confirmed) "Packet change rejects CopyOnly=$copyOnly"}
+        Restore-Packet;$state.Snapshot=Get-PanelSnapshot $fixture $isolated;$state.Confirmed=$true
+        $savedBinding=[IO.File]::ReadAllText($bindingPath)
+        Write-Text $bindingPath ($savedBinding.Replace($other,$url))
+        try{Invoke-PanelReturn $state $fixture $isolated -CopyOnly:$copyOnly;Check $false 'Changed route target'}catch{Check (-not $state.Confirmed) "Target change rejects CopyOnly=$copyOnly"}
+        Write-Text $bindingPath $savedBinding
+        $state.Snapshot=Get-PanelSnapshot $fixture $isolated;$state.Confirmed=$true;$state.Busy=$true
+        try{Invoke-PanelReturn $state $fixture $isolated -CopyOnly:$copyOnly;Check $false 'Busy route'}catch{Check $true "Busy guard rejects CopyOnly=$copyOnly"}
+        $state.Busy=$false
+        $result=Invoke-PanelReturn $state $fixture $isolated -CopyOnly:$copyOnly
+        Check ($result.ExitCode -eq 0 -and [IO.File]::ReadAllText((Join-Path $isolated 'copied.txt')) -ceq $packet) "Actual adapter/core exact payload CopyOnly=$copyOnly"
+        if($copyOnly){Check (-not(Test-Path (Join-Path $isolated 'opened.txt'))) 'CopyOnly actual adapter/core has zero browser requests'}
+        else{Check ([IO.File]::ReadAllText((Join-Path $isolated 'opened.txt')) -ceq $other) 'Web action requests exact bound URL'}
+    }
+    Write-Text $fixtureCore $coreText
     $panel=New-HandoffPanel -Repository $fixture -Demo
     $panel.Form.Show()
     [Windows.Forms.Application]::DoEvents()
@@ -125,8 +166,12 @@ try {
     $click.Invoke($panel.Prepare,@([EventArgs]::Empty))
     Check ($panel.Status.Text -like '演示成功*') 'Demo prepare uses actual event with zero OS effects'
     Save-Panel 'Success'
-    $panel.Form.ClientSize=New-Object Drawing.Size(740,560);Save-Panel 'Small-window'
-    $panel.Form.ClientSize=New-Object Drawing.Size(960,640)
+    Check ($panel.Status.Text -like '*仅复制路线*') 'Copy-only distinct demo success'
+    $panel.Confirm.Checked=$true;$click.Invoke($panel.OpenWeb,@([EventArgs]::Empty))
+    Check ($panel.Status.Text -like '*复制并打开网页路线*') 'Web distinct demo success'
+    Save-Panel 'Success-open-web'
+    $panel.Form.ClientSize=New-Object Drawing.Size(740,640);Save-Panel 'Small-window'
+    $panel.Form.ClientSize=New-Object Drawing.Size(960,740)
     # Capture only our own settings dialog using a UI timer, then cancel without saving.
     $timer=New-Object Windows.Forms.Timer;$timer.Interval=250
     $timer.Add_Tick({

@@ -32,6 +32,8 @@ Existing MASTER Chat
 
 ### Experimental local window
 
+The window offers `仅复制交付` for an already-open web/Desktop Chat and a separate `复制并打开网页对话` action. CLI equivalent: `.\handoff-kit\handoff.ps1 -CopyOnly` performs the same validation and clipboard preparation without opening a URL; no-argument behavior is unchanged. Copy-only does not select or verify the destination Chat. Delivery summary fields describe the captured packet, separately from current checkout HEAD.
+
 For users already combining Chat planning with local Codex work, double-click `Start-Handoff.cmd` in this checkout. The Chinese guided window previews the saved target and captured delivery before an explicit return action. It does not identify the current MASTER automatically or paste/send. Occasional one-shot edits may not need it. See [experimental window instructions](handoff-kit/ui/README.md); the original CLI workflow below remains available. Owner usability validation is still pending.
 
 Prerequisites are Windows ChatGPT Desktop with Codex, the intended local Git checkout, the configured Stop Hook, and Windows PowerShell 5.1.

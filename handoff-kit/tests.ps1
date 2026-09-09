@@ -104,12 +104,12 @@ function Write-ValidMetadata {
 }
 
 function Invoke-Handoff {
-    param([string] $Repository)
+    param([string] $Repository, [switch] $CopyOnly)
     $clipboardPath = Join-Path $Repository 'temp\clipboard.txt'
     $browserPath = Join-Path $Repository 'temp\browser.txt'
     Remove-Item -LiteralPath $clipboardPath, $browserPath -Force -ErrorAction SilentlyContinue
     $result = Invoke-PS51 -FilePath (Join-Path $Repository 'handoff-kit\test-wrapper.ps1') `
-        -Arguments @((Join-Path $Repository 'handoff-kit\handoff.ps1'), $clipboardPath, $browserPath) `
+        -Arguments @((Join-Path $Repository 'handoff-kit\handoff.ps1'), $clipboardPath, $browserPath, [string][bool]$CopyOnly) `
         -WorkingDirectory $Repository -TempDirectory (Join-Path $Repository 'temp')
     $result | Add-Member -NotePropertyName ClipboardPath -NotePropertyValue $clipboardPath
     $result | Add-Member -NotePropertyName BrowserPath -NotePropertyValue $browserPath
@@ -127,7 +127,7 @@ function Assert-FailedWithoutSideEffects {
 [void] (New-Item -ItemType Directory -Path $testRoot)
 try {
     $wrapper = @'
-param($HandoffPath, $ClipboardCapture, $BrowserCapture)
+param($HandoffPath, $ClipboardCapture, $BrowserCapture, $CopyOnly)
 function Set-Clipboard {
     param([Parameter(Mandatory = $true)][string] $Value)
     $encoding = New-Object System.Text.UTF8Encoding($false)
@@ -138,7 +138,8 @@ function Start-Process {
     $encoding = New-Object System.Text.UTF8Encoding($false)
     [System.IO.File]::WriteAllText($BrowserCapture, $FilePath, $encoding)
 }
-& $HandoffPath
+if ($CopyOnly -eq 'True') { & $HandoffPath -CopyOnly }
+else { & $HandoffPath }
 $handoffExitCode = $LASTEXITCODE
 if ($null -eq $handoffExitCode) { $handoffExitCode = 0 }
 exit $handoffExitCode
@@ -169,7 +170,11 @@ exit $handoffExitCode
     Assert-That ([System.IO.File]::ReadAllText($handoff.BrowserPath) -ceq $validOrigin) 'Correct persisted origin Chat target is opened'
 
     $handoffAst = [scriptblock]::Create([System.IO.File]::ReadAllText((Join-Path $sourceDirectory 'handoff.ps1'))).Ast
-    Assert-That ($handoffAst.ParamBlock.Parameters.Count -eq 0) 'handoff.ps1 requires no OriginChat or PacketPath parameters'
+    Assert-That ($handoffAst.ParamBlock.Parameters.Count -eq 1 -and $handoffAst.ParamBlock.Parameters[0].Name.VariablePath.UserPath -eq 'CopyOnly') 'Only optional CopyOnly parameter; no required target/packet parameters'
+    $copy = Invoke-Handoff $repo -CopyOnly
+    Assert-That ($copy.ExitCode -eq 0 -and [IO.File]::ReadAllText($copy.ClipboardPath) -ceq $packetText) 'CopyOnly preserves exact packet'
+    Assert-That (-not(Test-Path $copy.BrowserPath)) 'CopyOnly makes zero open requests'
+    Assert-That ($copy.Stdout -like '*No (explicit CopyOnly)*') 'CopyOnly output identifies skipped navigation'
     $handoffSource = [System.IO.File]::ReadAllText((Join-Path $sourceDirectory 'handoff.ps1'))
     Assert-That (-not [regex]::IsMatch($handoffSource, 'SendKeys|UIAutomation|keybd_event|SendWait', 'IgnoreCase')) 'Product contains no automatic paste or send mechanism'
 
@@ -274,6 +279,9 @@ exit $handoffExitCode
     Write-Utf8Text $candidateTwo 'two'
     Write-ValidMetadata -Repository $ambiguousRepo -PacketPath @($candidateOne, $candidateTwo)
     Assert-FailedWithoutSideEffects (Invoke-Handoff $ambiguousRepo) 'Handoff fails closed: ambiguous packet metadata; no latest-looking fallback'
+    foreach ($failedRepo in @($missingBindingRepo,$invalidBindingRepo,$missingMetadataRepo,$malformedMetadataRepo,$insufficientRepo,$wrongRepo,$missingPacketRepo,$emptyPacketRepo,$largePacketRepo,$ambiguousRepo)) {
+        Assert-FailedWithoutSideEffects (Invoke-Handoff $failedRepo -CopyOnly) ('CopyOnly fail-closed: ' + (Split-Path $failedRepo -Leaf))
+    }
 }
 finally {
     if (Test-Path -LiteralPath $testRoot) {

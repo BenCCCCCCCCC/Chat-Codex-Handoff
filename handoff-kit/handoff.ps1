@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param()
+param([switch] $CopyOnly)
 
 $ErrorActionPreference = 'Stop'
 $maximumPacketBytes = 64KB
@@ -74,12 +74,13 @@ try {
     $originChat = Assert-HandoffOriginChat -OriginChat $binding.OriginChat
 
     Set-Clipboard -Value $packet
-    Start-Process -FilePath $originChat
+    if (-not $CopyOnly) { Start-Process -FilePath $originChat }
 
     Write-Output 'clipboard prepared = Yes'
     Write-Output 'origin binding loaded automatically = Yes'
     Write-Output 'delivery packet resolved automatically = Yes'
-    Write-Output 'origin chat opened = Yes'
+    if ($CopyOnly) { Write-Output 'origin chat opened = No (explicit CopyOnly)' }
+    else { Write-Output 'origin chat opened = Yes' }
     Write-Output 'auto paste = No'
     Write-Output 'auto send = No'
 }
