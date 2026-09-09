@@ -1,100 +1,108 @@
 # Current State
 
-Updated: 2026-09-09  
+Updated: 2026-09-10  
 Role: 00 MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**STRATEGY-RESET-01 — R0 received; R1 desk research and four-layer design complete; R1-BUILD-01 DEVELOPMENT DECISION PENDING**
+**STRATEGY-RESET-01 — R0 received / R1 desk research and four-layer design complete / R1-BUILD-01 DEVELOPMENT APPROVAL PENDING**
 
-Legacy feature expansion remains frozen. Gate 5 external execution remains ON HOLD. No Beta, market validation, AI-evaluation PASS or complete new MVP is claimed. The next meaningful step needs local Codex implementation under a new bounded development approval, not more speculative research or another launcher/parser correction.
+The requested research-only work has reached the next meaningful local-development decision. No P0 code, new model experiment, full MVP, external pilot or commercial validation has been performed. Legacy feature expansion remains frozen. Gate 5 remains ON HOLD.
 
-## Actual Version Receipt
+## Local Version Receipt
 
-Source: owner-pasted UX-05 final report and R0 local Git inventory, not a new MASTER-side local command.
+Source: owner-pasted UX-05 final report plus R0 local Git inventory, not MASTER-side Windows commands.
 
-- repo: `F:\Chat-Codex-Handoff\validation-repo`
-- branch: `prototype/usability-spike-01`
-- actual local HEAD reported by both receipts: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- Repo: `F:\Chat-Codex-Handoff\validation-repo`
+- Branch: `prototype/usability-spike-01`
+- Reported actual HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
 - UX-05 before HEAD: `28828b110263909c5683a8cab54d6832f2ad7ffa`
-- UX-05 scope: only `Start-Handoff.cmd`, +1/-1; asynchronous hidden PowerShell child.
-- UX-05 final regression reported: core 43/43, UI 73/73.
-- R0 product_files_changed=0, commits_created=0, push=0.
-- last independently checked remote product HEAD remains historical: `869414c77d227fe2f1675c7cfa08b04250520279`; no claim of a fresh remote check.
+- UX-05 scope: only `Start-Handoff.cmd`, +1/-1, asynchronous hidden PowerShell child.
+- UX-05 final tests reported: core 43/43, UI 73/73.
+- R0: product_files_changed=0, commits_created=0, push=0.
+- Last independently checked remote product HEAD remains historical `869414c77d227fe2f1675c7cfa08b04250520279`; not freshly rechecked in R1.
 
-Owner accepts very brief launcher flash and confirms CopyOnly creates no new tab. Manual paste remains intentional legacy behavior. Do not reopen zero-flash/deep-link/tab work or label legacy usability/business value FULL PASS merely because these functions work.
+Owner accepts a very brief launcher flash and confirms CopyOnly produces no new tab. Manual paste remains a legacy contract, not a new defect. UX-05 no longer drives development; preserve its evidence. Do not reset local code to remote or reopen zero-flash/parser/tab/desktop-routing work.
 
-## Authority and Memory Layout
+## Authority / Durable Memory
 
-Canonical hot state, on `meta/master-state`:
+Same repository, ref `meta/master-state`:
 
-1. `docs/master/CURRENT_STATE.md`
-2. `docs/master/HANDOFF.md`
+1. `docs/master/CURRENT_STATE.md` — hot facts, decisions, gates.
+2. `docs/master/HANDOFF.md` — immediate next action.
 
-The latest owner request explicitly permits GitHub research recording. A narrow research-only extension to earlier two-file maintenance permission was used for four files on this SAME state branch:
+Research detail stays in only four documents under `docs/research/strategy-reset-01/`:
 
-- `docs/research/strategy-reset-01/R1_RESEARCH.md`
-- `docs/research/strategy-reset-01/R1_PRODUCT_AND_EVAL.md`
-- `docs/research/strategy-reset-01/R1_BUILD_BRIEF.md`
-- `docs/research/strategy-reset-01/SOURCES_AND_DECISIONS.json`
+- `R1_RESEARCH.md` v0.3 — findings and counterevidence.
+- `R1_PRODUCT_AND_EVAL.md` v0.2 — four-layer product, evaluation and interview design.
+- `R1_BUILD_BRIEF.md` v0.3 — complete proposed P0 execution contract; supersedes any earlier build-detail wording.
+- `SOURCES_AND_DECISIONS.json` v0.3 — source audit, limitations, decisions and untested hypotheses.
 
-These contain research, design, source limitations and the proposed development contract. They are not product code. Product-branch copies and older next steps are not authoritative. No product branch push, merge, publication or external sharing is implied by state/research maintenance.
+The latest user explicitly permitted GitHub research recording. These are state/research-only writes on the state branch, not product code pushes, publication or external sharing. Read the hot pair first and only the needed detailed document thereafter. Historical product-branch copies are not current authority.
 
-## R0 Findings and Evidence Limits
+## R0 / Archived Evidence Reconciliation
 
-R0 reports two untracked local artifacts under `artifacts/strategy-reset-01/`: ASSET_AND_CASE_INVENTORY.md and EVIDENCE_INDEX.json. MASTER has the final report but has not independently read those two F-drive files. Next Codex reads them directly; do not request another owner file-transfer round just for the inventory.
+R0 reports two untracked local research artifacts, six supported helper-history cases and one current evidence-provenance observation. MASTER has the report, not independent access to those two F-drive files. Next Codex reads them directly; no additional owner upload round requested.
 
-R0 reports six supported historical cases plus one current evidence-provenance observation, all within the same helper. Missing original README-transfer/clipboard-retry records were excluded. Do not relabel them as six target users or a Web-product benchmark.
+All six cases concern the same helper, not six users or target Web projects. Cases without local originals were excluded. Current-directory mixing of older Review/newer unversioned logs/inconsistent PNG inventory was reported.
 
-R0 found current artifact version mixing: older Review, newer unversioned logs and mismatched current PNG inventory. MASTER separately checked eight archived uploaded PNGs against their two historical inventories: all eight matched. This is consistent with later output-directory drift; it does not invalidate historical archived evidence or prove current local integrity. The read-only archive calculation is not a Windows test rerun.
+MASTER independently calculated hashes for eight previously uploaded PNGs against their two original inventories: 8/8 matched. This is an archive consistency check, not a new Windows run or current F-directory verification. Later overwrite/drift can coexist with valid historical archives. Do not retrofit old logs with the current HEAD or accuse earlier evidence of fabrication from directory drift alone.
 
-## R1 Product Decision
+## R1 Decision
 
-Refine the provisional generic AI acceptance assistant into a **single-Web-change acceptance sheet for non-engineering product owners**, initially a reusable module over existing coding/spec/test tools.
+Refine the generic AI acceptance-assistant hypothesis to a **single-Web-change acceptance sheet for non-engineering owners with recurring acceptance responsibility**, initially a reusable module over existing coding/spec/test tools.
 
-The value hypothesis is lower total human effort to reach a correct acceptance decision: approved criterion -> applicable same-version evidence -> qualified review suggestion -> human decision or bounded correction.
+Candidate value: reduce total human effort for a correct acceptance decision using approved criteria, applicable same-version evidence, qualified review suggestions, and an explicit owner decision or bounded correction.
 
-Important counterevidence: OpenSpec already maps requirements/scenarios to evidence; Spec Kit already checks implementation gaps; TestSprite/Lovable already test and report; Playwright already records Git metadata; Allure already manages test history. Criterion tables, test generation, hashes and version stamps alone are not a defensible differentiator. Compare the strongest existing combination, not a deliberately weak baseline.
+Counterevidence: OpenSpec already maps requirements/scenarios to evidence; Spec Kit checks implementation gaps; Kiro has specification workflows; TestSprite/Lovable test and report; Playwright already captures Git metadata; Allure provides history. Tables, tests, hashes and version stamps alone are not a moat. Compare the strongest existing combination, not a weak unorganized-files baseline.
 
-No user-demand/payment/accuracy result exists yet. If a native template/report achieves the same value, adapt or contribute instead of building a standalone platform.
+No demand/payment/model-quality advantage is established. If existing configuration/template is sufficient, adapt/contribute instead of building a standalone platform.
 
 ## Four Layers
 
-- User: a repeat responsibility for accepting low-risk Web changes, not the label 'AI beginner'. Frequency, reachability and willingness to adopt/pay remain untested.
-- Product: one readable acceptance sheet explaining evidence, uncertainty and decisions, not another chat/IDE/dashboard.
-- MVP: later, one repo/real Web change/execution route/criterion review/bounded correction; not authorized as a whole now.
-- Feasibility: reuse native tools and structured outputs; deterministic provenance checks, semantic model suggestions and human acceptance remain separate. No takeover of private Desktop Chat.
+- User: repeated responsibility for low-risk Web prototype/change acceptance; frequency, reachable users and adoption/payment still unknown.
+- Product: one readable acceptance sheet showing evidence applicability, uncertainty and decisions, not another Chat/IDE/dashboard.
+- MVP: later one repo, one actual Web change, one existing execution/model route, criterion review and one bounded correction; not approved as a whole now.
+- Feasibility: reuse native structured outputs/reporting. Rules establish limited identity/provenance facts; models propose semantic judgments; humans approve. No private Desktop Chat takeover.
 
-## Research Completion and Limits
+The forthcoming P0 is deliberately offline and non-model-connected. It is a comparison precursor, not an AI MVP. No endless infrastructure round follows automatically.
 
-Completed: 26 source records (project/user/library/public primary sources), detailed qualitative review of two official graduate/intern JDs plus two experienced-role comparators, external research, eight competitor/component references, source-level comparison, archive hash check, four-layer product design, evaluation/interview protocol and a fully bounded P0 brief.
+## Research Completion / Source Limits
 
-No target-user interviews, competitor runtime benchmark, new model evaluation, new application implementation, paid use or external contact occurred. The full separate career-training Project was not retrieved; relevant Library/personal context was used without inventing missing material. Hiring sample is not a market census.
+Source ledger now has 27 records. Current pass fully read two official graduate/intern JDs and one experienced-role comparator; another historical experienced-role page could not be fetched and is not counted as newly verified. Employer sample is small and concentrated, not a market census.
 
-## Next Smallest Step / Approval Gate
+Also reviewed public preprint/survey/methodology evidence, eight comparator products/components, fixed OpenSpec source, and official execution/evaluation/provenance docs. Related career context was recovered; the complete separate career-training Project source set was not obtained.
 
-**R1-BUILD-01 — offline acceptance-sheet P0** is READY FOR DEVELOPMENT DECISION, not yet execution authorized.
+OpenAI's hosted Evals deprecation notice was checked. Evaluation principles remain useful, but no new dependency on its scheduled retiring dashboard/API is proposed. Source T06 records exact official dates; no migration project was opened.
 
-If approved: Codex creates a small separate local module from the verified 0c2440b baseline, reads R0 files directly, snapshots explicitly selected existing evidence per run, validates references/provenance without upgrading Unknown, and emits offline HTML/JSON plus one review bundle. No new model/API/browser runtime or dependency is necessary for this increment. Legacy source remains unchanged. Maximum six new module files and two local commits; exact contract is R1_BUILD_BRIEF.md.
+Target-user interviews=0; competitor runtime benchmarks=0; new model evaluations=0. Published surveys/vendor documents are not our user validation.
 
-This is an executable comparison prototype, not the final AI MVP. Model-connected/real-Web/user experiments and any spending/install/live navigation require later decisions.
+## Next Smallest Step / Required Decision
+
+**R1-BUILD-01 — offline acceptance-sheet P0, v0.3: READY FOR OWNER DEVELOPMENT APPROVAL, NOT YET EXECUTION AUTHORIZED.**
+
+Upon approval only: from verified `0c2440b...`, create/safely continue local `prototype/acceptance-evidence-p0`; read R0 files locally; snapshot explicitly selected evidence per run; validate references/applicability without upgrading Unknown; emit offline HTML/JSON and one minimal review bundle.
+
+Maximum six new `acceptance-p0/` files, two local commits, existing PS5.1/system libraries, no new model/API/browser/runtime/dependency. Legacy source unchanged. Full contract in R1_BUILD_BRIEF.md.
+
+Four revision identities stay distinct: requirement revision, target code revision, evidence generation revision and current snapshot checkout. Application-level no-overwrite is not cryptographic authenticity. No reviewer means NOT_REVIEWED; invalid/inapplicable evidence cannot justify SATISFIED; owner decision stays PENDING.
 
 ## Completed / Not Done / Verified / Likely / Unknown
 
-Completed: R0 report review, R1 documentary research/design, decision ledger and development brief.
+Completed: R0 report reconciliation, desk research and source audit, competitor counterevidence, archive check, four-layer design, eval/interview protocols, build brief and durable state.
 
-Verified: owner no-new-tab/acceptable flash observations; reported Git receipt; direct fixed-source competitor capabilities; independent 8/8 archived byte comparisons. Tests remain labelled Codex-reported.
+Verified at stated source level: owner no-new-tab/acceptable flash, Codex Git receipt and reported tests, primary-source capabilities, independent 8/8 archived byte comparisons. No claim of local Windows rerun.
 
-Likely: explicit evidence applicability and readable decision boundaries may lower acceptance burden; no measured advantage yet.
+Likely: applicable evidence and readable decision boundaries could reduce acceptance effort; requires actual comparison.
 
-Unknown: target-user demand/payment, superiority over strong alternatives, new semantic model quality, real end-to-end economics and local future integration behavior.
+Unknown: target demand/adoption/payment, superiority over native/spec/report combination, semantic model accuracy, actual Web/runtime behavior, end-to-end economics.
 
-Not Done: P0 code, new model/runtime comparison, real target-user experiments, complete MVP, external pilot, release or product push.
+Not Done: P0 code, live comparison/model eval, target-user interviews, complete MVP, external pilot, product push/release/distribution.
 
 ## Classification
 
-Must Fix: no new legacy code defect is opened. Preserve time/version/source distinctions; never repair historical provenance by guessing a HEAD.
+Must Fix: no new legacy coding defect. Preserve version/source distinctions; no false market or AI-quality claims.
 
-User Decision Needed: approve/reject ONLY R1-BUILD-01 as scoped. Research permission does not automatically approve source development.
+User Decision Needed: approve/reject ONLY R1-BUILD-01. Research authorization is not a blanket implementation or paid/live-experiment approval.
 
-Future Optional: cosmetic polish, native Desktop routing, tab focus, cross-platform packaging and standalone business application; none is an active implementation task.
+Future Optional: aesthetic polish, Desktop exact routing, browser tab focus, multi-platform packaging and standalone business app remain inactive.
