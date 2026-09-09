@@ -156,16 +156,22 @@ try {
     $panel.Form.Dispose();Check $panel.Form.IsDisposed 'Window disposed; no background worker'
     $launch=New-Object Diagnostics.ProcessStartInfo
     $launch.FileName="$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
-    $launch.Arguments='-NoProfile -STA -File "' + (Join-Path $fixture 'handoff-kit\ui\Start-Handoff.ps1') + '" -Demo'
+    $lifecyclePath=Join-Path $isolated 'lifecycle.txt'
+    $launch.Arguments='-NoProfile -STA -File "' + (Join-Path $fixture 'handoff-kit\ui\Start-Handoff.ps1') + '" -Demo -TestLifecyclePath "' + $lifecyclePath + '"'
     $launch.WorkingDirectory=$isolated;$launch.UseShellExecute=$false;$launch.CreateNoWindow=$true
+    $launch.EnvironmentVariables['TEMP']=$isolated;$launch.EnvironmentVariables['TMP']=$isolated
     $child=[Diagnostics.Process]::Start($launch)
     try{
-        $deadline=[DateTime]::UtcNow.AddSeconds(15)
-        do {Start-Sleep -Milliseconds 200; $child.Refresh()} while(-not $child.HasExited -and $child.MainWindowHandle -eq [IntPtr]::Zero -and [DateTime]::UtcNow -lt $deadline)
-        Check (-not $child.HasExited -and $child.MainWindowHandle -ne [IntPtr]::Zero) 'Demo entry starts from foreign cwd and spaced checkout'
-        $closed=$child.CloseMainWindow()
-        Check ($closed -and $child.WaitForExit(15000)) 'Closing entry window exits its own process'
-    }finally{$child.Dispose()}
+        $exited=$child.WaitForExit(15000)
+        $receipt=if(Test-Path -LiteralPath $lifecyclePath){[IO.File]::ReadAllText($lifecyclePath)}else{''}
+        Check ($receipt.Contains("READY pid=$($child.Id) repo=$fixture")) 'Owned demo emitted readiness for exact PID and checkout'
+        Check ($exited -and $child.ExitCode -eq 0 -and $receipt.Contains('CLOSED disposed=True')) 'Owned demo self-closed, disposed and exited with code zero'
+        $script:log.Add("OWNED_CHILD_PID=$($child.Id) EXITED=$exited")
+        $script:log.Add($receipt)
+    }finally{
+        if(-not $child.HasExited){$child.Kill();$child.WaitForExit();$script:log.Add('Owned child timeout cleanup; test failed.')}
+        $child.Dispose()
+    }
     foreach($p in $liveBefore.Keys){Check ((Get-FileHash -LiteralPath $p).Hash -ceq $liveBefore[$p]) ('Live file unchanged: '+[IO.Path]::GetFileName($p))}
 }
 finally{Pop-Location}
