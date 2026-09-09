@@ -23,91 +23,59 @@ No push, merge, release, external sharing, paid API, dependency installation or 
 - UX-03 CopyOnly = PASS for owner-validation entry.
 - UX-02 / UX-04 delivery-summary parser = PASS for owner-validation entry.
 - Desktop Route Probe 01 = Unknown / inconclusive; do not broaden it now.
-- Latest reported final regressions before this owner observation: core 43/43 PASS, UI 73/73 PASS.
+- Latest reported final regressions before launcher correction: core 43/43 PASS, UI 73/73 PASS.
 
-## Real Owner Observation
+## UX-05 — Launcher Console Friction
 
-The owner used the real launcher and reported:
+The current `.cmd` entry can leave a persistent black console because it synchronously waits for Windows PowerShell while the WinForms UI is open.
 
-> `Start-Handoff.cmd` visibly opens a black command-line window, then the product GUI appears.
+Approved correction remains strictly launcher-level:
 
-This is a real beginner-facing launch friction. Do not classify it as mere visual polish.
+- spawn Windows PowerShell asynchronously;
+- pass `-WindowStyle Hidden`;
+- let the `.cmd` parent exit promptly;
+- preserve exact Windows PowerShell 5.1 path, `-NoProfile`, `-STA`, `%~dp0` script-relative pathing and paths with spaces;
+- preserve startup error MessageBox behavior in `Start-Handoff.ps1`;
+- do not add VBS, compiled EXE, shortcut, installer, dependency, service, registry/global change or a second launcher architecture.
 
-Current launcher source is synchronous:
+### Owner acceptance criterion — confirmed
 
-```bat
-@echo off
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -STA -File "%~dp0handoff-kit\ui\Start-Handoff.ps1"
-```
+The owner explicitly reports that a **very brief launch flash is acceptable**.
 
-Because the batch process waits for PowerShell, the console remains visible while the WinForms UI is running.
+Therefore:
 
-Normal `Start-Handoff.ps1` startup errors are already surfaced by MessageBox, so the child console can be hidden without removing the existing user-visible startup-error path.
+- UX-05 passes visually if the persistent/material black console is gone and only a brief flash remains;
+- do not claim or pursue completely zero-flash behavior;
+- do not introduce a heavier launcher just to remove the brief flash;
+- zero-flash work is not a current Future Optional item.
 
-## Must Fix — UX-05
+## Correction Packet — same Codex task
 
-**Goal:** remove the persistent black console from the normal double-click experience with the smallest bounded launcher-only change.
+If UX-05 has not yet been implemented, use the previously prepared UX-05-only packet with starting HEAD `28828b110263909c5683a8cab54d6832f2ad7ffa`.
 
-### Correction Packet — send to the same Codex task
+Expected product scope is `Start-Handoff.cmd` only unless a tightly bounded test-only change is necessary. Preserve CopyOnly, parser, Desktop Route Probe, GUI layout and core transport behavior.
 
-```text
-USABILITY-SPIKE-01 Correction — UX-05 only.
+Run final core and full UI regression, `git diff --check`, create at most one local correction commit, and do not push/merge/share/paid-use. No live handoff or Desktop/browser automation in the Codex turn.
 
-Real owner validation found one launch usability defect:
-double-clicking Start-Handoff.cmd leaves a clearly visible black command-line window while/around the WinForms product launch.
+## Owner Validation After UX-05 Review PASS
 
-Current expected local state:
-- repo: F:\Chat-Codex-Handoff\validation-repo
-- branch: prototype/usability-spike-01
-- starting HEAD: 28828b110263909c5683a8cab54d6832f2ad7ffa
+1. double-click `Start-Handoff.cmd`;
+2. confirm no persistent black console remains; a very brief flash is acceptable;
+3. confirm the live delivery summary is understandable;
+4. tick explicit confirmation;
+5. click **仅复制交付**;
+6. explicitly report whether CopyOnly opens any new browser/web tab;
+7. manually switch to the already-open current ChatGPT Desktop ordinary Chat or web Chat;
+8. Ctrl+V and Send without copying anything else;
+9. report whether the route is `更简单 / 差不多 / 更麻烦` than the previous forced-open/CLI route.
 
-Do not modify CopyOnly, delivery-summary parsing, transport, Desktop Route Probe, GUI layout, core configure/common/handoff behavior, or product scope.
-
-Root cause is bounded: Start-Handoff.cmd synchronously invokes Windows PowerShell, so the CMD console waits for the GUI process.
-
-Fix only UX-05.
-
-Requirements:
-1. Prefer the smallest launcher-only correction in Start-Handoff.cmd.
-2. Spawn Windows PowerShell asynchronously so the .cmd parent exits promptly.
-3. Pass -WindowStyle Hidden to the child PowerShell process so no persistent PowerShell console remains.
-4. Preserve exact Windows PowerShell 5.1 path, -NoProfile, -STA, script-relative `%~dp0` pathing and paths containing spaces.
-5. Preserve existing Start-Handoff.ps1 normal startup-error MessageBox behavior; do not hide errors by replacing that script path.
-6. Do not add VBS, a compiled EXE, shortcut/installer, new dependency, service, registry/global setting or another launcher type in this correction.
-7. Do not claim completely zero visual flash from a .cmd until owner observation proves it. The acceptance target for UX-05 is removal of the persistent black console window reported by the owner.
-8. Add/adjust a focused launcher check only if needed to prove asynchronous + hidden-child semantics and path safety. Do not use UI Automation, WMI/CIM sweeps or broad process enumeration.
-9. Rerun the existing core suite and full UI suite on final HEAD; report exact counts.
-10. Run git diff --check.
-11. Expected product scope is Start-Handoff.cmd only; if a test file must change, keep it test-only and explain. If a broader product change is required, STOP and report.
-12. At most one local correction commit. No push/merge/share/paid use.
-13. No Desktop URI research, browser automation, live handoff, real clipboard/browser/Desktop action or visual polish.
-
-If green, return IMPLEMENTED / SELF-TESTED / READY FOR OWNER VALIDATION.
-Do not run live handoff in the same turn.
-```
-
-## Owner Validation After UX-05 PASS
-
-After Codex finishes and MASTER reviews the tiny launcher delta:
-
-1. double-click `Start-Handoff.cmd` again;
-2. confirm whether the previously persistent black console is gone;
-3. record whether any brief launch flash remains and whether it materially matters;
-4. confirm the live delivery summary is understandable;
-5. tick the explicit confirmation;
-6. click **仅复制交付**;
-7. explicitly report whether CopyOnly opens any new browser/web tab;
-8. manually switch to the already-open current ChatGPT Desktop ordinary Chat or web Chat;
-9. Ctrl+V and Send without copying anything else;
-10. report whether the route is `更简单 / 差不多 / 更麻烦` than the previous forced-open/CLI route.
-
-The pasted packet itself proves returned content only; it does not by itself prove which GUI route was used or whether zero tabs opened. Capture those observations explicitly.
+The pasted packet alone proves returned content only; it does not prove which GUI action was used or that zero tabs opened, so record those observations separately.
 
 ## Classification
 
 ### Must Fix
 
-- UX-05 persistent launcher console.
+- UX-05 persistent launcher console, until corrected or demonstrated absent in the owner run.
 
 ### User Decision Needed
 
@@ -115,8 +83,9 @@ None for this bounded correction.
 
 ### Future Optional
 
-- a truly zero-flash launcher type only if brief `.cmd` flash remains a meaningful owner problem;
 - improved read-only Desktop package identification;
 - native exact-conversation routing only with supported evidence;
 - browser exact-tab focus only if extension/setup cost is justified;
 - visual polish/high-DPI/accessibility after functional acceptance.
+
+A zero-flash launcher is not currently required or planned.
