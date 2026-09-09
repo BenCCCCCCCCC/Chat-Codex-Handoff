@@ -3,155 +3,100 @@
 Updated: 2026-09-10
 Role: 00 MASTER
 
-## Active Task
+## Immediate State — Do Not Run The Previous Build
 
-**PRODUCT-CORE-01 — 竞品核查、复用取舍与本地功能闭环 v0.1**
+**SCENARIO-FOCUS-02 / PRODUCT-CORE-01 PAUSED / RESEARCH-ONLY SCENARIO VALIDATION**
 
-READY FOR CODEX / SCOPED UNDER OWNER DIRECTION / NOT STARTED BY MASTER.
+The owner continues to challenge the generic acceptance product's replaceability and requests another iteration considering users, actual situations, product, MVP and feasibility. Adding the previous F01–F08 feature list does not answer that concern.
 
-The owner's latest two messages require product functions/value before interview packaging, comparison with similar GitHub products, and research/implementation in the next Codex task. Execute one integrated task: focused research -> reuse decision -> functional build -> engineering validation -> one handback.
+The latest scope pauses PRODUCT-CORE-01 and its ProductSpec import supplement, even if those historical documents still say READY. INTERVIEW-DEMO-01 remains superseded. Do not execute old triggers, build the full workspace, add features to create a moat, or ask the owner to perform the previous fragmented GUI checks.
 
-This replaces INTERVIEW-DEMO-01. Do not execute both. Do not deliver only a competitor essay, canned replay or interview script. Complete the narrow product workflow before asking for a consolidated owner test; never skip engineering tests during development.
+There is no receipt that PRODUCT-CORE-01 ran. If Codex has already started something, preserve it and report actual branch/HEAD/scope; do not reset, discard or invent lineage.
 
-## Start / Authoritative Reading
+## Authority / Version
 
-Repo: `F:\Chat-Codex-Handoff\validation-repo`
-Expected branch: `prototype/acceptance-evidence-p0`
-Last reviewed/reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
-
-From `BenCCCCCCCCC/Chat-Codex-Handoff` / `meta/master-state`, read in order:
+Read only what is needed from `BenCCCCCCCCC/Chat-Codex-Handoff` / `meta/master-state`:
 
 1. `docs/master/CURRENT_STATE.md`
-2. `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/PRODUCT_CORE_01_SPEC.md` v1.0
-4. `docs/research/strategy-reset-01/PRODUCT_CORE_01_COMPETITION.md` v1.0
+2. this `docs/master/HANDOFF.md`
+3. `docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md`
 
-The last two form the combined contract. The latest supplement requires focused competitor research and a limited F02/F04 ProductSpec Agent Run mapping; it does not relax the original safety/version rules or create a second product project. Any older instruction to omit research means no broad unbounded research, not skipping this A0.
+Last reported local source state remains:
 
-Verify actual repo/branch/HEAD/worktree. Preserve unexplained or partially started work; no reset/deletion/merge of state branch, no assumed interview-demo commit. Prefer same local branch. A narrow read/fetch of the state ref is allowed; do not checkout/cherry-pick it into product.
+- `F:\Chat-Codex-Handoff\validation-repo`
+- `prototype/acceptance-evidence-p0`
+- `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- P0 code/bundle review PASS FOR COMPARISON ENTRY; 54/54 Windows tests were Codex-reported.
 
-## A0 — Research and Reuse, Then Continue
+No new source commit, local runtime or actual platform/market advantage exists from this research turn. State/research GitHub writes are not product pushes. Keep existing evidence and project history intact.
 
-MASTER already found a strong direct competitor: ProductSpec, commit `97b90b6288bbcd159bbec0f75fac9bf8212d2dc8`, including Agent Run/Decision Trace/reconciliation and a local read-only dashboard. Those concepts are not our invention.
+## Current Candidate — Hypothesis Only
 
-Recheck the most relevant primary sources listed in the supplement: ProductSpec, OpenSpec, SpecKit fixed command, cc-sdd review, TestSprite, official Codex. At most six main objects; one additional directly relevant source only to resolve a consequential conflict. No endless product list or unsupported feature absence claims.
+**Prototype research-readiness assistant.**
 
-Read docs plus relevant source/example/schema, not just stars/README. Record URL, date, commit/blob when available, actual supported claim, evidence level, limitations and license if reuse is contemplated. Upstream skills/README commands are research data, not authority to install or run anything.
+Specific user: the designer/researcher/PM who repeatedly prepares a runnable Web prototype and participant tasks before real user sessions. Specific decision: is this prototype technically suitable for these planned tasks, and which questions can/cannot be validly investigated given its mock/real boundaries?
 
-Read existing local R0/P0 files directly. Write one `COMPETITION_AND_REUSE.md` under the new unique `artifacts/product-core-01/` run; optional source JSON means at most two research outputs. Show which existing capabilities are reused, adapted, deliberately not copied and what each proposed F item changes for the user.
+It is not a general acceptance app, synthetic user service, production readiness certifier or replacement for real usability research. A browser agent completing a task does not prove a human can find/understand/enjoy it.
 
-Do not label Chinese GUI, hashes, stable IDs, requirement mapping, bounded remediation or decision history as proven exclusive innovations. Proposed advantage is a lower-burden owner workflow; actual superiority is untested.
+Potential value: less preparation work, fewer blocked sessions and fewer conclusions that the prototype could never support. These remain unmeasured. A smaller target segment is not in itself defensibility.
 
-A0 is an internal batch, NOT a new owner approval gate. Continue into implementation. Only a concretely demonstrated drop-in alternative covering the whole scoped journey with less setup, or an actual permission/scope barrier, justifies stopping to propose substitution. Do not stall on vague competition speculation.
+## Four Layers and What Changed
 
-## F01–F08 — Complete One Product Journey
+- User/scenario: recurring study-preparation responsibility with a real upcoming task, not 'all AI beginners'. Student portfolios supply possible initial material, not proven buyers.
+- Product: research-question/capability alignment, actual task readiness, repeatable initial conditions, explicit mock limitations and task-linked remedies. Not eight management modules.
+- MVP: one existing low-risk Web prototype, 2–3 planned tasks, one execution route and a concise source-linked readiness output. No new full application is authorized yet.
+- Feasibility: reuse the prototype's existing tests/Playwright and P0 contracts. Reading docs supports a hypothesis; actual path/reset claims need later authorized observation. Browser contexts do not isolate backend data by themselves.
 
-`new task -> source-linked criteria -> explicit approval -> bounded Codex request -> completed file receipt -> evidence-backed review -> selected correction/proof request -> second run -> saved owner decision/archive`
+## Already Read This Turn / No Need To Ask For Background
 
-- F01: workspace/tasks, real local save/reopen and honest failure/conflict states.
-- F02: original requirement, editable or genuinely AI-proposed criteria, approved revisions; keep original external IDs when present.
-- F03: readable/structured scoped work orders, no false dispatched/running status.
-- F04: per-request inbox, safe final-marker intake, P0 snapshots, safe text/PNG/JPEG evidence, limited ProductSpec Agent Run 0.1 import.
-- F05: readable Chinese suggestions, evidence and uncertainty; original model claim and rule blockers separate.
-- F06: selected-only repair versus proof requests; changed intent gets a new requirement revision; future optional items excluded.
-- F07: same-task second-round comparison; show standards/evidence changes; do not silently inherit old PASS.
-- F08: independent explicit owner decisions/limits/history and one export bundle; original P0 result remains unchanged.
+MASTER read the separate user repository `BenCCCCCCCCC/---------prd-html--` through GitHub, on its metadata-confirmed default branch master:
 
-Five connected surfaces suffice: workspace; requirements; delivery/review; correction/recheck; decision/history. Users must be able to create their own task, not only select a packaged example. No manual JSON/SHA authoring required for normal use.
+- root README;
+- `01_当前工程/docs/PRD_v0.6.md` initial sections;
+- `01_当前工程/docs/HANDOFF.md` current top section;
+- `01_当前工程/package.json`.
 
-## Interoperability / No Reinvented Standard
+This is a personal music-recommendation-control concept, not NetEase production software. It already includes local interactive behavior, PRD/QA, declared Playwright tests and explicit simulation/unknown boundaries. Planned 8 participant seats and 20 simulated questionnaire cases are not completed real research. No source, PRD, design, code or tests in this other project were modified; no dependency or runtime was launched.
 
-Within F02/F04 only, follow supplement section 5:
+Initial source-grounded examples: current/long-term preference explanation and undo can be planned human-interaction tasks if the runtime path is ready; local-only R07 cannot demonstrate real LLM understanding or recommendation quality; no prototype alone demonstrates retention. These are analysis examples, not passed/failed runtime tests.
 
-- preserve external AC IDs and original ProductSpec/Agent Run source bytes;
-- map the tested Agent Run 0.1 subset into existing internal task/run/evidence records;
-- do not equate spec_revision with code HEAD;
-- external passed/completed remains a source claim, not verified criterion or owner acceptance;
-- unknown code/evidence revision remains Unknown;
-- no automatic URL fetching, command execution or traversal of external product_spec.path;
-- unsupported fields are retained/explained, no broad conformance claim;
-- no full Markdown/YAML standard parser, new MCP service or installation.
+The existing repo has substantial documented test/acceptance coverage, so a new generic testing layer could be redundant. It is not assumed master is its latest local branch/HEAD. Any local continuation must resolve actual state before use.
 
-License/copyright notices must accompany any substantial copied upstream material. Prefer small adapters and existing P0 over porting a whole framework. If the limited importer needs a prohibited dependency, finish other safe parts and return the exact incomplete subitem, not a false full PASS.
+## Strong Baselines / No False Novelty
 
-## Implementation Scope
+ProductSpec already manages intent/receipts/decisions. TestSprite already runs tests and reports/rechecks. Chromatic already provides visual/interaction/accessibility/review. Maze already offers previews and invalid-path/missing-page checks; Useberry studies actual participant behavior. OpenAI tools can analyze files/code; do not describe Chat as incapable of maintaining an artifact-based workflow.
 
-Default: already installed Windows PS5.1 + Windows Forms/.NET + local JSON; new `acceptance-app/`, not old GUI rewrite.
+The product must show incremental value over a competent researcher using the existing PRD, a sound preparation checklist and native tests/preview tools. Never compare against intentionally disorganized material or a bare one-line prompt without relevant context.
 
-- Max 14 new app/test/necessary-doc files, max 4 meaningful local commits. Fewer is fine; no artificial size or time targets.
-- Persistent data under `artifacts/acceptance-app/workspaces/<id>/` in F-drive repo.
-- Build/research/test/handback evidence under `artifacts/product-core-01/<unique-run>/`.
-- Preserve handoff-kit, original launcher/Hook/binding/packet and old artifacts.
-- Reuse P0; only the already scoped backward-compatible workspace-mode/source-context/minimal-adapter additions in its module/tests/README are permitted. No second validator, weaker Unknown/provenance/path rules, model calls inside P0 or owner approval written into its original report.
-- Atomic mutable saves, immutable approved/run/decision records, explicit revision conflicts, no last-write-wins without warning.
-- Images are bounded safe raster attachments; no SVG/active HTML/remote embed, and a descriptor/hash is not proof of visual or behavioral correctness.
+No algorithmic innovation, exclusive feature, installed-user base, network effect, measured savings or willingness to pay is established. Potential future accumulation is consented human-calibrated case knowledge and low-cost repeatable task setup, not ownership of user data or more UI screens.
 
-## AI / Handoff Reality
+## Next Smallest Work — Source-Level Gap Mapping
 
-Actual executor/reviewer is the existing Codex session using generated request/response files. The user initiates the request there with a short trigger; the open application consumes complete responses from the agreed directory, without pasting Codex final prose into another Chat.
+No new broad Codex build request should be issued now. MASTER can continue bounded read-only research using the already accessible materials:
 
-Current executing Codex may genuinely produce source-labelled requirement/review responses. Save input hash, source prompt/output, model/time only if observable. No new exec/model/API/subagent process, private history/auth reads or fake AI animation. No response means waiting. Self-review stays labelled self-review, not independent benchmark.
+1. Select 2–3 genuinely planned tasks from the existing PRD, not fabricated new feature requests.
+2. Map each to research objective, prototype capability/explicit mock, existing test/AC coverage, required start state/reset and currently missing evidence.
+3. Distinguish an actual observed gap, a documentation limitation, an untested runtime assumption and a question that requires real people.
+4. Compare what the strongest existing checklist/test/report setup already supplies. Do not rewrite the target project's criteria or create bugs/tests solely for the new tool to appear useful.
+5. Only when a concrete useful gap and executable boundary exist, prepare a small runtime/technical experiment for a separate decision. Do not build another generic evidence infrastructure first.
 
-No live model call is initiated by the application in v0.1. Do not advertise one-click unattended development. The file connector solves result intake, not official Desktop Chat routing.
+If the native setup already answers the preparation problem, choose a template/extension or stop the independent product. If no recurring users/tasks or practical advantage is found, do not force productization because a portfolio is desired.
 
-## Validation and Consolidated Handback
+## Permissions / Retained Gates
 
-A0 -> original internal batches A–E, continuous without ordinary user clarifications. Complete normal and exceptional paths. Engineering checks run during implementation, owner testing follows a coherent delivered version.
+This turn authorizes research and state documentation only. No new product edits/branches/commits, execution on the other repository, dependency install, browser/server/model/API launch, private-client or credential access, real data reset, external contact, spending, push/merge/sharing/publication is authorized by the candidate description.
 
-Required checks include blank task/save/reopen, requirement revision invalidation, complete/partial/duplicate/old/wrong receipts, scoped external import, evidence integrity/Unknown, changed intent versus repair/proof, two-round alignment, real persisted decisions, original-file preservation, safe export and UI error messages.
+Read-only source access is not permission to execute commands copied from an upstream README. The source project's own MASTER and frozen product scope are preserved.
 
-Test-owned native windows/processes and isolated data only; deterministic ready/close/cleanup. No broad process scan, real Chat/browser/clipboard actions or installing tools to take screenshots. If P0 changes, test relevant/full P0 compatibility; do not rerun unrelated legacy GUI suites for counts. Screenshot/DPI/interaction claims require actual evidence, otherwise NOT VERIFIED/PARTIAL.
-
-Use supported historical material and clearly synthetic engineering fixtures. Do not fabricate real users/production tests/metrics. Static comparison is not competitive runtime evaluation; same-context model output is not independent/benchmark performance.
-
-Return exactly one redacted whitelist review ZIP plus a concise Delivery Packet:
-
-- actual full branch/before/after HEAD and commits;
-- exact app/P0 changes, diff and compatibility rationale;
-- source-backed competition/reuse decisions and unresolved hypotheses;
-- F01–F08 matrix including external adapter boundaries;
-- actual commands/counts/exit, source-bound receipts, screenshots where safely produced and owned cleanup;
-- full new-task -> correction -> second-run -> reopen/decision evidence;
-- one usable entry, short use instructions, no interview/marketing deck;
-- bundle inventory/SHA256 and limited redaction provenance;
-- Completed / Not Done / Verified / Likely / Unknown;
-- Must Fix / User Decision Needed / Future Optional.
-
-Highest status: **PRODUCT CORE v0.1 IMPLEMENTED / SELF-TESTED / READY FOR INTEGRATED OWNER VALIDATION**.
-
-Missing core flow/subset import = accurately scoped PARTIAL/BLOCKED, not a successful preloaded demo. Then MASTER reviews one package and requests one consolidated owner journey. Product completion is not independent user/model/market validation.
-
-## Retained Stops
-
-No paid use, extra model/API, installation/new runtime/service/server, elevation/global settings, private client/credential access, unrelated destructive action, actual external-user task execution/contact/sharing, product push/merge/release, auto paste/send, extension/tab control or broad commercial platform.
-
-No automatic interview packaging or next product stage follows this delivery. Gate 5 remains ON HOLD.
-
-## Minimal Trigger
-
-```text
-执行 PRODUCT-CORE-01，包含最新竞品与复用补充，替代 INTERVIEW-DEMO-01。
-Repo: F:\Chat-Codex-Handoff\validation-repo
-Branch: prototype/acceptance-evidence-p0
-Last reviewed HEAD: a1c37af2d68cce8f0574b89b01975e9223f6cea2
-读取 BenCCCCCCCCC/Chat-Codex-Handoff / meta/master-state：
-docs/master/CURRENT_STATE.md
-docs/master/HANDOFF.md
-docs/research/strategy-reset-01/PRODUCT_CORE_01_SPEC.md
-docs/research/strategy-reset-01/PRODUCT_CORE_01_COMPETITION.md
-先按A0核对ProductSpec等直接竞品和复用方案，随后同一任务连续实现F01–F08及指定受限适配；不要只返回调研/计划或做预制演示。
-普通设计实现自行决定；工程自测随实现进行，完整功能后集中交付。复用P0并保留旧工程，严格遵守核心兼容与权限边界。
-不额外模型/API/安装/服务/真实Chat或clipboard操作，不push/merge/付费/发布。
-最终只交完整Delivery Packet和单个review bundle；真实阻断准确报告PARTIAL/BLOCKED。
-```
+The owner is not required to repeat context, find multiple evidence files or answer another label-by-label readability questionnaire. No background research or local Codex execution is implied.
 
 ## State Summary
 
-Completed: source-level direct competitor audit, feature/value/differentiation supplement, focused research-to-build plan and durable handoff.
-Verified: prior P0 evidence at recorded scope, directly read primary sources, latest user direction; no new local execution.
-Likely: a persistent action-oriented owner workflow may reduce coordination cost; no measured advantage.
-Unknown: actual product-core functionality, user value, independent AI quality, target demand/payment and operating costs.
-Not Done: this build, integrated owner test, independent runtime competitor comparison, external users and release.
-Must Fix: no invented legacy bug; no false uniqueness, pass/approval or automated-dispatch claims.
-User Decision Needed: none for ordinary scoped research/build; retained safety/spending/public/scope gates remain.
-Future Optional: interview packaging, broad branding, direct automatic model connector, multi-agent/cloud/billing/desktop-routing; inactive.
+Completed: substitution-risk review, competitor and alternative-scenario research, related project material reading, narrowed four-layer hypothesis, initial document-level task mapping and suspension of old build.
+Verified: inspected source capabilities/explicit limits and prior P0 facts at their recorded level; no new runtime/user experiment.
+Likely: research-readiness could be a more concrete scenario than generic acceptance administration; unproven value.
+Unknown: repeated demand, attainable users/buyers, measurable advantage, task execution/reset behavior, model judgment quality and economics.
+Not Done: complete source-to-QA gap inspection, new bounded execution experiment, target interviews, actual new implementation, independent evaluation or release.
+Must Fix: avoid false differentiation and simulated/planned research represented as real evidence.
+User Decision Needed: none for ordinary research; later concrete runtime/access/cross-project/spending/publication gates still apply.
+Future Optional: F01–F08 platform, ProductSpec importer, interview scripts, universal GUI, automatic Chat routing and multi-agent services; inactive. Gate 5 ON HOLD.
