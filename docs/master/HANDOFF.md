@@ -5,119 +5,111 @@ Role: 00 MASTER
 
 ## Phase
 
-**STRATEGY-RESET-01 / R1-BUILD-01 P0 MASTER REVIEW PASS / OWNER READABILITY CHECK NOW**
+**INTERVIEW-DEMO-01 — scoped under explicit owner delegation / READY FOR CODEX EXECUTION**
 
-The offline acceptance-sheet P0 passed MASTER's independent transferred-bundle/source review for **comparison entry**. Do not start another Codex implementation turn yet. The next gate is one owner read-only viewing of the existing generated `report.html`.
+Owner: technical terms could overwhelm beginners; ordinary product/development choices are delegated to MASTER; priority is quickly obtaining an interview-demonstrable product. This is not an actual novice user-study result.
 
-This is not an AI/model/MVP/user/market PASS. Gate 5 remains ON HOLD.
+The previous four-question readability wait is deferred/unmeasured, not passed. Do not ask the owner to answer it before proceeding. This new, explicitly bounded build supersedes that next-step instruction without erasing P0's accepted evidence or safety contract.
 
-## Independent MASTER Review Result
+No local Codex task has been started by MASTER. This file is the executable handoff, not a dispatch receipt.
 
-Transferred ZIP actual SHA-256 matched Codex receipt exactly:
+## Start / Authority
 
-`E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`
+- Repo: F:\Chat-Codex-Handoff\validation-repo
+- Branch: prototype/acceptance-evidence-p0
+- Expected HEAD: a1c37af2d68cce8f0574b89b01975e9223f6cea2
 
-Shape/integrity:
+First verify actual repo/branch/HEAD/worktree. Preserve unrelated untracked artifacts and legacy files. Do not reset, amend, merge or push. Prefer same branch; no new branch needed. Unexplained divergence is a stop/report condition.
 
-- 15 ZIP entries total;
-- 14 intended entries recorded in bundle-index plus the index itself;
-- MASTER recomputed all indexed sizes/hashes: 14/14 matched;
-- no traversal ZIP entries found;
-- no real ChatGPT conversation URL/Bearer/sk- pattern detected in this narrow bundle scan.
+Read from BenCCCCCCCCC/Chat-Codex-Handoff / meta/master-state:
 
-Reviewed source/output independently:
+1. docs/master/CURRENT_STATE.md
+2. docs/master/HANDOFF.md
+3. docs/research/strategy-reset-01/INTERVIEW_DEMO_01_BRIEF.md v1.0
 
-- manifest/report/raw-index/test receipt;
-- historical snapshot task/reviews and materials;
-- `AcceptanceEvidence.psm1`, entry script, README and tests;
-- generated HTML markup/content.
+The third file contains the full approved-by-delegation implementation/validation boundary. Read earlier R1 research only to resolve an actual ambiguity, not to restart broad research.
 
-No source Must Fix found before comparison.
+## Deliver One Integrated Interview Version
 
-## Truthfulness Confirmed
+Working product remains an acceptance assistant, initially for low-risk Web changes. Produce a usable offline Chinese interface, an actual sourced AI review record, a small honest same-material comparison and a short demo/interview narrative.
 
-Historical replay keeps four identities distinct:
+Core route: understand requirements -> view AI suggestions with evidence -> select fixes/missing proof -> export a bounded correction request and/or a separate explicit owner decision.
 
-- requirement revision = null;
-- target code revision = `0c2440b06ffe5657331d4395a4181929d28c5ebf`;
-- evidence revisions = null / old `3a925c13...` as actually recorded;
-- snapshot checkout = `a1c37af2d68cce8f0574b89b01975e9223f6cea2`.
+This is a functional prototype, not a merely cosmetic report rewrite. It is also not a commercial SaaS, independent AI benchmark, external-user result or full online model service.
 
-Actual generated states:
+## Build Scope
 
-- old-log: VALID / UNKNOWN;
-- old-index: VALID / MISMATCH;
-- criterion: NOT_REVIEWED;
-- owner_decision: PENDING;
-- requirement approval: UNKNOWN.
+- Only add interview-demo/ product/test/docs files, maximum 8; at most 2 local commits.
+- Keep the four acceptance-p0 files read-only. Import/reuse accepted P0 logic and outputs; do not reimplement or weaken checks.
+- Keep handoff-kit, launcher, Hook, real binding/packet and historical artifacts read-only.
+- New generated artifacts: artifacts/interview-demo-01/<new-run-id>/; never overwrite accepted runs.
+- Use already installed PS5.1/system libraries and standard offline HTML/CSS/JS. No installations, npx auto-download, new server or framework bootstrapping.
 
-The reconstructed historical question is explicitly not the original frozen owner criterion. No missing historical version is filled with current HEAD.
+Ordinary wording/layout/component choices are Codex's bounded implementation discretion. Main labels must be readable Chinese; raw enums/hashes are technical details. Do not ask the owner to approve each label.
 
-## Source / Safety Confirmed at Review Level
+## Actual AI and Data Honesty
 
-The module implements create-new/no-overwrite snapshot/report behavior, scoped safe-path checks, passive text inputs, HTML encoding, restrictive offline CSP and explicit bundle allowlisting. It performs read-only Git facts and no model/API/network/browser/clipboard/Chat/Desktop integration.
+Use existing R0/P0 historical material directly and one clearly labelled synthetic Web acceptance scenario. Do not ask owner to invent a new real task. Do not build a second full Web application just to demonstrate acceptance or introduce bugs in legacy code.
 
-The included test source and receipt contain 54 named assertions matching the approved P0 boundary. MASTER did not rerun Windows PowerShell, so `54/54` remains Codex-local execution evidence rather than an independent second Windows run.
+The current Codex session may actually review selected materials and write structured P0 review inputs. Preserve prompt/input-hash/output/source/time/model-if-known. No additional model process, codex exec, API call or subagent. Same-session review is not independent or blind.
 
-Final local HEAD / clean worktree remain local Git/Codex receipt facts, not signed/remote provenance. P0 explicitly does not claim cryptographic execution attestation.
+Historical Unknown remains Unknown; synthetic inputs, reviewer outputs and owner-demo decisions remain visibly synthetic. A reported model review does not become a trusted test receipt. Existing correctness checks can reject unsupported positive advice.
 
-## Why Comparison Entry PASS, Not Product PASS
+UI labels must say '查看已生成的AI评审' or equivalent. It may import recorded results, but cannot show a fake live AI call/progress animation. Clearly state: AI is supplied by the Codex-assisted workflow; the offline screen displays/replays/imports its results.
 
-The report is more than a folder listing: criterion status, artifact integrity, applicability, blocker and owner-decision states are linked explicitly. This is enough to test whether the format reduces decision burden.
+P0 original report and owner_decision=PENDING remain unchanged. A user's explicit decision is a separate file/record bound to report bytes/task/run/revisions, not a changed evaluation result. No authentication/approval identity claims. In-memory+export/import is sufficient; clearly indicate unsaved state. Changing the report invalidates old decisions.
 
-But the current historical report still exposes technical enum codes (`NOT_REVIEWED`, `PENDING`, `VALID`, `UNKNOWN`, `MISMATCH`) and keeps most version detail behind a technical disclosure. The historical case also has no frozen original requirement/reviewer, so it cannot show final AI-assisted acceptance quality.
+## Validation Permission — Narrow New Exception
 
-Do not automatically translate/redesign it first. Observe whether those details are actually confusing to the owner. Visual polish, counters and status-label translation are not Must Fix without this observation.
+Current owner delegation allows MASTER to scope visual/interactive testing of our own offline demonstration, not manipulation of real Chat or user browser state.
 
-## Owner Readability Check — Do This Now
+Use only already installed/allowed browser tooling with a fresh temporary no-login profile/headless context, exact owned file paths, networking blocked. No existing Chrome/Edge profile, ChatGPT/site automation, global CDP, cookies, registry changes, installation, elevation or service.
 
-No Codex, no model, no new run, no source change.
+If no safe existing browser setup is available, finish safe code/data/tests and report visual/interaction NOT VERIFIED or PARTIAL. Do not keep asking for low-level setup decisions or bypass policy. A later consolidated owner check can address the gap.
 
-Open the existing file on the owner's Windows machine:
+Test new import/output decisions, security, scope/version identity, source mode, refresh/reset, selected-only corrections, exact source report preservation. Do not rerun all legacy GUI suites to inflate pass counts. Preserve real commands/results for any actual P0 calls.
 
-`F:\Chat-Codex-Handoff\validation-repo\artifacts\acceptance-p0\test-5250aefcd3954b468ee34ab6e59bd8b8-37\report.html`
+## Comparison / Interview Outputs
 
-Double-click/open it in a normal local browser. This is a static offline report already generated by the approved P0.
+Same frozen material in a competent ordinary textual/template report and candidate UI. Record actual differences and limitations, not fabricated timing/accuracy/user wins. Same model/context results have selection/order bias and cannot establish benchmark superiority.
 
-Before opening raw logs/source code, answer only these four observations:
+One concise note: 3-minute walkthrough, 1-minute problem/positioning explanation, user/AI/rules/human boundary, reuse decision, actual failure example, metrics to collect and what's still unverified. Attribute owner's product choices versus Codex implementation honestly.
 
-1. Can you immediately tell that **you have NOT accepted the task yet**?
-2. Can you tell that the two historical evidence items do **not** cleanly prove the target code version — one is UNKNOWN and one is MISMATCH?
-3. Can you tell what should happen next, without understanding Git/PowerShell internals?
-4. Compared with the old workflow of opening logs/files/screenshots separately, is this report **更简单 / 差不多 / 更麻烦**? Mention the single biggest confusing or useful part.
+No external-user interviews or commercial validation occurred. Do not turn synthetic scenario count, engineering assertions or AI roles into user samples/cross-team results.
 
-A screenshot is optional only if something is visually broken; do not upload source/evidence again.
+## Handback
 
-## What This Check Does / Does Not Prove
+Provide exactly one minimal redacted whitelist review ZIP with index/hash, runnable offline entry, generated AI record/provenance, comparison, code diff, final test receipts, actual screenshots if safely produced, and short demo note.
 
-It can establish whether the current P0 presentation is understandable to the owner and whether HTML actually renders in the owner's normal environment.
+Do not recursively package repo/.git, original private Chat URLs/credentials or unrelated files. Provide final branch/before/after HEAD, exact scope, actual test results and Completed/Not Done/Verified/Likely/Unknown, plus Must Fix/User Decision Needed/Future Optional.
 
-It does not establish target-user demand, strong-baseline superiority, AI accuracy or market value. The owner is also the project builder/decision maker, not an independent target-user sample.
+Maximum status: INTERVIEW DEMO IMPLEMENTED / SELF-TESTED / READY FOR MASTER REVIEW.
 
-## After Owner Observation
+Do not claim interview/user/MVP/model PASS before relevant review/observation. Maximum two complete self-review passes then stop; no endless next feature queue.
 
-Possible next decisions:
+## Minimal Trigger
 
-- **Readable enough:** design one bounded strong-baseline comparison with the same frozen material. Any actual competitor installation/model/Web execution still needs explicit approval.
-- **One bounded confusion:** issue a concise presentation correction only if it blocks comparison, then re-view once.
-- **Clearly adds burden/no decision value:** STOP/PIVOT P0 toward a template/adapter rather than add more UI.
-
-No automatic model-connected R2 follows.
+```text
+执行 INTERVIEW-DEMO-01，不再做新的泛调研或只返回计划。
+Repo: F:\Chat-Codex-Handoff\validation-repo
+Branch: prototype/acceptance-evidence-p0
+Expected HEAD: a1c37af2d68cce8f0574b89b01975e9223f6cea2
+先读 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state：
+docs/master/CURRENT_STATE.md
+docs/master/HANDOFF.md
+docs/research/strategy-reset-01/INTERVIEW_DEMO_01_BRIEF.md
+按工作包完成中文交互演示、当前会话真实AI评审记录、同材料小对照、测试和面试讲稿；最终只交一个review bundle。
+不改P0/旧产品、不额外模型/API/安装/真实Chat或浏览器profile操作、不push/merge/付费/发布。
+普通实现细节自行决定；真正权限/风险/范围Gate再停。不要在本轮运行live handoff。
+```
 
 ## Current State Summary
 
-Completed: R0/R1 research, bounded P0 implementation, one-bundle handback, MASTER bundle/source review.
-
-Verified: transferred ZIP/index/hash integrity; source-level contract/safety; generated historical Unknown/Mismatch/NOT_REVIEWED/PENDING behavior. Windows test execution remains Codex-reported.
-
-Likely: explicit applicability/provenance is clearer than unstructured shared files; owner observation required.
-
-Unknown: real readability, strong-baseline advantage, target-user demand/payment, model quality and Web economics.
-
-Not Done: owner visual/readability check, strong-baseline comparison, model/Web task, interviews, full MVP, external pilot/release.
-
-Must Fix: none now.
-
-User Decision Needed: perform the read-only owner check. Stop again for any new implementation/runtime/model/user/paid/public scope.
-
-Future Optional: visual polish, translated enums, summary counters and standalone packaging remain inactive pending actual feedback.
+Completed: accepted P0 review, owner delegation captured, scoped interview-demo design/work package, targeted official/existing-project check.
+Verified: prior evidence as recorded; current delegation and interview priority. No new local runtime result.
+Likely: one concrete readable interaction with sourced AI evidence can demonstrate the intended capability better than historical technical diagnostics.
+Unknown: actual demo readiness, novice comprehension, independent AI accuracy, strong-baseline advantage and demand/payment.
+Not Done: this new build, recorded review run, interactive/visual checks, owner consolidated walkthrough, independent user/model experiment or release.
+Must Fix: truthful source/automation/product claims; no new P0 code defect asserted.
+User Decision Needed: none for this bounded delegated work; retained paid/access/public/high-risk boundaries still apply.
+Future Optional: full visual design, native Desktop routing, automatic paste/send, broader platform or agents; inactive. Gate 5 ON HOLD.
