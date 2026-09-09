@@ -138,7 +138,7 @@ $historicalRun=$null
 if($Historical){
     $r0=Get-Content (Join-Path $repo 'artifacts/strategy-reset-01/EVIDENCE_INDEX.json') -Raw | ConvertFrom-Json
     if(-not @($r0.cases | Where-Object {$_.id -eq 'R0-07'}).Count){throw 'Historical source unavailable: PARTIAL'}
-    $historical=@{
+    $historyInput=@{
         schema_version=1
         task=@{task_id='R0-07-replay';requirement_revision=$null;target_code_revision='0c2440b06ffe5657331d4395a4181929d28c5ebf';requirement_source=$null;requirement_sha256=$null;mode='HISTORICAL_REPLAY';approval_status='UNKNOWN';notes='R0-07 reconstructed inspection question, not original owner-approved criteria. Materials selected now; no claim they were original earlier inputs.';criteria=@(@{criterion_id='H1';text='这些历史日志与索引能否支持目标版本的验收？原批准要求未冻结。';required_evidence_types=@('TEST_LOG','INVENTORY')})}
         artifacts=@(
@@ -147,11 +147,11 @@ if($Historical){
         )
         reviews=@()
     }
-    $before=@{};foreach($a in $historical.artifacts){$before[$a.path]=(Get-FileHash (Join-Path $repo $a.path)).Hash}
-    $historicalRun=Snapshot ($historical | ConvertTo-Json -Depth 20 | ConvertFrom-Json)
+    $before=@{};foreach($a in $historyInput.artifacts){$before[$a.path]=(Get-FileHash (Join-Path $repo $a.path)).Hash}
+    $historicalRun=Snapshot ($historyInput | ConvertTo-Json -Depth 20 | ConvertFrom-Json)
     $r=Write-P0Report $historicalRun
     Check ($r.criteria[0].criterion -eq 'NOT_REVIEWED' -and $r.approval_status -eq 'UNKNOWN' -and $r.artifacts[0].applicability -eq 'UNKNOWN' -and $r.artifacts[1].applicability -eq 'MISMATCH') 'Historical replay retains absent requirements, unknown and mixed revisions'
-    $unchanged=$true;foreach($a in $historical.artifacts){if($before[$a.path] -ne (Get-FileHash (Join-Path $repo $a.path)).Hash){$unchanged=$false}}
+    $unchanged=$true;foreach($a in $historyInput.artifacts){if($before[$a.path] -ne (Get-FileHash (Join-Path $repo $a.path)).Hash){$unchanged=$false}}
     Check $unchanged 'Historical source bytes unchanged'
 }
 $receipt=[ordered]@{suite='acceptance-p0';mode='OFFLINE_SELF_TEST';before_head='0c2440b06ffe5657331d4395a4181929d28c5ebf';head=$head;scope=@(& git -C $repo diff --name-only 0c2440b06ffe5657331d4395a4181929d28c5ebf HEAD);command='powershell.exe -NoProfile -File acceptance-p0/tests.ps1 -Historical';passed=$script:passed;failed=$script:failed;exit_code=[int]($script:failed -gt 0);assertions=$script:lines;historical_replay=($null -ne $historicalRun);html_visual='NOT VERIFIED'}
