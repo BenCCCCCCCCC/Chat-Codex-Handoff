@@ -5,91 +5,109 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage / Latest Owner Direction
 
-**SCENARIO-FOCUS-02 v5 — CHAT/SKILL SUBSTITUTION REVIEW / GROUNDED PRACTICE MECHANISM RESEARCH / NO NEW BUILD**
+**DIRECTION-DEEPENING-01 — CHAT-SUBSTITUTION GATE COMPLETE / AI DELEGATION GYM PRIORITY HYPOTHESIS / RESEARCH ONLY**
 
-Owner rejects personal-matter preparation as crowded and doubts ordinary learning/practice or communication roleplay justifies a standalone app versus capable Chat plus a Skill/reflection loop. Deepen those directions only where necessary software capabilities or creative interactions add value; other ideas may be explored. Do not choose a market from the owner's personal projects.
+Owner asks to continue deepening the two learning/communication directions and explicitly requires proving why normal Chat cannot already complete the job; plugins/apps are acceptable if they add necessary functionality. Other directions remain allowed.
 
-MASTER removes A matter-preparation as the priority. Plain question generation, Socratic feedback, roleplay and repeat practice are not proposed as standalone products. The next research priority is a task-grounded communication practice mechanism with unequal information and an observable shared output; hands-on operation learning remains a secondary, crowded alternative. Neither is a validated market, new product commitment or execution authorization.
+MASTER applies a new product gate: prompt/Skill-equivalent ideas do not get independent-product status. Software must add model-external state, action, verification, information isolation, replay/reset or live context that matters to the user outcome. Even then, current ChatGPT Plugins/Apps may be the correct delivery surface; software necessity is not standalone-native-app necessity.
 
-PRODUCT-CORE-01 remains PAUSED, INTERVIEW-DEMO-01 SUPERSEDED; earlier merchant, prototype-study and full-workspace directions inactive. Gate 5 external execution ON HOLD.
+PRODUCT-CORE-01 remains PAUSED; INTERVIEW-DEMO-01 remains SUPERSEDED; generic matter-prep/tutor/roleplay/workspace directions inactive. Gate 5 external execution ON HOLD. No new build or Codex dispatch.
 
 ## Authority / Durable Record
 
-Same repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
-1. docs/master/CURRENT_STATE.md
-2. docs/master/HANDOFF.md
-3. docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md v5
+`BenCCCCCCCCC/Chat-Codex-Handoff` / `meta/master-state`:
+1. `docs/master/CURRENT_STATE.md`
+2. `docs/master/HANDOFF.md`
+3. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` — current Chat-substitution gate, platform/form-factor analysis, deepened directions and source register.
+4. `SCENARIO_FOCUS_02.md` v5 remains prior research context; its older next-step does not override this state.
 
-The same research file is updated; previous iterations remain in Git history. No additional execution brief, product code push or public release.
+No product-code push, deployment, publication or private-data use is authorized by research/state writes.
 
 ## Last Product Receipt — Unchanged
 
-- Repo: F:\Chat-Codex-Handoff\validation-repo
-- Branch: prototype/acceptance-evidence-p0
-- Latest owner/Codex-reported HEAD: a1c37af2d68cce8f0574b89b01975e9223f6cea2
-- Before P0: 0c2440b06ffe5657331d4395a4181929d28c5ebf
-- Reported P0 commits: 81b4a80 / a1c37af; four files; PS5.1 54/54 reported.
-- Prior MASTER transferred-bundle/source review: PASS FOR COMPARISON ENTRY, not user/model/market success.
-- Bundle SHA256 E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4; prior indexed size/hash matches 14/14.
-- Historical remote product observation 869414c77d227fe2f1675c7cfa08b04250520279 is not freshly checked.
+- Repo: `F:\Chat-Codex-Handoff\validation-repo`
+- Branch: `prototype/acceptance-evidence-p0`
+- Latest owner/Codex-reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- Before P0: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- P0 reported commits `81b4a80` / `a1c37af`; four files; PS5.1 54/54 reported.
+- Prior MASTER transferred-bundle/source review: PASS FOR COMPARISON ENTRY only.
+- Bundle SHA256 `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`; previous index size/hash checks 14/14.
+- Historical remote product observation `869414c77d227fe2f1675c7cfa08b04250520279` not freshly checked.
 
-No new product files, local execution/HEAD, competitor runtime test, API/model experiment or Codex dispatch. Preserve existing P0/history and any partial work discovered later; no reset. P0 provenance concepts may help later, but do not force Windows/Git interfaces onto consumer users.
+No new local code/runtime/model/plugin experiment or competitor install this turn. Preserve all existing source/history; do not reset older work to match research assumptions.
 
-## Current Source Findings / False Novelty Removed
+## Chat-Substitution Decision
 
-Official ChatGPT Study Mode already supports source material, Socratic questions and answer feedback. OpenAI's 2026-03-10 interactive math/science launch also supplies manipulable formulas/graphs. Current Plugins/MCP Apps docs support optional embedded interactive UI/canvases. Do not claim Chat is text-only or cannot host software, or equate necessary software with a separately installed native app.
+Reject independent-product claims when the value is mainly generated explanations, Socratic questions, roleplay, scoring, remembered progress, reusable prompts or simple UI. Current Chat/Plugins already cover much of this.
 
-Yoodli already combines visual materials, teaching/practice and feedback. ST Practice's developer listing already claims hidden scenario information, transcript-cited feedback and specific-turn branching retries; these are untested product claims, not evidence of efficacy. CellSide and LogicExcel already offer hands-on spreadsheet practice/feedback. Generic practice, visual cards, memory or rewind are not unique.
+A software capability becomes worth testing when the outcome relies on model-external:
+- hidden/private task state;
+- executable environment and real structured actions;
+- deterministic/independent checks;
+- replay/reset/held-out variants;
+- attribution among user/model/tool/task-design failure;
+- live website/app/device state.
 
-CoDraw is a historical research precedent for a target-seeing speaker and a listener who reconstructs a scene through dialogue/actions. Repository is archived; README license is CC BY-NC4.0. The 2023 EACL clarification analysis supports studying ambiguity/repair, not consumer training efficacy or demand. No dataset/art downloaded or commercial reuse approved.
+A Skill with tools/state may itself be the product. Prefer ChatGPT Plugin/App if it supplies the necessary UI/tools with lower user friction. Standalone app is only preferred when platform coverage, latency/voice, local privacy, independent distribution or other real constraints justify it.
 
-This pass read official/vendor primary pages, the GitHub metadata/README and a paper abstract. No new independent target-user interviews/discussion evidence, product runtime comparison, study results or marketplace purchase. Source dates and claim limits are in the research file's nine-entry register.
+## Current Priority — AI Delegation Gym / Brief-to-Execution Lab
 
-## Four-Layer Priority Hypothesis
+Working hypothesis, not a brand or validated market: help ordinary users who can chat with AI but are starting to delegate multi-step work learn how to specify constraints and verify execution by observing what an AI actually does in a bounded environment.
 
-### User/scenario
+Mechanism:
+1. user sees a complete mission;
+2. collaborator model receives only allowed shared context and user brief, not hidden target/checks;
+3. model asks clarification or calls a small legal toolset against a visible board;
+4. separate engine executes/logs/checks fixed conditions;
+5. result separates uncommunicated constraints, model interpretation failure, tool execution failure and Unknown attribution;
+6. user rewrites one part and retries, then receives a held-out equivalent task.
 
-Adults who have a concrete need to explain a multi-step arrangement/procedure to someone without the same background. Practice focuses on prerequisites, references, sequence and responsibilities, not 'improve all social skills'. AI novice/light use is an onboarding constraint, not inability to communicate. Repeat usage, reachability and willingness to pay remain unknown.
+No universal ability score, fake human mind-reading or real external actions in the first slice.
 
-### Product mechanism
+Why Chat-only is insufficient: if the same conversation/model receives answer/goal/scoring state, it cannot credibly demonstrate information isolation, and language-only claims of action/results can be rewritten by the same generator. A Chat+Skill+independent tools baseline may solve this; therefore candidate form is likely a Plugin/App with private backend state and interactive board rather than a new generic chatbot.
 
-User sees a task target; AI collaborator sees only permitted shared context/user messages and its own workspace. The collaborator asks clarification or proposes constrained actions on a flow/arrangement board. An external engine executes and compares against fixed conditions. The user sees what was actually constructed, revises one instruction, and later attempts a new equivalent task.
+## Four Layers — Priority Hypothesis
 
-Target must be excluded from collaborator requests, not merely hidden by a pretend-persona prompt. No score like 'communication ability 85'; show concrete achieved/missing/conflicting conditions and qualified feedback. Model parsing/execution failure is not automatically user fault; uncertain attribution stays Unknown. No deliberate artificial misunderstandings to manufacture value.
+- User/scenario: basic AI user moving from questions/drafts into delegating a small multi-step task; specific recurring task/frequency/payment still unknown.
+- Product: one observable delegation attempt, clarification, real constrained actions, result mismatch and localized retry; not a prompt course or task manager.
+- MVP: one board type, 8–12 original missions including held-out variants, text, one collaborator, small toolset, private mission checker/event log, one branch/retry; no voice/3D/real accounts/infinite generation.
+- Feasibility: model handles language/clarification/action proposals; deterministic engine owns hidden target, legal actions/state/checks/reset; humans calibrate semantics/transfer. Need leakage, attribution and baseline tests before any learning claim.
 
-### MVP candidate
+## Secondary Direction — Real Software Coach Mode
 
-One board/task type, a few original non-sensitive targets, text input, one controlled collaborator and action replay. Not live voice, 3D, matching real people, therapy, production calendar actions, all-topic learning or a general agent platform. Original task examples are engineering/mechanism fixtures, not user findings.
+Hands-on learning is retained as a mechanism but generic spreadsheet/software tutoring is crowded. A stronger version would observe the user's actual software/page state, give adaptive guidance without doing the task, then check an unassisted repeat.
 
-### Feasibility / form
+This passes the Chat-only necessity test only when live state/site access is real. However WalkMe, Whatfix, Pendo and newer browser/site-tool products already provide contextual walkthrough/training/AI guidance. General cross-software coaching is therefore a high-substitution space. Keep only as a fallback if a specific personal-use niche with much lower setup and strong need appears.
 
-Model handles permitted language-to-action/clarification; deterministic engine controls legal operations, state and fixed condition checks; humans validate ambiguous semantic attribution and real-world learning claims. Web miniapp or later Chat-embedded component can host this; native-install need is unproved. No new service/model/API/runtime is authorized now. Provider legality, region, costs and limits need their own decision.
+## Fresh Platform / Competitor Findings
 
-## Secondary Learning Candidate
+Current official OpenAI docs confirm Plugins can package Skills, Apps and app templates; Apps can provide interactive UI and actions. Site tools/WebMCP and built-in/cloud browsers further reduce the gap between Chat and standalone tools. OpenAI Certified and College Student plugins already cover applied AI fluency and interactive study materials. Do not claim Chat is text-only or plugin UI is novel.
 
-Shift 'tell me the answer' to actually manipulating a workbook/object and observing result/action correctness, then solving a new task without the original hints. Reuse an existing editor/engine and allow alternative correct methods. But direct spreadsheet-practice competitors are strong; do not build another generic tutor simply because a grid is more interactive than chat. Need a real residual task gap.
+Current competition/prior art: CoDraw hidden-information collaborative task; ROPE requirement-driven LLM-use training; OpenAI Certified/Claude AI fluency; 2026 AI Factory game; PromptFluent prompt/debug practice; WalkMe/Whatfix/Pendo contextual digital adoption. These are source-level capabilities, not our runtime benchmark.
 
-## Evaluation and Main Risks
-
-Software necessity, original invention, learning effectiveness, repeated demand and independent-app distribution are different questions. None follows from an attractive canvas.
-
-Strong baseline is capable Chat + a sound Skill and available tools, plus a direct relevant product; do not remove its context/tools to make the candidate win. If adding the same engine to Chat works equally well, choose the module/plugin instead of insisting on native app.
-
-Assess hidden-target leakage, execution correctness, attribution errors, hints needed, independent novel-task outcome, real human transfer if later appropriately authorized, voluntary second use and total latency/cost. Same-case retry is not evidence of general learning. If users only enjoy it as a one-off puzzle, do not claim practical communication improvement.
-
-Potential reusable case calibration and low-friction experience are hypotheses, not existing moats/network effects. Preserve portability and privacy, no private conversation pooling by default.
-
-## Completed / Verified / Likely / Unknown / Not Done
-
-Completed: latest critique applied, current native/competitor capability counterchecks, two mechanism-level refinements, one concrete paper example, four-layer prioritization, honest app/plugin form and risk/evaluation boundaries.
-Verified: explicit contents of retrieved sources and CoDraw metadata; prior P0 evidence at its original level. No fresh local/runtime/user experiment.
-Likely: an observable shared task may provide more checkable feedback than ungrounded conversational grading. Design expectation only.
-Unknown: actual learner/user need, model fairness/error rate, transfer, direct-product advantage, repeat engagement/payment, cost and independent app necessity.
-Not Done: mechanism execution, new code, independent user observations/competitor trials, new model evaluation or release.
-Must Fix: no false Chat limitations or uniqueness, no blaming learner for system errors, no paper examples as execution/market evidence.
-User Decision Needed: none for ordinary continuing research. Retain bounded approval for code/runtime/model/API/installation/data/contact/spending/publication.
-Future Optional: matter preparation, generic tutors/roleplays, real-time voice, old acceptance workspace, personal-agent platform and interview packaging; no active build queue.
+Current evidence supports no algorithmic novelty, moat, target-user demand, independent learning effect or payment claim.
 
 ## Next Smallest Step
 
-Prepare a single falsifiable information-asymmetry task specification and strongest-baseline comparison, using the authored paper example and cited mechanism boundaries. A later explicitly bounded experiment should first establish target isolation, lawful actions and fair feedback before building a consumer application. Do not issue another full product implementation trigger now.
+No Codex build yet. Write one synthetic but fully specified mission protocol for the delegation gym and a strong Chat+Skill/tools baseline. Required fields:
+- user-only mission/hidden checks;
+- model-visible shared state/payload;
+- legal tools/actions;
+- deterministic result conditions;
+- clear/underspecified/contradictory/system-error variants;
+- exact leakage checks and error attribution;
+- held-out transfer variant;
+- comparison setup cost and interaction burden.
+
+Only propose a tiny runtime experiment when it is possible to show that hidden state is actually excluded from collaborator input, engine results are independent of model self-report, and errors can be attributed fairly. If equal Chat+Skill/tools achieves the same experience with less setup, ship/adapt that instead of forcing an independent app.
+
+## State Summary
+
+Completed: Chat-substitution gate, current platform capability verification, communication/learning deepening, delegation-gym synthesis, software-coach countercheck and form-factor decision.
+Verified: public source capabilities and historical P0 evidence at original scope only; no new runtime/user result.
+Likely: environment-grounded delegation has a stronger engineering reason beyond plain Chat than generic tutoring/roleplay; not demand proof.
+Unknown: repeated need, strong-baseline advantage, learning transfer, model reliability, plugin availability/coverage, cost/privacy/adoption/payment.
+Not Done: mission protocol, runtime mechanism experiment, target observations, competitor trial, product implementation/release.
+Must Fix: no false Chat incapability, no hidden-answer security claims without payload proof, no blaming users for model/tool errors, no app=innovation reasoning.
+User Decision Needed: none for ordinary research; new model/runtime/development/data/contact/spend/publication gates remain.
+Future Optional: standalone native app, voice, real websites, old acceptance/workspace products; inactive.
