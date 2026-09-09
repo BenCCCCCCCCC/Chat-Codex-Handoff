@@ -9,7 +9,7 @@ Role: 00 MASTER / authoritative dynamic state
 
 Gate 5 remains ON HOLD. The project is still in product/technical validation and bounded prototyping; it is not Beta or full application development.
 
-UX-03 CopyOnly and UX-02/UX-04 delivery-summary parsing remain accepted for owner-validation entry. The owner has now performed the real launcher/return flow far enough to expose one new usability defect: double-clicking `Start-Handoff.cmd` visibly opens a black command window before/alongside the product GUI.
+UX-03 CopyOnly and UX-02/UX-04 delivery-summary parsing remain accepted for owner-validation entry. The owner exposed one remaining launch friction: `Start-Handoff.cmd` can present a visible console around GUI startup.
 
 Overall Spike acceptance remains open / PARTIAL until UX-05 is corrected and the owner repeats the real GUI validation.
 
@@ -22,94 +22,58 @@ Overall Spike acceptance remains open / PARTIAL until UX-05 is corrected and the
 
 No product/code push, merge, release, external sharing, paid API use, dependency installation or privilege escalation is authorized.
 
-## Verified / Accepted Before UX-05
+## Accepted Before UX-05
 
 - UX-03 `handoff.ps1 -CopyOnly` independent review = PASS for owner use.
 - UX-02/UX-04 summary parser independent review = PASS for owner use.
 - Latest reported core regression = `43/43 PASS`.
 - Latest reported UI regression = `73/73 PASS`.
 - CopyOnly keeps strict validation and skips web-open requests; no-arg route remains backward compatible.
-- Parser remains explicit-label-only and now recognizes the real project forms `唯一 correction / final HEAD` and `After HEAD / commit` while excluding Before/prose SHAs.
+- Parser remains explicit-label-only and recognizes the real project forms `唯一 correction / final HEAD` and `After HEAD / commit` while excluding Before/prose SHAs.
 - Desktop Route Probe 01 remains Unknown/inconclusive; no live Desktop URI test is authorized.
-
-## Owner Live Observation
-
-The owner returned the latest UX-04 Delivery Packet to MASTER and separately reported:
-
-> Double-clicking `Start-Handoff.cmd` shows a clearly visible black command-line window, then the product GUI appears.
-
-Do not infer unreported details such as whether CopyOnly created zero tabs in this specific run or whether every summary field was understood. Those observations must be captured on the repeat owner validation after UX-05.
 
 ## UX-05 — Launcher Console Friction
 
-### Root cause confirmed from reviewed source
+Current launcher source synchronously runs Windows PowerShell from `.cmd`, which can leave a visible black console while the WinForms UI is running.
 
-Current `Start-Handoff.cmd` is:
+The approved narrow correction remains:
 
-```bat
-@echo off
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -STA -File "%~dp0handoff-kit\ui\Start-Handoff.ps1"
-```
+- spawn Windows PowerShell asynchronously;
+- use `-WindowStyle Hidden` for the child PowerShell process;
+- let the `.cmd` parent exit promptly;
+- preserve Windows PowerShell 5.1, `-NoProfile`, `-STA`, script-relative pathing and startup-error MessageBox behavior;
+- no VBS, compiled EXE, installer, shortcut, dependency, service, registry/global setting or alternate launcher type.
 
-The batch process synchronously waits for the Windows PowerShell process, so its console remains visible while the WinForms UI is running.
+### Owner acceptance criterion — confirmed 2026-09-09
 
-`Start-Handoff.ps1` already shows startup failures through a WinForms MessageBox in normal mode, so hiding/detaching the PowerShell console does not require losing the existing user-visible startup-error path.
+The owner explicitly accepts a **very brief launch flash** from the `.cmd` entry.
 
-### Classification
+Therefore UX-05 does **not** require a truly zero-flash launcher. The blocking defect is only a **persistent / materially visible black console window** during normal GUI use.
 
-**Must Fix — UX-05.**
+Do not introduce VBS/EXE/installer or another launcher architecture merely to remove an instantaneous flash. If the corrected launcher leaves only the brief flash the owner described as acceptable, treat launcher appearance as acceptable and do not reopen it as Future Optional work unless later real use changes that judgment.
 
-This is a real beginner-facing launch usability defect, not cosmetic polish.
-
-### Approved narrow correction
-
-Resume the same Codex task and change only the repo-local launcher behavior necessary to avoid a persistent console window.
-
-Preferred smallest approach to validate first:
-
-- make `Start-Handoff.cmd` spawn Windows PowerShell asynchronously;
-- pass `-WindowStyle Hidden` to the PowerShell process;
-- allow the `.cmd` parent to exit immediately after a successful spawn;
-- preserve `-NoProfile`, `-STA`, script-relative path resolution and paths containing spaces;
-- preserve normal-mode startup error visibility through the existing MessageBox;
-- do not add a VBS launcher, compiled executable, installer, shortcut, dependency, service or global registration unless this smallest approach demonstrably cannot meet the owner requirement and MASTER approves a new scope.
-
-A brief shell flash inherent to double-clicking a `.cmd` may still need owner observation; the immediate Must Fix is the clearly persistent black console window reported in the real run. Do not claim zero-flash until actually observed.
-
-## Required UX-05 Validation
-
-Codex should:
-
-1. verify repo / branch / HEAD / worktree first;
-2. modify only `Start-Handoff.cmd` unless a test-only file needs a tightly bounded update;
-3. preserve all current product behavior and core/UI code;
-4. run existing core and full UI regression on final HEAD;
-5. run `git diff --check`;
-6. add a focused launcher check proving the command uses script-relative pathing, Windows PowerShell 5.1, STA, hidden child window and asynchronous parent exit semantics without changing global settings;
-7. do not use UI automation or broad process scans to claim visual success;
-8. create at most one local correction commit; no push/merge;
-9. stop at `IMPLEMENTED / SELF-TESTED / READY FOR OWNER VALIDATION` if green.
-
-## Must Fix / User Decision Needed / Future Optional
+## Classification
 
 ### Must Fix
 
-- UX-05 — persistent black launcher console in the real owner run.
+- UX-05 — remove the persistent black launcher console while preserving the current simple repo-local entry.
 
 ### User Decision Needed
 
-None for this narrow correction; it is inside the already approved beginner-usability scope.
+None for the bounded UX-05 correction.
 
 ### Future Optional
 
-- a truly zero-flash launcher type only if a brief `.cmd` flash remains materially annoying after UX-05;
 - improved read-only Desktop package identification;
 - native exact-conversation routing only with supported evidence;
 - browser exact-tab focus only if extension/setup cost is justified;
 - visual polish/high-DPI/accessibility after functional acceptance.
 
+A zero-flash launcher is **not** currently a Future Optional requirement because the owner accepts the brief flash.
+
 ## Not Done / Unknown
 
+- UX-05 implementation evidence / final launcher delta if not yet returned by Codex;
 - owner repeat run after UX-05;
 - explicit owner confirmation that `仅复制交付` opens no new tab in the real run;
 - owner judgment that the live summary is understandable;
@@ -121,6 +85,6 @@ None for this narrow correction; it is inside the already approved beginner-usab
 
 ## Next Smallest Step
 
-Send one concise UX-05 Correction Packet to the same Codex task at local HEAD `28828b110...`. Do not reopen parser, CopyOnly, Desktop routing or visual design.
+If the UX-05 correction has not yet been run, send the existing concise UX-05 Correction Packet to the same Codex task at local HEAD `28828b110...`.
 
-After UX-05 self-test and MASTER delta review, the owner repeats the real GUI flow and reports console behavior, summary clarity, no-new-tab CopyOnly behavior and whether the route is simpler overall.
+If it has already been run and the current real behavior is only the owner-accepted brief flash with no persistent black console, do not change the launcher further; return the Codex UX-05 Delivery Packet / tiny launcher delta for MASTER review, then repeat the real CopyOnly owner flow.
