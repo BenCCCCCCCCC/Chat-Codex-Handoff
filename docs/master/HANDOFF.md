@@ -5,109 +5,127 @@ Role: 00 MASTER
 
 ## Phase
 
-**USABILITY-SPIKE-01 — UX-04 self-test complete / MASTER delta review pending**
+**USABILITY-SPIKE-01 — UX-04 REVIEW PASS / OWNER LIVE VALIDATION NOW**
 
-Gate 5 remains ON HOLD. Do not start another feature round, Desktop routing implementation or visual polish before owner validation.
+Gate 5 remains ON HOLD. Do not start another feature round, Desktop routing implementation, browser integration or visual polish before the real owner result.
 
 ## Current Local State
 
 - Repo: `F:\Chat-Codex-Handoff\validation-repo`
 - Branch: `prototype/usability-spike-01`
 - UX-04 before HEAD: `3a925c13dae51e7d3f3a89977a993ebafb771f1d`
-- UX-04 reported final HEAD: `28828b110263909c5683a8cab54d6832f2ad7ffa`
-- Prior pushed product branch remains older; do not reset local work to it.
+- UX-04 final HEAD: `28828b110263909c5683a8cab54d6832f2ad7ffa`
+- Pushed product branch remains older; do not reset local work to it.
 
 No push, merge, release, external sharing, paid API, dependency installation or privilege escalation is authorized.
 
-## Prior MASTER Review
+## MASTER Delta Review Result
 
-- UX-03 CopyOnly = PASS for owner-validation entry.
-- UX-02 summary behavior was correct except for a narrow real packet-label parser gap.
-- The missing real forms were:
-  - `唯一 correction / final HEAD：<sha>`
-  - `After HEAD / commit：<sha>`
-- Desktop Route Probe 01 remains Unknown/inconclusive and must not be broadened in this correction.
+### UX-03 CopyOnly
 
-## UX-04 — Codex Final Report
+**PASS for owner validation.**
 
-Codex reports one local commit and only two modified files:
+The accepted minimal core change remains unchanged by UX-04:
+
+- optional `-CopyOnly` retains all existing validation and exact clipboard preparation;
+- it skips opening the stored HTTPS target;
+- no-arg legacy route still copies and requests opening the stored web Chat;
+- no auto paste/send.
+
+### UX-02 / UX-04 Delivery Summary
+
+**PASS for owner validation.**
+
+MASTER directly inspected the current owner-uploaded `PanelAdapter.ps1` and `ui/tests.ps1`.
+
+The parser now explicitly recognizes the two real missing label forms:
+
+- `唯一 correction / final HEAD：<sha>` with case-insensitive English words;
+- `After HEAD / commit：<sha>`;
+
+while preserving the prior final/current labels.
+
+Safety/honesty properties remain intact:
+
+- parser remains beginning-of-line explicit-label based;
+- `Before HEAD` is not recognized as delivered version;
+- prose containing those words plus a SHA is not recognized;
+- conflicting final/current declarations remain ambiguous;
+- packet-declared version and current checkout HEAD remain separate;
+- raw packet/fingerprint behavior is unchanged.
+
+The tests explicitly cover full-width/ASCII colon, mixed case, both real label forms, conflict ambiguity and negative prose/Before cases.
+
+Codex reports final HEAD regression:
 
 ```text
-handoff-kit/ui/PanelAdapter.ps1
-handoff-kit/ui/tests.ps1
-
-2 files changed, 11 insertions(+), 1 deletion(-)
+Core: 43/43 PASS
+UI:   73/73 PASS
 ```
 
-Reported correction semantics:
+No new source Must Fix was found.
 
-- recognize `唯一 correction / final HEAD` case-insensitively;
-- recognize `After HEAD / commit`;
-- support full-width colon where applicable;
-- preserve existing accepted labels;
-- continue excluding `Before HEAD` and arbitrary prose SHAs;
-- conflicting recognized declarations remain ambiguous;
-- no change to raw packet, fingerprint, checkout HEAD relation, CopyOnly, transport or layout.
+## Desktop Route Probe
 
-Reported final regression:
+Still **Unknown / inconclusive**. Do not repeat, broaden or live-test Desktop URI routing now.
 
-```text
-Core: 43 passed / 0 failed; exit 0
-UI:   73 passed / 0 failed; exit 0
-```
+## Owner Validation — Run Now
 
-Also reported: `git diff --check` and correction-range checks PASS, test-owned lifecycle exits normally, live binding/metadata/packet/Hook hashes unchanged, and no live Desktop/browser/clipboard/handoff action or push/merge.
+Do not send another Codex implementation prompt first.
 
-## MASTER Review Gate
+1. Ensure the latest Codex turn is fully ended.
+2. Double-click `F:\Chat-Codex-Handoff\validation-repo\Start-Handoff.cmd`.
+3. Verify this is the real window, not Demo, and current project is the F: checkout.
+4. Inspect the live delivery summary for the latest Codex reply:
+   - title may honestly be `未提供` because the reply did not use a Markdown heading;
+   - `交付版本` should be `28828b110263909c5683a8cab54d6832f2ad7ffa`;
+   - `当前项目版本` should be the same if no later commit exists;
+   - relation should be `与当前项目一致`;
+   - capture time and fingerprint should be populated.
+5. Check the stored return Chat and raw packet are the intended ones.
+6. Tick the explicit confirmation.
+7. Click **仅复制交付** once.
+8. Confirm that this action does **not** open a new browser/web tab.
+9. Manually switch to the already-open current MASTER in ordinary ChatGPT Desktop Chat or web Chat.
+10. Do not copy anything else. Press **Ctrl+V → Send**.
+11. After that packet arrives, send one short owner observation:
+    - `更简单 / 差不多 / 更麻烦` than the previous forced-open path;
+    - whether the summary helped identify the delivery;
+    - any confusing/unnecessary step;
+    - whether a console window from `Start-Handoff.cmd` materially bothered you.
 
-Codex turn completion is not final acceptance. MASTER now needs only the tiny UX-04 source delta.
+Optional only after successful CopyOnly validation: test **复制并打开网页对话** once to confirm backward compatibility.
 
-Preferred evidence:
+## Expected Evidence From Owner Test
 
-- an exact correction diff for `3a925c13dae51e7d3f3a89977a993ebafb771f1d..28828b110263909c5683a8cab54d6832f2ad7ffa` if already present under the existing artifacts folder.
+A successful CopyOnly owner run should establish only:
 
-Fallback evidence if no dedicated UX-04 diff exists:
+- live GUI displayed a recognizable actual captured packet;
+- CopyOnly prepared the actual packet without requesting a new web tab;
+- user could manually choose an already-open ordinary Desktop/web Chat and paste/send;
+- user retained final destination/send control.
 
-- current `handoff-kit/ui/PanelAdapter.ps1`;
-- current `handoff-kit/ui/tests.ps1`.
+It does NOT prove native exact-conversation Desktop routing.
 
-Do not ask Codex to create another feature or push just to transfer evidence.
+## Final MASTER Decision After Owner Return
 
-## Owner Validation After MASTER PASS
-
-Then perform the real GUI test immediately:
-
-1. wait until the relevant Codex turn is fully ended;
-2. double-click `F:\Chat-Codex-Handoff\validation-repo\Start-Handoff.cmd`;
-3. confirm the live summary recognizes the actual packet title/final version instead of showing an avoidable `未提供`;
-4. confirm the stored target and raw packet are the intended ones;
-5. tick the explicit confirmation;
-6. click **仅复制交付** once;
-7. confirm no new browser tab/web page opens from CopyOnly;
-8. manually switch to the already-open ordinary ChatGPT Desktop Chat or web Chat;
-9. Ctrl+V and Send without copying anything else;
-10. report:
-   - whether the pasted packet is the intended delivery;
-   - whether the summary was understandable;
-   - whether CopyOnly is `更简单 / 差不多 / 更麻烦` than the prior forced-open path.
-
-Optional only after the above: test **复制并打开网页对话** once for backward compatibility.
-
-Do not treat manual Desktop Chat use as proof of native exact-conversation routing.
+- **PASS** — implementation/evidence correct and CopyOnly + summary reduce or acceptably manage the real friction;
+- **PARTIAL** — flow works but one bounded real Must Fix remains;
+- **FAIL/PIVOT** — GUI/summary/copy-only path adds more burden than value or violates the control contract.
 
 ## Classification
 
 ### Must Fix
 
-None confirmed after Codex report; UX-04 remains pending source-level MASTER confirmation.
+None before owner validation.
 
 ### User Decision Needed
 
-None for scope. Transfer the tiny correction evidence, then owner validation if review is clean.
+No new scope decision; perform the owner test.
 
 ### Future Optional
 
-- improved read-only Desktop package identification;
+- better read-only Desktop package identification;
 - native exact-conversation routing only with supported evidence;
-- browser exact-tab focus only if extension/setup cost is justified later;
+- exact browser-tab focus only if extension/setup cost is justified;
 - visual polish/high-DPI/accessibility after functional acceptance.
