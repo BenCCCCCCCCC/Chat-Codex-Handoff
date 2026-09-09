@@ -120,7 +120,7 @@ function Get-DeliverySummary {
         if($fenced){continue}
         if($title -eq '未提供' -and $line -match '^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$') { $title=$matches[1] }
         $plain=$line -replace '[`*]',''
-        if($plain -match '^\s*(?:-\s+)?(?:Correction\s*/\s*Final HEAD|Final HEAD|After HEAD|Current HEAD|最终\s*HEAD|当前\s*HEAD|最终版本|当前版本)\s*[:：]\s*([0-9a-fA-F]{7,40})(?![0-9a-fA-F])(?:\s|$)') {
+        if($plain -match '^\s*(?:-\s+)?(?:(?:唯一\s+)?Correction\s*/\s*Final HEAD|Final HEAD|After HEAD(?:\s*/\s*commit)?|Current HEAD|最终\s*HEAD|当前\s*HEAD|最终版本|当前版本)\s*[:：]\s*([0-9a-fA-F]{7,40})(?![0-9a-fA-F])(?:\s|$)') {
             $versions+=$matches[1].ToLowerInvariant()
         }
     }

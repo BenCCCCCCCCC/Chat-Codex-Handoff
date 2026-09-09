@@ -61,6 +61,16 @@ try {
     $bytes=[Text.Encoding]::UTF8.GetBytes($declared)
     $s=Get-DeliverySummary $declared $bytes $sha
     Check ($s.Title -ceq '中文交付 ✓' -and $s.Version -ceq $sha -and $s.Relation -eq '与当前项目一致') 'Summary uses actual heading and final only, not Before'
+    foreach($label in @('唯一 correction / final HEAD：','唯一 CoRrEcTiOn / FiNaL hEaD：','After HEAD / commit：','After HEAD / commit:','Correction / Final HEAD:','Final HEAD:','After HEAD:','Current HEAD:','最终 HEAD：','当前 HEAD：','最终版本：','当前版本：')){
+        $explicit="${label}$sha"
+        $parsed=Get-DeliverySummary $explicit ([Text.Encoding]::UTF8.GetBytes($explicit)) $sha
+        Check ($parsed.Version -ceq $sha -and $parsed.CheckoutHead -ceq $sha -and $parsed.Relation -eq '与当前项目一致') "Explicit version label: $label"
+    }
+    $realConflict="唯一 correction / final HEAD：$sha`nAfter HEAD / commit：bbbbbbb"
+    Check ((Get-DeliverySummary $realConflict ([Text.Encoding]::UTF8.GetBytes($realConflict)) $sha).Version -eq '不明确（查看原文）') 'Real final labels retain conflict ambiguity'
+    foreach($excluded in @("Before HEAD：$sha","prose 唯一 correction / final HEAD：$sha","prose After HEAD / commit：$sha")){
+        Check ((Get-DeliverySummary $excluded ([Text.Encoding]::UTF8.GetBytes($excluded)) $sha).Version -eq '未提供') 'Before and prose remain excluded'
+    }
     $none=Get-DeliverySummary 'prose aaaaaaa' ([byte[]]@(1,2)) $sha
     Check ($none.Title -eq '未提供' -and $none.Version -eq '未提供' -and $none.Relation -eq '无法判断') 'Missing declarations never inferred from checkout'
     $conflict=Get-DeliverySummary ($declared+"`nCurrent HEAD: bbbbbbb") $bytes $sha
