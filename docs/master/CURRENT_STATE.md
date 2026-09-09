@@ -1,108 +1,121 @@
 # Current State
 
-Updated: 2026-09-10  
+Updated: 2026-09-10
 Role: 00 MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**INTERVIEW-DEMO-01 — MASTER-scoped under owner delegation / READY FOR CODEX / NOT STARTED**
+**PRODUCT-CORE-01 — FUNCTIONAL BASELINE v0.1 SCOPED / READY FOR CODEX / NOT STARTED**
 
-The owner now delegates ordinary product/design/implementation choices to MASTER and prioritizes an interview-demonstrable product quickly. Owner notes technical jargon could overwhelm beginners and permits later GUI/visual improvements. This is product feedback/hypothesis, not a completed novice usability study.
+The owner's latest direction corrects the previous interview-demo plan: first define concrete product functions and their value, complete the core usable product workflow, then consolidate owner testing. Ordinary product/design/implementation choices remain delegated to MASTER. Interview presentation, scripts and marketing are deferred.
 
-MASTER selects one integrated delivery: a Chinese interactive acceptance demo, actual current-Codex-session review records, an honest small comparison, and a short interview narrative. Do not continue an indefinite research/inventory/one-label-correction sequence. The old four-question owner readability exercise is deferred/unmeasured, not marked PASS and not a mandatory precondition to this delegated build.
+MASTER therefore replaces INTERVIEW-DEMO-01 with one integrated, bounded product build. This is a local product-validation version, not authorization to build a general platform or claim market/production readiness. Gate 5 external execution stays ON HOLD.
 
-Gate 5 external execution remains ON HOLD. No market, independent model-quality, full commercial MVP or product-market fit claim.
+## Canonical Authority
 
-## Actual Local Receipt / Starting Version
+Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`
+Ref: `meta/master-state`
+
+Read:
+1. `docs/master/CURRENT_STATE.md`
+2. `docs/master/HANDOFF.md`
+3. **`docs/research/strategy-reset-01/PRODUCT_CORE_01_SPEC.md` v1.0** — full feature/value/acceptance/implementation contract.
+
+`INTERVIEW_DEMO_01_BRIEF.md` is explicitly SUPERSEDED. Its original remains in Git history at `6234e6527facffa8c83fd96cf26d8ea51da5cdff`; do not execute both briefs. R1 research and P0 evidence remain historical inputs, not a reason to restart broad research or reopen old launcher/tab work.
+
+## Last Confirmed Local Receipt
 
 - Repo: `F:\Chat-Codex-Handoff\validation-repo`
 - Branch: `prototype/acceptance-evidence-p0`
-- Latest owner/Codex-reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- Latest reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
 - P0 before HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
-- P0 commits reported: `81b4a80`, `a1c37af`
-- Four new acceptance-p0 files; final Windows PS5.1 tests reported 54/54, exit 0.
-- No product push/merge reported; last independently checked remote product HEAD remains historical `869414c77d227fe2f1675c7cfa08b04250520279`, not freshly checked.
+- P0 local commits reported: `81b4a80`, `a1c37af`
+- Four new acceptance-p0 files; Windows PS5.1 54/54 reported.
+- No receipt of INTERVIEW-DEMO-01 execution; do not invent new HEAD.
+- Last remote product observation remains historical `869414c77d227fe2f1675c7cfa08b04250520279`, not freshly checked.
 
-No local Git/test run was performed by MASTER. Do not claim new branch/commit before Codex receipt. Continue on the same local P0 branch if actual baseline matches; no new branch required for this increment.
+Codex must verify actual state before writing. Preserve unexpected/partially started work, explain lineage, never reset to old remote. Prefer the same local branch; no new branch just for naming.
 
-## Accepted P0 Evidence — Preserved
+## Preserved Verified Baseline
 
-Previous MASTER transferred-bundle/source review = **PASS FOR COMPARISON ENTRY**, not end-user/AI/MVP PASS.
+P0 MASTER review = PASS FOR COMPARISON ENTRY, not product/user/model/market PASS.
 
-- ZIP SHA256: `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`.
-- 15 entries; index covers 14 non-index files; prior independent byte/size checks matched 14/14.
-- Historical R0-07 keeps requirement_revision null, target 0c2440b..., evidence null/3a925c1..., snapshot checkout a1c37af... .
-- Generated states: old-log VALID/UNKNOWN, old-index VALID/MISMATCH, criterion NOT_REVIEWED, owner PENDING, approval UNKNOWN.
-- Source review accepted no-overwrite/path/HTML/provenance safeguards within P0's defined trust model. Hashes are not signed execution proof.
-- Windows 54/54 remains Codex-local evidence, not a second MASTER Windows execution.
+- Transferred ZIP SHA256 matched `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`.
+- 15 entries, 14/14 indexed byte/size checks previously passed.
+- R0-07 preserves missing requirement revision, target 0c2440b, evidence null/3a925c1, snapshot a1c37af.
+- Actual output retains NOT_REVIEWED / owner PENDING / approval UNKNOWN and applicability UNKNOWN/MISMATCH.
+- Scoped source review accepted P0 integrity/path/no-overwrite/state separation; no claim of signed execution trust.
+- Windows 54/54 is Codex-local evidence, not a second MASTER Windows run.
 
-R0 reports six helper-history cases plus one observation; these are not independent target users/Web business samples. Prior uploaded historical screenshots matched their original inventories; later shared-directory drift does not retroactively invalidate archives.
+The owner has not supplied a completed novice readability study; their terminology concern and request for product completeness are design inputs. Deferred owner questions remain unmeasured, not PASS.
 
-## Authority / Reading Order
+## Product Decision
 
-Same private repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
+Keep the working product name/direction **AI prototype acceptance assistant**. It serves an owner with recurring responsibility for a low-risk Web change, alongside an existing coding tool. It must work on a newly created task, not just replay preloaded samples.
 
-1. `docs/master/CURRENT_STATE.md`
-2. `docs/master/HANDOFF.md`
-3. **`docs/research/strategy-reset-01/INTERVIEW_DEMO_01_BRIEF.md` v1.0** for the immediate build.
+Core value hypothesis: lower ambiguity before execution, less manual evidence gathering after execution, understandable evidence-backed suggestions, narrower correction, and continuity across runs/reopens. These are proposed benefits, not measured savings or unique capabilities absent in competitors.
 
-R1_RESEARCH, R1_PRODUCT_AND_EVAL, R1_BUILD_BRIEF and SOURCES_AND_DECISIONS preserve research and the accepted earlier P0 contract. Their prior pending/stop instructions do not override this newer scoped delegation. Do not rewrite historical evidence to make the new work appear previously approved or tested.
+### F01–F08: complete this narrow workflow
 
-State/research maintenance remains on meta/master-state, not product code push. New interview brief is a single execution document, not a new document forest.
+- F01: project/task workspace with actual local save/reopen.
+- F02: original requirements, editable criteria, actual Codex suggestions and explicit requirement-revision approval.
+- F03: bounded readable/structured work orders for existing Codex; no false sent/running state.
+- F04: per-request file inbox, safe completed-response intake, immutable evidence snapshots and version association; text plus bounded image attachments.
+- F05: criterion-level suggestions, evidence, uncertainty and readable next action; no automatic business PASS.
+- F06: selected-only correction/proof requests, not a full rewritten prompt or scope creep.
+- F07: same-task second-round review and explicit requirement/run changes; no unqualified carry-forward of old PASS.
+- F08: independently recorded owner decisions, limits, history and a single export/review bundle.
 
-## Product Direction / Scope Decision
+Five integrated surfaces: workspace; requirements/criteria; delivery/review; correction/recheck; decision/history. Do not make eight separate tools or focus on interview scripts.
 
-Keep the one-change acceptance-assistant hypothesis, not a generic IDE/QA/AI-PM platform. Existing OpenSpec, Spec Kit, native reports/testing already cover substantial adjacent functions; novelty/efficiency/payment remain unproven.
+## Feasibility / Integration Choice
 
-Interview-demo target: in about three minutes, a viewer can follow requirements -> sourced AI review -> evidence/uncertainty -> explicit owner handling -> export bounded correction/decision. Duration is a design target, not a measured result.
+Default local native Windows application using existing PS5.1 + Windows Forms/.NET, backed by JSON. This supports real file I/O, saves, dialogs and P0 invocation without a new server, browser file-page persistence workaround or runtime installation. Old WinForms helper is not rewritten.
 
-The main UI uses plain Chinese labels; hashes/enums are available only in details. This is minimum comprehension design, not another cosmetic-polish project.
+Code lives under `acceptance-app/`; data in F-drive repo-local `artifacts/acceptance-app/`; build evidence under unique `artifacts/product-core-01/` runs. Max 14 new product/test/necessary-doc files, max 4 meaningful local commits. These are bounds, not output targets.
 
-## INTERVIEW-DEMO-01 — Bounded Permission
+Reuse P0 validation. The new owner direction permits only explicitly catalogued backward-compatible P0 additions in its module/tests/README if necessary: workspace-task mode, accurate caller-provided run/source context and minimal adapter fields. No weakening of safety/version/Unknown/synthetic rules, no model execution inside P0, no changing original report owner PENDING. Broader core redesign remains a gate.
 
-Under the owner's delegation, MASTER authorizes one local development task exactly as the new brief:
+The real AI execution surface in v0.1 is **the existing Codex session + structured request/response files**, not automatic cloud/API invocation. User starts the task in Codex with a short trigger; application ingests completed outputs while open. No need to copy Codex's final prose reply back into another Chat to populate the product. This file adapter is not a claim of automatic Desktop routing or a one-click hosted AI service.
 
-- same P0 branch/baseline; add at most 8 new tracked files under `interview-demo/`;
-- at most 2 local commits; existing P0 module and legacy code read-only;
-- reuse P0 functions/report inputs rather than duplicate or relax validation;
-- offline HTML/CSS/JS interface with explicit file import/export; no hosted backend/account/API;
-- local, separately stored/exported owner decisions bound to source report/task/revisions; original report remains PENDING/unmodified;
-- one historical case and one clearly synthetic, simple Web acceptance scenario; no fabricated real users, executed browser tests or business results;
-- current executing Codex session may produce and record actual semantic reviews; no extra model/API/codex-exec/subagent invocation;
-- a small same-material presentation/review comparison clearly labelled same-context exploratory, not independent benchmark;
-- existing permitted tools may validate ONLY owned offline demo pages in an isolated temporary/no-login browser context with networking blocked; no installation, live Chat, existing browser profile or global CDP;
-- one evidence-ready bundle plus concise demo/interview notes, not many owner-selected uploads.
+Current executing Codex may generate genuine structured requirement/review records with source/input/output provenance. No extra API/model/agent process. Missing response remains waiting; deterministic text splitting is not called AI. Self-review remains labelled self-review, not independent evaluation.
 
-The offline UI must say it displays/replays/imports Codex-generated AI review records. No fake live 'AI running' button or claim that a static page calls a model. Missing capabilities are explicitly labelled.
+## Completion Before Owner Testing
 
-No new paid use, extra API/model, installation, privilege change, private client access, real browser/Chat/clipboard operation, external participant contact, push/merge/release/share or core contract expansion is authorized. Those still stop at a genuine Gate.
+Finish F01–F08 and error states as one product increment before requesting a consolidated owner walkthrough. Do not ask the owner to test every enum or intermediate component.
 
-## Completion / Acceptance
+Engineering tests continue during development. New module persistence, input safety, file intake, P0 integration, decisions, recheck and export must be self-tested; if P0 changes, rerun its relevant/full regression. Existing unrelated GUI tests are not rerun merely to raise counts.
 
-Highest Codex claim: `INTERVIEW DEMO IMPLEMENTED / SELF-TESTED / READY FOR MASTER REVIEW`.
+Owned native-window validation is allowed using test-owned processes/fixtures, without real Chat/browser/clipboard actions or broad process sweeps. No new tool installation for screenshots. Unavailable visual/interaction tests must stay NOT VERIFIED; a missing core flow means PARTIAL, not complete.
 
-If browser interaction/rendering is unavailable under the safe existing environment, finish safe work and label the exact gap PARTIAL/NOT VERIFIED. Do not install or bypass access. No interview-ready assurance before artifact and actual rendering/interaction evidence.
+Highest Codex status: **PRODUCT CORE v0.1 IMPLEMENTED / SELF-TESTED / READY FOR INTEGRATED OWNER VALIDATION**.
 
-MASTER next reviews one bundle, then requests at most one consolidated owner walkthrough if needed. No separate question round for every enum, color or component.
+## Decisions This Turn
+
+PC01-D1: stop premature interview/demo packaging; preserve the approved P0.
+PC01-D2: replace the single historical-report/replay scope with a newly usable task-to-decision workflow.
+PC01-D3: choose native local persistence + a file-based existing-Codex adapter; do not fake live model buttons.
+PC01-D4: batch ordinary implementation and self-review; one final owner gate, not no tests.
+PC01-D5: reuse existing validators with minimal compatibility, rather than force a read-only core restriction that blocks the explicitly authorized product use.
 
 ## Completed / Verified / Likely / Unknown / Not Done
 
-Completed: P0 review, latest owner delegation captured, targeted official/existing-source check, interview-demo scope and full work package.
+Completed: canonical recovery, focused official/existing-tool check, concrete feature/value specification, user journey/error states, bounded architecture/build contract, cancellation of the superseded demo task.
 
-Verified: previously accepted P0 source/bundle facts and source-qualified local receipts; owner's stated preference for a faster interview outcome. No new runtime result.
+Verified: prior P0 source/bundle facts at recorded scope; current owner direction. No new product runtime result.
 
-Likely: a concrete human-readable workflow and real AI review record will be more demonstrable than jargon-heavy historical diagnostics. This remains a design expectation.
+Likely: an actual persistent task workflow can provide more use than a static historical report; requires real use to assess.
 
-Unknown: novice comprehension, strong-baseline advantage, external demand/payment, independent model quality, actual future runtime/visual outcome.
+Unknown: actual F01–F08 implementation, usability/value versus strong alternatives, independent AI quality, target demand/adoption/payment and economics.
 
-Not Done: INTERVIEW-DEMO-01 local execution, actual new review outputs, demo interactions/rendering, independent evaluation, external users, public release or commercial MVP.
+Not Done: PRODUCT-CORE-01 execution, integrated owner walkthrough, external-user testing, competitive runtime benchmark, automatic model adapter or commercial deployment.
 
-## Classification / Next Smallest Step
+## Classification / Next Step
 
-Must Fix: no new P0 code defect asserted; make new demo labels and automation claims truthful.
+Must Fix: no new legacy coding defect asserted. Deliver honest functional states rather than interview-only packaging or fake live AI.
 
-User Decision Needed: none for ordinary choices in this bounded delegated build. Stop for retained access/spending/distribution/high-risk or materially broader scope Gates.
+User Decision Needed: none for ordinary work inside PRODUCT-CORE-01. Pause for paid use, new model/API/runtime/install/service, elevation, private-client access, destructive action, external contact/sharing, product push/merge/release or materially unapproved scope.
 
-Future Optional: full visual brand redesign, Desktop routing, automatic Chat paste/send, additional agents/platform features; not active work.
+Future Optional: interview scripts, broad visual branding, Desktop deep links, auto paste/send, multi-model/agent platform, cloud accounts/billing; inactive.
 
-**Next Smallest Step: send the minimal INTERVIEW-DEMO-01 trigger to the same local Codex project. Task is prepared in GitHub; MASTER has not started local Codex.**
+**Next Smallest Step: send the concise PRODUCT-CORE-01 trigger to the same local Codex task, which reads this state, HANDOFF and the full spec. Prepared in GitHub; no local Codex dispatch or execution has occurred from MASTER.**
