@@ -1,0 +1,75 @@
+{
+  "research_id": "STRATEGY-RESET-01/R1",
+  "checked_date": "2026-09-09",
+  "status": "DESK_RESEARCH_COMPLETE / READY_FOR_DEVELOPMENT_DECISION",
+  "counts": {
+    "sources": 26,
+    "detailed_graduate_or_intern_jobs": 2,
+    "experienced_job_comparators": 2,
+    "own_target_user_interviews": 0,
+    "competitor_runtime_benchmarks": 0,
+    "new_model_evaluations": 0,
+    "archived_png_checks": 8,
+    "archived_png_matches": 8,
+    "R0_supported_cases_reported": 6,
+    "R0_provenance_observations_reported": 1
+  },
+  "sources": [
+    {"id":"P01","kind":"user_report","title":"UX-05 and R0 final receipts","locator":"Current conversation: latest owner-pasted Codex receipts","supported_claim":"UX-05 HEAD 0c2440b...; R0 six supported cases plus one provenance observation; no product modification in R0.","limitation":"R0 local documents not independently read by MASTER; case count is reported, not target-user sample."},
+    {"id":"P02","kind":"first_party_archive_check","title":"R1 archived-upload hash comparison","locator":"Current conversation generated artifact: R1_ARCHIVE_CHECK.json","supported_claim":"Eight archived PNGs match their respective two uploaded inventories.","limitation":"Not a fresh Windows test and not verification of the current F-drive artifact directory."},
+    {"id":"P03","kind":"project_canonical","title":"Prior canonical state","locator":"https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/tree/ad91f93a7b6b7a8a10306fdb4694afedb53a1806/docs/master","supported_claim":"Prior strategy reset, preserved safety/approval boundaries and R0 scope.","limitation":"Historical next step superseded by current R1 documents; do not merge state branch into product."},
+    {"id":"P04","kind":"user_library_advisor","title":"规划转写.txt","locator":"User Library: 规划转写.txt","supported_claim":"Related career guidance on product workflow, AI suitability/cost and actual outputs.","limitation":"Advisor opinion, not universal employer requirements. Exact separate Project full plan was not retrieved."},
+    {"id":"J01","kind":"employer_primary_graduate","title":"Baidu AI PM J100665","locator":"https://talent.baidu.com/jobs/detail/GRADUATE/423c0fa3-a0f3-4def-a882-7466d3685b79","supported_claim":"User needs, human-AI experience, cross-functional delivery and data/feedback iteration.","limitation":"One employer and one campus description; not regional vacancy statistics or hiring guarantee."},
+    {"id":"J02","kind":"employer_primary_intern","title":"Baidu AI assistant/search PM J103598","locator":"https://talent.baidu.com/jobs/detail/INTERN/2200970c-5801-49f9-9753-4f95cebaa2d7","supported_claim":"Evaluation standards, BadCase analysis, API/capability understanding and improvement.","limitation":"Internship requirements are role-specific, not all campus PM roles."},
+    {"id":"J03","kind":"employer_primary_experienced","title":"Baidu AI full-stack PM J100130","locator":"https://talent.baidu.com/jobs/detail/SOCIAL/e8e1904a-f6a7-4053-b630-c91f7e1d5269","supported_claim":"Product discovery, prototypes and measurable delivery/evaluation.","limitation":"Experienced role; used only for growth comparison, not graduate minimum."},
+    {"id":"J04","kind":"employer_primary_experienced","title":"Baidu AI search evaluation PM J92262","locator":"https://talent.baidu.com/jobs/detail/SOCIAL/6f083ac5-634d-48ef-b94e-781e8e7da588","supported_claim":"Evaluation, analysis and product/user/competitor understanding.","limitation":"Experienced role; qualitative supplementary source only."},
+    {"id":"U01","kind":"research_preprint","title":"From Prompting to Verification","locator":"https://arxiv.org/html/2605.24521v1","supported_claim":"162 usable survey responses across non-developer, novice and professional groups; reported practices/motivations differ.","limitation":"Self-report and sampling limitations; not own participants, behavioral experiment or product willingness-to-pay evidence."},
+    {"id":"U02","kind":"survey_primary","title":"Stack Overflow Developer Survey 2025 AI","locator":"https://survey.stackoverflow.co/2025/ai/","supported_claim":"Trust/verification concerns among responding developers.","limitation":"Developer population and self-selection, not non-engineering PM market prevalence."},
+    {"id":"U03","kind":"research_update_primary","title":"METR productivity experiment design update 2026-02-24","locator":"https://metr.org/blog/2026-02-24-uplift-update/","supported_claim":"Participant/task selection and concurrent-agent time measurement limit current productivity estimates.","limitation":"Do not use early-2025 slowdown percentage as a universal/current claim."},
+    {"id":"C01","kind":"pinned_primary_code","title":"OpenSpec verify-change Skill","locator":"https://github.com/Fission-AI/OpenSpec/blob/e062b9572be933564ba3899d059377dfa1393e32/skills/openspec-verify-change/SKILL.md","supported_claim":"Already maps requirements/scenarios to implementation/test evidence and creates structured review.","limitation":"Scoped static source inspection, not executed benchmark; cannot infer entire ecosystem lacks run provenance."},
+    {"id":"C02","kind":"pinned_primary_code","title":"Spec Kit converge command","locator":"https://github.com/github/spec-kit/blob/8ef20f176b7120b1bb3f90fb81d1673e18099c1f/templates/commands/converge.md","supported_claim":"Checks implementation against intent and appends traceable tasks; this command explicitly excludes Git/history comparison.","limitation":"Command-level boundary, not blanket product weakness."},
+    {"id":"C03","kind":"vendor_official_docs","title":"Kiro Specs","locator":"https://kiro.dev/docs/specs/","supported_claim":"Requirements, design, tasks and specification verification/correctness workflow.","limitation":"Vendor documentation, not independent measured accuracy or adoption."},
+    {"id":"C04","kind":"vendor_official_docs","title":"Lovable browser testing","locator":"https://docs.lovable.dev/features/browser-testing","supported_claim":"Tests current app preview through browser interactions, screenshots/logs and supported verification.","limitation":"Not locally run; published limitations and permission context apply."},
+    {"id":"C05","kind":"vendor_official_docs","title":"TestSprite MCP tools","locator":"https://docs.testsprite.com/mcp/core/tools","supported_claim":"PRD with acceptance criteria, test plans, execution and HTML/Markdown reports with evidence/fix suggestions.","limitation":"Do not claim AI testing or acceptance reports absent in competitors; vendor claim not product accuracy benchmark."},
+    {"id":"C06","kind":"vendor_official_docs","title":"TestSprite GitHub integration","locator":"https://docs.testsprite.com/mcp/integrations/github-integration","supported_claim":"Runs existing generated tests on PR previews and reports outcomes.","limitation":"Generated test setup, account and integration costs not measured here."},
+    {"id":"C07","kind":"official_tool_docs","title":"Playwright captureGitInfo","locator":"https://playwright.dev/docs/api/class-testconfig#test-config-capture-git-info","supported_claim":"Native commit/diff metadata capture exists.","limitation":"Not custom novelty; metadata structure subject to change, hash does not prove execution authenticity."},
+    {"id":"C08","kind":"official_tool_docs","title":"Playwright reporters","locator":"https://playwright.dev/docs/test-reporters","supported_claim":"Existing JSON, HTML and other reporter outputs; output lifecycle must be considered.","limitation":"Not local reporter execution. Do not duplicate runner/report infrastructure before showing extra value."},
+    {"id":"C09","kind":"official_tool_docs","title":"Allure history and retries","locator":"https://allurereport.org/docs/history-and-retries/","supported_claim":"Test history and retry correlation/reporting exist.","limitation":"No local installation or benchmark; not evidence every artifact is cryptographically attested."},
+    {"id":"C10","kind":"maintainer_primary","title":"Vibe Kanban company shutdown announcement","locator":"https://www.vibekanban.com/blog/shutdown","supported_claim":"Maintainer describes company closure/community maintenance and unsatisfactory business model.","limitation":"Single commercial outcome, not proof entire category impossible or unused."},
+    {"id":"T01","kind":"openai_official","title":"Codex non-interactive mode","locator":"https://learn.chatgpt.com/docs/non-interactive-mode","supported_claim":"codex exec JSONL, output-schema and output file support structured owned-task results.","limitation":"Documentation support only; no local model/integration run; no permission to read/copy credentials or operate existing Desktop Chat."},
+    {"id":"T02","kind":"openai_official","title":"Evaluation best practices","locator":"https://developers.openai.com/api/docs/guides/evaluation-best-practices","supported_claim":"Task-specific evaluation, representative data, human calibration and avoiding impression-only assessment.","limitation":"Guidance is not our model benchmark or accuracy guarantee."},
+    {"id":"T03","kind":"github_official","title":"Workflow artifacts","locator":"https://docs.github.com/en/actions/concepts/workflows-and-actions/workflow-artifacts","supported_claim":"Established mechanisms preserve outputs of workflow jobs.","limitation":"Private CI, retention, sharing and access are separate decisions; none enabled here."},
+    {"id":"T04","kind":"github_official","title":"Artifact attestations","locator":"https://docs.github.com/en/actions/concepts/security/artifact-attestations","supported_claim":"Verified provenance mechanisms differ from a bare local checksum.","limitation":"No attestations implemented; do not make cryptographic trust claims for local manifests."},
+    {"id":"T05","kind":"openai_official","title":"ChatGPT supported countries","locator":"https://help.openai.com/en/articles/7947663-chatgpt-supported-countries","supported_claim":"Service-region availability must be checked for intended users separately from job-search regions.","limitation":"No circumvention, region-eligibility claim or multi-provider implementation authorized."}
+  ],
+  "decision_log": [
+    {"id":"D01","decision":"Freeze legacy feature expansion","basis":["P01","P03"],"reason":"Owner confirms technical improvements but rejects transport-only value; preserve working history."},
+    {"id":"D02","decision":"Reject generic acceptance-platform novelty claim","basis":["C01","C02","C03","C04","C05"],"reason":"Strong alternatives already provide requirement mapping, test generation, evidence and reports."},
+    {"id":"D03","decision":"Do not treat Git metadata/hash/report as moat","basis":["C07","C08","C09","T04"],"reason":"These are established capabilities; candidate must prove lower human acceptance burden beyond configuration."},
+    {"id":"D04","decision":"Separate historic archive validity from current-directory drift","basis":["P01","P02"],"reason":"Eight uploaded images still match historical inventories; do not rewrite historical proof or retrofit missing version tags."},
+    {"id":"D05","decision":"Select small responsibility-based segment, not all beginners","basis":["U01","P01"],"reason":"Experience labels alone do not establish recurring business need, access or willingness to pay."},
+    {"id":"D06","decision":"Prepare offline P0 before model-connected MVP","basis":["P01","T01","T02"],"reason":"Need stable inputs and evidence states for any meaningful AI evaluation; not a market PASS or automatic code authorization."},
+    {"id":"D07","decision":"Keep integrity, criterion judgment and owner decision independent","basis":["P01","C01","T04"],"reason":"A file existing, a model suggestion and a business acceptance are different claims."},
+    {"id":"D08","decision":"Write bounded research docs to meta/master-state only","basis":["P01"],"reason":"Latest user explicitly permits GitHub research recording. No product branch/code push or external sharing implied."}
+  ],
+  "hypotheses": [
+    {"id":"H01","claim":"Criterion-linked evidence will reduce correct-decision handling time versus strongest existing baseline","state":"UNTESTED","falsifier":"No improvement including setup/uploads/reading, or extra false acceptance/return-work."},
+    {"id":"H02","claim":"Non-engineering owners with recurrent low-risk Web delivery responsibility are reachable and value this","state":"UNTESTED","falsifier":"No repeat real tasks, current alternatives satisfactory, or only enthusiastic hypothetical interest."},
+    {"id":"H03","claim":"A small module is sufficient and easier to adopt than a separate app","state":"UNTESTED","falsifier":"Module setup itself exceeds savings or requires unavailable execution access."}
+  ],
+  "version_receipt": {
+    "source":"Owner-pasted UX-05 plus R0 Codex report; not independent local Git execution",
+    "repo":"F:\\Chat-Codex-Handoff\\validation-repo",
+    "branch":"prototype/usability-spike-01",
+    "head":"0c2440b06ffe5657331d4395a4181929d28c5ebf",
+    "legacy_tests_reported":{"core":43,"ui":73},
+    "R0_product_files_changed":0,"R0_commits_created":0,"R0_push":0
+  },
+  "unavailable": [
+    "Full R0 artifacts on user F-drive not directly read in MASTER",
+    "Exact complete source set of the separate career-training Project",
+    "Target-user demand and payment observations",
+    "New MVP execution and owned-task model evaluation"
+  ],
+  "next_gate":"Approve/reject only R1-BUILD-01 offline P0; any new runtime/model/user/public action remains separately gated"
+}
