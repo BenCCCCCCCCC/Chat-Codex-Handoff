@@ -5,128 +5,113 @@ Role: 00 MASTER
 
 ## Phase
 
-**STRATEGY-RESET-01 / R1-BUILD-01 OFFLINE P0 APPROVED / EXECUTE IN CODEX NOW**
+**STRATEGY-RESET-01 / R1-BUILD-01 P0 SELF-TEST COMPLETE / SINGLE-BUNDLE MASTER REVIEW NOW**
 
-The owner explicitly approved only `R1-BUILD-01` v0.3. This converts the prepared offline P0 brief into an executable local Codex task. It does not authorize a complete AI MVP, model/API calls, browser/runtime integration, paid use, external users, push/merge/release or legacy-product refactoring.
+The approved offline acceptance-sheet P0 has been implemented locally according to the owner-pasted Codex receipt. Do not start another Codex implementation turn. The next gate is independent MASTER review of exactly one whitelist review bundle.
 
-## Local Starting Receipt
+This is still not a model/MVP/user/market PASS. Gate 5 remains ON HOLD.
+
+## Local Receipt
 
 - Repo: `F:\Chat-Codex-Handoff\validation-repo`
-- Expected starting branch: `prototype/usability-spike-01`
-- Expected starting HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
-- UX-05 is historical accepted evidence; launcher/parser/tab work remains frozen.
-- Preserve existing untracked Hook/T09 packet/artifacts unless the approved build writes new outputs only under its designated directories.
+- Branch: `prototype/acceptance-evidence-p0`
+- Before HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- Final HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- Local commits: `81b4a80`, `a1c37af`
+- New tracked scope: only four files under `acceptance-p0/`, reported `536 insertions(+ )` total; legacy source unchanged.
+- Final module test receipt: `54 passed / 0 failed / exit 0` under Windows PowerShell 5.1 with `-Historical`.
+- `git diff --check` and approved-range check reported PASS.
+- No model/API/browser/server/real clipboard/Desktop/install/push/merge.
 
-First verify actual repo/branch/HEAD/worktree. If a different HEAD cannot be explained by known continuation, STOP rather than reset. Do not use the older remote product branch as a reset source.
+Do not treat these as independently verified until the bundle is inspected.
 
-## Required Reading Order
+## Reported Historical Replay
 
-Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
+Codex reports a local R0-07 replay preserving:
 
-1. `docs/master/CURRENT_STATE.md`
-2. this `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/R1_BUILD_BRIEF.md` v0.3
+- missing requirement revision as null;
+- target code revision `0c2440b...`;
+- one evidence revision null and one old index at `3a925c1...`;
+- snapshot checkout at final `a1c37af...`;
+- criterion state `NOT_REVIEWED`;
+- owner decision `PENDING`;
+- applicability UNKNOWN/MISMATCH as appropriate.
 
-Read `R1_PRODUCT_AND_EVAL.md`, `R1_RESEARCH.md` or `SOURCES_AND_DECISIONS.json` only when needed to resolve product/evidence ambiguity. Do not reload the full historical project unnecessarily.
+This is the intended honest behavior: do not repair historical Unknown using the current checkout, and do not turn data integrity into owner acceptance. MASTER now checks whether implementation and generated output truly enforce it.
 
-## Approved Development Contract
+## Single Review Bundle
 
-Implement the offline acceptance-sheet P0 exactly within `R1_BUILD_BRIEF.md` v0.3.
+Owner only needs to transfer this one file into the current MASTER Chat:
 
-Allowed development:
+`F:\Chat-Codex-Handoff\validation-repo\artifacts\acceptance-p0\test-5250aefcd3954b468ee34ab6e59bd8b8-37\review-bundle.zip`
 
-- verify baseline and create/safely continue one local branch `prototype/acceptance-evidence-p0`;
-- read the two existing R0 local research artifacts directly, without asking the owner to upload them;
-- add at most six new product/test files under `acceptance-p0/`;
-- create at most two meaningful local commits;
-- use existing Windows PowerShell 5.1 and system libraries only;
-- generate new per-run artifacts under `artifacts/acceptance-p0/<run_id>/`;
-- implement one snapshot -> validate -> render path;
-- keep requirement revision, target code revision, evidence generation revision and current snapshot checkout distinct;
-- validate scoped provenance/reference/applicability facts without silently upgrading UNKNOWN;
-- accept optional structured reviewer suggestions as inert data only; do not call a model;
-- emit static Chinese `report.html`, machine-readable `report.json`, source/raw-material index and one whitelist review bundle;
-- run the new module's own isolated tests and one supported historical replay where available.
+Reported SHA-256:
 
-Core truthfulness rules:
+`E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`
 
-- no reviewer => `NOT_REVIEWED`;
-- invalid/missing/inapplicable positive support cannot justify `SATISFIED`;
-- file existence/hash/exit=0 never auto-approves a business criterion;
-- `owner_decision` stays `PENDING` in P0;
-- synthetic/demo inputs stay labelled synthetic/demo;
-- application-level no-overwrite is not cryptographic provenance;
-- do not repair historical unknowns by assigning the current HEAD.
+Do not ask the owner to separately upload source, reports, screenshots or logs if they are present in this bundle.
 
-## Do Not Do
+Reported ZIP shape: 14 indexed files plus index = 15 entries, including:
 
-- no changes to legacy `handoff-kit/`, `Start-Handoff.cmd`, Hook, binding, packet or old GUI;
-- no model/API/additional-agent invocation;
-- no browser/Web/server/app-server runtime;
-- no dependency install, new runtime, elevation or global config;
-- no real clipboard/Chat/Desktop operations;
-- no private-client/auth/history/cache reads;
-- no external contact, user interview, data sharing or publication;
-- no push/merge/release/paid use;
-- no full MVP, standalone platform, generic QA engine or new spec framework.
+- `report.html`
+- `report.json`
+- raw-material/source index
+- snapshot/manifest
+- final test result
+- four `acceptance-p0/` source files
+- bundle index
 
-Stop and report if a correct P0 requires any of the above.
+HTML visual rendering is `NOT VERIFIED` and should remain so until an actual safe owner/Master visual check occurs.
 
-## Required Validation / Handoff
+## MASTER Review Scope
 
-On final local HEAD:
+Review only P0 and its generated evidence; do not reopen legacy handoff work or redo R1 research unless contradictory evidence appears.
 
-- run the P0 module's complete isolated tests and report exact pass/fail/exit;
-- run `git diff --check` for the approved range;
-- show exact changed files/diff stat and commit(s);
-- prove run-directory collision fails without destroying old bytes;
-- show hash/path/reference/version mismatch behavior and honest UNKNOWN states;
-- show one supported historical replay if local material permits; otherwise state PARTIAL instead of fabricating it;
-- report HTML visual rendering as NOT VERIFIED unless safely checked without new browser/client tooling;
-- generate exactly one minimal review bundle/index for MASTER, not another many-file upload workflow.
+Check:
 
-Maximum status:
+1. ZIP SHA-256 equals the Codex receipt when bytes are available.
+2. Bundle index actually covers the expected entries and hashes.
+3. Source stays within four new module files and does not mutate legacy paths.
+4. Snapshot path controls/no-overwrite/version distinctions are real, not only README claims.
+5. `requirement_revision`, `target_code_revision`, `evidence_revision`, `snapshot_checkout_head` remain distinct in data/model/rendering.
+6. Missing reviewer -> NOT_REVIEWED; invalid/inapplicable positive evidence cannot produce SATISFIED; owner remains PENDING.
+7. Demo/synthetic and imported/unknown provenance cannot silently become live/trusted.
+8. Historical replay retains its real limitations and does not backfill missing historical versions.
+9. `report.json` agrees with HTML; HTML safely escapes input and is understandable enough to justify an owner visual check.
+10. The P0 is more than a folder listing: criterion/evidence/applicability/uncertainty relationships are explicit. But do not call that product superiority until compared against the strong baseline.
+11. Bundled final test evidence plausibly corresponds to final HEAD/approved range; no unversioned log is silently treated as final proof.
+12. Review bundle itself does not include real Chat URLs, credentials, arbitrary repo recursion or unrelated user files.
 
-`P0 IMPLEMENTED / OFFLINE SELF-TESTED / READY FOR COMPARISON REVIEW`
+Classify findings as Must Fix / User Decision Needed / Future Optional.
 
-Do not claim AI/model accuracy, complete MVP, user benefit, Web demand, efficiency improvement, market fit or commercial viability.
+## Possible Review Outcomes
 
-## Minimal Codex Trigger — Approved
+- **P0 PASS FOR COMPARISON ENTRY** — source/evidence contract is correct and readable enough to justify the next comparison experiment.
+- **P0 PARTIAL** — bounded source/evidence issue needs one concise correction before comparison.
+- **P0 FAIL / STOP-PIVOT** — it mostly repackages existing material or violates truthfulness/safety enough that more implementation is not justified.
 
-Send this in the same local Codex project:
+None of these equals market fit, model accuracy or complete MVP acceptance.
 
-```text
-执行已批准的 R1-BUILD-01 v0.3。
-Repo: F:\Chat-Codex-Handoff\validation-repo
-Expected starting HEAD: 0c2440b06ffe5657331d4395a4181929d28c5ebf
-先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state：
-docs/master/CURRENT_STATE.md
-docs/master/HANDOFF.md
-docs/research/strategy-reset-01/R1_BUILD_BRIEF.md
-按完整有界工作包执行；直接读取本地R0材料，不要求用户重传。
-不改旧产品、不安装、不额外调用模型/API、不操作真实浏览器/clipboard、不push/merge。
-完成后返回 evidence-ready Delivery Packet，最高状态只能是：
-P0 IMPLEMENTED / OFFLINE SELF-TESTED / READY FOR COMPARISON REVIEW。
-```
+## After Review PASS — Separate Decision
 
-## After Codex Returns
+Only if P0 passes source/evidence review, MASTER may propose the next smallest comparison experiment. That future gate must use a strong baseline (native tool + reasonable template and/or fixed OpenSpec/Spec Kit + native test/report capability) and the same frozen task/material. Any new model invocation, browser/Web execution, installation, real user contact or paid usage still requires explicit owner authorization.
 
-MASTER reviews only the new `acceptance-p0/` delta and its single review bundle, then decides whether the P0 adds enough clarity to justify a real comparison. No automatic model/Web/user phase follows from engineering PASS.
+No automatic R2 implementation follows from P0 PASS.
 
-## State Summary
+## Current State Summary
 
-Completed: R0, R1 desk research/counterevidence/four-layer/eval design, owner approval of bounded P0.
+Completed: R0/R1 research, owner-approved P0 implementation, reported offline self-test, historical replay and single-bundle handback.
 
-Verified: source-qualified owner/receipt facts and primary-source capabilities; no fresh MASTER-side Windows run.
+Verified: only the owner/Codex receipt at this point; prior R1 public/source checks remain independently verified. Windows P0 execution not independently rerun.
 
-Likely: criterion-linked applicable evidence may reduce owner decision burden; still unmeasured.
+Likely: the reported Unknown/Mismatch/PENDING handling matches the contract; bundle review will confirm or reject that.
 
-Unknown: user demand/payment, strong-baseline advantage, model quality, real Web/runtime behavior and economics.
+Unknown: actual bundle integrity/readability, incremental advantage over strong alternatives, user demand/payment, future model/runtime/Web performance.
 
-Not Done: P0 implementation, comparison/model eval, interviews, full MVP, external pilot, release.
+Not Done: MASTER bundle review, owner HTML visual check, baseline comparison, model eval, interviews, complete MVP, external pilot or release.
 
-Must Fix: no new legacy code defect; preserve evidence/version truth and scope.
+Must Fix: none before evidence review.
 
-User Decision Needed: none for this approved P0. Stop again for any scope/runtime/model/user/paid/public expansion.
+User Decision Needed: none for review; only transfer one ZIP. New execution/spending/user/public scope remains gated.
 
-Future Optional: old polish/deep-links/tab focus/standalone packaging remain inactive. Gate 5 remains ON HOLD.
+Future Optional: legacy UI/deep-link/tab work and standalone platform packaging remain inactive.
