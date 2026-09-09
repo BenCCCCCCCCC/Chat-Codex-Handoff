@@ -5,23 +5,23 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**USABILITY-SPIKE-01 — owner feedback received / return-destination research complete / overall acceptance open**
+**USABILITY-SPIKE-01 — OWNER FEEDBACK CORRECTION APPROVED / Desktop Route Probe approved read-only**
 
-Gate 5 external execution remains ON HOLD. This is product/technical validation and bounded prototyping, not Beta or full application development.
+Gate 5 remains ON HOLD. The project is still in product/technical validation and bounded prototyping; it is not Beta or full application development.
 
-The prior MASTER source/evidence review remains PASS for entry into owner validation. The owner has now returned the final packet and reported usability concerns. Do not equate receipt of that packet with proof of every live GUI step, byte-exact clipboard equality, or a positive net-usability verdict. Overall Spike acceptance remains open / PARTIAL at owner-validation level; the underlying accepted Alpha is not reopened.
+The prior GUI implementation, UF-01 self-test closure and MASTER source/evidence review remain accepted in their recorded scopes. Overall usability acceptance remains open because the owner found two real workflow costs: captured-delivery recognizability is insufficient, and the current successful return always requests opening the stored HTTPS Chat URL, producing an unwanted new browser tab in the owner's environment.
 
 ## Active Repo / Version
 
 - Local repo: `F:\Chat-Codex-Handoff\validation-repo`
-- Active local branch, last reported by Codex: `prototype/usability-spike-01`
+- Active local branch last reported: `prototype/usability-spike-01`
 - Spike baseline: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`
 - Implementation checkpoint: `9eae64b42a6cc809e61fda60514c09c7b270fe93`
 - UF-01 correction / latest reported local HEAD: `1055cc6bcfa5afc9ca75d9bf10b651562d7b6311`
-- Last independently checked pushed product-branch HEAD: `869414c77d227fe2f1675c7cfa08b04250520279`
+- Last independently checked pushed product branch: `869414c77d227fe2f1675c7cfa08b04250520279`
 - Private remote: `BenCCCCCCCCC/Chat-Codex-Handoff`
 
-No local code execution, product/code push, merge, installation, external sharing or paid API use was performed by MASTER in this research turn. Local and remote versions intentionally differ; do not reset local work to the old remote.
+No product/code push, merge, external sharing, public release, paid API use, dependency installation or privilege escalation is authorized.
 
 ## Dynamic State Authority
 
@@ -30,145 +30,127 @@ No local code execution, product/code push, merge, installation, external sharin
 - `docs/master/CURRENT_STATE.md`
 - `docs/master/HANDOFF.md`
 
-Standing MASTER write permission covers only these two canonical docs on this state branch. Product-branch copies are not authoritative dynamic state.
+MASTER standing write permission remains limited to these two files on the state branch.
 
-## Completed / Accepted Evidence
+## Accepted Evidence
 
-- Gate 4 remains PIVOT; later technical passes do not rewrite its result.
-- Productization Spike 01 and Combined Dogfood 01/02 accepted in their recorded scopes.
-- Dogfood 02 included real failures, corrections and manual recovery; eventual FULL PASS was not a friction-free first run.
-- MF-01 explicit safe MASTER rebind and MF-02 README evidence correction accepted.
-- Attached-Chat Identity Probe: context readable, no exact conversation ID or canonical URL exposed in the tested path. This is not a universal impossibility claim.
-- Correct external post-turn invocation returned the intended final packet. The exact causal sequence of all earlier clipboard symptoms was not independently logged.
-- Bounded native GUI and repo-local launcher implemented on the reported UI branch.
-- UF-01 deterministic test-owned lifecycle correction completed at self-test level.
-- Final core 30/30 and UI 38/38 reported at `1055cc6...`; uploaded Review Evidence, full source diff, inventory and four representative demo screenshots independently reviewed by MASTER.
-- Prior source/evidence review PASS for owner entry remains valid.
-- Current owner feedback, focused source inspection, current official capability review and targeted GitHub comparison completed.
+- Existing Alpha / Dogfood acceptance stays unchanged.
+- GUI implementation and UF-01 deterministic test lifecycle are accepted at engineering-evidence level.
+- Final reported core suite = `30/30 PASS`; final isolated UI suite = `38/38 PASS` at `1055cc6...`.
+- MASTER independently reviewed transferred `source.diff`, `REVIEW_EVIDENCE.md`, screenshot inventory and representative final demo screenshots.
+- Demo screenshots are explicitly demo-only and cannot prove which real packet is the owner's intended latest delivery.
+- Current GUI reads current checkout Branch/HEAD, raw packet text, capture time and target; its identity hash detects changes but does not prove user intent.
+- Current accepted core `handoff.ps1` couples exact clipboard preparation with `Start-Process` of the stored HTTPS Chat URL.
 
-## Latest Owner Feedback — Evidence, Not Assumptions
+## Owner Decision — Approved 2026-09-09
 
-The owner supplied the final packet again and stated:
+The owner approved MASTER's recommended bounded progression:
 
-1. The requested confirmation that the captured delivery is the intended final packet cannot be established from the screenshots.
-2. UI design/hierarchy is mediocre, but aesthetic polishing should be deferred.
-3. Return still opens a new browser tab; investigate whether that can be avoided.
-4. Investigate use in ordinary Chat inside the official Windows ChatGPT Desktop, not only web.
-5. Study comparable GitHub implementations.
+### A. Delivery identity clarity
 
-Record these as real workflow feedback. Do not ask the owner to invent another task. No new implementation was authorized by a request to investigate technical feasibility alone.
+Implement a readable summary derived from the actual captured packet / metadata while preserving the raw packet unchanged.
 
-## Focused Findings
+Required semantics:
 
-### Packet recognizability
+- show a task/correction title only when present in the actual packet;
+- show capture time;
+- show a short packet fingerprint for byte identity;
+- distinguish packet-declared version from current checkout HEAD;
+- absent or ambiguous fields must say `未提供 / 不明确`, never be guessed from current Git state;
+- keep the full raw preview and current confirmation/identity checks;
+- do not claim `latest task verified`, task completion or acceptance.
 
-All seven supplied screenshot records explicitly describe DEMO data, not live handoff. They cannot identify the owner's actual latest captured packet. MASTER's prior instruction should not require the user to infer live correctness from demo screenshots.
+### B. Separate copy from navigation
 
-The source diff shows `Get-PanelSnapshot` displaying raw packet text and a capture/file timestamp. Its Branch/Head fields are read from the CURRENT checkout. Its internal Identity hashes binding + metadata + packet for change detection.
+Add a minimal backward-compatible core option for **copy-only** preparation.
 
-These are different claims:
+Required semantics:
 
-- displayed current checkout HEAD;
-- version declared in a captured Delivery Packet;
-- identity/consistency of the captured bytes;
-- whether this is the user's intended completed task.
+- existing no-argument `handoff.ps1` behavior remains unchanged: strict validation -> exact clipboard -> request opening stored HTTPS Chat URL;
+- add an explicit `-CopyOnly` mode: perform the same validation and exact clipboard write but do **not** call `Start-Process`;
+- GUI makes `仅复制交付` the low-friction route for an already-open web or ordinary Desktop Chat;
+- GUI retains an explicit secondary `复制并打开网页对话` route for users who need navigation;
+- both real actions remain explicit confirmation-gated and preserve target/packet before/after consistency checks;
+- no automatic paste/send, tab control, clipboard monitoring, target guessing or browser automation.
 
-Do not collapse them into 'latest task verified'. A checksum is useful for consistency, not proof of intent or task acceptance. Readable task/correction identification is a bounded usability candidate; missing/ambiguous fields must say so, not be inferred from the current HEAD.
+This is an approved narrow exception to the prior read-only core boundary. Only the compatible `CopyOnly` interface and its tests/docs are authorized; no broader core redesign.
 
-### Why a new tab is requested
+### C. Desktop Route Probe 01 — read-only only
 
-The accepted unchanged core `handoff.ps1` ends its successful path with:
+Codex may inspect current-user, OS-exposed metadata for the installed official Windows ChatGPT app:
 
-`Set-Clipboard -Value $packet`
-`Start-Process -FilePath $originChat`
+- installed package identity/name/version/family;
+- Start-menu AppID if available;
+- package manifest extension declarations relevant to `windows.protocol` and `windows.appUriHandler`;
+- declared protocol scheme names / web hosts if exposed by the manifest.
 
-There is no clipboard-only mode, browser tab ID, profile-aware tab selection or native ordinary-Chat route in this current helper. It requests opening an HTTPS URL through the system handler. The owner's browser opens a new tab; the code alone does not establish that all browsers always do so.
+Rules:
 
-### Browser tab reuse
+- do not launch any URI or ChatGPT app route;
+- do not read ChatGPT application source/bundle files, local databases, history/cache, cookies, tokens, credentials or internal configuration;
+- do not modify registry, app associations, defaults, package state or settings;
+- do not enumerate unrelated processes or use UI automation/CDP/browser automation;
+- no elevation and no dependency install;
+- stop on denied access;
+- a registered app/protocol alone is NOT proof that an exact conversation deep link exists.
 
-Chrome documents extension APIs to query authorized tab URLs, activate an existing tab and focus its window. Thus automatic reuse is technically feasible without composer injection or auto-send.
+Final probe classification must distinguish:
 
-A correct implementation for this project would require exact bound-conversation matching within the authorized browser profile, handling duplicates/missing tabs explicitly, and not navigating an arbitrary existing chat or overwriting drafts. A generic first matching `chatgpt.com` tab is not sufficient.
+- Desktop app present: Yes/No/Unknown;
+- registered custom protocol(s): exact names or None;
+- registered app-uri web host(s): exact hosts or None;
+- exact ordinary-Chat conversation route: Supported / Undocumented / None;
+- can prove exact conversation routing from current evidence: Yes/No.
 
-Connecting the local panel to such an extension introduces an additional integration/installation boundary, for example native messaging. This is not a hidden PowerShell option and is not authorized for implementation now.
+Any live Desktop navigation test remains a later owner-controlled gate.
 
-### Ordinary Chat in Windows ChatGPT Desktop
+## Freshness / Comparison Findings
 
-Current OpenAI documentation confirms ordinary Chat remains available in the desktop app and Chat conversations sync between web and desktop. Therefore the user can use the same ordinary conversation in Desktop and manually paste an already prepared packet there.
+Current official Windows documentation confirms that URI activation depends on app-declared protocol/app-URI handlers; package registration alone does not define conversation-path semantics. Current OpenAI material reviewed by MASTER did not provide a documented Windows exact-conversation launch contract for ordinary Chat.
 
-This does NOT prove the current helper can automatically open the exact ordinary Desktop conversation. No documented Windows exact-conversation launch contract was established in the reviewed official sources. Opening the app, opening its ordinary Chat view, and selecting a particular conversation are separate capabilities.
+Nearby GitHub patterns remain references only:
 
-Do not infer a Windows route from a macOS `chatgpt://` example, a Codex-thread deep link, or the app's built-in browser. Browser-in-Desktop is not the ordinary Chat view requested by the owner.
+- RightClickGPT demonstrates browser-tab reuse via Chrome extension APIs but selects a provider-domain tab and performs prompt injection; not safe to copy for MASTER targeting.
+- Codex Web Review Relay uses explicit Arm + extension/native host and then browser composer/send actions; heavier than this approved correction.
+- PopClip ChatGPT App uses macOS `chatgpt://` plus keyboard automation; not Windows exact-conversation evidence.
+- codex-bridge-chatgpt uses browser automation with explicit consent; not native ordinary-Chat routing.
+- codex-from-chatgpt changes architecture to MCP/App Server orchestration; not a small return-path patch.
 
-## Nearby GitHub Patterns Reviewed
+Do not implement an extension/native host/server in this correction.
 
-- `eimexdev/RightClickGPT`: optional reuse of an existing provider tab. Pinned `background.js` at `087b201e99cb361cb6d5d11ba29695c5254c5d0f` selects `tabs[0]` from provider-domain matches, then injects a prompt. Borrow the browser tab API pattern, not first-domain-match selection or auto-submission.
-- `David-JA/codex-web-review-relay`: user selects a ChatGPT tab and explicitly Arms it; native host + extension transports review and performs browser composer/send actions. Borrow explicit target selection and evidence envelopes; do not import its sending/runtime architecture into this Alpha.
-- `pilotmoon/PopClip-Extensions`: ChatGPT App extension at `315e34f5d9f80095d46f79fc75f6c1551b49ad2c` is macOS-oriented, opens `chatgpt://`, then uses Command-key paste/send. It is not evidence for Windows exact-conversation routing and conflicts with current no-auto-paste/send scope.
-- `anightmonarch/codex-bridge-chatgpt`: Codex in-app Browser plus explicit browser-automation consent and evidence receipts; operates ChatGPT Web, not a demonstrated native ordinary-Chat deep link.
-- `joseanu/codex-from-chatgpt`: Chat calls MCP/local Codex App Server and receives tool results. Architecturally this can avoid a browser-return navigation step, but adopting it changes setup/runtime/orchestration substantially and does not establish Desktop availability for the owner's account.
+## Classification
 
-No inspected project is a drop-in, no-extension/no-service, Windows native exact-Chat return solution satisfying all current boundaries.
+### Must Fix before USABILITY-SPIKE-01 acceptance
 
-## Proposed Smallest Progression — NOT IMPLEMENTED
+- **UX-02 — Captured delivery must be recognizable without treating demo screenshots/current checkout HEAD as proof of the intended packet.**
+- **UX-03 — Return preparation must not force a new web tab when the user only needs the validated packet copied for an already-open web/Desktop Chat.**
 
-Priority 1: readable delivery identification from actual packet/metadata, with current checkout version kept separate from the packet's declared version. No guessing, new persistent freshness subsystem, or fabricated readiness.
+### User Decision Needed
 
-Priority 2: separate preparation from navigation. Offer an explicit 'copy delivery only' action while retaining the existing prepare-and-open path. This avoids creating a browser tab and permits manual return to an already-open web or Desktop Chat. It does not automatically locate that Chat and must not claim target verification. Keep strict packet/repo/binding checks and exact unmodified payload.
+None to begin this approved bounded correction and read-only probe.
 
-The current core always opens a URL; introducing a supported optional no-open mode changes a previously read-only core interface. A bounded implementation decision is required before coding. Do not work around the interface by silently monkey-patching live navigation.
+Stop again for: browser extension/native host, any actual Desktop URI launch, automatic exact-tab focus, core redesign beyond `-CopyOnly`, new dependencies, elevated access, external sharing, push/merge/public release or paid use.
 
-Parallel research candidate: inspect only OS-exposed installed ChatGPT package/version and protocol-registration metadata, at current-user privileges, to discover whether a documented native launch route exists. Do not read application bundles, history/cache, tokens or credentials; do not change registrations/defaults. Stop on denied access. Registered app activation alone is not evidence of exact conversation support. Any actual Desktop navigation test is a later owner gate.
+### Future Optional
 
-Extension-based tab reuse is a later option only if its additional setup is justified. Aesthetic polish stays deferred per the owner.
+- exact existing-browser-tab focus only if extension/setup cost is later justified;
+- native Desktop exact-conversation routing only if a supported contract is established;
+- visual polish, high-DPI and fuller accessibility validation after functional owner feedback.
 
-## Verified / Likely / Unknown
+## Not Done
 
-### Verified within available evidence
-
-- The posted packet names the reviewed final local HEAD and previously reviewed self-test results.
-- Supplied screenshots are demo evidence, not live current-packet proof.
-- The current core couples clipboard preparation and URL opening.
-- The GUI reads current Git HEAD separately from packet bytes and performs internal consistency checks.
-- Chrome documents tab/window activation APIs; Microsoft documents URI handlers and read-only package-manifest retrieval.
-- OpenAI documents ordinary Desktop Chat and web/desktop Chat synchronization.
-
-### Likely / engineering inference
-
-- Optional clipboard-only preparation could reduce unnecessary tab creation for users who already have the intended conversation open.
-- A readable delivery summary could reduce uncertainty about what is being copied.
-- Both benefits require later owner comparison; avoiding navigation may instead add manual conversation-search cost.
-
-### Unknown / Not Done
-
-- New independent byte-exact clipboard comparison for the latest owner attempt.
-- Complete live GUI step-by-step observation and net-usability verdict.
-- Exact Windows native Chat conversation deep-link/API for the owner's installed build.
-- Local protocol-registration audit and owner navigation validation.
-- Any implementation of copy-only or improved delivery identification.
-- 150%/200% DPI, exhaustive manual keyboard testing, prior ambiguous process status.
-- Gate 5, external value, product push or distribution.
-
-## Must Fix / User Decision Needed / Future Optional
-
-Must Fix for acceptance clarity: stop treating demo screenshots/current checkout HEAD as proof of the intended captured final response. Record the owner's recognizability concern; there is no newly confirmed packet-corruption or wrong-target code defect in this report.
-
-User Decision Needed: whether to authorize the narrow delivery-identification + optional-copy-only change, including the minimal compatible core-interface exception. Browser extension, native host, automatic Desktop routing and broader architecture remain unapproved.
-
-Future Optional: visual polish, extension-based exact-tab focus after cost validation, native routing only with a proven supported contract. No automatic paste/send.
+- UX-02 implementation/tests;
+- UX-03 `-CopyOnly` core/UI implementation/tests;
+- Desktop Route Probe 01 local read-only result;
+- updated final evidence / screenshots as needed;
+- owner live comparison of `仅复制交付` versus old open-new-tab path;
+- exact Desktop conversation navigation validation;
+- Gate 5, product push/distribution.
 
 ## Next Smallest Step
 
-Return the research conclusions and recommended bounded combination to the owner. Do not start a new implementation or ask for another synthetic task. On approval, hand the narrow changes to the same Codex project and keep Windows native routing investigation separate from any promise of support.
+Resume the **same USABILITY-SPIKE-01 Codex task** from local HEAD `1055cc6...` with the compact correction in canonical HANDOFF.
 
-## Primary Sources Checked — 2026-09-09
+Codex may implement A+B, run final core/UI regression, perform C read-only, regenerate bounded evidence, and stop at `IMPLEMENTED / SELF-TESTED / READY FOR OWNER VALIDATION` if all approved evidence passes.
 
-- OpenAI Desktop: https://help.openai.com/en/articles/20001275/
-- OpenAI Projects/chats: https://learn.chatgpt.com/docs/projects
-- OpenAI Hooks: https://learn.chatgpt.com/docs/hooks
-- Chrome tabs: https://developer.chrome.com/docs/extensions/reference/api/tabs
-- Chrome windows: https://developer.chrome.com/docs/extensions/reference/api/windows
-- Chrome native messaging: https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging
-- Microsoft URI launch: https://learn.microsoft.com/en-us/windows/apps/develop/launch/launch-default-app
-- Microsoft Get-AppxPackageManifest: https://learn.microsoft.com/en-us/powershell/module/appx/get-appxpackagemanifest
-- The above GitHub READMEs and pinned code were read through the connected GitHub tool, not substituted for official OpenAI capability documentation.
+Do not run a live real handoff or Desktop navigation in the same turn. The next owner gate is a real GUI test after the Codex turn fully ends.
