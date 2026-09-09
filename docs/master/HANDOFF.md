@@ -5,84 +5,89 @@ Role: 00 MASTER
 
 ## Immediate State
 
-**SCENARIO-FOCUS-02 v4 / PERSONAL UTILITY APP DISCOVERY / RESEARCH ONLY**
+**SCENARIO-FOCUS-02 v5 / FUNCTIONAL NECESSITY + CREATIVE PRACTICE RESEARCH / NO NEW CODEX BUILD**
 
-Latest user wants a functional app that helps ordinary learning/life/work, not necessarily merchant/business workflows. Prior wholesale-order priority no longer controls the next step; quote comparison and detective gaming remain historical options. Do not combine new directions into a general personal AI super-app.
+Owner rejects matter-preparation as crowded and says ordinary knowledge/communication practice may be a Chat Skill, not an independent app. Deepen B/C through necessary functionality or creative mechanisms, or explore alternatives. Do not defend previous generic apps by adding labels, memory, graphical polish or more prompts.
 
-PRODUCT-CORE-01 remains PAUSED. INTERVIEW-DEMO-01 remains SUPERSEDED. No new development, model/API execution, installation or Codex dispatch is approved by this inquiry. Gate 5 ON HOLD.
+A matter-preparation is no longer the priority; generic quiz and roleplay proposals are also not build commitments. Current priority is a source-grounded mechanism hypothesis: communicate to a collaborator who has different information and visibly constructs an outcome. Hands-on learning is a secondary category with strong competition.
 
-## Authority / Preserved Version
+PRODUCT-CORE-01 remains PAUSED, INTERVIEW-DEMO-01 SUPERSEDED, old build triggers inactive. Gate 5 external execution remains ON HOLD.
 
-Read repo `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
+## Authority / Preserved Baseline
 
+`BenCCCCCCCCC/Chat-Codex-Handoff` / `meta/master-state`:
 1. docs/master/CURRENT_STATE.md
 2. docs/master/HANDOFF.md
-3. docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md v4
+3. docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md v5
 
-Last owner/Codex-reported local state remains:
+No personal-project market inference. Same research file, earlier revisions remain in history, no new product-document forest.
+
+Last local owner/Codex receipt:
 - F:\Chat-Codex-Handoff\validation-repo
 - prototype/acceptance-evidence-p0
 - a1c37af2d68cce8f0574b89b01975e9223f6cea2
 
-Prior P0 review and reported Windows54/54 retain their original evidence level. No new source state observed. Preserve old source/evidence and unexpected partial work; do not reset or run an old READY brief.
+P0 source/bundle PASS FOR COMPARISON ENTRY and reported 54/54 retain their original level. No new code or runtime receipt. Preserve all source/partial work and do not reset or treat old READY specs as authorized now.
 
-## Current Candidate Order
+## Research Results to Carry Forward
 
-A — **Personal matter preparation**: user-selected notices/screenshots/text for one upcoming low-risk activity/submission -> confirmed source-linked preparations/materials -> later updates with explicit change confirmation -> useful next action. Priority research, not selected final product.
+1. Official Study Mode already questions and gives feedback using uploaded materials. March 10 2026 interactive math/science already manipulates formulas/graphs. Chat is not text-only.
+2. Official Plugins/MCP Apps docs allow custom embedded interactive components. A functional tool may run inside Chat; software necessity does not prove separate-native-app necessity. Skills can contain code/tools.
+3. Yoodli supports visual materials with learning/roleplay/feedback; ST Practice's developer listing already includes hidden scenario facts, cited grading and branching from a specific turn. Neither is independently trialled here.
+4. CellSide/LogicExcel already provide real spreadsheet-like manipulation and feedback. Do not label hands-on learning a new market invention.
+5. CoDraw and the EACL 2023 clarification analysis are historical evidence that dialogue can be studied against concrete task outcomes under unequal information. They do not show consumer learning efficacy or demand. CoDraw is archived and README license CC BY-NC4.0; do not copy its dataset/art into commercial assets by default.
 
-B — **Knowledge application practice**: a small source set and goal -> user explanation/application -> supported feedback/retry. A separate learning/work candidate, not part of A's feature list.
+Nine source records and full limits are in v5. This turn did not establish a first-hand target-user case or execute a competitor. Failed/partial source leads were not promoted into conclusions.
 
-C — **Everyday expression rehearsal**: prepare one actual explanation/request/conversation with transcript-specific feedback and targeted retry. A separate alternative, not sales automation or therapy.
+## Primary Mechanism, Not a Final Product
 
-All target ordinary users with simple capture/input, no prompt engineering/Codex/Git/key/self-host prerequisites. Underlying task repetition is distinct from AI use frequency. Do not select markets from this owner's personal projects or assume a student/office role proves pain.
+Potential user: adult with a concrete upcoming need to explain multi-step arrangements/procedures to someone who lacks the same background. Possible study/work/life use is a hypothesis, not a persona derived from this owner. Not general social-skills therapy, mind-reading or guaranteed interpersonal success.
 
-## What Was Checked, and What Already Exists
+User sees a target; collaborator receives only allowed shared context, actual user messages and its own board. It asks clarification or returns a small set of legal structured actions. An engine executes and compares a resulting arrangement/flow against fixed conditions. User can see a misunderstanding, rephrase one instruction and retry from that state; later try a different task without the earlier answer/hints.
 
-The research file links current official sources for Todoist extraction from text/images/docs, Goblin Tools breakdown, SnapDo screenshot actions, Ohai/CoFamy notice-to-task preparation, Google study-tool quizzes/progress/retries, and Yoodli custom/continuous practice. Karakeep GitHub README already covers AI-tagged bookmarks/search/mobile capture/archive.
+Only label concrete task facts as objectively checked. Show 'time not specified' or 'order differs' rather than a universal communication ability score. A model making the wrong interpretation or an engine failing cannot automatically be attributed to the user. Uncertain causal diagnosis stays Unknown.
 
-These are strong direct substitutes. Do not describe screenshot-to-task, retained source, question generation, remembered progress or roleplay as unique. Do not claim a capability absent merely because it was not found on one page. Plan availability and provider marketing are not independent efficacy evidence.
+Hidden target isolation must exist in payload/data access, not a persona instruction to pretend ignorance. Models may infer or guess; do not intentionally make them fail to manufacture utility. A compliant tools/Skill baseline can use the same mechanism and must not be artificially handicapped.
 
-HN source access failed with429; no primary user story from it was read. This turn had no target-user interview, actual competitor installation/use, independent AI eval or new code. Do not report a new comprehensive discussion-based validation.
+## Four Layers / Smallest Candidate
 
-## Next Smallest Research Work
+- User/scenario: explain a specific procedure, observe what the listener understood, repair missing/ambiguous information. Need/frequency/payment unmeasured.
+- Product: goal card, independently visible working board, explicit condition differences and localized explanation retry; no generic task manager.
+- MVP candidate: one flow/arrangement-board type, few original safe targets, text input, one collaborator and state/action replay. No real-time voice, 3D, real-calendar writes, human matching, whole curriculum or wide tool automation.
+- Feasibility: language model proposes actions/questions; deterministic runtime validates/executes and checks fixed constraints; humans calibrate semantic/attribution and real-world transfer claims. Web miniapp or future Chat component, no mandatory native installer.
 
-For A, find ONE ordinary low-risk situation that actually involves initial instructions, a subsequent change and concrete preparation. Screen for whether user already has a workable reminder/file solution. The illustrative study submission/activity/training examples are not observed users or authorized real tasks.
+Secondary learning direction is a real manipulation workspace with measurable task results and new-task practice, not more conversational questions. Direct competitors may already satisfy it; absent a concrete residual gap, do not start a generic tutor.
 
-Map:
-- original materials and required action;
-- known date/context and what is ambiguous;
-- how related updates are recognized and who confirms authority;
-- what must be prepared and where the material is;
-- the current tool/manual steps and actual mistake/correction if evidenced;
-- what Todoist/Ohai/CoFamy or normal reminders+attachments already cover;
-- measurable residual burden, not merely number of UI buttons.
+## Next Smallest Inquiry
 
-A strong baseline receives the same inputs and sensible configuration. Public vendor examples support documentation checks only, not real incidence/time savings. No synthetic interviews or owner's other project substituted for target evidence. If no meaningful gap survives, prefer extension/adoption or B/C without forcing a new large build.
+Do not issue another large Codex development prompt. Refine one authored information-asymmetry task and its falsifiers within the existing research record:
 
-Maintain only this hot pair and existing research file; no new product-name/PRD forest until a concrete task survives comparison. Ordinary source reading needs no repeated owner approval. Do not promise unattended/background research.
+- identify who can see target/shared state and where information is excluded;
+- specify legal actions and exact observable result conditions;
+- create clear, under-specified, contradictory and system-error illustrative inputs, explicitly synthetic;
+- distinguish model interpretation, execution, task design and genuine communication ambiguity;
+- define a capable Chat/Skill/tools baseline and direct-product comparison at the same data/assistance level;
+- decide whether an actual small mechanism experiment would require new runtime/model/installation or cost authorization.
 
-## Four-Layer Constraints for a Future Proposal
+The v5 paper example is not an actual model or user run. A later permitted experiment must first test fair result attribution and leakage, then test whether a person benefits/reuses it. No learners, effects, retention or time savings can be invented.
 
-User/scenario: an actual repeated responsibility with simple onboarding, not 'all beginners'.
-Product: one clear result — preparation, applied learning or practiced expression — not many generic AI tools in a menu.
-MVP: one task kind, one platform and one input/output route; do not promise all devices, calendar/notification systems or mixed domains.
-Feasibility: model interprets/proposes; rules handle explicit state/times/links; user confirms consequential changes. Missing facts remain unknown. Learning/roleplay scores cannot certify actual real-life competence.
+If ordinary Chat with a Skill or an existing product gives the same result with lower setup, ship a module/Skill/adaptation rather than insisting on an independent app. If the interaction is only a one-off puzzle, label it honestly and do not claim practical learning transfer.
 
-Original P0 may supply provenance/change-record ideas, but no forced WinForms/Git/acceptance interface for consumers. Target users need not bring API keys; legitimate model access, costs/limits, supported regions and privacy must be solved before a real product claim. No personal-subscription-as-public-backend assumption.
+## Permissions / Stop Conditions
 
-## Safety / Approval
+Research and canonical documentation only in this turn. No source changes, local branches/commits, model/API/agent executions, new service/runtime/install, private-client/credential reads, real microphone/voice capture, personal-calendar/email/browser actions, external contact, paid use, product push/merge/share/release.
 
-This is research/state maintenance only. No real reminders, calendar/email/photo operations, full-device capture, private chat/credential reads, automatic payments/submission, external contact, new service/dependency/model/API run, product edits/commits/push/merge/sharing/release or paid use.
+Don't require users to supply API keys/Git/Codex for eventual onboarding, and don't treat development subscriptions as a public-product model entitlement. Region/provider/cost/privacy must be resolved if a real implementation is later scoped.
 
-Do not include medical/legal/financial decisions or third-party/children's data as default MVP material. Later required actions must receive bounded authorization.
+No need to ask the owner to answer earlier readability questions or provide their personal projects. No unattended/background work has been promised. When a concrete executable next experiment is ready, present its scope honestly, not a false completion claim.
 
 ## State Summary
 
-Completed: personal-utility preference applied, direct official/GitHub checks, three concrete functional candidates with four layers, explicit saturation/counterevidence, updated ranking.
-Verified: actual retrieved source claims plus prior P0 evidence; no new user/runtime proof.
-Likely: personal matters preparation is the best current fit for cross-study/life/work utility; not yet a proven unmet task.
-Unknown: user frequency/need/payment, remaining multi-source-update burden, platform/cost/reliability and adoption.
-Not Done: first-hand observation, fair runtime baseline comparison, product development, new model eval or release.
-Must Fix: no false uniqueness, unsupported consumer usefulness or unapproved super-app; preserve source/claim distinctions.
-User Decision Needed: none for normal research; concrete data/access/execution/development/spending/public actions remain gated.
-Future Optional: earlier business directions, games, acceptance platform, direct desktop-agent orchestration; inactive.
+Completed: current platform/direct-competitor counterchecks, ordinary-chat candidates removed as standalone claims, two refined functional forms, primary mechanism/paper example, four layers and risks.
+Verified: retrieved source capability claims, CoDraw metadata and prior P0 evidence at recorded scope; no new runtime/user result.
+Likely: observable task outcomes could make feedback more inspectable than generic roleplay grades; unproven.
+Unknown: repeated need, system fairness/reliability, real skill transfer, strong-baseline advantage, independent-app necessity and economics.
+Not Done: mechanism experiment, target observations, actual competitor trial, code, independent model/learning evaluation or release.
+Must Fix: no false uniqueness/Chat incapability, hidden-answer leakage claims without proof, blaming learner for model errors, or synthetic task as user evidence.
+User Decision Needed: none for ordinary research; concrete execution/data/access/development/spending/publication gates retained.
+Future Optional: matters app, generic tutoring/roleplay, voice, broad state platform, old acceptance GUI and interview packaging; no active development queue.
