@@ -3,13 +3,13 @@
 Updated: 2026-09-10
 Role: 00 MASTER / authoritative dynamic state
 
-## Current Stage
+## Stage
 
-**SCENARIO-FOCUS-02 — differentiation challenged / PRODUCT-CORE-01 PAUSED / specific user-scenario discovery, not new application development**
+**SCENARIO-FOCUS-02 v2 — AI novice/light-user segmentation and pain validation / RESEARCH ONLY**
 
-The owner judges the generic acceptance workflow insufficiently distinctive/highly replaceable and asks for another iteration across users/scenarios, product, MVP and feasibility. MASTER pauses the unused F01–F08 product build and its ProductSpec import addition. Do not execute its older READY instructions merely because a feature specification exists.
+Latest owner direction: do not use the owner's personal project experience to select the audience; reject the proposed recurring prototype-user-study-preparer focus; further segment AI beginners/light users and identify concrete needs/pain.
 
-The latest user had said they had not sent the build to Codex. There is still no execution receipt; if partial work is later discovered, preserve/report rather than reset/delete. INTERVIEW-DEMO-01 remains superseded. Gate 5 external execution stays ON HOLD.
+The previous research-readiness hypothesis is no longer the priority. PRODUCT-CORE-01 stays PAUSED and INTERVIEW-DEMO-01 stays SUPERSEDED. No new office product or broader build is authorized by this research. Do not keep renaming/rebuilding a product before a specific unmet task is supported.
 
 ## Canonical Authority
 
@@ -17,79 +17,69 @@ Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 
 1. `docs/master/CURRENT_STATE.md`
 2. `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md` — current reasoning, four layers, source limitations and next validation boundary.
+3. `docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md` v2 — behavior-based segmentation, public evidence, pain hypotheses, four layers and next inquiry.
 
-PRODUCT_CORE_01_SPEC / PRODUCT_CORE_01_COMPETITION remain historical design/research, NOT active build contracts. Research/state updates are not product pushes or permission to modify other projects.
+The same research file was updated rather than adding a new document tree. Prior personal-project-led scenario remains in Git history, not the active plan. Old READY build briefs do not override this state.
 
-## Last Confirmed Local Receipt — Unchanged
+## Last Product Receipt — Unchanged
 
-- Repo: `F:\Chat-Codex-Handoff\validation-repo`
-- Branch: `prototype/acceptance-evidence-p0`
-- Last owner/Codex-reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
-- P0 before HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
-- P0 reported commits: `81b4a80`, `a1c37af`; four new files; Windows PS5.1 54/54 reported.
-- Prior MASTER P0 single-bundle/source review: PASS FOR COMPARISON ENTRY, not user/model/market acceptance.
-- Bundle SHA256: `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`; historical index integrity 14/14 accepted.
-- Last remote product observation remains historical `869414c77d227fe2f1675c7cfa08b04250520279`, not freshly checked.
+- repo: `F:\Chat-Codex-Handoff\validation-repo`
+- branch: `prototype/acceptance-evidence-p0`
+- last owner/Codex-reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- prior HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- P0 reported commits 81b4a80 / a1c37af; four new files, Windows PS5.1 54/54 reported.
+- Prior MASTER review: PASS FOR COMPARISON ENTRY only, based on transferred source/bundle.
+- ZIP SHA256 `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`; 14/14 indexed byte/size checks recorded.
+- Last remote product observation is historical `869414c77d227fe2f1675c7cfa08b04250520279`, not a fresh check.
 
-No new code, local branch/HEAD, runtime test, product push or release is claimed in this turn. Preserve P0 provenance/Unknown/owner-decision safeguards and all legacy artifacts.
+No new product files, local execution, branch/HEAD, model run or product push is reported this turn. Preserve P0 and legacy source/evidence. No receipt of PRODUCT-CORE-01 execution; preserve any later discovered partial work rather than reset.
 
-## Strategy Decision
+## New User/Scenario Decision
 
-Do not defend general task persistence/reporting/GUI/corrections as an inherent moat. ProductSpec, OpenSpec, TestSprite and native coding/report tools already cover significant overlapping capabilities. Chat with files and tools is a strong alternative, not merely a single-turn text responder.
+Treat AI skill, AI use frequency and underlying task frequency as separate axes. Low usage need not mean low skill or an unmet need; frequent chat does not prove task-delivery capability. Record ordinary office skill, access/data permission and responsibility for the result separately.
 
-Selected NEXT RESEARCH HYPOTHESIS, not a validated product:
+Five task-context clusters (not exclusive permanent personas): immediate questions; unconstrained one-off writing; source/constraint-bound deliverables; first complex executable artifact; permission/data-restricted use.
 
-**Prototype research-readiness assistant:** help a designer/researcher/PM who repeatedly prepares runnable Web prototypes for real participant studies determine whether the planned study tasks are technically executable and whether the prototype's capabilities/mock boundaries can support the intended questions.
+Priority for investigation: **people who already tried simple AI tasks, have source material/reference format and a real deliverable, but cannot reliably refine it while preserving confirmed facts/constraints.** Candidate recruitment entry points include routine office execution roles such as operations/admin/project assistants, not a claim that those occupations uniformly share the pain.
 
-Value hypothesis: less wasted preparation/blocked sessions/invalid inference caused by prototype limitations, not fewer chat messages. It does not predict human understanding, preferences, usability scores, retention or model quality, and does not simulate participants as user evidence.
+Key distinction: repetitive business tasks with shallow AI use may support repeat value; rare AI use alone does not support a product. Screen by actual recent task, available permissioned/redacted before/after material, failure/recovery and existing alternative, not self-description as 'beginner'.
 
-This is a more concrete setting, not proof of low replaceability. If an existing tool plus a good study-preparation checklist suffices, retain a template/adapter/contribution rather than grow a standalone platform.
+Five hypotheses to verify: missing-context setup; uncontrolled out-of-scope edits; polished but unusable output; inability to localize/recover from an error; repeated setup across similar tasks. None is yet a first-hand finding in our target sample.
 
-## Four Layers
+## Public Evidence / Counterevidence
 
-- User/scenario: recurring owner of preparing a specific Web prototype and participant tasks before a study; buyer hypothesis is the team paying preparation/rescheduling cost, not all AI beginners or students. Frequency, access and willingness to pay remain unknown.
-- Product: research-question feasibility -> task execution readiness -> reproducible initial conditions -> honest mock/real boundaries -> evidence-backed minimal preparation actions. No generic all-project workspace or synthetic user panel.
-- MVP: one already existing low-risk Web prototype, 2–3 planned tasks, one safe execution route, one readiness result with replay evidence. Not a whole F01–F08 client. Actual MVP execution is not authorized yet.
-- Feasibility: reuse PRD/spec/test tools and P0; use an existing browser/test runner only under later explicit local runtime permissions. Rules check observed/version facts; AI assists semantic task/capability matching; real people decide human-research questions. Browser context isolation does not reset server data.
+Detailed source/limits register is in SCENARIO_FOCUS_02 v2.
 
-## Newly Grounded Personal Scenario / Counterevidence
+- CNNIC 2025 midyear scenario percentages and OpenAI 2025 consumer usage support prioritizing everyday information/text work over assuming coding demand. Dated/platform samples, not 2026 novice-market rates.
+- Pew 2025 US nonuse reasons distinguish no job use case from not knowing how. Do not extrapolate US rates to China.
+- Anthropic AI Fluency Index distinguishes conversation-observable behaviors and explicitly limits population/causal interpretation. It is not proof that all beginners fail to evaluate outputs.
+- WPS already offers office AI tasks and guidance. Microsoft Word Copilot already supports in-document editing, references, undo/history and respects enabled tracked changes; availability depends on version/license/rollout.
 
-MASTER read via GitHub (no writes) `BenCCCCCCCCC/---------prd-html--` root README, `01_当前工程/docs/PRD_v0.6.md` initial sections, top HANDOFF and package.json on repository default `master`.
+Therefore guided prompts, editing, citations and change display are not novel by themselves. Strong baseline is the user's actually available ordinary AI + a good template and native office features, also manual non-AI workflow when sufficient. No surveys here prove repeated failures, adoption or payment for our candidate.
 
-The documents describe a personal recommendation-control prototype, PRD v0.6 / prototype v0.3.2, not an official NetEase product. PRD includes current/long-term preferences, undo, temporary listening and local-only language parsing, planned real participant tasks and explicitly simulated questionnaire material. Planned 8 seats are NOT 8 completed participants. It expressly cannot establish real model/recommendation/online outcome results.
+## Four Layers — Provisional, Not Build Scope
 
-The project already has substantial documented QA/E2E/acceptance coverage and declared Playwright dependencies. This is strong counterevidence to a new generic validator: source/QA may already answer most preparation questions. No tests were rerun; repository master is not assumed to be the user's latest local code. No other-project source, PRD, test or design was modified.
+User/scenario: source-and-constraint-bound document delivery/revision by a basic AI user, with repeated real work and no requirement to learn coding.
+Product: finish and revise a concrete deliverable without unrequested changes; likely interactions are targeted clarification, protected facts/sections, scoped edits and readable differences. Not a generic AI course, tool directory, QA dashboard or full office suite.
+MVP candidate: one text-document type, one permissioned material set, one feedback/revision cycle compared with a strong native/template workflow. Not all Word/PPT/Excel/Web outputs at once. Needs task evidence before implementation.
+Feasibility: model assists semantic formulation; deterministic document/field/diff checks enforce declared boundaries; humans settle missing/conflicting facts and subjective requirements. Layout preservation and format support require their own actual testing; hashes do not prove truth. Provider/access/cost remain separate decisions.
 
-A preliminary material-level example now exists: preference/undo interaction can support planned human interaction questions subject to actual task readiness; local R07 cannot establish real model accuracy; a prototype cannot establish online retention. These are source-based inferences, not new runtime findings or research results.
-
-## Competitor / Evidence Limits
-
-Public docs checked in this turn: ProductSpec, TestSprite, Chromatic, Maze, Useberry, Playwright, OpenAI data-analysis capabilities and NN/g's synthetic-user evaluation. Maze already has previews and invalid-path/missing-page checks; TestSprite already executes/report/reruns; Chromatic already covers visual/interaction/review. Do not claim preflight, browser tests or sign-off are new inventions.
-
-Also considered data-transformation checking but found Pandera/GX/Datafold/daff/Datablist and Chat strong substitutes, with no demonstrated user-access advantage here. No pivot to a spreadsheet business is approved.
-
-The current desk study is not competitive runtime evaluation or target-user demand research. No new interview, contact, data purchase, model benchmark, browser run or fake observation.
-
-## Potential Accumulation, Not Existing Defensibility
-
-Potential assets: consented human-calibrated task/capability/mock-boundary cases, repeatable per-prototype task/initial-state mappings, actual recheck/false-positive outcomes and low-friction team workflow adoption. None is a proven moat or network effect. User data remains theirs, portable and not automatically pooled.
-
-More features, Chinese labels or state storage alone do not address replaceability. A stronger base model or native vendor feature remains a competitive risk.
+Codex is this project's development tool, NOT a required tool for target beginners/light users. Reuse P0 concepts only where useful; do not force Git/PowerShell/canonical-state/acceptance terminology onto the new population. No new API/service/dependency is authorized now.
 
 ## Next Smallest Step
 
-No new broad Codex build trigger in this turn. The next bounded work is a source-level mapping of 2–3 existing planned research tasks to their prototype capabilities, current QA coverage, initial-state/reset conditions and mock boundaries. Start with the existing personal prototype, use strongest existing template/runner baseline, and identify a concrete uncovered burden before any new module is built.
+Build a source-supported task/pain record for the priority cohort: original material, required deliverable, explicit protected fields/sections, AI attempt, observed failure, recovery path, outcome, current alternative and total human effort. Use public traceable episodes or later authorized observation, not owner personal projects or invented interviews.
 
-Read-only research can proceed without making the owner repeat background. Actual browser/model/runtime execution, installs, changing the other project, contacting users, spending, push/share/release or larger scope require a separate bounded decision. Do not run old F01–F08 merely to keep producing code.
+Then check native/template alternatives on the same task before fixing a product name/implementation. A simple prompt/template or normal editing solving the problem is an acceptable stop result. Missing target evidence remains Unknown; do not use vendor instructions as failure prevalence data.
 
 ## Completed / Verified / Likely / Unknown / Not Done
 
-Completed: substitution-risk reassessment, current public capability checks, actual related prototype document reading, narrowed scenario and four-layer design, preliminary source-grounded example, paused prior broad build.
-Verified: sources read and their explicit claims; prior P0 evidence at its recorded level. No new runtime or user outcome.
-Likely: research preparation is a more concrete/useful target to investigate than generic handoff administration; incremental value not established.
-Unknown: repeated need, reachable users/payment, advantage over good templates/existing QA, runtime observation reliability, preparation cost saved, adoption.
-Not Done: full task-to-QA gap inspection, new execution experiment, independent user/model evaluation, new product implementation, commercial release.
-Must Fix: do not confuse feature breadth with defensibility, planned/synthetic participants with real research, or agent success with human usability.
-User Decision Needed: none for this research reorientation; retained execution/access/spending/other-project/distribution gates apply.
-Future Optional: general workspace app, ProductSpec importer, interview packaging, automatic Chat routing, multi-agent/cloud platform; inactive.
+Completed: public evidence review; independent skill/frequency/task axes; five context groups; primary research cohort; five falsifiable pains; four-layer constraints; previous personal-project focus retired.
+Verified: scoped public source claims and prior P0 facts; not actual target-user behavior or a new runtime test.
+Likely: already-attempted, constrained deliverables are a better inquiry target than all curious beginners. No proven advantage/market yet.
+Unknown: specific pain frequency/severity, remaining gap over native tools, task reuse/adoption/payment, implementation/effectiveness.
+Not Done: first-hand target interviews/observations, real tool comparison, new product code, business validation.
+
+Must Fix: avoid personal-project anchoring, equating low use with low skill, or presenting proposed pain statements as interviewed facts.
+User Decision Needed: none for this bounded research. Contact/data-sharing, new runtime/model/API/install/paid/development/publication gates remain.
+Future Optional: prototype-study assistant, F01–F08 workspace, ProductSpec importer, broad office product, AI courses/prompts platform; inactive. Gate 5 ON HOLD.
