@@ -5,119 +5,105 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**USABILITY-SPIKE-01 — UX-03 evidence review PASS / UX-02 PARTIAL due real packet-label parser gap**
+**USABILITY-SPIKE-01 — UX-04 IMPLEMENTED + SELF-TESTED / MASTER DELTA REVIEW PENDING**
 
 Gate 5 remains ON HOLD. The project is still in product/technical validation and bounded prototyping; it is not Beta or full application development.
 
-The owner-approved UX-02 / UX-03 correction has been implemented and self-tested at local HEAD `3a925c13dae51e7d3f3a89977a993ebafb771f1d`. MASTER has now independently reviewed the transferred correction diff, Review Evidence, Desktop Route Probe, screenshot inventory and representative screenshots.
-
-Overall Spike acceptance remains open because one narrow recognizability defect was found before owner live validation.
+The owner-approved UX-04 parser correction has been implemented locally according to Codex's final report. Overall Spike acceptance remains open because MASTER has not yet independently inspected the tiny two-file UX-04 delta, and the owner has not yet performed the real `仅复制交付` flow.
 
 ## Active Repo / Version
 
 - Local repo: `F:\Chat-Codex-Handoff\validation-repo`
 - Local branch: `prototype/usability-spike-01`
-- Prior accepted GUI HEAD: `1055cc6bcfa5afc9ca75d9bf10b651562d7b6311`
-- Current correction HEAD reviewed: `3a925c13dae51e7d3f3a89977a993ebafb771f1d`
-- Pushed product branch remains older: `869414c77d227fe2f1675c7cfa08b04250520279`
+- UX-04 starting HEAD: `3a925c13dae51e7d3f3a89977a993ebafb771f1d`
+- UX-04 reported final HEAD: `28828b110263909c5683a8cab54d6832f2ad7ffa`
+- Prior pushed product branch remains older: `869414c77d227fe2f1675c7cfa08b04250520279`
 
-No product/code push, merge, external sharing, release, paid use, dependency installation or privilege escalation is authorized.
+No product/code push, merge, release, external sharing, paid API use, dependency installation or privilege escalation is authorized.
 
-## MASTER Independent Delta Review
+## Prior Accepted Review State
 
-### UX-03 — Copy-only return
+- UX-03 `-CopyOnly` independent review = PASS for owner entry.
+- UX-02 summary design = PARTIAL only because two real explicit final-version label variants were not recognized.
+- Desktop Route Probe 01 = Unknown / inconclusive; no live URI or internal-client access occurred.
 
-**PASS for owner entry.**
+## UX-04 — Reported Implementation
 
-Reviewed core change is narrow and backward compatible:
+Codex reports exactly one local correction commit from `3a925c13...` to `28828b110...`, changing only:
 
-- `handoff.ps1` adds only optional `[switch] $CopyOnly`;
-- all existing repo/binding/metadata/packet/URL validation remains before clipboard preparation;
-- no-argument behavior still copies and requests opening the stored HTTPS Chat URL;
-- `-CopyOnly` copies the same packet and skips `Start-Process`;
-- no auto paste/send was added.
+- `handoff-kit/ui/PanelAdapter.ps1`
+- `handoff-kit/ui/tests.ps1`
 
-Transferred evidence reports final core `43/43 PASS` and UI `57/57 PASS`, including zero open requests for CopyOnly, exact fixture payload, existing fail-closed cases, both GUI routes' confirmation/change/busy guards, and unchanged live binding/metadata/packet/Hook hashes.
+Reported diff stat: `2 files changed, 11 insertions(+), 1 deletion(-)`.
 
-Representative uploaded screenshot hashes match the transferred final inventory at HEAD `3a925c13...`.
+Reported behavior:
 
-### UX-02 — Delivery identity summary
-
-**PARTIAL — one narrow parser Must Fix.**
-
-The implementation correctly separates:
-
-- first Markdown heading when present;
-- captured/file time;
-- packet-declared version versus checkout HEAD;
-- informational version relationship;
-- exact packet-byte SHA-256 fingerprint;
-- raw packet preview.
-
-However, the version parser only accepts a fixed set of labels at the beginning of a line, including `Correction / Final HEAD`, `Final HEAD`, `After HEAD`, `Current HEAD` and selected Chinese equivalents.
-
-The actual Codex Delivery Packet that triggered this review uses the real label form:
-
-`唯一 correction / final HEAD：<sha>`
-
-That label is semantically explicit but is not matched by the current parser because of the leading qualifier `唯一`. A previously observed real packet form `After HEAD / commit：<sha>` is likewise outside the current exact label grammar.
-
-Therefore this real current packet can still show `交付版本：未提供` despite containing an explicit final version. That directly weakens the approved UX-02 recognizability goal and should be corrected before asking the owner to validate the summary.
-
-Do not broaden this into arbitrary SHA scanning. The fix must remain label-based and conservative.
-
-## Required Narrow Fix — UX-04
-
-**UX-04 — recognize bounded real-world final-version label variants without guessing.**
-
-Minimum requirements:
-
-- preserve current explicit-label-only approach;
-- support the current real form `唯一 correction / final HEAD`;
-- support the previously observed real form `After HEAD / commit`;
-- keep `Before HEAD` excluded;
-- do not accept arbitrary prose SHA values;
+- adds recognition for real explicit label `唯一 correction / final HEAD：<sha>`;
+- adds recognition for real explicit label `After HEAD / commit：<sha>`;
+- matching is case-insensitive and supports Chinese full-width colon where applicable;
+- all previously supported labels remain;
+- `Before HEAD` and arbitrary prose SHA remain excluded;
 - conflicting recognized final/current declarations remain `不明确（查看原文）`;
-- add focused tests using these exact real-style variants;
-- no visual redesign, no new metadata model, no new transport behavior.
+- raw packet, fingerprint, checkout HEAD separation, version relation, CopyOnly, transport and UI layout remain unchanged.
 
-Expected implementation scope should normally be limited to `handoff-kit/ui/PanelAdapter.ps1` and `handoff-kit/ui/tests.ps1`, plus refreshed evidence if needed. Stop if a broader change appears necessary.
+This is the intended bounded correction. MASTER has not yet inspected the exact two-file source delta, so this is reported evidence rather than final acceptance.
 
-## Desktop Route Probe 01
+## Reported Final Regression
 
-MASTER reviewed the read-only evidence:
+On final HEAD `28828b110263909c5683a8cab54d6832f2ad7ffa`:
 
-- `Get-AppxPackage -Name *ChatGPT*` -> 0 matches;
-- `Get-AppxPackage -Name *OpenAI*` -> 0 matches;
-- no matching StartApps entry was exposed;
-- no manifest query or URI launch occurred;
-- no internal ChatGPT files/private state were read.
+```text
+Core: 43 passed / 0 failed; exit 0
+UI:   73 passed / 0 failed; exit 0
+```
 
-Result remains **Unknown / inconclusive**, not `Desktop absent` and not `Desktop unsupported`.
+Reported also:
 
-No exact ordinary-Chat conversation route can be proven from this probe. Do not invent or live-test URI paths now.
+- `git diff --check` PASS;
+- correction-range check PASS;
+- test-owned window/process exits normally;
+- live binding, metadata, packet and Hook hashes unchanged;
+- no Desktop research, live handoff, real clipboard/browser/Desktop action, push or merge.
 
 ## Classification
 
 ### Must Fix
 
-- **UX-04 — bounded real packet final-version label recognition.**
+None newly confirmed by the report. UX-04 remains **pending MASTER source-level confirmation**.
 
 ### User Decision Needed
 
-None for this narrow correction; it is within the already approved UX-02 recognizability scope.
+No new scope decision. The next action is evidence transfer for this tiny correction, then real owner validation if no Must Fix appears.
 
 ### Future Optional
 
-- improved read-only Desktop package identification if a safe reliable identifier source is found;
+- better read-only Desktop package identification only if a safe reliable identifier source appears;
 - exact native Desktop routing only with supported evidence;
 - browser exact-tab focus only if extension/setup cost is justified later;
 - visual polish/high-DPI/accessibility after functional owner acceptance.
 
+## Evidence Needed for MASTER Review
+
+Preferred minimum evidence for UX-04:
+
+1. exact correction diff for range `3a925c13dae51e7d3f3a89977a993ebafb771f1d..28828b110263909c5683a8cab54d6832f2ad7ffa` if an artifact exists;
+2. otherwise the current `handoff-kit/ui/PanelAdapter.ps1` and `handoff-kit/ui/tests.ps1` files are sufficient for direct comparison against the previously reviewed version.
+
+Do not push code merely for review.
+
 ## Next Smallest Step
 
-Send one concise UX-04 Correction Packet to the **same Codex task** at local HEAD `3a925c13dae51e7d3f3a89977a993ebafb771f1d`.
+Transfer the tiny UX-04 source evidence to MASTER. MASTER reviews only this parser/test delta.
 
-Do not add features or repeat Desktop research. Fix only the conservative label parser and tests, rerun the final UI suite and relevant core regression, regenerate evidence as needed, and stop at `READY FOR OWNER VALIDATION` if green.
+If no Must Fix remains, immediately proceed to the real owner GUI validation:
 
-Only after UX-04 closes should the owner run the real `仅复制交付` GUI validation.
+1. after the Codex turn is fully ended, open `Start-Handoff.cmd`;
+2. confirm the live summary recognizes the actual packet's explicit final version;
+3. confirm target/packet and tick the explicit confirmation;
+4. click `仅复制交付`;
+5. confirm no new browser tab opens;
+6. manually switch to the already-open ordinary ChatGPT Desktop Chat or web Chat;
+7. Ctrl+V and Send without copying anything else;
+8. report whether the summary is understandable and whether CopyOnly is `更简单 / 差不多 / 更麻烦` than the prior path.
+
+Do not start another feature round before this owner result.
