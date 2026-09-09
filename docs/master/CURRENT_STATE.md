@@ -5,120 +5,120 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**STRATEGY-RESET-01 — R1-BUILD-01 OFFLINE P0 APPROVED / READY FOR CODEX EXECUTION**
+**STRATEGY-RESET-01 — R1-BUILD-01 P0 IMPLEMENTED + OFFLINE SELF-TESTED / MASTER REVIEW BUNDLE PENDING**
 
-The owner explicitly approved the bounded `R1-BUILD-01` v0.3 development increment. This authorizes only the offline acceptance-sheet P0 defined in `R1_BUILD_BRIEF.md` v0.3. It does not authorize a complete AI MVP, new model/API calls, browser/runtime integration, external users, paid use, publication, product push/merge or broader legacy refactoring.
+The approved offline acceptance-sheet P0 has been implemented locally according to the owner-pasted Codex receipt. Engineering self-test is complete at reported final HEAD, but MASTER acceptance and comparison value are still open because the single whitelist review bundle has not yet been independently inspected.
 
-Legacy feature expansion remains frozen. Gate 5 external execution remains ON HOLD.
+No model/API/browser runtime, full MVP, external pilot, publication, push/merge or commercial validation is authorized or claimed. Legacy feature expansion remains frozen. Gate 5 remains ON HOLD.
 
-## Local Version Receipt
+## Local P0 Receipt
 
-Source: owner-pasted UX-05 final report plus R0 local Git inventory, not MASTER-side Windows commands.
+Source: owner-pasted Codex final Delivery Packet, not MASTER-side Windows commands.
 
 - Repo: `F:\Chat-Codex-Handoff\validation-repo`
-- Branch: `prototype/usability-spike-01`
-- Reported actual HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
-- UX-05 before HEAD: `28828b110263909c5683a8cab54d6832f2ad7ffa`
-- UX-05 scope: only `Start-Handoff.cmd`, +1/-1, asynchronous hidden PowerShell child.
-- UX-05 final tests reported: core 43/43, UI 73/73.
-- R0: product_files_changed=0, commits_created=0, push=0.
-- Last independently checked remote product HEAD remains historical `869414c77d227fe2f1675c7cfa08b04250520279`; not freshly rechecked in R1.
+- Branch: `prototype/acceptance-evidence-p0`
+- Before HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- Final HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- Local commits: `81b4a80`, `a1c37af`
+- Canonical implementation brief used by Codex: state commit `7da34e283407ac1af062e9a34cee1435021f5b1d` / R1_BUILD_BRIEF v0.3
+- Exact reported tracked scope: four new files only under `acceptance-p0/`, 536 insertions; legacy handoff/launcher/Hook/GUI unchanged.
 
-Owner accepts a very brief launcher flash and confirms CopyOnly produces no new tab. Manual paste remains a legacy contract, not a new defect. UX-05 no longer drives development; preserve its evidence. Do not reset local code to remote or reopen zero-flash/parser/tab/desktop-routing work.
+Reported module files:
 
-## Authority / Durable Memory
+- `acceptance-p0/AcceptanceEvidence.psm1`
+- `acceptance-p0/Invoke-AcceptanceReport.ps1`
+- `acceptance-p0/README.md`
+- `acceptance-p0/tests.ps1`
 
-Same repository, ref `meta/master-state`:
+Working tree reported clean for tracked files; existing untracked artifacts remain. No push/merge.
 
-1. `docs/master/CURRENT_STATE.md` — hot facts, decisions, gates.
-2. `docs/master/HANDOFF.md` — immediate next action.
+## Reported P0 Validation
 
-Research detail remains in four files under `docs/research/strategy-reset-01/`:
+Final-HEAD command reported:
 
-- `R1_RESEARCH.md` v0.3 — findings and counterevidence.
-- `R1_PRODUCT_AND_EVAL.md` v0.2 — four-layer product, evaluation and interview design.
-- `R1_BUILD_BRIEF.md` v0.3 — approved P0 execution contract.
-- `SOURCES_AND_DECISIONS.json` v0.3 — source audit, limitations, decisions and untested hypotheses.
+`C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -File acceptance-p0/tests.ps1 -Historical`
 
-State/research writes on `meta/master-state` do not authorize product code push, publication or external sharing. Historical product-branch copies are not current authority.
+Result: `passed=54 / failed=0 / exit=0`.
 
-## R0 / Archived Evidence Reconciliation
+Reported coverage includes:
 
-R0 reports two untracked local research artifacts, six supported helper-history cases and one current evidence-provenance observation. MASTER has the report, not independent access to those two F-drive files. The approved P0 Codex task reads them directly; no additional owner upload round is required.
+- duplicate run rejection while preserving old bytes;
+- hash/path/reference/version mismatch handling;
+- dirty/Unknown behavior;
+- reviewer conflict handling;
+- synthetic/demo propagation;
+- HTML escaping;
+- junction rejection;
+- actual command path `snapshot -> validate -> render`;
+- `git diff --check` and approved-range checks PASS.
 
-All six cases concern the same helper, not six users or target Web projects. Cases without local originals were excluded. Current-directory mixing of older Review/newer unversioned logs/inconsistent PNG inventory was reported.
+Tests are Codex-reported until the review bundle is inspected; MASTER has not rerun Windows tests.
 
-MASTER independently calculated hashes for eight previously uploaded PNGs against their two original inventories: 8/8 matched. This is archive consistency only, not a fresh Windows run/current F-directory verification. Later overwrite/drift can coexist with valid historical archives. Do not retrofit old logs with the current HEAD.
+## Historical Replay — Reported Result
 
-## R1 Product Decision
+Codex reports direct reuse of local R0-07 material:
 
-Refined hypothesis: a **single-Web-change acceptance sheet for non-engineering owners with recurring acceptance responsibility**, initially as a reusable module over existing coding/spec/test tools.
+- `requirement_revision = null` because original approved requirement was not frozen;
+- `target_code_revision = 0c2440b...`;
+- old-log `evidence_revision = null`;
+- old-index `evidence_revision = 3a925c1...`;
+- `snapshot_checkout_head = a1c37af...`.
 
-Candidate value: reduce total human effort for a correct acceptance decision using approved criteria, applicable same-version evidence, qualified review suggestions and an explicit owner decision/bounded correction.
+The report reportedly preserves `NOT_REVIEWED`, `owner_decision=PENDING`, with applicability UNKNOWN/MISMATCH instead of repairing historical gaps. Historical source bytes were reportedly unchanged and old tests were not rerun.
 
-Counterevidence remains active: OpenSpec/Spec Kit/Kiro already cover substantial spec/verification flow; TestSprite/Lovable test/report; Playwright captures Git metadata; Allure handles history. Tables/tests/hashes/version stamps alone are not a moat. If strong existing tools plus a reasonable template are sufficient, adapt/contribute or stop rather than grow a standalone platform.
+This is directionally correct and consistent with R1 truthfulness rules, but MASTER has not yet independently checked the generated manifest/report code or bundle contents.
 
-No demand/payment/model-quality advantage is established.
+## Review Bundle Receipt
 
-## Four Layers
+Codex generated exactly one local whitelist bundle:
 
-- User: repeated responsibility for low-risk Web prototype/change acceptance; frequency, reachable users and adoption/payment still unknown.
-- Product: one readable acceptance sheet showing evidence applicability, uncertainty and decisions, not another Chat/IDE/dashboard.
-- MVP: later one repo, one actual Web change, one existing execution/model route, criterion review and one bounded correction; not approved as a whole.
-- Feasibility: reuse native structured outputs/reporting. Rules establish limited identity/provenance facts; models propose semantic judgments; humans approve. No private Desktop Chat takeover.
+`F:\Chat-Codex-Handoff\validation-repo\artifacts\acceptance-p0\test-5250aefcd3954b468ee34ab6e59bd8b8-37\review-bundle.zip`
 
-The approved P0 is deliberately offline and non-model-connected. It is a comparison precursor, not an AI MVP. No automatic infrastructure round follows.
+Reported SHA-256:
 
-## R1-BUILD-01 — Approved Scope
+`E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`
 
-Starting from reported local `0c2440b...`, Codex may verify the local state and create/safely continue one local branch `prototype/acceptance-evidence-p0`.
+Reported contents: Chinese `report.html`, `report.json`, raw-material index, snapshot/manifest, final test result, the four source files and bundle index. Codex reports 14 indexed files plus index (15 ZIP entries) and successful item-by-item verification.
 
-Allowed:
+The local path is not directly readable by MASTER in Chat. The owner only needs to transfer this single ZIP; no multi-file evidence upload should be requested.
 
-- read R0 local artifacts directly;
-- add at most six files under `acceptance-p0/`;
-- at most two meaningful local commits;
-- use existing Windows PowerShell 5.1/system libraries only;
-- create new per-run outputs under `artifacts/acceptance-p0/<run_id>/`;
-- implement snapshot / validate / render for selected evidence;
-- emit static Chinese HTML/JSON and one whitelist review bundle;
-- run only the new module's isolated tests and historical replay required by the build brief.
+HTML visual rendering remains explicitly `NOT VERIFIED`; no browser/client tooling was used.
 
-Required distinctions remain: requirement revision, target code revision, evidence generation revision and current snapshot checkout. Application-level no-overwrite is not cryptographic trust. No reviewer = NOT_REVIEWED; invalid/inapplicable evidence cannot justify SATISFIED; owner decision remains PENDING.
+## R1 Product Decision Still Active
 
-Not authorized:
+Working hypothesis remains a **single-Web-change acceptance sheet for non-engineering owners with recurring acceptance responsibility**, initially as a reusable module around existing coding/spec/test tools.
 
-- legacy source changes;
-- model/API/extra agent invocation;
-- browser/Web/app-server runtime;
-- new dependencies/installations/elevation;
-- real Chat/Desktop/clipboard actions;
-- external contact/sharing;
-- push/merge/release/paid use;
-- full MVP or standalone platform build.
+Counterevidence remains active: OpenSpec/Spec Kit/Kiro/TestSprite/Lovable/Playwright/Allure already provide substantial spec, verification, testing, metadata and reporting capability. P0 engineering success alone does not prove incremental value or justify a standalone product.
 
-Maximum success label: `P0 IMPLEMENTED / OFFLINE SELF-TESTED / READY FOR COMPARISON REVIEW`.
+MASTER must next answer two different questions separately:
+
+1. **Engineering truthfulness:** does the P0 actually preserve provenance/version/Unknown/owner-decision boundaries and produce a coherent offline report?
+2. **Product increment:** after review, does it add enough clarity over a strong native/spec/report baseline to justify a real comparison, or is it mainly repackaging existing output?
+
+No model-connected or user phase starts automatically from 54/54.
 
 ## Completed / Not Done / Verified / Likely / Unknown
 
-Completed: R0 report reconciliation, desk research/source audit, competitor counterevidence, archive check, four-layer design, eval/interview protocols, build brief, development approval.
+Completed: R0/R1 research and design; owner-approved bounded P0 implementation; reported offline test and historical replay; single review bundle generated.
 
-Verified at stated source level: owner no-new-tab/acceptable flash, Codex Git receipt/reported tests, inspected primary-source capabilities, independent 8/8 archived byte comparisons. No claim of MASTER-side Windows rerun.
+Verified at current source level: owner/Codex receipt facts only. Prior public/source research remains independently inspected. MASTER has not yet inspected the local P0 bundle or rerun Windows tests.
 
-Likely: applicable evidence plus readable decision boundaries could reduce acceptance effort; requires actual comparison.
+Likely: reported handling of Unknown/Mismatch/PENDING matches the intended contract; pending source-level check.
 
-Unknown: target demand/adoption/payment, superiority over native/spec/report combination, semantic model accuracy, actual Web/runtime behavior, end-to-end economics.
+Unknown: actual bundle integrity/content, report readability, incremental value over strong baseline, target-user demand/adoption/payment, future semantic model accuracy and real Web economics.
 
-Not Done: P0 implementation, live comparison/model eval, target-user interviews, complete MVP, external pilot, product push/release/distribution.
+Not Done: MASTER P0 source/bundle review, HTML owner viewing, strong-baseline comparison, real Web task/model evaluation, interviews, full MVP, external pilot, product push/release.
 
 ## Classification
 
-Must Fix: no new legacy coding defect. Preserve version/source distinctions; no false market/AI-quality claims.
+Must Fix: none asserted before review. Any source/report inconsistency found in the single bundle will be classified then.
 
-User Decision Needed: none to start the approved R1-BUILD-01 v0.3. Any scope expansion, runtime/model/browser/user/paid/public action requires a new owner decision.
+User Decision Needed: none to perform MASTER review. The only owner action now is transfer the one review bundle into this Chat. Later model/Web/user/paid/public scope requires a separate decision.
 
-Future Optional: aesthetic polish, Desktop exact routing, browser tab focus, multi-platform packaging and standalone business app remain inactive.
+Future Optional: legacy polish/deep links/tab focus, standalone packaging and broader platform features remain inactive.
 
 ## Next Smallest Step
 
-Execute R1-BUILD-01 v0.3 in the same local Codex project using the minimal trigger in `HANDOFF.md`. After completion, return the evidence-ready Delivery Packet to MASTER for comparison review. Do not auto-start the next MVP/model/user phase.
+Owner transfers only `review-bundle.zip` to MASTER. MASTER independently inspects source, manifest/index, report.json/html, historical replay and bundled test evidence; verifies the ZIP hash if possible; then classifies P0 as PASS/PARTIAL/FAIL for **comparison entry**, not market/MVP success.
+
+Do not ask Codex for another implementation turn before that review.
