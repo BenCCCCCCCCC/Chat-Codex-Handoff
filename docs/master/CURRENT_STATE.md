@@ -5,81 +5,89 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**SCENARIO-FOCUS-02 v2 — AI novice/light-user segmentation and pain validation / RESEARCH ONLY**
+**SCENARIO-FOCUS-02 v3 — CURRENT-SOURCE OPPORTUNITY SCAN COMPLETE / SHORTLIST FOR VALIDATION / NO NEW BUILD**
 
-Latest owner direction: do not use the owner's personal project experience to select the audience; reject the proposed recurring prototype-user-study-preparer focus; further segment AI beginners/light users and identify concrete needs/pain.
+Latest owner request permits keeping or abandoning the old design and asks for fresh public resources, GitHub and discussion research to identify suitable AI product directions. Do not anchor audience selection to the owner's personal projects. AI novice/light use remains a task-level design constraint, not proof of demand or low domain expertise.
 
-The previous research-readiness hypothesis is no longer the priority. PRODUCT-CORE-01 stays PAUSED and INTERVIEW-DEMO-01 stays SUPERSEDED. No new office product or broader build is authorized by this research. Do not keep renaming/rebuilding a product before a specific unmet task is supported.
+MASTER examined current public discussions, official products/App Store descriptions and live GitHub READMEs. Three candidates remain; none has been selected as a final product or approved for implementation. Generic constrained-document editing is no longer automatically the leading direction.
 
-## Canonical Authority
+PRODUCT-CORE-01 remains PAUSED; INTERVIEW-DEMO-01 remains SUPERSEDED; former prototype-study-preparation work remains inactive. Gate 5 external execution stays ON HOLD. Do not execute older READY build prompts.
 
-Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
+## Authority
+
+Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, branch `meta/master-state`:
 
 1. `docs/master/CURRENT_STATE.md`
 2. `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md` v2 — behavior-based segmentation, public evidence, pain hypotheses, four layers and next inquiry.
+3. `docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md` v3 — evidence, four-layer candidate definitions, direct competitors, source dates/limits and next comparison boundary.
 
-The same research file was updated rather than adding a new document tree. Prior personal-project-led scenario remains in Git history, not the active plan. Old READY build briefs do not override this state.
+The existing research file was updated; no new product-document forest. Research/state writes are not product-code push, public publication, customer contact or permission to use private source data.
 
 ## Last Product Receipt — Unchanged
 
-- repo: `F:\Chat-Codex-Handoff\validation-repo`
-- branch: `prototype/acceptance-evidence-p0`
-- last owner/Codex-reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
-- prior HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
-- P0 reported commits 81b4a80 / a1c37af; four new files, Windows PS5.1 54/54 reported.
-- Prior MASTER review: PASS FOR COMPARISON ENTRY only, based on transferred source/bundle.
-- ZIP SHA256 `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`; 14/14 indexed byte/size checks recorded.
-- Last remote product observation is historical `869414c77d227fe2f1675c7cfa08b04250520279`, not a fresh check.
+- Repo: `F:\Chat-Codex-Handoff\validation-repo`
+- Branch: `prototype/acceptance-evidence-p0`
+- Last owner/Codex-reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- Before P0: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- Reported P0 commits: `81b4a80`, `a1c37af`; four new files; Windows PS5.1 54/54 reported.
+- Prior MASTER bundle/source review: PASS FOR COMPARISON ENTRY only.
+- P0 ZIP SHA256: `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`; 14/14 indexed size/hash checks previously recorded.
+- Last remote product observation is historical `869414c77d227fe2f1675c7cfa08b04250520279`, not freshly checked.
 
-No new product files, local execution, branch/HEAD, model run or product push is reported this turn. Preserve P0 and legacy source/evidence. No receipt of PRODUCT-CORE-01 execution; preserve any later discovered partial work rather than reset.
+No new local code/run/branch/HEAD, paid use, model execution or product push in this research turn. No receipt for prior large builds; preserve any partial work discovered later, never reset it. Old P0 may be reusable internally, but it must not dictate the new user or application architecture.
 
-## New User/Scenario Decision
+## Current Shortlist — Research Judgments, Not Market Facts
 
-Treat AI skill, AI use frequency and underlying task frequency as separate axes. Low usage need not mean low skill or an unmet need; frequent chat does not prove task-delivery capability. Record ordinary office skill, access/data permission and responsibility for the result separately.
+### 1. Message-based wholesale reorder/amendment -> reviewed order draft
 
-Five task-context clusters (not exclusive permanent personas): immediate questions; unconstrained one-off writing; source/constraint-bound deliverables; first complex executable artifact; permission/data-restricted use.
+Priority business hypothesis. Specific user: an owner/order clerk repeatedly interpreting informal repeat-customer orders against a real catalog and previously approved order. Specific difficulty: aliases, 'same as last time', box/unit quantities and later add/replace/cancel messages.
 
-Priority for investigation: **people who already tried simple AI tasks, have source material/reference format and a real deliverable, but cannot reliably refine it while preserving confirmed facts/constraints.** Candidate recruitment entry points include routine office execution roles such as operations/admin/project assistants, not a claim that those occupations uniformly share the pain.
+Proposed smallest product: explicitly supplied text + catalog/history -> source-linked draft and unresolved questions -> human-confirmed export. No automatic payment, shipment, inventory change or private-chat scraping. Model interprets language; rules control identity, arithmetic and duplicate/changed state.
 
-Key distinction: repetitive business tasks with shallow AI use may support repeat value; rare AI use alone does not support a product. Screen by actual recent task, available permissioned/redacted before/after material, failure/recovery and existing alternative, not self-description as 'beginner'.
+Evidence: a dated 2026-06-30 Shopify Community task self-report. Identity and frequency not independently verified; vendor replies are not customer validation. Strong direct competitors DraftGenius/POMate already do order extraction, SKU matching, rules and evidence; POMate includes Simplified Chinese. A multi-message/item-unit gap is UNTESTED, not a documented absence. No clone build is authorized.
 
-Five hypotheses to verify: missing-context setup; uncontrolled out-of-scope edits; polished but unusable output; inability to localize/recover from an error; repeated setup across similar tasks. None is yet a first-hand finding in our target sample.
+### 2. Like-for-like supplier quote comparison for occasional purchasing roles
 
-## Public Evidence / Counterevidence
+Office candidate: align existing same-category quotes, units, quantities/fees and missing terms, retaining source references and non-comparable states. One category/three supplied quotes; no automatic sourcing/negotiation/purchasing/legal advice.
 
-Detailed source/limits register is in SCENARIO_FOCUS_02 v2.
+Quotal directly offers extraction/normalization/fees/comparison; FlowParse is an auxiliary indexed lead with failed full fetch. Demand evidence is mostly supply-side and weaker than candidate 1. Do not make a generic quote-summary product without specific data/gap evidence. Docling is a potential reusable parser, not installed or verified locally.
 
-- CNNIC 2025 midyear scenario percentages and OpenAI 2025 consumer usage support prioritizing everyday information/text work over assuming coding demand. Dated/platform samples, not 2026 novice-market rates.
-- Pew 2025 US nonuse reasons distinguish no job use case from not knowing how. Do not extrapolate US rates to China.
-- Anthropic AI Fluency Index distinguishes conversation-observable behaviors and explicitly limits population/causal interpretation. It is not proof that all beginners fail to evaluate outputs.
-- WPS already offers office AI tasks and guidance. Microsoft Word Copilot already supports in-document editing, references, undo/history and respects enabled tracked changes; availability depends on version/license/rollout.
+### 3. Short-form AI detective interaction for ordinary players
 
-Therefore guided prompts, editing, citations and change display are not novel by themselves. Strong baseline is the user's actually available ordinary AI + a good template and native office features, also manual non-AI workflow when sufficient. No surveys here prove repeated failures, adoption or payment for our candidate.
+Consumer candidate from public HN/WhoDunnitAI, not the owner's personal experience. One authored original case, few characters, text-first questioning and evidence-based ending; model expression separated from factual state/knowledge access. No claim those rules guarantee zero hallucination.
 
-## Four Layers — Provisional, Not Build Scope
+Public feedback includes enthusiasm and friction; author reports voice costs/outages. Other-games hallucination/spoiler anecdotes are not defects independently found in WhoDunnitAI. HN absolute post date could not be established from the cached relative-time view. This is an engagement lead, not measured retention/payment. Existing competitors remain material.
 
-User/scenario: source-and-constraint-bound document delivery/revision by a basic AI user, with repeated real work and no requirement to learn coding.
-Product: finish and revise a concrete deliverable without unrequested changes; likely interactions are targeted clarification, protected facts/sections, scoped edits and readable differences. Not a generic AI course, tool directory, QA dashboard or full office suite.
-MVP candidate: one text-document type, one permissioned material set, one feedback/revision cycle compared with a strong native/template workflow. Not all Word/PPT/Excel/Web outputs at once. Needs task evidence before implementation.
-Feasibility: model assists semantic formulation; deterministic document/field/diff checks enforce declared boundaries; humans settle missing/conflicting facts and subjective requirements. Layout preservation and format support require their own actual testing; hashes do not prove truth. Provider/access/cost remain separate decisions.
+## Negative Findings / No False Novelty
 
-Codex is this project's development tool, NOT a required tool for target beginners/light users. Reuse P0 concepts only where useful; do not force Git/PowerShell/canonical-state/acceptance terminology onto the new population. No new API/service/dependency is authorized now.
+- Supplier CSV -> Shopify: current Portaim, Matrixify MCP supplier examples, Ablestar and Dromo substantially cover mapping/cleanup/preview/integration. Actual CSV complaints do not justify another generic importer.
+- Purchase-order CSV export requests may be ordinary structured data-export problems, not AI tasks.
+- kklimuk/docx-cli already lists scoped editing/redlines/comments/diff; author benchmarks are not adopted as our test results. Generic Word revision remains weakly differentiated.
+- accomplish-ai/coworker live README says it is no longer supported, even if search directories retain old features. Do not infer maintenance from old popularity or invent the reason for deprecation.
+
+Commercially useful is not the same as globally novel. No candidate currently has a proven moat, independent model result, target-user interview or willingness-to-pay evidence.
+
+## Evidence / Freshness Discipline
+
+Research file v3 stores 19 source records and their limitations. Most decision-driving community examples have explicit 2026 dates; original complaints and later replies are separated. Official App Store launch dates are not inferred from crawler date. HN relative time is not presented as 'launched today'. Maker claims, publicly self-reported problems and our design hypotheses remain distinct.
+
+No actual competitor install/use or private participant observation occurred. No new survey respondents, revenue, user savings, accuracy rates or market-size numbers were produced. Price/review counts are not used as demand proof.
 
 ## Next Smallest Step
 
-Build a source-supported task/pain record for the priority cohort: original material, required deliverable, explicit protected fields/sections, AI attempt, observed failure, recovery path, outcome, current alternative and total human effort. Use public traceable episodes or later authorized observation, not owner personal projects or invented interviews.
+Validate candidate 1's incremental gap against a strong baseline before choosing a new product/build: ordinary repeat-order/template flow, capable chat with the same catalog/history, and actual DraftGenius/POMate coverage of a small same-input set.
 
-Then check native/template alternatives on the same task before fixing a product name/implementation. A simple prompt/template or normal editing solving the problem is an acceptable stop result. Missing target evidence remains Unknown; do not use vendor instructions as failure prevalence data.
+A useful test requires permissioned, redacted messages, catalog/units, approved history and the actual correct final order. These are not currently available. Official/public or authored synthetic examples can support an engineering check only, not merchant demand. Do not request the owner's unrelated personal project as substitute or fabricate customer interviews.
+
+No new Codex development trigger in this turn. Future data acquisition/contact, runtime/model/API use, installation, paid use, implementation, sharing/release each need a bounded decision. If no unmet repeat-task gap survives the strongest available alternative, adapt existing tools or keep another candidate instead of growing a generic platform.
 
 ## Completed / Verified / Likely / Unknown / Not Done
 
-Completed: public evidence review; independent skill/frequency/task axes; five context groups; primary research cohort; five falsifiable pains; four-layer constraints; previous personal-project focus retired.
-Verified: scoped public source claims and prior P0 facts; not actual target-user behavior or a new runtime test.
-Likely: already-attempted, constrained deliverables are a better inquiry target than all curious beginners. No proven advantage/market yet.
-Unknown: specific pain frequency/severity, remaining gap over native tools, task reuse/adoption/payment, implementation/effectiveness.
-Not Done: first-hand target interviews/observations, real tool comparison, new product code, business validation.
-
-Must Fix: avoid personal-project anchoring, equating low use with low skill, or presenting proposed pain statements as interviewed facts.
-User Decision Needed: none for this bounded research. Contact/data-sharing, new runtime/model/API/install/paid/development/publication gates remain.
-Future Optional: prototype-study assistant, F01–F08 workspace, ProductSpec importer, broad office product, AI courses/prompts platform; inactive. Gate 5 ON HOLD.
+Completed: fresh source/community search, direct competition/repository-status checks, three four-layer candidates, ruled-out generic directions and source ledger.
+Verified: the read public source contents/limited claims and prior P0 facts at recorded levels; no new runtime/user result.
+Likely: informal reorder/amendment is a more concrete business task than generic AI workflow administration; unmet need is unproven.
+Unknown: competitor subscenario coverage, accessible authorized data, actual repeated pain, user skills, setup burden, payment/retention, future model quality/cost.
+Not Done: first-hand interviews, competitor runtime comparison, actual-case experiment, new product implementation/dispatch, paid/API use or release.
+Must Fix: no false uniqueness, maker-metric adoption, personal-project anchoring or AI-for-ordinary-export claims.
+User Decision Needed: none for this research recording; later concrete experiment/access/development/spend/publication gates remain.
+Future Optional: old acceptance platform, generic agent desktop, all-channel order/payment automation and full voice-game platform; inactive.
