@@ -1,8 +1,8 @@
 # R1-BUILD-01 — 离线验收单 P0
 
 版本：0.3 / 2026-09-10  
-状态：**READY FOR DEVELOPMENT DECISION — NOT EXECUTION AUTHORIZED**  
-本文件在用户批准 R1-BUILD-01 后才成为 Codex 可执行工作包；研究授权不等于源代码开发授权。批准本 P0 不等于批准模型调用、浏览器测试、完整 MVP 或发布。
+状态：**APPROVED / EXECUTION AUTHORIZED FOR THIS BOUNDED P0 ONLY**  
+用户已明确批准 R1-BUILD-01 v0.3。本文件现在是 Codex 可执行工作包。该批准只覆盖本 P0；不等于批准模型调用、浏览器测试、完整 MVP、外部用户、付费、发布、push/merge 或更大范围开发。
 
 ## 1. 目标与真实依据
 
