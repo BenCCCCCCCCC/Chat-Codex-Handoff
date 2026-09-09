@@ -5,19 +5,19 @@ Role: MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**USABILITY-SPIKE-01 — PARTIAL / final validation blocked by UI test-process lifecycle**
+**USABILITY-SPIKE-01 — IMPLEMENTED / SELF-TESTED / READY FOR OWNER VALIDATION**
 
 Gate 5 external execution remains **ON HOLD**. The project is still in product/technical validation and bounded prototyping; it has not entered Beta or full application development.
 
-The bounded native GUI prototype has now been implemented to a local checkpoint, but the Spike is **not accepted yet** because the final version has not completed its full isolated validation and visual evidence set.
+The bounded native GUI prototype has now completed its final isolated self-test cycle. The Spike is **not yet accepted as PASS** because MASTER still needs (1) independent source/evidence review of the local artifacts and (2) one real owner-controlled GUI return validation.
 
 ## Active Repo / Version
 
 - repo: `F:\Chat-Codex-Handoff\validation-repo`
-- active local branch reported by Codex: `prototype/usability-spike-01`
-- before HEAD: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`
-- current local checkpoint HEAD: `9eae64b42a6cc809e61fda60514c09c7b270fe93`
-- checkpoint message: `feat: checkpoint bounded local handoff panel`
+- active local branch: `prototype/usability-spike-01`
+- original Spike baseline: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`
+- implementation checkpoint: `9eae64b42a6cc809e61fda60514c09c7b270fe93`
+- UF-01 correction / current local HEAD: `1055cc6bcfa5afc9ca75d9bf10b651562d7b6311`
 - pushed product-branch HEAD remains: `869414c77d227fe2f1675c7cfa08b04250520279`
 - private remote: `BenCCCCCCCCC/Chat-Codex-Handoff`
 
@@ -30,9 +30,9 @@ No product/code push, merge, force push, external sharing, public release or pai
 - `docs/master/CURRENT_STATE.md`
 - `docs/master/HANDOFF.md`
 
-## Implemented at Checkpoint
+## Implemented Product Surface
 
-Codex reports the following bounded implementation on `prototype/usability-spike-01`:
+Reported final bounded implementation on `prototype/usability-spike-01`:
 
 - native Chinese Windows Forms handoff panel;
 - current project / target Chat / captured-delivery preview;
@@ -42,7 +42,7 @@ Codex reports the following bounded implementation on `prototype/usability-spike
 - repo-local launcher;
 - relevant README / UI documentation.
 
-Reported checkpoint scope:
+Original implementation checkpoint scope:
 
 - `M README.md`
 - `A Start-Handoff.cmd`
@@ -52,61 +52,116 @@ Reported checkpoint scope:
 - `A handoff-kit/ui/tests.ps1`
 - `A handoff-kit/ui/README.md`
 
-Reported diff stat: `7 files changed, 464 insertions(+)`.
+Checkpoint diff stat: `7 files changed, 464 insertions(+)`.
 
-Core scripts, original tests and Hook were reported unchanged.
+UF-01 correction scope:
 
-## Validation Evidence So Far
+- `M handoff-kit/ui/Start-Handoff.ps1`
+- `M handoff-kit/ui/tests.ps1`
+- `2 files changed, 28 insertions(+), 8 deletions(-)`.
 
-### Verified / reported PASS
+Accepted core configure/handoff scripts, original core tests and Hook were reported unchanged.
 
-- existing core regression: **30 passed / 0 failed**;
-- an earlier complete UI-test version reached **30 passed / 0 failed**, but this is historical evidence only and does not prove the final checkpoint;
-- extended UI tests subsequently exercised target changes, action-time changes, long URL and native focus traversal before the lifecycle failure;
-- `git diff --check` and baseline-to-HEAD checks reported PASS;
-- normal and smaller-window demo screenshots were inspected;
-- no live binding, real clipboard, browser, paid API, installation, push, merge or external sharing action was performed.
+## UF-01 Final Result
 
-### Blocking / not yet verified
+**PASS / CLOSED at self-test level.**
 
-The final UI-test lifecycle hit a `WaitForInputIdle` failure. Follow-up read-only process querying was denied by the environment. Codex sent Ctrl+C to the test session but could not confirm the spawned demo fixture process exited.
+The previous fragile `WaitForInputIdle` / external process-state approach was replaced with a deterministic test-owned lifecycle:
 
-Therefore the following remain open:
+- Demo child records READY from its own `Shown` event;
+- its own Timer closes the form;
+- resources are disposed and CLOSED is recorded;
+- parent test manages only the `Process` object it created and verifies child exit/exit code;
+- no process enumeration, WMI/CIM sweep, privilege escalation or unrelated process killing.
 
-- confirm/clean any remaining fixture demo window/process;
-- replace or correct the fragile test wait/lifecycle logic without broad process enumeration or elevated access;
-- run the **final checkpoint** complete isolated UI suite end to end;
-- complete the required rebind-confirmation screenshot;
-- confirm the final demo process exits cleanly;
-- record actual DPI/scaling evidence where available, otherwise mark it NOT VERIFIED honestly;
-- produce final review evidence for MASTER delta review.
+Reported final lifecycle evidence:
 
-The earlier 30/30 UI run must not be used as proof that the final checkpoint is fully tested.
+- owned child PID: `30360`;
+- `EXITED=True`;
+- `READY pid=30360 repo=<isolated fixture checkout>`;
+- `CLOSED disposed=True`;
+- `ExitCode=0`;
+- timeout cleanup was not triggered.
+
+The earlier ambiguous prior-turn process remains **Unknown** and was not queried or managed in the final correction. This is honest residual uncertainty, not a current blocker.
+
+## Final Self-Test Evidence Reported
+
+On final HEAD `1055cc6bcfa5afc9ca75d9bf10b651562d7b6311`:
+
+- core regression: **30 passed / 0 failed**, exit `0`;
+- final isolated UI suite: **38 passed / 0 failed**, exit `0`;
+- `git diff --check` and correction diff checks: PASS;
+- final tests reported no change to live binding, metadata, packet or Hook hash;
+- no real clipboard/browser/live handoff action was performed;
+- no install, global config, push, merge, paid use or external sharing occurred.
+
+Reported screenshots regenerated from the final version, all using demo data:
+
+- `Unconfigured.png`
+- `Captured.png`
+- `Error.png`
+- `Success.png`
+- `Rebind-dialog.png`
+- `Rebind-confirmation.png`
+- `Small-window.png`
+
+Reported rendering checks:
+
+- normal window: `960x640`;
+- smaller window: `740x560`;
+- actual tested DPI: `96 DPI`;
+- 150% / 200% scaling: **NOT VERIFIED**.
+
+## Evidence Artifacts Reported Locally
+
+Codex reports local evidence under:
+
+`F:\Chat-Codex-Handoff\validation-repo\artifacts\usability-spike-01\`
+
+including:
+
+- `REVIEW_EVIDENCE.md`
+- `UF-01.diff`
+- `source.diff`
+- `core-tests.txt`
+- `ui-tests.txt`
+- `screenshot-inventory.json`
+- the demo screenshots listed above.
+
+These are still **local evidence references only**. MASTER has not independently read those local files in Chat, so the source/evidence delta review is not complete yet.
 
 ## Classification
 
 ### Must Fix
 
-**UF-01 — Final UI validation lifecycle must terminate deterministically and the final checkpoint must complete its isolated regression/evidence run.**
-
-This is currently a validation/test-harness closure issue. It is not evidence that the product architecture or GUI direction has failed.
+None currently reported after final self-test.
 
 ### User Decision Needed
 
-The user should close any clearly visible leftover **demo/fixture** handoff window if one remains. If no such window is visible, do not broadly kill PowerShell processes or guess which process belongs to the test.
+No new product-scope decision is required for the next step.
 
-After that, the same Codex task is authorized to resume the bounded validation correction described in canonical HANDOFF.
+Owner validation is now required before Spike acceptance:
+
+1. provide MASTER the local review artifacts needed for independent delta review;
+2. open the real GUI and perform one user-controlled return using the existing live binding/packet only after the current Codex turn has fully ended;
+3. manually paste/send into the Chat opened by the GUI;
+4. compare actual usability against the CLI path.
 
 ### Future Optional
 
-No new Future Optional item is opened from this blocker. Do not use the blocker as a reason to add background process management, daemonization, telemetry or a new UI framework.
+- 150% / 200% DPI validation;
+- fuller manual keyboard traversal validation;
+- any additional usability polish only if owner validation reveals a real issue.
+
+Do not implement new features before owner validation.
 
 ## Current Product Contract
 
 Unchanged:
 
 - official Existing Chat -> Codex remains the initial context path;
-- GUI only wraps the accepted repo-local configure/rebind/handoff primitives;
+- GUI only wraps accepted repo-local configure/rebind/handoff primitives;
 - one checkout only;
 - no silent target discovery;
 - no automatic paste/send;
@@ -116,34 +171,22 @@ Unchanged:
 - no server/daemon;
 - CLI fallback remains intact.
 
-## Evidence Artifacts Reported Locally
-
-Codex reports local evidence under:
-
-`F:\Chat-Codex-Handoff\validation-repo\artifacts\usability-spike-01\`
-
-including `REVIEW_EVIDENCE.md`, `source.diff`, core/UI test logs and screenshots. These are local evidence references only; MASTER has not independently read those local files in Chat yet.
-
 ## Not Done
 
-- UF-01 final lifecycle/test correction;
-- final checkpoint full isolated regression;
-- complete required screenshot set;
-- owner real GUI -> current binding/packet -> clipboard -> current MASTER validation;
-- MASTER source/evidence delta review of the local implementation;
-- usability-value decision;
+- MASTER independent source/evidence delta review of the local final implementation;
+- one real owner GUI -> current binding/packet -> clipboard -> current MASTER validation;
+- actual owner usability judgment versus CLI;
+- 150% / 200% DPI validation;
+- full manual keyboard-use validation;
 - external validation / Gate 5;
 - product/code push or distribution.
 
 ## Next Smallest Step
 
-Resume the **same USABILITY-SPIKE-01 Codex task** with a narrow correction only:
+**Owner Validation Gate.**
 
-1. do not add product features;
-2. fix the UI-test process lifecycle using deterministic test-owned cleanup / self-close rather than broad system-process discovery;
-3. rerun core regression and the final isolated UI suite;
-4. produce the missing rebind-confirmation screenshot and final evidence;
-5. confirm no fixture process remains from the new run;
-6. stop at `IMPLEMENTED / SELF-TESTED / READY FOR OWNER VALIDATION` if all bounded evidence passes.
+First transfer only the minimum local review evidence to MASTER: `REVIEW_EVIDENCE.md`, `source.diff`, and the final screenshot inventory / representative screenshots. Then MASTER performs the final delta review.
 
-If completing deterministic cleanup requires modifying the accepted core handoff scripts, installing dependencies, elevated access, broad process control, or any new architecture, stop and report a new scope Gate instead.
+If that review finds no Must Fix, the owner runs `Start-Handoff.cmd`, confirms project/target/captured packet, explicitly confirms the completed Codex turn, uses the GUI prepare/open action, manually pastes/sends, and reports the usability result.
+
+Only after both evidence review and real owner validation can MASTER classify USABILITY-SPIKE-01 as PASS / PARTIAL / FAIL.
