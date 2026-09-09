@@ -2,7 +2,7 @@
   "research_id": "STRATEGY-RESET-01/R1",
   "version": "0.3",
   "checked_date": "2026-09-10",
-  "status": "DESK_RESEARCH_COMPLETE / R1_BUILD_01_DEVELOPMENT_APPROVAL_PENDING",
+  "status": "DESK_RESEARCH_COMPLETE / R1_BUILD_01_APPROVED_FOR_BOUNDED_EXECUTION",
   "counts": {
     "source_records": 27,
     "current_pass_fully_read_graduate_or_intern_jobs": 2,
@@ -57,7 +57,8 @@
     {"id":"D08","decision":"Hot state plus four documentary research files","basis":["P01"],"reason":"Current user permits GitHub research recording on the same state branch, not product code push."},
     {"id":"D09","decision":"Make four revision identities explicit","basis":["P01","P02","C07"],"reason":"Requirement revision, target code revision, evidence generation revision and current snapshot checkout must not be conflated."},
     {"id":"D10","decision":"No obsolete evaluation-platform dependency","basis":["T02","T06"],"reason":"Adopt task-specific evaluation methods and portable local contracts, not the deprecated hosted Evals API."},
-    {"id":"D11","decision":"P0 data index is not a weakened competitive baseline","basis":["C01","C02","C07","C08","C09"],"reason":"Later comparison must use full reasonable native/spec/report capability with comparable data/budget, not deliberately disorganized files."}
+    {"id":"D11","decision":"P0 data index is not a weakened competitive baseline","basis":["C01","C02","C07","C08","C09"],"reason":"Later comparison must use full reasonable native/spec/report capability with comparable data/budget, not deliberately disorganized files."},
+    {"id":"D12","decision":"Owner approved only R1-BUILD-01 v0.3 offline P0","basis":["P01"],"reason":"Proceed with the bounded local snapshot/validate/render experiment; all model/runtime/user/paid/public expansions remain separately gated."}
   ],
   "hypotheses": [
     {"id":"H01","claim":"Criterion-linked applicable evidence reduces correct-decision human effort versus the strongest existing baseline","state":"UNTESTED","falsifier":"No gain including setup/preparation/reading, extra false acceptance/rejection, or excessive abstention."},
@@ -75,11 +76,11 @@
     "R0_push":0
   },
   "remaining_evidence_gaps": [
-    "Local R0 artifacts not directly read by MASTER; next Codex reads them in place",
+    "Local R0 artifacts not directly read by MASTER; approved Codex P0 reads them in place",
     "Exact complete other career-training Project source set",
     "Target-user actual demand, task frequency and willingness to adopt/pay",
     "Runtime comparison against strong existing tools",
     "Model-connected prototype evaluation, real Web task and economics"
   ],
-  "next_gate":"Owner approves/rejects ONLY R1-BUILD-01 v0.3 offline P0. Not yet authorized; runtime/model/user/spending/distribution gates remain separate."
+  "next_gate":"Execute approved R1-BUILD-01 v0.3 locally. After P0 handback, MASTER performs comparison review; any model/runtime/user/spending/distribution expansion remains separately gated."
 }
