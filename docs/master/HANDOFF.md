@@ -5,78 +5,95 @@ Role: 00 MASTER
 
 ## Phase
 
-**STRATEGY-RESET-01 / R1 RESEARCH COMPLETE / R1-BUILD-01 DEVELOPMENT APPROVAL PENDING**
+**STRATEGY-RESET-01 / R1-BUILD-01 OFFLINE P0 APPROVED / EXECUTE IN CODEX NOW**
 
-The owner requested research, data collection, competition, four-layer design and durable GitHub recording, returning only at the next Codex-development step. That point is now reached. No new product code or local Codex task was started by MASTER.
+The owner explicitly approved only `R1-BUILD-01` v0.3. This converts the prepared offline P0 brief into an executable local Codex task. It does not authorize a complete AI MVP, model/API calls, browser/runtime integration, paid use, external users, push/merge/release or legacy-product refactoring.
 
-## Local Receipt
+## Local Starting Receipt
 
 - Repo: `F:\Chat-Codex-Handoff\validation-repo`
-- Branch: `prototype/usability-spike-01`
-- HEAD reported by both UX-05 and R0: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
-- UX-05 scope: only Start-Handoff.cmd, +1/-1; reported final core43/UI73.
-- R0: no product changes, commit or push.
-- Owner confirms CopyOnly no-new-tab and accepts brief launch flash.
+- Expected starting branch: `prototype/usability-spike-01`
+- Expected starting HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- UX-05 is historical accepted evidence; launcher/parser/tab work remains frozen.
+- Preserve existing untracked Hook/T09 packet/artifacts unless the approved build writes new outputs only under its designated directories.
 
-Do not claim MASTER ran local Git/tests. Preserve legacy source and untracked Hook/T09 packet/artifacts; do not reset to the older remote product branch. Launcher/parser/tab work is frozen, not an active correction queue.
+First verify actual repo/branch/HEAD/worktree. If a different HEAD cannot be explained by known continuation, STOP rather than reset. Do not use the older remote product branch as a reset source.
 
-## Authoritative Reading Order
+## Required Reading Order
 
-Repo `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
+Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 
-1. `docs/master/CURRENT_STATE.md` — facts and decisions.
-2. This file — immediate gate.
-3. `docs/research/strategy-reset-01/R1_BUILD_BRIEF.md` v0.3 — complete proposed execution contract.
-4. `R1_PRODUCT_AND_EVAL.md` — conceptual product and evaluation; `R1_RESEARCH.md` v0.3 / `SOURCES_AND_DECISIONS.json` v0.3 for supporting evidence or challenges.
+1. `docs/master/CURRENT_STATE.md`
+2. this `docs/master/HANDOFF.md`
+3. `docs/research/strategy-reset-01/R1_BUILD_BRIEF.md` v0.3
 
-Research-recording permission covers these four documentary files on the same state branch, in addition to the canonical pair. It does not authorize product code push, publication, arbitrary repository changes or external sharing. Do not read older product-branch copies as current instructions.
+Read `R1_PRODUCT_AND_EVAL.md`, `R1_RESEARCH.md` or `SOURCES_AND_DECISIONS.json` only when needed to resolve product/evidence ambiguity. Do not reload the full historical project unnecessarily.
 
-## R1 Decision / Counterevidence
+## Approved Development Contract
 
-Generic AI acceptance/testing is already meaningfully served by OpenSpec, Spec Kit/Kiro, Lovable/TestSprite and native reporting. Playwright Git metadata and Allure history are existing capabilities. Do not market basic requirement tables, hashes or test reports as novel.
+Implement the offline acceptance-sheet P0 exactly within `R1_BUILD_BRIEF.md` v0.3.
 
-Remaining working hypothesis: **one acceptance sheet per low-risk Web change**, helping a non-engineering owner distinguish applicable evidence, unmet/unproven conditions, reviewer suggestions and human decisions with less total handling effort.
+Allowed development:
 
-Start as a module around existing tools, not an IDE/platform rewrite. If strong native/spec/report alternatives suffice, adapt/contribute or stop. Market demand, repeat adoption/payment and model quality remain untested.
+- verify baseline and create/safely continue one local branch `prototype/acceptance-evidence-p0`;
+- read the two existing R0 local research artifacts directly, without asking the owner to upload them;
+- add at most six new product/test files under `acceptance-p0/`;
+- create at most two meaningful local commits;
+- use existing Windows PowerShell 5.1 and system libraries only;
+- generate new per-run artifacts under `artifacts/acceptance-p0/<run_id>/`;
+- implement one snapshot -> validate -> render path;
+- keep requirement revision, target code revision, evidence generation revision and current snapshot checkout distinct;
+- validate scoped provenance/reference/applicability facts without silently upgrading UNKNOWN;
+- accept optional structured reviewer suggestions as inert data only; do not call a model;
+- emit static Chinese `report.html`, machine-readable `report.json`, source/raw-material index and one whitelist review bundle;
+- run the new module's own isolated tests and one supported historical replay where available.
 
-## R0 and Evidence Truthfulness
+Core truthfulness rules:
 
-R0 reports six helper-history cases plus one provenance observation. MASTER has not directly read the two local inventory files; next Codex reads them in place, without another owner upload request.
+- no reviewer => `NOT_REVIEWED`;
+- invalid/missing/inapplicable positive support cannot justify `SATISFIED`;
+- file existence/hash/exit=0 never auto-approves a business criterion;
+- `owner_decision` stays `PENDING` in P0;
+- synthetic/demo inputs stay labelled synthetic/demo;
+- application-level no-overwrite is not cryptographic provenance;
+- do not repair historical unknowns by assigning the current HEAD.
 
-Current shared-directory drift must not be repaired by assigning current HEAD to historical logs. MASTER separately checked eight archived uploaded PNGs: all matched original inventories. Historical archive consistency and later local overwrite/mixing can coexist. No claim of fabricated historical tests or six independent Web-user cases.
+## Do Not Do
 
-## Research Done / Not Done
+- no changes to legacy `handoff-kit/`, `Start-Handoff.cmd`, Hook, binding, packet or old GUI;
+- no model/API/additional-agent invocation;
+- no browser/Web/server/app-server runtime;
+- no dependency install, new runtime, elevation or global config;
+- no real clipboard/Chat/Desktop operations;
+- no private-client/auth/history/cache reads;
+- no external contact, user interview, data sharing or publication;
+- no push/merge/release/paid use;
+- no full MVP, standalone platform, generic QA engine or new spec framework.
 
-27 source records with explicit limitations. Current pass fully read two official graduate/intern JDs and one experienced comparator; one historical social-role page failed re-fetch. Eight competitor/component references, public research context, fixed OpenSpec verification source, official integration/evaluation/provenance guidance and hosted Evals lifecycle checked.
+Stop and report if a correct P0 requires any of the above.
 
-Four layers, requirements/AI boundaries, MVP exclusions, interview protocol, evaluation denominators/strong baselines, cost/exit criteria and bounded build brief are documented.
+## Required Validation / Handoff
 
-No target-user interviews, competitor runtime benchmark, new model eval, new Web task execution or commercial validation. Related career context is available, not the complete separate Project source collection.
+On final local HEAD:
 
-## Required Development Decision
+- run the P0 module's complete isolated tests and report exact pass/fail/exit;
+- run `git diff --check` for the approved range;
+- show exact changed files/diff stat and commit(s);
+- prove run-directory collision fails without destroying old bytes;
+- show hash/path/reference/version mismatch behavior and honest UNKNOWN states;
+- show one supported historical replay if local material permits; otherwise state PARTIAL instead of fabricating it;
+- report HTML visual rendering as NOT VERIFIED unless safely checked without new browser/client tooling;
+- generate exactly one minimal review bundle/index for MASTER, not another many-file upload workflow.
 
-**R1-BUILD-01 — 离线验收单 P0 v0.3**
+Maximum status:
 
-READY, but **NOT EXECUTION AUTHORIZED until the owner explicitly approves this bounded build**. Research permission does not silently authorize it.
+`P0 IMPLEMENTED / OFFLINE SELF-TESTED / READY FOR COMPARISON REVIEW`
 
-Purpose: executable snapshot/validate/render path and readable acceptance sheet for selected existing evidence, preparing a fair future comparison. It addresses R0's actual provenance problem, not a fabricated user task. It is not the full AI MVP or another generic test engine.
+Do not claim AI/model accuracy, complete MVP, user benefit, Web demand, efficiency improvement, market fit or commercial viability.
 
-Only after approval, the brief permits:
+## Minimal Codex Trigger — Approved
 
-- verified local baseline -> one local `prototype/acceptance-evidence-p0` branch;
-- max six new module files and two local commits; legacy source untouched;
-- existing PS5.1/system libraries; no installation;
-- direct read of R0 local artifacts, scoped per-run evidence snapshots;
-- requirement / target code / evidence generation / snapshot checkout revisions separately;
-- application-level no-overwrite, without cryptographic trust claims;
-- optional structured reviewer suggestions as input data, no model call;
-- static Chinese HTML/JSON with integrity, applicability, criterion suggestion and owner decision separate;
-- own isolated synthetic engineering fixtures, explicitly labelled, plus supported historical replay;
-- one whitelist review bundle, not multiple manually selected uploads.
-
-No reviewer = NOT_REVIEWED. Positive review with missing/inapplicable support = INSUFFICIENT_EVIDENCE. Owner decision stays PENDING. No fake approve button. P0's raw-index output is not a deliberately weak substitute for the full native/spec/report baseline.
-
-## Minimal Codex Trigger — Only After Approval
+Send this in the same local Codex project:
 
 ```text
 执行已批准的 R1-BUILD-01 v0.3。
@@ -88,32 +105,28 @@ docs/master/HANDOFF.md
 docs/research/strategy-reset-01/R1_BUILD_BRIEF.md
 按完整有界工作包执行；直接读取本地R0材料，不要求用户重传。
 不改旧产品、不安装、不额外调用模型/API、不操作真实浏览器/clipboard、不push/merge。
+完成后返回 evidence-ready Delivery Packet，最高状态只能是：
+P0 IMPLEMENTED / OFFLINE SELF-TESTED / READY FOR COMPARISON REVIEW。
 ```
 
-This trigger is not approval while the status remains pending. Do not execute the previous R0 inventory-only task again as a substitute for development.
+## After Codex Returns
 
-## After Build / Stop Boundaries
+MASTER reviews only the new `acceptance-p0/` delta and its single review bundle, then decides whether the P0 adds enough clarity to justify a real comparison. No automatic model/Web/user phase follows from engineering PASS.
 
-Maximum result after approval: `P0 IMPLEMENTED / OFFLINE SELF-TESTED / READY FOR COMPARISON REVIEW`.
+## State Summary
 
-It cannot claim AI accuracy, complete MVP, user benefit or market PASS. One bounded build then comparison/owner decision; no automatic extra infrastructure/features.
+Completed: R0, R1 desk research/counterevidence/four-layer/eval design, owner approval of bounded P0.
 
-Actual model/runtime/Web testing, installations, paid use, external participant contact, source scope expansion, live Desktop/Chat actions, push/merge/release/share all require their own bounded approvals. No private-client/credential access, automatic paste/send or public service backed by personal credentials.
+Verified: source-qualified owner/receipt facts and primary-source capabilities; no fresh MASTER-side Windows run.
 
-## Current State Summary
+Likely: criterion-linked applicable evidence may reduce owner decision burden; still unmeasured.
 
-Completed: R0 report reconciliation, R1 documentary research and counterevidence, independent archive hash check, four-layer product/eval/interview design, source/decision ledger, refined v0.3 build brief.
+Unknown: user demand/payment, strong-baseline advantage, model quality, real Web/runtime behavior and economics.
 
-Verified: source-qualified owner/receipt facts, inspected primary-source capabilities, archived 8/8 hash matches; Windows tests remain Codex-reported.
+Not Done: P0 implementation, comparison/model eval, interviews, full MVP, external pilot, release.
 
-Likely: applicable evidence plus explicit decision boundaries may reduce human acceptance effort; not measured.
+Must Fix: no new legacy code defect; preserve evidence/version truth and scope.
 
-Unknown: target users/adoption/payment, advantage over strong existing alternatives, future model quality/runtime behavior/economics.
+User Decision Needed: none for this approved P0. Stop again for any scope/runtime/model/user/paid/public expansion.
 
-Not Done: P0, interviews, runtime comparisons, model eval, complete MVP, external pilot or release.
-
-Must Fix: no new legacy code defect. Preserve evidence/version truthfulness and no scope drift.
-
-User Decision Needed: approve/reject ONLY R1-BUILD-01 v0.3.
-
-Future Optional: legacy polish/deep links/tab focus and standalone packaging remain inactive. Gate 5 stays ON HOLD.
+Future Optional: old polish/deep-links/tab focus/standalone packaging remain inactive. Gate 5 remains ON HOLD.
