@@ -5,127 +5,118 @@ Role: 00 MASTER
 
 ## Phase
 
-**USABILITY-SPIKE-01 — UX-04 REVIEW PASS / OWNER LIVE VALIDATION NOW**
+**USABILITY-SPIKE-01 — OWNER LIVE VALIDATION PARTIAL / UX-05 launcher console correction**
 
-Gate 5 remains ON HOLD. Do not start another feature round, Desktop routing implementation, browser integration or visual polish before the real owner result.
+Gate 5 remains ON HOLD. Do not start another feature round, Desktop routing implementation, browser integration or visual redesign.
 
 ## Current Local State
 
 - Repo: `F:\Chat-Codex-Handoff\validation-repo`
 - Branch: `prototype/usability-spike-01`
-- UX-04 before HEAD: `3a925c13dae51e7d3f3a89977a993ebafb771f1d`
-- UX-04 final HEAD: `28828b110263909c5683a8cab54d6832f2ad7ffa`
+- Current accepted local HEAD before UX-05: `28828b110263909c5683a8cab54d6832f2ad7ffa`
 - Pushed product branch remains older; do not reset local work to it.
 
 No push, merge, release, external sharing, paid API, dependency installation or privilege escalation is authorized.
 
-## MASTER Delta Review Result
+## Prior Review State
 
-### UX-03 CopyOnly
+- UX-03 CopyOnly = PASS for owner-validation entry.
+- UX-02 / UX-04 delivery-summary parser = PASS for owner-validation entry.
+- Desktop Route Probe 01 = Unknown / inconclusive; do not broaden it now.
+- Latest reported final regressions before this owner observation: core 43/43 PASS, UI 73/73 PASS.
 
-**PASS for owner validation.**
+## Real Owner Observation
 
-The accepted minimal core change remains unchanged by UX-04:
+The owner used the real launcher and reported:
 
-- optional `-CopyOnly` retains all existing validation and exact clipboard preparation;
-- it skips opening the stored HTTPS target;
-- no-arg legacy route still copies and requests opening the stored web Chat;
-- no auto paste/send.
+> `Start-Handoff.cmd` visibly opens a black command-line window, then the product GUI appears.
 
-### UX-02 / UX-04 Delivery Summary
+This is a real beginner-facing launch friction. Do not classify it as mere visual polish.
 
-**PASS for owner validation.**
+Current launcher source is synchronous:
 
-MASTER directly inspected the current owner-uploaded `PanelAdapter.ps1` and `ui/tests.ps1`.
-
-The parser now explicitly recognizes the two real missing label forms:
-
-- `唯一 correction / final HEAD：<sha>` with case-insensitive English words;
-- `After HEAD / commit：<sha>`;
-
-while preserving the prior final/current labels.
-
-Safety/honesty properties remain intact:
-
-- parser remains beginning-of-line explicit-label based;
-- `Before HEAD` is not recognized as delivered version;
-- prose containing those words plus a SHA is not recognized;
-- conflicting final/current declarations remain ambiguous;
-- packet-declared version and current checkout HEAD remain separate;
-- raw packet/fingerprint behavior is unchanged.
-
-The tests explicitly cover full-width/ASCII colon, mixed case, both real label forms, conflict ambiguity and negative prose/Before cases.
-
-Codex reports final HEAD regression:
-
-```text
-Core: 43/43 PASS
-UI:   73/73 PASS
+```bat
+@echo off
+"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -STA -File "%~dp0handoff-kit\ui\Start-Handoff.ps1"
 ```
 
-No new source Must Fix was found.
+Because the batch process waits for PowerShell, the console remains visible while the WinForms UI is running.
 
-## Desktop Route Probe
+Normal `Start-Handoff.ps1` startup errors are already surfaced by MessageBox, so the child console can be hidden without removing the existing user-visible startup-error path.
 
-Still **Unknown / inconclusive**. Do not repeat, broaden or live-test Desktop URI routing now.
+## Must Fix — UX-05
 
-## Owner Validation — Run Now
+**Goal:** remove the persistent black console from the normal double-click experience with the smallest bounded launcher-only change.
 
-Do not send another Codex implementation prompt first.
+### Correction Packet — send to the same Codex task
 
-1. Ensure the latest Codex turn is fully ended.
-2. Double-click `F:\Chat-Codex-Handoff\validation-repo\Start-Handoff.cmd`.
-3. Verify this is the real window, not Demo, and current project is the F: checkout.
-4. Inspect the live delivery summary for the latest Codex reply:
-   - title may honestly be `未提供` because the reply did not use a Markdown heading;
-   - `交付版本` should be `28828b110263909c5683a8cab54d6832f2ad7ffa`;
-   - `当前项目版本` should be the same if no later commit exists;
-   - relation should be `与当前项目一致`;
-   - capture time and fingerprint should be populated.
-5. Check the stored return Chat and raw packet are the intended ones.
-6. Tick the explicit confirmation.
-7. Click **仅复制交付** once.
-8. Confirm that this action does **not** open a new browser/web tab.
-9. Manually switch to the already-open current MASTER in ordinary ChatGPT Desktop Chat or web Chat.
-10. Do not copy anything else. Press **Ctrl+V → Send**.
-11. After that packet arrives, send one short owner observation:
-    - `更简单 / 差不多 / 更麻烦` than the previous forced-open path;
-    - whether the summary helped identify the delivery;
-    - any confusing/unnecessary step;
-    - whether a console window from `Start-Handoff.cmd` materially bothered you.
+```text
+USABILITY-SPIKE-01 Correction — UX-05 only.
 
-Optional only after successful CopyOnly validation: test **复制并打开网页对话** once to confirm backward compatibility.
+Real owner validation found one launch usability defect:
+double-clicking Start-Handoff.cmd leaves a clearly visible black command-line window while/around the WinForms product launch.
 
-## Expected Evidence From Owner Test
+Current expected local state:
+- repo: F:\Chat-Codex-Handoff\validation-repo
+- branch: prototype/usability-spike-01
+- starting HEAD: 28828b110263909c5683a8cab54d6832f2ad7ffa
 
-A successful CopyOnly owner run should establish only:
+Do not modify CopyOnly, delivery-summary parsing, transport, Desktop Route Probe, GUI layout, core configure/common/handoff behavior, or product scope.
 
-- live GUI displayed a recognizable actual captured packet;
-- CopyOnly prepared the actual packet without requesting a new web tab;
-- user could manually choose an already-open ordinary Desktop/web Chat and paste/send;
-- user retained final destination/send control.
+Root cause is bounded: Start-Handoff.cmd synchronously invokes Windows PowerShell, so the CMD console waits for the GUI process.
 
-It does NOT prove native exact-conversation Desktop routing.
+Fix only UX-05.
 
-## Final MASTER Decision After Owner Return
+Requirements:
+1. Prefer the smallest launcher-only correction in Start-Handoff.cmd.
+2. Spawn Windows PowerShell asynchronously so the .cmd parent exits promptly.
+3. Pass -WindowStyle Hidden to the child PowerShell process so no persistent PowerShell console remains.
+4. Preserve exact Windows PowerShell 5.1 path, -NoProfile, -STA, script-relative `%~dp0` pathing and paths containing spaces.
+5. Preserve existing Start-Handoff.ps1 normal startup-error MessageBox behavior; do not hide errors by replacing that script path.
+6. Do not add VBS, a compiled EXE, shortcut/installer, new dependency, service, registry/global setting or another launcher type in this correction.
+7. Do not claim completely zero visual flash from a .cmd until owner observation proves it. The acceptance target for UX-05 is removal of the persistent black console window reported by the owner.
+8. Add/adjust a focused launcher check only if needed to prove asynchronous + hidden-child semantics and path safety. Do not use UI Automation, WMI/CIM sweeps or broad process enumeration.
+9. Rerun the existing core suite and full UI suite on final HEAD; report exact counts.
+10. Run git diff --check.
+11. Expected product scope is Start-Handoff.cmd only; if a test file must change, keep it test-only and explain. If a broader product change is required, STOP and report.
+12. At most one local correction commit. No push/merge/share/paid use.
+13. No Desktop URI research, browser automation, live handoff, real clipboard/browser/Desktop action or visual polish.
 
-- **PASS** — implementation/evidence correct and CopyOnly + summary reduce or acceptably manage the real friction;
-- **PARTIAL** — flow works but one bounded real Must Fix remains;
-- **FAIL/PIVOT** — GUI/summary/copy-only path adds more burden than value or violates the control contract.
+If green, return IMPLEMENTED / SELF-TESTED / READY FOR OWNER VALIDATION.
+Do not run live handoff in the same turn.
+```
+
+## Owner Validation After UX-05 PASS
+
+After Codex finishes and MASTER reviews the tiny launcher delta:
+
+1. double-click `Start-Handoff.cmd` again;
+2. confirm whether the previously persistent black console is gone;
+3. record whether any brief launch flash remains and whether it materially matters;
+4. confirm the live delivery summary is understandable;
+5. tick the explicit confirmation;
+6. click **仅复制交付**;
+7. explicitly report whether CopyOnly opens any new browser/web tab;
+8. manually switch to the already-open current ChatGPT Desktop ordinary Chat or web Chat;
+9. Ctrl+V and Send without copying anything else;
+10. report whether the route is `更简单 / 差不多 / 更麻烦` than the previous forced-open/CLI route.
+
+The pasted packet itself proves returned content only; it does not by itself prove which GUI route was used or whether zero tabs opened. Capture those observations explicitly.
 
 ## Classification
 
 ### Must Fix
 
-None before owner validation.
+- UX-05 persistent launcher console.
 
 ### User Decision Needed
 
-No new scope decision; perform the owner test.
+None for this bounded correction.
 
 ### Future Optional
 
-- better read-only Desktop package identification;
+- a truly zero-flash launcher type only if brief `.cmd` flash remains a meaningful owner problem;
+- improved read-only Desktop package identification;
 - native exact-conversation routing only with supported evidence;
-- exact browser-tab focus only if extension/setup cost is justified;
+- browser exact-tab focus only if extension/setup cost is justified;
 - visual polish/high-DPI/accessibility after functional acceptance.
