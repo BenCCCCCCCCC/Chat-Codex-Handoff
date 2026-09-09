@@ -1,179 +1,113 @@
 # Active Handoff
 
-Updated: 2026-09-09
+Updated: 2026-09-09  
 Role: 00 MASTER
 
 ## Phase
 
-**STRATEGY-RESET-01 — research-led direction reset / R0 factual inventory READY FOR CODEX**
+**STRATEGY-RESET-01 / R1 DESK RESEARCH COMPLETE / R1-BUILD-01 DEVELOPMENT DECISION PENDING**
 
-The owner now prioritizes AI product-manager campus-recruitment capability and plausible product adoption over further optimization of the Chat-to-Codex transport helper. The old instruction to keep patching launcher/tab/parser behavior is superseded. Gate 5 stays ON HOLD.
+The owner asked MASTER to finish research/data collection/competition/four-layer planning in this turn, record durable research on GitHub, and return only when local Codex development is the next step. That point has been reached. No new product implementation has started or been dispatched by MASTER.
 
-This is a planning/research phase, not a full application rewrite. This document is a prepared task, NOT a dispatch receipt. MASTER has not started a local Codex run from this Chat.
+## Current Local Receipt
 
-## Current Evidence and Version
+- repo: `F:\Chat-Codex-Handoff\validation-repo`
+- branch: `prototype/usability-spike-01`
+- HEAD from the owner-pasted UX-05 and R0 receipts: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- UX-05 changed only Start-Handoff.cmd, +1/-1, from 28828b...; reported final core43/UI73.
+- R0 changed no product source, created no commit and pushed nothing.
+- Owner confirms CopyOnly no-new-tab; a brief startup flash is acceptable.
 
-The owner confirms UX-05 executed, brief launch flash is acceptable, and CopyOnly opens no new tab. Manual paste remains necessary and the owner questions the product's value.
+Do not claim MASTER executed local Git/tests. The older remote product baseline is not a reset source. Preserve untracked Hook, T09 packet and artifacts. Do not reopen old launcher/parser/tab/Clipboard work.
 
-- Repo: `F:\Chat-Codex-Handoff\validation-repo`
-- Last reported local branch: `prototype/usability-spike-01`
-- Last source-reviewed HEAD before UX-05: `28828b110263909c5683a8cab54d6832f2ad7ffa`
-- Actual post-UX-05 HEAD: **unknown; resolve in R0 without resetting anything**.
-- Last checked remote product HEAD: `869414c77d227fe2f1675c7cfa08b04250520279`.
+## Read Only What Is Needed
 
-The previously reported core 43/43 and UI 73/73 results belong to their recorded revision, not an unknown UX-05 HEAD. No need to rerun these tests for a strategic inventory.
+Authoritative ref: `meta/master-state`, repository `BenCCCCCCCCC/Chat-Codex-Handoff`.
 
-Preserve historical Alpha/Dogfood/UI review outcomes, including their limits. Eventual technical PASS does not erase real setup, wrong-target, retry or evidence-transfer cost.
+1. CURRENT_STATE.md for current decisions.
+2. This HANDOFF for immediate next action.
+3. `docs/research/strategy-reset-01/R1_BUILD_BRIEF.md` for the entire proposed P0 contract.
+4. `R1_PRODUCT_AND_EVAL.md` for product/evaluation detail; `R1_RESEARCH.md` and `SOURCES_AND_DECISIONS.json` only for research grounds or challenges.
 
-## New Working Hypothesis
+The latest explicit research-recording permission covers these four documentary files on the state branch in addition to the two canonical docs. It does not authorize product code push, public/private distribution or arbitrary GitHub changes.
 
-**AI prototype acceptance assistant — a reusable requirement-to-evidence-to-decision module, initially for non-engineering owners of simple Web prototypes.**
+## R1 Conclusion
 
-Aim: reduce total human effort to make a correct acceptance decision about AI-generated work. Do not optimize solely for fewer clipboard operations.
+Generic 'AI prototype acceptance' is already served in meaningful part by OpenSpec/Spec Kit/Kiro, Lovable/TestSprite and native test/report tooling. Playwright already captures Git metadata; Allure already handles test history. Do not market these basic mechanisms as our invention.
 
-Candidate flow:
+The remaining hypothesis is narrower: a single-change acceptance sheet that distinguishes source integrity, evidence applicability, criterion-level suggestions and human decisions, with lower total handling effort for non-engineering owners of recurring low-risk Web changes.
 
-`owner-approved criteria -> existing coding/test tools -> version-bound evidence -> satisfied / failed / insufficient-evidence per criterion -> explicit owner decision or bounded correction`
+If the strongest native/spec/report combination already suffices, the correct result is an adaptation/template/contribution rather than a new standalone platform. Market demand, model quality and payment remain untested.
 
-Do not implement this module yet. First test whether existing Codex + template, Spec Kit/OpenSpec, browser/test/report tools already solve the need. If an existing workflow is sufficient, adapt/contribute rather than build a new platform.
+## Important R0 Reconciliation
 
-The target user, frequency, value over alternatives, adoption and willingness to pay remain hypotheses. The name is a working description, not a repo rename or new public brand.
+R0 reports six supported helper-history cases and one provenance observation. MASTER has not directly read the local two inventory files; next Codex reads them in place, avoiding another owner upload round.
 
-## Research Inputs Already Reviewed by MASTER
+Current-directory version mixing must not be retroactively repaired by labelling old logs with current HEAD. MASTER's independent check of eight archived uploaded PNGs found all matched their original inventories. Historical archive consistency and subsequent local overwrite/drift can coexist.
 
-- Related Library career consultation `规划转写.txt`: full product workflow, AI value/cost, actual outputs. The exact other Project's complete training plan was not available; do not invent it.
-- Baidu official campus AI PM J100665 and intern AI assistant/search PM J103598; one ended Alibaba employer-attributed intern listing as supplementary capability evidence. This is a qualitative sample, not a hiring-market census.
-- Spec Kit including pinned `templates/commands/converge.md`, OpenSpec, Lovable browser tests, TestSprite GitHub integration, Playwright traces, Vibe Kanban README/company shutdown notice.
-- Official Codex App Server/SDK/non-interactive docs and evaluation guidance.
+Do not claim six Web users, independent benchmark labels or historical test fabrication from these materials.
 
-Primary source URLs and bounded conclusions are in CURRENT_STATE. No vendor marketing accuracy/ROI number has been adopted as project evidence. No competitor was installed or run. No external-user interviews were performed.
+## Next Development Decision
 
-## R0 — Local Asset and Historical-Evidence Inventory
+**R1-BUILD-01 — 离线验收单 P0**.
 
-### Goal
+Status: READY, NOT EXECUTION AUTHORIZED until the owner explicitly approves this bounded increment.
 
-Use real local project facts to prepare a falsifiable reuse/acceptance experiment, not more product functionality.
+Purpose: build a working offline snapshot/validate/render path and readable acceptance sheet around existing evidence. This tests an actual provenance/understanding problem found in R0; it is not a new test engine or another GUI cosmetic pass.
 
-### Start
+Upon approval, the exact build brief permits:
 
-Read canonical `CURRENT_STATE.md`, then this `HANDOFF.md` from `meta/master-state`. Do not rely on stale product-branch copies. Existing authorized GitHub read is preferred; a narrow fetch of that ref is allowed when needed, but do not checkout/merge/cherry-pick it.
+- verify local baseline, create/safely continue one local prototype/acceptance-evidence-p0 branch;
+- at most six new files under acceptance-p0/ and two local commits;
+- existing Windows PowerShell 5.1/system libraries, no installations;
+- read local R0 artifacts directly and select actual existing evidence;
+- immutable per-run snapshots and explicit unknown/mismatch handling;
+- structured optional review input as data, not a new model call;
+- static Chinese HTML plus JSON with criterion/evidence/owner states separated;
+- isolated engineering fixtures clearly labelled synthetic, plus available historical replay;
+- one minimal review bundle with provenance, not another request for many manual uploads.
 
-Verify actual repo, branch, HEAD and worktree. A post-UX-05 commit differing from `28828b...` is expected as a possibility, not automatically an error. Explain its lineage with exact local Git evidence. If location/branch/history conflict cannot be explained by the known UX-05 continuation, stop rather than reset.
+P0 cannot approve business requirements from file hashes or test exit code. Missing reviewer = NOT_REVIEWED. Missing/mismatched supporting evidence cannot justify SATISFIED. Owner decision remains PENDING. No falsely interactive approval UI.
 
-### Allowed work
+## After Approval — Minimal Codex Trigger
 
-1. **Close the version inventory**
-   - Record actual branch and HEAD.
-   - Identify the UX-05 commit and exact changed files/diff from the last reviewed HEAD where available.
-   - Record tracked/untracked state; distinguish an observed commit from a report of execution.
-   - If UX-05 is uncommitted or ambiguous, report accurately without committing/fixing it.
+Only after approval is recorded, the owner can send the same local Codex task:
 
-2. **Map existing assets**
-   - Read only current project source and existing artifacts needed to identify reusable contracts/functions/tests.
-   - Separate reusable domain concepts from Windows/Chat-specific adapters and disposable presentation code.
-   - Prefer exact paths/symbols with a brief reuse rationale.
-   - No speculative refactor, module extraction, new schema file or framework installation.
+```text
+执行已批准的 R1-BUILD-01。
+Repo: F:\Chat-Codex-Handoff\validation-repo
+Expected starting HEAD: 0c2440b06ffe5657331d4395a4181929d28c5ebf
+先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state：
+docs/master/CURRENT_STATE.md
+docs/master/HANDOFF.md
+docs/research/strategy-reset-01/R1_BUILD_BRIEF.md
+按完整有界工作包执行，不重写旧产品，不安装/调用新模型或API，不操作真实浏览器/clipboard，不push/merge。
+```
 
-3. **Index existing real episodes**
-   - Use already-existing repository evidence; do not scrape private Chat history or assume old Chat turns are locally accessible.
-   - Candidate topics: wrong MASTER binding, post-turn delivery sequencing, unavailable README evidence, earlier-versus-final test proof, actual final-HEAD label gap, test-process lifecycle, CopyOnly/launcher owner friction.
-   - Include only episodes supported by the available evidence; report inaccessible material as unavailable. Fewer supported cases are preferable to fabricated ones.
-   - For each supported episode record: ID, source path, task/requirement, time/version context, then-visible evidence, reported decision, subsequently supported result, type of human burden, missing evidence, and whether a deterministic rule or semantic judgment was needed.
-   - Distinguish code bug, workflow/instruction error, evidence gap, usability feedback and product-value objection.
-   - Historical MASTER/Codex assertions are claims until corroborated. Do not label all prior PASS decisions as ground truth.
-   - No invented time savings, interview participants, errors, metrics or business tasks.
+This text does not authorize execution while approval remains pending. Do not use the old R0 inventory-only instructions as the new implementation contract.
 
-4. **Prepare a minimal comparison design**
-   - For the available episodes outline baseline A (native tool/basic template), baseline B (existing spec workflow) and candidate C (criterion-linked evidence report).
-   - This is an experiment plan, not a tool execution or benchmark result.
-   - Name what evidence is missing to judge incremental value and the smallest subsequent experiment.
-   - Do not download/install Spec Kit/OpenSpec, launch app-server, call another model, spend API credits, contact users or create tests now.
+## Stop / Acceptance Boundaries
 
-### Permitted outputs
+No paid API, extra model process, new browser/runtime/server, installation, elevation, client internals/credentials, live Chat/Desktop actions, automatic paste/send, legacy refactor, push/merge/publication or external contact is authorized here.
 
-Write or update at most these two research artifacts under the existing repo:
+Maximum implementation result after approval: `P0 IMPLEMENTED / OFFLINE SELF-TESTED / READY FOR COMPARISON REVIEW`. Do not call it an AI/model/MVP/market PASS.
 
-- `artifacts/strategy-reset-01/ASSET_AND_CASE_INVENTORY.md`
-- `artifacts/strategy-reset-01/EVIDENCE_INDEX.json`
+A later actual Web task, model comparison or user observation has a separate bounded execution gate. Do not turn research uncertainty into an unlimited development queue.
 
-These are untracked research outputs. Product source remains read-only. Do not modify canonical MASTER documents from the product branch. Do not add a new README/PRD forest or rewrite old evidence. Reuse an existing output if clearly from this R0 task; do not overwrite unrelated content.
+## Completed / Not Done / Verified / Likely / Unknown
 
-Do not include credentials, real Chat URLs, full private packet bodies or unrelated user files in exported material. References and minimal redacted excerpts are sufficient.
+Completed: documentary R1 research, strong-competitor comparison, archival integrity calculation, user/product/MVP/feasibility design, evaluation/interview plan, source/decision ledger and P0 build brief.
 
-### R0 not allowed
+Verified: received version/owner observations at their stated source level, inspected official/pinned-source capabilities, eight archived hash matches.
 
-- no source changes, new product files, branches, commits, amend, reset, merge, push or release;
-- no test reruns solely for inventory, no synthetic tasks/bugs, no model evaluation run;
-- no installation, dependency download, additional agent/model process, API use/paid credits;
-- no actual app-server task or new local server/daemon;
-- no Desktop URI/registry/package probe, process sweep, internal client/history/cache/credential read;
-- no real clipboard/browser/live handoff action;
-- no external contact or code/data sharing;
-- no UI redesign, new launcher or automatic paste/send.
+Likely: criterion-linked applicability plus readable uncertainty may lower human decision cost; not demonstrated.
 
-A read-only file/Git inspection and the two designated research outputs are enough. Stop at a permission barrier; do not bypass it to obtain a more complete inventory.
+Unknown: new target demand, reachability/payment, incremental benefit over existing tools, new model quality and economics.
 
-### R0 final reply
+Not Done: P0 implementation, target interviews, runtime competitor comparison, new model eval, complete MVP or distribution.
 
-Use a concise evidence-ready response, not another large background dump. Include:
+Must Fix: source/version truthfulness and no scope drift; no new legacy coding defect.
 
-- actual repo/branch/HEAD;
-- UX-05 exact version/scope or clearly unresolved status;
-- product_files_changed=0, commits_created=0, push=0;
-- research files created/updated and whether untracked;
-- reusable versus legacy-only assets;
-- supported historical case count (not a target count), unsupported cases explicitly excluded;
-- at most three findings that could change the new direction;
-- existing-tool comparison plan and precise missing evidence;
-- Completed / Not Done / Verified / Likely / Unknown;
-- Must Fix / User Decision Needed / Future Optional.
+User Decision Needed: approve or reject R1-BUILD-01 only.
 
-Final status: `R0 FACTUAL INVENTORY COMPLETE / READY FOR MASTER DISCOVERY REVIEW`, or honest PARTIAL/BLOCKED. Never report new MVP/market/AI-evaluation PASS.
-
-Do not invoke live handoff within the same turn to copy that turn's future reply. Do not require the owner to generate new tasks for this inventory.
-
-## Next Phases — Prepared, Not Automatically Authorized
-
-### R1 — Existing-tool comparison and problem discovery
-
-Use frozen real task/requirement/evidence snapshots. Compare with existing tools before new implementation. Any actual model execution, installation or fresh technical probe needs a bounded execution decision preserving usage and permission limits.
-
-Prepare problem interviews with a few non-engineering owners of real AI-built prototypes. No participants available does not authorize fake personas as evidence. Obtain owner approval before contacting anyone. A problem interview can use a past real task; it need not require installing our current tool.
-
-### R2 — Bounded feasibility / module prototype
-
-Only if a meaningful gap remains, select the smallest official integration and existing test/trace tools. Owned task IDs/events or explicit artifacts, not interception of existing private Desktop Chat.
-
-Possible MVP: one repo, one simple Web change, approved acceptance criteria, automatic evidence association, criterion-level verdict with insufficiency states, one owner-approved correction. No universal AI product manager or QA platform.
-
-This direction is provisional. Paid use, new installation/runtime, source rewrite or browser testing of even an owned prototype must be covered by the later explicit scope and safety contract.
-
-### R3 — Owner/independent user result and product decision
-
-Assess false acceptance, unnecessary rejection, evidence alignment, total human handling time including setup/transfers, follow-up rounds, actual model/runtime cost and voluntary reuse. Hold out tasks, calibrate against human labels, and do not reuse evaluator feedback as proof of real user value.
-
-Possible outcomes: keep as extension, justify a small standalone surface, contribute to an existing project, pivot to a different validated workflow, or stop. Do not grow scope merely to fill available time.
-
-## Portfolio / Capability Output
-
-The owner should be able to explain user problem, AI suitability, non-AI baseline, PRD and interaction, build-versus-reuse, permissions/failure modes, model/effect evaluation, measured iteration and commercial risk.
-
-Codex writing code is not the owner's claimed engineering authorship; AI agent roles are not real cross-functional stakeholder collaboration. Preserve honest personal contribution and project/production status. No invented users, revenue, improvement percentages or employer achievements.
-
-## State Summary
-
-Completed: first desk research, related career-source reading, candidate evaluation, provisional direction and R0 task.
-
-Verified: the owner's no-new-tab result and acceptable brief flash; previously recorded source/test outcomes; capabilities explicitly supported by reviewed primary sources.
-
-Likely: a reusable acceptance/evidence module may have greater workflow value than transport-only assistance.
-
-Unknown: post-UX-05 HEAD, external demand, frequency/willingness to adopt/pay, superiority over existing tools, actual new integration behavior and economics.
-
-Not Done: R0 local execution, existing-tool runtime comparison, external interviews, new MVP, model eval, independent user outcome or launch.
-
-Must Fix: avoid strategic overclaims and preserve evidence/version distinctions; no new coding defect is invented.
-
-User Decision Needed: none for this narrow inventory under the strategy-reset request. Pause at all later scope, live validation, access, spending and distribution gates.
-
-Future Optional: legacy polish/deep links/tab focus and standalone packaging are not current implementation tasks.
+Future Optional: old polish/deep links/tab focus and standalone packaging remain inactive. Gate 5 remains ON HOLD.
