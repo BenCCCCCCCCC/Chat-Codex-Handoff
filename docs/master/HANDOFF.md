@@ -5,23 +5,34 @@ Role: MASTER
 
 ## Phase
 
-**USABILITY-SPIKE-01 — PARTIAL / UF-01 final validation closure**
+**USABILITY-SPIKE-01 — IMPLEMENTED / SELF-TESTED / READY FOR OWNER VALIDATION**
 
-Gate 5 remains on hold. The local GUI usability prototype exists at a checkpoint, but the Spike is not yet accepted.
+Gate 5 remains on hold. The bounded native GUI prototype now has final self-test evidence, but the Spike is not yet accepted as PASS.
 
 ## Current Local State
 
 - repo: `F:\Chat-Codex-Handoff\validation-repo`
-- branch reported by Codex: `prototype/usability-spike-01`
-- before HEAD: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`
-- current checkpoint HEAD: `9eae64b42a6cc809e61fda60514c09c7b270fe93`
-- checkpoint: `feat: checkpoint bounded local handoff panel`
-- canonical state used by Codex: `9f093d3cc87378845e2b77d3c4833c349b6b4c33`
+- branch: `prototype/usability-spike-01`
+- Spike baseline: `a77cacdbda70bcd8b0808a4c4853740f481adbc0`
+- implementation checkpoint: `9eae64b42a6cc809e61fda60514c09c7b270fe93`
+- UF-01 correction / final HEAD: `1055cc6bcfa5afc9ca75d9bf10b651562d7b6311`
 - pushed product branch remains older and must not be used as a reset source.
 
 No product/code push, merge, external sharing, public release, paid API, dependency installation or privilege escalation is authorized.
 
-## Checkpoint Scope Reported
+## Implemented Surface
+
+Final bounded implementation reported:
+
+- native Chinese Windows Forms panel;
+- project / target Chat / captured-delivery preview;
+- explicit initial configure and explicit rebind;
+- explicit user confirmation before accepted handoff action;
+- isolated demo mode;
+- repo-local double-click launcher;
+- relevant README / UI documentation.
+
+Original implementation scope:
 
 ```text
 M README.md
@@ -31,135 +42,163 @@ A handoff-kit/ui/HandoffPanel.ps1
 A handoff-kit/ui/PanelAdapter.ps1
 A handoff-kit/ui/tests.ps1
 A handoff-kit/ui/README.md
-
-7 files changed, 464 insertions(+)
 ```
 
-Codex reports that accepted core scripts, original tests and Hook were not modified.
+Checkpoint stat: `7 files changed, 464 insertions(+)`.
 
-## What Is Implemented
-
-- native Chinese Windows Forms panel;
-- project / target Chat / captured-delivery preview;
-- explicit initial configure;
-- explicit rebind flow;
-- confirmation before invoking the accepted handoff action;
-- isolated demo mode;
-- repo-local startup entry;
-- relevant usage documentation.
-
-This is implementation evidence, not owner acceptance.
-
-## Validation Status
-
-### PASS evidence reported
-
-- core regression: `30 passed / 0 failed`;
-- an earlier complete UI test version: `30 passed / 0 failed` — historical only, not final-checkpoint proof;
-- extended checks reached target-change, action-time-change, long-URL and native-focus cases before the lifecycle blocker;
-- `git diff --check` PASS;
-- baseline-to-HEAD checks PASS;
-- normal and small-window demo screenshots inspected;
-- live binding / clipboard / browser not intentionally exercised.
-
-### Blocker
-
-Final lifecycle testing failed around `WaitForInputIdle`. The environment then denied the attempted read-only process query. Ctrl+C was sent to the test session, but exit of the spawned demo fixture process could not be confirmed.
-
-This leaves one natural Must Fix:
-
-## UF-01 — deterministic final UI-test lifecycle
-
-Required outcome:
-
-- no broad process enumeration;
-- no elevated access;
-- no guessing/killing unrelated PowerShell processes;
-- test-owned or demo-owned deterministic startup/readiness/close path;
-- final isolated suite runs against the **current checkpoint/fix**, not an earlier revision;
-- test-created demo processes exit cleanly;
-- missing visual evidence is completed;
-- final evidence is regenerated from the final tested HEAD.
-
-## User Action Before Resuming
-
-If a visible window clearly labeled as the USABILITY-SPIKE demo/fixture is still open, close that window normally.
-
-If no such demo window is visible, do **not** open Task Manager and kill generic PowerShell processes. The next Codex run must use a safer test-owned lifecycle and determine only what it can prove from its own run.
-
-## Correction Packet — Send to the Same Codex Task
+UF-01 correction scope:
 
 ```text
-USABILITY-SPIKE-01 Correction — UF-01 only.
+M handoff-kit/ui/Start-Handoff.ps1
+M handoff-kit/ui/tests.ps1
 
-The checkpoint implementation is preserved. Do not add product features and do not restart the Spike.
-
-Current expected local state:
-- repo: F:\Chat-Codex-Handoff\validation-repo
-- branch: prototype/usability-spike-01
-- checkpoint HEAD: 9eae64b42a6cc809e61fda60514c09c7b270fe93
-
-The previous turn stopped correctly after the final lifecycle validation hit WaitForInputIdle and subsequent process inspection was denied.
-
-Resume only to close UF-01:
-
-1. Verify repo / branch / HEAD / worktree first. Preserve unrelated untracked `.codex/hooks.json`, `T09_LIVE_PACKET.txt`, and existing artifacts.
-2. Do not modify the accepted core handoff scripts, original core tests, Hook, live binding, real clipboard or browser.
-3. Diagnose the lifecycle failure from the UI/test code and logs already produced. Do not use broad process enumeration, elevated access, WMI/CIM sweeps, Task Manager automation, or unrelated process killing.
-4. Replace the fragile readiness/exit strategy with a deterministic test-owned mechanism. Prefer a demo/test-owned self-close/readiness signal or another mechanism that only concerns the process/window created by that test. Keep any test-only behavior clearly isolated from normal product behavior.
-5. If the safest correction only needs `handoff-kit/ui/tests.ps1` and/or UI demo/test-mode code, make that bounded change. If it requires changing core configure/handoff contracts, installing dependencies, global settings, or adding a service/daemon, STOP and report a scope Gate instead.
-6. Rerun the existing core regression on the final state and require 30/30 PASS.
-7. Rerun the complete isolated UI suite from start to finish on the final state. Report exact pass/fail counts. Do not cite the earlier 30/30 run as final proof.
-8. Complete the required demo visual evidence, especially the missing explicit rebind-confirmation view. Confirm normal + smaller-window rendering already checked still matches the final version. Record 100/150/200% DPI only where actually tested; otherwise mark NOT VERIFIED.
-9. Confirm the new test run leaves no test-owned demo window/process alive using only deterministic evidence available to the test it created. Do not claim cleanup of the earlier ambiguous process unless actually proven.
-10. Regenerate/update `artifacts/usability-spike-01/REVIEW_EVIDENCE.md`, test logs, source diff and screenshot inventory for the final HEAD.
-11. Run `git diff --check` and exact scope checks.
-12. Create at most one additional local correction checkpoint commit if code/test changes are required. Do not push or merge.
-
-Final status may be:
-IMPLEMENTED / SELF-TESTED / READY FOR OWNER VALIDATION
-only if final core + complete final UI validation pass and required evidence is present.
-Otherwise return PARTIAL/BLOCKED honestly.
-
-Final Delivery Packet must include:
-- before/correction/final HEAD
-- exact changed files and diff stat
-- exact UF-01 fix summary
-- final core test command + count
-- final complete UI test command + count
-- screenshot inventory and demo labels
-- evidence paths
-- test-owned process cleanup evidence
-- git diff --check
-- current worktree status
-- Completed / Not Done / Verified / Likely / Unknown
-- Must Fix / User Decision Needed / Future Optional
-
-Do not run live handoff in the same turn.
+2 files changed, 28 insertions(+), 8 deletions(-)
 ```
+
+Accepted core scripts, original tests and Hook remain reported unchanged.
+
+## UF-01 Final Review
+
+UF-01 = **PASS / CLOSED at self-test level**.
+
+Fix summary:
+
+- removed fragile window-handle / `WaitForInputIdle` readiness dependence;
+- Demo child emits READY from its own `Shown` event;
+- Demo child closes itself via its own Timer, disposes resources and records CLOSED;
+- parent test tracks only the exact child `Process` it created;
+- parent verifies child exit and exit code;
+- no process enumeration, WMI/CIM sweep, elevated access or unrelated process killing.
+
+Final reported lifecycle evidence:
+
+```text
+OWNED_CHILD_PID=30360 EXITED=True
+READY pid=30360 repo=<isolated fixture checkout>
+CLOSED disposed=True
+ExitCode=0
+```
+
+Timeout cleanup did not trigger. The previous turn's ambiguous process remains Unknown and was not inspected or killed; do not reinterpret this as a confirmed current leak.
+
+## Final Self-Test Evidence
+
+Final HEAD commands/results reported:
+
+```text
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -File .\handoff-kit\tests.ps1
+passed=30 failed=0; exit=0
+
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -STA -File .\handoff-kit\ui\tests.ps1
+passed=38 failed=0; exit=0
+```
+
+Also reported:
+
+- `git diff --check` PASS;
+- correction diff check PASS;
+- live binding, metadata, packet and Hook hashes unchanged by final tests;
+- no real clipboard/browser/live handoff action;
+- no install/global config/push/merge/paid/share action.
+
+## Final Demo Screenshot Set
+
+All screenshots use demo data, not real Chat/binding/packet claims:
+
+- `Unconfigured.png`
+- `Captured.png`
+- `Error.png`
+- `Success.png`
+- `Rebind-dialog.png`
+- `Rebind-confirmation.png`
+- `Small-window.png`
+
+Reported checked sizes:
+
+- normal: `960x640`;
+- small: `740x560`;
+- actual tested rendering: `96 DPI`;
+- 150% / 200%: NOT VERIFIED.
+
+## Local Evidence Awaiting MASTER Read
+
+Located at:
+
+`F:\Chat-Codex-Handoff\validation-repo\artifacts\usability-spike-01\`
+
+Minimum artifacts needed for MASTER delta review:
+
+1. `REVIEW_EVIDENCE.md`
+2. `source.diff`
+3. `screenshot-inventory.json`
+4. representative final screenshots, at minimum `Captured.png`, `Rebind-confirmation.png`, `Success.png`, and `Small-window.png`.
+
+MASTER does not have direct access to these F: local paths from Chat. They must be attached/uploaded or otherwise explicitly transferred before independent source/evidence review can be claimed complete.
 
 ## MASTER Review Boundary
 
-When Codex returns, MASTER must review only the current delta and evidence. Do not reopen already-accepted Alpha history unless new evidence contradicts it.
+Do **not** reopen accepted Alpha history unless new evidence contradicts it.
 
-If final validation passes, the next step is **owner validation of the real GUI**, not another implementation feature round:
+Review only:
 
-- open `Start-Handoff.cmd`;
-- confirm project / target / captured packet display;
-- exercise one explicit user-controlled prepare/open action after a completed Codex turn;
-- manually paste/send;
-- compare usability against the CLI path.
+- full USABILITY-SPIKE-01 source delta from baseline to final HEAD;
+- UF-01 correction;
+- final core/UI test evidence;
+- final screenshot/status honesty;
+- owner live GUI behavior.
 
-## Must Fix
+### Must Fix
 
-- UF-01 final lifecycle and final-checkpoint isolated validation.
+None currently reported after self-test.
 
-## User Decision Needed
+### User Decision Needed
 
-No new scope decision is required for the narrow UF-01 correction.
+None for scope. Owner validation is now the required gate.
 
-A user action is only needed to close a clearly visible leftover demo window if one exists. No generic process-killing is requested.
+### Future Optional
 
-## Future Optional
+- 150% / 200% DPI validation;
+- fuller manual keyboard traversal validation;
+- UI polish only if owner validation finds a real comprehension/usability issue.
 
-None added by UF-01. Do not implement daemon/process manager, global launcher, automatic target discovery, clipboard monitoring or a new UI framework.
+Do not add features before owner validation.
+
+## Owner Validation — Exact Next Sequence
+
+### Step 1 — Transfer evidence to MASTER
+
+Upload/attach the minimum local artifacts listed above. MASTER performs source/evidence delta review first.
+
+### Step 2 — Real GUI validation, only if no review Must Fix
+
+After the relevant Codex turn has fully ended:
+
+1. double-click `F:\Chat-Codex-Handoff\validation-repo\Start-Handoff.cmd`;
+2. confirm the window shows the correct repository;
+3. confirm the stored return Chat is the intended current MASTER; do not rebind unless it is actually wrong;
+4. confirm the captured-delivery preview is the intended latest completed Codex Delivery Packet;
+5. verify that opening/refreshing the window has not itself opened Chat or written the clipboard;
+6. explicitly confirm that the Codex turn has ended and that this packet/target are intended;
+7. click the UI's prepare/open action once;
+8. when the target Chat opens, do not copy anything else; manually press Ctrl+V and Send;
+9. report whether the workflow felt clearer/easier than the previous CLI path and note any confusion, wrong state, or unnecessary step.
+
+Do not use Codex to invoke the live handoff within the same turn whose final response is being returned.
+
+### Step 3 — MASTER final decision
+
+After the pasted packet and owner observations arrive, classify:
+
+- PASS — implementation/evidence correct and owner flow is usable enough to justify keeping the GUI surface;
+- PARTIAL — works but one real Must Fix remains;
+- FAIL/PIVOT — GUI adds more burden or breaks the accepted safety contract.
+
+## Not Done
+
+- MASTER independent reading of local evidence/source diff;
+- real owner GUI -> live binding/packet -> clipboard -> current MASTER validation;
+- owner usability comparison versus CLI;
+- high-DPI validation;
+- complete manual keyboard validation;
+- Gate 5 / external validation;
+- product push/distribution.
