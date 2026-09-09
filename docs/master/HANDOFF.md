@@ -5,81 +5,84 @@ Role: 00 MASTER
 
 ## Immediate State
 
-**SCENARIO-FOCUS-02 v3 / CURRENT-SOURCE SCAN COMPLETE / THREE CANDIDATES / RESEARCH ONLY**
+**SCENARIO-FOCUS-02 v4 / PERSONAL UTILITY APP DISCOVERY / RESEARCH ONLY**
 
-Latest owner request: research fresh resources, GitHub and discussion communities for suitable AI product directions; keeping the old design is optional. Do not choose the market from the owner's personal projects. Do not simply rename the acceptance/revision tool or justify it through more generic features.
+Latest user wants a functional app that helps ordinary learning/life/work, not necessarily merchant/business workflows. Prior wholesale-order priority no longer controls the next step; quote comparison and detective gaming remain historical options. Do not combine new directions into a general personal AI super-app.
 
-PRODUCT-CORE-01 remains PAUSED; INTERVIEW-DEMO-01 remains SUPERSEDED. Earlier prototype-study and general constrained-document priorities are no longer active commitments. No new product is selected, implemented or dispatched to Codex. Gate 5 stays ON HOLD.
+PRODUCT-CORE-01 remains PAUSED. INTERVIEW-DEMO-01 remains SUPERSEDED. No new development, model/API execution, installation or Codex dispatch is approved by this inquiry. Gate 5 ON HOLD.
 
-## Read Order / Preserved Code
+## Authority / Preserved Version
 
-Read `BenCCCCCCCCC/Chat-Codex-Handoff` / `meta/master-state`:
-1. `docs/master/CURRENT_STATE.md`
-2. this HANDOFF
-3. `docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md` v3 for the source ledger and four-layer candidates.
+Read repo `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 
-Last owner/Codex-reported code:
-- `F:\Chat-Codex-Handoff\validation-repo`
-- `prototype/acceptance-evidence-p0`
-- `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+1. docs/master/CURRENT_STATE.md
+2. docs/master/HANDOFF.md
+3. docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md v4
 
-Prior P0 source/bundle PASS FOR COMPARISON ENTRY remains; 54/54 Windows tests were Codex-local. No new version is known. Preserve old source and any later-discovered partial work. No reset, new branch or product push is authorized by this research.
+Last owner/Codex-reported local state remains:
+- F:\Chat-Codex-Handoff\validation-repo
+- prototype/acceptance-evidence-p0
+- a1c37af2d68cce8f0574b89b01975e9223f6cea2
 
-## What Was Actually Done
+Prior P0 review and reported Windows54/54 retain their original evidence level. No new source state observed. Preserve old source/evidence and unexpected partial work; do not reset or run an old READY brief.
 
-Public-source search across GitHub, HN/Show HN, Shopify Community, V2EX and product/vendor/App Store docs; no private channels or personal-project market inference. Search noise/SEO/creator marketing was not upgraded into first-hand research.
+## Current Candidate Order
 
-Read live GitHub READMEs for docx-cli, Docling and accomplish-ai/coworker. The last now explicitly says unsupported; do not recommend old popular projects as maintained based on search summaries.
+A — **Personal matter preparation**: user-selected notices/screenshots/text for one upcoming low-risk activity/submission -> confirmed source-linked preparations/materials -> later updates with explicit change confirmation -> useful next action. Priority research, not selected final product.
 
-Read date-specific Shopify task complaints, official CSV behavior and actual direct competitors including Portaim, Matrixify, Ablestar, Dromo, DraftGenius/POMate. Read Quotal and WhoDunnitAI/HN discussion. Research file contains 19 source records/limitations; a record is not a customer or experiment.
+B — **Knowledge application practice**: a small source set and goal -> user explanation/application -> supported feedback/retry. A separate learning/work candidate, not part of A's feature list.
 
-No target-user interview, competitor installation/runtime test, data purchase, model/API run or new source implementation. Cached HN relative time could not establish absolute launch date; avoid 'today's launch'. Original post vs later comment dates and author vs customer comments are separate.
+C — **Everyday expression rehearsal**: prepare one actual explanation/request/conversation with transcript-specific feedback and targeted retry. A separate alternative, not sales automation or therapy.
 
-## Shortlist — Do Not Overclaim
+All target ordinary users with simple capture/input, no prompt engineering/Codex/Git/key/self-host prerequisites. Underlying task repetition is distinct from AI use frequency. Do not select markets from this owner's personal projects or assume a student/office role proves pain.
 
-1. **Business priority: informal repeat-order/amendment messages -> reviewed order draft.** Target a store owner/order clerk who repeatedly resolves aliases, 'same as last time', units and later corrections. A 2026-06-30 public task self-report grounds the inquiry, not a validated cohort. Start with explicitly supplied redacted text/catalog/approved history, output draft only. DraftGenius and POMate already cover much of this; the actual multistep-amendment gap is Unknown.
-2. **Office alternative: comparable supplier quotes.** One category, few quotes, source-bound unit/spec/fee alignment and missing-question list. Quotal already does the generic product, so a narrow gap must be demonstrated. Evidence this turn is mainly supply-side, not independent user need.
-3. **Consumer alternative: authored short AI detective interaction.** Text-first bounded original case, character knowledge/evidence rules and a real ending. Public HN feedback is an engagement lead plus cost/friction counterevidence, not retention or payment. Not derived from the owner's existing projects.
+## What Was Checked, and What Already Exists
 
-Each has a concrete user/scenario, product job, minimal slice, technical division between model/rules/human and explicit counterevidence in the research file. Ranking is MASTER judgment, not a numeric market score or guaranteed career outcome. AI-light users should not be required to use Git/Codex/keys as their normal product entrance.
+The research file links current official sources for Todoist extraction from text/images/docs, Goblin Tools breakdown, SnapDo screenshot actions, Ohai/CoFamy notice-to-task preparation, Google study-tool quizzes/progress/retries, and Yoodli custom/continuous practice. Karakeep GitHub README already covers AI-tagged bookmarks/search/mobile capture/archive.
 
-## Rejected / Parked After Source Checks
+These are strong direct substitutes. Do not describe screenshot-to-task, retained source, question generation, remembered progress or roleplay as unique. Do not claim a capability absent merely because it was not found on one page. Plan availability and provider marketing are not independent efficacy evidence.
 
-- Generic supplier CSV -> Shopify mapping: Portaim and Matrixify/Ablestar/Dromo already provide substantial direct functionality.
-- Native PO CSV export: may be a regular structured export problem, not an AI requirement.
-- Generic docx revision: native AI and docx-cli have direct editing/redline capabilities.
-- Generic desktop coworker/agent shell: no verified distinctive target task; maintenance and official-platform competition matter.
+HN source access failed with429; no primary user story from it was read. This turn had no target-user interview, actual competitor installation/use, independent AI eval or new code. Do not report a new comprehensive discussion-based validation.
 
-Do not revive any of these as an independent product based solely on a forum complaint or old stars. Do not claim all the above have no business value; only that this research found no justified unserved wedge yet.
+## Next Smallest Research Work
 
-## Next Smallest Evidence Step
+For A, find ONE ordinary low-risk situation that actually involves initial instructions, a subsequent change and concrete preparation. Screen for whether user already has a workable reminder/file solution. The illustrative study submission/activity/training examples are not observed users or authorized real tasks.
 
-For priority 1, establish whether the specific repeated-message amendment task remains hard with a competent existing workflow. Required comparison material:
-- permissioned redacted customer messages, including actual corrections;
-- product catalog and pack/unit definitions;
-- approved prior order when 'usual' is referenced;
-- actual final human-correct order;
-- current manual/template/native-tool steps and observed handling cost where available.
+Map:
+- original materials and required action;
+- known date/context and what is ambiguous;
+- how related updates are recognized and who confirms authority;
+- what must be prepared and where the material is;
+- the current tool/manual steps and actual mistake/correction if evidenced;
+- what Todoist/Ohai/CoFamy or normal reminders+attachments already cover;
+- measurable residual burden, not merely number of UI buttons.
 
-Compare manual clone/template, capable chat with identical inputs, and direct product coverage before writing a new general importer/order system. Public official examples or invented fixtures may test mechanics but are not customer validation. Do not collect private chat history or let an AI impersonate interviewees.
+A strong baseline receives the same inputs and sensible configuration. Public vendor examples support documentation checks only, not real incidence/time savings. No synthetic interviews or owner's other project substituted for target evidence. If no meaningful gap survives, prefer extension/adoption or B/C without forcing a new large build.
 
-This material has not been acquired. Do not ask the owner to reuse an unrelated personal project or assume access to merchants. Further ordinary public research is allowed; contacting people, sharing or processing new private data, installing/running competitors, new model/API execution/spend, source development and live store actions need the appropriate bounded decision.
+Maintain only this hot pair and existing research file; no new product-name/PRD forest until a concrete task survives comparison. Ordinary source reading needs no repeated owner approval. Do not promise unattended/background research.
 
-If existing products solve the case with less setup, prefer adopting/extending them or choosing the other candidate. Do not change to yet another title and immediately authorize a large build. The current response should present the shortlist and specific limitations, not a Codex build trigger.
+## Four-Layer Constraints for a Future Proposal
 
-## Safety / Scope
+User/scenario: an actual repeated responsibility with simple onboarding, not 'all beginners'.
+Product: one clear result — preparation, applied learning or practiced expression — not many generic AI tools in a menu.
+MVP: one task kind, one platform and one input/output route; do not promise all devices, calendar/notification systems or mixed domains.
+Feasibility: model interprets/proposes; rules handle explicit state/times/links; user confirms consequential changes. Missing facts remain unknown. Learning/roleplay scores cannot certify actual real-life competence.
 
-No changes to product code, other project sources, local services, credentials, installed tools or user's clipboard/browser/store. No autonomous order submission, stock edits, payment, outbound messages, account signup, external contact, product push/merge/publish, or paid model use.
+Original P0 may supply provenance/change-record ideas, but no forced WinForms/Git/acceptance interface for consumers. Target users need not bring API keys; legitimate model access, costs/limits, supported regions and privacy must be solved before a real product claim. No personal-subscription-as-public-backend assumption.
 
-Research records may be maintained on the state branch. Existing evidence stays at original confidence/version level. No unsupported success/retention/revenue/time-saving numbers.
+## Safety / Approval
+
+This is research/state maintenance only. No real reminders, calendar/email/photo operations, full-device capture, private chat/credential reads, automatic payments/submission, external contact, new service/dependency/model/API run, product edits/commits/push/merge/sharing/release or paid use.
+
+Do not include medical/legal/financial decisions or third-party/children's data as default MVP material. Later required actions must receive bounded authorization.
 
 ## State Summary
 
-Completed: current public resource search, direct competitor and maintenance checks, shortlist/four layers, rejected alternatives, source/decision recording.
-Verified: sources returned and scoped claims, earlier P0 evidence at recorded level; not new user/runtime results.
-Likely: message-based repeat-order amendments provide a concrete falsifiable workflow, not proven market gap.
-Unknown: actual underserved scope, accessible data/users, adoption/payment, accuracy/latency/cost and comparative value.
-Not Done: target observation, actual baseline comparison, new prototype/build, model test, public release.
-Must Fix: no false novelty, complaint-as-market proof, synthetic users, or inheriting outdated build permissions.
-User Decision Needed: no repetitive confirmation for ordinary research; retain concrete data/access/runtime/development/spending/public gates.
-Future Optional: old full acceptance app, generic multi-agent platform, all-channel order SaaS and voice-heavy game platform; inactive.
+Completed: personal-utility preference applied, direct official/GitHub checks, three concrete functional candidates with four layers, explicit saturation/counterevidence, updated ranking.
+Verified: actual retrieved source claims plus prior P0 evidence; no new user/runtime proof.
+Likely: personal matters preparation is the best current fit for cross-study/life/work utility; not yet a proven unmet task.
+Unknown: user frequency/need/payment, remaining multi-source-update burden, platform/cost/reliability and adoption.
+Not Done: first-hand observation, fair runtime baseline comparison, product development, new model eval or release.
+Must Fix: no false uniqueness, unsupported consumer usefulness or unapproved super-app; preserve source/claim distinctions.
+User Decision Needed: none for normal research; concrete data/access/execution/development/spending/public actions remain gated.
+Future Optional: earlier business directions, games, acceptance platform, direct desktop-agent orchestration; inactive.
