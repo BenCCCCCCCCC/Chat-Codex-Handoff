@@ -5,86 +5,91 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage / Latest Owner Direction
 
-**SCENARIO-FOCUS-02 v4 — PERSONAL UTILITY APP DISCOVERY / THREE FUNCTIONAL CANDIDATES / NO NEW BUILD**
+**SCENARIO-FOCUS-02 v5 — CHAT/SKILL SUBSTITUTION REVIEW / GROUNDED PRACTICE MECHANISM RESEARCH / NO NEW BUILD**
 
-Owner clarifies the desired product need not be a business/industry workflow; prefer a functional app useful in ordinary study, life or work. This changes research ranking, not permission to build three apps or a universal personal agent. Do not select markets from the owner's personal projects.
+Owner rejects personal-matter preparation as crowded and doubts ordinary learning/practice or communication roleplay justifies a standalone app versus capable Chat plus a Skill/reflection loop. Deepen those directions only where necessary software capabilities or creative interactions add value; other ideas may be explored. Do not choose a market from the owner's personal projects.
 
-The prior wholesale-order and procurement candidates are demoted as current priorities, not disproved. The detective game is no longer the priority for this utility-oriented request. PRODUCT-CORE-01 remains PAUSED, INTERVIEW-DEMO-01 remains SUPERSEDED, and prototype-study preparation remains inactive. Gate 5 external execution ON HOLD.
+MASTER removes A matter-preparation as the priority. Plain question generation, Socratic feedback, roleplay and repeat practice are not proposed as standalone products. The next research priority is a task-grounded communication practice mechanism with unequal information and an observable shared output; hands-on operation learning remains a secondary, crowded alternative. Neither is a validated market, new product commitment or execution authorization.
 
-## Canonical Authority
+PRODUCT-CORE-01 remains PAUSED, INTERVIEW-DEMO-01 SUPERSEDED; earlier merchant, prototype-study and full-workspace directions inactive. Gate 5 external execution ON HOLD.
 
-Same private repo `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
+## Authority / Durable Record
 
+Same repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 1. docs/master/CURRENT_STATE.md
 2. docs/master/HANDOFF.md
-3. docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md v4 — current candidates, four layers, source register, counterevidence and next inquiry.
+3. docs/research/strategy-reset-01/SCENARIO_FOCUS_02.md v5
 
-Previous iterations remain in Git history. No additional document tree or active build brief. State/research writes are not product-code pushes, deployment or external sharing.
+The same research file is updated; previous iterations remain in Git history. No additional execution brief, product code push or public release.
 
-## Last Product Receipt — No Change
+## Last Product Receipt — Unchanged
 
 - Repo: F:\Chat-Codex-Handoff\validation-repo
 - Branch: prototype/acceptance-evidence-p0
-- Last owner/Codex-reported HEAD: a1c37af2d68cce8f0574b89b01975e9223f6cea2
-- P0 before: 0c2440b06ffe5657331d4395a4181929d28c5ebf
-- P0 reported commits: 81b4a80 / a1c37af; four files; Windows PS5.1 54/54 reported.
-- Prior MASTER source/bundle review PASS FOR COMPARISON ENTRY only.
+- Latest owner/Codex-reported HEAD: a1c37af2d68cce8f0574b89b01975e9223f6cea2
+- Before P0: 0c2440b06ffe5657331d4395a4181929d28c5ebf
+- Reported P0 commits: 81b4a80 / a1c37af; four files; PS5.1 54/54 reported.
+- Prior MASTER transferred-bundle/source review: PASS FOR COMPARISON ENTRY, not user/model/market success.
 - Bundle SHA256 E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4; prior indexed size/hash matches 14/14.
-- Historical remote product observation 869414c77d227fe2f1675c7cfa08b04250520279 is not a fresh check.
+- Historical remote product observation 869414c77d227fe2f1675c7cfa08b04250520279 is not freshly checked.
 
-No new local code, execution, branch/HEAD, model/API call, product push or new build dispatch. Preserve existing P0 and unexpected partial work; never reset to fit a research assumption.
+No new product files, local execution/HEAD, competitor runtime test, API/model experiment or Codex dispatch. Preserve existing P0/history and any partial work discovered later; no reset. P0 provenance concepts may help later, but do not force Windows/Git interfaces onto consumer users.
 
-## Product Selection Principles
+## Current Source Findings / False Novelty Removed
 
-An ordinary user should open the app to prepare a concrete matter, apply knowledge or rehearse an expression, not to manage AI tools. No required Codex/Git/API-key/self-host setup for intended consumers. The product provider still needs a legitimate, costed, region-appropriate model route; do not call it free because development uses an existing subscription.
+Official ChatGPT Study Mode already supports source material, Socratic questions and answer feedback. OpenAI's 2026-03-10 interactive math/science launch also supplies manipulable formulas/graphs. Current Plugins/MCP Apps docs support optional embedded interactive UI/canvases. Do not claim Chat is text-only or cannot host software, or equate necessary software with a separately installed native app.
 
-One core function can apply in study/life/work, but the first slice must use one concrete low-risk situation. App form, Chinese UI, saved state and more features are not proven differentiation. Preserve strong manual/native/AI-app baselines.
+Yoodli already combines visual materials, teaching/practice and feedback. ST Practice's developer listing already claims hidden scenario information, transcript-cited feedback and specific-turn branching retries; these are untested product claims, not evidence of efficacy. CellSide and LogicExcel already offer hands-on spreadsheet practice/feedback. Generic practice, visual cards, memory or rewind are not unique.
 
-## Current Candidates — Research Judgments
+CoDraw is a historical research precedent for a target-seeing speaker and a listener who reconstructs a scene through dialogue/actions. Repository is archived; README license is CC BY-NC4.0. The 2023 EACL clarification analysis supports studying ambiguity/repair, not consumer training efficacy or demand. No dataset/art downloaded or commercial reuse approved.
 
-### A. Personal matter-preparation assistant — priority inquiry
+This pass read official/vendor primary pages, the GitHub metadata/README and a paper abstract. No new independent target-user interviews/discussion evidence, product runtime comparison, study results or marketplace purchase. Source dates and claim limits are in the research file's nine-entry register.
 
-User supplies related notices/screenshots/text for one upcoming low-risk activity or ordinary submission. Proposed app creates a source-linked matter card with deadline, required preparations/materials and unresolved details. Later user-shared notices propose changes to the same matter rather than creating duplicate tasks. The user confirms critical fields, links and changes; no automatically guessed deadlines, authority or completion.
+## Four-Layer Priority Hypothesis
 
-Candidate usefulness spans study submissions, ordinary activity preparation and work training/meeting preparation. These are illustrative contexts, not observed cohorts. First MVP would select only one, one platform and a limited input/reminder route. No scanning full private chats/photos/mail, no automatic payment/submission, no medical/legal/financial decision support.
+### User/scenario
 
-Strong direct alternatives: Todoist already extracts tasks from text/images/documents; SnapDo already does screenshot actions; Ohai/CoFamy already link notices/tasks/preparation/source. The specific multi-source amendment/preparation burden is UNVERIFIED, not an established absent competitor feature.
+Adults who have a concrete need to explain a multi-step arrangement/procedure to someone without the same background. Practice focuses on prerequisites, references, sequence and responsibilities, not 'improve all social skills'. AI novice/light use is an onboarding constraint, not inability to communicate. Repeat usage, reachability and willingness to pay remain unknown.
 
-### B. Knowledge-application practice app — learning/work alternative
+### Product mechanism
 
-Adult learner brings a small material set and specific goal, answers/explains/applies, receives source-bound feedback and retries relevant gaps. Distinguish exposure, self-report and observed performance. Narrow material/skill/assessment type rather than universal courses or homework completion.
+User sees a task target; AI collaborator sees only permitted shared context/user messages and its own workspace. The collaborator asks clarification or proposes constrained actions on a flow/arrangement board. An external engine executes and compares against fixed conditions. The user sees what was actually constructed, revises one instruction, and later attempts a new equivalent task.
 
-NotebookLM already offers source-grounded quizzes/flashcards, saved progress and missed-item retries; Brainy already combines notes/cards/AI/review scheduling. Practice/memory is not a novel category. A transfer/application improvement must be measured, not asserted from generated question count or model score.
+Target must be excluded from collaborator requests, not merely hidden by a pretend-persona prompt. No score like 'communication ability 85'; show concrete achieved/missing/conflicting conditions and qualified feedback. Model parsing/execution failure is not automatically user fault; uncertain attribution stays Unknown. No deliberate artificial misunderstandings to manufacture value.
 
-### C. Everyday expression rehearsal — secondary alternative
+### MVP candidate
 
-User has an actual upcoming short explanation/request/disagreement and a clear communication goal. Short practice, transcript-linked feedback and targeted replay; no therapist framing, diagnosis, emotional mind-reading or guarantees about another person's response.
+One board/task type, a few original non-sensitive targets, text input, one controlled collaborator and action replay. Not live voice, 3D, matching real people, therapy, production calendar actions, all-topic learning or a general agent platform. Original task examples are engineering/mechanism fixtures, not user findings.
 
-Yoodli already supports personal custom roleplays, source context, repeated practice and feedback, with plan-specific access. Do not claim custom scenario or feedback is unique. Voice reliability/cost and meaningful improvement need evidence; no voice API is authorized now.
+### Feasibility / form
 
-These are separate options, not three tabs of one planned super-app. A is the current first research priority, not a committed implementation direction.
+Model handles permitted language-to-action/clarification; deterministic engine controls legal operations, state and fixed condition checks; humans validate ambiguous semantic attribution and real-world learning claims. Web miniapp or later Chat-embedded component can host this; native-install need is unproved. No new service/model/API/runtime is authorized now. Provider legality, region, costs and limits need their own decision.
 
-## Current-Source Checks / Limitations
+## Secondary Learning Candidate
 
-Read official Todoist task-capture page updated 2026-09-02; Goblin Tools task extraction/breakdown; SnapDo/related screenshot-action pages; Ohai and CoFamy; Google official 2025 and 2026 study-tool updates; Yoodli official Builder/Loops/Visual Content/text-roleplay docs; Brainy website.
+Shift 'tell me the answer' to actually manipulating a workbook/object and observing result/action correctness, then solving a new task without the original hints. Reuse an existing editor/engine and allow alternative correct methods. But direct spreadsheet-practice competitors are strong; do not build another generic tutor simply because a grid is more interactive than chat. Need a real residual task gap.
 
-Read current GitHub Karakeep README, blob 737b05636aa5ab592d3dfbca9887fca45cc99e86, showing existing bookmarking, AI tags/search, mobile clients and archive capabilities. README declares AGPL-3.0; no source reuse/install occurred. Consumer onboarding cannot require self-hosting just because code is open.
+## Evaluation and Main Risks
 
-A HN source fetch returned 429. No direct discussion content from it is claimed; no secondary synopsis becomes an interview. This pass establishes documented product capabilities only, not independent usage, costs or user pain. Marketing accuracy/speed/privacy statements were not independently verified or adopted.
+Software necessity, original invention, learning effectiveness, repeated demand and independent-app distribution are different questions. None follows from an attractive canvas.
 
-## Next Smallest Step
+Strong baseline is capable Chat + a sound Skill and available tools, plus a direct relevant product; do not remove its context/tools to make the candidate win. If adding the same engine to Chat works equally well, choose the module/plugin instead of insisting on native app.
 
-Define and compare ONE low-risk personal matter whose instructions arrive in multiple source items and later change. Map input -> confirmed facts/requirements -> actual preparation -> subsequent update against ordinary reminders/files and the strongest direct app workflow. Public first-person material or later permissioned observation is needed for pain/effort; vendor examples can only support capability checks.
+Assess hidden-target leakage, execution correctness, attribution errors, hints needed, independent novel-task outcome, real human transfer if later appropriately authorized, voluntary second use and total latency/cost. Same-case retry is not evidence of general learning. If users only enjoy it as a one-off puzzle, do not claim practical communication improvement.
 
-No new broad Codex build. Do not force use of personal projects or simulate user interviews. If existing apps solve the selected situation with lower burden, adapt/extend rather than rename it as a new product. Keep B/C as alternatives without parallel implementation.
+Potential reusable case calibration and low-friction experience are hypotheses, not existing moats/network effects. Preserve portability and privacy, no private conversation pooling by default.
 
 ## Completed / Verified / Likely / Unknown / Not Done
 
-Completed: latest utility-app preference applied, updated official/GitHub capability scan, three four-layer functional candidates, current ranking and counterevidence.
-Verified: retrieved source contents and previously recorded P0 evidence; no new model/runtime/user results.
-Likely: one source-bound everyday matter is more aligned with this owner request than merchant orders; incremental value unknown.
-Unknown: actual repeated user need, multi-source/update gap, adoption/payment, chosen MVP platform, model accuracy and notification/runtime costs.
-Not Done: first-hand user observations, direct app runtime comparison, new model eval, app design implementation, code push or release.
-Must Fix: no false novelty or broad-app scope; no treating examples/marketing as user data; no personal-project market anchoring.
-User Decision Needed: none for ordinary ongoing research; new data permission/contact/runtime/model/install/development/spend/publication remains gated.
-Future Optional: merchant orders/quotes, games, old acceptance workspace, generic AI desktop and universal personal assistant; no active implementation queue.
+Completed: latest critique applied, current native/competitor capability counterchecks, two mechanism-level refinements, one concrete paper example, four-layer prioritization, honest app/plugin form and risk/evaluation boundaries.
+Verified: explicit contents of retrieved sources and CoDraw metadata; prior P0 evidence at its original level. No fresh local/runtime/user experiment.
+Likely: an observable shared task may provide more checkable feedback than ungrounded conversational grading. Design expectation only.
+Unknown: actual learner/user need, model fairness/error rate, transfer, direct-product advantage, repeat engagement/payment, cost and independent app necessity.
+Not Done: mechanism execution, new code, independent user observations/competitor trials, new model evaluation or release.
+Must Fix: no false Chat limitations or uniqueness, no blaming learner for system errors, no paper examples as execution/market evidence.
+User Decision Needed: none for ordinary continuing research. Retain bounded approval for code/runtime/model/API/installation/data/contact/spending/publication.
+Future Optional: matter preparation, generic tutors/roleplays, real-time voice, old acceptance workspace, personal-agent platform and interview packaging; no active build queue.
+
+## Next Smallest Step
+
+Prepare a single falsifiable information-asymmetry task specification and strongest-baseline comparison, using the authored paper example and cited mechanism boundaries. A later explicitly bounded experiment should first establish target isolation, lawful actions and fair feedback before building a consumer application. Do not issue another full product implementation trigger now.
