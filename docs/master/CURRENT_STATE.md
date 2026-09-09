@@ -5,120 +5,136 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Current Stage
 
-**STRATEGY-RESET-01 — R1-BUILD-01 P0 IMPLEMENTED + OFFLINE SELF-TESTED / MASTER REVIEW BUNDLE PENDING**
+**STRATEGY-RESET-01 — R1-BUILD-01 P0 MASTER REVIEW PASS FOR COMPARISON ENTRY / OWNER READABILITY CHECK NEXT**
 
-The approved offline acceptance-sheet P0 has been implemented locally according to the owner-pasted Codex receipt. Engineering self-test is complete at reported final HEAD, but MASTER acceptance and comparison value are still open because the single whitelist review bundle has not yet been independently inspected.
+The offline acceptance-sheet P0 passed MASTER's independent bundle/source review for entry into comparison. This is an engineering/evidence-contract result only. It does NOT establish AI/model quality, target-user value, superiority over existing tools, complete MVP, market fit or commercial viability.
 
-No model/API/browser runtime, full MVP, external pilot, publication, push/merge or commercial validation is authorized or claimed. Legacy feature expansion remains frozen. Gate 5 remains ON HOLD.
+No additional Codex implementation is authorized now. Legacy feature expansion remains frozen. Gate 5 stays ON HOLD.
 
 ## Local P0 Receipt
 
-Source: owner-pasted Codex final Delivery Packet, not MASTER-side Windows commands.
+Source version remains owner/Codex local receipt; MASTER did not run Windows Git/tests:
 
-- Repo: `F:\Chat-Codex-Handoff\validation-repo`
-- Branch: `prototype/acceptance-evidence-p0`
-- Before HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
-- Final HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
-- Local commits: `81b4a80`, `a1c37af`
-- Canonical implementation brief used by Codex: state commit `7da34e283407ac1af062e9a34cee1435021f5b1d` / R1_BUILD_BRIEF v0.3
-- Exact reported tracked scope: four new files only under `acceptance-p0/`, 536 insertions; legacy handoff/launcher/Hook/GUI unchanged.
+- repo: `F:\Chat-Codex-Handoff\validation-repo`
+- branch: `prototype/acceptance-evidence-p0`
+- before HEAD: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- final HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- commits reported: `81b4a80`, `a1c37af`
+- tracked scope reported: four new `acceptance-p0/` files, legacy source unchanged
+- Windows PS5.1 result reported: 54/54 PASS, exit 0
+- no push/merge/model/API/browser/server/install/live Chat/Desktop/clipboard actions reported.
 
-Reported module files:
+The final HEAD and tracked-clean status remain local Codex/Git receipt claims, not signed attestations or a remote branch check. P0 does not claim otherwise.
 
-- `acceptance-p0/AcceptanceEvidence.psm1`
-- `acceptance-p0/Invoke-AcceptanceReport.ps1`
-- `acceptance-p0/README.md`
-- `acceptance-p0/tests.ps1`
+## MASTER Independent Review — Bundle Integrity
 
-Working tree reported clean for tracked files; existing untracked artifacts remain. No push/merge.
+Owner transferred one ZIP to MASTER. MASTER read its bytes directly in the Chat sandbox.
 
-## Reported P0 Validation
-
-Final-HEAD command reported:
-
-`C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -File acceptance-p0/tests.ps1 -Historical`
-
-Result: `passed=54 / failed=0 / exit=0`.
-
-Reported coverage includes:
-
-- duplicate run rejection while preserving old bytes;
-- hash/path/reference/version mismatch handling;
-- dirty/Unknown behavior;
-- reviewer conflict handling;
-- synthetic/demo propagation;
-- HTML escaping;
-- junction rejection;
-- actual command path `snapshot -> validate -> render`;
-- `git diff --check` and approved-range checks PASS.
-
-Tests are Codex-reported until the review bundle is inspected; MASTER has not rerun Windows tests.
-
-## Historical Replay — Reported Result
-
-Codex reports direct reuse of local R0-07 material:
-
-- `requirement_revision = null` because original approved requirement was not frozen;
-- `target_code_revision = 0c2440b...`;
-- old-log `evidence_revision = null`;
-- old-index `evidence_revision = 3a925c1...`;
-- `snapshot_checkout_head = a1c37af...`.
-
-The report reportedly preserves `NOT_REVIEWED`, `owner_decision=PENDING`, with applicability UNKNOWN/MISMATCH instead of repairing historical gaps. Historical source bytes were reportedly unchanged and old tests were not rerun.
-
-This is directionally correct and consistent with R1 truthfulness rules, but MASTER has not yet independently checked the generated manifest/report code or bundle contents.
-
-## Review Bundle Receipt
-
-Codex generated exactly one local whitelist bundle:
-
-`F:\Chat-Codex-Handoff\validation-repo\artifacts\acceptance-p0\test-5250aefcd3954b468ee34ab6e59bd8b8-37\review-bundle.zip`
-
-Reported SHA-256:
+Expected/actual ZIP SHA-256 matched exactly:
 
 `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`
 
-Reported contents: Chinese `report.html`, `report.json`, raw-material index, snapshot/manifest, final test result, the four source files and bundle index. Codex reports 14 indexed files plus index (15 ZIP entries) and successful item-by-item verification.
+ZIP contained exactly 15 safe relative entries. `bundle-index.json` listed the 14 intended non-index entries. MASTER independently recalculated every indexed file's size and SHA-256: **14/14 matched**. No path-traversal ZIP entry was present.
 
-The local path is not directly readable by MASTER in Chat. The owner only needs to transfer this single ZIP; no multi-file evidence upload should be requested.
+Bundle contents reviewed:
 
-HTML visual rendering remains explicitly `NOT VERIFIED`; no browser/client tooling was used.
+- `manifest.json`
+- `report.json`
+- `report.html`
+- `raw-index.json`
+- `report-hashes.json`
+- `snapshot/task.json`
+- `snapshot/reviews.json`
+- historical `old-log` / `old-index` snapshots
+- `test-results.json`
+- four module source files
+- `bundle-index.json`
 
-## R1 Product Decision Still Active
+A narrow scan found no real ChatGPT conversation URL, Bearer token or `sk-...` pattern in the transferred bundle. This is not a general secret-scanner guarantee; the product README already states caller responsibility and limited pattern detection.
 
-Working hypothesis remains a **single-Web-change acceptance sheet for non-engineering owners with recurring acceptance responsibility**, initially as a reusable module around existing coding/spec/test tools.
+## MASTER Independent Review — Truthfulness / Provenance
 
-Counterevidence remains active: OpenSpec/Spec Kit/Kiro/TestSprite/Lovable/Playwright/Allure already provide substantial spec, verification, testing, metadata and reporting capability. P0 engineering success alone does not prove incremental value or justify a standalone product.
+PASS for comparison entry.
 
-MASTER must next answer two different questions separately:
+The historical replay actually records:
 
-1. **Engineering truthfulness:** does the P0 actually preserve provenance/version/Unknown/owner-decision boundaries and produce a coherent offline report?
-2. **Product increment:** after review, does it add enough clarity over a strong native/spec/report baseline to justify a real comparison, or is it mainly repackaging existing output?
+- `requirement_revision = null`
+- `target_code_revision = 0c2440b06ffe5657331d4395a4181929d28c5ebf`
+- old-log `evidence_revision = null`
+- old-index `evidence_revision = 3a925c13dae51e7d3f3a89977a993ebafb771f1d`
+- `snapshot_checkout_head = a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- `worktree_dirty = true` at snapshot time.
 
-No model-connected or user phase starts automatically from 54/54.
+The generated result keeps:
 
-## Completed / Not Done / Verified / Likely / Unknown
+- old-log integrity VALID / applicability UNKNOWN;
+- old-index integrity VALID / applicability MISMATCH;
+- criterion NOT_REVIEWED;
+- owner decision PENDING;
+- requirement approval UNKNOWN.
 
-Completed: R0/R1 research and design; owner-approved bounded P0 implementation; reported offline test and historical replay; single review bundle generated.
+No later checkout value is inserted into missing historical evidence revision. The historical question is explicitly labelled reconstructed and not the original owner-approved criterion.
 
-Verified at current source level: owner/Codex receipt facts only. Prior public/source research remains independently inspected. MASTER has not yet inspected the local P0 bundle or rerun Windows tests.
+Source-level review confirms the four-version design is real, not README-only. Snapshot/report writes use create-new/no-overwrite semantics. Missing/mismatched/unknown evidence cannot produce a positive supported result. Synthetic evidence/review is kept separate from historical/real modes. `SATISFIED` remains only a reviewer suggestion and does not change owner PENDING.
 
-Likely: reported handling of Unknown/Mismatch/PENDING matches the intended contract; pending source-level check.
+Application-level no-overwrite and local SHA-256 are correctly described as limited integrity controls, not signed execution provenance.
 
-Unknown: actual bundle integrity/content, report readability, incremental value over strong baseline, target-user demand/adoption/payment, future semantic model accuracy and real Web economics.
+## MASTER Independent Review — Safety / Scope
 
-Not Done: MASTER P0 source/bundle review, HTML owner viewing, strong-baseline comparison, real Web task/model evaluation, interviews, full MVP, external pilot, product push/release.
+PASS for this P0 scope.
+
+Reviewed module source:
+
+- performs only read-only Git queries (`rev-parse`, `status`) plus writes under the P0 run output;
+- does not call a model/API/network/browser/clipboard/Chat/Desktop integration;
+- rejects absolute/traversal/device/reparse paths and passive-input extensions outside the allowed text set;
+- HTML-encodes displayed input and uses a restrictive CSP with no remote resources;
+- bundle construction uses an explicit allowlist, not recursive repository packaging;
+- source contains no legacy handoff modification behavior.
+
+The included tests plausibly exercise 54 named assertions covering no-overwrite, version separation, Unknown/Mismatch, review conflicts, path/reparse rejection, HTML escaping and historical replay. MASTER inspected test source and the bundled receipt but did not independently execute Windows PowerShell 5.1, so 54/54 remains a Codex-local execution result supported by source/receipt consistency rather than a second Windows run.
+
+## Product Readability / Incremental Value — Still Open
+
+P0 is more than a folder index: the report explicitly separates criterion status, artifact integrity, applicability, blockers, next step and owner decision. That is enough to justify comparison entry.
+
+However, MASTER does **not** yet accept the non-engineering readability/value hypothesis:
+
+- current historical `report.html` uses internal English state codes such as `NOT_REVIEWED`, `PENDING`, `VALID`, `UNKNOWN`, `MISMATCH` on the main surface;
+- target/version detail is mostly inside a collapsible technical section;
+- the page does not yet have measured owner handling time or a strong baseline result;
+- the historical replay has one reconstructed criterion and no reviewer, so it cannot demonstrate the eventual AI-assisted decision experience.
+
+These are comparison/usability questions, not automatic coding Must Fixes. Do not polish them before observing the owner. HTML visual rendering remains unverified by the Windows Codex run; MASTER inspected markup/content but did not establish a Windows/browser visual PASS.
+
+## R1 Product Decision Remains
+
+Working hypothesis: one low-risk Web-change acceptance sheet may reduce total human effort for a correct acceptance decision by making evidence applicability, uncertainty, reviewer suggestions and owner decision explicit.
+
+Strong counterevidence remains: OpenSpec/Spec Kit/Kiro/TestSprite/Lovable/Playwright/Allure already cover substantial adjacent functionality. P0 PASS does not prove differentiation. If a reasonable native/spec/report setup is equally understandable with less setup, the correct outcome is template/adapter/contribution or stop.
+
+## Completed / Verified / Likely / Unknown / Not Done
+
+Completed: R0/R1 research, bounded P0 implementation, one-bundle handback, MASTER bundle/source integrity and truthfulness review.
+
+Verified: transferred ZIP hash, 15-entry shape, 14/14 index hashes, generated historical statuses/version separation, source-level safety/no-overwrite/report behavior. Windows 54/54 remains Codex-reported, not independently rerun.
+
+Likely: P0 provides a cleaner evidence relationship than an unstructured shared artifact folder. Whether that matters to a non-engineering owner is unmeasured.
+
+Unknown: owner readability, handling-time advantage over strong baseline, target-user demand/adoption/payment, future semantic model quality, actual Web/runtime economics.
+
+Not Done: owner HTML readability check, strong baseline comparison, real Web task/model evaluation, interviews, full MVP, external pilot, product push/release.
 
 ## Classification
 
-Must Fix: none asserted before review. Any source/report inconsistency found in the single bundle will be classified then.
+Must Fix: **none before comparison/readability observation.** Do not invent UI work without owner evidence.
 
-User Decision Needed: none to perform MASTER review. The only owner action now is transfer the one review bundle into this Chat. Later model/Web/user/paid/public scope requires a separate decision.
+User Decision Needed: owner performs one local read-only report viewing and reports whether the page makes the acceptance decision easier. Any subsequent model/Web/runtime/user/paid/public experiment requires a new bounded decision.
 
-Future Optional: legacy polish/deep links/tab focus, standalone packaging and broader platform features remain inactive.
+Future Optional: visual polish, translated status labels, richer summary counters and standalone packaging are not active work until the owner observation identifies them as real friction.
 
 ## Next Smallest Step
 
-Owner transfers only `review-bundle.zip` to MASTER. MASTER independently inspects source, manifest/index, report.json/html, historical replay and bundled test evidence; verifies the ZIP hash if possible; then classifies P0 as PASS/PARTIAL/FAIL for **comparison entry**, not market/MVP success.
+Owner opens the existing local historical `report.html` only; no Codex execution and no source changes. Assess whether, without reading source code or raw logs first, the page makes it obvious (1) final owner decision is still pending, (2) evidence for the target version is unknown/mismatched, and (3) what must happen next. Also report whether this is easier / same / harder than the prior artifact/log workflow.
 
-Do not ask Codex for another implementation turn before that review.
+Only after that observation should MASTER choose the next strong-baseline comparison or a bounded readability correction. Do not start R2 automatically.
