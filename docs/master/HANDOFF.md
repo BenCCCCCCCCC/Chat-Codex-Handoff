@@ -5,122 +5,144 @@ Role: 00 MASTER
 
 ## Immediate State
 
-**AUTH RECOVERED / BUILD-01 PARTIAL / BUILD-01R2 OWNER APPROVED — EXACTLY ONE FIFTH WHISPER RETRY NEXT**
+**BUILD-01R2 REVIEWED / FIFTH WHISPER HTTP 200 / SEGMENT TIMING USABLE + WORD TIMING PARTIAL / BUILD-01R3 AUTHORIZED**
 
 Active product remains:
 `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`
 with normal **in-product microphone recording**, not pre-record/upload.
 
-MASTER directly reviewed remote `prototype/study-teachback-v0.1` at accepted checkpoint `cb973500bafbd58fb8154835292db1e30d1c3e0b`. No manual artifact upload is needed.
+MASTER directly reviewed private `prototype/study-teachback-v0.1` at remote HEAD `ef918b4eb9329e424ff90256a9f24fa47ae2abe6`. No manual artifact upload is needed.
 
-## Verified latest state
+## Verified fifth ASR evidence
 
-Current runtime credential fingerprint `deecd15c4b0b` successfully authenticated both approved endpoint families:
-- tiny `gpt-5.6-luna` Responses smoke -> HTTP 200;
-- fourth `whisper-1 /v1/audio/transcriptions` request on the existing 7.31-second synthetic Mandarin fixture -> HTTP 200.
+Exactly one fifth authorized `whisper-1` request ran using the existing 7.31-second synthetic Mandarin fixture and the reviewed credential fingerprint. It returned HTTP 200 and, this time, the diagnostic persisted response fields before normalization.
 
-The fourth Whisper JSON was parsed and settled in the ledger, so auth recovery is complete for this runtime credential. However the executed diagnostic normalized before saving the returned transcript/timestamp fields; local validation threw and the catch path discarded the precise validation category and provider text/word/segment evidence. Therefore actual Mandarin transcript, word timestamps, segment timestamps and the exact shape defect remain Unknown.
+Saved provider evidence contains:
+- transcript `只有土壤乾燥時才給這盆植物澆水,土壤濕潤時不要澆水。`;
+- 22 word entries;
+- one segment from 0 to `6.460000038146973` seconds;
+- word index 14 (`土`) has start=end=`4.579999923706055`.
 
-Current branch fixes that evidence path in `study-teachback-app/asr-evidence.mjs`: sanitized allowlisted transcript + word/segment timing evidence is persisted **before** normalization, a safe validation category is retained, and non-empty word timestamps are required. Offline regression reports 28/28 PASS; this is only offline engineering evidence.
+The current shared `spanValue` requires `end > start` for both segments and words, so this one zero-duration word caused `INVALID_TIME`. No sixth request was made; Luna logic was not run after the stop.
 
-## Owner approval — satisfied
+## MASTER decision: do not spend another Whisper request
 
-Owner explicitly said:
+The preserved response is enough to fix the policy offline.
 
-> 批准第五次 Whisper 重试。
+OpenAI's current transcription API documents word/segment timestamp granularities for `verbose_json` but does not guarantee that each returned word has strictly positive duration. Public OpenAI Whisper discussions document real zero/effectively-zero-duration word timestamps and imperfect alignment-derived word timing. Therefore one zero-duration word is treated as an unreliable word boundary, not as proof that the whole transcript and segment timing are unusable.
 
-This authorizes exactly **one fifth** `whisper-1` request for the same existing `synthetic-mandarin-build01` fixture. Only that fixture's submission allowance may change from 4 to 5.
+This also matches the product architecture: current replay/confirmation UI uses ASR **segment spans**, not individual word entries, as its primary audio evidence path.
 
-Do not reset/release/relabel prior ledger history, reservations, minutes, requests, attempts or fixture identity.
+## BUILD-01R3 — active engineering contract
 
-## Execution order
+Read:
+`docs/research/strategy-reset-01/BUILD_01R3_TIMESTAMP_DEGRADATION_AND_RESUME.md`
 
-1. Verify repo/branch/HEAD/worktree and preserve lineage from `cb973500bafbd58fb8154835292db1e30d1c3e0b`.
-2. Before paid ASR, compute only the irreversible short fingerprint of runtime `OPENAI_API_KEY`.
-   - must equal `deecd15c4b0b`;
-   - if different, stop with `RUNTIME_CREDENTIAL_CHANGED` before Whisper;
-   - never print/store/commit raw key or Authorization header.
-3. Run exactly one fifth Whisper request for the same 7.31-second fixture and same attempt ID.
-4. HTTP non-2xx: save sanitized status/request ID/error and stop.
-5. HTTP 2xx: first persist sanitized allowlisted `text`, `words[{word,start,end}]`, and `segments[{text,start,end}]`, then run normalization/validation.
-6. If validation fails, preserve exact safe local category + saved provider shape and stop. No sixth request and no weakening guards merely for PASS.
-7. If transcript + segment timestamps + non-empty word timestamps validate, run the corrected bounded Luna necessary/sufficient logic challenge.
-8. If that passes at its stated scope, continue remaining already-authorized BUILD-01 C–F: real ASR critical-term gates, supported delivery observations, remaining export/quota/per-attempt-delete/pending-navigation checks, then one integrated owner walkthrough.
-9. Fast-forward push sanitized evidence to `prototype/study-teachback-v0.1`. No merge/release/public deploy/force push.
+No new owner approval is needed because this stays inside the already approved build and requires no new provider/model/dependency/budget/data permission.
+
+### Timestamp policy
+
+**Segments remain strict:** finite, ordered, in range, and `end > start`. Bad segment timing remains a hard failure because segment replay is a current product dependency.
+
+**Words become partial-quality timing evidence:** finite, ordered, in range, and `end >= start`. Preserve provider values exactly.
+
+If a word has `end == start`:
+- mark its timing unusable/zero-duration;
+- do not widen/interpolate/merge it silently;
+- do not use it as a precise word-level audio anchor;
+- do not fail the entire transcript/segment result solely because of that one word.
+
+Critical negation/number/condition/term with unusable/missing word timing remains fail-closed: replay and confirm the containing validated segment before dependent negative diagnosis.
+
+After offline implementation against the saved real response, current fixture may be called at most:
+**ASR TRANSCRIPT + SEGMENT TIMESTAMP TRANSPORT PASS / WORD TIMESTAMPS PARTIAL / HUMAN REPLAY REVIEW REQUIRED**.
+
+That is not calibrated word-alignment accuracy or speech scoring.
+
+## Execution sequence
+
+Codex should now:
+1. verify branch/HEAD/worktree and preserve lineage from `ef918b4eb9329e424ff90256a9f24fa47ae2abe6`;
+2. implement separate segment/word validators and visible word-timing quality metadata;
+3. add offline tests using the exact saved 22-word/1-segment provider shape plus malformed cases;
+4. make **no new Whisper request** for this recovery;
+5. run the corrected bounded `gpt-5.6-luna` necessary/sufficient-condition logic challenge;
+6. if acceptable at its bounded scope, resume remaining BUILD-01 C-F: critical-ASR handling, supported delivery, export completeness, quota recovery, per-attempt delete, pending navigation and browser/integration engineering checks;
+7. prepare one integrated owner microphone walkthrough only after engineering readiness;
+8. normal fast-forward push sanitized checkpoint to the same private feature branch.
+
+If a new live Whisper request becomes necessary for a different reason, stop and return a specific User Decision Needed. Do not infer permission for a sixth retry.
+
+## Required timestamp regression
+
+At minimum:
+- exact current saved response -> segment PASS / word PARTIAL;
+- zero-duration word preserved and flagged;
+- reversed word, non-finite word, out-of-range word, backward word ordering -> reject;
+- zero-duration/invalid segment -> reject;
+- critical term with unusable word timing -> segment replay + user confirmation, no precise word anchor;
+- no interpolation/mutation of provider values.
 
 ## Logic state
 
-`只有 A 才 B` remains constrained to `B -> A` only; no silent strengthening into `A -> B`. Historical Luna 5/5 is not logic-quality evidence. Corrected live Luna semantic quality remains Not Done until rerun after ASR evidence passes.
+The `只有 A 才 B` fix remains accepted offline: it establishes `B -> A`, not `A -> B`. Corrected live Luna logic fidelity is still Not Done and should now be rerun after timestamp regression.
 
 ## Cost / limits
 
-Current reviewed checkpoint:
-- known conservative cost: `US$0.00341565`;
-- exposure: `US$0.06022315 / US$5`;
-- BUILD-01 total new cash ceiling: `US$10`;
-- no recharge or ledger reset.
+Latest reviewed state:
+- known conservative cost: `US$0.00421565`;
+- exposure: `US$0.06102315 / US$5`;
+- BUILD-01 total new-cash ceiling: `US$10`.
 
-Still approved: local code/commits, private feature-branch fast-forward checkpoint sync, loopback Node + Edge + explicit product mic, owner-selected low-risk single-speaker data, `whisper-1` + `gpt-5.6-luna`, unchanged US$5/US$10 limits.
+Still approved: local code/commits, private feature-branch fast-forward sync, loopback Node + Edge, explicit product mic for owner validation, low-risk single-speaker data, `whisper-1` + `gpt-5.6-luna`, unchanged budget caps.
 
-Still prohibited without a new owner decision: sixth same-fixture Whisper request, provider/model/dependency change, `gpt-transcribe`, local ASR/VAD install, ledger reset/relabel, public hosting, merge/release, force push, external users, third-party/sensitive audio, secrets/private-client publication.
+Still prohibited without new owner decision: another live ASR request, provider/model/dependency change, `gpt-transcribe`, local ASR/VAD install, ledger reset/relabel, public hosting, merge/release, force push, external users, third-party/sensitive audio, secrets/private-client publication.
 
 ## Authority / Read Order
 
 Repo `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 1. `docs/master/CURRENT_STATE.md`
 2. this `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/BUILD_01R2_ASR_EVIDENCE_RECOVERY.md`
-4. `docs/research/strategy-reset-01/BUILD_01R_WHISPER_AUTH_AND_LOGIC_RECOVERY.md`
-5. `docs/research/strategy-reset-01/BUILD_01_STUDY_TEACHBACK_HANDOFF.md`
-6. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` v4
+3. `docs/research/strategy-reset-01/BUILD_01R3_TIMESTAMP_DEGRADATION_AND_RESUME.md`
+4. `docs/research/strategy-reset-01/BUILD_01R2_ASR_EVIDENCE_RECOVERY.md`
+5. `docs/research/strategy-reset-01/BUILD_01R_WHISPER_AUTH_AND_LOGIC_RECOVERY.md`
+6. `docs/research/strategy-reset-01/BUILD_01_STUDY_TEACHBACK_HANDOFF.md`
+7. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` v4
 
-## Minimal Resume Trigger
+## Minimal Codex Trigger
 
 ```text
-恢复 BUILD-01R2 / BUILD-01。
-
-Owner 已明确批准第五次 Whisper 重试。
-
-允许对现有 7.31 秒 synthetic-mandarin-build01 fixture 进行 exactly one 次第五次 whisper-1 /v1/audio/transcriptions 请求。仅把该 fixture 的 submission allowance 从 4 提高到 5；不得 reset / release / relabel 既有 ledger、reservation、minutes、request、attempt 或历史事件。
+执行 BUILD-01R3 并继续 BUILD-01。
 
 Repo: F:\Chat-Codex-Handoff\validation-repo
 Expected branch: prototype/study-teachback-v0.1
-Expected remote checkpoint: cb973500bafbd58fb8154835292db1e30d1c3e0b
+Expected remote checkpoint: ef918b4eb9329e424ff90256a9f24fa47ae2abe6
 
-先读取 meta/master-state：
-- docs/master/CURRENT_STATE.md
-- docs/master/HANDOFF.md
-- docs/research/strategy-reset-01/BUILD_01R2_ASR_EVIDENCE_RECOVERY.md
-- docs/research/strategy-reset-01/BUILD_01R_WHISPER_AUTH_AND_LOGIC_RECOVERY.md
-- docs/research/strategy-reset-01/BUILD_01_STUDY_TEACHBACK_HANDOFF.md
+先读取 meta/master-state：CURRENT_STATE.md、HANDOFF.md、BUILD_01R3_TIMESTAMP_DEGRADATION_AND_RESUME.md，以及原 BUILD-01 contracts。
 
-执行：
-1. 核对 branch/HEAD/worktree并保留 lineage。
-2. 任何付费 ASR 前，只计算当前 runtime OPENAI_API_KEY 的不可逆短 fingerprint；必须等于已验证的 deecd15c4b0b。若不同，停止并返回 RUNTIME_CREDENTIAL_CHANGED。不得打印/保存 raw key。
-3. 只先执行这一笔第五次 Whisper 请求。
-4. HTTP 2xx 后，必须先通过已修正的 asr-evidence.mjs 保存 sanitized allowlisted transcript / word timestamps / segment timestamps，再调用 normalizeASR。
-5. 若校验失败，保存 exact safe validation category + 已保存 provider shape，立即停止；不得自动第六次请求，不得为了通过而弱化 guard。
-6. 若 transcript + segment timestamps + non-empty word timestamps 校验通过，运行修正后的 bounded Luna necessary/sufficient logic challenge，然后继续 active BUILD-01 剩余 C-F。
-7. 保持 whisper-1 + gpt-5.6-luna、US$5 API exposure hard stop / US$10 BUILD-01 cash ceiling；不换 provider/model，不安装依赖，不重置账本，不自动充值。
-8. 完成或阻塞后正常 fast-forward push sanitized checkpoint 到同一 private feature branch；不 merge/release/public deploy/force push。
+本轮不要再次调用 Whisper。使用已经保存的第五次真实响应离线修正 timestamp policy：segment 仍要求严格正时长；word 允许 start==end 但必须保留并标为 unusable/zero-duration，不能插值、延长、合并或伪造。异常 word timing 不得单独让整个 transcript/segment result 失败；critical term 落在 unusable word timing 时只能回退到 containing segment replay + user confirmation。
 
-最终只返回：status、remote branch、exact remote SHA、Whisper evidence result、Luna logic result（如实际运行）、known cost、exposure。无需 owner 手工上传 review 文件。
+用真实保存的 22 words / 1 segment shape 加 malformed cases 做 regression。通过后运行修正后的 bounded gpt-5.6-luna necessary/sufficient logic challenge；若通过其限定门槛，继续原 BUILD-01 剩余 C-F。普通实现细节无需回来确认。
+
+保持原 provider/model/data/budget：whisper-1 + gpt-5.6-luna，US$5 API exposure / US$10 cash ceiling。禁止新的 Whisper retry、换 provider/model、安装依赖、reset ledger、merge/release/public deploy/force push。
+
+完成或真正触发 retained blocker 后，正常 fast-forward push sanitized checkpoint 到 prototype/study-teachback-v0.1，并返回 exact remote SHA + status。无需 owner 手工上传文件。
 ```
 
 ## State Summary
 
-Completed: auth recovered; fourth Whisper HTTP 200; evidence-capture defect fixed offline; 28/28 regression; fifth retry approved.
+Completed: fifth Whisper response preserved; ASR transport/auth is 200; exact word timing defect isolated; next handling policy defined.
 
-Verified: accepted remote checkpoint; same credential fingerprint; Luna 200; Whisper 200; preserved ledger/cost; fixed evidence helper.
+Verified: real transcript, 22 word entries, one valid segment and one zero-duration word at the reviewed remote checkpoint.
 
-Likely: fifth request will expose the actual ASR response shape.
+Likely: current MVP can safely use segment-level replay while treating exact word timing as partial evidence.
 
-Unknown: actual Mandarin transcript/timestamps, exact prior validation failure, corrected live Luna logic fidelity, remaining C–F.
+Unknown: broader word-boundary accuracy, corrected live Luna logic quality, remaining C-F and physical-mic full journey.
 
-Not Done: fifth response capture/validation, corrected live semantic rerun, remaining C–F, integrated owner walkthrough, external validation/release.
+Not Done: R3 timestamp regression, corrected Luna live challenge, remaining C-F, integrated owner walkthrough, external validation/release.
 
-Must Fix: persist successful ASR evidence before validation; no inferred reconstruction; no automatic sixth retry.
+Must Fix: separate word-timing degradation from strict segment validity; never fabricate exact word times.
 
-User Decision Needed: none for this authorized retry or normal continuation if it passes. New decision only for retained stop conditions.
+User Decision Needed: none for R3/remaining current BUILD-01. A new decision is required only if another live ASR request or another retained boundary is genuinely necessary.
 
-Future Optional: broader ASR/acoustic/pedagogy calibration, local VAD/ASR, `gpt-transcribe` comparison, realtime Tutor, English/PTE, native/plugin distribution, external learner study.
+Future Optional: calibrated word alignment/acoustic analysis, local VAD/ASR, gpt-transcribe comparison, realtime Tutor, English/PTE, native/plugin distribution, external learner study.
