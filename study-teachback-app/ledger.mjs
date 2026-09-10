@@ -39,7 +39,9 @@ export class Ledger {
       const s = this.summary(data);
       const reserveUSD = kind === 'asr' ? minutes * PRICING.whisperMinute : (input * PRICING.lunaCacheWriteMillion + output * PRICING.lunaOutputMillion) / 1e6;
       const old = data.events.filter(e => e.type === 'reserve' && e.kind === 'asr' && e.attemptId === attemptId);
-      if (kind === 'asr' && (!attemptId || minutes !== 3 || old.length >= 2 || (!old.length && !data.events.some(e=>e.type==='attempt'&&e.attemptId===attemptId) && s.attempts >= LIMITS.attempts))) throw new Error('ATTEMPT_LIMIT');
+      // Owner-approved one additional submission for this existing synthetic fixture only.
+      const submissionLimit = attemptId === 'synthetic-mandarin-build01' ? 3 : 2;
+      if (kind === 'asr' && (!attemptId || minutes !== 3 || old.length >= submissionLimit || (!old.length && !data.events.some(e=>e.type==='attempt'&&e.attemptId===attemptId) && s.attempts >= LIMITS.attempts))) throw new Error('ATTEMPT_LIMIT');
       if (s.requests >= LIMITS.requests || s.exposureUSD + reserveUSD > LIMITS.dollars || s.minutes + minutes > LIMITS.minutes || s.inputReserved + input > LIMITS.input || s.outputReserved + output > LIMITS.output) throw new Error('BUDGET_STOP');
       const e = { type: 'reserve', id: randomUUID(), at: new Date().toISOString(), model: kind === 'asr' ? 'whisper-1' : 'gpt-5.6-luna', kind, attemptId, input, output, minutes, reserveUSD };
       data.events.push(e); return e;

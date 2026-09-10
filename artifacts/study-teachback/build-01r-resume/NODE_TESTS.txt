@@ -1,0 +1,34 @@
+✔ ticket strengthening is schema-valid but cannot pass semantic fixture oracle (1.0938ms)
+✔ unsupported strengthening requires explicit rejection or uncertainty, never mixed support (0.2869ms)
+✔ correct paraphrase and final self-repair cannot pass with conflicting verdicts (0.1646ms)
+✔ one fixture gets third submission, fourth fails, prior reservations remain charged (41.1578ms)
+✔ ordinary and similar-named attempts still get only two submissions (46.7422ms)
+✔ same in-memory credential gets same irreversible short fingerprint (1.5963ms)
+✔ error sanitizer redacts full/masked key, bearer, IDs and email; ignores unapproved fields (1.6044ms)
+✔ missing malformed errors and request headers fail closed (0.2711ms)
+✔ source and attempt versions are bound, acoustic labels excluded from content (2.1456ms)
+✔ all ASR including negation, number, condition, term inversions fail closed until replay confirmation (0.3017ms)
+✔ interrupted capture blocks content even if text confirmed (0.1606ms)
+✔ valid finding preserved; source/span/quote/time/schema fabrications rejected (1.2708ms)
+✔ missing content cannot receive a timestamp or span (0.222ms)
+✔ delivery event must overlap real span and cannot issue knowledge judgment (0.3229ms)
+✔ ASR timestamps reject missing, reversed, out-of-range and non-finite values (0.4715ms)
+✔ silence/noise/clipping/decode failure are conservative, never validated VAD (11.2875ms)
+✔ long near-silence is only an acoustic candidate, not knowledge deficit (6.4614ms)
+✔ WAV duration guard enforces true PCM layout and 180s upper bound (50.5141ms)
+✔ corrected text is a separate version and is not a new recording; partial/full identities distinct (0.7388ms)
+✔ expiry removes seven-day records, preserves newer records and rejects undated records (0.2446ms)
+✔ reservation survives timeout and restart; retry does not create audio/attempt copies (26.6392ms)
+✔ atomic reservation rejects concurrent process lock and malformed ledger (5.4297ms)
+✔ budget, request/token, 60 attempts and two ASR submissions limits fail closed (4299.314ms)
+✔ only approved model and store=false are sent; failed API result keeps reserve (28.6536ms)
+✔ real ASR transport contract uses whisper timestamps; malformed response fails without losing reservation (35.5741ms)
+✔ HTTP loopback rejects foreign origin, host and arbitrary filesystem path without model calls (64.8746ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4753.3476

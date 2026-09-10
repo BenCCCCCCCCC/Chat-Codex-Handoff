@@ -1,0 +1,43 @@
+{
+  "at": "2026-09-10T21:27:30.891Z",
+  "credentialFingerprint": "66d86db3fb11",
+  "model": "whisper-1",
+  "attemptId": "synthetic-mandarin-build01",
+  "submission": 3,
+  "fixtureSha256": "7e291bc01d614dfb34068ab3d2d9f4d1217f329ba14b6e4fdb7cea919aba6206",
+  "duration": 7.31,
+  "ledgerBefore": {
+    "requests": 14,
+    "attempts": 1,
+    "minutes": 6,
+    "inputReserved": 45471,
+    "outputReserved": 19864,
+    "exposureUSD": 0.041414400000000004,
+    "knownCostUSD": 0.0026069000000000005,
+    "unsettled": 3,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  },
+  "httpStatus": 401,
+  "requestId": "req_c05a58ff473d4b55bbdfa3abfe8eafe9",
+  "error": {
+    "type": "invalid_request_error",
+    "code": "invalid_api_key",
+    "param": null,
+    "message": "Incorrect API key provided: [REDACTED_KEY] You can find your API key at https://platform.openai.com/account/api-keys."
+  },
+  "outcome": "STOP_PAID_CALLS_HTTP_FAILURE",
+  "ledgerAfter": {
+    "requests": 15,
+    "attempts": 1,
+    "minutes": 9,
+    "inputReserved": 45471,
+    "outputReserved": 19864,
+    "exposureUSD": 0.059414400000000006,
+    "knownCostUSD": 0.0026069000000000005,
+    "unsettled": 4,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  },
+  "priorLedgerEventsUnchanged": true
+}

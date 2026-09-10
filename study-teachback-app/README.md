@@ -1,3 +1,5 @@
+> Latest resume: changed runtime credential; the one owner-approved third synthetic Whisper submission returned HTTP 401 / invalid_api_key. Paid calls stopped, Luna not rerun. See [resume packet](../artifacts/study-teachback/build-01r-resume/DELIVERY_PACKET.md). Historical evidence below remains scoped to its original checkpoint.
+
 # 知而能讲 — BUILD-01 partial implementation
 
 **BUILD-01R PARTIAL / USER DECISION NEEDED: same-process Luna 200 + Whisper 401 (`missing_scope`). Paid calls stopped.**
