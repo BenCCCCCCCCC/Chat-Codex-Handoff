@@ -5,114 +5,120 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**BUILD-01 — CODEX-REPORTED PARTIAL / BLOCKED AT WHISPER AUTH / PRIVATE FEATURE-BRANCH SYNC AUTHORIZED / REMOTE REVIEW PENDING**
+**BUILD-01 REMOTE CHECKPOINT REVIEWED / PARTIAL ACCEPTED / BUILD-01R AUTHORIZED — WHISPER AUTH + LOGIC FIDELITY RECOVERY**
 
-The active product direction remains **Study-first + in-product spoken teach-back** with the continuous flow `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`. Formal attempts are recorded inside the product; manual pre-record/upload is not the normal consumer journey.
+Active product remains **Study-first + in-product spoken teach-back** with `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`. Formal attempts are recorded inside the product; manual pre-record/upload is not the normal consumer journey.
 
-BUILD-00 remains MASTER-accepted as **PASS WITH TWO BUILD-TIME CORRECTIONS**. BUILD-01 was owner-approved and Codex returned a partial/blocker receipt. The owner has now explicitly approved a process correction: MASTER-approved bounded development checkpoints may be pushed to the existing **private GitHub repository on their explicit non-default feature branch** so MASTER can inspect code/evidence remotely without the owner manually uploading artifacts.
+Owner-approved private feature-branch checkpoint sync is now working. Remote branch `prototype/study-teachback-v0.1` is directly visible to MASTER at HEAD `99228bed6aa17b05790083de5ecdd45c4a96c28f`; GitHub confirms its parent is product checkpoint `be5cef57564ed16bf2f25467ad0247bb9d7a717a`. The evidence commit only adds GitHub-readable review material. Owner no longer needs to manually upload Delivery Packet/review ZIP for ordinary bounded checkpoint review.
 
-This standing private-branch sync permission does **not** authorize merge, release, public deployment, public sharing, force-push/destructive history rewrite, secret/raw-private-data publication, or unrelated branch pushes. PRODUCT-CORE-01 remains PAUSED; INTERVIEW-DEMO-01 remains SUPERSEDED; Gate5 external-user execution remains ON HOLD.
+BUILD-01 is accepted as a **PARTIAL engineering checkpoint only**, not integrated product PASS. A narrow active recovery contract now exists at `docs/research/strategy-reset-01/BUILD_01R_WHISPER_AUTH_AND_LOGIC_RECOVERY.md`.
+
+PRODUCT-CORE-01 remains PAUSED; INTERVIEW-DEMO-01 remains SUPERSEDED; Gate5 external-user execution remains ON HOLD.
 
 ## Authority
 
 Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 1. `docs/master/CURRENT_STATE.md`
 2. `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/BUILD_01_STUDY_TEACHBACK_HANDOFF.md` — active bounded implementation contract
-4. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` v4 — product/UX baseline and prior research
+3. `docs/research/strategy-reset-01/BUILD_01R_WHISPER_AUTH_AND_LOGIC_RECOVERY.md` — active narrow recovery
+4. `docs/research/strategy-reset-01/BUILD_01_STUDY_TEACHBACK_HANDOFF.md` — original owner-approved bounded build
+5. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` v4 — product/UX baseline and prior research
 
-## BUILD-01 Receipt — Reported, Not Yet MASTER-Verified
+## Remote BUILD-01 Review — Verified at Evidence Scope
 
-Codex/user reports:
-- status: **BUILD-01 PARTIAL / BLOCKED — Whisper API HTTP 401**;
-- calls stopped immediately after blocker; no provider/model switch;
-- Node engineering checks: **18/18**;
-- Edge checks: **14/14**;
-- real `gpt-5.6-luna` content challenge: **5/5**;
-- full speech path did not pass because `whisper-1` transcription returned HTTP 401;
-- local commit: `be5cef57564ed16bf2f25467ad0247bb9d7a717a`;
-- reported unsettled/reserved API amount: **US$0.02340565 / US$5 internal stop cap**;
-- a disabled-hooks commit path was denied by an approval/control, then a normal commit with hooks preserved succeeded;
-- local artifacts reportedly exist at:
-  - `F:\Chat-Codex-Handoff\validation-repo\artifacts\study-teachback\build-01\DELIVERY_PACKET.md`
-  - `F:\Chat-Codex-Handoff\validation-repo\artifacts\study-teachback\build-01\BUILD-01-review.zip`
-- bundle entries were reported hash-verified.
+MASTER directly read the remote source/evidence. Verified from the pushed branch:
+- product checkpoint `be5cef57564ed16bf2f25467ad0247bb9d7a717a`, evidence HEAD `99228bed6aa17b05790083de5ecdd45c4a96c28f`;
+- Delivery Packet and review index/manifest are GitHub-readable; manifest covers the 27 app/evidence files plus review docs and excludes secrets/raw private audio;
+- Node engineering receipt reports 18/18; Edge receipt reports 14/14 using real Edge/MediaRecorder/IndexedDB but synthetic WebAudio and stub provider; these are accepted only at that stated scope;
+- real `gpt-5.6-luna` API evidence exists, including 5 text challenge cases plus Learn/Repair/Apply schema outputs; known usage 3,999 input / 1,332 output tokens and conservative known-cost estimate US$0.00259815;
+- exactly one real `whisper-1` `/v1/audio/transcriptions` attempt used a 7.31s synthetic Mandarin Windows-voice sample and returned HTTP 401; no transcript/timestamps were obtained;
+- reported exposure including unsettled reservations is US$0.02340565 / US$5; no new cash purchase;
+- no physical owner microphone, full live browser/API journey, live delivery interpretation or integrated owner walkthrough yet.
 
-The local commit was previously absent from GitHub because the original BUILD-01 authorization prohibited push. That restriction is now narrowed by the owner decision below. Until the checkpoint is pushed and inspected, the BUILD-01 implementation/test claims remain Codex/user-reported rather than MASTER-verified.
+The remote sync itself does not increase implementation confidence beyond the evidence it makes inspectable.
 
-## Owner-Approved Private Feature-Branch Sync Policy
+## Must Fix A — Whisper 401 Is Not Yet Classified
 
-Purpose: remove the owner as a manual message/file bus between Codex local implementation and MASTER cloud review.
+Remote `provider.mjs` shows successful Responses and failed audio transcription both use the same `process.env.OPENAI_API_KEY`, same Bearer construction and same `https://api.openai.com` host. Therefore an obvious different in-code credential path/header/base URL is **not supported** by the source review.
 
-For a MASTER-approved bounded build, Codex may now push the corresponding **explicitly named private feature branch** and subsequent review checkpoints to `BenCCCCCCCCC/Chat-Codex-Handoff` without asking the owner again for each ordinary checkpoint, provided all of the following hold:
+However the failed audio path intentionally discarded the provider error body and the receipt records `responseBodyRead:false`. Luna and Whisper checks also ran as separate processes, so the evidence does not prove they saw the exact same runtime secret value/configuration.
 
-- push only the active non-default feature branch named by the bounded handoff (current: `prototype/study-teachback-v0.1`);
-- push only commits within the already approved product scope and review/evidence files needed for MASTER inspection;
-- verify actual branch/HEAD/worktree before push and preserve unexpected work;
-- normal fast-forward push only; no force push, remote branch deletion or destructive history rewrite;
-- no merge/rebase into default/master/main/meta state, no release, no public deploy/share;
-- no secrets, API keys, `.env` credentials, private client data, raw third-party audio, sensitive source material or other data outside the approved repository boundary;
-- owner-selected raw test audio/material should remain local by default unless a later explicit decision says it is safe/necessary to commit; MASTER review should use sanitized textual/runtime evidence instead;
-- human-readable review evidence must be available on the branch. `DELIVERY_PACKET.md`, manifests, test summaries and sanitized error evidence are preferred. An opaque ZIP may remain a local convenience but must not be the only review source because remote text review cannot depend on unpacking an unavailable binary artifact;
-- after push Codex reports the remote branch and exact pushed SHA. MASTER then reads commit/diff/evidence directly from GitHub.
+HTTP 401 remains an authentication/authorization-boundary failure, not a Mandarin/timestamp-quality failure. Exact cause is Unknown until a same-process, safe diagnostic captures status/request ID and sanitized provider error type/code/message without revealing the credential.
 
-This is a standing workflow authorization for private feature-branch checkpoint synchronization, not blanket permission for arbitrary remote operations.
+Current OpenAI documentation confirms API keys can have endpoint-specific Restricted permissions and projects can also control model access. These are plausible owner-controlled causes only if the next safe error evidence points there; do not pre-assign blame or rotate credentials yet.
 
-## Preliminary Blocker Interpretation
+## Must Fix B — Current Logic 5/5 Is Not Accepted as Logic Fidelity
 
-A 401 from `/v1/audio/transcriptions` is an authentication/authorization failure at the transcription request boundary, not evidence that Mandarin recognition or timestamp quality failed. Because Codex reports successful real Luna calls in the same build, total OpenAI API unavailability is not established; the fault may be route-specific credential propagation/selection, request construction, or another auth-path difference. This remains a hypothesis until remote source/log evidence is reviewed.
+The synthetic source says `只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。` In formal logic, `只有 A 才 B` makes A necessary for B; it does not by itself mean A is sufficient for B.
 
-Do **not** switch to another ASR/provider/model, install WhisperX/local models, print/expose keys, raise budget, or weaken timestamp requirements merely to bypass the blocker.
+Yet the live Learn output states `土壤干燥时要浇水`, asks whether dry soil means one should water, and the challenge set labels some strengthened `dry -> water` formulations as correct. That is exactly the type of necessary/sufficient-condition distortion this product must catch.
 
-## Product / Four Layers — Unchanged
+Therefore the 5/5 result remains accepted only as real-Luna/schema/channel-control evidence. It is **not** accepted as semantic logic-quality 5/5. BUILD-01R must correct the fixture/expectations and add a direct necessary-vs-sufficient challenge before semantic quality can be claimed.
 
-**User/scenario:** adult Mandarin learner studying a bounded source/concept/rule/process and wanting to explain it in their own words.
+## BUILD-01R — Authorized Within Existing Owner Approval
 
-**Product:** one learning tutor + formal spoken teach-back workspace. Increment over ordinary Study/Voice is controlled original-audio evidence, time-linked replay, separate raw/corrected transcript, knowledge-versus-delivery separation, ASR/tool-error attribution, targeted reteaching/re-recording and a distinct related Apply step.
+No new owner decision is required for the narrow recovery because it stays inside the already-approved provider/models/data/budget/local-development scope.
 
-**v0.1/MVP:** one local Web surface; text Tutor; persistent `我来讲讲`; in-product microphone recording; timestamped transcription where supported; conservative audio observations; source-linked content/logic and delivery feedback; targeted partial/full re-record; related application item; history/export/delete.
+R1 safe auth diagnostic:
+- one process, existing server-side `OPENAI_API_KEY` only;
+- never print/store/commit the raw secret or Authorization header;
+- optional non-reversible short fingerprint only to prove the two calls use the same runtime value;
+- make one tiny Luna access request and one existing short synthetic Whisper request from that same process;
+- record status, `x-request-id` if present, and sanitized provider `error.type/code/param/message` only;
+- preserve existing ledger/reservations.
 
-**Feasibility:** partial engineering evidence is reported for the local Web/Tutor/content side, but the actual full speech pipeline remains blocked at API authentication. No claim of end-to-end product usability yet.
+Outcomes:
+- Luna PASS + Whisper PASS: blocker not reproduced; continue R2/R3 and remaining BUILD-01 C-F.
+- Luna PASS + Whisper 401: stop paid calls; if safe provider evidence points to key endpoint permissions/project-model/account membership, return one precise User Decision Needed with UI setting to inspect/change, never ask for secret value.
+- Luna also fails: stop and report current credential/runtime access changed/invalid; no automatic rotation/replacement.
 
-## Active Build-Time Boundaries
+R2 logic fidelity:
+- fix `只有…才…` necessary-condition interpretation;
+- add an explicit challenge where a source says `只有持票者才可以入场` and a learner wrongly strengthens it to `只要持票就一定可以入场`;
+- revise Tutor/content behavior or challenge expectations so source conditions are not strengthened silently;
+- rerun bounded Luna semantic checks. Schema-valid is not logic-valid.
 
-Approved route remains:
-- isolated `study-teachback-app/` on `prototype/study-teachback-v0.1`;
-- local development/commits plus **private feature-branch checkpoint push under the sync policy above**;
-- native HTML/CSS/JS + existing Node + Edge + browser media APIs + IndexedDB;
-- ASR = `whisper-1` because timestamps are required;
-- semantic = `gpt-5.6-luna` via Responses, `store=false`;
-- no auto provider/model switch, new package/local-model install, public hosting, merge/release, external users or sensitive/third-party recordings;
-- BUILD-01 new cash <= US$10; internal API reservation/hard stop <= US$5.
+R3 if Whisper auth succeeds:
+- verify actual Mandarin transcript and word/segment timestamp shape;
+- test negation/number/condition/term fail-closed behavior;
+- finish live delivery and remaining export/quota/per-attempt-delete/pending-navigation checks;
+- then integrated owner walkthrough through the product's own microphone flow.
 
-The zero-dependency audio checker may only report supported observations/candidates; no validated VAD/PTE/hesitation claims.
+## Standing Private Feature-Branch Sync Policy
 
-## Next Smallest Step
+For MASTER-approved bounded builds, Codex may normal fast-forward push the explicitly named private feature branch and sanitized human-readable review evidence to the existing private repo without repeated owner approval. No merge/default-branch integration, release/public deployment, force push, remote deletion, secrets, `.env`, raw owner/private audio or sensitive data.
 
-**Sync the current BUILD-01 checkpoint to the approved private feature branch, then MASTER reviews it remotely and isolates the Whisper 401.**
+After each meaningful checkpoint Codex reports exact remote branch and SHA; MASTER reviews directly from GitHub.
 
-For the current checkpoint Codex should:
-1. preserve local branch/commit lineage and verify `prototype/study-teachback-v0.1` / `be5cef57564ed16bf2f25467ad0247bb9d7a717a` (or accurately report a later local commit if evidence files require an additional commit);
-2. ensure the product source plus a human-readable `DELIVERY_PACKET.md` and sufficient sanitized review/test/auth evidence are tracked on that branch; do not commit secrets or raw private test audio;
-3. use a normal fast-forward push of `prototype/study-teachback-v0.1` to `origin`;
-4. return the exact remote branch and pushed SHA; no merge/release/public action.
+## Active Boundaries
 
-After remote sync, MASTER will inspect branch/diff/tests/Luna evidence/transcription code/401 evidence directly through GitHub. If the evidence shows an implementation/config bug within the already-approved credential path, a narrow fix and minimal transcription rerun can proceed under the existing BUILD-01 authorization. If resolving it requires entering/replacing credentials, changing account/project/provider/model, installing anything, or other new credential handling, return one consolidated User Decision Needed.
+Still approved:
+- local code/commits and private checkpoint pushes on `prototype/study-teachback-v0.1`;
+- loopback Node + Edge + explicit in-product microphone;
+- owner-selected low-risk single-speaker audio/source via OpenAI default/global endpoints;
+- models only `whisper-1` and `gpt-5.6-luna`;
+- BUILD-01 total new cash <= US$10; API exposure/reservation hard stop <= US$5; no auto recharge/escalation.
+
+Not authorized: new provider/model/endpoint family for workaround, `gpt-transcribe`, npm/Python/ffmpeg/WhisperX/Silero/local model install, admin/account APIs, external users, third-party/sensitive audio, public hosting, merge/release or destructive Git.
 
 ## State Summary
 
-Completed: BUILD-01 produced a local implementation/checkpoint and blocker receipt; paid calls were stopped; owner approved private feature-branch checkpoint synchronization to remove manual artifact uploads.
+Completed: private feature-branch sync works; MASTER directly reviewed remote code/evidence; BUILD-01 partial checkpoint accepted at its stated scope; two concrete Must Fix items identified; BUILD-01R written and authorized within existing scope.
 
-Verified by MASTER: BUILD-00/public documentation at prior scope; no new BUILD-01 implementation/test evidence yet because the product checkpoint has not been remotely synced.
+Verified: exact remote branch/head/parent; readable source/evidence; 18/18 and 14/14 at their reported engineering scopes; real Luna evidence/usage; one real Whisper HTTP 401; current source shows same coded environment key/header/base host pattern for Luna and Whisper.
 
-Likely: substantial non-ASR product work exists and the blocker is localized to transcription authentication, but this remains unverified until remote branch review.
+Likely: substantial product shell/state/guard work is usable enough to continue once auth and logic fidelity are fixed. The 401 may be runtime/key permission/account configuration rather than request-shape code, but not yet proven.
 
-Unknown: exact implementation completeness; actual Node/Edge/Luna evidence; cause of Whisper 401; Mandarin transcript/timestamp quality; real full-pipeline latency/cost; local deletion/history behavior.
+Unknown: exact 401 provider code/message and runtime key equality across prior processes; successful Mandarin ASR/timestamps; live delivery; physical microphone full journey; true semantic reliability/user learning value.
 
-Not Done: private branch sync, MASTER review of current checkpoint, 401 resolution, successful end-to-end speech attempt, integrated owner walkthrough, external learner validation or release.
+Not Done: BUILD-01R diagnostic/fixes, successful end-to-end speech chain, remaining browser/live challenges, integrated owner walkthrough, external learner validation/release.
 
-Must Fix: full speech chain remains blocked; no content-only result may be relabelled end-to-end PASS; review artifacts must be remotely inspectable without requiring owner manual upload.
+Must Fix: classify/resolve Whisper auth without unauthorized workaround; correct necessary-vs-sufficient logic test/behavior; do not call current Luna 5/5 a logic-quality pass.
 
-User Decision Needed: none for normal private checkpoint pushes under this policy or diagnosis within existing BUILD-01 scope. New credential/account handling, provider/model/dependency/budget/scope expansion, merge/release/public actions still require a new decision.
+User Decision Needed: none now. Only if safe diagnostic points to an owner-controlled credential/project/account permission change or another retained boundary.
 
-Future Optional: dedicated VAD/local ASR, `gpt-transcribe` comparison, realtime Tutor, English/PTE, native/plugin distribution, external learner study.
+Future Optional: dedicated local VAD/ASR, `gpt-transcribe` comparison, realtime Tutor, English/PTE, native/plugin distribution, external learner study.
+
+## Next Smallest Step
+
+**Codex executes BUILD-01R from remote HEAD `99228bed6aa17b05790083de5ecdd45c4a96c28f`, pushes the sanitized recovery checkpoint to the same private feature branch, and either resumes remaining BUILD-01 if Whisper succeeds or returns one precise User Decision Needed if an owner-controlled API permission is identified.**
