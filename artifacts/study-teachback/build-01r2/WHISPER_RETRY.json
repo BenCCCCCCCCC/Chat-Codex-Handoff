@@ -1,0 +1,38 @@
+{
+  "at": "2026-09-10T22:28:59.968Z",
+  "credentialFingerprint": "deecd15c4b0b",
+  "model": "whisper-1",
+  "attemptId": "synthetic-mandarin-build01",
+  "submission": 5,
+  "fixtureSha256": "7e291bc01d614dfb34068ab3d2d9f4d1217f329ba14b6e4fdb7cea919aba6206",
+  "duration": 7.31,
+  "ledgerBefore": {
+    "requests": 17,
+    "attempts": 1,
+    "minutes": 12,
+    "inputReserved": 47684,
+    "outputReserved": 19928,
+    "exposureUSD": 0.06022315000000001,
+    "knownCostUSD": 0.0034156500000000005,
+    "unsettled": 4,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  },
+  "httpStatus": 200,
+  "requestId": "req_1136d20fdc6c4f00954060e20866e094",
+  "outcome": "ASR_VALIDATION_FAILED",
+  "validationCategory": "INVALID_TIME",
+  "ledgerAfter": {
+    "requests": 18,
+    "attempts": 1,
+    "minutes": 15,
+    "inputReserved": 47684,
+    "outputReserved": 19928,
+    "exposureUSD": 0.06102315000000001,
+    "knownCostUSD": 0.0042156500000000005,
+    "unsettled": 4,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  },
+  "priorLedgerEventsUnchanged": true
+}

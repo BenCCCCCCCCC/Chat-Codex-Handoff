@@ -39,8 +39,8 @@ export class Ledger {
       const s = this.summary(data);
       const reserveUSD = kind === 'asr' ? minutes * PRICING.whisperMinute : (input * PRICING.lunaCacheWriteMillion + output * PRICING.lunaOutputMillion) / 1e6;
       const old = data.events.filter(e => e.type === 'reserve' && e.kind === 'asr' && e.attemptId === attemptId);
-      // Owner-approved fourth submission after successful Luna smoke for this existing synthetic fixture only.
-      const submissionLimit = attemptId === 'synthetic-mandarin-build01' ? 4 : 2;
+      // Owner-approved fifth submission for ASR evidence recovery for this existing synthetic fixture only.
+      const submissionLimit = attemptId === 'synthetic-mandarin-build01' ? 5 : 2;
       if (kind === 'asr' && (!attemptId || minutes !== 3 || old.length >= submissionLimit || (!old.length && !data.events.some(e=>e.type==='attempt'&&e.attemptId===attemptId) && s.attempts >= LIMITS.attempts))) throw new Error('ATTEMPT_LIMIT');
       if (s.requests >= LIMITS.requests || s.exposureUSD + reserveUSD > LIMITS.dollars || s.minutes + minutes > LIMITS.minutes || s.inputReserved + input > LIMITS.input || s.outputReserved + output > LIMITS.output) throw new Error('BUDGET_STOP');
       const e = { type: 'reserve', id: randomUUID(), at: new Date().toISOString(), model: kind === 'asr' ? 'whisper-1' : 'gpt-5.6-luna', kind, attemptId, input, output, minutes, reserveUSD };

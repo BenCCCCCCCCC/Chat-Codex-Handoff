@@ -1,0 +1,433 @@
+{
+  "version": 1,
+  "pricing": {
+    "date": "2026-09-11",
+    "whisperMinute": 0.006,
+    "lunaInputMillion": 0.2,
+    "lunaOutputMillion": 1.2,
+    "lunaCacheWriteMillion": 0.25,
+    "sources": [
+      "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+      "https://developers.openai.com/api/docs/models/whisper-1"
+    ]
+  },
+  "events": [
+    {
+      "type": "reserve",
+      "id": "11643c63-9b94-48f4-80da-d869db0f12b2",
+      "at": "2026-09-10T20:05:46.021Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 2590,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.0028075
+    },
+    {
+      "type": "failure",
+      "id": "11643c63-9b94-48f4-80da-d869db0f12b2",
+      "at": "2026-09-10T20:05:46.104Z",
+      "category": "REQUEST_OR_RESPONSE_FAILURE",
+      "httpStatus": null
+    },
+    {
+      "type": "reserve",
+      "id": "50ba56db-cc41-4471-b055-6d8fc84bb863",
+      "at": "2026-09-10T20:06:19.298Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 2590,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.0028075
+    },
+    {
+      "type": "settle",
+      "id": "50ba56db-cc41-4471-b055-6d8fc84bb863",
+      "at": "2026-09-10T20:06:22.679Z",
+      "usage": {
+        "input_tokens": 81,
+        "output_tokens": 39
+      },
+      "requestId": "req_7cdceb1ec3e447ea940b108ede336a2c",
+      "costUSD": 0.00006705,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "12364790-6118-4b5d-8546-1ccef36e8e5e",
+      "at": "2026-09-10T20:20:00.460Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 4346,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.0032465
+    },
+    {
+      "type": "settle",
+      "id": "12364790-6118-4b5d-8546-1ccef36e8e5e",
+      "at": "2026-09-10T20:20:04.688Z",
+      "usage": {
+        "input_tokens": 483,
+        "output_tokens": 147
+      },
+      "requestId": "req_03933f35f4a44adea8f41055ec94ab6d",
+      "costUSD": 0.00029715,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "a08116c7-db15-49c9-9c04-2d25df947be1",
+      "at": "2026-09-10T20:20:46.205Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 4472,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.003278
+    },
+    {
+      "type": "settle",
+      "id": "a08116c7-db15-49c9-9c04-2d25df947be1",
+      "at": "2026-09-10T20:20:49.528Z",
+      "usage": {
+        "input_tokens": 483,
+        "output_tokens": 177
+      },
+      "requestId": "req_63a0c74ed5ab479eae0b347a681ee976",
+      "costUSD": 0.00033315,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "aa23dbd3-76d6-46c1-b4b1-ea8a6ca1bd36",
+      "at": "2026-09-10T20:20:49.538Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 4462,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.0032755
+    },
+    {
+      "type": "settle",
+      "id": "aa23dbd3-76d6-46c1-b4b1-ea8a6ca1bd36",
+      "at": "2026-09-10T20:20:52.714Z",
+      "usage": {
+        "input_tokens": 484,
+        "output_tokens": 150
+      },
+      "requestId": "req_e219b9eef55c45d0b4b37aac959d4bf8",
+      "costUSD": 0.000301,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "3be6528d-d4b1-45de-a811-59a55b8c60b9",
+      "at": "2026-09-10T20:20:52.724Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 4440,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.00327
+    },
+    {
+      "type": "settle",
+      "id": "3be6528d-d4b1-45de-a811-59a55b8c60b9",
+      "at": "2026-09-10T20:20:55.001Z",
+      "usage": {
+        "input_tokens": 472,
+        "output_tokens": 122
+      },
+      "requestId": "req_da06cddb9a264ca8979df9f7418c2f8e",
+      "costUSD": 0.0002644,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "b012aa59-e8b9-48ff-92ff-e24a15cba84d",
+      "at": "2026-09-10T20:20:55.012Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 4469,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.00327725
+    },
+    {
+      "type": "settle",
+      "id": "b012aa59-e8b9-48ff-92ff-e24a15cba84d",
+      "at": "2026-09-10T20:20:58.833Z",
+      "usage": {
+        "input_tokens": 481,
+        "output_tokens": 148
+      },
+      "requestId": "req_b01fc5a8571c43c6a6bf852c7db5f2d2",
+      "costUSD": 0.00029785,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "ff8827d5-f2a6-4e6e-ad4c-b35b83d5a827",
+      "at": "2026-09-10T20:20:58.841Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 4497,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.00328425
+    },
+    {
+      "type": "settle",
+      "id": "ff8827d5-f2a6-4e6e-ad4c-b35b83d5a827",
+      "at": "2026-09-10T20:21:01.857Z",
+      "usage": {
+        "input_tokens": 488,
+        "output_tokens": 158
+      },
+      "requestId": "req_aad436e0b76c4f0f87ede80365e4ad87",
+      "costUSD": 0.00031160000000000004,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "2818a057-6ed9-49b4-b560-865d12d73997",
+      "at": "2026-09-10T20:21:01.867Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 3773,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.00310325
+    },
+    {
+      "type": "settle",
+      "id": "2818a057-6ed9-49b4-b560-865d12d73997",
+      "at": "2026-09-10T20:21:04.097Z",
+      "usage": {
+        "input_tokens": 336,
+        "output_tokens": 146
+      },
+      "requestId": "req_4cbd985bf1eb440ab0eb97d1773fdd44",
+      "costUSD": 0.0002592,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "e3c4e107-4751-4842-880a-5ad29e1ba9bb",
+      "at": "2026-09-10T20:21:04.107Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 3828,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.003117
+    },
+    {
+      "type": "settle",
+      "id": "e3c4e107-4751-4842-880a-5ad29e1ba9bb",
+      "at": "2026-09-10T20:21:06.323Z",
+      "usage": {
+        "input_tokens": 352,
+        "output_tokens": 115
+      },
+      "requestId": "req_6ce29c6906c34feba0c89911a88efa54",
+      "costUSD": 0.000226,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "1bdd3d2d-09ad-4995-bf39-248a1e01aa35",
+      "at": "2026-09-10T20:21:06.335Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 3791,
+      "output": 1800,
+      "minutes": 0,
+      "reserveUSD": 0.00310775
+    },
+    {
+      "type": "settle",
+      "id": "1bdd3d2d-09ad-4995-bf39-248a1e01aa35",
+      "at": "2026-09-10T20:21:08.380Z",
+      "usage": {
+        "input_tokens": 339,
+        "output_tokens": 130
+      },
+      "requestId": "req_c009079cdcf248a6993c97c0890d5713",
+      "costUSD": 0.00024075,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "96cbdc0b-0254-470a-a176-5b000360c1f8",
+      "at": "2026-09-10T20:26:24.191Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "synthetic-mandarin-build01",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002
+    },
+    {
+      "type": "failure",
+      "id": "96cbdc0b-0254-470a-a176-5b000360c1f8",
+      "at": "2026-09-10T20:26:26.064Z",
+      "category": "HTTP_ERROR",
+      "httpStatus": 401
+    },
+    {
+      "type": "reserve",
+      "id": "7c924c27-11ad-44de-94f5-30f804630a9d",
+      "at": "2026-09-10T20:59:55.777Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 2213,
+      "output": 64,
+      "minutes": 0,
+      "reserveUSD": 0.00063005
+    },
+    {
+      "type": "settle",
+      "id": "7c924c27-11ad-44de-94f5-30f804630a9d",
+      "at": "2026-09-10T20:59:59.523Z",
+      "usage": {
+        "input_tokens": 11,
+        "output_tokens": 5
+      },
+      "requestId": "req_ba6d7dd137a2475bbead09f9a6cdd856",
+      "costUSD": 0.00000875,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "0a215ec0-11a7-402a-a209-ac675f02be37",
+      "at": "2026-09-10T20:59:59.538Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "synthetic-mandarin-build01",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002
+    },
+    {
+      "type": "failure",
+      "id": "0a215ec0-11a7-402a-a209-ac675f02be37",
+      "at": "2026-09-10T21:00:00.704Z",
+      "category": "HTTP_ERROR",
+      "httpStatus": 401
+    },
+    {
+      "type": "reserve",
+      "id": "a62d9841-7797-4414-bddb-4bfaf4614679",
+      "at": "2026-09-10T21:27:30.917Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "synthetic-mandarin-build01",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002
+    },
+    {
+      "type": "failure",
+      "id": "a62d9841-7797-4414-bddb-4bfaf4614679",
+      "at": "2026-09-10T21:27:31.350Z",
+      "category": "HTTP_ERROR",
+      "httpStatus": 401
+    },
+    {
+      "type": "reserve",
+      "id": "97c6ebea-1480-4e79-916f-fc3db80bd90d",
+      "at": "2026-09-10T22:15:44.954Z",
+      "model": "gpt-5.6-luna",
+      "kind": "semantic",
+      "attemptId": null,
+      "input": 2213,
+      "output": 64,
+      "minutes": 0,
+      "reserveUSD": 0.00063005
+    },
+    {
+      "type": "settle",
+      "id": "97c6ebea-1480-4e79-916f-fc3db80bd90d",
+      "at": "2026-09-10T22:15:47.425Z",
+      "usage": {
+        "input_tokens": 11,
+        "output_tokens": 5
+      },
+      "requestId": "req_ec736ad1f65e4abba48718fc2a16de92",
+      "costUSD": 0.00000875,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "86d90a1e-07e8-49fc-94a2-549418ea2e56",
+      "at": "2026-09-10T22:16:09.749Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "synthetic-mandarin-build01",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002
+    },
+    {
+      "type": "settle",
+      "id": "86d90a1e-07e8-49fc-94a2-549418ea2e56",
+      "at": "2026-09-10T22:16:12.945Z",
+      "usage": {
+        "seconds": 7.31
+      },
+      "requestId": "req_d2c2110b763045d698f304691e2c38f4",
+      "costUSD": 0.0008,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "failure",
+      "id": "86d90a1e-07e8-49fc-94a2-549418ea2e56",
+      "at": "2026-09-10T22:16:12.955Z",
+      "category": "NETWORK_OR_VALIDATION_FAILURE",
+      "httpStatus": 200
+    },
+    {
+      "type": "reserve",
+      "id": "f1edb890-b2d0-4acc-ac2a-6be7ab856e0f",
+      "at": "2026-09-10T22:28:59.994Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "synthetic-mandarin-build01",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002
+    },
+    {
+      "type": "settle",
+      "id": "f1edb890-b2d0-4acc-ac2a-6be7ab856e0f",
+      "at": "2026-09-10T22:29:04.137Z",
+      "usage": {
+        "seconds": 7.31
+      },
+      "requestId": "req_1136d20fdc6c4f00954060e20866e094",
+      "costUSD": 0.0008,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    }
+  ]
+}
