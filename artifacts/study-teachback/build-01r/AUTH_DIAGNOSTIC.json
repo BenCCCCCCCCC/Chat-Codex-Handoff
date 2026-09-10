@@ -1,0 +1,67 @@
+{
+  "at": "2026-09-10T20:59:55.773Z",
+  "kind": "BUILD_01R_SAME_PROCESS_AUTH",
+  "credentialFingerprint": "21c4bf00e422",
+  "fingerprintAlgorithm": "SHA-256 truncated to 12 hex",
+  "credentialSource": "existing OPENAI_API_KEY captured once",
+  "sameProcess": true,
+  "records": [
+    {
+      "model": "gpt-5.6-luna",
+      "credentialFingerprint": "21c4bf00e422",
+      "httpStatus": 200,
+      "requestId": "req_ba6d7dd137a2475bbead09f9a6cdd856",
+      "status": "PASS",
+      "usage": {
+        "input_tokens": 11,
+        "output_tokens": 5
+      }
+    },
+    {
+      "model": "whisper-1",
+      "credentialFingerprint": "21c4bf00e422",
+      "httpStatus": 401,
+      "requestId": "req_d8ca678993a744ab8548fb313c43df9e",
+      "error": {
+        "type": "invalid_request_error",
+        "code": "missing_scope",
+        "param": null,
+        "message": "You have insufficient permissions for this operation. Missing scopes: [REDACTED_TOKEN] Check that you have the correct role in your organization (Reader, Writer, Owner) and project (Member, Owner), and if you're using a restricted API key, that it has the necessary scopes."
+      },
+      "status": "HTTP_FAILURE"
+    }
+  ],
+  "ledgerBefore": {
+    "requests": 12,
+    "attempts": 1,
+    "minutes": 3,
+    "inputReserved": 43258,
+    "outputReserved": 19800,
+    "exposureUSD": 0.02340565,
+    "knownCostUSD": 0.0025981500000000005,
+    "unsettled": 2,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  },
+  "ledgerBeforeSha256": "80ca0627cd4be84a6ab6e92c60ea65f0a235ab82348ff9d602ac5928ce82bae7",
+  "audio": {
+    "kind": "EXISTING_SYNTHETIC_MANDARIN_WINDOWS_VOICE",
+    "duration": 7.31,
+    "originalSha256": "7e291bc01d614dfb34068ab3d2d9f4d1217f329ba14b6e4fdb7cea919aba6206",
+    "ownerVoice": false
+  },
+  "outcome": "STOP_PAID_CALLS_WHISPER_401",
+  "ledgerAfter": {
+    "requests": 14,
+    "attempts": 1,
+    "minutes": 6,
+    "inputReserved": 45471,
+    "outputReserved": 19864,
+    "exposureUSD": 0.041414400000000004,
+    "knownCostUSD": 0.0026069000000000005,
+    "unsettled": 3,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  },
+  "priorLedgerEventsUnchanged": true
+}

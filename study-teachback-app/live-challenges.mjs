@@ -1,20 +1,17 @@
 import { semantic, ledger } from './provider.mjs';
 import { contentInput,validateFindings,validateTeaching } from './core.mjs';
 import { CONTENT,TEACH,findingsSchema,teachingSchema } from './schemas.mjs';
-import { writeFileSync } from 'node:fs';
-const source={id:'engineering-source-1',title:'自编工程材料：植物浇水',text:'只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。'};
-const cases=[
-  ['correct_with_pauses','土壤干了才浇水，湿润的时候不要浇水。','correct'],
-  ['fluent_wrong','土壤越湿越要浇水，湿润时也要浇水。','wrong'],
-  ['omitted_condition','给这盆植物浇水。','missing'],
-  ['valid_paraphrase','摸起来还是湿的就先别加水，干了再加。','correct'],
-  ['self_repair','湿的时候浇水，不对，我说反了，干的时候才浇，湿的时候别浇。','correct']
-];
-const receipt={kind:'LIVE_API_SYNTHETIC_ENGINEERING_FIXTURES',at:new Date().toISOString(),source,cases:[],speechEvidence:false};
-for(const [id,words,expectation]of cases){
+import { writeFileSync,readFileSync } from 'node:fs';
+import {cases,plantSource,verdictPass} from './logic-fixtures.mjs';
+// Recovery stop is retained; absent/incomplete evidence also blocks paid semantic runs.
+const auth=JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r/AUTH_DIAGNOSTIC.json',import.meta.url),'utf8'));
+if(auth.outcome!=='AUTH_PASS_TIMESTAMP_TRANSPORT_VALID')throw new Error('AUTH_RECOVERY_STOP_NO_PAID_CALLS');
+const source=plantSource;
+const receipt={kind:'LIVE_API_SYNTHETIC_ENGINEERING_FIXTURES',at:new Date().toISOString(),source,cases:[],speechEvidence:false,oracleVersion:'BUILD-01R-necessary-not-sufficient',qualitativeReview:'REQUIRED_NOT_ESTABLISHED_BY_SCHEMA_OR_STATUS'};
+for(const {id,words,expectation,source}of cases){
   const a={id,sourceId:source.id,transcriptVersion:'fixture-confirmed-1',duration:20,spans:[{id:'s0',start:0,end:20,text:words}],assistance:'none',kind:'full',focus:null,reviewed:true,interrupted:false};
   let response;
-  try{const r=await semantic(CONTENT,contentInput(source,{...a,fluency:id==='fluent_wrong'?'smooth':'slow',pauses:12}),findingsSchema);response=r;validateFindings(r.value,source,a,'content');const statuses=r.value.findings.map(f=>f.status);const pass=expectation==='correct'?statuses.includes('supported')&&!statuses.some(s=>['incorrect','missing'].includes(s)):expectation==='wrong'?statuses.includes('incorrect'):statuses.includes('missing');receipt.cases.push({id,expectation,status:pass?'PASS':'FAIL',fixture:a,model:r.model,usage:r.usage,result:r.value});console.log(id+': '+(pass?'PASS':'FAIL'));}
+  try{const r=await semantic(CONTENT,contentInput(source,{...a,fluency:id==='fluent_wrong'?'smooth':'slow',pauses:12}),findingsSchema);response=r;validateFindings(r.value,source,a,'content');const pass=verdictPass(expectation,r.value.findings);receipt.cases.push({id,expectation,status:pass?'PASS':'FAIL',source,fixture:a,model:r.model,usage:r.usage,result:r.value});console.log(id+': '+(pass?'PASS':'FAIL'));}
   catch(e){receipt.cases.push({id,status:'BLOCKED',category:e.message,result:response?.value??null});console.log(id+': BLOCKED '+e.message);break;}
 }
 if(!receipt.cases.some(c=>c.status==='BLOCKED'))for(const mode of ['learn','repair','apply']){

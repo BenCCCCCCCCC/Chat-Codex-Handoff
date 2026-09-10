@@ -1,0 +1,21 @@
+{
+  "kind": "OFFLINE_RETAINED_STOP_CHECK",
+  "at": "2026-09-10T21:04:10.992Z",
+  "cases": [
+    {
+      "file": "auth-recovery.mjs",
+      "expected": "DIAGNOSTIC_ALREADY_RECORDED_NO_AUTOMATIC_RETRY",
+      "exitCode": 1,
+      "pass": true
+    },
+    {
+      "file": "live-challenges.mjs",
+      "expected": "AUTH_RECOVERY_STOP_NO_PAID_CALLS",
+      "exitCode": 1,
+      "pass": true
+    }
+  ],
+  "ledgerUnchanged": true,
+  "ledgerSha256": "21e9367ac115eaa9b6c3084026c24658320c5c213909e401f4534791d4331c58",
+  "paidCalls": 0
+}

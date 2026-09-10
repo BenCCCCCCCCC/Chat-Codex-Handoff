@@ -1,0 +1,32 @@
+✔ ticket strengthening is schema-valid but cannot pass semantic fixture oracle (1.2685ms)
+✔ unsupported strengthening requires explicit rejection or uncertainty, never mixed support (0.3283ms)
+✔ correct paraphrase and final self-repair cannot pass with conflicting verdicts (0.3356ms)
+✔ same in-memory credential gets same irreversible short fingerprint (1.5128ms)
+✔ error sanitizer redacts full/masked key, bearer, IDs and email; ignores unapproved fields (1.4126ms)
+✔ missing malformed errors and request headers fail closed (0.2825ms)
+✔ source and attempt versions are bound, acoustic labels excluded from content (2.073ms)
+✔ all ASR including negation, number, condition, term inversions fail closed until replay confirmation (0.3111ms)
+✔ interrupted capture blocks content even if text confirmed (0.1541ms)
+✔ valid finding preserved; source/span/quote/time/schema fabrications rejected (1.271ms)
+✔ missing content cannot receive a timestamp or span (0.1988ms)
+✔ delivery event must overlap real span and cannot issue knowledge judgment (0.22ms)
+✔ ASR timestamps reject missing, reversed, out-of-range and non-finite values (0.4251ms)
+✔ silence/noise/clipping/decode failure are conservative, never validated VAD (8.6178ms)
+✔ long near-silence is only an acoustic candidate, not knowledge deficit (6.4607ms)
+✔ WAV duration guard enforces true PCM layout and 180s upper bound (51.912ms)
+✔ corrected text is a separate version and is not a new recording; partial/full identities distinct (0.6726ms)
+✔ expiry removes seven-day records, preserves newer records and rejects undated records (0.3014ms)
+✔ reservation survives timeout and restart; retry does not create audio/attempt copies (26.3584ms)
+✔ atomic reservation rejects concurrent process lock and malformed ledger (4.1441ms)
+✔ budget, request/token, 60 attempts and two ASR submissions limits fail closed (4689.0837ms)
+✔ only approved model and store=false are sent; failed API result keeps reserve (26.2308ms)
+✔ real ASR transport contract uses whisper timestamps; malformed response fails without losing reservation (34.5259ms)
+✔ HTTP loopback rejects foreign origin, host and arbitrary filesystem path without model calls (72.1106ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5147.7523

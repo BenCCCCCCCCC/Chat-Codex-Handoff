@@ -1,6 +1,6 @@
 # 知而能讲 — BUILD-01 partial implementation
 
-**PARTIAL / BLOCKED: real whisper-1 transcription returned HTTP 401.**
+**BUILD-01R PARTIAL / USER DECISION NEEDED: same-process Luna 200 + Whisper 401 (`missing_scope`). Paid calls stopped.**
 
 Do not treat this checkout as ready for integrated owner validation. Stop occurred on 2026-09-11 Australia/Sydney; no fallback model/provider was used.
 
@@ -18,8 +18,8 @@ Code is partial, with bounded evidence rather than a full production claim. Word
 
 - `node --test study-teachback-app/tests.mjs`: last observed run 18/18. Includes schema/time/source guards, channel isolation, four critical-ASR classes, sound fixtures, versions, expiry and reservation/HTTP failure behavior. These are engineering fixtures, not ASR accuracy measurements.
 - `browser-tests.mjs`: 14/14 in actual Edge headless, using generated WebAudio tones and stubbed provider responses. Real MediaRecorder/decode/IndexedDB were exercised. Evidence records distinguish these from live API runs. Profile and mock ledger are isolated under runtime and excluded from Git/review.
-- `live-challenges.mjs`: 5/5 real Luna content fixtures; Learn/Repair/Apply returned valid schemas and source references. Qualitative pedagogy and necessary-versus-sufficient condition fidelity remain uncalibrated. One earlier empty-string result was rejected; its failure receipt remains.
-- `live-asr-check.mjs`: exactly one actual Whisper request, for a self-authored 7.31s synthetic Mandarin fixture produced with an already-installed Windows voice. HTTP 401; no transcription or timestamps obtained. Nothing proves ordinary Mandarin mic fidelity yet.
+- Historical Luna 5/5 is schema/channel evidence only, NOT accepted logic fidelity. BUILD-01R corrected necessary/sufficient-condition instructions and seven fixtures, including the explicit ticket counterexample. Updated live semantic run is NOT DONE because auth recovery requires paid calls to stop. Offline fixture-oracle tests do not prove model semantics.
+- Original `live-asr-check.mjs`: one actual Whisper request, for a self-authored 7.31s synthetic Mandarin fixture produced with an already-installed Windows voice. HTTP 401; no transcription or timestamps obtained. Nothing proves ordinary Mandarin mic fidelity yet.
 - `browser-learning.png` is an actual screenshot of the stub-provider engineering session, not a screenshot of live AI output.
 - Export content completeness, quota recovery, individual-attempt delete, live delivery interpretation and full real-API integration still need verification. Seven-day reopening cleanup, history persistence and delete-all were verified in Edge.
 
@@ -33,9 +33,11 @@ Only whisper-1 and gpt-5.6-luna and their two fixed global endpoints are coded. 
 
 ## Resume blockers / unfinished work
 
-1. Resolve legitimate access to `/v1/audio/transcriptions` with whisper-1. Do not infer diagnosis from the 401, search private client files, or silently use another credential/provider/model.
+1. Owner must inspect existing key endpoint permissions and project/organization membership: the BUILD-01R same-process diagnostic identifies `missing_scope` for `/v1/audio/transcriptions` while Luna passes. Specific missing-scope text was conservatively redacted. No credential replacement or paid retry is authorized by the diagnosis itself. The synthetic attempt has now used both permitted ASR submissions; do not reset its ledger or relabel it to evade that cap.
 2. Complete successful ASR timestamp and negation/number/condition/term checks with the existing fail-closed gate, then live delivery and full journey tests.
 3. Finish export/quota/individual delete and pending-navigation recovery checks. Review Tutor prose for necessary/sufficient-condition fidelity; schema validity alone does not establish semantic correctness.
 4. Run the integrated owner walkthrough with the owner's explicit in-product recording action. Synthetic fixtures are not owner recordings or learning-efficacy evidence.
 
-The original accepted branch/history and unrelated untracked files are preserved. No push, merge, release, public hosting, external users, installed dependencies, automatic recharge or provider/model change occurred.
+The original accepted branch/history and unrelated untracked files are preserved. Private feature-branch checkpoint pushes are owner-authorized. No merge, release, public hosting, external users, installed dependencies, automatic recharge or provider/model change occurred.
+
+BUILD-01R readable evidence: [Delivery Packet](../artifacts/study-teachback/build-01r/DELIVERY_PACKET.md), [review manifest](../artifacts/study-teachback/build-01r/REVIEW_MANIFEST.json). Original BUILD-01 manifest remains a historical checkpoint manifest.
