@@ -3,105 +3,101 @@
 Updated: 2026-09-10
 Role: 00 MASTER / authoritative dynamic state
 
-## Stage / Latest Owner Direction
+## Stage
 
-**DIRECTION-DEEPENING-01 v2 — SPOKEN EXPLAIN-BACK SYNTHESIS / SOURCE AND IMPLEMENTATION RESEARCH COMPLETE / AUDIO FEASIBILITY NOT STARTED**
+**DIRECTION-DEEPENING-01 v3 — BOUNDED PRODUCT/ENGINEERING SPECIFICATION COMPLETE / DUAL-CHANNEL DESIGN SELECTED / IMPLEMENTATION NOT STARTED**
 
-The owner proposes combining the previous grounded learning/communication mechanism with spoken logical organization, Feynman-like explain-back and PTE-like multidimensional oral assessment. They request similar projects, implementation study, integration/iteration and development feasibility.
+Owner asks for a comprehensive product/R&D treatment before returning to isolated loops, and proposes independent transcript analysis plus a built-in speaking/pausing checker feeding their combined evidence to a model. ChatGPT Voice is explicitly optional.
 
-MASTER selects one bounded hypothesis, not three simultaneous apps: **source-grounded short spoken explanations with auditable audio/text feedback, targeted re-explanation and a new application question**. Knowledge, reasoning, observable speaking delivery and independent application stay separate. Information-asymmetry/observable-result ideas survive as a small source-backed expressed-structure/listener mechanism, not a mandatory full delegation game.
+MASTER selects this as the preferred candidate architecture for short source-grounded spoken explanations, with quality gates, aligned evidence and separated content-versus-delivery judgment. This is a design decision, not a measured optimum. No new product pivot or brand. Generic old builds remain paused; Gate5 external execution stays ON HOLD.
 
-Research is completed at the source level; no voice recorded/processed, model/API run, install, new code or local Codex dispatch occurred. PRODUCT-CORE-01 remains PAUSED, INTERVIEW-DEMO-01 SUPERSEDED and Gate5 external execution ON HOLD. The previous “Chat-substitution gate complete” was a desk-design decision, NOT a demonstrated performance advantage.
+'Build first' is implemented as a full bounded functional specification and continuous internal engineering batches before one integrated owner review. It does not remove critical measurement/calibration tests or authorize an unbounded commercial build. Long-term learning, retention and commercial validation remain later questions.
 
-## Authority / Durable Record
+## Authority
 
-Repo `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
-
+`BenCCCCCCCCC/Chat-Codex-Handoff` / `meta/master-state`:
 1. `docs/master/CURRENT_STATE.md`
 2. `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` **v2** — integrated product/assessment/architecture, primary-source register and next feasibility boundary.
+3. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` **v3** — comprehensive product/architecture/data/error/implementation plan.
 
-The existing detailed document is revised rather than another product-name/PRD tree. Prior v1 and SCENARIO_FOCUS_02 remain historical reasoning, not active old build permission. Research/state writes are not product push or publication.
+Prior v2 source/learning/PTE/competitor register is preserved in Git at `88c520e620d2b451bbaa8cb6dd4f6e70fc5a91bb`. Old product-core and interview-demo briefs are not active build permission. Research/state writes do not authorize product-code push or external publication.
 
 ## Last Product Receipt — Unchanged
 
-- Repo: `F:\Chat-Codex-Handoff\validation-repo`
+- Local repo: `F:\Chat-Codex-Handoff\validation-repo`
 - Branch: `prototype/acceptance-evidence-p0`
-- Last owner/Codex-reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+- Latest owner/Codex-reported HEAD: `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
 - Before P0: `0c2440b06ffe5657331d4395a4181929d28c5ebf`
-- Reported P0 commits: `81b4a80`, `a1c37af`; four files; Windows PS5.1 54/54 reported.
-- Prior MASTER source/bundle review: PASS FOR COMPARISON ENTRY only.
-- ZIP SHA256: `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`; prior 14/14 indexed byte/size matches.
-- Historical remote product observation `869414c77d227fe2f1675c7cfa08b04250520279` is not a fresh remote check.
+- P0 commits reported: `81b4a80`, `a1c37af`; four files; PS5.1 54/54 reported.
+- Prior MASTER transferred-bundle/source review: PASS FOR COMPARISON ENTRY only.
+- Bundle SHA256 `E0CAFE949CB6611329F247CD01DF468B6AF41D534D8D9B429F8D1C88391867A4`; previous indexed size/hash matches 14/14.
+- Remote product observation `869414c77d227fe2f1675c7cfa08b04250520279` is historical, not freshly checked.
 
-No new version is known. Preserve all prior source/evidence/partial work; no reset. P0 concepts may help internal provenance but must not force Windows/Git/Codex onboarding on consumers.
+No new code/HEAD, Windows/runtime test, microphone capture, audio analysis, model/API call, installation or local Codex dispatch in this turn. Preserve old source/history/partial work, no reset. Old P0 may contribute provenance ideas, not dictate a consumer WinForms/Git interface.
 
-## Primary-Source Findings / Direct Competition
+## Product / Four Layers
 
-- Vocenda and LaoshiAI already offer teach-back/voice/targeted gaps. Yoodli already offers recorded practice and feedback. No claim that Feynman + voice + scoring/graph is new.
-- Actual code inspected in mattdiep15/feynman: evaluate route accepts transcript/prior turns, retrieves concept context, requests structured LLM rubric fields; helper computes/clamps aggregate. The inspected evaluator receives no raw audio/timestamp stream. That is a scoped code observation, not a claim about all competitors. Programmed arithmetic over model judgments does not establish psychometric validity. The README-linked root DEVELOPMENT.md was404; real code was found through its tree instead.
-- feynman-tutor SKILL.md provides a strong conversational/persistent-learning baseline; app form is not automatically better.
-- Pearson official Academic guide was read and its printed pages8/21/46 visually inspected. Content and pronunciation/fluency are distinct; some content scoring uses AI and human review. Borrow task/rubric/calibration, not official score equivalence, English norms for Mandarin or proprietary test content.
-- 2025 oral+written explanation experiment supports complementary modalities in a specific setting, not universal spoken superiority. The 2020 text-complexity paper abstract was available but full publisher fetch403; no full-method review claimed.
-- MediaRecorder, Silero VAD, WhisperX and audio-region UI are reusable technical components, not installed/benchmarked here. VAD detects speech activity, not mental hesitation.
-- Current OpenAI transcription docs distinguish ordinary transcription from explicit timestamp options; timestamp_granularities is limited to whisper-1. Filler-preserving prompts are not fidelity guarantees.
-- Microsoft pronunciation docs: prosody en-US only; content-assessment preview retired at SDK1.46.0+. Do not promise a ready-made Chinese knowledge/logic scoring API.
-- ChatGPT Voice official documentation states transcripts are not verbatim. Chat has voice and study functions; custom UI exists, but this research did not establish a plugin's access to host raw audio/microphone.
+User/scenario: adult who studied limited material and needs to explain a concept/rule/process; Mandarin single-speaker short explanation first. Do not select audience from owner's personal projects or treat AI novice as low domain skill.
 
-See detailed register E01–E19 for URLs/blobs and limitations. Official/vendor capability statements are not user efficacy evidence. No competitive runtime comparison or first-hand target interviews this turn.
+Product: evidence-linked feedback on what this attempt expressed, its reasoning and separately its observable speaking delivery; selective replay/repair, not a PTE-like uncalibrated score or new chat wrapper.
 
-## Four Levels / Product Decision
+v0.1 boundary: one material/task type, one Web surface, recording/upload, quality/transcript correction, built-in observations, content/logic feedback, source/audio navigation, actual re-record, saved attempts/export/delete. 60–180sec and3–6criteria are proposed scope limits, not education/scoring norms. No full curriculum/realtime voice/knowledge graph/native multi-platform app.
 
-**User/scenario:** adult with a near-term need to explain a learned concept, rule or procedure from a limited source; wants to know whether the explanation is accurate, complete and usable. No personal-project anchoring; AI novice/light use is not low domain expertise. Frequency/adoption/payment and willingness to record remain unknown.
+Feasibility: mature recorder/playback/ASR/VAD/alignment components plus explicit evidence/data contract and a thin semantic adapter. Reliability, target demand and user benefit are not established merely because components exist.
 
-**Product:** confirm source/learning scope -> brief independent recording -> check audio/transcript quality -> source- and time-linked feedback -> targeted question/re-record -> separate new-situation attempt. Show only a few useful issues, not a universal ability score or polished answer replacing the user's attempt.
+## Selected Architecture
 
-**MVP candidate:** Mandarin, single speaker,60–180 seconds, one task type,1–2 original short sources,3–6 anchored conditions, original audio playback, targeted repair and one unseen application item. Numbers are proposed scope, not studied efficacy thresholds. Batch processing, text feedback; no full knowledge graph, realtime voice coach, PTE simulator or universal learning platform.
+One original recording -> quality/decode -> parallel branches:
+A audio-based VAD/quality/timing observations;
+B faithful ASR, optional alignment, versioned transcript and uncertainty.
 
-**Feasibility:** model handles semantic interpretation; external audio/timing/rule systems record/check inspectable facts; people resolve uncertain language/source/learning judgments. No foundation-model training is required for a prototype, but reliable diagnosis/calibration remains the main uncertainty. Candidate small web recorder with later plugin option; raw host-voice access must not be assumed.
+Join on the original audio clock, with no silent-removal/time-warp measurement shortcut. Then:
+C1 source/criteria/transcript -> content/logic, WITHOUT acoustic fluency statistics;
+C2 transcript/acoustic+text events -> contextual delivery observations.
 
-## Assessment Boundaries / Must-Hold Rules
+Program validates and presents the two outputs, ranking only supported findings. Optional generated summary cannot alter numeric measurements, invent references or turn pause correlation into knowledge causality. One semantic model can serve separate requests; no needless agents/vendors. Separation is a bias-control design, not proof of independence/fairness.
 
-Four separate tracks:
-1. content/learning-criterion evidence;
-2. expressed reasoning/structure;
-3. acoustic/delivery observations;
-4. new-task performance and assistance level.
+Built-in checker is a combination of learned detectors and deterministic calculations, not a perfectly objective speech judge. VAD does not read cognitive hesitation. Silence/fillers/accent/self-repair cannot automatically reduce knowledge judgments. Poor source/transcript quality blocks both positive and negative unsupported claims.
 
-Never infer lack of knowledge from silence/fillers/accent/stutter, or comprehension from fluent delivery alone. Absence from this recording is not proof the learner does not know. Negation/number/term ASR uncertainty blocks dependent negative judgments until clarified. No personality, mental-state or cognitive diagnosis, certified exam score, admissions/recruitment assessment or claimed human learning effect.
+## Engineering Details Now Fixed
 
-Original audio, raw ASR, user-corrected transcript and generated polished text remain separate versioned records. Correcting text cannot rewrite historical audio performance. Every substantive diagnosis needs source and attempt references; uncertainty is explicit. A deterministic checksum/sum is not semantic truth.
+- Original audio, derived decode, raw ASR, corrected transcript, coaching rewrite and a new recording are separate objects.
+- Preserve sample/time mapping, recorder pause/interruption metadata and detector settings; exclude missing-capture gaps from acoustic silence claims.
+- Do not pass full correct answers to ASR; limited vocabulary hints still require checking hallucinated additions.
+- A known-critical ASR ambiguity blocks dependent diagnoses; missing confidence is Unknown, not invented. Undetected high-confidence errors remain a residual risk.
+- Correcting transcript invalidates dependent alignment/text metrics/semantic reports, not original audio history. Text edits are not oral improvement.
+- Stable attempt/source/rubric/transcript/config IDs drive reports/cache/retry. Model-returned IDs/time references undergo mechanical validation, which does not certify semantic truth.
+- App shows facts versus interpretation/uncertainty, a few priority findings and direct replay. No global fluency/logic/intelligence or PTE10–90 score.
+- No-service mode honestly yields local observations only / semantic NOT RUN; fixtures cannot make a product look fully live.
+- Proposed modular frontend/backend/worker, not microservices, vector database or multi-agent framework. Final dependency/provider/runtime choices need actual environment/access confirmation.
 
-Optional expressed map uses transcript-only extraction with quoted spans; reference-aware assessor is separate. A listener can still infer from pretrained knowledge; unsupported guessed knowledge cannot count as proof that the user communicated it. Real payload separation, not “pretend ignorance” in a full-answer context.
+## Fresh Source Checks / Meaningful Update
 
-## Chat/Substitution and Form Factor
+Re-read official OpenAI file transcription, Microsoft pronunciation, Pearson task scoring, MDN recorder, WaveSurfer and evaluation guidance; read actual Silero timestamp implementation and WhisperX limitations.
 
-Ordinary Chat Voice plus good learning prompts already performs explanation and questioning. Proposed incremental value is original-audio/timestamp access, inspectable diagnoses, separate metrics and exact local retry—not a smarter persona.
+Important: current OpenAI file transcription docs now recommend `gpt-transcribe` and describe prompt/keywords/languages; previous candidate lists must not be treated as exhaustive/current. The same docs still restrict `timestamp_granularities` to `whisper-1`. ASR selection must test needed fidelity/time capabilities, not assume latest model supplies all fields. No model was called.
 
-Compare against both normal Chat Voice with the same source and a good Skill with equal audio/state tools. If the latter is equally useful with less preparation, ship a component/Skill or use an existing product. No established standalone-app necessity or moat.
+Silero inspected blob `8f6b68191b6939a9ef92f7532935d7e7b6de530e`: duration filters, padding and output resolution affect reported intervals; don't directly reuse chopping defaults as validated fluency thresholds. WhisperX documents language-specific alignment, missing timing for unsupported tokens and overlapping speech limits.
 
-A self-owned light Web recording surface is a feasibility candidate because it can control source audio/replay. It is not an authorized deployed product, not a claim that Chat plugins cannot record, and not permission to read internal Chat audio files. Region, model access, data retention, deletion and actual per-attempt cost remain separate engineering/product decisions.
+Pearson separates content/fluency and includes human content review for some tasks. Azure prosody en-US limitation and retired content-preview remain. These support modular design, not a ready-made Chinese knowledge/PTE-equivalent score.
 
-## Decisions This Turn
+The prior direct voice-teachback competition remains valid; no new algorithmic novelty, moat or app necessity claim. Current source register N01–N08 and prior evidence references are in v3.
 
-DD02-D1: voice is a substantive practice input, not merely a microphone button on a text chat.
-DD02-D2: formative feedback before uncalibrated total scores; separate knowledge/logic/delivery/transfer.
-DD02-D3: preserve source and actual audio evidence; never blame a learner for ASR/model/tool error.
-DD02-D4: acknowledge direct voice-teachback competition; adopt useful architecture without copying unverified licences or arbitrary scoring weights.
-DD02-D5: adapt prior hidden-state mechanism narrowly; do not build two training platforms.
-DD02-D6: next work is a minimal end-to-end audio feasibility slice, not more generic UI/state infrastructure; actual runtime/voice/API budget requires bounded approval.
+## Implementation Sequence / Gates
 
-## Completed / Verified / Likely / Unknown / Not Done
+Design covers U01–U08, four screens, data contracts and exceptional paths. Next prepare one bounded local engineering work package, preserving prior source and explicitly covering actual dependencies/runtime, lawful source/voice samples, provider and maximum spend. No need for another broad market scan or label-by-label owner questionnaire.
 
-Completed: concept integration, empirical-learning/PTE/competitor/source-code checks, speech-tool and native-Chat audit, four-level design, separate feedback rubric, pipeline/error/privacy/cost boundaries and next experiment design.
-Verified: retrieved source/code claims and prior P0 evidence at their recorded levels. No new audio, user or model output.
-Likely: evidence-linked targeted spoken repair may help more than generic feedback. Not measured.
-Unknown: Mandarin ASR/alignment and diagnosis reliability, fairness, real learning transfer, user repeat need/payment, host audio access, latency/cost and comparative burden.
-Not Done: audio pipeline execution, labelled sample acquisition, live competitor baseline, learner study, product implementation or release.
-Must Fix: no false oral-over-written/PTE-like certification/pause-equals-ignorance/Chat-incapability/ASR-blame claims.
-User Decision Needed: none for completed research; new source development/audio collection/processing/API/installation/spending/external contact/publication needs explicit bounded authorization.
-Future Optional: realtime/full-duplex speech, English pronunciation coaching, native app, full delegation game, general knowledge graphs; inactive.
+Proposed internal batches: A capture/storage/timebase; B ASR/VAD/alignment; C separated semantic review and validation; D full UI/history/re-record/error integration; E actual tests and one review bundle. Engineering checks/calibration run during the work; one integrated owner journey after relevant functionality exists.
 
-## Next Smallest Step
+Dependencies/installations, new audio/model/API data processing and costs, source development scope, deployments, external contact/share/push/release still need bounded action authorization. This turn is specification, not an execution receipt or blanket permission. Missing access yields explicit partial capability, not fake completion.
 
-Prepare/authorize one **source -> real short recording -> faithful transcript + timing -> a few evidence-linked findings -> re-record** feasibility experiment, with clear/hesitant-correct/fluent-wrong/missing/ASR-critical challenge cases and a matched Chat/Skill baseline. Use original or explicitly permitted material/voices; synthetic scripted samples are engineering data, not real user evidence. Confirm the actual available processing route, cost and permission before execution. No full software build or paid audio run was started by MASTER.
+## State Summary
+
+Completed: user-proposed architecture adopted/refined; comprehensive product/engineering specification, current capability/source check, data/metric/error/privacy/cost rules, continuous implementation sequence.
+Verified: read source/API capability statements and prior project evidence at recorded levels; no audio/runtime outcomes.
+Likely: this hybrid pipeline is easier to audit/debug than unconstrained one-call grading for the intended task; no measured superiority.
+Unknown: Mandarin ASR/alignment, fairness and diagnosis accuracy, actionable benefit, repeated user demand, actual infrastructure cost/latency, learning transfer.
+Not Done: local preflight/implementation, consented sample processing, actual model/competitor calibration, integrated owner test, external study or release.
+Must Fix: no pause=ignorance, model-generated measurements, ASR blame, fake implementation, or treating postponed owner testing as permission to skip engineering assurance.
+User Decision Needed: none for normal design; next real development/runtime/data/install/budget/publication gates only.
+Future Optional: realtime duplex voice, English pronunciation/exam modules, global scores, full hidden-world game, platform ecosystem; inactive.
