@@ -1,107 +1,81 @@
 # Active Handoff
 
-Updated: 2026-09-10
+Updated: 2026-09-11
 Role: 00 MASTER
 
 ## Immediate State
 
-**DIRECTION-DEEPENING-01 v4 / STUDY-FIRST + IN-APP TEACH-BACK DESIGN / NO LOCAL IMPLEMENTATION STARTED**
+**BUILD-00 PREFLIGHT — CODEX-REPORTED COMPLETE / MASTER REVIEW PENDING / DO NOT START BUILD YET**
 
-Latest owner correction: remove the rigid `confirm evaluation requirements -> upload your recording` journey. The product should first teach the user in a Study-Mode-like flow, then let them naturally enter a formal explain-back attempt. The app/plugin itself records the microphone; manual upload is not the default consumer workflow.
+The active direction is unchanged: Study-first Tutor -> in-product `我来讲讲` recording -> evidence-linked Diagnose -> targeted Repair/Re-explain -> related Apply. Manual pre-record/upload is not the normal user journey.
 
-This supersedes v3 interaction order while preserving its dual-channel audio/transcript pipeline, evidence/error rules, PTE-like dimensional separation and Chat-substitution gate. PRODUCT-CORE-01 remains paused, INTERVIEW-DEMO-01 superseded, Gate5 external execution ON HOLD. No previous READY build prompt is active.
+The owner returned this Codex receipt:
+- preflight artifact: `F:\Chat-Codex-Handoff\validation-repo\artifacts\study-teachback\build-00\PREFLIGHT.md`;
+- branch/HEAD reportedly match the last receipt and product code was unchanged;
+- GitHub v4 + latest MASTER supplement reportedly read;
+- cloud ASR timestamp route recommended, zero new dependencies;
+- proposed total additional cash cap **US$10**;
+- install/service/data-processing/budget consolidated;
+- no server/browser/microphone/model/API/paid execution.
 
-## Authority / Baseline
+This receipt is useful but is not acceptance of the underlying local artifact. MASTER cannot currently see the F: file in this Chat. Do not infer its provider/model/timestamp contract, pricing calculation, retention terms or requested permissions from the short summary. **US$10 is proposed, not approved.**
 
-Read `BenCCCCCCCCC/Chat-Codex-Handoff` / `meta/master-state`:
-1. docs/master/CURRENT_STATE.md
-2. this HANDOFF
-3. docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md v4
+## Authority / Preserved Baseline
 
-Last owner/Codex-reported local code state remains:
-- `F:\Chat-Codex-Handoff\validation-repo`
-- `prototype/acceptance-evidence-p0`
-- `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+Read `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
+1. `docs/master/CURRENT_STATE.md`
+2. this `docs/master/HANDOFF.md`
+3. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` v4
 
-Historical P0 source/bundle review PASS FOR COMPARISON ENTRY and reported PS5.1 54/54 remain unchanged. No new code/audio/model/runtime receipt. Preserve all source/history and any later-discovered partial work; no reset.
+Last reported local source state:
+- repo `F:\Chat-Codex-Handoff\validation-repo`
+- branch `prototype/acceptance-evidence-p0`
+- HEAD `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
 
-## Product Flow — Current Contract
+Prior P0 source/bundle PASS FOR COMPARISON ENTRY and reported PS5.1 54/54 remain at their historical evidence level. No later product-code receipt is accepted. Preserve unexpected partial work; no reset.
 
-`Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`
+PRODUCT-CORE-01 remains PAUSED; INTERVIEW-DEMO-01 remains SUPERSEDED; old READY prompts are inactive. Gate5 external execution remains ON HOLD.
 
-This is one continuous learning experience, not separate tutor and scoring products.
+## Required MASTER Review of BUILD-00
 
-### Learn
+Obtain/read only the single `PREFLIGHT.md`; do not ask the owner to resend project history or a basket of artifacts.
 
-User starts with a topic or limited source. Tutor asks what they know/where they are stuck, explains in layers, uses questions/examples/short checks and may give direct explanation when requested. Internally create source-bound versioned learning anchors as needed; ordinary users see only a few plain-language learning goals, not a criteria approval form.
+Acceptance review must establish:
+1. exact repo/branch/full HEAD/worktree evidence and whether any untracked output is expected;
+2. actual Node/Python/ffmpeg/browser/dependency observations and what `zero new dependencies` means;
+3. exact ASR/provider/model route, official timestamp capability and fallback/degradation behavior;
+4. how original-audio timing, replay and pause observations work if no new local speech dependency is installed;
+5. semantic model/provider path, structured output and error boundary;
+6. user-selected audio/source data route, retention/deletion/logging assumptions and region/privacy considerations;
+7. exact pricing source/date/calculation, retry assumptions and whether US$10 is per build, test batch or a broader authorization;
+8. any installation, API-key presence check, service, audio-data or spend approvals actually requested;
+9. no credentials/private Chat/Desktop audio/history/client-file reads, no automatic product push/merge/release.
 
-Only material ambiguity that materially affects assessment should trigger a clarification. Never wait until after the recording to silently change the criteria.
+If the file supports the receipt and the proposed architecture is coherent, MASTER should prepare **one** bounded build handoff and **one consolidated owner approval decision** for the genuine access/data/spend gates. Do not ask for ordinary UI/engineering micro-decisions.
 
-### Explain
+If material contradictions appear, classify them as Must Fix / User Decision Needed / Future Optional and return the smallest correction. Do not rerun broad research or reopen the product direction unless the preflight reveals a real blocker.
 
-`我来讲讲` is a persistent first-level action. The user can begin whenever they feel ready; Tutor may suggest but does not certify readiness. Record assistance level (no prompt / keywords / source visible).
+## Build Direction After Acceptance — Not Yet Authorized
 
-The product requests microphone permission and records the formal attempt itself. Normal path is Start -> continuous explanation -> Finish -> replay. Do not ask users to pre-record elsewhere and upload. A file-import path, if retained, is a bounded fallback/test aid only.
+Continuous internal batches should remain:
+A. Tutor/source/learning state + natural teach-back transition;
+B. in-product microphone capture, original audio/replay/timebase/failure recovery;
+C. actual ASR/audio observation/alignment + transcript correction/versioning;
+D. separated content/logic and delivery analysis with validated source/audio anchors;
+E. feedback -> targeted teaching -> partial/full re-record -> related Apply -> history/export/delete;
+F. challenge cases, truthful feature matrix, one review bundle and one integrated owner walkthrough.
 
-Keep ordinary voice-to-text questions to Tutor distinct from a formal explain-back attempt. Do not score casual questions or acknowledgements as oral performance.
+Required challenge cases include correct-with-pauses, fluent-wrong, omitted condition, self-repair, critical ASR negation/number error, device interruption, source revision and corrected transcript versus genuinely new recording. Foundational measurement/calibration is part of engineering quality, not postponed user research.
 
-### Diagnose
-
-One original recording feeds:
-- audio quality/activity/timing observations;
-- faithful ASR/transcript and optional alignment;
-then separate source-bound content/logic assessment and contextual delivery interpretation.
-
-Content/logic does not first see labels such as low fluency. Observable pauses/repetition/rate do not automatically lower knowledge. Critical negation/number/condition/jargon recognition uncertainty blocks dependent negative feedback until replay/correction.
-
-Important feedback is limited and actionable, each linked to actual source/attempt/audio span. Program owns numeric durations/timestamps/references; models explain supported evidence but do not invent measurements.
-
-### Repair / Re-explain
-
-Clicking a knowledge or logic gap returns to targeted teaching, a probing question or a new example. Delivery findings produce narrow speaking practice rather than a personality/mental-state judgment.
-
-User may record a new local explanation for the affected point or a new full attempt. Preserve the earlier audio/transcript; a corrected transcript is not a new spoken attempt.
-
-### Apply
-
-Use one related new situation for limited application evidence. Same-question repair and new-task performance stay separate. Do not claim stable mastery, exam equivalence or long-term transfer from one session.
-
-## Form Factor / Why Not Plain Chat
-
-Current Study Mode already supports guided learning, questions and understanding checks. That part is a strong baseline, not our proprietary feature.
-
-The proposed extra product capability is controlled original recording, time-aligned replay, audio/transcript/source versions, separate knowledge and delivery diagnostics, ASR/tool-error attribution and a single learning state that routes findings back to reteaching/re-recording/new application.
-
-If an equal-tool Chat Skill/Plugin can lawfully provide the same raw-audio access, timing, state and UX with lower burden, use that form. Do not force standalone software. Current raw host-Voice microphone/audio access for a plugin has not been established; no client-private file extraction. A small owned Web/PWA recorder remains the controlled implementation candidate.
-
-Browser microphone capture is technically plausible with user-granted media APIs in secure contexts; this is a platform capability, not a local runtime receipt or permission to record now.
-
-## Engineering Sequence For The Later Build Package
-
-A. Tutor/source/learning-state skeleton plus natural teach-back transition.
-B. In-app microphone capture, original-audio save/replay/timebase and failure recovery.
-C. Actual audio observation, ASR/alignment and transcript correction/versioning.
-D. Separated content/logic and delivery analysis with source/audio anchors.
-E. Feedback -> targeted teaching -> partial/full re-record -> new application -> history/export/delete.
-F. Challenge cases, truthful feature matrix, one review bundle and one integrated owner walkthrough.
-
-Required challenge cases include: correct content with pauses; fluent wrong content; omitted condition; self-repair; ASR inversion of a critical negative/number; device interruption; source/rubric revision; corrected text versus genuinely new recording.
-
-Long-term learning efficacy, retention, target demand/payment and distribution follow after a working bounded product. Foundational measurement/calibration cannot be deferred because false feedback is a functional defect.
-
-## Retained Gates
-
-This state authorizes product/engineering design maintenance only. No local development, new branch/commit, microphone use, actual recording or upload, ASR/model/API call, dependency install/service, spending, external user/contact, public hosting, push/merge/release or private-client data access has been authorized by this UX correction.
-
-Do not force old PowerShell/WinForms architecture on this consumer product. End users must not supply developer API keys/Git/Codex. Provider, retention/deletion, cost and region/privacy need an explicit engineering decision when actual implementation is scoped.
+The strong substitution baseline remains ordinary Study/Voice + competent Skill/tools with equal information. If an equal-tool Chat/Plugin surface gives the same result with lower burden, later delivery form can change without invalidating the core product mechanism.
 
 ## State Summary
 
-Completed: rigid criteria/upload flow removed; Study-first tutor, natural `我来讲讲`, in-product recording and continuous Repair/Re-explain flow integrated into the product contract.
-Verified: current Study Mode and browser microphone-recording platform capabilities from official/reference sources; prior P0 evidence only at old scope.
-Likely: the revised journey is more natural and product-like than separate scoring setup/upload; not user-tested.
-Unknown: actual usability, Mandarin ASR/alignment/diagnosis, plugin raw-audio support, latency/cost, repeat value and learning effect.
-Not Done: local product implementation, real audio/model tests, integrated owner use, external study/release.
-Must Fix: no default upload path, mandatory criteria-confirm form, test-before-teach UX or accidental scoring of normal Tutor speech.
-User Decision Needed: none for normal design; actual development/audio/API/install/spend/deployment gates remain.
-Future Optional: realtime conversational voice tutor, PTE/English pronunciation, mobile native app, broad knowledge graph/multi-user learning; inactive.
+Completed: Codex-reported BUILD-00 preflight receipt returned; canonical state records it.
+Verified: historical P0 and public research only at prior confidence; PREFLIGHT content not MASTER-inspected.
+Likely: the project can move to a bounded build decision after one artifact review if the receipt is accurate.
+Unknown: precise provider/timestamp/data/cost/dependency findings until the file is read.
+Not Done: BUILD-00 acceptance, build authorization, new implementation/audio/model execution, owner walkthrough or release.
+Must Fix: none known from the receipt; do not treat summary claims as reviewed evidence.
+User Decision Needed: provide the single `PREFLIGHT.md`; after review, approve/reject the consolidated real execution/data/spend gate once.
+Future Optional: realtime voice, English/PTE, native multi-platform app, broad knowledge graph; inactive.
