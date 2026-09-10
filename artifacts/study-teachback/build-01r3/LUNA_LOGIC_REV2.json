@@ -1,0 +1,65 @@
+{
+  "kind": "LIVE_API_SYNTHETIC_ENGINEERING_FIXTURES",
+  "at": "2026-09-10T22:44:58.013Z",
+  "source": {
+    "id": "engineering-source-1",
+    "title": "自编工程材料：植物浇水",
+    "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+  },
+  "cases": [
+    {
+      "id": "correct_with_pauses",
+      "status": "BLOCKED",
+      "category": "CHANNEL_LEAK",
+      "result": {
+        "sourceId": "engineering-source-1",
+        "attemptId": "correct_with_pauses",
+        "transcriptVersion": "fixture-confirmed-1",
+        "findings": [
+          {
+            "status": "supported",
+            "message": "你正确识别了必要条件：只有土壤干燥，才可以给植物浇水，因此“浇水”需要“土壤干燥”这一条件。",
+            "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+            "spanId": "s0",
+            "quote": "浇水的必要条件是土壤干燥",
+            "eventId": null,
+            "repair": ":保持区分：材料没有说明土壤干燥时一定要浇水。"
+          },
+          {
+            "status": "supported",
+            "message": "你正确复述了材料关于湿润土壤的规定：土壤湿润时不要浇水。",
+            "sourceQuote": "土壤湿润时不要浇水。",
+            "spanId": "s0",
+            "quote": "湿润时不要浇水",
+            "eventId": null,
+            "repair": ":继续注意不要把“不要浇水”扩展为材料未说明的其他结论。"
+          },
+          {
+            "status": "observation",
+            "message": "你明确指出材料没有说明“土壤干燥是否一定要浇水”，这保留了条件方向，表达准确。",
+            "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+            "spanId": "s0",
+            "quote": "干燥是否一定要浇，材料没说",
+            "eventId": null,
+            "repair": ":遇到“只有……才……”时，先判断它表达的是必要条件，再检查材料是否给出了充分条件。"
+          }
+        ]
+      }
+    }
+  ],
+  "speechEvidence": false,
+  "oracleVersion": "BUILD-01R-necessary-not-sufficient",
+  "qualitativeReview": "REQUIRED_NOT_ESTABLISHED_BY_SCHEMA_OR_STATUS",
+  "ledger": {
+    "requests": 26,
+    "attempts": 1,
+    "minutes": 15,
+    "inputReserved": 86902,
+    "outputReserved": 34328,
+    "exposureUSD": 0.0644844,
+    "knownCostUSD": 0.007676900000000001,
+    "unsettled": 4,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "at": "2026-09-10T22:53:50.880Z",
+  "kind": "EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER",
+  "cases": [
+    {
+      "name": "study-first source and tutor, persistent teach-back without rubric/upload",
+      "status": "PASS"
+    },
+    {
+      "name": "microphone denial preserves study state",
+      "status": "PASS"
+    },
+    {
+      "name": "native MediaRecorder + decode + original IndexedDB Blob + timestamp adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "diagnosis blocked before segment replay; correction keeps original identity and audio",
+      "status": "PASS"
+    },
+    {
+      "name": "targeted repair routes feedback back into tutor",
+      "status": "PASS"
+    },
+    {
+      "name": "partial re-record is a new attempt with parent and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "new Apply task and answer stay separate from same-topic repair",
+      "status": "PASS"
+    },
+    {
+      "name": "history reload preserves raw audio and corrected versions",
+      "status": "PASS"
+    },
+    {
+      "name": "API timeout then budget stop preserves one original attempt across explicit retry",
+      "status": "PASS"
+    },
+    {
+      "name": "device interruption preserves original and skips semantic diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "decode failure retains original, shows retry state",
+      "status": "PASS"
+    },
+    {
+      "name": "export contains exact audio bytes, raw/corrected versions, reports and source",
+      "status": "PASS"
+    },
+    {
+      "name": "per-attempt delete removes linked objects and preserves other attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "quota failure preserves memory audio, offers export and retry save",
+      "status": "PASS"
+    },
+    {
+      "name": "pending semantic navigation cannot replace topic or misattach result",
+      "status": "PASS"
+    },
+    {
+      "name": "seven-day expiry cleans linked objects but preserves live topic",
+      "status": "PASS"
+    },
+    {
+      "name": "source revision creates distinct record, preserves prior source/attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "delete all actually removes IndexedDB topic and linked audio records",
+      "status": "PASS"
+    },
+    {
+      "name": "saved real ASR PARTIAL words replay through validated segment before diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "delivery requires candidate replay and stays separate from content reports",
+      "status": "PASS"
+    },
+    {
+      "name": "stale history navigation blocked and pending delete-all prevents late restoration",
+      "status": "PASS"
+    }
+  ],
+  "calls": [
+    {
+      "kind": "learn",
+      "sourceId": "8778db16-ef75-43f0-94ed-33556f7c2fa1"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "50f8e5c8-974b-409a-a991-68c39122f9f3"
+    },
+    {
+      "kind": "content",
+      "sourceId": "8778db16-ef75-43f0-94ed-33556f7c2fa1"
+    },
+    {
+      "kind": "repair",
+      "sourceId": "8778db16-ef75-43f0-94ed-33556f7c2fa1"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "c12f6304-f914-4216-86f4-f7587402fc68"
+    },
+    {
+      "kind": "apply",
+      "sourceId": "8778db16-ef75-43f0-94ed-33556f7c2fa1"
+    },
+    {
+      "kind": "apply_answer",
+      "sourceId": "8778db16-ef75-43f0-94ed-33556f7c2fa1"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "a7211950-6285-4130-9d4a-b3748605a10c"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "a7211950-6285-4130-9d4a-b3748605a10c"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "8778db16-ef75-43f0-94ed-33556f7c2fa1"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "4b1f7cb7-a735-4db6-9739-443805ae60ab"
+    },
+    {
+      "kind": "content",
+      "sourceId": "real-source"
+    },
+    {
+      "kind": "delivery",
+      "sourceId": "real-source"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "real-source"
+    }
+  ],
+  "consoleErrors": [],
+  "physicalMicrophone": false,
+  "liveAPI": false
+}

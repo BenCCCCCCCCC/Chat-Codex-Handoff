@@ -56,11 +56,26 @@ export function validateFindings(v, source, attempt, channel, events = []) {
   return v;
 }
 export function normalizeASR(data, duration) {
+  requireValue(Number.isFinite(duration)&&duration>0&&duration<=180,'INVALID_DURATION');
   requireValue(data && Array.isArray(data.segments) && data.segments.length > 0 && data.segments.length <= 150, 'ASR_NO_SEGMENTS');
   const spans = data.segments.map((s,i)=>spanValue({id:`s${i}`,start:s.start,end:s.end,text:s.text},duration));
   requireValue(spans.every((s,i)=>!i||s.start>=spans[i-1].start),'ASR_INVALID_ORDER');
-  const words = Array.isArray(data.words) ? data.words.map((w,i)=>spanValue({id:`w${i}`,start:w.start,end:w.end,text:w.word},duration)) : [];
-  return { text: text(data.text,16000), spans, words, alignment: 'UNVERIFIED_PROVIDER_TIMESTAMPS', reviewRequired: true };
+  requireValue(data.words==null||Array.isArray(data.words),'ASR_INVALID_WORDS');
+  const words = (data.words??[]).map((w,i)=>{
+    requireValue(w&&Number.isFinite(w.start)&&Number.isFinite(w.end)&&w.start>=0&&w.end>=w.start&&w.end<=duration+0.05,'INVALID_WORD_TIME');
+    return {id:`w${i}`,start:w.start,end:w.end,text:text(w.word,2000),usable:w.end>w.start,timingQuality:w.end>w.start?'UNVERIFIED_POSITIVE_DURATION':'UNUSABLE_ZERO_DURATION'};
+  });
+  requireValue(words.every((w,i)=>!i||(w.start>=words[i-1].start&&w.end>=words[i-1].end)),'ASR_INVALID_WORD_ORDER');
+  const unusableWordIds=words.filter(w=>!w.usable).map(w=>w.id);
+  return { text: text(data.text,16000), spans, words, wordTiming:{status:!words.length||unusableWordIds.length?'PARTIAL':'UNVERIFIED',count:words.length,unusableWordIds,missing:!words.length}, alignment: 'UNVERIFIED_PROVIDER_TIMESTAMPS', reviewRequired: true };
+}
+// Anchors are selected only inside a caller-selected validated segment. No invented
+// word boundary when timing is unusable, missing or ambiguous. Review remains required.
+export function replayAnchor(raw,segmentId,wordId=null){
+  const s=raw.spans.find(s=>s.id===segmentId);requireValue(s,'INVALID_REFERENCE');
+  const w=wordId&&raw.words?.find(w=>w.id===wordId);
+  if(w&&w.usable===true&&Number.isFinite(w.start)&&Number.isFinite(w.end)&&w.end>w.start&&w.start>=s.start&&w.end<=s.end)return {level:'word',start:w.start,end:w.end,reviewRequired:true};
+  return {level:'segment',start:s.start,end:s.end,reviewRequired:true,preciseWordAnchor:false};
 }
 export function observations(channels, sampleRate, interrupted = false) {
   if (!channels?.length || !Number.isFinite(sampleRate) || sampleRate <= 0 || !channels[0]?.length) return { status:'PARTIAL', reason:'DECODE_FAILURE', events:[] };

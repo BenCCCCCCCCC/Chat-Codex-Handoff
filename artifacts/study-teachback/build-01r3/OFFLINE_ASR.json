@@ -1,0 +1,203 @@
+{
+  "kind": "OFFLINE_REPROCESS_OF_FIFTH_RESPONSE",
+  "newWhisperCalls": 0,
+  "result": {
+    "text": "只有土壤乾燥時才給這盆植物澆水,土壤濕潤時不要澆水。",
+    "spans": [
+      {
+        "id": "s0",
+        "start": 0,
+        "end": 6.460000038146973,
+        "text": "只有土壤乾燥時才給這盆植物澆水,土壤濕潤時不要澆水。"
+      }
+    ],
+    "words": [
+      {
+        "id": "w0",
+        "start": 0,
+        "end": 0.5,
+        "text": "只有",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w1",
+        "start": 0.5,
+        "end": 0.800000011920929,
+        "text": "土",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w2",
+        "start": 0.800000011920929,
+        "end": 0.9800000190734863,
+        "text": "壤",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w3",
+        "start": 0.9800000190734863,
+        "end": 1.2000000476837158,
+        "text": "乾",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w4",
+        "start": 1.2000000476837158,
+        "end": 1.3799999952316284,
+        "text": "燥",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w5",
+        "start": 1.3799999952316284,
+        "end": 1.6799999475479126,
+        "text": "時",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w6",
+        "start": 1.6799999475479126,
+        "end": 1.9600000381469727,
+        "text": "才",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w7",
+        "start": 1.9600000381469727,
+        "end": 2.140000104904175,
+        "text": "給",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w8",
+        "start": 2.140000104904175,
+        "end": 2.3399999141693115,
+        "text": "這",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w9",
+        "start": 2.3399999141693115,
+        "end": 2.5199999809265137,
+        "text": "盆",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w10",
+        "start": 2.5199999809265137,
+        "end": 2.7200000286102295,
+        "text": "植",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w11",
+        "start": 2.7200000286102295,
+        "end": 2.940000057220459,
+        "text": "物",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w12",
+        "start": 2.940000057220459,
+        "end": 3.140000104904175,
+        "text": "澆",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w13",
+        "start": 3.140000104904175,
+        "end": 3.5799999237060547,
+        "text": "水",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w14",
+        "start": 4.579999923706055,
+        "end": 4.579999923706055,
+        "text": "土",
+        "usable": false,
+        "timingQuality": "UNUSABLE_ZERO_DURATION"
+      },
+      {
+        "id": "w15",
+        "start": 4.579999923706055,
+        "end": 4.920000076293945,
+        "text": "壤",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w16",
+        "start": 4.920000076293945,
+        "end": 5.139999866485596,
+        "text": "濕",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w17",
+        "start": 5.139999866485596,
+        "end": 5.260000228881836,
+        "text": "潤",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w18",
+        "start": 5.260000228881836,
+        "end": 5.619999885559082,
+        "text": "時",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w19",
+        "start": 5.619999885559082,
+        "end": 5.960000038146973,
+        "text": "不要",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w20",
+        "start": 5.960000038146973,
+        "end": 6.239999771118164,
+        "text": "澆",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      },
+      {
+        "id": "w21",
+        "start": 6.239999771118164,
+        "end": 6.460000038146973,
+        "text": "水。",
+        "usable": true,
+        "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+      }
+    ],
+    "wordTiming": {
+      "status": "PARTIAL",
+      "count": 22,
+      "unusableWordIds": [
+        "w14"
+      ],
+      "missing": false
+    },
+    "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+    "reviewRequired": true
+  }
+}

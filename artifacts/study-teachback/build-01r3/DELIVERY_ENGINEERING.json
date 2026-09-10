@@ -1,0 +1,80 @@
+{
+  "kind": "LIVE_LUNA_ON_EXISTING_SYNTHETIC_MECHANICAL_OBSERVATIONS",
+  "ownerConfirmed": false,
+  "physicalMic": false,
+  "acoustic": {
+    "duration": 7.31,
+    "rms": 0.06217554575299725,
+    "clipping": 0,
+    "config": {
+      "frameMs": 20,
+      "nearSilenceRMS": 0.008,
+      "minCandidateSeconds": 0.7,
+      "clippingAmplitude": 0.99
+    },
+    "status": "PARTIAL",
+    "reason": "UNVALIDATED_ACTIVITY",
+    "events": [
+      {
+        "id": "e0",
+        "type": "near_silence_candidate",
+        "start": 3.42,
+        "end": 4.38
+      }
+    ]
+  },
+  "source": {
+    "id": "delivery-source",
+    "title": "合成工程材料",
+    "text": "只有土壤乾燥時才給這盆植物澆水,土壤濕潤時不要澆水。"
+  },
+  "attempt": {
+    "id": "delivery-fixture",
+    "sourceId": "delivery-source",
+    "transcriptVersion": "saved-fifth",
+    "duration": 7.31,
+    "spans": [
+      {
+        "id": "s0",
+        "start": 0,
+        "end": 6.460000038146973,
+        "text": "只有土壤乾燥時才給這盆植物澆水,土壤濕潤時不要澆水。"
+      }
+    ],
+    "reviewed": false
+  },
+  "paidWhisperCalls": 0,
+  "status": "REFERENCE_SCHEMA_VALID_REVIEW_REQUIRED",
+  "value": {
+    "sourceId": "delivery-source",
+    "attemptId": "delivery-fixture",
+    "transcriptVersion": "saved-fifth",
+    "findings": []
+  },
+  "usage": {
+    "input_tokens": 598,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 34,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 632
+  },
+  "model": "gpt-5.6-luna",
+  "reservationId": "df2d9558-9ac4-462f-9527-b9d3788ac120",
+  "ledger": {
+    "requests": 37,
+    "attempts": 1,
+    "minutes": 15,
+    "inputReserved": 140196,
+    "outputReserved": 54128,
+    "exposureUSD": 0.06859995,
+    "knownCostUSD": 0.011792450000000003,
+    "unsettled": 4,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  }
+}

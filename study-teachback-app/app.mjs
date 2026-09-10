@@ -1,7 +1,7 @@
 import { observations, waveBytes, revisedTranscript, validateFindings } from './core.mjs';
 import { openStore } from './storage.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
-let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false;
+let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false;
 const heard=new Set(),editors=new Map();
 const notice=message=>{$('notice').textContent=message;};
 const reveal=(id,show=true)=>{$(id).hidden=!show;};
@@ -9,7 +9,7 @@ function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefine
 function button(label,fn,cls='quiet'){const b=el('button',label,cls);b.onclick=()=>act(fn);return b;}
 async function act(fn){try{await fn();}catch(e){notice(friendly(e.message));}}
 function friendly(code){const messages={ASR_REVIEW_REQUIRED:'请先回听并确认转写，尤其是否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请逐段完整回听后再确认。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
-async function save(){if(!topic||deleted.has(topic.id))return;try{await db.put(topic);memoryOnly=false;}catch{memoryOnly=true;throw new Error('STORAGE_FAILED');}}
+async function save(){if(!topic||deleted.has(topic.id))return;try{await db.put(topic);memoryOnly=false;reveal('storageRecovery',false);}catch{memoryOnly=true;reveal('storageRecovery');throw new Error('STORAGE_FAILED');}}
 async function api(path,body,headers={}){
   if(controller)throw new Error('REQUEST_IN_PROGRESS');
   controller=new AbortController();
@@ -73,8 +73,9 @@ $('start').onclick=()=>act(async()=>{
   }catch(e){stream?.getTracks().forEach(t=>t.stop());if(context&&context.state!=='closed')await context.close();record=null;$('start').disabled=false;notice(e.name==='NotAllowedError'?'麦克风权限未允许。学习内容已保留，请在浏览器中允许麦克风后重试。':friendly(e.message));}
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&record)stopRecording(true);});
-window.addEventListener('beforeunload',e=>{if(record||memoryOnly){e.preventDefault();e.returnValue='';}});
+window.addEventListener('beforeunload',e=>{if(record||memoryOnly||controller||processing){e.preventDefault();e.returnValue='';}});
 async function processAudio(a){
+  if(processing)throw new Error('REQUEST_IN_PROGRESS');processing=true;
   notice('原声已保存，正在检查声音并转写……');let context;
   try{
     context=new AudioContext();const decoded=await context.decodeAudioData(await a.audio.arrayBuffer());a.duration=decoded.duration;
@@ -88,7 +89,7 @@ async function processAudio(a){
     if(deleted.has(a.id)||!topic||deleted.has(topic.id))return;
     a.raw={...result,id:uid(),origin:'ASR',createdAt:Date.now()};a.status='REVIEW_REQUIRED';await save();renderAttempt();notice('转写完成。请逐段回听，检查关键字后再开始诊断。');
   }catch(e){a.status='PARTIAL';a.error=context?'ASR_OR_DECODE_FAILED':'DECODE_FAILED';try{await save();}catch{}renderAttempt();throw e;}
-  finally{if(context&&context.state!=='closed')await context.close();}
+  finally{processing=false;if(context&&context.state!=='closed')await context.close();}
 }
 $('retryAsr').onclick=()=>act(()=>processAudio(current));
 function latest(a){return a.corrections.at(-1)??a.raw;}
@@ -103,7 +104,7 @@ function renderAttempt(){
   $('audioStatus').textContent=`${a.duration?`${a.duration.toFixed(1)} 秒 · `:''}${a.interrupted?'采集中断 · ':''}${a.observation?.reason??'尚未完成声音检查'}。仅候选观测，非流利度评分。`;
   $('rawText').textContent=a.raw?.text??'尚未取得转写';$('transcript').replaceChildren();$('feedback').replaceChildren();$('observations').replaceChildren();
   reveal('retryAsr',!a.raw&&!a.interrupted);reveal('confirm',!!a.raw);reveal('reviewHint',!!a.raw);
-  if(a.raw){const v=latest(a);v.spans.forEach(s=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.value=s.text;editor.rows=2;editor.maxLength=2000;editors.set(s.id,editor);const b=button(`回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{heard.add(s.id);b.textContent='已完整回听 ✓';}));row.append(b,editor);$('transcript').append(row);});
+  if(a.raw){$('reviewHint').textContent=a.raw.wordTiming?.status==='PARTIAL'?'词级定位部分不可用；请按整段回听，确认否定词、数字、条件和术语后再诊断。':'请逐段完整回听并确认关键字后再诊断。';const v=latest(a);v.spans.forEach(s=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.value=s.text;editor.rows=2;editor.maxLength=2000;editors.set(s.id,editor);const b=button(`回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{heard.add(s.id);b.textContent='已完整回听 ✓';}));row.append(b,editor);$('transcript').append(row);});
     if(v.reviewed)$('reviewHint').textContent='已保存核对版本。再次修改后需要重新回听确认；这不会创建新口头表现。';
     for(const report of a.reports.filter(r=>r.transcriptVersion===v.id))renderFeedback(report);
   }
@@ -134,11 +135,14 @@ async function exportTopic(){
   const url=URL.createObjectURL(new Blob([JSON.stringify({format:'study-teachback-export-v1',exportedAt:new Date().toISOString(),notice:'导出副本不受应用内删除控制',topic:data},null,2)],{type:'application/json'}));const link=el('a');link.href=url;link.download=`study-${topic.id}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
 }
 $('export').onclick=()=>act(exportTopic);
+$('recoveryExport').onclick=()=>act(exportTopic);
+$('retrySave').onclick=()=>act(async()=>{await save();if(current)renderAttempt();notice('已重新保存到本机。');});
 function abortPending(){controller?.abort();}
 $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;abortPending();deleted.add(current.id);topic.attempts=topic.attempts.filter(a=>a.id!==current.id);await save();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);current=null;reveal('attemptPanel',false);notice('这次原声及其关联转写、纠正和反馈已从本地删除。已导出副本和已在途的云请求不受此操作控制。');});
-async function history(){if(record)throw new Error('RECORDING_ACTIVE');if(controller)throw new Error('REQUEST_IN_PROGRESS');reveal('history');const list=$('historyList');list.replaceChildren();for(const t of await db.all()){const row=el('div');row.append(el('strong',t.source.title),el('p',`${new Date(t.createdAt).toLocaleString()} · ${t.attempts.length} 次讲解`,'muted'),button('继续学习',()=>{topic=t;current=null;renderTopic();reveal('attemptPanel',false);reveal('history',false);}));for(const a of t.attempts)row.append(button(`${a.kind==='partial'?'局部':'完整'} · ${new Date(a.createdAt).toLocaleTimeString()}`,()=>{topic=t;current=a;renderTopic();renderAttempt();reveal('history',false);}));row.append(button('删除主题',async()=>{abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');}await history();},'danger'));list.append(row);}if(!list.children.length)list.append(el('p','还没有保存的学习记录。'));$('history').scrollIntoView({behavior:'smooth'});}
+async function history(){if(memoryOnly)throw new Error('STORAGE_FAILED');if(processing)throw new Error('REQUEST_IN_PROGRESS');if(record)throw new Error('RECORDING_ACTIVE');if(controller)throw new Error('REQUEST_IN_PROGRESS');reveal('history');const list=$('historyList');list.replaceChildren();for(const t of await db.all()){const row=el('div');row.append(el('strong',t.source.title),el('p',`${new Date(t.createdAt).toLocaleString()} · ${t.attempts.length} 次讲解`,'muted'),button('继续学习',()=>{if(!canNavigate())return;topic=t;current=null;renderTopic();reveal('attemptPanel',false);reveal('history',false);}));for(const a of t.attempts)row.append(button(`${a.kind==='partial'?'局部':'完整'} · ${new Date(a.createdAt).toLocaleTimeString()}`,()=>{if(!canNavigate())return;topic=t;current=a;renderTopic();renderAttempt();reveal('history',false);}));row.append(button('删除主题',async()=>{abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');}await history();},'danger'));list.append(row);}if(!list.children.length)list.append(el('p','还没有保存的学习记录。'));$('history').scrollIntoView({behavior:'smooth'});}
 $('historyButton').onclick=()=>act(history);
-function newTopic(){if(record)return;abortPending();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');$('title').value='';$('source').value='';}
-$('newTopic').onclick=newTopic;$('revise').onclick=()=>{const s=topic.source;newTopic();$('title').value=s.title;$('source').value=s.text;notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');};
-$('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);newTopic();notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
+function canNavigate(){if(memoryOnly){notice(friendly('STORAGE_FAILED'));return false;}if(record||controller||processing){notice(friendly('REQUEST_IN_PROGRESS'));return false;}return true;}
+function newTopic(){if(!canNavigate())return false;abortPending();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');$('title').value='';$('source').value='';return true;}
+$('newTopic').onclick=newTopic;$('revise').onclick=()=>{const s=topic.source;if(!newTopic())return;$('title').value=s.title;$('source').value=s.text;notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');};
+$('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
 await act(async()=>{db=await openStore();await updateBudget();const all=await db.all();if(all.length){topic=all.at(-1);renderTopic();}});

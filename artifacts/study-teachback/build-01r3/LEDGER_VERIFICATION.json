@@ -1,0 +1,11 @@
+{
+  "priorEventsUnchanged": true,
+  "newWhisperRequests": 0,
+  "newLunaRequests": 19,
+  "newUsage": {
+    "input": 11328,
+    "output": 3954,
+    "cost": 0.0075768
+  },
+  "unsettledPreserved": 4
+}

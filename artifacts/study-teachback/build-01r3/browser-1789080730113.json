@@ -1,0 +1,80 @@
+{
+  "at": "2026-09-10T22:52:28.402Z",
+  "kind": "EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER",
+  "cases": [
+    {
+      "name": "study-first source and tutor, persistent teach-back without rubric/upload",
+      "status": "PASS"
+    },
+    {
+      "name": "microphone denial preserves study state",
+      "status": "PASS"
+    },
+    {
+      "name": "native MediaRecorder + decode + original IndexedDB Blob + timestamp adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "diagnosis blocked before segment replay; correction keeps original identity and audio",
+      "status": "PASS"
+    },
+    {
+      "name": "targeted repair routes feedback back into tutor",
+      "status": "PASS"
+    },
+    {
+      "name": "partial re-record is a new attempt with parent and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "new Apply task and answer stay separate from same-topic repair",
+      "status": "PASS"
+    },
+    {
+      "name": "history reload preserves raw audio and corrected versions",
+      "status": "PASS"
+    },
+    {
+      "name": "API timeout then budget stop preserves one original attempt across explicit retry",
+      "status": "FAIL",
+      "error": "WAIT_FAILED document.getElementById('notice').textContent.includes('预算')"
+    }
+  ],
+  "calls": [
+    {
+      "kind": "learn",
+      "sourceId": "90bf4267-0c41-4a25-a70c-754461b22141"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "73413610-c7bc-4cc9-aa99-b3c47dba7365"
+    },
+    {
+      "kind": "content",
+      "sourceId": "90bf4267-0c41-4a25-a70c-754461b22141"
+    },
+    {
+      "kind": "repair",
+      "sourceId": "90bf4267-0c41-4a25-a70c-754461b22141"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "0db700d4-5c19-400e-9b09-df9ad87a898b"
+    },
+    {
+      "kind": "apply",
+      "sourceId": "90bf4267-0c41-4a25-a70c-754461b22141"
+    },
+    {
+      "kind": "apply_answer",
+      "sourceId": "90bf4267-0c41-4a25-a70c-754461b22141"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "d9b3c98c-203d-47b3-b7c0-a87e1553eb93"
+    }
+  ],
+  "consoleErrors": [],
+  "physicalMicrophone": false,
+  "liveAPI": false
+}

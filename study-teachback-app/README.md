@@ -1,49 +1,19 @@
-> Latest BUILD-01R2: fifth Whisper HTTP 200; fields preserved before validation. INVALID_TIME from a zero-duration word; strict guard unchanged, Luna not run. See [R2 packet](../artifacts/study-teachback/build-01r2/DELIVERY_PACKET.md).
+# 知而能讲 — Study-first + in-app teach-back v0.1
 
-> Latest credential recovery: Luna 200 + Whisper 200, but local ASR validation failed and response fields were lost before saving. Auth recovered; transcript/timestamps remain unverified. See [current packet](../artifacts/study-teachback/credential-recovery/DELIVERY_PACKET.md). The evidence-capture fix is offline-tested only.
+**IMPLEMENTED / ENGINEERING-TESTED / READY FOR INTEGRATED OWNER VALIDATION** at the scope in the [R3 Delivery Packet](../artifacts/study-teachback/build-01r3/DELIVERY_PACKET.md). Physical owner walkthrough is prepared, not performed. No learning-efficacy or calibrated-alignment claim.
 
-> Latest resume: changed runtime credential; the one owner-approved third synthetic Whisper submission returned HTTP 401 / invalid_api_key. Paid calls stopped, Luna not rerun. See [resume packet](../artifacts/study-teachback/build-01r-resume/DELIVERY_PACKET.md). Historical evidence below remains scoped to its original checkpoint.
+Learn → Explain (in-app recording) → Diagnose → Repair → Re-explain → Apply. Native HTML/CSS/JS, Node standard library, Edge, MediaRecorder/Web Audio and IndexedDB. No new package/build step or normal file-upload workflow.
 
-# 知而能讲 — BUILD-01 partial implementation
+After owner go-ahead for the next live walkthrough, start with node study-teachback-app/server.mjs and open http://127.0.0.1:4317 in Edge. Existing server-side OPENAI_API_KEY only; never print/share it. No service left running by this checkpoint.
 
-**BUILD-01R PARTIAL / USER DECISION NEEDED: same-process Luna 200 + Whisper 401 (`missing_scope`). Paid calls stopped.**
+Segments retain strict validity. Zero-duration word values are preserved and unusable; word timing is PARTIAL/unverified, not fluency scoring. Primary replay uses segments. All transcripts require complete segment replay and confirmation, especially critical negation/number/condition/term content. Raw/corrected versions stay separate from new recordings.
 
-Do not treat this checkout as ready for integrated owner validation. Stop occurred on 2026-09-11 Australia/Sydney; no fallback model/provider was used.
+Content and delivery schemas are separate. Necessary conditions are not strengthened into sufficient ones; withdrawn claims are not current errors. Runtime rejects invalid references/channels. Final bounded live logic 7/7 followed two recorded failures and explicit fixes; it is not a universal semantic guarantee.
 
-Native HTML/CSS/JS, Node standard library, Edge, IndexedDB, MediaRecorder and Web Audio. No package installation or build step. The product captures its own audio; there is no normal file-upload interface.
+Original audio saved before ASR. Quota failure provides in-memory export/retry-save. Busy/unsaved navigation guarded. Per-attempt delete, history, source revision, byte-complete audio export, seven-day expiry on reopen and pending-request delete/navigation tested. Exported copies and already-sent requests cannot be recalled. Global API processing, Responses store=false/background=false; no Australian-local processing claim. Ledger independent of learning deletion.
 
-After the retained API-access blocker is resolved and work is resumed, the developer command is `node study-teachback-app/server.mjs`, using an already-configured process OPENAI_API_KEY. Open http://127.0.0.1:4317 in Edge. Users are not asked to supply API keys. Never print or include keys in review bundles. No server is left running in this handback.
+Latest: Node 33/33; Edge 21/21 synthetic/stub-provider engineering checks including the saved real fifth response. Transcript/segment transport PASS; word timing PARTIAL; human replay required. R3 made no new Whisper call. Unconfirmed live mechanical-delivery probe abstained. Physical-mic/full live journey remains owner validation.
 
-## Implemented surface
+Budget: US$5 API exposure; US$10 new cash, no recharge. Four old unsettled reservations preserved. Caps: 60 registrations, 360 reserved audio minutes, 300 requests, 1M input/250k output reserved tokens. Ordinary ASR IDs allow two submissions; explicit synthetic ID allowance is five, all consumed. No sixth retry/further live ASR implied.
 
-Study/source dialogue, background versioned learning goals, persistent teach-back action, continuous recording with assistance levels, original Blob storage before processing, decoding/near-silence/clipping candidates, fixed Whisper timestamp transport, raw/corrected transcript separation, replay confirmation before diagnosis, separate content and delivery calls with reference/schema checks, targeted repair, new partial/full recordings, Apply, history, JSON export and deletion.
-
-Code is partial, with bounded evidence rather than a full production claim. Word timing is provider-unverified; source-bound coarse segment playback is used. All initial transcripts require replay confirmation; this deliberately conservative gate prevents unknown ASR words from becoming automatic negative diagnosis. Voice observations are not calibrated VAD or fluency scores.
-
-## Evidence and limits
-
-- `node --test study-teachback-app/tests.mjs`: last observed run 18/18. Includes schema/time/source guards, channel isolation, four critical-ASR classes, sound fixtures, versions, expiry and reservation/HTTP failure behavior. These are engineering fixtures, not ASR accuracy measurements.
-- `browser-tests.mjs`: 14/14 in actual Edge headless, using generated WebAudio tones and stubbed provider responses. Real MediaRecorder/decode/IndexedDB were exercised. Evidence records distinguish these from live API runs. Profile and mock ledger are isolated under runtime and excluded from Git/review.
-- Historical Luna 5/5 is schema/channel evidence only, NOT accepted logic fidelity. BUILD-01R corrected necessary/sufficient-condition instructions and seven fixtures, including the explicit ticket counterexample. Updated live semantic run is NOT DONE because auth recovery requires paid calls to stop. Offline fixture-oracle tests do not prove model semantics.
-- Original `live-asr-check.mjs`: one actual Whisper request, for a self-authored 7.31s synthetic Mandarin fixture produced with an already-installed Windows voice. HTTP 401; no transcription or timestamps obtained. Nothing proves ordinary Mandarin mic fidelity yet.
-- `browser-learning.png` is an actual screenshot of the stub-provider engineering session, not a screenshot of live AI output.
-- Export content completeness, quota recovery, individual-attempt delete, live delivery interpretation and full real-API integration still need verification. Seven-day reopening cleanup, history persistence and delete-all were verified in Edge.
-
-## Data and budget
-
-Browser origin stores complete topic objects with linked original audio/transcript/corrections/reports. Expiry runs on open after seven days. Delete removes local objects; exported copies and already-in-flight provider requests cannot be recalled. No cloud conversation storage: Responses uses store=false, background=false. Global API processing is not Australian-local processing.
-
-The runtime ledger is independent of learning-data deletion and must be preserved on resume. Caps: US$5 API exposure, US$10 new cash (no recharge/purchases in app), 60 formal registrations, two ASR submissions per ID, 360 reserved audio minutes, 300 total API requests, 1M reserved input tokens and 250k reserved output tokens. Whichever cap is reached first stops requests. A crash/timeout keeps its reservation. A leftover lock/corrupt ledger fails closed; do not delete/reset it to obtain more budget.
-
-Only whisper-1 and gpt-5.6-luna and their two fixed global endpoints are coded. Rate assumptions dated 2026-09-11 are in ledger.mjs. Costs are conservative public-rate estimates, not a provider invoice. The evidence ledger snapshot is read-only review data, not a replacement for the live runtime ledger.
-
-## Resume blockers / unfinished work
-
-1. Owner must inspect existing key endpoint permissions and project/organization membership: the BUILD-01R same-process diagnostic identifies `missing_scope` for `/v1/audio/transcriptions` while Luna passes. Specific missing-scope text was conservatively redacted. No credential replacement or paid retry is authorized by the diagnosis itself. The synthetic attempt has now used both permitted ASR submissions; do not reset its ledger or relabel it to evade that cap.
-2. Complete successful ASR timestamp and negation/number/condition/term checks with the existing fail-closed gate, then live delivery and full journey tests.
-3. Finish export/quota/individual delete and pending-navigation recovery checks. Review Tutor prose for necessary/sufficient-condition fidelity; schema validity alone does not establish semantic correctness.
-4. Run the integrated owner walkthrough with the owner's explicit in-product recording action. Synthetic fixtures are not owner recordings or learning-efficacy evidence.
-
-The original accepted branch/history and unrelated untracked files are preserved. Private feature-branch checkpoint pushes are owner-authorized. No merge, release, public hosting, external users, installed dependencies, automatic recharge or provider/model change occurred.
-
-BUILD-01R readable evidence: [Delivery Packet](../artifacts/study-teachback/build-01r/DELIVERY_PACKET.md), [review manifest](../artifacts/study-teachback/build-01r/REVIEW_MANIFEST.json). Original BUILD-01 manifest remains a historical checkpoint manifest.
+Review: [manifest](../artifacts/study-teachback/build-01r3/REVIEW_MANIFEST.json), [Owner walkthrough](../artifacts/study-teachback/build-01r3/OWNER_WALKTHROUGH.md). Earlier evidence/manifests are historical. Normal private feature-branch sync only; no merge/release/public hosting/provider or dependency change.

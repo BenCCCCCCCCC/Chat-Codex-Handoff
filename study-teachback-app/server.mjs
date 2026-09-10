@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { semantic, transcribe, ledger } from './provider.mjs';
 import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue } from './core.mjs';
-import { teachingSchema, findingsSchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
+import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
 
 const files={'/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css'};
 export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger}={}) {
@@ -42,7 +42,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       }
       requireValue(b.channel==='delivery'&&Array.isArray(b.events)&&b.events.length>0&&b.events.length<=8,'SOUND_EVIDENCE_INSUFFICIENT');
       const events=b.events.map(e=>{requireValue(e.confirmed===true&&e.type==='near_silence_candidate'&&typeof e.id==='string'&&Number.isFinite(e.start)&&Number.isFinite(e.end)&&e.start>=0&&e.end>e.start&&e.end<=attempt.duration,'INVALID_EVENT');return {id:e.id,type:e.type,start:e.start,end:e.end};});
-      const result=await semanticCall(DELIVERY,{...input,attempt,events},findingsSchema,{signal:controller.signal});return json(200,{...result,value:validateFindings(result.value,source,attempt,'delivery',events)});
+      const result=await semanticCall(DELIVERY,{...input,attempt,events},deliverySchema,{signal:controller.signal});return json(200,{...result,value:validateFindings(result.value,source,attempt,'delivery',events)});
     }catch(e){const safe=/^[A-Z][A-Z0-9_]+$/.test(e.message)?e.message:'REQUEST_FAILED';json(422,{error:safe});}
     finally{busy=false;}
   });

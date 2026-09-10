@@ -9,7 +9,6 @@ export function captureASREvidence(data,duration,secret,persist){
   persist(snapshot);
   try{
     const transcription=normalizeASR(data,duration);
-    if(!transcription.words.length)throw Error('ASR_NO_WORDS');
     return {outcome:'HTTP_PASS_TIMESTAMP_REVIEW_REQUIRED',transcription};
   }catch(e){return {outcome:'ASR_VALIDATION_FAILED',validationCategory:/^[A-Z_]+$/.test(e.message)?e.message:'LOCAL_VALIDATION_FAILURE'};}
 }

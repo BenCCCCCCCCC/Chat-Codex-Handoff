@@ -6,8 +6,8 @@ test('invalid provider timestamps retain allowlisted evidence before rejection',
   const r=captureASREvidence(data,7.31,'fictitious-credential',s=>saved=s);
   assert.equal(r.outcome,'ASR_VALIDATION_FAILED');assert.equal(saved.segments[0].end,99);assert(!('secret' in saved));
 });
-test('missing word timestamps cannot pass; valid timestamps require human review',()=>{
+test('missing word timing degrades to PARTIAL; valid timestamps require human review',()=>{
   const data={text:'你好',segments:[{text:'你好',start:0,end:1}]};
-  assert.equal(captureASREvidence(data,2,'fictitious-credential',()=>{}).validationCategory,'ASR_NO_WORDS');
+  assert.equal(captureASREvidence(data,2,'fictitious-credential',()=>{}).transcription.wordTiming.status,'PARTIAL');
   data.words=[{word:'你好',start:0,end:1}];assert.equal(captureASREvidence(data,2,'fictitious-credential',()=>{}).outcome,'HTTP_PASS_TIMESTAMP_REVIEW_REQUIRED');
 });

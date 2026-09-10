@@ -1,0 +1,116 @@
+{
+  "at": "2026-09-10T22:48:44.043Z",
+  "kind": "EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER",
+  "cases": [
+    {
+      "name": "study-first source and tutor, persistent teach-back without rubric/upload",
+      "status": "PASS"
+    },
+    {
+      "name": "microphone denial preserves study state",
+      "status": "PASS"
+    },
+    {
+      "name": "native MediaRecorder + decode + original IndexedDB Blob + timestamp adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "diagnosis blocked before segment replay; correction keeps original identity and audio",
+      "status": "PASS"
+    },
+    {
+      "name": "targeted repair routes feedback back into tutor",
+      "status": "PASS"
+    },
+    {
+      "name": "partial re-record is a new attempt with parent and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "new Apply task and answer stay separate from same-topic repair",
+      "status": "PASS"
+    },
+    {
+      "name": "history reload preserves raw audio and corrected versions",
+      "status": "PASS"
+    },
+    {
+      "name": "API timeout then budget stop preserves one original attempt across explicit retry",
+      "status": "PASS"
+    },
+    {
+      "name": "device interruption preserves original and skips semantic diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "decode failure retains original, shows retry state",
+      "status": "PASS"
+    },
+    {
+      "name": "export contains exact audio bytes, raw/corrected versions, reports and source",
+      "status": "PASS"
+    },
+    {
+      "name": "per-attempt delete removes linked objects and preserves other attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "quota failure preserves memory audio, offers export and retry save",
+      "status": "PASS"
+    },
+    {
+      "name": "pending semantic navigation cannot replace topic or misattach result",
+      "status": "PASS"
+    },
+    {
+      "name": "seven-day expiry cleans linked objects but preserves live topic",
+      "status": "FAIL",
+      "error": "Uncaught: TypeError: Cannot read properties of null (reading 'hidden')\n    at <anonymous>:1:38"
+    }
+  ],
+  "calls": [
+    {
+      "kind": "learn",
+      "sourceId": "419a4445-af8b-4c0f-8f9c-3be517dac5b3"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "7b2116a9-6e0e-417a-8238-17c84fadcb3b"
+    },
+    {
+      "kind": "content",
+      "sourceId": "419a4445-af8b-4c0f-8f9c-3be517dac5b3"
+    },
+    {
+      "kind": "repair",
+      "sourceId": "419a4445-af8b-4c0f-8f9c-3be517dac5b3"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "cf700014-f716-4095-b0c6-6564c6e42acc"
+    },
+    {
+      "kind": "apply",
+      "sourceId": "419a4445-af8b-4c0f-8f9c-3be517dac5b3"
+    },
+    {
+      "kind": "apply_answer",
+      "sourceId": "419a4445-af8b-4c0f-8f9c-3be517dac5b3"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "19c4886b-0a48-4bf6-b455-686083e15e3d"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "19c4886b-0a48-4bf6-b455-686083e15e3d"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "419a4445-af8b-4c0f-8f9c-3be517dac5b3"
+    }
+  ],
+  "consoleErrors": [],
+  "physicalMicrophone": false,
+  "liveAPI": false
+}
