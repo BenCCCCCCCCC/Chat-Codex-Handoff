@@ -1,0 +1,29 @@
+{
+  "kind": "LIVE_API_SYNTHETIC_ENGINEERING_FIXTURES",
+  "at": "2026-09-10T20:20:00.457Z",
+  "source": {
+    "id": "engineering-source-1",
+    "title": "自编工程材料：植物浇水",
+    "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+  },
+  "cases": [
+    {
+      "id": "correct_with_pauses",
+      "status": "BLOCKED",
+      "category": "INVALID_TEXT"
+    }
+  ],
+  "speechEvidence": false,
+  "ledger": {
+    "requests": 3,
+    "attempts": 0,
+    "minutes": 0,
+    "inputReserved": 9526,
+    "outputReserved": 5400,
+    "exposureUSD": 0.0031717,
+    "knownCostUSD": 0.00036419999999999996,
+    "unsettled": 1,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  }
+}

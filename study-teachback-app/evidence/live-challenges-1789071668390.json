@@ -1,0 +1,381 @@
+{
+  "kind": "LIVE_API_SYNTHETIC_ENGINEERING_FIXTURES",
+  "at": "2026-09-10T20:20:46.202Z",
+  "source": {
+    "id": "engineering-source-1",
+    "title": "自编工程材料：植物浇水",
+    "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+  },
+  "cases": [
+    {
+      "id": "correct_with_pauses",
+      "expectation": "correct",
+      "status": "PASS",
+      "fixture": {
+        "id": "correct_with_pauses",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "fixture-confirmed-1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "土壤干了才浇水，湿润的时候不要浇水。"
+          }
+        ],
+        "assistance": "none",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "model": "gpt-5.6-luna",
+      "usage": {
+        "input_tokens": 483,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 177,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 660
+      },
+      "result": {
+        "sourceId": "engineering-source-1",
+        "attemptId": "correct_with_pauses",
+        "transcriptVersion": "fixture-confirmed-1",
+        "findings": [
+          {
+            "status": "supported",
+            "message": "你准确表达了材料中的两个条件：土壤干燥时浇水，土壤湿润时不浇水。",
+            "sourceQuote": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。",
+            "spanId": "s0",
+            "quote": "土壤干了才浇水，湿润的时候不要浇水。",
+            "eventId": null,
+            "repair": "继续注意“才”表示必要条件；也可以改述为“土壤不干燥时不给这盆植物浇水”。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "fluent_wrong",
+      "expectation": "wrong",
+      "status": "PASS",
+      "fixture": {
+        "id": "fluent_wrong",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "fixture-confirmed-1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "土壤越湿越要浇水，湿润时也要浇水。"
+          }
+        ],
+        "assistance": "none",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "model": "gpt-5.6-luna",
+      "usage": {
+        "input_tokens": 484,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 150,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 634
+      },
+      "result": {
+        "sourceId": "engineering-source-1",
+        "attemptId": "fluent_wrong",
+        "transcriptVersion": "fixture-confirmed-1",
+        "findings": [
+          {
+            "status": "incorrect",
+            "message": "你的说法与材料相反：材料要求土壤湿润时不要浇水，而你说“湿润时也要浇水”。",
+            "sourceQuote": "土壤湿润时不要浇水。",
+            "spanId": "s0",
+            "quote": "土壤越湿越要浇水，湿润时也要浇水。",
+            "eventId": null,
+            "repair": "请改述规则：什么情况下应该浇水？什么情况下不要浇水？"
+          }
+        ]
+      }
+    },
+    {
+      "id": "omitted_condition",
+      "expectation": "missing",
+      "status": "PASS",
+      "fixture": {
+        "id": "omitted_condition",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "fixture-confirmed-1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "给这盆植物浇水。"
+          }
+        ],
+        "assistance": "none",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "model": "gpt-5.6-luna",
+      "usage": {
+        "input_tokens": 472,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 122,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 594
+      },
+      "result": {
+        "sourceId": "engineering-source-1",
+        "attemptId": "omitted_condition",
+        "transcriptVersion": "fixture-confirmed-1",
+        "findings": [
+          {
+            "status": "missing",
+            "message": "没有表达浇水的条件“只有土壤干燥时”，因此答案不完整。",
+            "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+            "spanId": null,
+            "quote": null,
+            "eventId": null,
+            "repair": "请补充：在什么情况下可以给这盆植物浇水？"
+          }
+        ]
+      }
+    },
+    {
+      "id": "valid_paraphrase",
+      "expectation": "correct",
+      "status": "PASS",
+      "fixture": {
+        "id": "valid_paraphrase",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "fixture-confirmed-1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "摸起来还是湿的就先别加水，干了再加。"
+          }
+        ],
+        "assistance": "none",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "model": "gpt-5.6-luna",
+      "usage": {
+        "input_tokens": 481,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 148,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 629
+      },
+      "result": {
+        "sourceId": "engineering-source-1",
+        "attemptId": "valid_paraphrase",
+        "transcriptVersion": "fixture-confirmed-1",
+        "findings": [
+          {
+            "status": "supported",
+            "message": "你准确表达了材料中的浇水条件：土壤湿润时不浇水，干燥后再浇水。",
+            "sourceQuote": "土壤湿润时不要浇水。",
+            "spanId": "s0",
+            "quote": "摸起来还是湿的就先别加水，干了再加。",
+            "eventId": null,
+            "repair": "可继续说明这是“只有土壤干燥时才浇水”的条件关系。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "self_repair",
+      "expectation": "correct",
+      "status": "PASS",
+      "fixture": {
+        "id": "self_repair",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "fixture-confirmed-1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "湿的时候浇水，不对，我说反了，干的时候才浇，湿的时候别浇。"
+          }
+        ],
+        "assistance": "none",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "model": "gpt-5.6-luna",
+      "usage": {
+        "input_tokens": 488,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 158,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 646
+      },
+      "result": {
+        "sourceId": "engineering-source-1",
+        "attemptId": "self_repair",
+        "transcriptVersion": "fixture-confirmed-1",
+        "findings": [
+          {
+            "status": "supported",
+            "message": "你最终表达的规则与材料一致：土壤干燥时浇水，湿润时不浇水。",
+            "sourceQuote": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。",
+            "spanId": "s0",
+            "quote": "干的时候才浇，湿的时候别浇",
+            "eventId": null,
+            "repair": "可继续用“只有……才……”复述：只有土壤干燥时才浇水。"
+          }
+        ]
+      }
+    },
+    {
+      "id": "learn",
+      "status": "SCHEMA_VALID_REVIEW_REQUIRED",
+      "model": "gpt-5.6-luna",
+      "usage": {
+        "input_tokens": 336,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 146,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 482
+      },
+      "result": {
+        "sourceId": "engineering-source-1",
+        "message": "规则很简单：先检查土壤的状态。土壤干燥时要浇水；土壤湿润时不要浇水。",
+        "goals": [
+          {
+            "text": "能根据土壤状态判断是否浇水。",
+            "sourceQuote": "只有土壤干燥时才给这盆植物浇水。"
+          },
+          {
+            "text": "知道土壤湿润时不能浇水。",
+            "sourceQuote": "土壤湿润时不要浇水。"
+          }
+        ],
+        "question": "如果土壤现在是干燥的，应该浇水吗？"
+      }
+    },
+    {
+      "id": "repair",
+      "status": "SCHEMA_VALID_REVIEW_REQUIRED",
+      "model": "gpt-5.6-luna",
+      "usage": {
+        "input_tokens": 352,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 115,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 467
+      },
+      "result": {
+        "sourceId": "engineering-source-1",
+        "message": "规则是：只有土壤干燥时才浇水。土壤湿润时不要浇水，因为浇水的条件“土壤干燥”没有满足。",
+        "goals": [
+          {
+            "text": "理解湿润土壤不浇水",
+            "sourceQuote": "土壤湿润时不要浇水。"
+          }
+        ],
+        "question": "如果土壤还是湿润的，你应该浇水吗？"
+      }
+    },
+    {
+      "id": "apply",
+      "status": "SCHEMA_VALID_REVIEW_REQUIRED",
+      "model": "gpt-5.6-luna",
+      "usage": {
+        "input_tokens": 339,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 130,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 469
+      },
+      "result": {
+        "sourceId": "engineering-source-1",
+        "message": "新情境：你检查另一盆植物时，发现土壤湿润。根据材料中的规则，你应该怎么做？",
+        "goals": [
+          {
+            "text": "根据土壤状态决定是否浇水。",
+            "sourceQuote": "只有土壤干燥时才给这盆植物浇水。"
+          },
+          {
+            "text": "土壤湿润时避免浇水。",
+            "sourceQuote": "土壤湿润时不要浇水。"
+          }
+        ],
+        "question": "如果土壤湿润，你会怎么做？"
+      }
+    }
+  ],
+  "speechEvidence": false,
+  "ledger": {
+    "requests": 11,
+    "attempts": 0,
+    "minutes": 0,
+    "inputReserved": 43258,
+    "outputReserved": 19800,
+    "exposureUSD": 0.00540565,
+    "knownCostUSD": 0.0025981500000000005,
+    "unsettled": 1,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "status": "BUILD-01 PARTIAL / BLOCKED: WHISPER_API_HTTP_401",
+  "beforeHead": "a1c37af2d68cce8f0574b89b01975e9223f6cea2",
+  "branch": "prototype/study-teachback-v0.1",
+  "environment": {
+    "node": "24.19.0",
+    "edge": "152.0.4191.66",
+    "dependenciesInstalled": 0,
+    "physicalMicrophoneUsed": false,
+    "newCashPurchaseUSD": 0
+  },
+  "authority": {
+    "ref": "meta/master-state",
+    "buildHandoffBlob": "7917b4e4b8895ff859c750a2abef689bcdbac909",
+    "currentStateBlob": "c539222ba790dbca74131f632490139e305ddab8",
+    "directionBlob": "90cb021b69a9021f367971898d7f8eacb51d6090"
+  },
+  "tests": {
+    "node": {
+      "command": "node --test study-teachback-app/tests.mjs",
+      "observedToolReceipt": "af3db4",
+      "passed": 18,
+      "failed": 0,
+      "durationMs": 4565.828,
+      "initialFailure": "Host header assertion used fetch (header not sent as intended); corrected harness to node:http; no product Host bypass found."
+    },
+    "browser": {
+      "command": "node study-teachback-app/browser-tests.mjs",
+      "passed": 14,
+      "failed": 0,
+      "provider": "STUB_NOT_API",
+      "media": "WebAudio-generated tone through native MediaRecorder; not physical mic",
+      "receipt": "browser-1789071825159.json"
+    },
+    "liveSemantic": {
+      "command": "node study-teachback-app/live-challenges.mjs",
+      "semanticFixturesPassed": 5,
+      "teachingSchemaValidated": 3,
+      "initialFailure": "INVALID_TEXT rejected; tightened minLength in response schema; failed receipt preserved",
+      "receipt": "live-challenges-1789071668390.json"
+    }
+  },
+  "stop": {
+    "model": "whisper-1",
+    "endpoint": "https://api.openai.com/v1/audio/transcriptions",
+    "httpStatus": 401,
+    "attempts": 1,
+    "audio": "7.31 second self-authored synthetic Mandarin, installed Microsoft Huihui Desktop",
+    "responseBodyRead": false,
+    "cause": "UNKNOWN: not inferred from key presence or Luna access",
+    "postStop": "No more paid calls or product development; handback packaging only"
+  },
+  "notDone": [
+    "Whisper successful transcription/timestamp quality",
+    "Real owner microphone recording",
+    "Integrated real-API browser journey",
+    "All required challenge cases at live-audio end-to-end level",
+    "Quota/export/per-attempt delete browser verification",
+    "Live delivery interpretation",
+    "Integrated owner validation"
+  ],
+  "listenersAfterStop": {
+    "ports": [
+      4317,
+      4318,
+      9327
+    ],
+    "observedListeners": 0
+  }
+}

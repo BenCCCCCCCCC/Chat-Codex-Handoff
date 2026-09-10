@@ -1,0 +1,43 @@
+{
+  "at": "2026-09-10T20:26:24.178Z",
+  "kind": "REAL_WHISPER_API_SYNTHETIC_WINDOWS_VOICE",
+  "voice": "Microsoft Huihui Desktop",
+  "ownerSpeech": false,
+  "sourceText": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。",
+  "duration": 7.31,
+  "observation": {
+    "duration": 7.31,
+    "rms": 0.06217554575299725,
+    "clipping": 0,
+    "config": {
+      "frameMs": 20,
+      "nearSilenceRMS": 0.008,
+      "minCandidateSeconds": 0.7,
+      "clippingAmplitude": 0.99
+    },
+    "status": "PARTIAL",
+    "reason": "UNVALIDATED_ACTIVITY",
+    "events": [
+      {
+        "id": "e0",
+        "type": "near_silence_candidate",
+        "start": 3.42,
+        "end": 4.38
+      }
+    ]
+  },
+  "status": "PARTIAL",
+  "category": "API_HTTP_401",
+  "ledger": {
+    "requests": 12,
+    "attempts": 1,
+    "minutes": 3,
+    "inputReserved": 43258,
+    "outputReserved": 19800,
+    "exposureUSD": 0.02340565,
+    "knownCostUSD": 0.0025981500000000005,
+    "unsettled": 2,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  }
+}

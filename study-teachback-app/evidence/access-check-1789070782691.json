@@ -1,0 +1,35 @@
+{
+  "at": "2026-09-10T20:06:19.295Z",
+  "purpose": "BUILD-01 initial approved-model access check",
+  "fixture": "SYNTHETIC_ENGINEERING_TEXT",
+  "modelRequested": "gpt-5.6-luna",
+  "endpoint": "/v1/responses",
+  "store": false,
+  "status": "PASS",
+  "modelReturned": "gpt-5.6-luna",
+  "usage": {
+    "input_tokens": 81,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens": 39,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 120
+  },
+  "explanation": "仅在土壤干燥时给植物浇水，土壤湿润时不要浇水。",
+  "ledger": {
+    "requests": 2,
+    "attempts": 0,
+    "minutes": 0,
+    "inputReserved": 5180,
+    "outputReserved": 3600,
+    "exposureUSD": 0.00287455,
+    "knownCostUSD": 0.00006705,
+    "unsettled": 1,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  }
+}

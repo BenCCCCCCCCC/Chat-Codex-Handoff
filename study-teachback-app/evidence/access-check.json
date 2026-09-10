@@ -1,0 +1,22 @@
+{
+  "at": "2026-09-10T20:05:46.019Z",
+  "purpose": "BUILD-01 initial approved-model access check",
+  "fixture": "SYNTHETIC_ENGINEERING_TEXT",
+  "modelRequested": "gpt-5.6-luna",
+  "endpoint": "/v1/responses",
+  "store": false,
+  "status": "BLOCKED",
+  "category": "API_RESULT_UNAVAILABLE",
+  "ledger": {
+    "requests": 1,
+    "attempts": 0,
+    "minutes": 0,
+    "inputReserved": 2590,
+    "outputReserved": 1800,
+    "exposureUSD": 0.0028075,
+    "knownCostUSD": 0,
+    "unsettled": 1,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  }
+}

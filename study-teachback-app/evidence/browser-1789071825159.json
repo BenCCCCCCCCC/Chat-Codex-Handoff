@@ -1,0 +1,107 @@
+{
+  "at": "2026-09-10T20:23:55.362Z",
+  "kind": "EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER",
+  "cases": [
+    {
+      "name": "study-first source and tutor, persistent teach-back without rubric/upload",
+      "status": "PASS"
+    },
+    {
+      "name": "microphone denial preserves study state",
+      "status": "PASS"
+    },
+    {
+      "name": "native MediaRecorder + decode + original IndexedDB Blob + timestamp adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "diagnosis blocked before segment replay; correction keeps original identity and audio",
+      "status": "PASS"
+    },
+    {
+      "name": "targeted repair routes feedback back into tutor",
+      "status": "PASS"
+    },
+    {
+      "name": "partial re-record is a new attempt with parent and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "new Apply task and answer stay separate from same-topic repair",
+      "status": "PASS"
+    },
+    {
+      "name": "history reload preserves raw audio and corrected versions",
+      "status": "PASS"
+    },
+    {
+      "name": "API timeout then budget stop preserves one original attempt across explicit retry",
+      "status": "PASS"
+    },
+    {
+      "name": "device interruption preserves original and skips semantic diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "decode failure retains original, shows retry state",
+      "status": "PASS"
+    },
+    {
+      "name": "seven-day expiry cleans linked objects but preserves live topic",
+      "status": "PASS"
+    },
+    {
+      "name": "source revision creates distinct record, preserves prior source/attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "delete all actually removes IndexedDB topic and linked audio records",
+      "status": "PASS"
+    }
+  ],
+  "calls": [
+    {
+      "kind": "learn",
+      "sourceId": "91c57ea7-45bf-4940-bf12-ae3626258395"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "d4db8d8d-c22f-4334-aede-e9b9aaa42502"
+    },
+    {
+      "kind": "content",
+      "sourceId": "91c57ea7-45bf-4940-bf12-ae3626258395"
+    },
+    {
+      "kind": "repair",
+      "sourceId": "91c57ea7-45bf-4940-bf12-ae3626258395"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "57ba56bc-49b4-496a-a5ce-58ad92739ac4"
+    },
+    {
+      "kind": "apply",
+      "sourceId": "91c57ea7-45bf-4940-bf12-ae3626258395"
+    },
+    {
+      "kind": "apply_answer",
+      "sourceId": "91c57ea7-45bf-4940-bf12-ae3626258395"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "645e22d0-0a70-4cee-b7fa-6cecd8a19047"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "645e22d0-0a70-4cee-b7fa-6cecd8a19047"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "400a6fb1-83d9-4d6a-8276-a89afb716b95"
+    }
+  ],
+  "consoleErrors": [],
+  "physicalMicrophone": false,
+  "liveAPI": false
+}
