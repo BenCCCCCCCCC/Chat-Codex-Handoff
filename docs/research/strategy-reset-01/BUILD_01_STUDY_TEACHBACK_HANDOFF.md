@@ -2,7 +2,7 @@
 
 Date: 2026-09-11
 Role: 00 MASTER
-Status: READY FOR OWNER CONSOLIDATED APPROVAL / NOT YET AUTHORIZED TO EXECUTE
+Status: **OWNER APPROVED / READY FOR CODEX EXECUTION / NOT YET EXECUTED**
 
 ## 1. BUILD-00 acceptance
 
@@ -18,7 +18,20 @@ Accepted local receipt from PREFLIGHT:
 
 This acceptance is based on the supplied report plus fresh official source checks; MASTER did not rerun the local commands.
 
-## 2. Freshness corrections
+## 2. Owner approval — now granted
+
+Immediately after MASTER presented the consolidated five-item approval package, the owner replied **“可以的”**. In direct context, this is accepted as approval of the whole BUILD-01 bundle below, not just one sub-item.
+
+Owner-approved scope:
+1. local product-code development plus a local branch and local commits under this handoff; **no push, merge, public release or deployment**;
+2. short-lived loopback Node service, target Edge, and in-product microphone use through explicit user/test action;
+3. owner-selected, low-risk, single-speaker audio and limited learning-source processing through the OpenAI default/global API route, with the data-retention/cross-border limitations in this handoff accepted for BUILD-01;
+4. API use limited to `whisper-1` for timestamped transcription and `gpt-5.6-luna` for Tutor/semantic analysis; no automatic model/provider upgrade;
+5. total new cash cap **US$10** for BUILD-01, with internal API reservation/hard-stop cap **US$5**, no automatic recharge.
+
+This approval does **not** authorize external-user recruitment/contact, third-party voices, sensitive data, public hosting, product push/merge/release, private Chat/Desktop/client file access, destructive Git reset, new provider/model, new package/model installation, or spending beyond the stated caps. Those remain stop conditions.
+
+## 3. Freshness corrections
 
 ### C1 semantic model
 
@@ -32,7 +45,7 @@ Keep `whisper-1` as the initial ASR **because this product requires word/segment
 
 No dual-ASR voting in v0.1. Critical negation/number/condition/term errors are handled by replay/user correction and fail-closed downstream diagnosis. If timestamp quality or Mandarin fidelity is insufficient, report that capability as PARTIAL and stop the affected diagnostic rather than invent timing or auto-install a local stack.
 
-## 3. Product contract
+## 4. Product contract
 
 One continuous experience:
 `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`.
@@ -54,7 +67,7 @@ First version:
 
 No PTE-equivalent total score, personality/mental-state inference, pronunciation/accent grading, realtime duplex voice teacher, broad curriculum platform or external-user account system.
 
-## 4. Build architecture
+## 5. Build architecture
 
 Prefer the PREFLIGHT zero-new-package route for v0.1:
 - isolated product directory `study-teachback-app/`;
@@ -80,7 +93,7 @@ If the zero-dependency detector is unreliable under a challenge case, display `�
 - program validates attempt/source/span IDs, bounded timestamps, quoted transcript text and schema before display.
 - model never owns numeric pause duration, source identity or successful deletion claims.
 
-## 5. Data and privacy boundary
+## 6. Data and privacy boundary
 
 Only owner-selected, low-risk, single-speaker test material/audio during this build. No third-party voices, meetings, children, sensitive medical/legal/financial material or private Chat/Desktop internals.
 
@@ -91,19 +104,19 @@ Local app proposal accepted for build:
 - exported copies are outside app deletion control;
 - storage/quota failure must be a recoverable visible state.
 
-Cloud route, if owner approves:
+Approved cloud route:
 - formal attempt audio -> loopback proxy -> OpenAI `/v1/audio/transcriptions`;
 - limited selected source/transcript/events -> `/v1/responses`, `store=false`;
 - no repo/history/private-client bulk upload;
 - no third-party telemetry.
 
-Fresh official data-control check: API data is not used for training unless opted in; `/v1/audio/transcriptions` currently lists no abuse-monitoring or application-state retention; `/v1/responses` with `store=false` avoids normal stored response state but default abuse-monitoring logs may retain customer content up to 30 days absent approved controls. Australia can be a data-storage region subject to eligibility, but current docs do not list Australia as a regional-processing location for audio/text. This build therefore uses the default global endpoint only if the owner accepts cross-border processing. Do not claim Australian-local processing.
+Fresh official data-control check: API data is not used for training unless opted in; `/v1/audio/transcriptions` currently lists no abuse-monitoring or application-state retention; `/v1/responses` with `store=false` avoids normal stored response state but default abuse-monitoring logs may retain customer content up to 30 days absent approved controls. Australia can be a data-storage region subject to eligibility, but current docs do not list Australia as a regional-processing location for audio/text. The owner has approved the default/global route for this bounded low-risk BUILD-01 test. Do not claim Australian-local processing.
 
-## 6. Budget and usage gate
+## 7. Budget and usage gate
 
-The PREFLIGHT arithmetic is accepted as a conservative envelope, but update semantic pricing assumptions for Luna at runtime from the official source and record the actual date/model.
+The PREFLIGHT arithmetic is accepted as a conservative envelope; semantic model is now Luna as above. Record actual runtime pricing/date/model and usage.
 
-Owner decision requested as one bundle:
+Approved limits:
 - total **new cash cap: US$10** for this bounded BUILD-01 only;
 - internal API reservation/stop cap: **US$5**;
 - no automatic recharge;
@@ -115,20 +128,20 @@ Owner decision requested as one bundle:
 
 The cash cap is not a target. Expected spend should be minimized and reported. ChatGPT/Codex subscription entitlement is not API credit.
 
-## 7. Local engineering authority requested
+## 8. Local engineering authority — active
 
-After explicit owner approval, Codex may:
+Codex may now:
 - verify actual starting branch/HEAD/worktree and create local branch `prototype/study-teachback-v0.1` from the actual accepted HEAD if unchanged; if changed, stop and report lineage instead of resetting;
 - add the isolated app and related test/evidence files;
 - make local meaningful commits as needed; do not push/merge/release;
 - start only the loopback app server and target Edge for this product;
-- request microphone only through explicit user action during owner walkthrough or test-owned authorized interaction;
+- request microphone only through explicit user action or test-owned authorized interaction;
 - call only the approved OpenAI endpoints/models within budget/data limits;
 - use clearly labelled synthetic engineering fixtures where useful; they do not count as user evidence.
 
 No external-user contact, public hosting, credential printing, private client reads, unrelated destructive changes or automatic browser/Chat actions.
 
-## 8. Continuous implementation sequence
+## 9. Continuous implementation sequence
 
 A. Learn state and Tutor/source flow, including persistent `我来讲讲` transition.
 B. In-product microphone capture, original-audio lifecycle, playback/timebase, permission/interruption/quota recovery.
@@ -139,7 +152,7 @@ F. Integrated engineering verification and one review bundle/Delivery Packet, th
 
 Do not pause after each batch for ordinary owner approval. Self-test while building. Stop only for an actual permission/budget/credential/access blocker, unexpected repository state, or a scope decision outside this handoff.
 
-## 9. Required challenge cases
+## 10. Required challenge cases
 
 At minimum:
 - correct content with long pauses must not become knowledge failure;
@@ -156,7 +169,7 @@ At minimum:
 
 No aggregate 'learning improvement' claim from these engineering fixtures.
 
-## 10. Completion / handback
+## 11. Completion / handback
 
 Highest allowed status after BUILD-01:
 **STUDY-TEACHBACK v0.1 IMPLEMENTED / ENGINEERING-TESTED / READY FOR INTEGRATED OWNER VALIDATION**.
@@ -165,13 +178,6 @@ Return one concise Delivery Packet and one whitelist review bundle containing so
 
 Do not push/merge/release automatically. External learner efficacy, retention, willingness to pay, plugin-vs-standalone distribution and long-term learning transfer remain later questions.
 
-## 11. Consolidated owner decision
+## 12. Execution trigger
 
-Before execution, owner must explicitly approve or adjust:
-1. local product-code development/branch/commits under this scope;
-2. loopback server + Edge + microphone use for this product;
-3. owner-selected low-risk audio/source processing through OpenAI default/global API endpoints;
-4. `whisper-1` and `gpt-5.6-luna` API use;
-5. US$10 total new cash cap and US$5 API hard-stop reservation cap.
-
-No other ordinary design/implementation micro-decisions require owner approval.
+BUILD-01 is authorized. Codex should read current MASTER state and this handoff, verify actual local lineage, then execute continuously within the above boundaries. Do not ask for another ordinary approval unless a retained stop condition is actually reached.
