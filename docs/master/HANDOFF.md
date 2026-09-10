@@ -5,111 +5,97 @@ Role: 00 MASTER
 
 ## Immediate State
 
-**DIRECTION-DEEPENING-01 / CHAT-SUBSTITUTION GATE / AI DELEGATION GYM RESEARCH / NO CODEX BUILD**
+**DIRECTION-DEEPENING-01 v2 / SPOKEN EXPLAIN-BACK RESEARCH COMPLETE / BOUNDED AUDIO FEASIBILITY DECISION NEXT**
 
-Owner asks to deepen the two learning/communication directions while treating “Chat+Skill may already solve it” as a hard product gate. Other ideas remain allowed. Do not create an app merely because richer UI, saved state or more prompts are possible.
+Owner wants to combine prior grounded learning/communication practice with spoken logical organization, Feynman-like explanation and PTE-style assessment; requests similar projects, implementation references and integration/feasibility.
 
-PRODUCT-CORE-01 remains PAUSED; INTERVIEW-DEMO-01 remains SUPERSEDED. Generic matter-prep, knowledge chat, roleplay-only coaching and universal software tutor are inactive. No old READY trigger is authorized. Gate 5 remains ON HOLD.
+This turn is research and product synthesis. No local Codex build, microphone recording, audio upload/analysis, new model/API, installation or paid run is dispatched/authorized merely by this description. PRODUCT-CORE-01 stays PAUSED, INTERVIEW-DEMO-01 SUPERSEDED; Gate5 external execution ON HOLD. Do not run older READY briefs.
 
-## Authority / Preserved Product Version
+## Authority / Unchanged Baseline
 
-Read `BenCCCCCCCCC/Chat-Codex-Handoff` / `meta/master-state`:
+Read `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 1. `docs/master/CURRENT_STATE.md`
 2. this HANDOFF
-3. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md`
-4. `SCENARIO_FOCUS_02.md` v5 only for prior detail if required.
+3. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` v2
 
-Last owner/Codex-reported local product state remains:
-- `F:\Chat-Codex-Handoff\validation-repo`
-- `prototype/acceptance-evidence-p0`
-- `a1c37af2d68cce8f0574b89b01975e9223f6cea2`
+Preserved local receipt:
+- F:\Chat-Codex-Handoff\validation-repo
+- prototype/acceptance-evidence-p0
+- a1c37af2d68cce8f0574b89b01975e9223f6cea2
 
-Historical P0 source/bundle PASS FOR COMPARISON ENTRY and 54/54 Codex-local test report keep their original level. No new code/model/runtime/plugin experiment. Preserve source/history; do not reset or fabricate continuation.
+Prior P0 source/bundle PASS FOR COMPARISON ENTRY, Windows54/54 Codex-reported, unchanged. No new source HEAD or runtime proof. Preserve all old code/artifacts/partial work; never reset to fit a research hypothesis. Target consumers must not need Codex/Git/API-key/self-host setup.
 
-## Product Gate — Prove Why Plain Chat Is Insufficient
+## Selected Synthesis
 
-Do not build an independent product when the value is mostly:
-- generating explanations/questions;
-- reusable prompts/skills;
-- ordinary roleplay and reflection;
-- model-only scoring;
-- simple history/progress/UI.
+One practice loop: **limited learning source + explicit goal -> short independent spoken explanation -> faithful recording/transcript evidence -> separate content/logic/delivery feedback -> targeted re-explanation -> new application question**.
 
-A candidate may justify software only when outcome depends materially on model-external capabilities such as hidden task state, executable objects/actions, independent checks, reset/replay, held-out variants, fair failure attribution or live page/app/device context.
+This is not adding recording to an arbitrary chatbot, nor building a Feynman tutor, AI delegation game and English exam simultaneously. Retain the old mechanism narrowly: reconstruct only what the user actually expressed and compare with fixed reference conditions. Full interactive board/real-software coaching is not the next task.
 
-Even then, compare a capable Chat + equivalent Skill/tools. ChatGPT Plugins/Apps can already provide interactive UI and actions; site tools and browser surfaces expand this further. The correct product may be a Plugin/App inside Chat rather than a standalone native app.
+Initial candidate: adult Mandarin speaker, one conceptual/procedural task type,60–180sec single-speaker attempt,1–2 original short sources and3–6 confirmed conditions. Scope numbers are design choices, not efficacy thresholds. First batch processing and text feedback, not realtime interruptions/voice TTS/full knowledge graph.
 
-## Priority Hypothesis — AI Delegation Gym / Brief-to-Execution Lab
+## Evidence Already Read — Do Not Repeat Broad Research
 
-Specific hypothesis: ordinary users moving from “ask AI a question” to “delegate a multi-step task” need practice specifying constraints and verifying what the agent actually did.
+Detailed source IDs E01–E19 are in v2.
 
-Mechanism:
-- user has a full mission/goal;
-- collaborator model only receives permitted shared state + the user's brief;
-- collaborator may clarify or use a small legal toolset against a visible board;
-- separate engine executes/logs actions and owns fixed checks;
-- result identifies unmet conditions and separates user omission, model misinterpretation, tool failure and Unknown attribution;
-- user revises one part, retries, then tackles a new equivalent mission.
+- Vocenda/LaoshiAI already provide voice teachback; Yoodli already records/analyzes practice. No voice+Feynman novelty claim.
+- mattdiep15/feynman README and actual evaluate route/helpers were read. Text plus retrieved concepts -> structured model subjudgments -> calculated sum. The inspected endpoint has no raw-audio timing input; summation is not objective learning validation. Its linked root DEVELOPMENT.md404 was not treated as read.
+- Chinese feynman-tutor Skill is a meaningful conversational baseline, not dismissed as just a tiny prompt.
+- Pearson current official guide: separate Content/Pronunciation/Oral Fluency, with some AI+human content scoring. Printed8/21/46 were actually viewed. Do not copy PTE norms/scale or advertise equivalence.
+- Primary 2025 oral/written experiment supports contextual complementarity, not speaking always superior. 2020 study abstract available, full fetch403; do not claim full article reviewed.
+- Official MediaRecorder, VAD/WhisperX, audio Regions UI and transcription APIs show viable components, not local performance results.
+- Current transcription word-timestamp parameter is model-specific; pronunciation service is not knowledge/logic scoring. Azure prosody en-US and content-preview retirement are recorded constraints.
+- Chat Voice already converses; official transcript is not verbatim. Plugin raw-voice/mic access remains unestablished, not inferred from UI docs.
 
-No global communication/prompt score, no hidden-answer-in-the-same-prompt trick, no fake model failure and no real external side effects in the first slice.
+No new target-user interview, actual product trial, training study, audio dataset or model benchmark. Do not replace this honesty with vendor growth/effect numbers.
 
-### Four levels
+## Non-Negotiable Assessment Contract
 
-User/scenario: basic AI user starting to delegate constrained multi-step work; actual task frequency/reuse/payment Unknown.
-Product: an observable delegation attempt and local repair, not a course, chat wrapper or project manager.
-MVP candidate: one process/arrangement board, 8–12 original missions with held-out variants, text, one collaborator, a small legal toolset and private checker/event log.
-Feasibility: model handles language/action proposals; deterministic runtime owns hidden mission, legal transitions/checks/reset; human calibrates semantics and real transfer.
+1. Keep knowledge, expressed logic, observable delivery and unassisted new-task performance independent. No arbitrary total score, PTE10–90, general intelligence/personality or employability label.
+2. Silence/fillers/self-correction/accent/stutter cannot automatically lower knowledge assessment. Report observations and uncertainty, not hidden mental state.
+3. A concept absent from this attempt is 'not demonstrated here', not proven unknown. Source mismatch may mean an alternative valid explanation or incomplete reference, not necessarily wrong knowledge.
+4. Critical ASR uncertainty (negation, numbers, conditions, jargon) blocks dependent negative claims until replay/confirmation. No fabricated confidence or timestamps. No user's penalty for noise/model/tool failure.
+5. Original audio, raw transcript, corrected transcript and rewritten coaching text are distinct immutable/versioned evidence. Text correction is not a new oral performance; alignment dependent on altered text must be rechecked/invalidated.
+6. Every substantive feedback item points to actual source/criterion and actual attempt span. Sources/rubric versions and assistance level stay fixed/recorded. Do not silently change criteria to create progress.
+7. Independent first attempt, prompted repair and unseen application results stay separate. Delayed transfer/user benefit requires its own study, not a model score increase.
+8. If a listener/expressed-map is tested, it does not receive reference answers; every reported expressed relation requires a quote/segment. Pretrained model guesses are not proof of user communication. Same model can serve separate requests; no fake ignorance in one full-answer context or needless agent team.
 
-### Why not plain Chat
+## Next Smallest Feasibility Slice — Proposed, Not Started
 
-A roleplay prompt in one conversation cannot credibly demonstrate that the collaborator never received the target/checks if those are present in its context. Language-only “I completed it” claims and model self-grading also lack an independent state/result channel. A Skill with an independent backend can solve this — in that case the Skill/Plugin is the product, not a reason to duplicate Chat in a separate app.
+Objective: determine whether the actual audio evidence pipeline yields a few correct, usable findings beyond ordinary Chat before building an app/platform.
 
-### Likely form factor
+Candidate experiment after explicit scope/access/budget approval:
+- select1–2 original/permissioned short sources with clear content relationships and reference anchors;
+- use a small set of consented/scripted recordings, explicitly labelled engineering data, not claimed users;
+- include correct-fluent, correct-with-pauses, fluent-wrong, incomplete, self-corrected and critical-ASR/noise conditions;
+- process original recording -> faithful transcription and observable timing -> evidence-linked content/logic feedback;
+- play cited segment, correct recognizer error without erasing original evidence, and make one local re-explanation;
+- compare manual-checked transcript vs ASR and audio-enabled feedback vs a competent Chat Voice/Skill baseline using equal source context;
+- inspect negative findings with human judgments; use counts/cases and unresolved disagreements, not underpowered claims of learning efficacy;
+- record time/cost/errors and whether replay actually saved correction effort.
 
-First-choice research form: ChatGPT Plugin/App with an interactive board and private backend state, because users keep the natural-language surface while the product supplies the external environment. Standalone Web/App is conditional on plugin reach, local/offline/privacy, low-latency voice or distribution evidence.
+Do not make ordinary users record material in this turn, fabricate human recordings/interviews, silently synthesize speech as real people or buy/API-call without approval. No need for huge curated curriculum or dataset before the first slice. If no permitted audio/runtime is available, deliver only the prepared test contract and state that execution is blocked—not fake full success.
 
-## Secondary Direction — Real Software Coach Mode
+The next implementation proposal should deliver this real end-to-end slice, not another large inventory module or preloaded UI. Required provider, model timestamp/faithfulness limitations, actual dependency availability and maximum cost must be resolved before running it. A desktop/local inspection can be separately scoped; MASTER has not inspected the user's installed environment here.
 
-Potential mechanism: the user performs a real software/web task while AI observes current state, gives adaptive hints without taking over, then checks an unassisted repeat.
+## Form Factor and Replacement Gate
 
-This passes the plain-Chat test only when live page/app state is available. However WalkMe, Whatfix, Pendo and similar digital-adoption tools already supply contextual walkthrough/training, AI assistance and simulations; current ChatGPT site tools/Work and browser features also reduce the gap. Do not build a generic cross-software coach without a narrow consumer use case and direct evidence of lower setup/clear unmet need.
+Normal Chat Voice plus a good prompt can handle ordinary teachback. Proposed value is controlled original recording/timing, source-linked checks, error attribution and selective replay/retry. A capable Skill with equivalent tools may provide exactly that.
 
-Hands-on learning is therefore treated as a mechanism shared by both directions, not a third generic tutor category.
+Prefer the least-friction lawful surface: a small owned Web recorder is a feasibility candidate; a Chat component is equally acceptable if original audio and needed permissions are supported. No automatic standalone-native-app commitment, no private-client audio extraction. If equal-tool Chat/Skill or existing products give the same result with less effort, reuse/adapt rather than force a separate product.
 
-## Current Source Findings — Carry Forward
+## Privacy / Cost / Retained Gates
 
-Current OpenAI official docs: Plugins package Skills/Apps/templates, Apps can provide interactive UI/actions; site tools use WebMCP; cloud/built-in browsers can work on websites; OpenAI Certified and College Student plugins already offer applied/interactive learning. Google Chrome Skills also packages reusable prompts. Never claim Chat is text-only or a saved prompt is a moat.
+User-selected source and single-speaker recording only. No background listening, third-party meetings, voice identification, sensitive personal profiling, real students' data without permission or medical/psychological conclusions. Specify cloud processing, retention and real deletion before collection; don't pool private sources by default.
 
-Prior art/competition: CoDraw hidden-information collaboration; ROPE requirement-driven prompt training; OpenAI/Claude AI fluency curricula; 2026 AI Factory hands-on AI game; PromptFluent prompt-debug practice; WalkMe/Whatfix/Pendo digital guidance. Source capabilities only; no runtime comparison or efficacy proof.
-
-## Next Research Deliverable — No Development Yet
-
-Prepare ONE complete synthetic mission protocol for the delegation-gym mechanism, not a large app brief. It must include:
-- private user-visible goal/checks;
-- exact collaborator-visible payload;
-- allowed tools/actions and state transitions;
-- objective/partial/Unknown result conditions;
-- clear, under-specified, contradictory, model-error and engine-error cases;
-- leakage tests proving what was not sent to the collaborator;
-- error-attribution rules;
-- a held-out equivalent mission;
-- strong baselines: Chat only, Chat+Skill/tools with equal information and comparable setup burden.
-
-Then decide if a tiny runtime experiment is worth authorization. No one should code before the mechanism can be falsified on paper. If Chat+Skill/tools gives the same result with less setup, product form becomes Skill/Plugin/adaptation or stops. If hidden-state/action/result independence cannot be demonstrated, do not claim learning/communication improvement.
-
-## Retained Gates
-
-Research/state maintenance only. No new product code, model/API/agent run, plugin installation, browser/site execution, private data, external participant/contact, spending, push/merge/share/release or real account actions. These receive bounded authorization at the actual gate.
-
-No user personal projects or prior interview packaging needed. No promise of background execution.
+Cost includes ASR/audio duration, semantic requests, alignment compute and storage. Existing Chat subscriptions are not free/public API entitlements. No extra model/API/agent calls, new dependency/service/server, microphone access, local source change/commit, paid use, external contact, push/merge/share/release is authorized by this research handoff.
 
 ## State Summary
 
-Completed: Chat-substitution framework, platform/form-factor verification, delegation-gym and software-coach deepening, current counterevidence.
-Verified: public capability sources and historical P0 evidence at prior scope; no new runtime/user result.
-Likely: model-external environment/state/checks give delegation practice a stronger product rationale than pure chat; demand and learning effect unproven.
-Unknown: repeated need, strong-baseline advantage, model/tool fairness, plugin coverage, cost/privacy, transfer/adoption/payment.
-Not Done: synthetic mission protocol, runtime mechanism test, target observation, competitor use test, implementation or release.
-Must Fix: no Chat strawman, no hidden-target security assumption, no model-error blame on users, no app-form novelty claim.
-User Decision Needed: none for ordinary research; execution/development/data/contact/spending/publication gates remain.
-Future Optional: native app, voice, live external workflows, old acceptance/workspace products; inactive.
+Completed: similar-product/actual-code review, PTE official/learning-evidence analysis, speech component and Chat boundary audit, integrated four-level product design, assessment/error/data rules and next experiment plan.
+Verified: directly inspected sources and historical P0 receipts only; no new audio/user/model output.
+Likely: source/time-linked targeted repair may offer more value than generic oral feedback; untested.
+Unknown: Mandarin ASR/alignment, fair logic diagnosis, actual learning/transfer, repeated user need/payment, plugin audio availability and latency/cost.
+Not Done: audio pipeline execution, labelled corpus, actual competitor comparison, learner observation, new product code or release.
+Must Fix: no pause=ignorance, ASR-user blame, uncalibrated exam claims, fabricated tool/learning validation or false uniqueness.
+User Decision Needed: none for completed research; actual bounded voice/runtime/development/API/budget/data/contact/publication decision next.
+Future Optional: realtime voice, English pronunciation assessment, native installation, broad knowledge graph and full delegation simulation; inactive.
