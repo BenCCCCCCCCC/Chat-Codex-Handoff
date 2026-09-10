@@ -1,190 +1,203 @@
-# DIRECTION-DEEPENING-01 — Chat替代性门槛、AI委派练习与真实软件教练
+# DIRECTION-DEEPENING-01 v2 — 语音讲解练习：知识、逻辑与表达的分层反馈
 
-日期：2026-09-10
+核查日期：2026-09-10
 角色：00 MASTER
-状态：RESEARCH / NO BUILD AUTHORIZATION
+状态：RESEARCH / PRODUCT SYNTHESIS / FEASIBILITY PLAN — NOT BUILD OR AUDIO-API EXECUTION AUTHORIZATION
 
-## 1. 最新用户要求
+## 1. 最新输入与本轮决定
 
-用户认可继续深化“操作型学习”和“共同任务沟通”，但要求把“为什么不能直接用Chat完成”作为核心产品门槛，也允许继续寻找更合适的新方向。
+用户认可上一轮外部状态/结果可核对的学习与沟通机制，并提出：结合费曼式讲解、用语音组织逻辑、分析是否满足学习要求、哪里模糊/犹豫/错误，参考PTE口语机考评分。要求查找同类及实现、借鉴整合并考虑开发可能性。
 
-本轮结论：普通出题、苏格拉底追问、角色扮演、复盘、保存历史、图文卡片均不能支撑独立产品；Chat/Skill/Plugin本身已覆盖大量能力。独立软件的必要性必须来自**模型外部的状态、动作、验证、信息隔离或设备/网站交互**。并且“需要软件”不等于“必须独立安装App”：当前ChatGPT Plugins/Apps可承载交互UI、工具和外部动作，可能就是更合适的产品形态。
+这不是批准同时建设委派游戏、英语考试和全学科学习平台。当前收敛到一条主线：**成年人根据明确材料，独立讲清一个概念/机制/规则；反馈指向原录音、所说内容和学习标准，随后针对缺口重讲并做一次新情境应用。**
 
-PRODUCT-CORE-01继续暂停；不恢复旧验收App、事项App或通用AI导师。没有Codex开发授权。
+优先输出可复查的诊断和下一步，不先产生未经校准的总分。先普通话、短录音、录完分析，不先实时打断/实时双工语音。AI委派练习的“只从已传达信息重建结果”保留为受限的解释结构/听者重建机制，不强行保留整套流程板游戏。真实软件Coach保持次级/暂停。
 
-## 2. Chat替代性门槛
+不从用户个人项目选市场。不再改产品名称来回避同类竞争。旧PRODUCT-CORE-01仍暂停，INTERVIEW-DEMO-01仍被替代，Gate5外部执行ON HOLD。已有P0只供可追溯/版本/未知状态思想复用，不决定消费者的界面或运行架构。
 
-一个候选方向若同时满足以下条件中的0–1项，默认先做Skill/提示模板，不开发独立产品：
+## 2. 研究证据支持的边界
 
-1. 只需要模型生成/解释/追问；
-2. 所有必要信息都可以安全地放进同一个对话上下文；
-3. 成功与否主要由同一个模型主观打分；
-4. 用户没有需要实际操作的对象；
-5. 不需要固定重置、回放、跨题迁移或可靠事件记录。
+### 学习与表达不能直接划等号
 
-值得开发插件/交互应用的必要性信号：
+“说出来能暴露问题”是值得采用的练习设计，不是“说一定优于写”的普遍定律。2025年International Journal of STEM Education研究在特定视频学习实验中发现口头+书面结合的即时保持/迁移优于单一方式；不能直接外推所有人/学科/长期效果。[E01]
 
-- **Hidden state**：有目标、答案、角色信息或规则不能暴露给协作者模型；
-- **Executable environment**：用户/AI必须实际改变一个外部对象，而非只声称“已完成”；
-- **Deterministic/independent checks**：至少部分结果可由模型外引擎核对；
-- **Replay/reset**：同一状态能重放、分支，或换等价任务检查迁移；
-- **Attribution**：能区分用户遗漏、模型理解错误、工具执行失败、题目本身错误；
-- **Live context/device access**：需要真实网站、应用、传感器或文件状态，而不是用户反复截图/描述。
+2020年Learning and Instruction论文摘要指出口头/书面优势与文本复杂性有关。本轮检索取得摘要，publisher全文打开403，未声称读到完整方法/数据，也不据此作效果量主张。[E02]
 
-即使满足，也先问：这些能力能否以ChatGPT Plugin/App UI或站点工具实现？只有需要独立分发、低延迟语音、离线/本地隐私、跨宿主连续使用、特殊设备能力或Chat平台覆盖不足时，才优先独立App。
+本产品允许简短提纲/示意辅助，再独立讲解；记录开卷/闭卷、提纲/提示和是否见过答案。不用“没有看资料”假定经过防作弊认证。好口才不证明理解正确；停顿、重复、口音、卡词不证明不会。未讲到只说明本次未呈现，不能直接推出永久知识缺陷。没有可靠依据不诊断紧张、认知能力、人格或心理状况。
 
-## 3. 平台事实：Chat已经不是纯文本框
+### PTE只能借鉴评估结构，不复制效度或标尺
 
-2026当前资料：ChatGPT Plugins可以包含Skills、Apps和App templates；Apps可连接外部数据/actions并提供交互UI。官方Apps/Plugins文档明确列出interactive cards/maps等体验，Developer/MCP Apps可有interactive UI和write/modify动作；具体可用性受plan/region/workspace限制。
+读取Pearson官方scoring页面与46页Academic Score Guide；实际查看印刷页8、21、46的图表/评分维度。官方Describe Image示例把内容与发音/流利度分开；部分内容由AI与人共同评分，有分歧时进一步人工判断。Retell Lecture内容还涉及要点和逻辑联系。[E03,E04]
 
-ChatGPT Desktop的site tools使用WebMCP，可在提供工具的网站中读取/修改；built-in browser/Work还可以执行更广泛网页任务。不要靠“Chat看不到网页/不能操作”来造差异。
+因此可借鉴：先限定任务和标准，分维度，有可解释锚点，用人工判断校准，异常保留复核。不可宣称PTE全部只由机器评分，不可复制其受校准的分数体系、考试权重、题库或官方认证地位。第一版不输出PTE10–90、考试预测、录用/升学分数，也不把英语发音规范用于中文知识掌握。
 
-OpenAI Certified插件已经提供角色化AI能力课程、hands-on exercises、assessment和progress tracking；College Student plugin可围绕课程材料生成互动练习。Google Chrome Skills也能保存/复用提示词。因此“学习提示工程”“把prompt变成按钮”也不是新产品空白。
+## 3. 同类产品与实际源码核查
 
-## 4. 方向A（优先）：AI Delegation Gym / Brief-to-Execution Lab
+| 对象 | 本轮直接核查 | 可借鉴 | 不得当作创新/已验证能力 |
+|---|---|---|---|
+| Vocenda | 当前官网：语音/文字讲解、AI追问、知识薄弱记录及回顾 | 从主动讲解而非内容消费进入；针对缺口追问 | 讲解、记忆、复习已存在；厂商叙述不证明学习效果/使用量。[E05] |
+| LaoshiAI | 当前官网Feynman mode、学习者角色、语音解释与发现缺口 | 角色反转，简化开始操作 | 让AI扮演听众不是独创，也不是可以测出真实知识的保证。[E06] |
+| mattdiep15/feynman | README与code/app/api/evaluate/route.ts、code/lib/evaluate.ts实际读取 | 概念+转写+相关材料→结构化correct/missing/misconceptions/followup；不可评分输入显式跳过；实际提供累积与提交记录 | README标2026黑客松。所读evaluate接口只收transcript/priorTurns，不收原始音频时间数据；该接口不是停顿/声学评估。模型产生分项、程序求和不等于客观效度。[E07] |
+| GibbonTech/feynman-learning-app | README：语音、材料、简化解释/反馈，Next/API架构 | 基础录音/转写/对话接线参考 | 仅README级，未安装/运行；不采纳历史free模型或学习提升宣传。[E08] |
+| feynman-tutor Skill | 实读SKILL.md：对话澄清、材料与笔记延续、针对用户讲解推进 | 好Skill是必须承认的强基线 | 对话费曼导师可以是Skill，不因加声音就必需单独App。上游内部命令不在此执行。[E09] |
+| Yoodli | 官方Practice说明：录制练习、分析、AI问题、视觉材料 | 回看自己的实际表达，再练明确片段 | 录音+反馈/反问已经存在；未进行产品试用或疗效比较。[E10] |
 
-工作名，不是品牌。它是v5“共同任务沟通”的更具体、2026更相关版本：**训练普通用户从‘问AI问题’过渡到‘把一个多步骤任务可靠地委派给AI’。**
+mattdiep15/feynman的README根目录DEVELOPMENT.md链接返回404；通过实际树定位代码后读取，不虚构这份文档内容。主README列出Deepgram STT/TTS、Claude、Voyage和Redis；这不意味着本项目必须复制多服务/向量库架构。一份短材料与少数标准可先直接上下文检索，不建知识图谱数据库。
 
-### 用户/场景
+本轮没有独立目标用户访谈、竞品登录使用、软件安装、新模型/API运行、学习实验或付费。公开项目是供给侧/实现依据，不是需求发生率。代码复用前仍需核查实际许可及模型/数据许可，未确认许可的应用代码不能直接复制；上游“学习风格”“掌握分数”宣传不直接采用。
 
-候选用户：已经会基础聊天，但开始希望AI执行多步骤任务的人；他们不一定是经理或程序员。场景是“我需要把目标、限制、先后、资料和停止条件说明给AI，然后判断结果是否真的满足任务”。
+## 4. 产品与用户四层定义
 
-可用于学习/工作/生活的同一机制：安排一组任务、组织一个小流程、根据若干约束形成一个计划、把一套资料转换成规定结构。首版不执行真实邮箱/订单/支付/生产系统。
+### 4.1 用户与场景
 
-真正痛点假设不是“不会写高级prompt”，而是：
-- 不知道哪些背景/约束必须交代；
-- 看到流畅输出却不知道该验证什么；
-- AI做错后只会整段重来；
-- 不知道问题来自自己没说、模型理解错还是工具执行错。
+首批假设：成年人近期需要根据一份材料脱稿解释一个概念、规则或步骤，已经读过/学过，但希望知道自己是否讲对、讲完整和能应用。AI新手/轻用户是低门槛设计约束，不意味着业务知识低或沟通差。
 
-发生频率、付费、迁移到真实任务的效果仍未知。
+使用时点：一次学习之后、复习时、向同伴解释之前。学习/工作可共用同一机制；不同时面向所有考试、咨询、医学/法律/财务决策或社交治疗。第一版不以未成年录音、课堂同学声音、真实第三方私密对话为默认材料。
 
-### 产品机制
+具体打开理由：我讲一小段，请指出哪个知识关系说错/没说明，哪一句导致理解困难，而不是再替我写一份标准答案。任务重复频率、愿不愿意录音及公开说话条件、付费与复用均未知。
 
-1. 用户看到完整Mission Card；协作者模型只收到明确允许的共享材料和用户brief，后台目标/答案不进入该模型上下文。
-2. 协作者拥有有限工具，对一个可见的流程/安排/资源板进行真实结构化操作。
-3. 引擎执行合法动作、记录事件，依据预先固定的检查条件验证结果；模型不能改成功条件。
-4. 结果页面拆分：未传达的条件 / 已传达但模型忽略或误解 / 工具执行失败 / 未能确定归因。
-5. 用户从一个具体遗漏处重写brief并重新运行；随后换一份结构相似、内容不同的held-out任务，看是否能减少相同遗漏。
-6. 不给“沟通能力72分”或“prompt等级”；只对可观测的条件、提示依赖和行动结果报告事实。
+### 4.2 产品主流程
 
-### 为什么普通Chat不够
+1. 选定一份有限来源和讲解目标。系统提出3–6条学习条件，显示出处/适用范围/歧义；用户确认本轮要练什么，之后版本冻结。无法合理评判的开放主题需改目标或显示不支持，不能临时发明标准。
+2. 学习/准备后连续讲60–180秒；初次独立尝试期间不抢答、不自动补完、不用中途提示把原本遗漏掩盖。时长是原型范围，不是效度阈值。可提供用户选择的提纲辅助，并记录辅助状态。
+3. 先检查录音/转写质量，再检查知识和逻辑。可疑专业词、否定词、数字或条件词允许回听确认；ASR没有置信输出则写Unknown，不伪造置信分数。不要要求每次全文人工校对才正常可用。
+4. 展示三个互不替代的视图：学习条件覆盖与问题；所说的逻辑结构；可回听的时间线/表达观察。反馈默认最多两三个重要点，不用一大屏术语/评分逼用户先学系统。
+5. 在需要时只追问最重要缺口；让用户自己补充原因、例子或反例，而不是立刻给完整答案。用户明确请求解释时可以给解释，但记录为有提示学习。
+6. 用户选择一个片段重讲，原片段保留，差异按条件/内容比较；改善流利度不能抵消事实错误。
+7. 再用一个新情境/隔日短检查观察能否无提示运用；一次练习成功不等于稳定掌握。新情境结果与同题修正分开展示。
 
-同一Chat能模拟角色并反问，但如果完整目标、参考答案和评分标准都在同一模型上下文中，无法可靠证明协作者没有‘偷看答案’。Chat也可以声称自己执行了安排，但没有外部状态引擎时，结果与评分可能由同一生成模型自洽地改写。
+### 4.3 MVP边界
 
-Skill若能调用独立工具/状态服务，则它已经变成该产品的一部分。因此正确对比不是“App vs Chat文本”，而是：
-- Chat + 好prompt；
-- Chat + 同等Skill/tools；
-- 候选封装是否显著减少设置、泄露和判断成本。
+候选第一切片：普通话，一类短概念/规则解释，1–2份明确可评的原创材料，单人短录音，来源固定、原声回放、局部反馈/重讲、一个未见应用题。首先证明完整真实音频链路，而不是只有预制反馈。
 
-### 产品形态
+不做全学科题库、全PDF转换、动态知识网络、跨用户画像/所谓学习风格推断、实时语音打断、语音情绪/人格分析、自动发音等级、PTE模考认证、复杂3D或完整AI委派任务管理。文字反馈足够，语音输出不是语音输入产品的必需项。
 
-优先考虑**ChatGPT Plugin/App + 交互工作区**，而非先做独立原生App：Chat负责自然语言，插件后端保存private target/state，UI展示共享板，tools执行受限动作。这样既保留Chat熟悉入口，又增加Chat单靠语言做不到的环境能力。
+原型可用小型Web录音页面承载，未来可选PWA或Chat组件；先不要强制原生Windows，也不要求消费者部署服务/填模型Key。实际用户入口、授权地区、成本和权限须验证，不能拿开发者Chat订阅作公开服务后端。
 
-独立Web/App只在插件能力/计划覆盖、分发、实时语音或本地隐私成为实证障碍时再选。
+### 4.4 可实现性与职责分层
 
-### MVP
+普通录音、分段、时间线与保存：已有技术可实现，仍需设备/权限/格式/中断测试。
 
-- 一种流程/安排board；
-- 8–12个原创任务，含训练集与未见变体；
-- 文本输入、一个协作者；
-- 5–8种合法动作；
-- private mission checker、事件日志、一次局部重试；
-- 不做真实第三方动作、语音、3D、多人、账号付费系统或无限AI生成任务。
+来源对齐、覆盖/矛盾/因果或条件关系：可用模型+明确量表+可核验引用做候选反馈，但准确/公平不应由模型自报。标准答案也可能简化/错漏；来源不充分或合理替代解释时要保留争议。
 
-### 可实现层
+“停顿说明没理解”“知道用户当时脑中在想什么”“准确测出一般逻辑能力”：不承诺。声学事实与认知原因不同。因果归因不明就先提问/人工复核。
 
-模型：理解brief、选择澄清问题和受限动作。
-规则/engine：目标、可见性、动作合法性、状态变化、显式条件检查、reset/replay。
-人：主观/现实迁移与任务定义校准。
+考试级可靠评分、全领域真实掌握、迁移效果：当前没有依据，不能作为首版承诺。
 
-重点测试leakage、action/result绑定、clear/underspecified/contradictory/system-error对照和模型错误归因。不能故意降低模型能力制造训练价值。
+## 5. 四条评估轨道，不做未经校准的总分
 
-### 竞争/先例与创新边界
+| 轨道 | 判断内容 | 所需证据 | 不能越界 |
+|---|---|---|---|
+| 内容/学习要求 | 明确关键点是否被表达，有无与本轮材料矛盾 | 已确认来源+原声可核对转写+具体引用 | 关键词出现≠正确理解；没说≠不会；来源未涵盖≠错误 |
+| 逻辑组织 | 前提/结论、因果/条件方向、术语指代、步骤/例子是否连接 | 实际语句及其关系，必要时追问 | 连接词多≠逻辑好，不强迫唯一表达顺序 |
+| 口头表达观察 | 停顿位置/时长、重复、自我修正、填充词候选、节奏 | 原录音、真实时间对齐、语境 | 停顿不直接减知识分；口音/口吃不作智力或理解推断；“那个”不一律填充词 |
+| 迁移/独立性 | 新情境是否能用，有无提示/答案辅助 | 独立题目和后续回答记录 | 同题背熟/补完不冒充新题掌握；不由模型分数预测真实考试 |
 
-- CoDraw早已使用信息不对称+对话+动作重建；不是新机制。
-- ROPE研究训练prompt novice通过requirement defect反馈与counterfactual输出改进要求表达；不是我们首次发现“需求表达可训练”。
-- OpenAI Certified/Claude Academy已有AI fluency、delegation/discernment训练和hands-on exercises。
-- PyCon 2026 AI Factory是通过真实LLM调用/预算/guardrails做游戏化AI学习的公开先例。
-- PromptFluent已有prompt debugger/response ranker/real-world practice。
+产品优先显示：已呈现 / 部分呈现 / 尚未呈现 / 与本轮来源存在冲突 / 需要确认 / 暂不判断。语音使用观察性描述，不显示“认知薄弱67分”。若以后确需数字，必须先有维度锚点、人类标注、误差和稳定性证据；模型分项由程序求和不提供这些证据。
 
-候选差异只能暂时表述为：**面向普通轻用户的、结果可执行且归因可检查的委派微型环境**；不是prompt课程、不是企业证书、不是纯模拟聊天。独特性/需求/效果尚未验证。
+例子仅为设计材料：源规则要求“登记有效且出示确认码才能入场”。录音说“只要登记成功就能进去”时，反馈可指出缺少另一条件；若原声其实是“不能”而ASR漏了“不”，则应归转写错误、重评该片段。另有两秒停顿只能记录为停顿，不能因此说用户没理解。这些不是已采集或实跑的录音案例。
 
-## 5. 方向B（降级但保留）：真实软件“Coach Mode”
+## 6. 与上次信息差机制的整合，不盲目加第二个Agent
 
-将v5“操作型学习”从自建Excel沙盒改为：**在真实或高保真软件界面中，AI观察用户当前状态，分步提示但不替用户完成，完成后让用户在新任务独立做一次。**
+把“AI协作者按说明做出什么”收敛成**你的说明实际表达了哪些关系**。
 
-### 用户/场景
+- 参考图/条件由确认来源生成、保存版本。
+- 表达结构抽取器仅读取本次讲解，不读取参考答案；每条节点/边必须绑定转写segment/原话，模型补出的知识标为推测或不进入已表达图。
+- 对照评估器可读取两者，解释漏掉的关系、冲突和无法确定处。是否语义等价仍可能需要模型判断，不能全叫确定性比对。
+- 后续适合的规则/流程任务可让“听者”只根据已表达信息处理一个新例。听者不收到原材料，但预训练知识仍可能补答案，因此不能假装它真是零知识人；可计入结果的规则必须有用户话语引用，纯模型猜对不算用户讲清。
+- 需要时同一模型可用于两次隔离请求；不需要多个品牌/常驻Agent。隔离是实际payload/权限边界，不是在一个已知答案对话里让模型假装不知道。
+- 最初音频链路验证可不实现完整互动板。不得因“整合上次内容”把MVP扩成学习、委派和软件训练三个系统。
 
-学习一个近期真的要用的软件功能的人，例如设置筛选、构建某类页面、完成一个网页流程。目标是会自己做，而不是让Agent代办。
+## 7. 技术流水线与可复用组件
 
-### 为什么Chat不够
+来源/学习目标 → 冻结rubric/source_id → 录音与质量检查 → 两条并行分析线：
 
-没有页面/应用状态时，Chat只能给静态步骤；UI更新或用户走错后需要反复截图解释。若有site tools/browser integration，AI可读取上下文并检查进度。因此这也是工具型产品，而不是聊天提示。
+A 原声 → VAD语音活动分段/时间统计 → 表达观察；
+B 原声 → ASR → 原始转写/时间对齐 → 内容与关系评审；
 
-### 但为什么不优先
+最终合并到可回听的反馈片段，再进入追问/重讲/新情境。
 
-这一类竞争极强：WalkMe、Whatfix、Pendo都已有实时/上下文in-app guidance、walkthrough、training和analytics；Whatfix Mirror明确做安全交互式软件模拟训练。ToughTongue也已把browser工具用于软件/CRM training和guided onboarding。当前ChatGPT site tools/Work、Gemini browser automation也快速逼近。
+### 组件核查
 
-因此通用“AI软件教练”替代性依然高。只有找到一个大型DAP不适合的个人细分（低配置、跨个人工具、按个人任务临时生成且尊重‘不要代办’模式）并有真实痛点，才继续。否则应复用/集成现有平台。
+- Browser MediaRecorder：已有标准录音接口；需HTTPS/localhost/授权和实际设备格式检查，不能预设所有移动浏览器同样支持。[E11]
+- Silero VAD：可返回speech timestamps，有PyTorch/ONNX路径。它判断语音活动，不理解语义或心理犹豫。厂商速度与跨语言效果未本机复现。[E12]
+- OpenAI file transcription：当前官方文档列中文提示/术语上下文等；显式word/segment timestamps的timestamp_granularities参数限定whisper-1，不能给另一转写模型随意套参数。Prompt可帮助保留填充词，但不是逐字保真保证。[E13]
+- WhisperX：提供语言相关的强制对齐及词级时间，适合作为候选；不是自动修正所有漏词/回填被ASR删掉的犹豫。实际中文与中英混读、依赖及模型许可要单独确认，未安装。[E14]
+- WaveSurfer Regions：可做音频片段选择、回放、时间定位，不是评分器。[E15]
+- Azure Pronunciation Assessment：发音/流利度等是专项能力，不是学习理解判断。官方文档明确prosody仅en-US；content assessment preview自SDK1.46.0后退役，示例转向另用LLM分析内容。不可按旧教程把完整中文逻辑评分当现成API。[E16]
 
-### MVP若未来继续
+### 数据与错误处理
 
-单一自有/允许测试站点、一个流程、Coach vs Show-me模式、事件/状态检查、一次无提示复练；不碰真实敏感账户。不做“支持所有网站”的浏览器扩展。
+原始音频、原始ASR、用户纠正文本、模型整理稿是四种对象，不覆盖彼此。评价必须指向具体版本。修正文字后重新检查对应内容，旧对齐失效须重对齐/标记；音频停顿仍基于原声，不把文字修订当口语进步。
 
-## 6. 新的合并视角：Hands-on Learning是机制，不一定是产品类别
+任何负面知识判断若依赖不确定识别，优先提示回听/确认，不先扣分。录音空白、截断、噪声、上传失败/超时、结构化输出错误、引用不存在或时间越界时，明确部分结果/不判断。模型信心数不是经过校准的概率；无置信可用就不用假数。
 
-v5的操作型学习可以成为A/B的共同学习机制：
-- 在A中，用户通过让AI实际执行来学会委派与验证；
-- 在B中，用户通过自己实际执行来学会软件操作。
+保留关键术语提示但不把完整正确答案喂给ASR诱发答案化转写。提示词/来源/模型版本和评估条件都记录，不能下一次暗改评分标准后宣布进步。
 
-两者真正的软件必要性都来自**环境状态+动作+结果**，不是AI讲解。因此不再单独立“万能学习App”。
+隐私：录音及学习材料只处理用户明确选择的数据；不读聊天客户端内部语音，不录旁人/会议，不识别人或作声纹画像。明确云处理范围/保存时间/删除，音频删除及索引去除须真实工作。密钥服务端保存，模型/ASR与存储费用独立计算，无免费无限或自部署零成本假设。
 
-## 7. 当前优先级与下一步
+## 8. 为什么不是直接Chat，以及形态重新判断
 
-优先级：A AI Delegation Gym > B real-software Coach Mode > generic tutor/roleplay（停止独立立项）。
+原生Chat语音+学习提示已经能听解释、追问、给建议，普通费曼练习应先用它。[E17,E18] 不继续用“Chat只能写字”“它没记忆”之类弱基线。
 
-下一步仍是研究，不开发：为A写一个完整但synthetic的mission protocol和Chat+Skill强基线，明确private target、model payload、tools、engine conditions、error attribution与held-out variant；再判断是否值得一个极小runtime实验。
+本候选的必要软件增量是：可访问且版本固定的原声、忠实转写和段落时间；与来源/量表绑定的反馈；知识与声学观察分开；点到原声证据；片段重讲的真实对照；同题有提示与新题独立表现区分。不是多一张图或一段更长提示。
 
-一个实验只有在以下问题都有可验证方案时才进入开发：
-1. 可以证明协作者模型没有收到hidden target；
-2. engine能独立记录/检查动作，而不是同模型自评；
-3. 用户遗漏与模型错误不会被混淆；
-4. 同等Chat+Skill baseline不能用更少设置达到相同体验；
-5. 至少存在一个合理重复使用理由，而不仅是一次谜题。
+OpenAI当前Voice官方说明转写并非逐字记录，可能与实际所说不一致。普通聊天转写不能直接当本产品逐词/停顿证据。由此并不能推论Chat永远不支持音频分析，也不证明外部App优于原生Voice。[E18]
 
-若第4项失败，产品形态应退化成Skill/Plugin模板；若1–3失败，停止训练效果主张；若5失败，可视为互动游戏原型而非实用学习产品。
+Chat内组件可承载UI/工具，但本轮没有确认插件能取得宿主原始语音或可靠麦克风权限。不得读取私有客户端文件取音频。[E19] 因此优先研究一个自有轻量Web录音/回放入口；若官方插件能合法提供相同能力且更省事，交付插件。无需当前决定原生安装App，也不把平台限制当永久护城河。
 
-## 8. 来源与证据级别（2026-09-10）
+公平基线：A普通Chat Voice+合理费曼提示+同样来源；B Chat/Skill+同样合法音频与时间工具；C候选产品。B若已同样可靠省事，选择Skill/组件，不硬造独立App。模型+规则能力是否有用与用户是否愿意迁移是不同问题。
 
-Primary/current platform:
-- https://help.openai.com/en/articles/20001256/ — Plugins: skills/apps/templates, plan/workspace限制。
-- https://help.openai.com/en/articles/11487775-apps-in-chatgpt — apps可有interactive UI、search/actions。
-- https://help.openai.com/en/articles/20001423-using-site-tools-in-the-chatgpt-desktop-app — WebMCP site tools。
-- https://help.openai.com/en/articles/20001280-using-cloud-browser-in-chatgpt — Work cloud browser。
-- https://openai.com/business/plugins/openai-certified/ — applied AI fluency/hands-on assessment。
-- https://academy.openai.com/public/clubs/higher-education-05x4z/blogs/college-student-plugin-interactive-study-materials — course-source interactive practice。
-- https://blog.google/products-and-platforms/products/chrome/skills-in-chrome/ — 2026 Chrome saved/remixed AI skills。
+## 9. 开发可行性判断与下一步最小验证
 
-Mechanism/competition:
-- https://github.com/facebookresearch/CoDraw — archived mechanism precedent, CC BY-NC4.0; no dataset reuse.
-- https://doi.org/10.1145/3731756 — ROPE requirement-driven LLM-use training study.
-- https://pycon.de/archive/2026/talks/escape-the-hype-teaching-llm-concepts-through-an-interactive-ai-factory-game/ — AI Factory educational game description; not locally run.
-- https://play.google.com/store/apps/details?id=com.blueinstinct.promptfluent — PromptFluent developer listing; not efficacy proof.
-- https://academy.claude.com/courses/ai-fluency-for-small-businesses and https://academy.claude.com/tutorials/the-ai-fluency-index — delegation/discernment framework and exercises.
-- https://support.walkme.com/knowledge-base/walkme-ai-guide/ and https://www.walkme.com/in-app-guidance/ — current contextual guidance.
-- https://support.whatfix.com/docs/what-can-i-do-with-whatfix and https://support.whatfix.com/ — current DAP/Mirror claims.
-- https://www.pendo.io/product/in-app-guides/ — contextual/branching in-app guides.
+无需训练新的基础大模型即可尝试上述短闭环。主要工程是录音/转写/对齐/结构化评审/播放器联动；主要产品风险是反馈是否正确、公平、有帮助。集成可做不等于考试级评分已解决。
 
-All capability statements are source-level; no competitor runtime benchmark, target user interview or new model execution happened this turn. Vendor efficacy/ROI claims are not adopted.
+建议下一阶段只做 **一段语音到可复查反馈的端到端可行性切片**，不是再建通用框架：1–2份原创短材料、少量锚点条件、真实或经许可录音、原声对齐、最多几个有据反馈、一次重讲。若还没有合法录音/API预算，先把样本/预期标签/调用范围准备成实验合同，不能用TTS结果假装真实学习者数据。
 
-## State
+首批挑战对照：同一正确内容讲得顺/有停顿；流畅但错误；遗漏条件；含自我修正；ASR漏否定词/专业词；环境噪声；不同有效解释顺序。人工至少独立复核主要负面判断与争议，样本小只报告案例与计数，不报群体学习效果。
 
-Completed: Chat substitution gate, platform/form-factor analysis, A/B deepening, new delegation-gym synthesis, direct counterevidence.
-Verified: current public capability claims and prior P0 evidence at their original level only.
-Likely: A has a stronger reason for software beyond pure chat because private target/action state/independent checks are central; this is an engineering necessity, not demand proof.
-Unknown: user need/frequency, real transfer, baseline advantage, model reliability, plugin coverage, cost/privacy and willingness to pay.
-Not Done: mechanism runtime experiment, independent user observation, plugin/app implementation, competitive use test or commercialization.
-Must Fix: never say Chat is text-only, roleplay=skill improvement, hidden prompt=secure isolation, or app form=innovation.
-User Decision Needed: none for research; model/runtime/development/spending/publication/participant contact gates remain.
-Future Optional: standalone native app, real voice, live websites, old acceptance/workspace products; inactive.
+分别看：
+- 内容/逻辑负面发现是否有真实依据，错误归咎用户的比例；
+- ASR关键语义错误及其对下游判断的影响；
+- 引用/回放是否准确且确实帮人定位；
+- 同样内容的停顿变化是否错误改变知识判断；
+- 一次原始讲解与有提示修正不混成同等掌握；
+- 新情境/延后检查才用于有限迁移研究；
+- 处理成本、等待与人工核对是否抵消帮助；
+- 比普通Chat/同工具Skill究竟新增了哪项有用信息。
+
+本轮没有开发/安装/运行录音或模型。首次真实音频处理、新API/模型费、依赖、存储和用户参与需明确有界批准。完成可行性结果后再决定MVP正式构建，不根据一张漂亮评分图扩成考试/培训平台。
+
+## 10. 来源账本（读取内容/边界）
+
+E01 Primary empirical study, 2025-03-13, Modality matters: https://doi.org/10.1186/s40594-025-00539-1 。87名本科生、特定STEM视频实验；支持口头/书面互补，不证明本App或通用口语优势。
+E02 Publisher abstract, Learning by explaining orally or in written form? Text complexity matters, 2020: https://www.sciencedirect.com/science/article/pii/S0959475219307297 / DOI10.1016/j.learninstruc.2020.101344 。摘要已得；本轮全文403，结果仅作为有限反证，不声称全文审查。
+E03 Pearson official: https://www.pearsonpte.com/pte-academic/scoring/ 。部分响应人工复核，不是全自动无人工。
+E04 Pearson official score guide: https://www.pearsonpte.com/content/dam/ELL/pte/pearsonpte/pdfs/pte-academic-pdfs/PTE-Academic-Test-Taker-Score-Guide.pdf 。46页；截图查看printed8/21/46。只概括机制，不复制完整rubric/题库。
+E05 https://vocenda.app/ 。官网功能说明，未使用/测效。
+E06 https://www.laoshiaiapp.com/ 。官网Feynman/voice说明，未试用。
+E07 https://github.com/mattdiep15/feynman/blob/main/README.md ，blob4c62a905ee60c57bc24cc09296c6faf36c48e5df； https://github.com/mattdiep15/feynman/blob/main/code/app/api/evaluate/route.ts ，blobb84fd1b98f37d7b513b38477da0a8e0d0cace4e0； https://github.com/mattdiep15/feynman/blob/main/code/lib/evaluate.ts ，blob84a583e282dc99a32661220afa7cf1ce308a3cb8 。确实读源码，没有运行；tree772f132c538ac0176358ed972460961d06078aa4是tree SHA，不误写成commit。
+E08 https://github.com/GibbonTech/feynman-learning-app/blob/main/README.md ，blobb2a0a8f094a9ae2837ea437dc09f7322b2a6e518。README级。
+E09 https://github.com/koukekoukej-glitch/feynman-tutor/blob/main/SKILL.md ，blob356497f1d7e3b686951855269aefc81f5aba671a 。已读，未执行上游指令或隐私资料读取。
+E10 https://support.yoodli.ai/en/articles/9550465-practice-with-yoodli 。官方产品文档；未产品实测。
+E11 https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder 。标准接口文档，不代表本机或所有浏览器已验证。
+E12 https://github.com/snakers4/silero-vad/blob/master/README.md ，blobb9e85340487aace89e9b83fd8700444cce0251ad 。README及API示例；未下载模型或跑性能。
+E13 https://developers.openai.com/api/docs/guides/speech-to-text 。当前转写/时间参数/保留填充词上下文边界；未调用。
+E14 https://github.com/m-bain/whisperX/blob/main/README.md ，blobfe86103573ee749795cb7ce10778a5b257c37d29 。语言相关对齐/依赖；未安装或复现宣传性能。
+E15 https://wavesurfer.xyz/docs/modules/plugins_regions.html 。音频UI功能参考，未集成。
+E16 https://learn.microsoft.com/en-us/azure/ai-services/speech-service/how-to-pronunciation-assessment 。prosody en-US、content preview退役限制；未调用，不采用默认分数为掌握证据。
+E17 https://help.openai.com/en/articles/11780217 。Study Mode原生引导/材料/反馈；具体界面组合取决于实际会话，未运行比较。
+E18 https://help.openai.com/en/articles/8400625-voice-mode-faq （现重定向20001274）。明确Voice转写非逐字，不据此猜测插件内部权限。
+E19 https://developers.openai.com/plugins/build/chatgpt-ui 。UI能力依据，不是原始语音桥接合同证明。
+
+旧CoDraw/信息差、ROPE/AI fluency等来源保留在v1和SCENARIO_FOCUS_02历史研究中。声音点评、知识图谱、追问、片段复练均不单独构成新发明。候选增益与真实学习效果仍待实测。
+
+## 11. 阶段状态
+
+Completed：最新需求整合；同类官网/实际评估源码、PTE官方指南截图、学习研究、ASR/VAD/对齐及原生Chat限制核查；分层指标与产品流程；MVP、误差/隐私/成本边界及最小验证定义。
+Verified：本轮直接读取的来源/源码与既有P0记录，各按原层级；没有新音频/模型/用户结果。
+Likely：原声定位+来源量表+分层反馈可能比普通语音聊天更便于修正，但未比较。
+Unknown：语音对齐/中文语义诊断准确度、公平性、学习迁移、真实重复需求/采用/支付、平台与成本。
+Not Done：端到端语音运行、实际竞品试用、人工标注集、模型评测、用户研究、新产品代码或发布。
+Must Fix：不把停顿当知识错，不把ASR错记在用户身上，不声称考试级/全球首创/插件已获取原声，不把模拟案例当用户证据。
+User Decision Needed：研究无需重复确认；语音/API/依赖/费用/新开发/外联/发布的具体执行需有界授权。
+Future Optional：实时双向语音、英语发音维度、完整信息差游戏、长程知识库、原生App；不在当前执行队列。
