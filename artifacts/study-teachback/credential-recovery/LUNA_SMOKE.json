@@ -1,0 +1,38 @@
+{
+  "at": "2026-09-10T22:15:44.946Z",
+  "credentialFingerprint": "deecd15c4b0b",
+  "model": "gpt-5.6-luna",
+  "ledgerBefore": {
+    "requests": 15,
+    "attempts": 1,
+    "minutes": 9,
+    "inputReserved": 45471,
+    "outputReserved": 19864,
+    "exposureUSD": 0.059414400000000006,
+    "knownCostUSD": 0.0026069000000000005,
+    "unsettled": 4,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  },
+  "httpStatus": 200,
+  "requestId": "req_ec736ad1f65e4abba48718fc2a16de92",
+  "usage": {
+    "input_tokens": 11,
+    "output_tokens": 5
+  },
+  "returnedModel": "gpt-5.6-luna",
+  "outcome": "LUNA_PASS",
+  "ledgerAfter": {
+    "requests": 16,
+    "attempts": 1,
+    "minutes": 9,
+    "inputReserved": 47684,
+    "outputReserved": 19928,
+    "exposureUSD": 0.05942315000000001,
+    "knownCostUSD": 0.0026156500000000006,
+    "unsettled": 4,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  },
+  "priorLedgerEventsUnchanged": true
+}

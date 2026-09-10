@@ -4,13 +4,13 @@ import {mkdtempSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {Ledger} from './ledger.mjs';
-test('one fixture gets third submission, fourth fails, prior reservations remain charged',()=>{
+test('one fixture gets fourth submission, fifth fails, prior reservations remain charged',()=>{
   const b=new Ledger(join(mkdtempSync(join(tmpdir(),'retry-exception-')),'usage.json'));
   const args={kind:'asr',attemptId:'synthetic-mandarin-build01',minutes:3};
-  b.reserve(args);b.reserve(args);const before=b.read().events;
+  b.reserve(args);b.reserve(args);b.reserve(args);const before=b.read().events;
   b.reserve(args);assert.deepEqual(b.read().events.slice(0,before.length),before);
-  assert.equal(b.summary().minutes,9);assert.equal(b.summary().unsettled,3);assert.equal(b.summary().requests,3);
-  assert.throws(()=>b.reserve(args),/ATTEMPT_LIMIT/);assert.equal(b.summary().requests,3);
+  assert.equal(b.summary().minutes,12);assert.equal(b.summary().unsettled,4);assert.equal(b.summary().requests,4);
+  assert.throws(()=>b.reserve(args),/ATTEMPT_LIMIT/);assert.equal(b.summary().requests,4);
 });
 test('ordinary and similar-named attempts still get only two submissions',()=>{
   for(const attemptId of ['ordinary','synthetic-mandarin-build01-copy']){

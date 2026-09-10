@@ -1,0 +1,351 @@
+{
+  "format": "credential-recovery-whitelist-v1",
+  "parentHead": "79988de15ca72a6e2339cb1a4437448008a02153",
+  "branch": "prototype/study-teachback-v0.1",
+  "byteConvention": "Git canonical blobs; manifest covered by containing commit; no self hash",
+  "scan": "Excluded-path and static credential-pattern scan PASS",
+  "entries": [
+    {
+      "path": "artifacts/study-teachback/build-01/DELIVERY_PACKET.md",
+      "bytes": 7692,
+      "sha256": "c94d4f4d1d5a58daee47ae3d958b164a7218a903bed9eacbea788af998138e2a",
+      "gitBlobSha1": "30e459a8206dec1ff248d133ce1987c1353eb1fd"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01/REVIEW_INDEX.md",
+      "bytes": 3880,
+      "sha256": "408c99d008cacbae70572b44a172033beda01c5d26e6f2f127bdcfeb9016a0fd",
+      "gitBlobSha1": "d4a48becb2ff5c4a354d403f717785fc60856ef0"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01/REVIEW_MANIFEST.json",
+      "bytes": 7458,
+      "sha256": "1616e356ab266bd3572ae7d46f00fa63a44dd080a0b3db5485b7bc250258e8f8",
+      "gitBlobSha1": "89228ca3d4866db904d69e400aeff8eb5b725a88"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r-resume/DELIVERY_PACKET.md",
+      "bytes": 4473,
+      "sha256": "b3f349f431929bacb649969b68b43b6925e090f11df343938a9863662dc2e9ef",
+      "gitBlobSha1": "d818fb664b87d3ea2e193a90dd345c0150bf0cd1"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r-resume/NODE_TESTS.txt",
+      "bytes": 2546,
+      "sha256": "92031379f9e1ec5a274676412f75d2054a2f8e7c5d9c12226925b98e7524b673",
+      "gitBlobSha1": "6c899ca10265213808300d0f4de0839d385e87dd"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r-resume/REVIEW_MANIFEST.json",
+      "bytes": 11877,
+      "sha256": "70fadbccd3eea8d454c9517bf2ff5beca3d5e78162967d29a99f54ab706bae69",
+      "gitBlobSha1": "f017c9eb440a87898e68246357000cf2420b7abf"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r-resume/USAGE_LEDGER.json",
+      "bytes": 9818,
+      "sha256": "ba18c38254542cc41ac79cd48bb1b43c710dbf6b296cf33b0c57eb590c30beb0",
+      "gitBlobSha1": "cf8f173c0fcbc506a76de85fbc1096c3d1c814e7"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r-resume/WHISPER_RETRY.json",
+      "bytes": 1401,
+      "sha256": "4712adb29bfaa34240f92d34449c62c5ed37f99bbf0d845b8ac47e5cd4f12f39",
+      "gitBlobSha1": "7f9b1d3a986c5b7315ee8e8a5bb446ebd268ad37"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r/AUTH_DIAGNOSTIC.json",
+      "bytes": 2285,
+      "sha256": "cee87099ff3669de91033b202bcf7e29e33424df416f587ad585c5b919d2f770",
+      "gitBlobSha1": "e211e3557c2bc09758263f0a946537c6068f4c0e"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r/DELIVERY_PACKET.md",
+      "bytes": 9759,
+      "sha256": "83cf37d8bda7d4bd58fd3c74487a9c8022d75d02b93922ab549b9b9e8b951195",
+      "gitBlobSha1": "df47a93aa2fcbbd5de5cbf236b55c3b3ee8e8029"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r/NODE_TESTS.txt",
+      "bytes": 2360,
+      "sha256": "880f331346e0eb45402955d05419c8ea7c1227916b29642a02b1da40d8f2abc7",
+      "gitBlobSha1": "1814a5b70fee06bc263aaed7092ed60b960b4a83"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r/REVIEW_MANIFEST.json",
+      "bytes": 10356,
+      "sha256": "2a24d22398d22f17dde5b96af7a61bbcc7464bcf414dd6b7b833309d23ddd46e",
+      "gitBlobSha1": "9c27d007973994fda68a3e52f20403bc411270e0"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r/STOP_GUARDS.json",
+      "bytes": 528,
+      "sha256": "08a3e9cad2af8f66cae687ffccd865792a34d00391fcfbfcd379709d2ba51d1e",
+      "gitBlobSha1": "0aa6cce66bf965233c5b4bd7c0c97529650cc5aa"
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r/USAGE_LEDGER.json",
+      "bytes": 9306,
+      "sha256": "21e9367ac115eaa9b6c3084026c24658320c5c213909e401f4534791d4331c58",
+      "gitBlobSha1": "6351c0920103f0406e950448dba69d10d929ceb0"
+    },
+    {
+      "path": "artifacts/study-teachback/credential-recovery/DELIVERY_PACKET.md",
+      "bytes": 5333,
+      "sha256": "71fdaea2a42d1e441eeec19124d915fb956fb507ea849d03114678e43c2bb31d",
+      "gitBlobSha1": "469c4a03601d27a26f79441309f4d6f9ea679d83"
+    },
+    {
+      "path": "artifacts/study-teachback/credential-recovery/LUNA_SMOKE.json",
+      "bytes": 1073,
+      "sha256": "31aff7481c589510a10afd4ddad7276967bec50243b6321c1e8dddfd21b31e8a",
+      "gitBlobSha1": "5ad1e006a62da1bace219fb3028d5f2c662df18f"
+    },
+    {
+      "path": "artifacts/study-teachback/credential-recovery/NODE_TESTS.txt",
+      "bytes": 2721,
+      "sha256": "81866bd9f0b6bf04e53b44176969833b534eab3c911f794e301af957347157e8",
+      "gitBlobSha1": "11bee825e00bd7df8e4d6fd106143aa3d740f7ed"
+    },
+    {
+      "path": "artifacts/study-teachback/credential-recovery/USAGE_LEDGER.json",
+      "bytes": 11350,
+      "sha256": "4562a694b6e7f146a93c38647f6e052feeca1ceea3cdd4cf2df65dd55544101d",
+      "gitBlobSha1": "548df42800ac6bed5c2ffefbdc86146e913335da"
+    },
+    {
+      "path": "artifacts/study-teachback/credential-recovery/WHISPER_RETRY.json",
+      "bytes": 1177,
+      "sha256": "4c17306aa27f691c61a8073cd299ee00e5cd1af0ef3f99238b3b3ad58f19792a",
+      "gitBlobSha1": "8c66766ad1198bc3363ebec96e4cf5700133eb35"
+    },
+    {
+      "path": "study-teachback-app/.gitignore",
+      "bytes": 31,
+      "sha256": "e7949ea9b7008fccd8ec8985678707dec97d2a1b8a60726d8c76340fdb9f01ef",
+      "gitBlobSha1": "4e05f6575e1d38905ace87de3c3964ee3b14c85e"
+    },
+    {
+      "path": "study-teachback-app/README.md",
+      "bytes": 6848,
+      "sha256": "3e8c4f6d4dd2ae7f496e5a4b5dcbab6daed56aeeb684926657958eb8757f4181",
+      "gitBlobSha1": "878c8c8afda4dccd44690497586ad7f975df56f3"
+    },
+    {
+      "path": "study-teachback-app/access-check.mjs",
+      "bytes": 1171,
+      "sha256": "ed9b4ceacf21f10e8acde9796e89549f54b37c44f8acbe8381152d2e898666b7",
+      "gitBlobSha1": "517cf40d5b2bbbbd9485a2210fe007757bccc775"
+    },
+    {
+      "path": "study-teachback-app/app.mjs",
+      "bytes": 19833,
+      "sha256": "11d9ee1cb8d8339adf6bdbb1504286e3b45eb2c9593b8679c4097b87d9ebbcc5",
+      "gitBlobSha1": "c9fe6d8196be5b6c1ba780e6d8a142d19c39f7e5"
+    },
+    {
+      "path": "study-teachback-app/asr-evidence.mjs",
+      "bytes": 1127,
+      "sha256": "e0734b3e8d930b5ac854023d075ee14d454f3efa38093df12163367ea7274364",
+      "gitBlobSha1": "4fd2ac8c041c0d48cb342707246963daa25e44fd"
+    },
+    {
+      "path": "study-teachback-app/asr-evidence.test.mjs",
+      "bytes": 1035,
+      "sha256": "2eb1f9efebc31e44ac91bc323881bb03fcb009c5b952eda81b06b79cba379a2f",
+      "gitBlobSha1": "49d6fc640c3792d33b8d8a07753bda689fb55de9"
+    },
+    {
+      "path": "study-teachback-app/auth-recovery.mjs",
+      "bytes": 4950,
+      "sha256": "037f47d7116fc332cb6ab8c560dff4d291aa509470ea902d42f827085a7973b9",
+      "gitBlobSha1": "5445354e67bc2ac2c082fafa0f0b4dde664bf397"
+    },
+    {
+      "path": "study-teachback-app/browser-tests.mjs",
+      "bytes": 13472,
+      "sha256": "66d3d3e1664b30bf1137400ae14986eb238d823ee89a9e7d49e2d3f90ebb1ca5",
+      "gitBlobSha1": "9ea1cb33f05aee914997e88513234404b3b5a0ce"
+    },
+    {
+      "path": "study-teachback-app/core.mjs",
+      "bytes": 9028,
+      "sha256": "140381c531da2f4b6bc527ccfd0c2556fa4266a6b72fca74375960109d492306",
+      "gitBlobSha1": "7e8ab2ccf6a1055d5e508c473b61d463ea7408fb"
+    },
+    {
+      "path": "study-teachback-app/credential-smoke.mjs",
+      "bytes": 2330,
+      "sha256": "22c1724299f37625d0b786048dace2865bedf57b33b39cfeb78a7559e3914255",
+      "gitBlobSha1": "47d5c114248934d9e3cdc67f7da4707a3e8f4da4"
+    },
+    {
+      "path": "study-teachback-app/credential-whisper.mjs",
+      "bytes": 3744,
+      "sha256": "8537cf6cd5a8082c687fa8a13a09dd01601d4802fa36df44b4df7ec6c95f7b4b",
+      "gitBlobSha1": "d00d5ed269e954a35d90ecdea93d00eb4a084ed3"
+    },
+    {
+      "path": "study-teachback-app/dedicated-whisper-retry.mjs",
+      "bytes": 3614,
+      "sha256": "f68d757d050073dac3440f1abe6f87a9eac2897d3ab1deefd0bc7a0bab5a779d",
+      "gitBlobSha1": "6d72db6074461365886e49e9c9cff90dd9bd4b57"
+    },
+    {
+      "path": "study-teachback-app/evidence/access-check-1789070782691.json",
+      "bytes": 955,
+      "sha256": "5d5bc0a6695a2df3728f38e2dbbf534d850ea3c191752d191e7edd792574eff0",
+      "gitBlobSha1": "75eea3004823ca6802fd987947e00dd324b56e37"
+    },
+    {
+      "path": "study-teachback-app/evidence/access-check.json",
+      "bytes": 613,
+      "sha256": "c38bc9eedf1b8e418ad94a9007f024f550cb0c6d19bb097530d07a40d037b14a",
+      "gitBlobSha1": "63f6610c157c940c5dd651621e2d1adb63a91f19"
+    },
+    {
+      "path": "study-teachback-app/evidence/browser-1789071825159.json",
+      "bytes": 2815,
+      "sha256": "e412f4f40a70de854362d2a951863efebbc72f98e86e2ab8f5805b9cb2fcb238",
+      "gitBlobSha1": "86c7dea84fadcc1d10c9d9ae4769f788ed29e9fe"
+    },
+    {
+      "path": "study-teachback-app/evidence/browser-learning.png",
+      "bytes": 80340,
+      "sha256": "8dafafb9551f9a4af4d6ff0eb0ca90761664f4cae7bdb0ab7c6f9cbcb35d6599",
+      "gitBlobSha1": "178e6fd55fa94514feedd923d3523b99f17a1094"
+    },
+    {
+      "path": "study-teachback-app/evidence/engineering-receipt.json",
+      "bytes": 2496,
+      "sha256": "175c086421e2b1a3eeaf6a2df2894ec594ec6e4c01d9c04e736f613120e6f646",
+      "gitBlobSha1": "201c4cd82c1051e66974a02a72e7d8f121d842d4"
+    },
+    {
+      "path": "study-teachback-app/evidence/live-asr-1789071986074.json",
+      "bytes": 1117,
+      "sha256": "c2cdbeb66728ef208d7bcd4fa131376735281991f6f30760c16fe25fd1629dc1",
+      "gitBlobSha1": "25a4dfd26519b26692d7bb2260af969a7aafe7a1"
+    },
+    {
+      "path": "study-teachback-app/evidence/live-challenges-1789071604700.json",
+      "bytes": 783,
+      "sha256": "cd21e72695f52060ffcd39f53f2130a619a6fabe227b960e70ed34b14dfa44dc",
+      "gitBlobSha1": "04eda071b421c90bfe3dd0d6a0c75ffca43cec65"
+    },
+    {
+      "path": "study-teachback-app/evidence/live-challenges-1789071668390.json",
+      "bytes": 11744,
+      "sha256": "aa695908510b0b0e90d7b53feaf9ecfd9cd0e4d961b8fde247fa57478299fd0a",
+      "gitBlobSha1": "06227023e8c8b1c3c436b63e090ca8bd84cb0714"
+    },
+    {
+      "path": "study-teachback-app/evidence/usage-ledger.json",
+      "bytes": 8124,
+      "sha256": "80ca0627cd4be84a6ab6e92c60ea65f0a235ab82348ff9d602ac5928ce82bae7",
+      "gitBlobSha1": "ebebc63083afea219725687774df6ad959ef1e0b"
+    },
+    {
+      "path": "study-teachback-app/index.html",
+      "bytes": 4737,
+      "sha256": "5bd93202d136997fb8eb425a1cb18b54942abc0b7b21c8f9606891a005908cd8",
+      "gitBlobSha1": "6e783fe3b0913aa21d80c1ce4cff85307c07e6a6"
+    },
+    {
+      "path": "study-teachback-app/ledger.mjs",
+      "bytes": 5667,
+      "sha256": "2889e80d3a4da1c4f122a920a266e84e28084f91522e530ba78036433bfdbe86",
+      "gitBlobSha1": "eaefdfddbefee1cdd9f96c70f6d70535b6acef0f"
+    },
+    {
+      "path": "study-teachback-app/live-asr-check.mjs",
+      "bytes": 1440,
+      "sha256": "bbbd015101a291945408e072ce349c741ae7ce1541dbaa11bd19a7fa8e66c6bc",
+      "gitBlobSha1": "ab6c99d4f0bcdfa0fca0081bd662e01dfb1f87a0"
+    },
+    {
+      "path": "study-teachback-app/live-challenges.mjs",
+      "bytes": 2555,
+      "sha256": "f19ee8e5b83f63d58ab3a45941ff05ca3d39c14f58db8dbb2dc9ed89f938265b",
+      "gitBlobSha1": "e91855a5cc350cba2d936bf9851b046b877c0985"
+    },
+    {
+      "path": "study-teachback-app/logic-fixtures.mjs",
+      "bytes": 2219,
+      "sha256": "b0e871dd7b07cb736a89f3ca2b7f7ebd3f8dc67edbd543111b6d24fb1f958adc",
+      "gitBlobSha1": "1c0d8d85476af5530b8a80706777902b57c6533c"
+    },
+    {
+      "path": "study-teachback-app/logic-fixtures.test.mjs",
+      "bytes": 1710,
+      "sha256": "5837512485895992f6d3afe342ad60c8712fa97fe50e4285ff5add755e2a5352",
+      "gitBlobSha1": "1744dec57b02373bfb666b4a246618b63a44b41c"
+    },
+    {
+      "path": "study-teachback-app/provider.mjs",
+      "bytes": 4177,
+      "sha256": "0cad6509136d4625b24659561ff7b3b0ce7488166e8dd61a89ff3e7e1ec7fabf",
+      "gitBlobSha1": "cda6e73511ed475c8586f8c369a1ae7c3da23e76"
+    },
+    {
+      "path": "study-teachback-app/retry-allowance.test.mjs",
+      "bytes": 1226,
+      "sha256": "b374d5b70f338bdd052ce0a56ede99ac4747adac4d524dc27cb44e02cbfdda0d",
+      "gitBlobSha1": "318016fbc32b4700df9407e747fe191ede300fa9"
+    },
+    {
+      "path": "study-teachback-app/safe-auth-evidence.mjs",
+      "bytes": 1253,
+      "sha256": "9d9ea9937f1faa06c6365b41bf4d9aa08a94e6d59c47262f137ef099c6e7d614",
+      "gitBlobSha1": "fc1ab5163c88b71724f2284c5f417933cd26be98"
+    },
+    {
+      "path": "study-teachback-app/safe-auth-evidence.test.mjs",
+      "bytes": 1372,
+      "sha256": "da35767c5a69ba750552338d3e3193e3e13cac26d929fc3f3280590953ee7c0e",
+      "gitBlobSha1": "b30c0e7aea26deb988f93dfc35fbf20adcc87c25"
+    },
+    {
+      "path": "study-teachback-app/schemas.mjs",
+      "bytes": 2807,
+      "sha256": "6186da25c3c9f146a587842cd84ba191baf6c74171adbf498d44ade29079c341",
+      "gitBlobSha1": "9ca6b8b5efa5d4fdef4d488cd10c0ff17b09b860"
+    },
+    {
+      "path": "study-teachback-app/server.mjs",
+      "bytes": 4904,
+      "sha256": "139116e08d73beeeaf2b16f3b99f107348459a56730c2c7641faa654ef77e184",
+      "gitBlobSha1": "b12f9e2ce0cab2cc958424cd8fc7275fd18ad4f1"
+    },
+    {
+      "path": "study-teachback-app/storage.mjs",
+      "bytes": 1102,
+      "sha256": "7a0d66e1c4e47c994d45dac25a0ccdd6c4a64fa9e3853f18c8ed2fbfe3f9d8d6",
+      "gitBlobSha1": "aae77527f8fe9b96fff7131465df3faa73479abf"
+    },
+    {
+      "path": "study-teachback-app/style.css",
+      "bytes": 3864,
+      "sha256": "bf25a7c2faf743b9a41497e822a9151749574b7b9ff44dd83744a43f3ef960ca",
+      "gitBlobSha1": "58e0e96882a14cf6410133a0ea3c0e9e2e64cd8b"
+    },
+    {
+      "path": "study-teachback-app/synthetic-speech.ps1",
+      "bytes": 1018,
+      "sha256": "9054a638953e9e89a8158107cd0b7d7a284c623468426654c1fb986761105d7d",
+      "gitBlobSha1": "62292c23eb2433b3c62b0daade8529e5da9fa8e8"
+    },
+    {
+      "path": "study-teachback-app/tests.mjs",
+      "bytes": 9358,
+      "sha256": "763fc25ba9c3b6dc2b0c63f4ded34453d6974ee0dee2e17ebe98663066f603e5",
+      "gitBlobSha1": "3d441e68378423d967705ceacdbbabd7ac5558eb"
+    },
+    {
+      "path": "study-teachback-app/voice-metadata.ps1",
+      "bytes": 307,
+      "sha256": "c324b308558fcabf7c56073ea696cd6a9d09a9ab01b93040e566d4194ac7039e",
+      "gitBlobSha1": "3013c62f1c15a9c9be00d9bdac305df80154f9b3"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+✔ invalid provider timestamps retain allowlisted evidence before rejection (1.7409ms)
+✔ missing word timestamps cannot pass; valid timestamps require human review (0.4526ms)
+✔ ticket strengthening is schema-valid but cannot pass semantic fixture oracle (1.1253ms)
+✔ unsupported strengthening requires explicit rejection or uncertainty, never mixed support (0.3276ms)
+✔ correct paraphrase and final self-repair cannot pass with conflicting verdicts (0.1699ms)
+✔ one fixture gets fourth submission, fifth fails, prior reservations remain charged (53.449ms)
+✔ ordinary and similar-named attempts still get only two submissions (46.0032ms)
+✔ same in-memory credential gets same irreversible short fingerprint (2.4755ms)
+✔ error sanitizer redacts full/masked key, bearer, IDs and email; ignores unapproved fields (2.2202ms)
+✔ missing malformed errors and request headers fail closed (0.2793ms)
+✔ source and attempt versions are bound, acoustic labels excluded from content (1.9101ms)
+✔ all ASR including negation, number, condition, term inversions fail closed until replay confirmation (0.3765ms)
+✔ interrupted capture blocks content even if text confirmed (0.159ms)
+✔ valid finding preserved; source/span/quote/time/schema fabrications rejected (1.4002ms)
+✔ missing content cannot receive a timestamp or span (0.2069ms)
+✔ delivery event must overlap real span and cannot issue knowledge judgment (0.2344ms)
+✔ ASR timestamps reject missing, reversed, out-of-range and non-finite values (0.3268ms)
+✔ silence/noise/clipping/decode failure are conservative, never validated VAD (11.171ms)
+✔ long near-silence is only an acoustic candidate, not knowledge deficit (7.5047ms)
+✔ WAV duration guard enforces true PCM layout and 180s upper bound (51.394ms)
+✔ corrected text is a separate version and is not a new recording; partial/full identities distinct (1.7229ms)
+✔ expiry removes seven-day records, preserves newer records and rejects undated records (0.242ms)
+✔ reservation survives timeout and restart; retry does not create audio/attempt copies (24.1896ms)
+✔ atomic reservation rejects concurrent process lock and malformed ledger (12.6356ms)
+✔ budget, request/token, 60 attempts and two ASR submissions limits fail closed (4383.5593ms)
+✔ only approved model and store=false are sent; failed API result keeps reserve (26.5037ms)
+✔ real ASR transport contract uses whisper timestamps; malformed response fails without losing reservation (34.4398ms)
+✔ HTTP loopback rejects foreign origin, host and arbitrary filesystem path without model calls (74.5648ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4917.938

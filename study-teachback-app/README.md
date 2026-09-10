@@ -1,3 +1,5 @@
+> Latest credential recovery: Luna 200 + Whisper 200, but local ASR validation failed and response fields were lost before saving. Auth recovered; transcript/timestamps remain unverified. See [current packet](../artifacts/study-teachback/credential-recovery/DELIVERY_PACKET.md). The evidence-capture fix is offline-tested only.
+
 > Latest resume: changed runtime credential; the one owner-approved third synthetic Whisper submission returned HTTP 401 / invalid_api_key. Paid calls stopped, Luna not rerun. See [resume packet](../artifacts/study-teachback/build-01r-resume/DELIVERY_PACKET.md). Historical evidence below remains scoped to its original checkpoint.
 
 # 知而能讲 — BUILD-01 partial implementation
