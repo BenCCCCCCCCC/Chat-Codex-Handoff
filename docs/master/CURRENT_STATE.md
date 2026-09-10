@@ -5,93 +5,109 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**BUILD-01R RESUME REMOTE REVIEWED / PARTIAL ACCEPTED / USER DECISION NEEDED — NEW DEDICATED RUNTIME CREDENTIAL RETURNS `invalid_api_key`**
+**AUTH RECOVERED / BUILD-01 PARTIAL / BUILD-01R2 READY FOR ONE FIFTH WHISPER RETRY APPROVAL — ASR EVIDENCE CAPTURE DEFECT**
 
 Active product remains **Study-first + in-product spoken teach-back** with `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`. Normal flow records inside the product; no pre-record/upload requirement.
 
-Private checkpoint sync is working. MASTER directly reviewed `prototype/study-teachback-v0.1` at remote HEAD `79988de15ca72a6e2339cb1a4437448008a02153`.
+Private feature-branch checkpoint sync is working. MASTER directly reviewed remote `prototype/study-teachback-v0.1` at `cb973500bafbd58fb8154835292db1e30d1c3e0b`.
 
-## Verified Remote Result
+## Verified Latest Recovery
 
-The recovery commit is a normal descendant of `97dddd8154b9a0ba340e8c11fc1b0f7db309e879` and records exactly one additional bounded Whisper retry using the existing 7.31-second synthetic Mandarin fixture.
+Remote lineage is a normal descendant of `79988de15ca72a6e2339cb1a4437448008a02153`.
 
-Verified from the remote checkpoint:
-- runtime credential fingerprint changed from old `21c4bf00e422` to new `66d86db3fb11`, so a different `OPENAI_API_KEY` value was inherited;
-- the one extra `whisper-1` request returned HTTP 401;
-- provider safe error classification is `invalid_request_error` / `invalid_api_key` / `param=null`;
-- provider message says the supplied API key is incorrect;
-- no transcript, word timestamps or segment timestamps were returned;
-- no Luna call was made after the failure;
-- paid calls stopped immediately;
-- offline regression reports 26/26 PASS;
-- known conservative cost remains US$0.00260690;
-- exposure including unsettled reservations is US$0.05941440 / US$5;
-- prior ledger history/reservations were preserved; no reset/relabel/recharge/provider/model switch.
+The latest checkpoint proves credential/auth recovery at endpoint transport scope:
+- runtime credential fingerprint is `deecd15c4b0b`;
+- tiny `gpt-5.6-luna` Responses smoke returned HTTP 200;
+- the fourth `whisper-1` request for the existing 7.31-second synthetic Mandarin fixture returned HTTP 200;
+- both calls used the same runtime credential fingerprint;
+- Whisper response JSON was parsed and the request was settled in the preserved ledger.
 
-This is a different blocker from the previous old-key `missing_scope` result. Current evidence no longer supports treating endpoint scope as the immediate blocker for the new runtime value. The immediate blocker is that the newly inherited credential value is not accepted as a valid OpenAI API key.
+Authentication no longer requires further investigation for this runtime credential unless the fingerprint changes.
 
-## Interpretation Boundary
+## ASR Evidence Defect
 
-`invalid_api_key` establishes that the credential string presented by the runtime was not accepted. It does **not** identify whether the cause is an incomplete/wrong copy, a revoked/deleted key, a value from the wrong account/project, stale local binding, accidental quoting/extra characters, or another credential-state problem. Do not ask for or expose the secret.
+The fourth Whisper request cannot be accepted as transcript/timestamp PASS because the diagnostic runner normalized the successful provider response before persisting allowlisted transcript/time fields. Local validation then threw and the catch path discarded both the precise validation category and the successful-response text/word/segment fields.
 
-Because the full key is only safely available to the owner at creation time and must never be pasted into Chat/GitHub, the next action is an owner-side credential validity/rebinding check in the dedicated OpenAI Platform project. No further paid/model call is authorized until that check is completed.
+Therefore the following remain Unknown for that request:
+- actual Mandarin transcript;
+- word timestamps;
+- segment timestamps;
+- exact normalization failure.
 
-## Logic / Product State
+Do not reconstruct or infer these fields from the HTTP 200 result.
 
-The necessary/sufficient-condition correction remains accepted at offline scope. Current Tutor/content instructions explicitly preserve `只有 A 才 B` as `B -> A` only and reject strengthening it to `A -> B`. The latest 26/26 offline suite includes the prior logic/safety tests plus the bounded third-submission guard. Corrected live Luna semantic quality is still Not Done.
+Checkpoint `cb9735...` fixes this evidence path with `study-teachback-app/asr-evidence.mjs`: sanitized `text`, word timing and segment timing are persisted before normalization; safe validation categories are retained; non-empty word timestamps are required before timestamp transport can pass. Offline regression reports **28/28 PASS**. This is accepted only as offline engineering evidence.
 
-BUILD-01 remains PARTIAL. Successful ASR/timestamps, real owner microphone flow, live delivery, remaining C-F, export/quota/per-attempt-delete/pending-navigation checks and integrated owner walkthrough are still Not Done.
+## Logic State
 
-## Current User Decision Needed
+The earlier necessary/sufficient-condition defect remains corrected at source/offline scope. `只有 A 才 B` is constrained to `B -> A` only and cannot be strengthened into `A -> B` without source support.
 
-Owner should privately validate/recreate/rebind the **dedicated product API key** in the intended dedicated OpenAI Platform project. Do not send any secret value or screenshot containing it.
+The corrected bounded Luna semantic challenge has still NOT RUN because execution stopped after the ASR evidence failure. Historical Luna 5/5 remains schema/channel evidence only, not logic-fidelity proof.
 
-Preferred safe recovery:
-1. in the dedicated `Chat-Codex-Handoff` OpenAI Platform project, confirm the intended key record still exists and has the intended permissions;
-2. because a secret cannot be fully re-opened later, if there is any doubt that the locally stored value is exact, create a fresh dedicated key in that same project rather than guessing/reconstructing the previous secret;
-3. bind the fresh secret only to the local server-side `OPENAI_API_KEY` user/process environment path; no committed `.env`, source, prompt or screenshot;
-4. fully restart the launching runtime/terminal/Codex so the new value is inherited;
-5. after restart, Codex may verify only a non-reversible short fingerprint and must not print the raw value.
+## Current Cost / Ledger
 
-After the owner confirms this private key correction, one new explicit execution authorization is required because the same synthetic fixture has consumed three Whisper submissions.
+Reviewed latest evidence:
+- known conservative cost: **US$0.00341565**;
+- exposure including unsettled reservations: **US$0.06022315 / US$5**;
+- no recharge;
+- no ledger/reservation/minute/attempt reset or relabel;
+- original BUILD-01 total new-cash ceiling remains US$10.
 
-Recommended next bounded experiment after owner approval:
-- first one **tiny `gpt-5.6-luna` Responses auth smoke** using the freshly rebound runtime credential; this is to avoid consuming another Whisper submission if the new key is still invalid;
-- only if Luna returns 2xx, perform **exactly one additional `whisper-1` request** with the same existing 7.31-second synthetic fixture, raising only that fixture's allowance from 3 to 4;
-- keep every previous reservation/event; no reset or relabel;
-- if Luna fails `invalid_api_key`, stop before Whisper;
-- if Luna passes and Whisper fails `missing_scope`, stop and return to permission/role diagnosis;
-- if both pass, validate transcript + word/segment timestamps, run corrected live Luna logic challenges, then resume remaining BUILD-01 C-F.
+## New Narrow Recovery Gate
 
-## Active Boundaries
+A new active recovery contract exists at:
+`docs/research/strategy-reset-01/BUILD_01R2_ASR_EVIDENCE_RECOVERY.md`.
 
-- branch: `prototype/study-teachback-v0.1`
-- private feature-branch fast-forward checkpoint push remains standing-approved
-- models only `whisper-1` + `gpt-5.6-luna`
-- BUILD-01 total new cash <= US$10
-- API exposure/reservation hard stop <= US$5
-- no automatic recharge/model/provider switch
-- no new dependency/local ASR/VAD
-- no public hosting, merge/release, force push, external users, third-party/sensitive recordings, secret/private-client publication
+The same synthetic fixture has consumed four submissions. One fresh provider response is required because the fourth response was lost to the agent-authored evidence-capture defect.
+
+### User Decision Needed
+
+Approve exactly **one fifth** `whisper-1 /v1/audio/transcriptions` request for the same `synthetic-mandarin-build01` 7.31-second fixture.
+
+This exception:
+- raises only that fixture's allowance from 4 to 5;
+- does not reset/release/relabel prior ledger history, reservations, minutes, request counts or attempt identity;
+- keeps models limited to `whisper-1` + `gpt-5.6-luna`;
+- keeps US$5 API exposure hard stop and US$10 BUILD-01 cash ceiling;
+- does not authorize provider/model/dependency changes.
+
+Before the fifth request, Codex must compare the runtime credential fingerprint to the reviewed `deecd15c4b0b`. If it differs, stop before paid ASR and report `RUNTIME_CREDENTIAL_CHANGED`.
+
+On fifth-request HTTP 2xx, persist sanitized allowlisted response fields **before** validation. If validation fails again, stop with the exact safe local category and preserved response shape; do not auto-run a sixth request or weaken guards. If transcript + segment timestamps + non-empty word timestamps validate, proceed to corrected live Luna logic challenge and resume remaining already-authorized BUILD-01 C-F.
+
+## Standing Private Sync / Active Limits
+
+Approved:
+- local code/commits + normal fast-forward private checkpoint pushes on `prototype/study-teachback-v0.1`;
+- loopback Node + Edge + explicit product mic;
+- owner-selected low-risk single-speaker audio/source via OpenAI default/global endpoints;
+- models only `whisper-1` + `gpt-5.6-luna`;
+- BUILD-01 cash <= US$10; API exposure/reservation hard stop <= US$5.
+
+Still prohibited without new decision:
+- provider/model/dependency change or local ASR/VAD install;
+- ledger reset/relabel to bypass limits;
+- public hosting, merge/release, force push;
+- external users, third-party/sensitive recordings, secret/private-client publication.
 
 ## State Summary
 
-Completed: remote recovery checkpoint reviewed; changed runtime credential confirmed; one authorized third Whisper submission executed and safely classified; 26/26 offline regression; private sync preserved.
+Completed: dedicated credential recovered; Luna 200 and Whisper 200 verified on same runtime credential; ASR evidence-loss defect identified and fixed offline; private remote sync/review; 28/28 offline regression.
 
-Verified: remote SHA `79988de15ca72a6e2339cb1a4437448008a02153`; changed credential fingerprint; Whisper HTTP 401 `invalid_api_key`; no successful transcript/timestamps; ledger/cost/exposure preserved at stated scope.
+Verified: remote SHA `cb973500bafbd58fb8154835292db1e30d1c3e0b`; HTTP 200 for both approved endpoints; same credential fingerprint; ledger/cost/exposure at stated scope; fixed capture helper source.
 
-Likely: the newly created/rebound credential was copied, bound, revoked, or selected incorrectly; this is a hypothesis, not yet proven.
+Likely: one fifth request using the fixed capture path will reveal the actual transcript/timestamp shape without further credential work.
 
-Unknown: exact credential-state mistake; whether a freshly recreated/rebound dedicated key will authenticate; successful Mandarin ASR/timestamps; corrected live semantic fidelity; remaining C-F.
+Unknown: actual Mandarin transcript/timestamps from successful provider response; exact prior normalization failure; corrected live Luna semantic fidelity; remaining C-F behavior.
 
-Not Done: credential recovery, valid-key smoke, fourth bounded Whisper retry, successful ASR/timestamps, live Luna logic rerun, remaining integration checks, owner walkthrough, external validation/release.
+Not Done: one fifth ASR response capture/validation; corrected live semantic rerun; remaining end-to-end C-F; integrated owner walkthrough; external validation/release.
 
-Must Fix: valid dedicated server-side API credential; no secret exposure; do not burn another Whisper submission before a tiny Luna auth smoke; no ledger reset or silent fallback.
+Must Fix: persist successful ASR evidence before validation; do not infer lost response fields; no sixth automatic retry if the fifth response still fails validation.
 
-User Decision Needed: privately correct/recreate/rebind the dedicated key, then explicitly approve one tiny Luna auth smoke plus exactly one additional same-fixture Whisper request under unchanged US$5/US$10 limits.
+User Decision Needed: approve exactly one fifth same-fixture Whisper request under unchanged history/budget boundaries.
 
-Future Optional: calibrated acoustic analysis, local VAD/ASR, `gpt-transcribe` comparison, realtime Tutor, English/PTE, native/plugin distribution, external learner study.
+Future Optional: broader ASR/acoustic/pedagogy calibration, local VAD/ASR, gpt-transcribe comparison, realtime Tutor, English/PTE, native/plugin distribution, external learner study.
 
 ## Next Smallest Step
 
-**Owner privately corrects/recreates/rebinds the dedicated project key and restarts the runtime. Then authorize one tiny Luna credential smoke; only on 2xx, one fourth and final bounded Whisper retry for the existing synthetic fixture.**
+**Owner approves one fifth same-fixture Whisper request. Codex captures sanitized text/word/segment evidence before validation; success resumes corrected Luna logic and remaining BUILD-01 C-F, failure stops with exact evidence.**
