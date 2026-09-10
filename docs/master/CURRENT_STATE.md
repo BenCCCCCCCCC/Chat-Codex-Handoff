@@ -5,109 +5,101 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**AUTH RECOVERED / BUILD-01 PARTIAL / BUILD-01R2 READY FOR ONE FIFTH WHISPER RETRY APPROVAL — ASR EVIDENCE CAPTURE DEFECT**
+**AUTH RECOVERED / BUILD-01 PARTIAL / BUILD-01R2 OWNER APPROVED — EXACTLY ONE FIFTH WHISPER EVIDENCE-RECOVERY RETRY AUTHORIZED**
 
 Active product remains **Study-first + in-product spoken teach-back** with `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`. Normal flow records inside the product; no pre-record/upload requirement.
 
-Private feature-branch checkpoint sync is working. MASTER directly reviewed remote `prototype/study-teachback-v0.1` at `cb973500bafbd58fb8154835292db1e30d1c3e0b`.
+Private feature-branch checkpoint sync is operational. MASTER directly reviewed `prototype/study-teachback-v0.1` at accepted checkpoint `cb973500bafbd58fb8154835292db1e30d1c3e0b`.
 
-## Verified Latest Recovery
+## Verified latest checkpoint
 
-Remote lineage is a normal descendant of `79988de15ca72a6e2339cb1a4437448008a02153`.
+Credential/auth recovery is complete at endpoint transport scope for runtime fingerprint `deecd15c4b0b`:
+- tiny `gpt-5.6-luna` Responses smoke -> HTTP 200;
+- fourth `whisper-1 /v1/audio/transcriptions` request on the existing 7.31-second synthetic Mandarin fixture -> HTTP 200;
+- both calls used the same runtime fingerprint;
+- Whisper JSON was parsed and the request settled in the preserved ledger.
 
-The latest checkpoint proves credential/auth recovery at endpoint transport scope:
-- runtime credential fingerprint is `deecd15c4b0b`;
-- tiny `gpt-5.6-luna` Responses smoke returned HTTP 200;
-- the fourth `whisper-1` request for the existing 7.31-second synthetic Mandarin fixture returned HTTP 200;
-- both calls used the same runtime credential fingerprint;
-- Whisper response JSON was parsed and the request was settled in the preserved ledger.
+Authentication should not be reopened unless the runtime credential fingerprint changes.
 
-Authentication no longer requires further investigation for this runtime credential unless the fingerprint changes.
+The fourth Whisper response cannot establish transcript/timestamp quality because the diagnostic runner normalized before persisting the allowlisted response fields. Local validation threw and the catch path lost the exact category and transcript/word/segment evidence. This is an agent-authored evidence-capture defect.
 
-## ASR Evidence Defect
+Checkpoint `cb9735...` fixes the evidence path with `study-teachback-app/asr-evidence.mjs`, persisting sanitized `text`, word timing and segment timing before normalization and requiring non-empty word timestamps. Offline regression reports 28/28 PASS; accepted only at offline engineering scope.
 
-The fourth Whisper request cannot be accepted as transcript/timestamp PASS because the diagnostic runner normalized the successful provider response before persisting allowlisted transcript/time fields. Local validation then threw and the catch path discarded both the precise validation category and the successful-response text/word/segment fields.
+## Owner approval — active
 
-Therefore the following remain Unknown for that request:
-- actual Mandarin transcript;
-- word timestamps;
-- segment timestamps;
-- exact normalization failure.
+Owner explicitly approved:
 
-Do not reconstruct or infer these fields from the HTTP 200 result.
+> 批准第五次 Whisper 重试。
 
-Checkpoint `cb9735...` fixes this evidence path with `study-teachback-app/asr-evidence.mjs`: sanitized `text`, word timing and segment timing are persisted before normalization; safe validation categories are retained; non-empty word timestamps are required before timestamp transport can pass. Offline regression reports **28/28 PASS**. This is accepted only as offline engineering evidence.
+Therefore BUILD-01R2 is authorized for **exactly one fifth** `whisper-1` request using the same `synthetic-mandarin-build01` fixture.
 
-## Logic State
+This raises only that fixture's ASR submission allowance from 4 to 5. No previous ledger event, reservation, minute, request, attempt, or audio identity may be reset/released/relabelled.
 
-The earlier necessary/sufficient-condition defect remains corrected at source/offline scope. `只有 A 才 B` is constrained to `B -> A` only and cannot be strengthened into `A -> B` without source support.
+Before the paid ASR call, Codex must verify only the irreversible runtime fingerprint. If it is not `deecd15c4b0b`, stop before Whisper with `RUNTIME_CREDENTIAL_CHANGED`.
 
-The corrected bounded Luna semantic challenge has still NOT RUN because execution stopped after the ASR evidence failure. Historical Luna 5/5 remains schema/channel evidence only, not logic-fidelity proof.
+On HTTP 2xx, the diagnostic must persist sanitized transcript/word/segment evidence **before** normalization. If validation fails, preserve the exact safe local validation category and saved provider shape and stop; no sixth automatic request and no weakening of guards.
 
-## Current Cost / Ledger
+If transcript + segment timestamps + non-empty word timestamps validate, proceed under the existing BUILD-01 authorization to:
+1. corrected bounded Luna necessary/sufficient logic challenge;
+2. remaining BUILD-01 C–F engineering checks;
+3. one integrated owner walkthrough only after engineering readiness.
 
-Reviewed latest evidence:
-- known conservative cost: **US$0.00341565**;
-- exposure including unsettled reservations: **US$0.06022315 / US$5**;
-- no recharge;
-- no ledger/reservation/minute/attempt reset or relabel;
-- original BUILD-01 total new-cash ceiling remains US$10.
+## Logic state
 
-## New Narrow Recovery Gate
+The earlier necessary/sufficient-condition defect remains corrected at source/offline scope. `只有 A 才 B` must preserve `B -> A` only and cannot be strengthened into `A -> B` without source support.
 
-A new active recovery contract exists at:
-`docs/research/strategy-reset-01/BUILD_01R2_ASR_EVIDENCE_RECOVERY.md`.
+Corrected live Luna logic fidelity is still Not Done; historical Luna 5/5 remains schema/channel-control evidence only.
 
-The same synthetic fixture has consumed four submissions. One fresh provider response is required because the fourth response was lost to the agent-authored evidence-capture defect.
+## Current cost / boundaries
 
-### User Decision Needed
+Reviewed checkpoint:
+- known conservative cost: US$0.00341565;
+- exposure including unsettled reservations: US$0.06022315 / US$5;
+- BUILD-01 total new-cash ceiling: US$10;
+- no recharge or ledger reset.
 
-Approve exactly **one fifth** `whisper-1 /v1/audio/transcriptions` request for the same `synthetic-mandarin-build01` 7.31-second fixture.
-
-This exception:
-- raises only that fixture's allowance from 4 to 5;
-- does not reset/release/relabel prior ledger history, reservations, minutes, request counts or attempt identity;
-- keeps models limited to `whisper-1` + `gpt-5.6-luna`;
-- keeps US$5 API exposure hard stop and US$10 BUILD-01 cash ceiling;
-- does not authorize provider/model/dependency changes.
-
-Before the fifth request, Codex must compare the runtime credential fingerprint to the reviewed `deecd15c4b0b`. If it differs, stop before paid ASR and report `RUNTIME_CREDENTIAL_CHANGED`.
-
-On fifth-request HTTP 2xx, persist sanitized allowlisted response fields **before** validation. If validation fails again, stop with the exact safe local category and preserved response shape; do not auto-run a sixth request or weaken guards. If transcript + segment timestamps + non-empty word timestamps validate, proceed to corrected live Luna logic challenge and resume remaining already-authorized BUILD-01 C-F.
-
-## Standing Private Sync / Active Limits
-
-Approved:
-- local code/commits + normal fast-forward private checkpoint pushes on `prototype/study-teachback-v0.1`;
+Still approved:
+- local code/commits and normal fast-forward private checkpoint pushes on `prototype/study-teachback-v0.1`;
 - loopback Node + Edge + explicit product mic;
-- owner-selected low-risk single-speaker audio/source via OpenAI default/global endpoints;
+- owner-selected low-risk single-speaker audio/source via approved OpenAI default/global endpoints;
 - models only `whisper-1` + `gpt-5.6-luna`;
-- BUILD-01 cash <= US$10; API exposure/reservation hard stop <= US$5.
+- US$5 API exposure/reservation hard stop and US$10 BUILD-01 cash ceiling.
 
-Still prohibited without new decision:
-- provider/model/dependency change or local ASR/VAD install;
+Still prohibited without a new owner decision:
+- a sixth same-fixture Whisper request or any retry beyond the currently authorized fifth request;
+- new provider/model/endpoint workaround, `gpt-transcribe`, local ASR/VAD or new dependency install;
 - ledger reset/relabel to bypass limits;
-- public hosting, merge/release, force push;
+- public hosting, merge/release, force push/destructive remote action;
 - external users, third-party/sensitive recordings, secret/private-client publication.
+
+## Authority
+
+Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
+1. `docs/master/CURRENT_STATE.md`
+2. `docs/master/HANDOFF.md`
+3. `docs/research/strategy-reset-01/BUILD_01R2_ASR_EVIDENCE_RECOVERY.md` — active authorized recovery
+4. `docs/research/strategy-reset-01/BUILD_01R_WHISPER_AUTH_AND_LOGIC_RECOVERY.md`
+5. `docs/research/strategy-reset-01/BUILD_01_STUDY_TEACHBACK_HANDOFF.md`
+6. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` v4
 
 ## State Summary
 
-Completed: dedicated credential recovered; Luna 200 and Whisper 200 verified on same runtime credential; ASR evidence-loss defect identified and fixed offline; private remote sync/review; 28/28 offline regression.
+Completed: authentication recovered for Luna and Whisper transport; evidence-capture defect identified/fixed offline; private review works; 28/28 offline regression; fifth retry explicitly approved.
 
-Verified: remote SHA `cb973500bafbd58fb8154835292db1e30d1c3e0b`; HTTP 200 for both approved endpoints; same credential fingerprint; ledger/cost/exposure at stated scope; fixed capture helper source.
+Verified: remote checkpoint `cb973500bafbd58fb8154835292db1e30d1c3e0b`; Luna 200; Whisper 200; same credential fingerprint; ledger/cost/exposure; fixed evidence helper source.
 
-Likely: one fifth request using the fixed capture path will reveal the actual transcript/timestamp shape without further credential work.
+Likely: the fifth request will expose the real ASR response shape without further credential work.
 
-Unknown: actual Mandarin transcript/timestamps from successful provider response; exact prior normalization failure; corrected live Luna semantic fidelity; remaining C-F behavior.
+Unknown: actual Mandarin transcript/timestamp quality, exact prior normalization failure, corrected live Luna logic quality, remaining C–F behavior.
 
-Not Done: one fifth ASR response capture/validation; corrected live semantic rerun; remaining end-to-end C-F; integrated owner walkthrough; external validation/release.
+Not Done: fifth ASR capture/validation, corrected live semantic rerun, remaining C–F, integrated owner walkthrough, external validation/release.
 
-Must Fix: persist successful ASR evidence before validation; do not infer lost response fields; no sixth automatic retry if the fifth response still fails validation.
+Must Fix: successful ASR evidence must be persisted before validation; no inference from the lost fourth response; no automatic sixth retry.
 
-User Decision Needed: approve exactly one fifth same-fixture Whisper request under unchanged history/budget boundaries.
+User Decision Needed: none for the authorized fifth retry or normal continuation if it passes. New decision only for retained stop conditions.
 
-Future Optional: broader ASR/acoustic/pedagogy calibration, local VAD/ASR, gpt-transcribe comparison, realtime Tutor, English/PTE, native/plugin distribution, external learner study.
+Future Optional: broader ASR/acoustic/pedagogy calibration, local VAD/ASR, `gpt-transcribe` comparison, realtime Tutor, English/PTE, native/plugin distribution, external learner study.
 
 ## Next Smallest Step
 
-**Owner approves one fifth same-fixture Whisper request. Codex captures sanitized text/word/segment evidence before validation; success resumes corrected Luna logic and remaining BUILD-01 C-F, failure stops with exact evidence.**
+**Codex executes BUILD-01R2 from `cb973500bafbd58fb8154835292db1e30d1c3e0b`: verify fingerprint, run exactly one fifth Whisper request, save allowlisted response evidence before validation, and either stop with exact preserved evidence or continue the existing BUILD-01 path if it passes.**
