@@ -5,136 +5,106 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**BUILD-01 / R3 REMOTE REVIEWED — ENGINEERING READINESS ACCEPTED / OWNER-VALIDATION-01 READY FOR OWNER APPROVAL**
+**BUILD-01 / R3 REMOTE REVIEWED — ENGINEERING READINESS PASS WITH ONE MUST FIX / BUILD-01R4 AUTHORIZED BEFORE OWNER VALIDATION**
 
-Active product remains **Study-first + in-product spoken teach-back** with `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`. Normal use records inside the product; no pre-record/upload requirement.
+Active product remains **Study-first + in-product spoken teach-back** with `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`.
 
-MASTER directly reviewed private `prototype/study-teachback-v0.1` at remote HEAD `4e57edfb57495cddd0870029782b987dc7502800` and accepts the bounded status:
+MASTER directly reviewed private `prototype/study-teachback-v0.1` at `4e57edfb57495cddd0870029782b987dc7502800`.
 
-**STUDY-TEACHBACK v0.1 IMPLEMENTED / ENGINEERING-TESTED / READY FOR INTEGRATED OWNER VALIDATION**
+Most R3 evidence is accepted at its stated scope: Node 33/33, Edge 21/21, saved real ASR transcript + strict segment timing with word timing PARTIAL, corrected necessary/sufficient verdicts, lifecycle recovery and readable private review evidence.
 
-This acceptance is engineering readiness only. It is not owner-validation completion, learning-effect evidence, external-user approval, merge/release or public deployment approval.
+However final owner-walkthrough entry is temporarily held by one concrete known defect found during MASTER review. Active narrow contract:
+
+`docs/research/strategy-reset-01/BUILD_01R4_FEEDBACK_ACTION_GATING.md`
+
+`OWNER-VALIDATION-01` remains prepared but **NOT YET OPEN**.
 
 ## Authority
 
 Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 1. `docs/master/CURRENT_STATE.md`
 2. `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/OWNER_VALIDATION_01.md` — next bounded stage, awaiting owner approval
-4. `docs/research/strategy-reset-01/BUILD_01R3_TIMESTAMP_DEGRADATION_AND_RESUME.md`
-5. `docs/research/strategy-reset-01/BUILD_01_STUDY_TEACHBACK_HANDOFF.md`
-6. `docs/research/strategy-reset-01/DIRECTION_DEEPENING_01.md` v4
+3. `docs/research/strategy-reset-01/BUILD_01R4_FEEDBACK_ACTION_GATING.md` — active Must Fix
+4. `docs/research/strategy-reset-01/OWNER_VALIDATION_01.md` — prepared, gated on R4 PASS
+5. `docs/research/strategy-reset-01/BUILD_01R3_TIMESTAMP_DEGRADATION_AND_RESUME.md`
+6. `docs/research/strategy-reset-01/BUILD_01_STUDY_TEACHBACK_HANDOFF.md`
 
-## Remote BUILD-01 / R3 review — accepted at stated scope
+## Accepted R3 evidence
 
-Verified from the pushed checkpoint and readable evidence:
-- normal one-commit descendant from `ef918b4e...` to `4e57edfb...`;
-- review manifest static credential/excluded-path scan PASS;
-- Node final suite **33/33 PASS**;
-- Edge final suite **21/21 PASS** using actual headless Edge/MediaRecorder/IndexedDB with synthetic media/stub provider where explicitly stated;
-- fifth saved real Whisper response is reprocessed without another Whisper call: transcript + strict segment timing PASS, all 22 provider words retained, the zero-duration `w14` remains unchanged and marks word timing PARTIAL;
-- critical unusable/missing word timing falls back to validated segment replay + user confirmation; no invented/interpolated precise word boundary;
-- corrected live `gpt-5.6-luna` semantic challenge reached **7/7** only after preserving earlier 6/7 and CHANNEL_LEAK failures and correcting the actual prompt/schema defects;
-- content and delivery schemas are separated; content cannot emit delivery observations/event IDs;
-- export completeness, forced quota recovery, per-attempt deletion, pending-navigation/stale-result guards and history/expiry behavior passed the final engineering suite;
-- delivery probe on existing synthetic evidence conservatively abstained when owner confirmation was absent;
-- no new Whisper request occurred in R3.
+Verified from remote source/evidence:
+- Node final **33/33 PASS**;
+- Edge final **21/21 PASS** at stated synthetic/stub browser scope;
+- real fifth Whisper response reprocessed with no additional ASR request: transcript + strict segment timing PASS, all 22 word entries preserved, zero-duration provider word retained and marked unusable; word timing PARTIAL;
+- critical unusable/missing word timing falls back to validated segment replay + user confirmation;
+- content and delivery schemas are separated;
+- corrected live Luna verdict challenge reaches **7/7** after earlier 6/7 and CHANNEL_LEAK failures were preserved and fixed rather than hidden;
+- export, quota recovery, per-attempt deletion, pending-navigation/stale-result protections and history/expiry paths passed final engineering checks;
+- R3 made **zero new Whisper requests**;
+- review manifest excluded-path/static-credential scan PASS.
 
-The 7/7 result is bounded synthetic evidence, not a statistical reliability claim. Edge 21/21 is engineering/browser evidence, not physical-owner-microphone or fully live-provider browser validation.
+Latest reviewed ledger estimate: known cost **US$0.01179245**, exposure **US$0.06859995 / US$5**, four historical unsettled reservations preserved, no recharge/reset/relabel.
 
-## Timestamp / evidence policy — accepted
+## Must Fix — feedback action correctness
 
-Segments remain strict hard evidence: finite, ordered, in-range and positive duration.
+Direct review of retained `LUNA_LOGIC_REV3.json` found the `self_repair` case contains a correct `supported` finding whose `repair` field is literally:
 
-Word timing is auxiliary/partial evidence: finite, ordered, in range, `end >= start`; zero-duration provider words are preserved and marked unusable rather than widened/interpolated/merged. Precise word anchors require usable positive-duration word timing; otherwise the product falls back to validated segment replay and requires human confirmation before dependent diagnosis.
+`". ."`
 
-Current fifth fixture classification is accepted as:
+The verdict is correct, but this is not meaningful remediation guidance.
+
+Current `renderFeedback(...)` renders both `再学这一点` and `再讲这一点` for **every finding**, including `supported`, and passes `f.repair` into the next repair/re-record focus. Therefore this retained live output could create an incoherent user-facing action path.
+
+This is a known product defect already visible before owner validation. Under the project rule “test owner experience only after coherent functionality”, the owner should not be asked to rediscover it manually.
+
+## BUILD-01R4 — authorized within existing scope
+
+No new owner decision is needed. No new Whisper request is allowed/needed.
+
+R4 must:
+- hide remediation actions for `supported` findings;
+- define which finding statuses may expose targeted remediation;
+- fail closed on punctuation-only/empty-equivalent repair text when an action is actually exposed;
+- preserve valid repair flow for `missing/incorrect/actionable unknown`;
+- keep delivery observations separate from knowledge remediation;
+- regress against the retained real Luna `supported + repair=". ."` evidence and malformed repair cases;
+- rerun Node/Edge suites;
+- fast-forward push sanitized evidence to the same private branch.
+
+Do not rewrite the historical 7/7 receipt. It remains useful verdict evidence and also evidence of why action gating is needed.
+
+## Timestamp / ASR policy — unchanged
+
+Segments remain strict hard evidence: finite, ordered, in range and positive duration.
+
+Word timing remains auxiliary/partial evidence: finite, ordered, in range, `end >= start`; zero-duration words are preserved and marked unusable, never interpolated/widened/merged.
+
+Current classification remains:
 **ASR TRANSCRIPT + SEGMENT TIMESTAMP TRANSPORT PASS / WORD TIMESTAMPS PARTIAL / HUMAN REPLAY REVIEW REQUIRED**.
 
-This is not calibrated word-alignment accuracy or fluency scoring.
+## Owner validation status
 
-## Current product evidence boundary
+`OWNER-VALIDATION-01` is prepared but must wait for R4 PASS.
 
-Completed / engineering-verified:
-- source-bound Tutor/goals;
-- in-app recording shell and original-audio preservation paths;
-- faithful transcript review/correction workflow;
-- segment-first evidence linking and partial word-timing degradation;
-- content/logic versus delivery separation;
-- necessary/sufficient-condition and withdrawn-claim safeguards at bounded live synthetic scope;
-- targeted repair, partial/full re-explain and related Apply;
-- history/export/delete/quota/navigation recovery at local engineering scope;
-- budget/ledger retained-stop behavior;
-- GitHub-readable private checkpoint review workflow.
-
-Not Done:
-- physical owner microphone walkthrough/full live journey;
-- owner validation of actual usability/latency/ASR on owner speech;
-- external learner validation;
-- learning efficacy/retention claims;
-- calibrated acoustic/word precision;
-- release/merge/public deployment.
-
-## Cost / ledger
-
-Latest reviewed checkpoint reports:
-- known conservative cost: **US$0.01179245**;
-- exposure including unsettled reservations: **US$0.06859995 / US$5**;
-- total requests: 37;
-- ASR reserved minutes remain 15;
-- four historical unsettled reservations preserved;
-- no recharge or ledger reset/relabel;
-- BUILD-01 total new-cash ceiling remains US$10.
-
-R3 used 19 Luna requests and zero new Whisper requests. Cost figures are conservative ledger estimates, not invoices.
-
-## Next stage — OWNER-VALIDATION-01
-
-A bounded protocol is prepared at:
-`docs/research/strategy-reset-01/OWNER_VALIDATION_01.md`.
-
-Purpose: one coherent low-risk owner-microphone journey through `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply` using the product itself.
-
-Owner performs the microphone actions in Edge; Codex prepares/runs the local loopback runtime and collects only sanitized review evidence. Raw owner audio remains local by default and must not be committed.
-
-Owner approval of this protocol authorizes the normal live calls needed for **one coherent owner walkthrough and, if the product flow calls for it, one targeted re-explanation attempt**, under the same models and existing US$5/US$10 caps. It does not authorize open-ended retries, stress testing, external users or release action.
-
-Stop and return to MASTER if a critical ASR error cannot be safely corrected through replay, diagnosis materially contradicts confirmed source/transcript, evidence is fabricated/misattached, original audio/identity is lost, or a new retained boundary is required.
-
-## Standing private sync / retained boundaries
-
-Still approved:
-- local code/commits and normal fast-forward private feature-branch checkpoints;
-- loopback Node + Edge;
-- owner-selected low-risk owner voice/source through approved OpenAI default/global endpoints for the bounded owner validation once approved;
-- models only `whisper-1` + `gpt-5.6-luna`;
-- US$5 API exposure hard stop / US$10 BUILD-01 cash ceiling.
-
-Still prohibited without new owner decision:
-- external users or third-party/sensitive recordings;
-- provider/model/dependency/local-ASR/VAD changes;
-- ledger reset/relabel;
-- merge/default-branch integration, release/public hosting, force push/destructive Git;
-- broader or repeated owner-audio testing beyond the bounded walkthrough.
+No owner microphone action should begin yet. After R4 passes and MASTER reviews the new checkpoint, owner approval will open one bounded integrated microphone walkthrough.
 
 ## State Summary
 
-Completed: BUILD-01/R3 implementation and bounded engineering verification; remote review; timestamp degradation policy; corrected synthetic Luna logic run; lifecycle/browser engineering checks; owner walkthrough protocol prepared.
+Completed: R3 implementation/evidence package; timestamp degradation policy; corrected bounded Luna verdict logic; lifecycle/browser engineering checks; owner-validation protocol preparation.
 
-Verified: remote HEAD `4e57edfb57495cddd0870029782b987dc7502800`; Node 33/33; Edge 21/21 at stated scope; corrected Luna 7/7 with failed historical runs preserved; transcript+segment PASS / word timing PARTIAL; cost/ledger and private review manifest.
+Verified: remote `4e57edfb57495cddd0870029782b987dc7502800`, Node 33/33, Edge 21/21, corrected Luna verdict 7/7 at bounded synthetic scope, segment PASS / word timing PARTIAL, known user-facing repair-action defect.
 
-Likely: the product is coherent enough for owner validation; this is not yet proven on owner speech.
+Likely: R4 is a small local product-correctness fix; no provider/model/ASR work should be necessary.
 
-Unknown: owner-mic ASR quality, full live end-to-end latency/usability, future semantic reliability, actual provider invoice, broader device/storage behavior.
+Unknown: owner-mic end-to-end behavior remains untested.
 
-Not Done: integrated owner walkthrough, post-walkthrough MASTER acceptance, external validation/release.
+Not Done: R4 fix/regression, then integrated owner walkthrough and post-walkthrough MASTER acceptance.
 
-Must Fix before stronger product claim: execute and review the owner walkthrough; any critical unconfirmed ASR or material misdiagnosis is a stop for that result.
+Must Fix: supported findings must not expose meaningless remediation; actionable statuses must fail closed on meaningless repair text.
 
-User Decision Needed: **approve `OWNER-VALIDATION-01` to begin the real owner microphone walkthrough.**
+User Decision Needed: **none for R4**. Owner approval will be requested only after R4 passes.
 
-Future Optional: broader devices, calibrated acoustic/alignment work, realtime Tutor, English/PTE, native/plugin distribution, external learner study and learning-effect evaluation.
+Future Optional: broader feedback-copy calibration, device coverage, calibrated acoustics/alignment, external learner study and learning-effect evaluation.
 
 ## Next Smallest Step
 
-**Owner approves `OWNER-VALIDATION-01`; Codex starts only the local runtime, the owner completes one bounded microphone journey, and the sanitized checkpoint returns to MASTER for acceptance.**
+**Codex executes BUILD-01R4 from `4e57edfb...` without new Whisper calls, pushes the fixed checkpoint, and MASTER rechecks only this feedback-action delta plus regressions before opening OWNER-VALIDATION-01.**
