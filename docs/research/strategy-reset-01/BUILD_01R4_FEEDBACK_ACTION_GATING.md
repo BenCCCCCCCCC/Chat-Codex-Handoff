@@ -2,89 +2,93 @@
 
 Date: 2026-09-11
 Role: 00 MASTER
-Status: AUTHORIZED WITHIN EXISTING BUILD-01 / MUST FIX BEFORE OWNER WALKTHROUGH
+Status: **MASTER-ACCEPTED / PASS / CLOSED**
 
 ## 1. Trigger
 
-MASTER reviewed remote `prototype/study-teachback-v0.1` at `4e57edfb57495cddd0870029782b987dc7502800`.
+MASTER previously reviewed remote `prototype/study-teachback-v0.1` at `4e57edfb57495cddd0870029782b987dc7502800` and found one retained live Luna result in `self_repair` where a correct `supported` finding contained `repair: ". ."` while the UI exposed remediation actions for every finding.
 
-Most R3 engineering evidence is accepted at its stated scope: Node 33/33, Edge 21/21, transcript+segment ASR evidence with word timing PARTIAL, corrected necessary/sufficient verdicts, lifecycle recovery and private review bundle.
+That known user-facing defect blocked owner walkthrough entry and created this narrow R4 contract.
 
-However direct review of `LUNA_LOGIC_REV3.json` found one retained live output in the `self_repair` case where a `supported` finding has:
+## 2. Reviewed checkpoint
 
-`repair: ". ."`
+Codex pushed normal descendant checkpoint:
 
-The final verdict itself is correct, but this is not meaningful repair guidance.
+`09698dfb85c783c67ac83e6462c33d61aee31122`
 
-Current `renderFeedback(...)` renders `再学这一点` and `再讲这一点` actions for **every** finding, including `supported`. Both actions pass `f.repair` into the next Tutor/re-record focus. Therefore the retained `". ."` value is potentially user-visible/actionable and can create an incoherent repair path.
+MASTER directly reviewed the commit, narrow source delta and readable evidence. GitHub comparison confirms it is exactly one commit ahead of `4e57ed...`, with no history rewrite.
 
-This is a known product defect already visible in synthetic evidence. The owner should not be asked to discover it during integrated validation.
+## 3. Accepted implementation
 
-## 2. MASTER decision
+R4 implements the intended action gate:
 
-Engineering readiness is **PASS WITH ONE MUST FIX**, not yet owner-walkthrough entry.
+- `remediationFocus(...)` returns no knowledge-remediation route for `supported` findings;
+- delivery findings never enter the knowledge-remediation route;
+- only content `missing`, `incorrect`, or `unknown` may expose targeted remediation, and only when `repairFocus(...)` accepts concrete guidance;
+- `repairFocus(...)` fails closed on empty/whitespace, invisible controls, punctuation-only text such as `. .`, numeric-only text, and explicit empty placeholders;
+- partial-attempt focus and direct Tutor `mode=repair` requests pass through the same meaningful-focus guard;
+- valid gap guidance remains source/attempt/version-bound and preserves targeted reteaching plus partial/full re-explanation.
 
-Product rule:
-- `supported` findings are evidence of what the learner already expressed correctly; they should not expose targeted `再学这一点` / `再讲这一点` remediation actions by default.
-- remediation actions belong to `missing`, `incorrect`, or actionable `unknown` findings.
-- `observation` delivery findings may keep only actions appropriate to confirmed delivery evidence; do not route a meaningless repair string into Tutor/re-record.
-- runtime must not accept punctuation-only/empty-equivalent repair guidance for findings that actually expose a remediation action.
+The retained historical Luna 7/7 evidence was not rewritten. The actual `supported + repair=". ."` record is used as a regression fixture.
 
-Do not alter past evidence or relabel the retained live 7/7 verdict run. Keep the `". ."` output as proof of why the UI/runtime guard is needed.
+## 4. Evidence reviewed
 
-## 3. Allowed fix
+Accepted at stated scope:
 
-No new Whisper request. No provider/model/dependency change.
+- Node: **38/38 PASS**;
+- Edge: **22/22 PASS** using actual Edge with synthetic media/stub provider where stated;
+- retained real supported `repair=". ."` renders as evidence without targeted remediation;
+- malformed actionable repair fails closed before provider invocation;
+- valid `missing/incorrect/unknown` focus still reaches the expected targeted flow;
+- delivery retains replay/evidence behavior without knowledge remediation;
+- full previously accepted lifecycle/browser regression remains green;
+- live ledger unchanged: **0 new paid calls, 0 Whisper, 0 Luna**;
+- known conservative cost remains **US$0.01179245**;
+- exposure remains **US$0.06859995 / US$5**;
+- no ledger reset/relabel, provider/model switch, install, merge/release/public deploy or force push.
 
-Codex may:
-1. update feedback rendering so `supported` findings do not show remediation buttons;
-2. define the exact set of statuses that expose `再学这一点` / `再讲这一点`;
-3. add a runtime guard for remediation text used by those actions so punctuation-only values such as `". ."` fail closed rather than becoming Tutor focus;
-4. ensure `missing/incorrect/unknown` remediation remains source/attempt/version-bound and does not fabricate audio spans;
-5. ensure delivery observations remain separate from knowledge remediation and do not become a knowledge-deficit route;
-6. add offline regression using the retained real Luna self-repair output plus malformed repair cases;
-7. rerun Node and Edge engineering suites.
+## 5. MASTER decision
 
-A new live Luna call is **not required** merely to fix this known presentation/action defect. If Codex believes a live call is genuinely required, stop and return to MASTER rather than spending automatically.
+**BUILD-01R4 PASS. No remaining Must Fix is known from this delta.**
 
-## 4. Acceptance gate
+The engineering entry gate is restored to:
 
-BUILD-01R4 passes when:
-- retained `supported + repair=". ."` fixture renders as correct evidence with **no remediation action**;
-- `incorrect/missing/actionable unknown` with punctuation-only repair is rejected/fails closed;
-- valid actionable repair still routes correctly to targeted reteaching and partial/full re-explanation;
-- content/delivery channel separation remains intact;
-- no new Whisper call;
-- final Node/Edge suites pass with readable evidence;
-- sanitized checkpoint is fast-forward pushed to the same private feature branch.
+**STUDY-TEACHBACK v0.1 IMPLEMENTED / ENGINEERING-TESTED / READY FOR INTEGRATED OWNER VALIDATION**
 
-After R4 passes, MASTER may restore:
+R4 is now closed. Do not reopen accepted R3/R4 work unless owner validation produces new evidence that materially contradicts it.
 
-`STUDY-TEACHBACK v0.1 IMPLEMENTED / ENGINEERING-TESTED / READY FOR INTEGRATED OWNER VALIDATION`
+## 6. What this does not prove
 
-and then request owner approval for `OWNER-VALIDATION-01`.
+R4 does not establish:
 
-## 5. Boundaries
+- real owner-microphone usability;
+- live owner-speech ASR quality;
+- future semantic reliability outside bounded fixtures;
+- learning efficacy, long-term mastery, PTE validity or market fit;
+- release readiness.
 
-Keep:
-- branch `prototype/study-teachback-v0.1`;
-- models only `whisper-1` + `gpt-5.6-luna`;
-- no new live call required for R4;
-- US$5 API exposure hard stop / US$10 BUILD-01 cash ceiling;
-- no ledger reset/relabel;
-- no merge/release/public deploy/force push;
-- no external users or owner microphone yet.
+These remain outside R4.
 
-## 6. State classification
+## 7. Next gate
 
-Completed: R3 engineering implementation and evidence review except owner validation.
+Next active protocol:
 
-Verified: the retained live self-repair output contains one punctuation-only `repair` value while the current UI exposes remediation actions for every finding.
+`docs/research/strategy-reset-01/OWNER_VALIDATION_01.md`
 
-Must Fix: gate remediation actions by finding status and fail closed on meaningless repair text when an action is exposed.
+Execution requires explicit owner go-ahead because it uses the owner's real microphone audio and makes the bounded live ASR/semantic calls needed for one integrated walkthrough.
 
-Not Done: R4 regression, then owner walkthrough.
+No merge/release/external-user step follows automatically from owner validation.
 
-User Decision Needed: none for R4; this is within the already-approved product correctness scope.
+## 8. State classification
 
-Future Optional: broader feedback-copy quality calibration after owner validation.
+Completed: feedback action gating implementation, retained-evidence regression, Node/Edge regression and private checkpoint sync.
+
+Verified: remote `09698df...`, Node 38/38, Edge 22/22, zero new paid calls, valid action gating at UI/runtime entry points.
+
+Not Done: integrated owner microphone walkthrough.
+
+Must Fix: none remaining for R4.
+
+User Decision Needed: owner approval to start `OWNER-VALIDATION-01`.
+
+Future Optional: broader feedback-copy calibration after owner validation.
