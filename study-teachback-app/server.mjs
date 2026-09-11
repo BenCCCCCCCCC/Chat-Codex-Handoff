@@ -7,7 +7,7 @@ import { sourceValue, attemptValue, contentInput, validateTeaching, validateFind
 import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
 
 const files={'/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css'};
-export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger}={}) {
+export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger,extractCall=extractSource}={}) {
   let busy=false;
   return http.createServer(async(req,res)=>{
     const expected=`127.0.0.1:${req.socket.localPort}`, origin=`http://${expected}`;
@@ -27,7 +27,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       const limit=path==='/api/extract'?10*1024*1024:path==='/api/asr'?5_760_044:80000;const parts=[];let length=0;
       for await(const part of req){length+=part.length;requireValue(length<=limit,'INPUT_TOO_LARGE');parts.push(part);}
       const bytes=Buffer.concat(parts);
-      if(path==='/api/extract')return json(200,await extractSource(bytes,req.headers['x-source-format']));
+      if(path==='/api/extract')return json(200,await extractCall(bytes,req.headers['x-source-format']));
       if(path==='/api/asr')return json(200,await asrCall(bytes,req.headers['x-attempt-id'],{signal:controller.signal}));
       requireValue(req.headers['content-type']==='application/json','CONTENT_TYPE');
       const b=JSON.parse(bytes.toString('utf8'));

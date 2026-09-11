@@ -1,0 +1,16 @@
+{
+  "unchangedFromR3": true,
+  "newPaidCalls": 0,
+  "summary": {
+    "requests": 37,
+    "attempts": 1,
+    "minutes": 15,
+    "inputReserved": 140196,
+    "outputReserved": 54128,
+    "exposureUSD": 0.06859995,
+    "knownCostUSD": 0.011792450000000003,
+    "unsettled": 4,
+    "cashSpentUSD": 0,
+    "cashNote": "No purchase/recharge performed by app; provider billing balance not inspected."
+  }
+}

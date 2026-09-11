@@ -1,0 +1,1 @@
+{"bootstrap":"ordinary Python 3.14.6","venv":"study-teachback-app/.venv","package":"pypdf","version":"6.18.0","wheelSHA256":"05b762b77bcb9dcb4a7c91fcf5dded585b25bee7269ab3d3001d7c55fa1b324b","verification":"pip install --require-hashes --only-binary=:all: --no-deps; exit 0; installed import reports 6.18.0","setupInstall":true,"runtimeAutoInstall":false,"venvIgnored":true}

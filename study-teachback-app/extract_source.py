@@ -72,8 +72,14 @@ def extract(data, kind):
 
 if __name__ == '__main__':
     try:
+        try:
+            import pypdf
+            if pypdf.__version__ != '6.18.0':
+                raise ImportError()
+        except ImportError:
+            raise ValueError('EXTRACTOR_DEPENDENCY_REQUIRED')
         result = extract(sys.stdin.buffer.read(10 * 1024 * 1024 + 1), sys.argv[1])
     except Exception as error:
         code = str(error)
-        result = {'error': code if code in ('FILE_TOO_LARGE', 'TEXT_ENCODING_UNSUPPORTED', 'INVALID_DOCUMENT', 'ENCRYPTED_DOCUMENT', 'DOCUMENT_LIMIT', 'FORMAT_UNSUPPORTED', 'NO_EXTRACTABLE_TEXT') else 'INVALID_DOCUMENT'}
+        result = {'error': code if code in ('EXTRACTOR_DEPENDENCY_REQUIRED', 'FILE_TOO_LARGE', 'TEXT_ENCODING_UNSUPPORTED', 'INVALID_DOCUMENT', 'ENCRYPTED_DOCUMENT', 'DOCUMENT_LIMIT', 'FORMAT_UNSUPPORTED', 'NO_EXTRACTABLE_TEXT') else 'INVALID_DOCUMENT'}
     sys.stdout.buffer.write(json.dumps(result, ensure_ascii=True).encode('ascii'))

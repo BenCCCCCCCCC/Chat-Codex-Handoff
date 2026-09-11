@@ -1,3 +1,6 @@
 runtime/
 .env
 browser-profile/
+
+.venv/
+__pycache__/

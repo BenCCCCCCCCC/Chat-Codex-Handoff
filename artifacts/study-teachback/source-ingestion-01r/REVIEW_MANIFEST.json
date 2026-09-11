@@ -1,0 +1,92 @@
+[
+  {
+    "path": "artifacts/study-teachback/source-ingestion-01r/DELIVERY_PACKET.md",
+    "sha256": "259b21c671e3a1d6d3c1c31fc0d33fada585e6dffe7ed265f9432799f646959d",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/source-ingestion-01r/EXTRACTION_TESTS.txt",
+    "sha256": "d6319361e0d1591bb257c8211e980516b79402ce8e48835b5b550ebdf0aacc6b",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/source-ingestion-01r/LEDGER_VERIFICATION.json",
+    "sha256": "f551b5b6dd93644128e0e6907c02270a9f4251a37b03d393949a7f54b661ef9a",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/source-ingestion-01r/NODE_TESTS.txt",
+    "sha256": "6d566d0db24d75d757cac882aecb419cdb0eb31d8ed2b2b81f68fb894297e0b8",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/source-ingestion-01r/NODE_TESTS_INITIAL.txt",
+    "sha256": "2a1cc0a881b09bf424997a72c2a21118dc0bce23730916d60672c1cebecc4b7c",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/source-ingestion-01r/SETUP.json",
+    "sha256": "3f323f4415f486574a5d2d8ddc31f071e45f9a792cad5ea138bf1e9a2a206fec",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/source-ingestion-01r/browser-1789137274191.json",
+    "sha256": "20e2f55db51375b5b6240c082bd14112c0a39b05f97f9e00ed3e7def95c68a88",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/source-ingestion-01r/browser-learning.png",
+    "sha256": "eebdd203fc6bf44dd1860a1e41f837232e0f677b16f39615345fa038686b0fe0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/source-ingestion-01r/browser-real-asr.png",
+    "sha256": "d81f2147859102e902a66c62d4e1dac23beb2e94fcb4d9afb4cbd960b7737a34",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/.gitignore",
+    "sha256": "e5cdce3d7f2d0284a2283614fb7803148b1edc214129991e2240a84431dccadb",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/README.md",
+    "sha256": "f123e45f5bd909d02a3759810e3d80ab7771deb5f7725f95eaa211fb7c2e624b",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/app.mjs",
+    "sha256": "10a1417a8692b362fb36935f6d2c84da2039d16bd3b774f2f16f2b40f709303a",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/browser-tests-r4.mjs",
+    "sha256": "39b16847d6b5a2e55644a8055c25df4a172d3b2a8f83493cf14ad6f28b604c1b",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/extract_source.py",
+    "sha256": "f2f0c86ed1beb87ba32fe355dd4af21d0eea875278cd927fd4926ba4e937de6f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/ingestion.mjs",
+    "sha256": "13b991ac7ceff1f9ed20cabd961266a9ff458e41a2aac39f39b7c4822c3386e1",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/portability.test.mjs",
+    "sha256": "6795c1ee7646e62c0dfac06381dc966fb9a87d5c2a69433817ab41f51776d599",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/requirements-extractor.txt",
+    "sha256": "a4b7bb8285cfee31b1478019aa7d5fdd60f5f318a05fe0548f11081450fa82cc",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/server.mjs",
+    "sha256": "76e4f4ede6ef84b30b5dd595333b3311052a166349378cf281c9e00d1067cf1a",
+    "hashBasis": "git blob bytes"
+  }
+]
