@@ -5,109 +5,105 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**STUDY-TEACHBACK v0.1 IMPLEMENTED / ENGINEERING-TESTED / READY FOR INTEGRATED OWNER VALIDATION — OWNER GO-AHEAD REQUIRED**
+**OWNER-VALIDATION-01 APPROVED / ACTIVE — INTEGRATED OWNER MICROPHONE WALKTHROUGH NEXT**
 
-Active product remains **Study-first + in-product spoken teach-back** with `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`.
+Active product remains **Study-first + in-product spoken teach-back** with:
 
-MASTER directly reviewed private `prototype/study-teachback-v0.1` at latest remote HEAD:
+`Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`
+
+MASTER has already accepted engineering readiness through BUILD-01R4 on private feature branch `prototype/study-teachback-v0.1` at remote HEAD:
 
 `09698dfb85c783c67ac83e6462c33d61aee31122`
 
-BUILD-01R4 is accepted and closed. The prior known feedback-action defect is fixed at the reviewed engineering scope. `OWNER-VALIDATION-01` is now the active next gate, but it has **not started** because the owner's real microphone audio and bounded live calls require explicit owner go-ahead.
+The owner replied `继续`, which is accepted as explicit go-ahead to start the prepared `OWNER-VALIDATION-01` protocol. No additional synthetic feature development should run before this walkthrough unless the live journey exposes a retained stop condition.
 
 ## Authority
 
 Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 1. `docs/master/CURRENT_STATE.md`
 2. `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/OWNER_VALIDATION_01.md` — active next gate, awaiting owner approval
-4. `docs/research/strategy-reset-01/BUILD_01R4_FEEDBACK_ACTION_GATING.md` — MASTER-accepted / closed
-5. `docs/research/strategy-reset-01/BUILD_01R3_TIMESTAMP_DEGRADATION_AND_RESUME.md`
-6. `docs/research/strategy-reset-01/BUILD_01_STUDY_TEACHBACK_HANDOFF.md`
+3. `docs/research/strategy-reset-01/OWNER_VALIDATION_01.md` — **APPROVED / ACTIVE**
+4. `docs/research/strategy-reset-01/BUILD_01R4_FEEDBACK_ACTION_GATING.md` — PASS / closed
+5. earlier BUILD-01/R3 contracts only as evidence boundaries.
 
-## BUILD-01R4 remote review — PASS
+## Entry state — accepted
 
-MASTER reviewed only the R4 delta and regression evidence, without reopening already accepted R3 scope.
+Do not reopen unless owner validation contradicts it:
+- Node 38/38 PASS;
+- Edge 22/22 PASS at stated engineering scope;
+- transcript + strict segment timestamp transport PASS;
+- word timing PARTIAL with unusable provider word timings preserved rather than fabricated;
+- critical timing uncertainty falls back to validated segment replay + human confirmation;
+- corrected bounded Luna necessary/sufficient verdict challenge 7/7 after retained failed runs were fixed rather than hidden;
+- content/delivery schema separation;
+- R4 remediation gating: supported/delivery findings do not enter knowledge-remediation; meaningless actionable repair fails closed;
+- export/quota/per-attempt-delete/pending-navigation/history/expiry engineering checks pass at their stated scope;
+- latest reviewed known conservative cost US$0.01179245; exposure US$0.06859995 / US$5; BUILD-01 new-cash ceiling US$10.
 
-GitHub comparison confirms `09698df...` is exactly one normal descendant commit ahead of `4e57edfb...`.
+## Owner approval scope
 
-Accepted R4 behavior:
-- content `supported` findings no longer expose targeted knowledge-remediation actions;
-- delivery findings never enter the knowledge-remediation route;
-- content `missing`, `incorrect`, and `unknown` may expose remediation only when `repairFocus(...)` accepts concrete guidance;
-- punctuation-only / empty-equivalent / invisible / placeholder repair strings fail closed;
-- direct Tutor `mode=repair` and partial-attempt focus pass through the same meaningful-focus guard;
-- the retained historical live Luna `supported + repair=". ."` evidence remains unchanged and is used as a regression fixture;
-- valid gap flows remain intact.
+Owner approval authorizes only:
+- one coherent real-owner microphone walkthrough;
+- owner's own low-risk voice and one short non-sensitive source;
+- normal live `whisper-1` + `gpt-5.6-luna` calls needed by that journey;
+- if naturally offered by the product, at most one targeted re-explanation attempt;
+- existing US$5 API exposure hard stop / US$10 BUILD-01 cash ceiling;
+- normal fast-forward private feature-branch checkpoint sync of sanitized evidence after the run.
 
-Evidence accepted at stated scope:
-- Node **38/38 PASS**;
-- Edge **22/22 PASS** using actual Edge with synthetic media/stub provider where stated;
-- direct invalid Tutor repair requests are rejected before provider invocation;
-- real retained supported punctuation-repair finding renders without remediation;
-- valid missing/incorrect/unknown focus still routes correctly;
-- full prior lifecycle/browser regression remains green;
-- R4 made **0 new paid calls / 0 Whisper / 0 Luna**;
-- ledger unchanged.
+It does **not** authorize:
+- repeated stress testing/open-ended retries;
+- a sixth synthetic-fixture retry or unrelated ASR experiments;
+- new provider/model/dependency/local ASR/VAD;
+- public hosting, merge/release, force push;
+- external users, third-party/sensitive audio;
+- raw owner audio, API keys, `.env`, browser profiles or private client files being committed.
 
-Latest reviewed ledger remains:
-- known conservative cost `US$0.01179245`;
-- exposure `US$0.06859995 / US$5`;
-- four historical unsettled reservations preserved;
-- BUILD-01 cash ceiling `US$10`;
-- no recharge/reset/relabel/provider/model switch.
+Raw owner audio remains local by default.
 
-## Previously accepted engineering state — unchanged
+## Execution ownership
 
-Do not reopen unless owner validation produces contradictory evidence:
-- real Whisper transcript + strict segment timestamp transport PASS;
-- word timing PARTIAL with unusable zero-duration words preserved, not fabricated/interpolated;
-- critical unusable/missing word timing falls back to validated segment replay + human confirmation;
-- corrected bounded Luna necessary/sufficient verdict challenge reaches **7/7** after preserving earlier failures;
-- content/delivery schemas separated;
-- original audio saved before ASR;
-- export completeness, quota recovery, per-attempt delete, pending navigation, history/expiry paths pass stated engineering checks;
-- no current claim of calibrated word alignment, acoustic scoring, learning efficacy or market fit.
+Codex prepares and keeps the local runtime available. The owner performs the actual microphone actions in Edge.
 
-## Active next gate — OWNER-VALIDATION-01
+Expected local runtime:
+- repo `F:\Chat-Codex-Handoff\validation-repo`;
+- branch `prototype/study-teachback-v0.1`;
+- HEAD must equal or normally descend from `09698dfb85c783c67ac83e6462c33d61aee31122`;
+- server `node study-teachback-app/server.mjs`;
+- URL `http://127.0.0.1:4317`.
 
-Prepared protocol:
+The walkthrough should cover one coherent path through Learn, formal in-product recording, ASR replay/correction, content feedback, targeted repair if warranted, at most one re-explanation, Apply, and local export/history behavior.
 
-`docs/research/strategy-reset-01/OWNER_VALIDATION_01.md`
+## Stop conditions
 
-Purpose: one coherent owner-microphone journey through:
+Stop and return to MASTER if any of these occurs:
+- critical ASR meaning error cannot be safely corrected through replay;
+- diagnosis materially contradicts confirmed transcript/source;
+- source/audio/timestamp evidence is fabricated or misattached;
+- R4 remediation gating regresses;
+- repeated API retries become necessary;
+- budget/credential/storage guard fails;
+- original audio or attempt/source identity is lost/corrupted.
 
-`Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`
-
-The owner uses only:
-- their own voice;
-- one short non-sensitive source;
-- existing dedicated server-side credential;
-- models only `whisper-1` + `gpt-5.6-luna`;
-- existing US$5 exposure / US$10 cash ceilings.
-
-Owner approval of this protocol authorizes only the normal live ASR/semantic calls needed for **one coherent walkthrough and, if the product flow offers it, one targeted re-explanation attempt**. It does not authorize repeated stress testing/open-ended retries, external users, new models/providers/dependencies, public hosting, merge or release.
-
-Raw owner audio remains local by default. GitHub review evidence must be sanitized; no raw owner audio, API key, `.env`, browser profile or sensitive source is committed.
+Minor copy/layout friction should be recorded but is not automatically a stop unless it blocks the coherent journey.
 
 ## State Summary
 
-Completed: BUILD-01 through R4 engineering implementation, private checkpoint synchronization, engineering regression and MASTER delta review.
+Completed: BUILD-01 through R4 engineering implementation, private remote review, engineering readiness and owner approval for the integrated walkthrough.
 
-Verified: latest remote `09698df...`; R4 Node 38/38; R4 Edge 22/22; zero new paid calls in R4; engineering-readiness entry criteria restored.
+Verified: latest engineering checkpoint `09698df...`, Node 38/38, Edge 22/22, R4 zero paid calls, accepted ASR/timestamp and feedback-action policies at stated scope.
 
-Likely: the coherent flow is ready for one real owner walkthrough without further synthetic implementation.
+Likely: the product is coherent enough for one real owner walkthrough without more synthetic development.
 
-Unknown: real owner-microphone ASR behavior, live semantic behavior on owner speech, owner-facing latency/friction and full real journey behavior.
+Unknown: real owner-microphone ASR quality, live semantic behavior on owner speech, actual owner-facing latency/friction and full live journey behavior.
 
-Not Done: `OWNER-VALIDATION-01`, post-walkthrough MASTER decision, any external-user validation or release decision.
+Not Done: execute OWNER-VALIDATION-01, collect sanitized result evidence, post-walkthrough MASTER acceptance, any external-user validation/release decision.
 
-Must Fix: none currently known before owner validation.
+Must Fix: none known before the walkthrough.
 
-User Decision Needed: **owner approval to start `OWNER-VALIDATION-01` using their own low-risk microphone audio and the bounded live calls defined in that protocol.**
+User Decision Needed: none to start the already-approved OWNER-VALIDATION-01. A new decision is required only if a retained stop condition or new scope boundary appears.
 
-Future Optional: broader copy calibration, device coverage, calibrated alignment/acoustics, external learner study, learning-effect evaluation, distribution/release work.
+Future Optional: broader copy/device/acoustic validation, external learner study, learning-effect evaluation and release/distribution work.
 
 ## Next Smallest Step
 
-**Owner explicitly approves or declines `OWNER-VALIDATION-01`. If approved, Codex prepares the local server and the owner performs the single integrated microphone walkthrough; then MASTER reviews only the resulting walkthrough evidence and any new failures.**
+**Codex starts the bounded local runtime from the accepted feature branch; owner performs the single integrated microphone walkthrough; then MASTER reviews only the walkthrough evidence and new failures.**
