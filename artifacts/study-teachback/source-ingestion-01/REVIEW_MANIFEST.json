@@ -1,66 +1,82 @@
 [
   {
     "path": "study-teachback-app/app.mjs",
-    "sha256": "c5bb85d58918e29a7de5589159facd5c24e74799c37776ef6be11210b5d83f55"
+    "sha256": "fbb566d0e949f6d0ecb057ca0feff2bc713a334fb104875bf3d06b568945785d",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "study-teachback-app/browser-tests-r4.mjs",
-    "sha256": "14bb25b3fdee24ec5693c23e3e26b0bf54e60bf5c5282303f75d1b1ea51c04c9"
+    "sha256": "634e75566ac57f2bd02aeec62632f475581661617143be1fba094735a5e03516",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "study-teachback-app/index.html",
-    "sha256": "daab5f11f55bb27c6b48718b55376c67e12b37fe1db731a919fe946373eb24f7"
+    "sha256": "9cb214380db995367e98a2c29a9011b1ba20de33bcbb6b2ead7c6358ec6cdb9a",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "study-teachback-app/server.mjs",
-    "sha256": "5345ce4b10396791002ba23b836baced5de0d165403d03c31316690cab4b8d7e"
+    "sha256": "21f4360c734b03592154f9b1367bfec4805a4aaadf6fe39404982ffe56da3373",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "study-teachback-app/extract_source.py",
-    "sha256": "a82976ae901286e41773e9614d5443b58acf2aaf90cb748daeb0e302257bce5b"
+    "sha256": "549c97e1324460fac307b5f3a87b5d6dae3764ba6b8ed4948bbeb61b9640dc74",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "study-teachback-app/extract_source_test.py",
-    "sha256": "6bd44d2d13eccceffa852e63eaf60bdf15059d1ce5f7a4f6aa099bc1989df17e"
+    "sha256": "58d4460aa0dd67d8cfc597670b94850a489600fa700e3dfceb98c1f67911ac36",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "study-teachback-app/ingestion.mjs",
-    "sha256": "a038911fadb69b1640c6e7a0e57ceb5e39cab0011cfc8cbf4526a19c22b6694d"
+    "sha256": "a038911fadb69b1640c6e7a0e57ceb5e39cab0011cfc8cbf4526a19c22b6694d",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "study-teachback-app/ingestion.test.mjs",
-    "sha256": "df8023068859f30f7b0fa00efb71380ea97c084083a1756932ae6c7acfaa275d"
+    "sha256": "df8023068859f30f7b0fa00efb71380ea97c084083a1756932ae6c7acfaa275d",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "artifacts/study-teachback/source-ingestion-01/browser-1789134015153.json",
-    "sha256": "517e8f1715d1357611d8966d6594ca1a7b38bb822492bc54bb773f2d8fa7e926"
+    "sha256": "517e8f1715d1357611d8966d6594ca1a7b38bb822492bc54bb773f2d8fa7e926",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "artifacts/study-teachback/source-ingestion-01/browser-1789134069665.json",
-    "sha256": "8ebe3362f62550e8dca245853e5adea1ff436824328d386b60c4bfcdb0ab2bd9"
+    "sha256": "8ebe3362f62550e8dca245853e5adea1ff436824328d386b60c4bfcdb0ab2bd9",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "artifacts/study-teachback/source-ingestion-01/browser-learning.png",
-    "sha256": "eebdd203fc6bf44dd1860a1e41f837232e0f677b16f39615345fa038686b0fe0"
+    "sha256": "eebdd203fc6bf44dd1860a1e41f837232e0f677b16f39615345fa038686b0fe0",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "artifacts/study-teachback/source-ingestion-01/browser-real-asr.png",
-    "sha256": "7544dfee9cf8d559b6c876e9daa64876f8133bcfe67c09b521e563c936ea5dfb"
+    "sha256": "7544dfee9cf8d559b6c876e9daa64876f8133bcfe67c09b521e563c936ea5dfb",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "artifacts/study-teachback/source-ingestion-01/DELIVERY_PACKET.md",
-    "sha256": "6fa361281509bf3e3d7c39e5900fbe9bdafd35c5dcd93372f67b6e8b6a031ed5"
+    "sha256": "c8d273269db3a4d8824a7cf06935c8682ef3012c9964639e2a80284adacaa923",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "artifacts/study-teachback/source-ingestion-01/EXTRACTION_TESTS.txt",
-    "sha256": "e2a37c99097cdb17de6082602372a2e97a5b2e4ac3397d268a20d1135681c7d3"
+    "sha256": "928c3c35261362141851ab5da0ab66dc4f28eb774d61c3f0a7fdd49ecaf978b2",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "artifacts/study-teachback/source-ingestion-01/LEDGER_VERIFICATION.json",
-    "sha256": "b9a219a090e6a9cb46e7215341336e6fa0af0e04cff2d8f95880fa3cbaccd247"
+    "sha256": "b9a219a090e6a9cb46e7215341336e6fa0af0e04cff2d8f95880fa3cbaccd247",
+    "hashBasis": "git blob bytes"
   },
   {
     "path": "artifacts/study-teachback/source-ingestion-01/NODE_TESTS.txt",
-    "sha256": "abedbd12946c2d2afadd1106cbf7f0270bec6f432c94656d9f48da5b5f77c956"
+    "sha256": "008d0f8a29d8c2c16e96dc3f0a8076c910d2ad32f2a02d4aeae3ce2dad6eedf8",
+    "hashBasis": "git blob bytes"
   }
 ]
