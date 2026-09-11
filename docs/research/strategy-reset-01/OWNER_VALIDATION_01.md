@@ -1,135 +1,108 @@
-# OWNER-VALIDATION-01 — Integrated owner microphone walkthrough
+# OWNER-VALIDATION-01 — Integrated owner file + microphone walkthrough
 
-Date: 2026-09-11
+Date: 2026-09-12
 Role: 00 MASTER
-Status: **OWNER APPROVED / PAUSED PENDING SOURCE-INGESTION-01R PORTABILITY FIX / NOT YET EXECUTED**
+Status: **OWNER APPROVED / RESUMED / NOT YET EXECUTED**
 
-## 1. Entry gate
+## Entry gate
 
-MASTER previously approved this bounded owner walkthrough after BUILD-01R4. Since then, SOURCE-INGESTION-01 added local file import on private feature branch `prototype/study-teachback-v0.1` through:
+MASTER accepts engineering readiness through BUILD-01R4 plus SOURCE-INGESTION-01R at private feature HEAD:
 
-`dc4893c5ca146037c8a498755854b3ce5cb73c62`.
+`prototype/study-teachback-v0.1`
 
-The file-ingestion behavior is accepted at current-machine engineering scope, but its extractor currently depends on a hard-coded private Codex runtime path. Therefore this owner validation remains approved in principle but is temporarily **PAUSED** until:
+`a99d380473a1eac45ada67022c589d654db9c7cd`
 
-`docs/research/strategy-reset-01/SOURCE_INGESTION_01R_PORTABILITY.md`
+SOURCE-INGESTION-01R closed the temporary portability blocker. The prior owner approval remains valid because provider, model, budget and data boundaries are unchanged.
 
-passes MASTER review.
+Accepted entry evidence:
+- extraction **6/6 PASS**;
+- Node **42/42 PASS**;
+- Edge **23/23 PASS** at stated engineering scope;
+- repo-owned `.venv` extractor contract using Python 3.14.6 and pinned `pypdf==6.18.0`;
+- missing runtime/dependency fails closed with no provider invocation and unchanged ledger;
+- prior ASR segment PASS / word timing PARTIAL policy;
+- bounded corrected Luna logic 7/7;
+- R4 feedback-action gating;
+- latest known conservative cost `US$0.01179245`, exposure `US$0.06859995 / US$5`.
 
-Do not execute the owner microphone walkthrough from the current ingestion checkpoint.
+This is engineering readiness only, not owner-validation completion, learning-effect evidence or release approval.
 
-## 2. Purpose after resume
+## Purpose
 
 Validate one coherent real-owner journey:
 
-`File/text source -> Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`
+`File import -> preview/select -> Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`
 
-The goal is actual product usability and evidence behavior, not learning efficacy, PTE validity, long-term mastery or market fit.
+## Approved boundary
 
-## 3. Approved data / spend boundary
+Use one owner-controlled low-risk supported file and the owner's own voice. Live calls remain limited to `whisper-1` + `gpt-5.6-luna` for one coherent walkthrough and at most one targeted re-explanation if naturally reached. Existing US$5 API exposure and US$10 BUILD-01 cash ceilings remain unchanged.
 
-Use only:
-- owner's own voice;
-- one short non-sensitive owner-selected source;
-- after portability recovery, preferably one supported low-risk file imported through the new local extraction preview/selection path;
-- existing dedicated server-side OpenAI credential;
-- `whisper-1` + `gpt-5.6-luna`;
-- existing US$5 API exposure hard stop / US$10 BUILD-01 cash ceiling.
+No repeated stress testing, new provider/model/dependency/OCR work, public hosting, external users or release action is authorized.
 
-The prior owner approval still authorizes the normal live ASR/semantic calls needed for **one coherent owner walkthrough and at most one targeted re-explanation attempt if the product naturally offers it**, once this protocol is resumed by MASTER.
+Raw owner audio and raw imported documents remain local by default and are not part of the review checkpoint.
 
-It does not authorize repeated stress testing, open-ended retries, new provider/model work, public hosting, external users or release action.
+## Execution
 
-Raw owner audio and raw imported source files remain local by default. Do not commit API keys, `.env`, browser profiles, private client files, raw owner audio or raw private documents.
+1. Verify local repo/branch/HEAD equals or normally descends from `a99d380...`; preserve worktree and ledger.
+2. Verify `study-teachback-app/.venv` is present and pypdf 6.18.0 is available. Do not reinstall if already valid.
+3. Start `node study-teachback-app/server.mjs`; keep `http://127.0.0.1:4317` available.
+4. Owner imports one low-risk DOCX/PDF/PPTX/MD/TXT file, reviews the preview and selects <=5000 characters.
+5. Confirm import/preview alone does not create a provider request and that selected text becomes the learning source. Then start Learn and ask at least one normal Tutor question.
+6. Owner uses `我来讲讲` and records about 20–45 seconds with at least one condition and one natural self-correction.
+7. Verify original audio remains available; inspect raw transcript and word-timing notice.
+8. Fully replay each validated segment and correct any critical negation/number/condition/term ASR error before confirmation.
+9. Inspect content feedback and evidence links. Confirm condition direction, withdrawn-claim handling, missing-content timestamp behavior and R4 remediation gating.
+10. If a near-silence candidate appears, replay/confirm it before delivery interpretation.
+11. Use targeted reteaching only if a real actionable gap exists; at most one partial/full re-explanation if useful.
+12. Use Apply and verify it is a related new situation without mastery claims.
+13. Export locally and inspect selected source, audio, raw/corrected transcript and reports.
+14. Stop the server after the walkthrough.
 
-## 4. Execution after SOURCE-INGESTION-01R passes
+## Source-ingestion checks
 
-Codex prepares the local runtime only; owner performs file selection and microphone actions in Edge.
+Record whether the chosen file is accepted locally, extracted content/order is understandable enough for the selected section, limitations are visible in preview, selected text rather than the raw full document becomes the source, and import alone causes no provider call.
 
-1. Verify local repo/branch/HEAD equals or normally descends from the MASTER-accepted post-portability checkpoint; preserve worktree and ledger.
-2. Start only `node study-teachback-app/server.mjs`; keep `http://127.0.0.1:4317` available.
-3. Owner selects one supported non-sensitive MD/TXT/PDF/DOCX/PPTX file (or uses pasted text if a file-specific limitation is being intentionally avoided), reviews extracted preview and selects a bounded <=5000-character source section.
-4. Confirm importing alone does not trigger a provider/model call. Then start Learn, inspect goals and ask at least one normal Tutor question.
-5. Owner clicks `我来讲讲`, explicitly starts recording and explains for about 20–45 seconds. Include at least one condition and one natural self-correction.
-6. Finish in-app; verify original audio is retained. Review raw transcript and visible word-timing quality notice.
-7. Fully replay each validated segment before confirming. Correct any critical negation/number/condition/term transcription error. Unusable/missing word timing must not produce an invented precise anchor.
-8. Inspect content/logic feedback. Check:
-   - withdrawn earlier statement is not separately punished after explicit correction;
-   - missing content has no fabricated timestamp;
-   - necessary conditions are not strengthened into sufficient conditions;
-   - source/audio links point to real preserved evidence;
-   - supported findings do not show targeted remediation;
-   - actionable remediation appears only with meaningful repair guidance.
-9. If a mechanical near-silence candidate appears, owner must replay/confirm it before delivery interpretation. Empty/insufficient delivery findings are a valid conservative outcome.
-10. Use targeted reteaching only if a real actionable gap exists. If useful, perform at most one partial or full re-explanation and confirm it creates a new attempt while preserving the original.
-11. Use Apply; verify it is a new related situation and does not claim long-term transfer/mastery.
-12. Export locally and inspect that selected source, audio, raw/corrected transcript and reports are present. Test delete/history only if it does not destroy evidence still needed for assessment.
-13. Stop the server after the walkthrough.
+Complex-layout mismatch is not automatically a product-wide failure if preview exposes it and the owner can select/correct a bounded source. Silent corruption or unintended raw-content transmission is a stop.
 
-## 5. Source-ingestion checks during owner validation
+## Evidence
 
-Record whether:
-- chosen file is accepted locally;
-- extracted text ordering/content is understandable enough for the selected section;
-- preview makes limitations visible before Learn;
-- selected text, not the raw full document, becomes the learning source;
-- no unexpected model/provider call occurs during import;
-- scanned/image-only/complex-layout limitations are understandable if encountered.
+After the run, Codex may commit only sanitized step-level PASS / FAIL / UNKNOWN, safe request/model/cost metadata, and non-sensitive review notes/screenshots as needed. Do not commit raw owner audio or raw owner files.
 
-A complex document extraction mismatch is not automatically a product-wide failure if the preview clearly exposes it and the owner can select/correct a bounded source. Silent corruption or sending unintended raw content is a stop.
-
-## 6. Evidence / privacy
-
-After the run, Codex may commit only sanitized validation evidence that the owner permits:
-- step-level PASS / FAIL / UNKNOWN;
-- safe request/model/cost metadata;
-- sanitized text excerpts only if needed and owner-approved;
-- non-sensitive screenshots only if needed.
-
-Do not commit owner raw audio, raw owner files, API keys, `.env`, browser profiles, private client files or sensitive source text.
-
-The owner should not be asked to manually upload a review ZIP. Private feature-branch sync remains the review path.
-
-## 7. Stop conditions
+## Stop conditions
 
 Stop and return to MASTER if any of these occurs:
-- imported raw file is unexpectedly sent to the model/provider or persisted contrary to the contract;
-- source extraction silently substitutes/corrupts critical meaning without an understandable preview;
-- invalid/unconfirmed critical ASR changes meaning and cannot be safely corrected through replay;
-- content diagnosis materially contradicts confirmed transcript/source;
-- source/audio/timestamp evidence is fabricated or misattached;
-- supported feedback exposes knowledge remediation despite R4 guard;
-- meaningless repair guidance becomes an actionable route;
-- unexpected repeated API retry would be required;
+- raw imported file is unexpectedly sent to provider or persisted contrary to the contract;
+- extraction silently corrupts critical meaning without an understandable preview;
+- extractor/runtime guard fails;
+- critical ASR meaning error cannot be safely corrected;
+- diagnosis materially contradicts confirmed transcript/source;
+- evidence is fabricated or misattached;
+- remediation gating regresses;
+- repeated API retry is required;
 - budget/credential/storage guard fails;
-- product loses original audio or corrupts attempt/source identity.
+- original audio or source/attempt identity is lost or corrupted.
 
-Minor copy/layout friction is recorded for later prioritization but is not automatically a stop unless it blocks the coherent journey.
+Minor copy/layout friction is recorded but is not automatically a stop.
 
-## 8. Acceptance decision
-
-After execution, MASTER classifies findings as:
-- Must Fix;
-- User Decision Needed;
-- Future Optional.
+## Acceptance decision
 
 Possible outcomes:
 - `OWNER VALIDATION PASS — READY FOR NEXT PRODUCT DECISION`;
 - `OWNER VALIDATION PASS WITH MUST FIX`;
 - `OWNER VALIDATION BLOCKED`.
 
-No merge/release/external-user stage follows automatically.
+No merge/release/external-user step follows automatically.
 
-## 9. Current state classification
+## State classification
 
-Completed: engineering build/readiness through R4; SOURCE-INGESTION-01 behavior and current-machine tests; owner approval for the walkthrough.
+Completed: engineering readiness through R4; SOURCE-INGESTION-01 + portability recovery; owner approval.
 
-Verified: source-ingestion remote `dc4893c...`; extraction 6/6; Node 40/40; Edge 23/23; zero new paid calls; known portability defect in extractor launcher.
+Verified: remote `a99d380...`; extraction 6/6; Node 42/42; Edge 23/23; pinned repo-owned extractor setup; zero new paid calls in portability recovery.
 
-Not Done: SOURCE-INGESTION-01R portability fix; real owner file + microphone walkthrough; post-run MASTER review.
+Not Done: actual owner file + microphone walkthrough and post-run MASTER review.
 
-Must Fix before walkthrough: remove the private Codex runtime dependency and pass the bounded portability regression.
+Must Fix: none known before execution.
 
-User Decision Needed: none for the narrow portability recovery. A new decision is needed only if recovery hits a larger dependency/packaging boundary.
+User Decision Needed: none to resume; approval is already satisfied. New decision only if execution hits a retained boundary.
 
-Future Optional: broader devices, calibrated alignment/acoustics, OCR/layout-aware extraction, external learners and learning-effect evaluation.
+Future Optional: installer UX, broader devices, calibrated alignment/acoustics, OCR/layout-aware extraction, external learners and learning-effect evaluation.
