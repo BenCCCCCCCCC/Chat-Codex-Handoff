@@ -1,123 +1,109 @@
 # Current State
 
-Updated: 2026-09-11
+Updated: 2026-09-12
 Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**SOURCE-INGESTION-01 REMOTE REVIEWED / PARTIAL ACCEPTED — PORTABILITY MUST FIX / OWNER-VALIDATION-01 PAUSED**
+**SOURCE-INGESTION-01R BLOCKER CLASSIFIED / MASTER DEPENDENCY DECISION MADE — PRODUCT-LOCAL VENV + PINNED PYPDF AUTHORIZED / OWNER-VALIDATION-01 PAUSED**
 
-Active product remains **Study-first + in-product spoken teach-back** with:
+Active product remains **Study-first + in-product spoken teach-back**:
 
 `Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`
 
-and now adds a bounded source-ingestion entry:
+with source entry:
 
-`MD/TXT/PDF/DOCX/PPTX -> local extraction -> preview/selection -> existing Learn`.
+`MD/TXT/PDF/DOCX/PPTX -> local extraction -> preview/selection -> Learn`.
 
-MASTER directly reviewed private `prototype/study-teachback-v0.1` at remote HEAD:
+Latest feature checkpoint remains:
+
+`prototype/study-teachback-v0.1`
 
 `dc4893c5ca146037c8a498755854b3ce5cb73c62`
 
-The prior BUILD-01R4 engineering state remains accepted. OWNER-VALIDATION-01 is still approved in principle but is now **PAUSED** because SOURCE-INGESTION-01 introduced one product-runtime portability defect that should be fixed before the real owner walkthrough.
+No feature-branch change occurred during the portability probe because Codex correctly stopped before installing a dependency.
 
 ## Authority
 
-Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
+Repo `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
 1. `docs/master/CURRENT_STATE.md`
 2. `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/SOURCE_INGESTION_01R_PORTABILITY.md` — active narrow Must Fix
+3. `docs/research/strategy-reset-01/SOURCE_INGESTION_01R_PORTABILITY.md` — active recovery with dependency decision
 4. `docs/research/strategy-reset-01/OWNER_VALIDATION_01.md` — approved but paused
-5. `docs/research/strategy-reset-01/BUILD_01R4_FEEDBACK_ACTION_GATING.md` — PASS / closed
-6. earlier R3 / BUILD-01 contracts only as evidence boundaries.
+5. R4/R3/BUILD-01 only as evidence boundaries.
 
-## SOURCE-INGESTION-01 — accepted evidence
-
-GitHub comparison shows the new feature HEAD is a normal two-commit descendant of accepted R4 checkpoint `09698dfb...`.
+## SOURCE-INGESTION-01 accepted state
 
 Accepted at current-machine engineering scope:
-- `.md/.txt/.pdf/.docx/.pptx` import;
-- local extraction before model use;
-- preview + explicit selection into the existing maximum-5000-character source editor;
-- no automatic model call when a file is imported;
-- raw file/full preview not persisted as learning history;
-- TXT/MD strict text decoding; DOCX/PPTX ZIP/XML extraction without executing macros/external relationships; PDF text extraction only;
-- scanned/image-only PDF has no OCR fallback;
-- 10 MB input, 30 MB Office archive expansion, 100 page/slide and 200k extracted-character limits; 15-second extractor timeout;
-- Python extraction **6/6 PASS**;
+- `.md/.txt/.pdf/.docx/.pptx` local extraction;
+- preview + explicit selection before Learn;
+- no automatic provider call on import;
+- no raw document persistence;
+- no OCR;
+- extraction **6/6 PASS**;
 - Node **40/40 PASS**;
-- Edge **23/23 PASS** at actual Edge / synthetic-media / stub-provider scope;
-- **0 new paid calls**, no ledger reset/relabel.
+- Edge **23/23 PASS**;
+- **0 new paid calls** and unchanged ledger.
 
-The feature correctly keeps file import separate from OpenAI provider calls until the user explicitly starts Learn. The browser UI also warns that scans/images/charts/comments/notes are outside extraction scope and requires preview checking.
+## Portability probe result
 
-## Must Fix — extractor runtime portability
+Codex removed nothing and made no paid call during the probe. It verified:
+- ordinary `py -3` / `python` resolve to normal Python **3.14.6**;
+- ordinary Python does **not** have `pypdf` installed;
+- therefore the current hard-coded Codex-private runtime cannot simply be replaced with global Python without an explicit dependency decision.
 
-`study-teachback-app/ingestion.mjs` currently launches Python from the hard-coded private development path:
+This is a packaging/setup blocker, not a failure of the ingestion UX or extraction algorithms already tested.
 
-`%USERPROFILE%/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe`
+## MASTER dependency decision
 
-and relies on `pypdf` available inside that Codex runtime.
+The dependency decision stays within the already-approved SOURCE-INGESTION feature scope and is local/free/auditable. MASTER therefore resolves it without sending another ordinary implementation decision to the owner.
 
-This is not accepted as a product-owned runtime contract. It can break when Codex/runtime/cache state changes and would make owner validation depend on a private dev environment rather than the application itself.
+Approved recovery:
+- create a product-owned repo-local venv, normally `study-teachback-app/.venv`;
+- bootstrap it from ordinary Python 3.14.6;
+- install **`pypdf==6.18.0`** explicitly as a one-time setup step;
+- pin/document the dependency and preferably verify the published wheel hash;
+- do not commit the venv;
+- normal runtime must never silently install/download packages;
+- runtime uses the product-local venv (or an explicit non-secret configured Python path) and fails closed if unavailable;
+- no references to `.cache/codex-runtimes`, `codex-primary-runtime`, ChatGPT/Codex internals or private app files;
+- no raw-file provider fallback, no OCR, no provider/model change.
 
-The feature-branch `study-teachback-app/README.md` is also stale: it still says there is no normal file-upload workflow and reports older engineering test counts.
+Official package check on 2026-09-12: pypdf 6.18.0 is current, BSD-3-Clause, requires Python >=3.9 and lists Python 3.14 support.
 
-Active recovery contract:
+## Recovery acceptance
 
-`docs/research/strategy-reset-01/SOURCE_INGESTION_01R_PORTABILITY.md`
+SOURCE-INGESTION-01R passes when:
+- product-local venv/setup metadata is explicit and repo-owned;
+- hard-coded private runtime dependency is gone;
+- missing venv/dependency fails closed without provider or ledger activity;
+- README accurately documents file ingestion, setup, formats, limits and no-OCR/complex-layout constraints;
+- extraction + Node + Edge regressions pass;
+- zero Whisper/Luna calls and ledger unchanged;
+- sanitized checkpoint fast-forward pushed to the same private feature branch.
 
-Required outcome:
-- no hard-coded Codex/ChatGPT private runtime path;
-- explicit supported extractor runtime + safe fail-closed behavior when unavailable;
-- no silent install/download/provider fallback;
-- preserve local-only extraction and current safety/size limits;
-- truthful README/runtime prerequisite documentation;
-- zero new paid calls;
-- extraction/Node/Edge regressions remain green.
+## Owner validation
 
-## Previously accepted engineering state — unchanged
-
-Do not reopen unless the portability recovery changes it:
-- BUILD-01R4 Node 38/38 and Edge 22/22 before ingestion;
-- real Whisper transcript + strict segment timestamp transport PASS;
-- word timing PARTIAL, zero-duration provider values preserved rather than fabricated;
-- critical timing uncertainty falls back to validated segment replay + human confirmation;
-- corrected bounded Luna necessary/sufficient verdict challenge 7/7 after retained failures were fixed rather than hidden;
-- content/delivery separation and R4 remediation gating;
-- original audio saved before ASR;
-- export/quota/per-attempt-delete/pending-navigation/history/expiry engineering checks at stated scope.
-
-Latest reviewed API ledger remains the pre-ingestion value because ingestion made no paid/provider calls:
-- known conservative cost `US$0.01179245`;
-- exposure `US$0.06859995 / US$5`;
-- BUILD-01 new-cash ceiling `US$10`;
-- four historical unsettled reservations preserved.
-
-## Owner validation status
-
-OWNER-VALIDATION-01 is **PAUSED**, not cancelled. Do not execute the microphone walkthrough from `dc4893c...` until SOURCE-INGESTION-01R passes MASTER review.
-
-After recovery, resume the already-approved owner protocol from the new feature HEAD and exercise one low-risk imported file through preview/selection before the Learn + microphone journey.
+OWNER-VALIDATION-01 remains **PAUSED**, not cancelled. After SOURCE-INGESTION-01R passes MASTER review, resume the already-approved walkthrough from the new HEAD and begin with one low-risk imported file -> preview/selection -> Learn before the microphone portion.
 
 ## State Summary
 
-Completed: BUILD-01 through R4; SOURCE-INGESTION-01 feature implementation and current-machine engineering tests; private remote review.
+Completed: BUILD-01 through R4; SOURCE-INGESTION-01 feature implementation/current-machine tests; portability probe; dependency decision.
 
-Verified: remote `dc4893c...`; extraction 6/6; Node 40/40; Edge 23/23; no new paid calls; local preview/selection architecture; hard-coded Codex runtime dependency.
+Verified: `dc4893c...`; extraction 6/6; Node 40/40; Edge 23/23; zero paid calls; normal Python 3.14.6 available; `pypdf` absent from normal Python.
 
-Likely: source-ingestion behavior is suitable for the v0.1 flow once its runtime dependency is product-owned or explicitly supported.
+Likely: a repo-owned venv with one pinned pure-Python PDF dependency is sufficient to remove the current portability blocker without changing product architecture.
 
-Unknown: portability outside the current Codex runtime; owner real-file extraction quality; complex PDF/document reading order; real owner microphone journey.
+Unknown: final venv setup/regression result; owner real-file extraction; owner microphone journey.
 
-Not Done: SOURCE-INGESTION-01R portability recovery; README/runtime documentation correction; resumed OWNER-VALIDATION-01; external validation/release.
+Not Done: venv implementation/setup, README correction, rerun regressions, resumed OWNER-VALIDATION-01.
 
-Must Fix: remove the private Codex runtime dependency before owner validation.
+Must Fix: remove private Codex runtime dependency using the authorized product-local venv contract.
 
-User Decision Needed: none for the narrow portability recovery. New decision only if recovery requires a materially larger packaging/dependency architecture or another retained boundary.
+User Decision Needed: **none** for this bounded dependency/setup recovery. New owner decision only if a materially larger packaging architecture, new provider/model, paid expansion, release/public action or other retained boundary becomes necessary.
 
-Future Optional: OCR, richer page/slide provenance UI, layout-aware extraction, broader document/device compatibility, external learner study and learning-effect evaluation.
+Future Optional: installer UX, OCR, richer page/slide provenance, layout-aware parsing, broader device/document support.
 
 ## Next Smallest Step
 
-**Codex executes SOURCE-INGESTION-01R from `dc4893c...`: remove the private Codex runtime dependency without changing provider/model/data scope, rerun extraction/Node/Edge tests with zero paid calls, push a sanitized checkpoint, and return exact SHA for MASTER review.**
+**Codex resumes SOURCE-INGESTION-01R from `dc4893c...`, creates the repo-owned venv, installs pinned pypdf once, migrates the launcher, reruns extraction/Node/Edge with zero paid calls, and pushes a sanitized checkpoint for MASTER review.**
