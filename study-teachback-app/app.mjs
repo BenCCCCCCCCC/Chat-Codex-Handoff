@@ -8,7 +8,7 @@ const reveal=(id,show=true)=>{$(id).hidden=!show;};
 function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
 function button(label,fn,cls='quiet'){const b=el('button',label,cls);b.onclick=()=>act(fn);return b;}
 async function act(fn){try{await fn();}catch(e){notice(friendly(e.message));}}
-function friendly(code){const messages={ASR_REVIEW_REQUIRED:'请先回听并确认转写，尤其是否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请逐段完整回听后再确认。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
+function friendly(code){const messages={FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先回听并确认转写，尤其是否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请逐段完整回听后再确认。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
 async function save(){if(!topic||deleted.has(topic.id))return;try{await db.put(topic);memoryOnly=false;reveal('storageRecovery',false);}catch{memoryOnly=true;reveal('storageRecovery');throw new Error('STORAGE_FAILED');}}
 async function api(path,body,headers={}){
   if(controller)throw new Error('REQUEST_IN_PROGRESS');
@@ -35,8 +35,34 @@ async function teach(message,mode='learn',focus=null){
     await save();renderTopic();notice('可以继续问，也可以随时“我来讲讲”。');
   }catch(e){notice(friendly(e.message));throw e;}
 }
+let importPending=false;
+function clearImport(){ $('sourceFile').value='';$('extractedText').value='';$('importStatus').textContent='';reveal('importPreview',false); }
+$('clearImport').onclick=clearImport;
+$('sourceFile').onchange=()=>act(async()=>{
+  const file=$('sourceFile').files[0];if(!file)return;
+  if(controller||importPending)return notice('请先等当前处理完成。');
+  clearImport();importPending=true;$('learn').disabled=true;$('sourceFile').disabled=true;
+  try{
+    if(file.size>10*1024*1024)throw new Error('FILE_TOO_LARGE');
+    notice('正在本机提取材料……');
+    const result=await api('/api/extract',await file.arrayBuffer(),{'X-Source-Format':file.name.split('.').pop().toLowerCase()});
+    $('extractedText').value=result.blocks.map(b=>b.text).join('\n\n');
+    $('importStatus').textContent=`已提取 ${result.blocks.length} 个正文/页面/幻灯片区块。请核对顺序和空白页；选中所需文字后使用，尚未发送给模型。`;
+    if(!$('title').value.trim())$('title').value=file.name.replace(/\.[^.]+$/,'').slice(0,120);
+    reveal('importPreview');notice('请预览并选择这一轮要学习的文字。');
+  }finally{importPending=false;$('learn').disabled=false;$('sourceFile').disabled=false;}
+});
+function useImported(all){
+  const preview=$('extractedText');const selected=(all?preview.value:preview.value.slice(preview.selectionStart,preview.selectionEnd)).trim();
+  if(!selected)return notice('请先在预览中选中文字。');
+  if(selected.length>5000)return notice('这一轮最多 5,000 字，请缩小选段；不会自动截断材料。');
+  $('source').value=selected;notice('选段已放入学习材料。可继续编辑，点击“开始一起学”才会发送给模型。');
+}
+$('useSelection').onclick=()=>useImported(false);$('useAll').onclick=()=>useImported(true);
 $('learn').onclick=()=>act(async()=>{
+  if(importPending||controller)return;
   if(!$('title').value.trim()||!$('source').value.trim())return notice('先写一个主题，再放入这一轮的有限材料。');
+  clearImport();
   topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim(),text:$('source').value.trim()},goals:[],messages:[],attempts:[],mode:'learn'};await save();renderTopic();await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。');
 });
 $('chatForm').onsubmit=e=>{e.preventDefault();act(async()=>{const message=$('chat').value.trim();if(!message)return;$('chat').value='';if(topic.mode==='apply'&&topic.apply){topic.apply.answer=message;await teach(message,'apply_answer',topic.apply.question);}else await teach(message,topic.mode==='repair'?'repair':'learn',topic.focus??null);});};
@@ -144,7 +170,7 @@ $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;abortPending();d
 async function history(){if(memoryOnly)throw new Error('STORAGE_FAILED');if(processing)throw new Error('REQUEST_IN_PROGRESS');if(record)throw new Error('RECORDING_ACTIVE');if(controller)throw new Error('REQUEST_IN_PROGRESS');reveal('history');const list=$('historyList');list.replaceChildren();for(const t of await db.all()){const row=el('div');row.append(el('strong',t.source.title),el('p',`${new Date(t.createdAt).toLocaleString()} · ${t.attempts.length} 次讲解`,'muted'),button('继续学习',()=>{if(!canNavigate())return;topic=t;current=null;renderTopic();reveal('attemptPanel',false);reveal('history',false);}));for(const a of t.attempts)row.append(button(`${a.kind==='partial'?'局部':'完整'} · ${new Date(a.createdAt).toLocaleTimeString()}`,()=>{if(!canNavigate())return;topic=t;current=a;renderTopic();renderAttempt();reveal('history',false);}));row.append(button('删除主题',async()=>{abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');}await history();},'danger'));list.append(row);}if(!list.children.length)list.append(el('p','还没有保存的学习记录。'));$('history').scrollIntoView({behavior:'smooth'});}
 $('historyButton').onclick=()=>act(history);
 function canNavigate(){if(memoryOnly){notice(friendly('STORAGE_FAILED'));return false;}if(record||controller||processing){notice(friendly('REQUEST_IN_PROGRESS'));return false;}return true;}
-function newTopic(){if(!canNavigate())return false;abortPending();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');$('title').value='';$('source').value='';return true;}
+function newTopic(){if(importPending)return false;if(!canNavigate())return false;abortPending();clearImport();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');$('title').value='';$('source').value='';return true;}
 $('newTopic').onclick=newTopic;$('revise').onclick=()=>{const s=topic.source;if(!newTopic())return;$('title').value=s.title;$('source').value=s.text;notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');};
 $('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
 await act(async()=>{db=await openStore();await updateBudget();const all=await db.all();if(all.length){topic=all.at(-1);renderTopic();}});

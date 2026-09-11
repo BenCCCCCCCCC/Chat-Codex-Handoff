@@ -1,4 +1,5 @@
 import http from 'node:http';
+import { extractSource } from './ingestion.mjs';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { semantic, transcribe, ledger } from './provider.mjs';
@@ -19,13 +20,14 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
     }
     if(req.method==='GET' && path==='/api/status')return json(200,{keyConfigured:!!process.env.OPENAI_API_KEY,ledger:book.summary(),models:['whisper-1','gpt-5.6-luna']});
     if(req.method!=='POST'||req.headers.origin!==origin||req.headers['x-study-request']!=='1')return json(403,{error:'ORIGIN_REJECTED'});
-    if(!['/api/teach','/api/diagnose','/api/asr','/api/register'].includes(path))return json(404,{error:'NOT_FOUND'});
+    if(!['/api/teach','/api/diagnose','/api/asr','/api/register','/api/extract'].includes(path))return json(404,{error:'NOT_FOUND'});
     if(busy)return json(409,{error:'REQUEST_IN_PROGRESS'});
     busy=true; const controller=new AbortController();res.on('close',()=>{if(!res.writableEnded)controller.abort();});
     try {
-      const limit=path==='/api/asr'?5_760_044:80000;const parts=[];let length=0;
+      const limit=path==='/api/extract'?10*1024*1024:path==='/api/asr'?5_760_044:80000;const parts=[];let length=0;
       for await(const part of req){length+=part.length;requireValue(length<=limit,'INPUT_TOO_LARGE');parts.push(part);}
       const bytes=Buffer.concat(parts);
+      if(path==='/api/extract')return json(200,await extractSource(bytes,req.headers['x-source-format']));
       if(path==='/api/asr')return json(200,await asrCall(bytes,req.headers['x-attempt-id'],{signal:controller.signal}));
       requireValue(req.headers['content-type']==='application/json','CONTENT_TYPE');
       const b=JSON.parse(bytes.toString('utf8'));
