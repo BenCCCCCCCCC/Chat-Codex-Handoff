@@ -2,79 +2,87 @@
 
 Date: 2026-09-12
 Role: 00 MASTER
-Status: MASTER DECISION RECORDED / RESUME AUTHORIZED — PRODUCT-LOCAL VENV + PINNED PYPDF
+Status: **PASS / MASTER-ACCEPTED / CLOSED**
 
 ## Trigger
 
-MASTER reviewed private `prototype/study-teachback-v0.1` at `dc4893c5ca146037c8a498755854b3ce5cb73c62`.
+SOURCE-INGESTION-01 added local `.md/.txt/.pdf/.docx/.pptx` extraction + preview/selection before Learn. MASTER found the first implementation depended on a Codex-private Python runtime. A normal Python 3.14.6 probe then showed `pypdf` was absent, so MASTER authorized a repo-owned local venv with pinned `pypdf==6.18.0`.
 
-SOURCE-INGESTION-01 is accepted at current-machine engineering scope:
-- `.md/.txt/.pdf/.docx/.pptx` local extraction;
-- preview/explicit selection before existing Learn;
-- no automatic provider call on import;
+## Reviewed checkpoint
+
+Private feature branch:
+
+`prototype/study-teachback-v0.1`
+
+Accepted remote HEAD:
+
+`a99d380473a1eac45ada67022c589d654db9c7cd`
+
+GitHub comparison shows this is one normal descendant commit from `dc4893c5ca146037c8a498755854b3ce5cb73c62`.
+
+## Accepted implementation
+
+Runtime contract:
+- repo-owned local venv: `study-teachback-app/.venv`;
+- bootstrap/setup interpreter: ordinary Python 3.14.6;
+- pinned dependency: `pypdf==6.18.0`;
+- wheel SHA256 pinned in `requirements-extractor.txt`: `05b762b77bcb9dcb4a7c91fcf5dded585b25bee7269ab3d3001d7c55fa1b324b`;
+- one-time explicit setup used hash verification, binary-only and no-deps;
+- `.venv` is ignored and not committed;
+- normal runtime does not auto-install/download anything;
+- default launcher is repo-relative `.venv/Scripts/python.exe` on Windows, with optional absolute non-secret `STUDY_PYTHON` override;
+- no active `.cache/codex-runtimes`, `codex-primary-runtime`, ChatGPT/Codex private runtime or private app path dependency;
+- extractor subprocess retains `-I`, restricted environment and 15-second timeout;
+- missing interpreter fails `EXTRACTOR_SETUP_REQUIRED`;
+- missing/wrong pypdf fails `EXTRACTOR_DEPENDENCY_REQUIRED`;
+- missing setup/dependency never invokes model/provider and does not alter ledger.
+
+Source-ingestion contract remains unchanged:
+- MD/TXT/PDF/DOCX/PPTX local extraction;
+- preview + explicit selection before Learn;
+- no provider/model call merely from file import;
+- no raw-file cloud fallback;
 - no raw document persistence in learning history;
-- no OCR;
-- extraction 6/6, Node 40/40, Edge 23/23;
-- zero new paid calls and unchanged ledger.
+- 10 MB input, 30 MB Office archive expansion, 100 pages/slides, 200k extracted characters, 5k selected source limit;
+- no OCR; complex layout/reading order must be reviewed in preview.
 
-The current launcher hard-codes a Codex-private Python runtime. Portability recovery correctly stopped after proving ordinary `py -3` / `python` point to Python 3.14.6 but do not contain `pypdf`.
+## Verification
 
-## MASTER dependency decision
+Accepted evidence:
+- extraction tests: **6/6 PASS**;
+- Node: **42/42 PASS**;
+- Edge: **23/23 PASS** at actual Edge / synthetic media / stub-provider scope;
+- real absent-interpreter and empty-venv dependency cases fail closed over HTTP;
+- provider invocation count remains zero in setup/import failure regressions;
+- live ledger unchanged;
+- **0 new paid calls**;
+- README updated with actual file-ingestion workflow, setup prerequisite, pinned dependency, supported formats, limits and no-OCR/complex-layout limitation;
+- historical initial static-test failure was retained, corrected, and final suite passed.
 
-This dependency choice is within the already-approved SOURCE-INGESTION scope and is local, free, auditable, reversible, and not a provider/model/data-scope expansion. It does not require a new owner product decision.
+Latest live ledger remains known conservative cost `US$0.01179245`, exposure `US$0.06859995 / US$5`, with four historical unsettled reservations preserved.
 
-Use a **product-local virtual environment** owned by this repo/app, not Codex/ChatGPT internals and not the global Python site-packages.
+## Scope interpretation
 
-Approved setup:
-- bootstrap interpreter: normal `py -3` / Python 3.14.6;
-- local venv: `study-teachback-app/.venv` (or an equivalently repo-relative product-local path, documented exactly);
-- dependency: `pypdf==6.18.0` only for PDF text extraction;
-- pin the dependency in a committed requirements/setup file;
-- prefer hash-verified installation for reproducibility; current PyPI wheel SHA256: `05b762b77bcb9dcb4a7c91fcf5dded585b25bee7269ab3d3001d7c55fa1b324b`;
-- do not commit the venv itself; add it to `.gitignore`;
-- no optional pypdf extras unless separately justified.
+This closes the specific private-runtime portability defect for the tested Windows/local-alpha environment. It is not proof of installer quality or broad cross-platform compatibility. `.venv` setup remains an explicit developer/alpha prerequisite.
 
-Official PyPI was checked on 2026-09-12: pypdf 6.18.0 is the current release, BSD-3-Clause, requires Python >=3.9, and explicitly lists Python 3.14 support.
-
-## Runtime contract
-
-At runtime:
-1. use the documented product-local venv Python, or an explicit non-secret `STUDY_PYTHON`-style override if Codex chooses to support one;
-2. never inspect or invoke `.cache/codex-runtimes`, `codex-primary-runtime`, ChatGPT/Codex app internals, credentials, or private application files;
-3. never auto-download or silently install packages during normal app runtime;
-4. if the product-local extractor runtime or `pypdf` is absent, fail closed with a safe user-facing setup/dependency error and do not call a provider;
-5. keep `python -I` or equivalent isolation, restricted subprocess environment, 15s timeout, 10 MB input, 30 MB Office expansion, 100 pages/slides, 200k extracted chars;
-6. never upload the raw file to OpenAI as a fallback.
-
-A **one-time explicit setup/install step** executed now by Codex is authorized. This is installation/setup, not runtime auto-install behavior.
-
-## Required implementation and verification
-
-Codex may now:
-- create the product-local venv using ordinary Python 3.14.6;
-- explicitly install the pinned `pypdf==6.18.0` into that venv;
-- replace the hard-coded private-runtime launcher with the repo-owned venv contract;
-- add committed dependency/setup metadata and `.gitignore` coverage;
-- update README with file ingestion, setup prerequisite, supported formats/limits, no OCR/complex-layout limitation and current tests;
-- add regressions proving no Codex-private path remains and missing venv/dependency fails closed with zero provider/ledger effects;
-- rerun extraction + Node + Edge suites;
-- make zero Whisper/Luna calls;
-- normal fast-forward push sanitized evidence to the same private feature branch.
-
-Do not vendor the whole Python runtime, add a package manager framework, add OCR, or change provider/model architecture in this recovery.
+Other-machine/non-Windows behavior, richer packaging/installer UX, OCR and layout-aware extraction remain unverified/out of scope.
 
 ## Owner-validation consequence
 
-OWNER-VALIDATION-01 remains approved but PAUSED until this recovery passes MASTER review. After PASS, resume from the new HEAD and include one low-risk file import -> preview/selection before the existing Learn + microphone walkthrough.
+OWNER-VALIDATION-01 is now **RESUMED**. Existing owner approval remains valid because this recovery changed no provider/model/budget/data boundary.
+
+The resumed walkthrough should begin with one low-risk imported file -> preview/selection -> Learn, then proceed through the existing real-owner microphone journey.
 
 ## State classification
 
-Completed: SOURCE-INGESTION feature behavior and current-machine tests; ordinary Python discovery.
+Completed: private-runtime removal, repo-owned extractor setup, regression and README correction.
 
-Verified: ordinary Python 3.14.6 exists; `pypdf` is absent there; current feature still depends on Codex-private runtime at `dc4893c...`.
+Verified: `a99d380...`; pypdf 6.18.0 pinned/hash setup; extraction 6/6; Node 42/42; Edge 23/23; zero paid calls; unchanged ledger.
 
-Must Fix: migrate PDF extraction to the repo-owned local venv contract and rerun regressions.
+Must Fix: none remaining in this recovery.
 
-User Decision Needed: none for this bounded dependency/setup decision.
+Not Done: real owner file + microphone walkthrough; broader packaging/device/document compatibility.
 
-Future Optional: installer/packaging UX, OCR, richer provenance/layout-aware extraction, wider document/device compatibility.
+User Decision Needed: none for resuming the already-approved OWNER-VALIDATION-01.
+
+Future Optional: installer UX, OCR, richer page/slide provenance, layout-aware parsing, wider OS/device compatibility.
