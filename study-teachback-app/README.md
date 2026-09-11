@@ -1,3 +1,5 @@
+> BUILD-01R4 feedback-action fix: Node 38/38, Edge 22/22, zero new paid calls. Supported/delivery have no knowledge-remediation buttons; invalid actionable focus fails closed. [R4 packet](../artifacts/study-teachback/build-01r4/DELIVERY_PACKET.md). Owner validation awaits MASTER review/opening.
+
 # 知而能讲 — Study-first + in-app teach-back v0.1
 
 **IMPLEMENTED / ENGINEERING-TESTED / READY FOR INTEGRATED OWNER VALIDATION** at the scope in the [R3 Delivery Packet](../artifacts/study-teachback/build-01r3/DELIVERY_PACKET.md). Physical owner walkthrough is prepared, not performed. No learning-efficacy or calibrated-alignment claim.

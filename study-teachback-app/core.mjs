@@ -2,6 +2,19 @@ export const RETENTION_MS = 7 * 86400000;
 export function requireValue(ok, code) { if (!ok) throw new Error(code); }
 export function text(value, max = 12000) { requireValue(typeof value === 'string' && value.trim().length > 0 && value.length <= max, 'INVALID_TEXT'); return value; }
 export function identifier(value) { requireValue(typeof value === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(value), 'INVALID_ID'); return value; }
+export function repairFocus(value) {
+  requireValue(typeof value==='string'&&value.length<=500,'INVALID_REPAIR_FOCUS');
+  const clean=value.replace(/[\p{Cf}\p{Cc}]/gu,'').trim();
+  const placeholder=clean.replace(/[^\p{L}\p{N}]/gu,'').toLowerCase();
+  requireValue(/\p{L}/u.test(clean)&&! /^(?:na|none|null|undefined|unknown|无|暂无|不适用|无需修正|无需补救|暂无建议|无法判断|不确定)$/u.test(placeholder),'INVALID_REPAIR_FOCUS');
+  return clean;
+}
+// Unknown is actionable only with concrete, non-placeholder guidance. No delivery
+// or supported finding can enter the knowledge-remediation route.
+export function remediationFocus(f,channel) {
+  if(channel!=='content'||!['missing','incorrect','unknown'].includes(f?.status))return null;
+  return repairFocus(f.repair);
+}
 export function sourceValue(s) {
   requireValue(s && typeof s === 'object', 'SOURCE_REQUIRED');
   const result={ id: identifier(s.id), text: text(s.text, 5000), title: text(s.title, 120) };
@@ -19,7 +32,7 @@ export function attemptValue(a) {
   requireValue(['none','keywords','source'].includes(a.assistance), 'INVALID_ASSISTANCE');
   requireValue(['full','partial'].includes(a.kind), 'INVALID_ATTEMPT_KIND');
   return { id: identifier(a.id), sourceId: identifier(a.sourceId), transcriptVersion: identifier(a.transcriptVersion), duration: a.duration, spans, assistance: a.assistance, kind: a.kind,
-    focus: a.kind === 'partial' ? text(a.focus, 500) : null, reviewed: a.reviewed === true, interrupted: a.interrupted === true };
+    focus: a.kind === 'partial' ? repairFocus(a.focus) : null, reviewed: a.reviewed === true, interrupted: a.interrupted === true };
 }
 export function contentInput(source, attempt) {
   const s = sourceValue(source), a = attemptValue(attempt);
@@ -43,6 +56,7 @@ export function validateFindings(v, source, attempt, channel, events = []) {
     exactKeys(f,['status','message','sourceQuote','spanId','quote','eventId','repair']);
     requireValue(['supported','missing','incorrect','unknown','observation'].includes(f.status),'INVALID_STATUS');
     text(f.message,1000); text(f.repair,1000); text(f.sourceQuote,600);
+    remediationFocus(f,channel);
     requireValue(source.text.includes(f.sourceQuote),'INVALID_SOURCE_QUOTE');
     if (channel === 'content') requireValue(f.eventId === null && f.status !== 'observation','CHANNEL_LEAK');
     if (channel === 'delivery') requireValue(f.status === 'observation' && events.some(e=>e.id===f.eventId),'INVALID_EVENT');

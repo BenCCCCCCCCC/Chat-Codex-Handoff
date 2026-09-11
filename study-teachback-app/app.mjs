@@ -1,4 +1,4 @@
-import { observations, waveBytes, revisedTranscript, validateFindings } from './core.mjs';
+import { observations, waveBytes, revisedTranscript, validateFindings, remediationFocus, repairFocus } from './core.mjs';
 import { openStore } from './storage.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
 let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false;
@@ -24,6 +24,7 @@ function renderTopic(){
   $('question').textContent=topic.question??'';$('phase').textContent=topic.mode==='apply'||topic.mode==='apply_answer'?'APPLY · 换个情境试试':topic.mode==='repair'?'REPAIR · 再学这一点':'LEARN · 一起学';
 }
 async function teach(message,mode='learn',focus=null){
+  if(mode==='repair')focus=repairFocus(focus);
   const target=topic;target.messages.push({role:'user',text:message});target.mode=mode;await save();renderTopic();notice('正在一起梳理这段材料……');
   try{const r=await api('/api/teach',{source:target.source,mode,message,focus,history:target.messages.slice(0,-1)});
     if(deleted.has(target.id)||topic!==target)return;
@@ -40,7 +41,7 @@ $('learn').onclick=()=>act(async()=>{
 });
 $('chatForm').onsubmit=e=>{e.preventDefault();act(async()=>{const message=$('chat').value.trim();if(!message)return;$('chat').value='';if(topic.mode==='apply'&&topic.apply){topic.apply.answer=message;await teach(message,'apply_answer',topic.apply.question);}else await teach(message,topic.mode==='repair'?'repair':'learn',topic.focus??null);});};
 function prepare(kind='full',focus=null,parentId=null){
-  if(record)return;if(!topic)return;pending={kind,focus,parentId};reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'用自己的话说明这个概念、条件或过程。';$('recording').scrollIntoView({behavior:'smooth'});$('timer').textContent='00:00';
+  if(record)return;if(!topic)return;if(kind==='partial')focus=repairFocus(focus);pending={kind,focus,parentId};reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'用自己的话说明这个概念、条件或过程。';$('recording').scrollIntoView({behavior:'smooth'});$('timer').textContent='00:00';
 }
 $('explain').onclick=()=>prepare();$('fullAgain').onclick=()=>prepare('full',null,current?.id);
 $('cancelRecord').onclick=()=>{if(!record)reveal('recording',false);};
@@ -126,7 +127,8 @@ function renderFeedback(report){
   if(!report.findings.length)$('feedback').append(el('p','本次没有足够证据生成此类反馈。'));
   for(const f of report.findings){const card=el('article',undefined,'finding'),labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足',observation:'表达观察'};card.append(el('strong',labels[f.status]),el('p',f.message),el('blockquote',`材料：${f.sourceQuote}`));
     if(f.spanId){const span=latest(current).spans.find(s=>s.id===f.spanId);card.append(el('blockquote',`本次原话：${f.quote}`),button('回听对应原声',()=>play(span.start,span.end)));}else card.append(el('p','未表达内容没有可对应的音频时间点。','muted'));
-    card.append(button('再学这一点',async()=>{topic.focus=f.repair;await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',f.repair);$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',f.repair,current.id)));$('feedback').append(card);
+    let focus=null;try{focus=remediationFocus(f,report.channel);}catch{}
+    if(focus)card.append(button('再学这一点',async()=>{topic.focus=remediationFocus(f,report.channel);await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',remediationFocus(f,report.channel));$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',remediationFocus(f,report.channel),current.id)));$('feedback').append(card);
   }
 }
 $('apply').onclick=()=>act(()=>teach('给我一个新的、相关的应用情境，不要先公布答案。','apply'));

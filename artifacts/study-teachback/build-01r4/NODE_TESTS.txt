@@ -1,0 +1,46 @@
+✔ invalid provider timestamps retain allowlisted evidence before rejection (2.4436ms)
+✔ missing word timing degrades to PARTIAL; valid timestamps require human review (0.7564ms)
+✔ retained real supported + . . remains valid evidence but has no remediation (1.1841ms)
+✔ empty-equivalent, punctuation, invisible and placeholder actionable focus fails closed (3.4615ms)
+✔ valid missing incorrect unknown repair stays source/attempt/version bound (0.4909ms)
+✔ supported and all delivery statuses never expose knowledge remediation (0.1551ms)
+✔ direct Tutor repair request rejects invalid focus before provider invocation (57.7241ms)
+✔ ticket strengthening is schema-valid but cannot pass semantic fixture oracle (1.5714ms)
+✔ unsupported strengthening requires explicit rejection or uncertainty, never mixed support (0.3378ms)
+✔ correct paraphrase and final self-repair cannot pass with conflicting verdicts (0.1704ms)
+✔ one fixture gets fifth submission, sixth fails, prior reservations remain charged (67.3482ms)
+✔ ordinary and similar-named attempts still get only two submissions (49.481ms)
+✔ same in-memory credential gets same irreversible short fingerprint (1.9347ms)
+✔ error sanitizer redacts full/masked key, bearer, IDs and email; ignores unapproved fields (1.3755ms)
+✔ missing malformed errors and request headers fail closed (0.2612ms)
+✔ source and attempt versions are bound, acoustic labels excluded from content (2.5067ms)
+✔ all ASR including negation, number, condition, term inversions fail closed until replay confirmation (0.3286ms)
+✔ interrupted capture blocks content even if text confirmed (0.1581ms)
+✔ valid finding preserved; source/span/quote/time/schema fabrications rejected (1.2845ms)
+✔ missing content cannot receive a timestamp or span (2.5815ms)
+✔ delivery event must overlap real span and cannot issue knowledge judgment (0.2956ms)
+✔ ASR timestamps reject missing, reversed, out-of-range and non-finite values (0.4223ms)
+✔ silence/noise/clipping/decode failure are conservative, never validated VAD (9.2845ms)
+✔ long near-silence is only an acoustic candidate, not knowledge deficit (7.0632ms)
+✔ WAV duration guard enforces true PCM layout and 180s upper bound (49.4769ms)
+✔ corrected text is a separate version and is not a new recording; partial/full identities distinct (0.6904ms)
+✔ expiry removes seven-day records, preserves newer records and rejects undated records (0.2344ms)
+✔ reservation survives timeout and restart; retry does not create audio/attempt copies (25.7925ms)
+✔ atomic reservation rejects concurrent process lock and malformed ledger (3.484ms)
+✔ budget, request/token, 60 attempts and two ASR submissions limits fail closed (4170.5274ms)
+✔ only approved model and store=false are sent; failed API result keeps reserve (25.4694ms)
+✔ real ASR transport contract uses whisper timestamps; malformed response fails without losing reservation (34.5633ms)
+✔ HTTP loopback rejects foreign origin, host and arbitrary filesystem path without model calls (74.5913ms)
+✔ real fifth response preserves all provider values; segment PASS, 22 words PARTIAL (3.4177ms)
+✔ malformed words reversed, nonfinite, out-of-range and backwards rejected (0.834ms)
+✔ segments retain hard positive duration, finite range and order gates (0.4745ms)
+✔ critical unusable/missing word falls back to segment, diagnosis blocked before confirmation (1.1503ms)
+✔ missing word timing is PARTIAL and has no precise anchor (0.2388ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4649.9956
