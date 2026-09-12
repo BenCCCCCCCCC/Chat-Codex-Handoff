@@ -1,148 +1,165 @@
-# Active Handoff — LOCAL-LAUNCH-LIFECYCLE-DIAG-01
+# Active Handoff — OWNER-VALIDATION-01 PREPARED
 
 Updated: 2026-09-12
 Role: 00 MASTER
-Status: **LOCAL-LAUNCH-01 ENGINEERING-ACCEPTED / FIRST SHELL SMOKE PARTIAL / LIFECYCLE DIAG NEXT**
-Owner Validation: **OWNER-DEFERRED / NOT EXECUTED**
+Status: **OWNER-VALIDATION-01 PREPARED / READY TO EXECUTE / NOT YET EXECUTED**
 
 ## Product binding
 
 Repo: `F:\Chat-Codex-Handoff\validation-repo`
 Private remote: `BenCCCCCCCCC/Chat-Codex-Handoff`
 Feature branch: `prototype/study-teachback-v0.1`
-Current reviewed remote feature state: `074941a9072db4f56f04691fe51b9d9ed5194d64`
-Launcher implementation checkpoint: `a4a360d4e86a71db39213cb42baca29837b433bd`
+Current remote feature HEAD verified by MASTER:
+`912bce6542eef4fe813f32fe4e160acd97ca2d71`
 
-Read `docs/master/CURRENT_STATE.md` and this file from `meta/master-state`; do not switch the product worktree to the meta branch. Preserve unexpected work; no reset/clean/force.
+Canonical read order:
+1. `docs/master/CURRENT_STATE.md`
+2. this file
+3. `docs/research/strategy-reset-01/OWNER_VALIDATION_01.md`
 
-## What the first real Shell smoke proved
+The older OWNER_VALIDATION document records the original approved protocol and historical engineering entry gate. This handoff supersedes its old checkpoint number for execution; use the current feature HEAD/normal descendants above.
 
-Tracked receipt:
-`artifacts/study-teachback/local-launch-smoke-01/SMOKE_RECEIPT.md`
+## What is already accepted
 
-Verified:
-- actual Windows Shell execution invoked the real repo-root launcher entry;
-- a real listener and expected product status became available at `127.0.0.1:4317`;
-- no learning/file/microphone action occurred;
-- provider/model calls caused by the smoke = 0;
-- ledger bytes before/after are identical;
-- no unknown/pre-existing process was stopped;
-- README now marks Explorer/double-click/Enter/Ctrl+C as unverified where appropriate and Owner Validation as owner-deferred.
+- UI-UX-FOUNDATION-01R2 accepted at engineering/UI scope.
+- SOURCE-INGESTION portability accepted.
+- R3/R4 ASR/evidence/remediation guards accepted.
+- local launcher accepted at engineering scope, but its Explorer/default-browser/interactive-console lifecycle remains unverified.
+- lifecycle diagnosis is closed as INCONCLUSIVE; no launcher defect was proven.
+- bootstrap preflight is closed; no new setup/installer work is authorized.
 
-Still not verified:
-- default-browser open/window target;
-- visible control-console lifecycle;
-- normal Enter stop;
-- Ctrl+C/window-close behavior;
-- Explorer mouse double-click specifically.
+Owner Validation remains the next real product gate.
 
-New blocker-to-understand:
-- twice, the product listener appeared and passed identity checks, but before the bounded recovery step the launcher/server and ownership-state record had disappeared;
-- there was no evidence of an intentional Enter/Ctrl+C/recovery stop;
-- cause remains UNKNOWN.
+## Important execution choice
 
-Do not infer the cause from timing alone.
+Do **not** make launcher UX part of OWNER-VALIDATION-01.
 
-## Task — LOCAL-LAUNCH-LIFECYCLE-DIAG-01
+For this run Codex should start the existing server directly:
 
-This is diagnosis only. **Do not change production launcher or product logic in this turn.**
+`node study-teachback-app/server.mjs`
 
-### Goal
+Use the unchanged product origin:
 
-Determine whether the early exit is best explained by:
-A. noninteractive/closed console input in the automation Shell context;
-B. a launcher/process lifecycle defect;
-C. an environment boundary that remains inconclusive.
+`http://127.0.0.1:4317`
 
-### Allowed diagnostic actions
+This isolates the real learning/file/microphone journey from the still-unverified Explorer/default-browser/control-console launcher interaction.
 
-1. Confirm exact branch/HEAD/worktree and that port4317 has no unknown owner before starting.
-2. Hash/summarize the existing usage ledger before the diagnostic; do not perform learning/model operations.
-3. Use temporary ignored files under the existing runtime/temp boundary for diagnostics; delete/leave ignored as appropriate, never commit machine-private process dumps.
-4. Run a tiny temporary PowerShell console-input probe through the **same `UseShellExecute=true` / Shell execution style** used by the prior smoke. Record only safe facts such as:
-   - shell/process IDs and parent-child timing;
-   - host/console type;
-   - whether console input is redirected/unavailable;
-   - whether a bounded `Read-Host`-style wait returns immediately without injected user input;
-   - exit timing/status.
-   Do not record environment contents or secret values.
-5. If needed, invoke the actual `Start-Study.cmd` **at most one additional bounded time** and observe, without clicking/typing:
-   - launcher/shell/Node process-tree timing;
-   - creation/removal timing of ignored launcher ownership state;
-   - port readiness and disappearance;
-   - shell/PowerShell exit status where safely available.
-6. Do not try to prove browser UI in this diagnostic. The question here is process lifetime, not browser rendering.
-7. Do not send Enter, Ctrl+C, UI Automation clicks, file/mic actions or provider/model requests.
-8. Verify ledger before/after byte identity and provider/model calls = 0.
-9. Correct one remaining README inconsistency if present: localhost launch must not be described as waiting for Owner Validation to resume. Owner Validation remains deferred, but local launch itself is already an engineering capability.
-10. Track a compact sanitized receipt under `artifacts/study-teachback/local-launch-lifecycle-diag-01/` if evidence/docs change, then normal fast-forward push the same private feature branch.
+## Codex preparation task
 
-### Stop conditions
+Codex prepares runtime only. The owner performs file selection and microphone actions.
 
-Stop immediately and report if:
-- port4317 has an unknown owner;
-- the experiment would require persistent configuration, OS/browser policy changes or installation;
-- capturing the needed evidence would expose credentials/user desktop/private data;
-- any provider/model request occurs;
-- one bounded repeat is inconclusive.
+Before returning READY:
+1. verify repo, branch, remote HEAD lineage and worktree; preserve unrelated work;
+2. verify HEAD equals or normally descends from `912bce...`;
+3. verify the existing repo-owned extractor runtime and pinned pypdf 6.18.0 without reinstalling a valid environment;
+4. verify existing model-access configuration is available without exposing or rewriting it;
+5. record a safe current usage-ledger summary;
+6. confirm port 4317 has no unknown conflicting listener;
+7. start only the existing Node server directly;
+8. confirm GET-only readiness/product identity with no Tutor/ASR/model request;
+9. keep the server available and return exactly the compact readiness receipt below;
+10. then wait for the owner. Do not simulate owner interaction.
 
-No repeated exploratory retries.
-
-## Decision rule
-
-Return one classification only:
-
-### `ENVIRONMENT_LIMITED_CONFIRMED`
-Use only if evidence shows the same automation Shell context has noninteractive/closed input and the wait exits immediately without user input, consistent with the observed server cleanup. This does **not** prove Explorer double-click works; it explains why this automated smoke cannot verify it. Keep launcher code unchanged and defer true desktop interaction to future manual/owner validation.
-
-### `LAUNCHER_DEFECT_SUPPORTED`
-Use only if the process/input evidence points to launcher behavior independent of the automation interaction boundary. Do not fix it in this diagnostic. Return exact evidence and a concise proposed correction scope.
-
-### `INCONCLUSIVE`
-Use when neither can be supported safely. Stop rather than iterating.
-
-## Retained boundaries
-
-No changes to:
-- study UI/business logic;
-- source ingestion or extractor contract;
-- ASR/replay/remediation semantics;
-- browser storage/history/delete;
-- models/provider/budget logic;
-- port/origin;
-- installer/native wrapper/PWA/service worker/system startup.
-
-New paid product API calls: **0**.
-Owner Validation remains **OWNER-DEFERRED / NOT EXECUTED**.
-
-## Required return
+Return:
 
 ```text
-Status: LOCAL-LAUNCH-LIFECYCLE-DIAG-01 ENVIRONMENT_LIMITED_CONFIRMED / LAUNCHER_DEFECT_SUPPORTED / INCONCLUSIVE
-Branch: prototype/study-teachback-v0.1
-Exact remote SHA: <sha or unchanged>
-Base reviewed feature state: 074941a9072db4f56f04691fe51b9d9ed5194d64
-Input/console evidence: <sanitized conclusion>
-Process lifecycle evidence: <sanitized conclusion>
-Actual launcher repeat: RUN ONCE / NOT NEEDED / BLOCKED
-Provider/model calls: 0 / unexpected
-Ledger before/after: identical / changed
-README correction: yes/no
-Evidence: <tracked path or none>
-Must Fix / User Decision Needed / Future Optional
-Owner Validation: OWNER-DEFERRED / NOT EXECUTED
+OWNER_VALIDATION_READY
+URL: http://127.0.0.1:4317
+Branch: <actual branch>
+HEAD: <actual sha>
+Worktree: <safe summary>
+Extractor: <safe readiness summary>
+Server: <direct server / readiness summary>
+Known cost/exposure: <safe live ledger summary>
+Owner Validation: READY / NOT YET EXECUTED
 ```
+
+Do not push a preparation-only commit unless an actual documentation/evidence correction is necessary.
+
+## Test source
+
+Use one owner-controlled low-risk supported file.
+
+Preferred if already locally available:
+`OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`
+
+The fixture is intentionally simple and contains a necessary-vs-sufficient condition relation useful for checking Tutor/diagnosis behavior. If it is not available, the owner may use another low-risk DOCX/PDF/PPTX/MD/TXT whose meaning they can verify personally.
+
+Do not use sensitive/private-client material.
+
+## Owner walkthrough — one coherent journey
+
+1. Open the URL manually.
+2. Choose the low-risk file and verify the displayed filename/extraction state.
+3. Review the extraction preview. Check critical meaning/order rather than cosmetic whitespace.
+4. Select a coherent section <=5,000 characters. Import/preview alone must create no model request.
+5. Start Learn; ask at least one normal Tutor question.
+6. Click `我来讲讲`; record roughly 20–45 seconds naturally. Include a condition relation and, if it happens naturally, a self-correction. Do not read a polished script.
+7. Confirm original audio is playable and retained.
+8. Inspect raw transcript/timing notice; fully replay each validated segment. Correct critical negation/number/condition/term errors before confirming text reliability.
+9. Inspect diagnosis and evidence links. Check final corrected stance, withdrawn-claim handling, missing-content timestamp behavior and remediation gating.
+10. Delivery findings may be empty. Any near-silence candidate needs replay confirmation before interpretation.
+11. Use targeted reteaching only if a real actionable gap exists. At most one re-explanation attempt is allowed; the original attempt must remain preserved.
+12. Use Apply once. It must be related but new, not merely the same repair task, and must not claim long-term mastery.
+13. Export locally; inspect selected source, audio, raw/corrected transcript versions and reports. Review history/source versions. Do not delete evidence yet.
+14. Tell MASTER that the walkthrough completed and report visible friction/failures. No raw file/audio upload to Chat is required.
+
+## Live-call boundary
+
+This owner validation authorizes only the already-approved live models (`whisper-1` + `gpt-5.6-luna`) for one coherent owner journey and, only if naturally warranted, one targeted re-explanation.
+
+Keep the existing US$5 exposure hard stop and US$10 cash ceiling. No stress testing, retry loop, provider/model switch or recharge.
+
+## Stop conditions
+
+Stop and return to MASTER if:
+- raw imported file is unexpectedly transmitted or persisted contrary to contract;
+- extraction silently changes critical meaning without understandable preview;
+- extractor/runtime guard fails;
+- critical ASR meaning error cannot be safely corrected;
+- diagnosis materially contradicts confirmed source/transcript;
+- source/audio/span evidence is fabricated or misattached;
+- remediation gating regresses;
+- repeated API retry becomes necessary;
+- budget/access/storage guard fails;
+- original audio/source/attempt/version identity is lost or corrupted.
+
+Minor copy/layout friction is logged but is not automatically blocking.
+
+## After owner completion
+
+When the owner reports completion, Codex should:
+1. stop only the server/process it prepared for this walkthrough;
+2. collect sanitized step-level PASS/FAIL/UNKNOWN and safe model/request/cost metadata;
+3. never commit raw owner file/audio or local environment/private browser data;
+4. normal fast-forward push only the named private feature branch if tracked validation evidence is added;
+5. return exact remote SHA, safe ledger before/after, walkthrough summary and unresolved items.
+
+MASTER then reviews only the new owner-validation delta/evidence.
+
+Possible outcomes:
+- `OWNER VALIDATION PASS — READY FOR NEXT PRODUCT DECISION`
+- `OWNER VALIDATION PASS WITH MUST FIX`
+- `OWNER VALIDATION BLOCKED`
+
+No merge/release/external-user action follows automatically.
 
 ## Classification
 
-Completed: launcher implementation, engineering review, first Shell smoke and evidence correction.
-Verified: the real Shell path can reach the expected local product; no provider/model call and no ledger change.
-Unknown: cause of early exit; real browser/control-window UX.
-Not Done: this diagnosis, actual interactive desktop validation, Owner Validation, packaging/distribution.
-Must Fix: none proven in launcher code yet; end-user one-action launch must not be claimed fully validated.
-User Decision Needed: none for this diagnosis.
-Future Optional: manual desktop smoke and later bootstrap/distribution work after the lifecycle question is classified.
+Completed: current engineering/UI/ingestion/ASR/storage/budget readiness and validation preparation.
+
+Verified: current remote HEAD `912bce...`; direct-server validation path does not depend on unverified launcher interaction.
+
+Unknown: real owner file extraction quality, physical-microphone/ASR/semantic behavior, latency/friction and learning usefulness.
+
+Not Done: actual OWNER-VALIDATION-01 and MASTER post-run acceptance.
+
+Must Fix: none known before execution.
+
+User Decision Needed: none to run this already-approved bounded validation.
+
+Future Optional: manual launcher UX smoke and distribution/bootstrap work only after this gate or a separate owner decision.
 
 ## Next Smallest Step
 
-**Run this one bounded lifecycle diagnosis. Do not patch launcher code during the diagnostic.**
+**Codex performs preparation only and returns `OWNER_VALIDATION_READY`. Owner then executes one bounded file + microphone walkthrough.**
