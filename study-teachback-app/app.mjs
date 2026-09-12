@@ -23,11 +23,12 @@ function renderTopic(){
   $('messages').replaceChildren(...topic.messages.map(m=>el('div',m.text,`message ${m.role}`)));$('messages').scrollTop=$('messages').scrollHeight;
   $('question').textContent=topic.question??'';$('phase').textContent=topic.mode==='apply'||topic.mode==='apply_answer'?'换个情境试试':topic.mode==='repair'?'再学这一点':'一起学';
 }
-async function teach(message,mode='learn',focus=null){
+async function teach(message,mode='learn',focus=null,{internalStarter=false}={}){
   if(record||controller||processing)throw new Error('REQUEST_IN_PROGRESS');
   if(mode==='repair')focus=repairFocus(focus);
-  const target=topic;target.messages.push({role:'user',text:message});target.mode=mode;await save();renderTopic();notice('正在一起梳理这段材料……');
-  try{const r=await api('/api/teach',{source:target.source,mode,message,focus,history:target.messages.slice(0,-1)});
+  const target=topic,history=target.messages.slice();
+  if(!internalStarter)target.messages.push({role:'user',text:message});target.mode=mode;await save();renderTopic();notice('正在一起梳理这段材料……');
+  try{const r=await api('/api/teach',{source:target.source,mode,message,focus,history});
     if(deleted.has(target.id)||topic!==target)return;
     target.messages.push({role:'assistant',text:r.value.message});target.question=r.value.question;
     if(!target.goals.length){target.goals=r.value.goals;target.anchorVersion=uid();target.source.anchors=structuredClone(target.goals);target.source.anchorVersion=target.anchorVersion;}
@@ -66,7 +67,7 @@ $('learn').onclick=()=>act(async()=>{
   if(importPending||controller)return;
   if(!$('title').value.trim()||!$('source').value.trim())return notice('先写一个主题，再放入这一轮的有限材料。');
   clearImport();
-  topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim(),text:$('source').value.trim()},goals:[],messages:[],attempts:[],mode:'learn'};await save();renderTopic();await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。');
+  topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim(),text:$('source').value.trim()},goals:[],messages:[],attempts:[],mode:'learn'};await save();renderTopic();await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。','learn',null,{internalStarter:true});
 });
 $('chatForm').onsubmit=e=>{e.preventDefault();if(!canNavigate())return;act(async()=>{const message=$('chat').value.trim();if(!message)return;$('chat').value='';if(topic.mode==='apply'&&topic.apply){topic.apply.answer=message;await teach(message,'apply_answer',topic.apply.question);}else await teach(message,topic.mode==='repair'?'repair':'learn',topic.focus??null);});};
 function prepare(kind='full',focus=null,parentId=null){

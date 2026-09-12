@@ -1,0 +1,29 @@
+PASS provenance initial success and first real owner input
+PASS provenance initial validation rejection and first real owner input
+PASS R2 prominent native file entry at desktop and mobile before any provider call
+PASS local MD import, selection, no provider call until Learn, clear preview
+PASS study-first source and tutor, persistent teach-back without rubric/upload
+PASS A responsive layout, readable focus, reduced motion and text zoom
+PASS microphone denial preserves study state
+PASS native MediaRecorder + decode + original IndexedDB Blob + timestamp adapter
+PASS diagnosis blocked before segment replay; correction keeps original identity and audio
+PASS targeted repair routes feedback back into tutor
+PASS partial re-record is a new attempt with parent and focus
+PASS new Apply task and answer stay separate from same-topic repair
+PASS history reload preserves raw audio and corrected versions
+PASS API timeout then budget stop preserves one original attempt across explicit retry
+PASS device interruption preserves original and skips semantic diagnosis
+PASS decode failure retains original, shows retry state
+PASS export contains exact audio bytes, raw/corrected versions, reports and source
+PASS delete dialog cancel and Escape preserve data and restore focus
+PASS per-attempt delete removes linked objects and preserves other attempts
+PASS quota failure preserves memory audio, offers export and retry save
+PASS pending semantic navigation cannot replace topic or misattach result
+PASS seven-day expiry cleans linked objects but preserves live topic
+PASS source revision creates distinct record, preserves prior source/attempts
+PASS delete all actually removes IndexedDB topic and linked audio records
+PASS saved real ASR PARTIAL words replay through validated segment before diagnosis
+PASS delivery requires candidate replay and stays separate from content reports
+PASS stale history navigation blocked and pending delete-all prevents late restoration
+PASS real supported punctuation repair renders no remediation; valid gaps retain focus actions
+PASS topic deletion is scoped, cancel keeps topic, confirmed focus returns to history

@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+const source=readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
+const teach=source.slice(source.indexOf('async function teach('),source.indexOf('let importPending'));
+for(const fail of [false,true])test(`starter provenance and first owner input; initial rejection=${fail}`,async()=>{
+  const topic={id:'topic',source:{id:'source'},messages:[],goals:[]},requests=[],saved=[];
+  let reject=fail;
+  const context=vm.createContext({topic,record:null,controller:null,processing:false,deleted:new Set(),uid:()=> 'anchor',structuredClone,repairFocus:x=>x,save:async()=>saved.push(structuredClone(topic)),renderTopic(){},notice(){},friendly:x=>x,api:async(path,body)=>{requests.push(structuredClone(body));if(reject){reject=false;throw Error('INVALID_SOURCE_QUOTE');}return {value:{message:'Tutor reply',question:'Question',goals:[]}};}});
+  vm.runInContext(teach,context);
+  await vm.runInContext("teach('internal starter','learn',null,{internalStarter:true})",context).catch(e=>{assert.equal(e.message,'INVALID_SOURCE_QUOTE');});
+  assert.equal(topic.messages.filter(m=>m.role==='user').length,0);
+  assert(saved.every(t=>t.messages.every(m=>m.role!=='user')));
+  assert.equal(topic.messages.length,fail?0:1);
+  await vm.runInContext("teach('real owner question')",context);
+  assert.equal(topic.messages.find(m=>m.role==='user').text,'real owner question');
+  assert(requests.every(r=>r.history.every(m=>m.text!=='internal starter')));
+});
+test('Learn entry explicitly marks automatic starter internal',()=>assert.match(source,/await teach\('请先帮我理解[^\n]+internalStarter:true/));
