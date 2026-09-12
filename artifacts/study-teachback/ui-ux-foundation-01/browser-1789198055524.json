@@ -1,0 +1,321 @@
+{
+  "at": "2026-09-12T07:28:03.949Z",
+  "kind": "EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER",
+  "cases": [
+    {
+      "name": "local MD import, selection, no provider call until Learn, clear preview",
+      "status": "PASS"
+    },
+    {
+      "name": "study-first source and tutor, persistent teach-back without rubric/upload",
+      "status": "PASS"
+    },
+    {
+      "name": "A responsive layout, readable focus, reduced motion and text zoom",
+      "status": "PASS"
+    },
+    {
+      "name": "microphone denial preserves study state",
+      "status": "PASS"
+    },
+    {
+      "name": "native MediaRecorder + decode + original IndexedDB Blob + timestamp adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "diagnosis blocked before segment replay; correction keeps original identity and audio",
+      "status": "PASS"
+    },
+    {
+      "name": "targeted repair routes feedback back into tutor",
+      "status": "PASS"
+    },
+    {
+      "name": "partial re-record is a new attempt with parent and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "new Apply task and answer stay separate from same-topic repair",
+      "status": "PASS"
+    },
+    {
+      "name": "history reload preserves raw audio and corrected versions",
+      "status": "PASS"
+    },
+    {
+      "name": "API timeout then budget stop preserves one original attempt across explicit retry",
+      "status": "PASS"
+    },
+    {
+      "name": "device interruption preserves original and skips semantic diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "decode failure retains original, shows retry state",
+      "status": "PASS"
+    },
+    {
+      "name": "export contains exact audio bytes, raw/corrected versions, reports and source",
+      "status": "PASS"
+    },
+    {
+      "name": "delete dialog cancel and Escape preserve data and restore focus",
+      "status": "PASS"
+    },
+    {
+      "name": "per-attempt delete removes linked objects and preserves other attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "quota failure preserves memory audio, offers export and retry save",
+      "status": "PASS"
+    },
+    {
+      "name": "pending semantic navigation cannot replace topic or misattach result",
+      "status": "PASS"
+    },
+    {
+      "name": "seven-day expiry cleans linked objects but preserves live topic",
+      "status": "PASS"
+    },
+    {
+      "name": "source revision creates distinct record, preserves prior source/attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "delete all actually removes IndexedDB topic and linked audio records",
+      "status": "PASS"
+    },
+    {
+      "name": "saved real ASR PARTIAL words replay through validated segment before diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "delivery requires candidate replay and stays separate from content reports",
+      "status": "PASS"
+    },
+    {
+      "name": "stale history navigation blocked and pending delete-all prevents late restoration",
+      "status": "PASS"
+    },
+    {
+      "name": "real supported punctuation repair renders no remediation; valid gaps retain focus actions",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n\n'只讲这一点' !== '我来讲讲'\n"
+    },
+    {
+      "name": "suite completion",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n\n'只讲这一点' !== '我来讲讲'\n"
+    }
+  ],
+  "calls": [
+    {
+      "kind": "learn",
+      "sourceId": "f3acf497-fb0f-4660-9245-82740a003d11",
+      "focus": null
+    },
+    {
+      "kind": "asr",
+      "attemptId": "c8c07103-a28a-4c1c-b142-6540902aa2ac"
+    },
+    {
+      "kind": "content",
+      "sourceId": "f3acf497-fb0f-4660-9245-82740a003d11",
+      "focus": null
+    },
+    {
+      "kind": "repair",
+      "sourceId": "f3acf497-fb0f-4660-9245-82740a003d11",
+      "focus": "再用一个不同的情境说明条件。"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "559ad60e-ebe0-4df3-8f73-f60b8b972a67"
+    },
+    {
+      "kind": "apply",
+      "sourceId": "f3acf497-fb0f-4660-9245-82740a003d11",
+      "focus": null
+    },
+    {
+      "kind": "apply_answer",
+      "sourceId": "f3acf497-fb0f-4660-9245-82740a003d11",
+      "focus": "现在要浇水吗？为什么？"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "9afe5d26-5f8e-450b-ae0d-b8f18ad8ac18"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "9afe5d26-5f8e-450b-ae0d-b8f18ad8ac18"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "f3acf497-fb0f-4660-9245-82740a003d11",
+      "focus": "再用一个不同的情境说明条件。"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "23da63e4-4242-4033-8c38-6cd95ecd0fb5",
+      "focus": null
+    },
+    {
+      "kind": "content",
+      "sourceId": "real-source",
+      "focus": null
+    },
+    {
+      "kind": "delivery",
+      "sourceId": "real-source",
+      "focus": null
+    },
+    {
+      "kind": "learn",
+      "sourceId": "real-source",
+      "focus": null
+    },
+    {
+      "kind": "repair",
+      "sourceId": "engineering-source-1",
+      "focus": "请澄清浇水的必要条件。"
+    },
+    {
+      "kind": "repair",
+      "sourceId": "engineering-source-1",
+      "focus": "请澄清浇水的必要条件。"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "1789198055524-preview.png",
+      "state": "preview",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-learn-1440.png",
+      "state": "learn-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-learn-1024.png",
+      "state": "learn-1024",
+      "viewport": {
+        "width": 1024,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-learn-768.png",
+      "state": "learn-768",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-learn-390.png",
+      "state": "learn-390",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-learn-320.png",
+      "state": "learn-320",
+      "viewport": {
+        "width": 320,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-text-200-percent.png",
+      "state": "text-200-percent",
+      "viewport": {
+        "width": 320,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-recording.png",
+      "state": "recording",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-partial-review.png",
+      "state": "partial-review",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-budget-stop.png",
+      "state": "budget-stop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-delete-confirmation.png",
+      "state": "delete-confirmation",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-storage-failure.png",
+      "state": "storage-failure",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-supported.png",
+      "state": "supported",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789198055524-missing.png",
+      "state": "missing",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    }
+  ],
+  "consoleErrors": [],
+  "physicalMicrophone": false,
+  "liveAPI": false
+}

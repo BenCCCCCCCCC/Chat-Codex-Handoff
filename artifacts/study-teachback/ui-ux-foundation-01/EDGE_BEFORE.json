@@ -1,0 +1,184 @@
+{
+  "at": "2026-09-12T07:19:36.180Z",
+  "kind": "EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER",
+  "cases": [
+    {
+      "name": "local MD import, selection, no provider call until Learn, clear preview",
+      "status": "PASS"
+    },
+    {
+      "name": "study-first source and tutor, persistent teach-back without rubric/upload",
+      "status": "PASS"
+    },
+    {
+      "name": "microphone denial preserves study state",
+      "status": "PASS"
+    },
+    {
+      "name": "native MediaRecorder + decode + original IndexedDB Blob + timestamp adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "diagnosis blocked before segment replay; correction keeps original identity and audio",
+      "status": "PASS"
+    },
+    {
+      "name": "targeted repair routes feedback back into tutor",
+      "status": "PASS"
+    },
+    {
+      "name": "partial re-record is a new attempt with parent and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "new Apply task and answer stay separate from same-topic repair",
+      "status": "PASS"
+    },
+    {
+      "name": "history reload preserves raw audio and corrected versions",
+      "status": "PASS"
+    },
+    {
+      "name": "API timeout then budget stop preserves one original attempt across explicit retry",
+      "status": "PASS"
+    },
+    {
+      "name": "device interruption preserves original and skips semantic diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "decode failure retains original, shows retry state",
+      "status": "PASS"
+    },
+    {
+      "name": "export contains exact audio bytes, raw/corrected versions, reports and source",
+      "status": "PASS"
+    },
+    {
+      "name": "per-attempt delete removes linked objects and preserves other attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "quota failure preserves memory audio, offers export and retry save",
+      "status": "PASS"
+    },
+    {
+      "name": "pending semantic navigation cannot replace topic or misattach result",
+      "status": "PASS"
+    },
+    {
+      "name": "seven-day expiry cleans linked objects but preserves live topic",
+      "status": "PASS"
+    },
+    {
+      "name": "source revision creates distinct record, preserves prior source/attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "delete all actually removes IndexedDB topic and linked audio records",
+      "status": "PASS"
+    },
+    {
+      "name": "saved real ASR PARTIAL words replay through validated segment before diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "delivery requires candidate replay and stays separate from content reports",
+      "status": "PASS"
+    },
+    {
+      "name": "stale history navigation blocked and pending delete-all prevents late restoration",
+      "status": "PASS"
+    },
+    {
+      "name": "real supported punctuation repair renders no remediation; valid gaps retain focus actions",
+      "status": "PASS"
+    }
+  ],
+  "calls": [
+    {
+      "kind": "learn",
+      "sourceId": "a2677d32-611e-4ec9-82b5-3c78927fe7c9",
+      "focus": null
+    },
+    {
+      "kind": "asr",
+      "attemptId": "bcf0a8e7-169b-44e6-bdbe-13ffa1227dec"
+    },
+    {
+      "kind": "content",
+      "sourceId": "a2677d32-611e-4ec9-82b5-3c78927fe7c9",
+      "focus": null
+    },
+    {
+      "kind": "repair",
+      "sourceId": "a2677d32-611e-4ec9-82b5-3c78927fe7c9",
+      "focus": "再用一个不同的情境说明条件。"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "7e457afe-4147-40ea-b379-1dea4e50a8a0"
+    },
+    {
+      "kind": "apply",
+      "sourceId": "a2677d32-611e-4ec9-82b5-3c78927fe7c9",
+      "focus": null
+    },
+    {
+      "kind": "apply_answer",
+      "sourceId": "a2677d32-611e-4ec9-82b5-3c78927fe7c9",
+      "focus": "现在要浇水吗？为什么？"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "1e441b1e-d2c3-48dc-8005-aa7054566287"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "1e441b1e-d2c3-48dc-8005-aa7054566287"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "a2677d32-611e-4ec9-82b5-3c78927fe7c9",
+      "focus": "再用一个不同的情境说明条件。"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "6eff5267-f4ef-4392-a515-b1b1ccd04284",
+      "focus": null
+    },
+    {
+      "kind": "content",
+      "sourceId": "real-source",
+      "focus": null
+    },
+    {
+      "kind": "delivery",
+      "sourceId": "real-source",
+      "focus": null
+    },
+    {
+      "kind": "learn",
+      "sourceId": "real-source",
+      "focus": null
+    },
+    {
+      "kind": "repair",
+      "sourceId": "engineering-source-1",
+      "focus": "请澄清浇水的必要条件。"
+    },
+    {
+      "kind": "repair",
+      "sourceId": "engineering-source-1",
+      "focus": "请澄清浇水的必要条件。"
+    },
+    {
+      "kind": "repair",
+      "sourceId": "engineering-source-1",
+      "focus": "请澄清浇水的必要条件。"
+    }
+  ],
+  "consoleErrors": [],
+  "physicalMicrophone": false,
+  "liveAPI": false
+}

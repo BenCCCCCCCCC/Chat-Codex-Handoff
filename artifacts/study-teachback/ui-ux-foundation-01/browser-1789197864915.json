@@ -1,0 +1,284 @@
+{
+  "at": "2026-09-12T07:25:01.948Z",
+  "kind": "EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER",
+  "cases": [
+    {
+      "name": "local MD import, selection, no provider call until Learn, clear preview",
+      "status": "PASS"
+    },
+    {
+      "name": "study-first source and tutor, persistent teach-back without rubric/upload",
+      "status": "PASS"
+    },
+    {
+      "name": "A responsive layout, readable focus, reduced motion and text zoom",
+      "status": "PASS"
+    },
+    {
+      "name": "microphone denial preserves study state",
+      "status": "PASS"
+    },
+    {
+      "name": "native MediaRecorder + decode + original IndexedDB Blob + timestamp adapter",
+      "status": "PASS"
+    },
+    {
+      "name": "diagnosis blocked before segment replay; correction keeps original identity and audio",
+      "status": "PASS"
+    },
+    {
+      "name": "targeted repair routes feedback back into tutor",
+      "status": "PASS"
+    },
+    {
+      "name": "partial re-record is a new attempt with parent and focus",
+      "status": "PASS"
+    },
+    {
+      "name": "new Apply task and answer stay separate from same-topic repair",
+      "status": "PASS"
+    },
+    {
+      "name": "history reload preserves raw audio and corrected versions",
+      "status": "PASS"
+    },
+    {
+      "name": "API timeout then budget stop preserves one original attempt across explicit retry",
+      "status": "PASS"
+    },
+    {
+      "name": "device interruption preserves original and skips semantic diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "decode failure retains original, shows retry state",
+      "status": "PASS"
+    },
+    {
+      "name": "export contains exact audio bytes, raw/corrected versions, reports and source",
+      "status": "PASS"
+    },
+    {
+      "name": "delete dialog cancel and Escape preserve data and restore focus",
+      "status": "PASS"
+    },
+    {
+      "name": "per-attempt delete removes linked objects and preserves other attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "quota failure preserves memory audio, offers export and retry save",
+      "status": "PASS"
+    },
+    {
+      "name": "pending semantic navigation cannot replace topic or misattach result",
+      "status": "PASS"
+    },
+    {
+      "name": "seven-day expiry cleans linked objects but preserves live topic",
+      "status": "PASS"
+    },
+    {
+      "name": "source revision creates distinct record, preserves prior source/attempts",
+      "status": "PASS"
+    },
+    {
+      "name": "delete all actually removes IndexedDB topic and linked audio records",
+      "status": "PASS"
+    },
+    {
+      "name": "saved real ASR PARTIAL words replay through validated segment before diagnosis",
+      "status": "PASS"
+    },
+    {
+      "name": "delivery requires candidate replay and stays separate from content reports",
+      "status": "PASS"
+    },
+    {
+      "name": "stale history navigation blocked and pending delete-all prevents late restoration",
+      "status": "FAIL",
+      "error": "WAIT_FAILED document.getElementById('workspace').hidden NOTICE=可以继续问，也可以随时“我来讲讲”。"
+    }
+  ],
+  "calls": [
+    {
+      "kind": "learn",
+      "sourceId": "058d0f8c-461c-439c-8bca-ad676e3687ab",
+      "focus": null
+    },
+    {
+      "kind": "asr",
+      "attemptId": "c8cd01db-6f60-4e0a-ac42-b204ecbd51bd"
+    },
+    {
+      "kind": "content",
+      "sourceId": "058d0f8c-461c-439c-8bca-ad676e3687ab",
+      "focus": null
+    },
+    {
+      "kind": "repair",
+      "sourceId": "058d0f8c-461c-439c-8bca-ad676e3687ab",
+      "focus": "再用一个不同的情境说明条件。"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "df2d3b19-12a4-4035-b2a2-0473865c3c79"
+    },
+    {
+      "kind": "apply",
+      "sourceId": "058d0f8c-461c-439c-8bca-ad676e3687ab",
+      "focus": null
+    },
+    {
+      "kind": "apply_answer",
+      "sourceId": "058d0f8c-461c-439c-8bca-ad676e3687ab",
+      "focus": "现在要浇水吗？为什么？"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "9a36b84c-c8be-4017-b3bc-bd619c873c8e"
+    },
+    {
+      "kind": "asr",
+      "attemptId": "9a36b84c-c8be-4017-b3bc-bd619c873c8e"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "058d0f8c-461c-439c-8bca-ad676e3687ab",
+      "focus": "再用一个不同的情境说明条件。"
+    },
+    {
+      "kind": "learn",
+      "sourceId": "9ac2f8ef-ac6e-4366-92ec-b6c4de93aa1d",
+      "focus": null
+    },
+    {
+      "kind": "content",
+      "sourceId": "real-source",
+      "focus": null
+    },
+    {
+      "kind": "delivery",
+      "sourceId": "real-source",
+      "focus": null
+    },
+    {
+      "kind": "learn",
+      "sourceId": "real-source",
+      "focus": null
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "1789197864915-preview.png",
+      "state": "preview",
+      "viewport": {
+        "width": 1280,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-learn-1440.png",
+      "state": "learn-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-learn-1024.png",
+      "state": "learn-1024",
+      "viewport": {
+        "width": 1024,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-learn-768.png",
+      "state": "learn-768",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-learn-390.png",
+      "state": "learn-390",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-learn-320.png",
+      "state": "learn-320",
+      "viewport": {
+        "width": 320,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-text-200-percent.png",
+      "state": "text-200-percent",
+      "viewport": {
+        "width": 320,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-recording.png",
+      "state": "recording",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-partial-review.png",
+      "state": "partial-review",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-budget-stop.png",
+      "state": "budget-stop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-delete-confirmation.png",
+      "state": "delete-confirmation",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789197864915-storage-failure.png",
+      "state": "storage-failure",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    }
+  ],
+  "consoleErrors": [],
+  "physicalMicrophone": false,
+  "liveAPI": false
+}

@@ -1,0 +1,512 @@
+[
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-budget-stop.png",
+    "sha256": "77a79984b941f1345eccc68368df99707efcae5b6b735f6102376bebf8bffc7d",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-delete-confirmation.png",
+    "sha256": "64337778f0a7aea2c67fce906cdb4c333f39e8fbd56a02714f957295c2cda725",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-learn-1024.png",
+    "sha256": "8338c7d87d5b508aa87ec0986afd382150a01d449f7795418cc3011fb67166f0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-learn-1440.png",
+    "sha256": "36d358731e0102452c9b24ccd664bc1fbfcdad895cbaa8280cd29cdebe4d5677",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-learn-320.png",
+    "sha256": "acb929c97b75b93fe80cdf369eac966ea20321025f6422fece1c618a8d08c5fd",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-learn-390.png",
+    "sha256": "879a5a580e6331a0887e43a51b93915fd663b2a6d793afc9ed651ec93f6bea78",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-learn-768.png",
+    "sha256": "1784361793c254dd3bc661999850e8dccdeaf1d2b5f026376ffde9bbef6def9f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-partial-review.png",
+    "sha256": "67d6a28c6fd1707edeb63d4e14edc4c606888c1aa4b5f311d562348fdffe2d41",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-preview.png",
+    "sha256": "d981c9680a9fb786d52fd4473264fafec06ffb17f3245d1fbbdc8321569a8a6f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-recording.png",
+    "sha256": "1ff76bf8ee95051043da83895bdd988c820d5908672fdfdc0e617fc77d980ac4",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197793394-text-200-percent.png",
+    "sha256": "ad5c8f82281606c16b73676bf39ab04ca49477d3a66ac3c687b435f595e85958",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-budget-stop.png",
+    "sha256": "77a79984b941f1345eccc68368df99707efcae5b6b735f6102376bebf8bffc7d",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-delete-confirmation.png",
+    "sha256": "64337778f0a7aea2c67fce906cdb4c333f39e8fbd56a02714f957295c2cda725",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-learn-1024.png",
+    "sha256": "8338c7d87d5b508aa87ec0986afd382150a01d449f7795418cc3011fb67166f0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-learn-1440.png",
+    "sha256": "36d358731e0102452c9b24ccd664bc1fbfcdad895cbaa8280cd29cdebe4d5677",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-learn-320.png",
+    "sha256": "acb929c97b75b93fe80cdf369eac966ea20321025f6422fece1c618a8d08c5fd",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-learn-390.png",
+    "sha256": "879a5a580e6331a0887e43a51b93915fd663b2a6d793afc9ed651ec93f6bea78",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-learn-768.png",
+    "sha256": "1784361793c254dd3bc661999850e8dccdeaf1d2b5f026376ffde9bbef6def9f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-partial-review.png",
+    "sha256": "67d6a28c6fd1707edeb63d4e14edc4c606888c1aa4b5f311d562348fdffe2d41",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-preview.png",
+    "sha256": "d981c9680a9fb786d52fd4473264fafec06ffb17f3245d1fbbdc8321569a8a6f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-recording.png",
+    "sha256": "cf191ca12b91a49fed110d0ff96327db648487558ce52db4885e007345058ee0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-storage-failure.png",
+    "sha256": "a63eaf22d363c98549830bf708ca8133e277f9bb5e4a6b40cc8845ebea1e9801",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197864915-text-200-percent.png",
+    "sha256": "52852baf8ba8bc14cfbf3bd941ed7d3f54dc4c46f394b2eb8d102fef0ead760f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-budget-stop.png",
+    "sha256": "77a79984b941f1345eccc68368df99707efcae5b6b735f6102376bebf8bffc7d",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-delete-confirmation.png",
+    "sha256": "64337778f0a7aea2c67fce906cdb4c333f39e8fbd56a02714f957295c2cda725",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-learn-1024.png",
+    "sha256": "8338c7d87d5b508aa87ec0986afd382150a01d449f7795418cc3011fb67166f0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-learn-1440.png",
+    "sha256": "36d358731e0102452c9b24ccd664bc1fbfcdad895cbaa8280cd29cdebe4d5677",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-learn-320.png",
+    "sha256": "acb929c97b75b93fe80cdf369eac966ea20321025f6422fece1c618a8d08c5fd",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-learn-390.png",
+    "sha256": "879a5a580e6331a0887e43a51b93915fd663b2a6d793afc9ed651ec93f6bea78",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-learn-768.png",
+    "sha256": "1784361793c254dd3bc661999850e8dccdeaf1d2b5f026376ffde9bbef6def9f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-partial-review.png",
+    "sha256": "93466bb0181dab0145439e7b8bda38574260957876286c911d283a88d8a5df6b",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-preview.png",
+    "sha256": "d981c9680a9fb786d52fd4473264fafec06ffb17f3245d1fbbdc8321569a8a6f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-recording.png",
+    "sha256": "eb26d69543e91646cc0979d43709219b95522e93d5e23e108b046f63029ff89e",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-storage-failure.png",
+    "sha256": "a63eaf22d363c98549830bf708ca8133e277f9bb5e4a6b40cc8845ebea1e9801",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789197953090-text-200-percent.png",
+    "sha256": "52852baf8ba8bc14cfbf3bd941ed7d3f54dc4c46f394b2eb8d102fef0ead760f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-budget-stop.png",
+    "sha256": "77a79984b941f1345eccc68368df99707efcae5b6b735f6102376bebf8bffc7d",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-delete-confirmation.png",
+    "sha256": "64337778f0a7aea2c67fce906cdb4c333f39e8fbd56a02714f957295c2cda725",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-learn-1024.png",
+    "sha256": "8338c7d87d5b508aa87ec0986afd382150a01d449f7795418cc3011fb67166f0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-learn-1440.png",
+    "sha256": "36d358731e0102452c9b24ccd664bc1fbfcdad895cbaa8280cd29cdebe4d5677",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-learn-320.png",
+    "sha256": "acb929c97b75b93fe80cdf369eac966ea20321025f6422fece1c618a8d08c5fd",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-learn-390.png",
+    "sha256": "879a5a580e6331a0887e43a51b93915fd663b2a6d793afc9ed651ec93f6bea78",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-learn-768.png",
+    "sha256": "1784361793c254dd3bc661999850e8dccdeaf1d2b5f026376ffde9bbef6def9f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-missing.png",
+    "sha256": "f0c27780e41a4221f066c4ffcc19e8ae9434c390cb56a6b98ade07bed18f45d0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-partial-review.png",
+    "sha256": "67d6a28c6fd1707edeb63d4e14edc4c606888c1aa4b5f311d562348fdffe2d41",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-preview.png",
+    "sha256": "d981c9680a9fb786d52fd4473264fafec06ffb17f3245d1fbbdc8321569a8a6f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-recording.png",
+    "sha256": "eb26d69543e91646cc0979d43709219b95522e93d5e23e108b046f63029ff89e",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-storage-failure.png",
+    "sha256": "a63eaf22d363c98549830bf708ca8133e277f9bb5e4a6b40cc8845ebea1e9801",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-supported.png",
+    "sha256": "c342faefeb02d2395eff76a74f8c4900d9a286635e9784bdb8ae6dc03a09abd7",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198055524-text-200-percent.png",
+    "sha256": "52852baf8ba8bc14cfbf3bd941ed7d3f54dc4c46f394b2eb8d102fef0ead760f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-budget-stop.png",
+    "sha256": "e94a46836cf8b9df232a5e784c988e4fc818825a71b23f828962e9045fe99b6c",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-delete-confirmation.png",
+    "sha256": "9e868cf90db1649a2a408c19edf0eedbd2cf646402e99854d0f7e2a461ea3728",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-history-delete.png",
+    "sha256": "375c1d0236b1120b3cf56c283fccad644b356c98f690708ebe477779bbe97ba5",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-learn-1024.png",
+    "sha256": "8338c7d87d5b508aa87ec0986afd382150a01d449f7795418cc3011fb67166f0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-learn-1440.png",
+    "sha256": "36d358731e0102452c9b24ccd664bc1fbfcdad895cbaa8280cd29cdebe4d5677",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-learn-320.png",
+    "sha256": "acb929c97b75b93fe80cdf369eac966ea20321025f6422fece1c618a8d08c5fd",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-learn-390.png",
+    "sha256": "879a5a580e6331a0887e43a51b93915fd663b2a6d793afc9ed651ec93f6bea78",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-learn-768.png",
+    "sha256": "1784361793c254dd3bc661999850e8dccdeaf1d2b5f026376ffde9bbef6def9f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-missing.png",
+    "sha256": "f0c27780e41a4221f066c4ffcc19e8ae9434c390cb56a6b98ade07bed18f45d0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-partial-review.png",
+    "sha256": "30582fa12764f2f3c505bf58f438e1b6ead4be2ae161ae35849b55e39fbed6b6",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-preview.png",
+    "sha256": "d981c9680a9fb786d52fd4473264fafec06ffb17f3245d1fbbdc8321569a8a6f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-recording.png",
+    "sha256": "9d8dd754ba91c10debd0ebe3013bbb04d14dd3e147a7a26369c140ca10730073",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-storage-failure.png",
+    "sha256": "d63b7bde3b187afd07382a0f5cd7e3570a1666cababb68267db60a94963d9024",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-supported.png",
+    "sha256": "7d8a619257cc60cd2c8325b0c642d3cd2a8178a9bfedee4521d2451ee119a60b",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198123868-text-200-percent.png",
+    "sha256": "52852baf8ba8bc14cfbf3bd941ed7d3f54dc4c46f394b2eb8d102fef0ead760f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-budget-stop.png",
+    "sha256": "77a79984b941f1345eccc68368df99707efcae5b6b735f6102376bebf8bffc7d",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-delete-confirmation.png",
+    "sha256": "64337778f0a7aea2c67fce906cdb4c333f39e8fbd56a02714f957295c2cda725",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-history-delete.png",
+    "sha256": "4ce32749deef9f0daf59b8c47b190490d0b2454762a8ca0a922474234a5ab854",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-learn-1024.png",
+    "sha256": "8338c7d87d5b508aa87ec0986afd382150a01d449f7795418cc3011fb67166f0",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-learn-1440.png",
+    "sha256": "36d358731e0102452c9b24ccd664bc1fbfcdad895cbaa8280cd29cdebe4d5677",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-learn-320.png",
+    "sha256": "acb929c97b75b93fe80cdf369eac966ea20321025f6422fece1c618a8d08c5fd",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-learn-390.png",
+    "sha256": "879a5a580e6331a0887e43a51b93915fd663b2a6d793afc9ed651ec93f6bea78",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-learn-768.png",
+    "sha256": "1784361793c254dd3bc661999850e8dccdeaf1d2b5f026376ffde9bbef6def9f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-missing.png",
+    "sha256": "098e083ba973c72471e01d97cc335af718a8f3ab39702ece911e9813f6bd10e4",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-partial-review.png",
+    "sha256": "3f20d21fcec177952c6a492d68424cabf4123b8a2c9fe6ca2d1f1395bfaa66f6",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-preview.png",
+    "sha256": "d981c9680a9fb786d52fd4473264fafec06ffb17f3245d1fbbdc8321569a8a6f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-recording.png",
+    "sha256": "9d8dd754ba91c10debd0ebe3013bbb04d14dd3e147a7a26369c140ca10730073",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-storage-failure.png",
+    "sha256": "a63eaf22d363c98549830bf708ca8133e277f9bb5e4a6b40cc8845ebea1e9801",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-supported.png",
+    "sha256": "237c2d6d8986cb839f69d348438e51879c95c72cd6b56713b437c4ba82372f87",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/1789198246981-text-200-percent.png",
+    "sha256": "52852baf8ba8bc14cfbf3bd941ed7d3f54dc4c46f394b2eb8d102fef0ead760f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/CHANGE_MAP.md",
+    "sha256": "9d5f9379505040d5d0643d0bd52b53b73475ac237119871f9c89248cbad00dcc",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/DELIVERY_PACKET.md",
+    "sha256": "fe051ce087edd5f23461c6136721580fea3df8c1b030cc74102ca42160448d91",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/EDGE_BEFORE.json",
+    "sha256": "556c305dd0c754679da511917b5b064ed428f7591a174c5a801c1678a08d607d",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/EXTRACTION.txt",
+    "sha256": "e07d6010e472563caad92fc41e6ffa653b8ecc338f1f5743cfff5ceb58f7d046",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/LEDGER_BEFORE.json",
+    "sha256": "03c05453d3b9a1002dd17b69e6b73c9be836ba6e11a247fe6e18dc9038104147",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/LEDGER_CHECK.json",
+    "sha256": "575efbd14f02f46f080748152b8565c9e5d74ab4c86d4dd61a062fd82ac6d01a",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/NODE_AFTER.txt",
+    "sha256": "0d78971879ef51dd346d0a0274ceecabb9ec4aebd6cf58424f34e18274a08d04",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/NODE_BEFORE.txt",
+    "sha256": "c5dfdbe521257fc77dac0e68105d50277b134600b8b67c8659e695449175dfdb",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/SCREENSHOT_INDEX.json",
+    "sha256": "b84982133f9f4d4221607c8b7727161079b1cc318e18524d40243be823909772",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/browser-1789197793394.json",
+    "sha256": "c1489a14eb680579af02913b41a6a64c35d00a6ebb83d1ed5e33b833aa93751f",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/browser-1789197864915.json",
+    "sha256": "fb035479d6c7afc82c3bc61970876acf9127e5c2665321f21ae14fcf47867ff2",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/browser-1789197953090.json",
+    "sha256": "66edfd018394ff0df80c9b15fede724caea0b43942b55e93977b3bc4be194a69",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/browser-1789198055524.json",
+    "sha256": "dc18937d33933c79b3775067e88012b483ec45a9e22bff0405fd8e9547d47f73",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/browser-1789198123868.json",
+    "sha256": "186b0b39742b4bd0eac740eaa977afc66fbc6a51df883aa77e657ae5b901eba7",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/browser-1789198246981.json",
+    "sha256": "5cbf6783a0a030e79b1e52f8eb679b284ea8c50469e21c1c9223f2b150d68615",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/browser-learning.png",
+    "sha256": "08e81884bf80e707f0cc7da245ef93239adab016a2fe821d7e94f555759d4da3",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/ui-ux-foundation-01/browser-real-asr.png",
+    "sha256": "4444ce0139b971cb84ff856a75b3292d5d7b92c4552b8987e57d5691fedf6b31",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/README.md",
+    "sha256": "7a50b746983ec1622ccbb3bcb19e075303580412b5bf62ac61795cd2d7909c09",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/app.mjs",
+    "sha256": "adf68cae8614020199a32622ed92f511dfe2f4a3ac66ebfead50e08414956491",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/browser-tests-r4.mjs",
+    "sha256": "3541d773b9c0164c786f87975cc25b0f127bec37a6a0def529d36ddb537bc9eb",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/index.html",
+    "sha256": "3132e00005a7afcff89bbcac586f9c542a486149379cc13b8ec108901e04ff4a",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/style.css",
+    "sha256": "3137f98472098d950c2de15ffb0fed2a9dd35a5b7f8ad953f4afe3dd9dee0bb2",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/ui-foundation.test.mjs",
+    "sha256": "f5817f2f795fe85446c41fd725e4051320886a737dd60b447049404ec2be247d",
+    "hashBasis": "git blob bytes"
+  }
+]
