@@ -15,155 +15,194 @@ Role: 00 MASTER / authoritative dynamic state
 
 **LOCAL-BOOTSTRAP-PREFLIGHT-01 — PASS / NO NEW IMPLEMENTATION AUTHORIZED**
 
-**OWNER-VALIDATION-01 — OWNER-DEFERRED / NOT EXECUTED**
+**OWNER-VALIDATION-01 — PREPARED / READY TO EXECUTE / NOT YET EXECUTED**
 
 Active product: **知而能讲**, Windows local-Web Study-first + spoken teach-back alpha.
 
+Flow:
+`local file extraction -> preview/select -> Learn -> continuous Explain -> replay/confirm -> Diagnose -> legitimate Repair/new attempt -> Apply`.
+
+## Exact product state
+
+Private repo: `BenCCCCCCCCC/Chat-Codex-Handoff`
 Feature branch: `prototype/study-teachback-v0.1`
-Current reviewed remote feature state: `912bce6542eef4fe813f32fe4e160acd97ca2d71`.
-Launcher production implementation checkpoint remains `a4a360d4e86a71db39213cb42baca29837b433bd`; the two later commits contain only docs/evidence corrections/diagnostics.
+Current remote feature HEAD verified by MASTER:
+`912bce6542eef4fe813f32fe4e160acd97ca2d71`
 
-## LOCAL-LAUNCH-LIFECYCLE-DIAG-01 review
+Accepted product/UI implementation is contained in the normal lineage through `3a6137d...`; accepted launcher implementation is `a4a360d...`. Later feature commits contain docs/evidence corrections only and do not alter study runtime behavior.
 
-Git comparison confirms `912bce...` is one normal docs/evidence commit after `074941a...`; production launcher and product logic were not modified.
+Current authoritative read order:
+1. `docs/master/CURRENT_STATE.md`
+2. `docs/master/HANDOFF.md`
+3. `docs/research/strategy-reset-01/OWNER_VALIDATION_01.md`
+4. prior R4/R3/source-ingestion evidence only when a specific boundary needs verification.
 
-Tracked evidence:
-`artifacts/study-teachback/local-launch-lifecycle-diag-01/RECEIPT.md`
+## Pre-validation engineering state
 
-Verified:
-- the diagnostic Windows PowerShell host was `ConsoleHost` on PowerShell 5.1;
-- console input was not redirected, the input handle was valid, and console mode was readable;
-- only a pre-wait record was captured; there is no after-wait record and therefore no evidence that `Read-Host` returned immediately;
-- the observer reached its 12-second bound; diagnostic cleanup then encountered an access-denied process-handle boundary;
-- the production launcher was not repeated and no product server was started in this diagnostic;
-- provider/model calls = 0 and the usage-ledger byte hash was unchanged;
-- README stale localhost/Owner-Validation wording was corrected.
+Retained accepted evidence:
+- source extraction 6/6 PASS;
+- Node 45/45 PASS at the latest UI regression scope;
+- Edge 27/27 PASS using actual Edge with synthetic media/stub providers;
+- PowerShell launcher suite 14/14 PASS at engineering scope;
+- repo-owned ignored `.venv` and pinned `pypdf==6.18.0` extraction contract;
+- no runtime auto-install/private Codex runtime coupling;
+- local raw-file extraction and explicit preview/selection;
+- no OCR and no raw-file provider fallback;
+- 10 MB input / 30 MB Office expansion / 100 pages-slides / 200k extracted chars / 5,000 selected chars;
+- original audio saved locally before ASR;
+- strict valid segment timing; unusable word times remain PARTIAL and are never widened/interpolated;
+- critical ASR uncertainty requires replay/user confirmation;
+- raw/corrected transcript separation;
+- content/delivery separation and meaningful remediation gating;
+- supported/delivery findings do not expose targeted knowledge remediation;
+- missing content has no fabricated audio timestamp;
+- history/export/delete/quota/pending-navigation/seven-day cleanup protections;
+- scoped Cancel-first deletion confirmation;
+- models remain `whisper-1` + `gpt-5.6-luna`, semantic Responses `store=false`;
+- no global/PTE score and no psychological/intelligence/confidence/accent inference from acoustics.
 
-Conclusion:
-- **environment-limited cause is NOT confirmed**;
-- **launcher defect is NOT supported**;
-- the prior early-exit cause remains unknown;
-- per the pre-declared stop rule, do not keep retrying this automated desktop lifecycle question.
+Last reviewed safe ledger evidence before Owner Validation:
+- known cost: US$0.01179245;
+- exposure: US$0.06859995 / US$5;
+- four historical unsettled reservations;
+- BUILD-01 new-cash ceiling: US$10;
+- launch/UI/diagnostic work added 0 paid product calls.
 
-The launcher remains accepted at engineering scope, but Explorer double-click/default-browser/visible-console Enter/Ctrl+C lifecycle must remain described as unverified.
+These numbers are historical review evidence, not a substitute for the fresh live ledger check that Codex must perform immediately before the owner walkthrough.
 
-## LOCAL-BOOTSTRAP-PREFLIGHT-01
+## Launcher evidence boundary
 
-Goal: determine whether the next productization step should automate fresh-machine prerequisites/credential setup or bundle runtimes.
+The repo-owned Windows launcher remains accepted at engineering scope, but Explorer double-click/default-browser/visible-console Enter/Ctrl+C lifecycle is not fully verified. The bounded lifecycle diagnosis was INCONCLUSIVE and is closed; no launcher defect was proven and no further automated desktop probing is authorized by default.
 
-### Current-product setup facts
+**OWNER-VALIDATION-01 must therefore use the direct, already-established server start path rather than making launcher UX part of the validation:**
 
-A brand-new machine currently needs, outside the normal app runtime:
-- Node available to start the loopback server;
-- Python 3.14.x available for explicit setup;
-- repo-owned `.venv` with the pinned `pypdf==6.18.0` extractor dependency;
-- the approved API credential supplied through the launch environment;
-- no runtime auto-install and no application-owned secret store.
+`node study-teachback-app/server.mjs`
 
-The current owner machine is already configured enough for the accepted engineering tests/launcher. Therefore fresh-machine setup cost is **not yet an observed blocker on the current owner workflow**.
+Keep `http://127.0.0.1:4317` available and have the owner operate the browser manually. This isolates the learning/product journey from the still-unverified launcher-interaction edge.
 
-### Current external/collision findings
+## OWNER-VALIDATION-01 preparation decision
 
-- OpenAI's current API-key safety guidance still recommends environment variables and gives Windows user-environment setup examples. This supports the current environment-based boundary but does not justify the app silently persisting credentials.
-  - `https://help.openai.com/en/articles/5112595`
-- WinGet can install packages such as Python, but using it would intentionally change machine state and belongs to an explicit setup/distribution decision.
-  - `https://learn.microsoft.com/windows/package-manager/winget/install`
-  - `https://learn.microsoft.com/windows/dev-environment/python`
-- Python 3.14 provides an embeddable Windows distribution intended for embedding into another application. This is a future packaging option, not needed for the current repo-local alpha.
-  - `https://docs.python.org/3/using/windows.html`
-- Node supports Single Executable Applications, but the feature is still in active development and would only solve the Node half; the Python extractor/runtime still needs a packaging design.
-  - `https://nodejs.org/api/single-executable-applications.html`
-- `uv` can create virtual environments and automatically acquire Python, but that introduces a new runtime manager/download behavior rather than removing product complexity for the current owner alpha.
-  - `https://docs.astral.sh/uv/guides/install-python/`
-- Volta/fnm/nvm-style Node managers exist, but on Windows they add another toolchain and PATH/shell integration. They are developer-environment tools, not a simpler end-user product boundary here.
-  - `https://docs.volta.sh/guide/getting-started`
-  - `https://github.com/Schniz/fnm`
-- PowerShell SecretManagement/SecretStore remains supported for security/critical fixes but is feature-complete and archived; adding it as a new core credential dependency is not compelling for this alpha.
-  - `https://learn.microsoft.com/powershell/utility-modules/secretmanagement/overview`
-- Windows generic Credential Manager credentials are a possible secure-store primitive, but adopting them would be a new credential architecture and requires an owner decision rather than being slipped into launch polish.
-  - `https://learn.microsoft.com/windows/win32/api/wincred/ns-wincred-credentiala`
+The owner has now asked to prepare OWNER-VALIDATION-01. The prior approval remains valid; no new model/provider/budget/data expansion is introduced.
 
-### Route decision
+Purpose: validate one coherent real-owner journey:
 
-**Route A — current configured-machine alpha: KEEP.**
-Keep the accepted explicit setup contract and environment-based credential boundary. Do not change current-machine setup merely to manufacture a fresh-machine installer problem.
+`File import -> preview/select -> Learn -> Explain -> replay/confirm -> Diagnose -> Repair/Re-explain if warranted -> Apply -> export/history review`.
 
-**Route B — repo-local Setup helper: DEFER UNTIL FRESH-MACHINE NEED IS REAL.**
-A future explicit helper could create/verify the repo `.venv` and pinned extractor dependency using an already-installed Python, without installing Node/Python or storing secrets. It would reduce clone/setup commands, but the current owner machine does not need it now.
+### Test source
 
-**Route C — WinGet/uv/Volta/fnm automatic runtime provisioning: REJECT FOR CURRENT ALPHA.**
-It changes machine/toolchain state and adds new download/update behavior. Only revisit if fresh-machine onboarding becomes an observed cost.
+Use one owner-controlled, low-risk supported file. Preferred bounded fixture, if already available locally, is the previously prepared synthetic DOCX:
 
-**Route D — application-owned secure credential storage: USER DECISION REQUIRED.**
-Do not add Credential Manager/DPAPI/SecretManagement or another vault silently. Current environment-variable mechanism is retained.
+`OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`
 
-**Route E — bundled Node/Python/native installer: USER DECISION REQUIRED / DEFER.**
-Node SEA + Python embeddable/native packaging may later reduce external-user prerequisites, but that is distribution architecture, not a small continuation of the current local alpha.
+It contains deliberately useful condition logic (registration is necessary but not sufficient for entry), no personal data and no need for OCR. If that fixture is not locally available, the owner may instead choose any low-risk DOCX/PDF/PPTX/MD/TXT whose meaning they can personally verify.
 
-## Product decision
+Do not use sensitive/private-client material for this run.
 
-**LOCAL-BOOTSTRAP-PREFLIGHT-01 = PASS.**
+### Execution scope
 
-No new bootstrap implementation is justified now. The project has reached a genuine decision boundary rather than a missing coding task.
+Codex prepares runtime only; the owner performs file selection, learning interaction and microphone actions.
 
-Recommended next product action when owner time is available: resume the real OWNER-VALIDATION-01 file + microphone journey against the accepted UI/launcher state.
+Before owner interaction Codex must:
+1. verify repo `F:\Chat-Codex-Handoff\validation-repo`, branch `prototype/study-teachback-v0.1`, HEAD equals or normally descends from `912bce...`, remote lineage and worktree;
+2. preserve unrelated work and current ledger; no reset/clean/force;
+3. verify the existing repo-owned extractor runtime and pypdf 6.18.0; do not reinstall if already valid;
+4. safely verify the existing model-access configuration is available without exposing or rewriting it;
+5. safely record current ledger summary;
+6. start only `node study-teachback-app/server.mjs` on the existing loopback origin;
+7. confirm safe readiness with GET-only status checks and no Tutor/ASR/provider request;
+8. return `OWNER_VALIDATION_READY` and wait.
 
-If the owner instead wants continued work without owner interaction, they must explicitly choose a new productization goal such as:
-1. fresh-machine onboarding/bootstrap;
-2. runtime bundling/native installer/distribution;
-3. external-user validation preparation.
+### Owner walkthrough
 
-Those paths introduce new setup/system/distribution or credential decisions and are not auto-authorized by the earlier local-alpha work.
+1. Open `http://127.0.0.1:4317`.
+2. Import the selected low-risk supported file.
+3. Check filename, extraction state and preview. Confirm critical condition wording/order is understandable.
+4. Select a coherent section <=5,000 characters; import/preview alone must not create a provider/model request.
+5. Start Learn and ask at least one normal Tutor question.
+6. Click `我来讲讲`; record about 20–45 seconds in natural language. Include at least one condition relation and, if natural, one genuine self-correction; do not read a polished script.
+7. Verify original audio is playable and retained. Review the raw transcript and timing notice.
+8. Fully replay every validated segment before confirmation. Correct critical negation, number, condition or jargon errors before diagnosis. Word-level PARTIAL timing is acceptable; do not require fabricated precision.
+9. Review diagnosis. Check that the final corrected stance is judged, a withdrawn earlier statement is not punished twice, missing content has no fake timestamp, and supported/delivery findings do not expose knowledge-remediation actions.
+10. Delivery feedback may be empty. Any near-silence candidate must be replay-confirmed before interpretation.
+11. Use targeted repair/reteaching only if a real actionable content gap exists. At most one re-explanation attempt is authorized. Preserve the original attempt.
+12. Use Apply once and verify it is a related but new situation, not the same-task repair and not a long-term mastery claim.
+13. Export locally and inspect that the existing export contains the selected source, original audio, raw/corrected transcript versions and reports. Review history/source-version behavior. Do not delete evidence before MASTER review.
+14. Tell MASTER whether the walkthrough completed and any visible friction/failure. No raw audio/file upload to Chat is required.
 
-## Retained accepted state
+### Live-call boundary
 
-UI R2 remains accepted. LOCAL-LAUNCH-01 remains accepted at engineering scope: PowerShell 5.1 launcher suite 14/14 PASS, Node45/45, extraction6/6, historical accepted R2 Edge27/27, ledger unchanged, zero new paid product calls. All source-ingestion, ASR/replay/remediation, storage/history/delete and budget guards remain unchanged.
+For this owner validation only, normal live calls to the already-approved `whisper-1` + `gpt-5.6-luna` are authorized for one coherent walkthrough and at most one naturally warranted targeted re-explanation. Existing US$5 exposure hard stop and US$10 cash ceiling remain unchanged. No repeated stress testing/retry loop.
 
-No external-user/release claim follows. Owner Validation remains deferred.
+### Stop conditions
+
+Stop and return to MASTER if any of the following occurs:
+- raw imported file is unexpectedly sent to provider or persisted contrary to contract;
+- extraction silently corrupts critical meaning without understandable preview;
+- extractor/runtime guard fails;
+- critical ASR meaning error cannot be safely corrected;
+- diagnosis materially contradicts confirmed source/transcript;
+- source/audio/span evidence is fabricated or misattached;
+- remediation gating regresses;
+- repeated API retry becomes necessary;
+- budget/access/storage guard fails;
+- original audio, source identity, attempt identity or corrected/raw version lineage is lost/corrupted.
+
+Minor copy/layout friction is recorded but is not an automatic stop if the journey remains coherent.
+
+## After the walkthrough
+
+After the owner says the walkthrough is complete, Codex must:
+- stop only the server/process it prepared for the walkthrough;
+- collect sanitized step-level PASS/FAIL/UNKNOWN and safe model/request/cost metadata;
+- never commit raw owner files/audio, secrets, `.env`, browser profiles or `.venv`;
+- normal fast-forward push only `prototype/study-teachback-v0.1` with tracked human-readable owner-validation evidence;
+- return exact remote SHA, walkthrough summary, safe ledger before/after and unresolved items.
+
+MASTER then reviews only the new owner-validation evidence.
+
+Possible outcomes:
+- `OWNER VALIDATION PASS — READY FOR NEXT PRODUCT DECISION`;
+- `OWNER VALIDATION PASS WITH MUST FIX`;
+- `OWNER VALIDATION BLOCKED`.
+
+No merge/release/external-user action follows automatically.
 
 ## Classification
 
 Completed:
-- UI R2 implementation/review;
-- local-launch preflight/implementation/engineering review;
-- first real Shell smoke;
-- bounded lifecycle diagnosis;
-- fresh-machine/bootstrap preflight.
+- engineering readiness through UI R2 and local launcher engineering acceptance;
+- source-ingestion/ASR/R4/storage/budget protections;
+- bounded launch diagnostics/bootstrap preflight;
+- OWNER-VALIDATION-01 preparation protocol refreshed against current feature state.
 
 Verified:
-- actual Shell invocation can reach the local product;
-- launcher engineering guards/tests;
-- no provider/model calls or ledger changes from launch/smoke/diagnosis;
-- current external bootstrap/runtime options above.
+- remote feature HEAD `912bce...`;
+- retained engineering evidence above;
+- current validation may use the direct server path without depending on unverified launcher UI lifecycle.
 
 Likely:
-- further automated desktop lifecycle probing has lower value than a true interactive/manual smoke;
-- fresh-machine packaging work would be premature until onboarding/distribution is a real requirement.
+- the product is ready for a bounded real-owner file + microphone journey at the existing alpha scope.
 
 Unknown:
-- real Explorer/default-browser/Enter lifecycle;
-- real owner file/microphone learning journey;
-- external-user onboarding and learning efficacy.
+- real owner document extraction quality;
+- real physical-microphone/ASR/semantic behavior and latency;
+- real owner-facing friction and learning usefulness.
 
 Not Done:
-- OWNER-VALIDATION-01;
-- manual interactive desktop launch validation;
-- fresh-machine setup implementation;
-- installer/native packaging/public release/external validation.
+- actual OWNER-VALIDATION-01 walkthrough;
+- post-run MASTER acceptance;
+- external validation/installer/release.
 
 Must Fix:
-- no proven launcher/product code defect currently blocks the accepted engineering scope;
-- do not claim end-user one-action launch fully validated.
+- none known before execution.
 
 User Decision Needed:
-- **yes, before any further implementation beyond the current local alpha**: choose whether to prioritize owner validation, fresh-machine onboarding, or distribution/packaging.
+- none to execute this already-approved bounded owner validation.
 
 Future Optional:
-- true manual desktop smoke;
-- repo-local setup helper if fresh-machine setup becomes a real need;
-- Edge install-as-app/manifest/icon;
-- runtime bundling/native packaging only after explicit decision.
+- manual launcher UX smoke;
+- fresh-machine onboarding/distribution only after owner validation or a separate explicit decision.
 
 ## Next Smallest Step
 
-**Default: pause new implementation and resume OWNER-VALIDATION-01 when the owner has time. Do not continue automated launcher retries or introduce bootstrap/installer/credential-persistence scope without a new owner decision.**
+**Codex prepares the current branch/runtime and returns `OWNER_VALIDATION_READY`; then the owner performs exactly one bounded file + microphone walkthrough.**
