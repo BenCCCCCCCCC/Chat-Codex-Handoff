@@ -5,107 +5,76 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**UI-UX-FOUNDATION-01 / R1 DESIGN DELIVERY RECOVERED — CODEX IMPLEMENTATION AUTHORIZED, NOT YET EXECUTED**
+**UI-UX-FOUNDATION-01 R1 — IMPLEMENTED / MASTER REVIEW = MUST FIX**
+
+**UI-UX-FOUNDATION-01R2 — CORRECTION AUTHORIZED / NOT YET EXECUTED**
 
 **OWNER-VALIDATION-01 — OWNER-DEFERRED / NOT EXECUTED**
 
-Owner explicitly deferred the real file + microphone walkthrough and requested UI/UX/GUI productization, researched references/Skills/styles/standards, layered examples and one consolidated Codex task. Do not request the owner walkthrough as a prerequisite for this bounded UI task.
+Active product: **知而能讲**, existing local Web Study-first + spoken teach-back app.
+Flow remains:
+`local file extraction -> preview/select -> Learn -> continuous Explain -> replay/confirm -> Diagnose -> legitimate Repair/new attempt -> Apply`.
 
-Active product is **知而能讲**, the existing local-web Study-first + spoken teach-back application, not the earlier Chat-Codex Handoff Assistant utility.
+## Exact product state
 
-Flow: `local file extraction -> preview/select -> Learn -> continuous Explain -> replay/confirm -> Diagnose -> legitimate Repair/new attempt -> Apply`.
+Private repo: `BenCCCCCCCCC/Chat-Codex-Handoff`
+Feature branch: `prototype/study-teachback-v0.1`
+R1 reviewed remote SHA: `3ca0722c5c9ef3f4136865e9fb973f4d74ea8b42`
+Accepted pre-UI engineering checkpoint: `a99d380473a1eac45ada67022c589d654db9c7cd`
 
-## Delivery correction — important evidence boundary
+Git comparison confirms R1 is a normal two-commit descendant of the accepted checkpoint. R1 delivery reports Node 44/44, Edge 26/26, extraction 6/6, zero new paid product API calls and unchanged ledger. These engineering results are accepted as evidence for the implemented delta, but the UI itself is not accepted because owner review found product-facing issues.
 
-The previous assistant final response was empty. Its generated poster depicted the earlier Handoff Assistant rather than the active study application; it is rejected as current design input.
+## MASTER review — R1
 
-The previous canonical text claimed a downloadable package and 40 layout / 27 interaction / 13 contrast checks. Their underlying files and test receipts could not be located in the active file environment during recovery. Those claims are **UNVERIFIED / NOT TO BE RELIED ON**, not accepted evidence. Do not backfill them using newer results.
+### Verified
 
-MASTER has now created a new, separately identified package `UI_UX_FOUNDATION_01_R1`, with actual files, scripts, a retained initial execution failure and new test outputs. This is a design-reference delivery, not production implementation.
+- Product code still contains a real local file input: `#sourceFile`, accepting `.md,.txt,.pdf,.docx,.pptx`; file selection remains local extraction and provider access still begins only after explicit Learn.
+- The user screenshot is the separate design/reference page in state `02 · 提取预览`, not the actual product runtime. Reference-only controls/labels such as level/direction/state selectors and design annotations are not production controls.
+- However, the production entry currently presents file selection as a conventional inline native file input under the label `从本机导入材料`; it is visually secondary and easy to miss.
+- Production R1 intentionally uses a paper/editorial direction with a CJK serif display stack and mixed phase labels such as `01 /`, `LEARN`, `EXPLAIN`, `DIAGNOSE`.
 
-## Exact binding
+### Owner feedback — now authoritative
 
-Private repo: `BenCCCCCCCCC/Chat-Codex-Handoff`.
-Canonical ref: `meta/master-state`; read this file then `docs/master/HANDOFF.md`.
-Local product repo: `F:\Chat-Codex-Handoff\validation-repo`.
-Feature branch: `prototype/study-teachback-v0.1`.
-Last MASTER-accepted product checkpoint and freshly observed remote feature ref during R1 recovery:
+1. Product-facing UI should reduce nonessential explanatory/meta copy and visual noise.
+2. The product does **not** need a deliberately Chinese/editorial style.
+3. File upload/import must be an obvious first-class entry; the owner did not perceive one in the current experience/reference.
 
-`a99d380473a1eac45ada67022c589d654db9c7cd`
+These are **Must Fix** for R2, not Future Optional.
 
-MASTER has not modified/pushed product code or executed Codex on the owner's machine. Only the two authorized canonical documents are maintained here.
+## R2 bounded correction
 
-## Bounded UI decision
+R2 stays on the same feature branch and does not change models, extraction contracts, ASR/semantic logic, persistence schema, budget or release scope.
 
-Implement A / 纸页书桌 as a reversible design baseline: warm paper, ink green, source/anchors alongside readable Tutor, single-focus recording, traceable evidence. This is MASTER's implementation choice, not a claimed owner preference or efficacy result.
+Required:
+- move from deliberate Chinese editorial styling to a neutral modern learning/product UI; use the existing local sans-serif UI stack consistently for headings/body and remove forced CJK serif display styling;
+- reduce nonessential product chrome/copy: remove decorative numbering/English phase prefixes and redundant helper/meta sentences where safety meaning is already conveyed elsewhere; keep legally/operationally important privacy, processing, error and evidence text but consolidate it;
+- first screen must visibly prioritize `选择学习文件 / 上传学习文件（本地解析）`, using the existing `#sourceFile` and existing extraction handler rather than a new upload backend;
+- show supported formats and local-processing note adjacent to the primary file action; keep paste/manual text as an explicit secondary route;
+- after selection, clearly show chosen filename/extraction status and continue into preview/selection; no provider call before explicit Learn;
+- no design-reference selectors, style names, synthetic/test badges or design annotations in production UI;
+- preserve all R3/R4/source-ingestion/storage/budget guards and accessibility behavior.
 
-B / 清晰工作台 uses a denser cool-white layout and right-side source inspector. C / 静夜讲述 uses a dark centered single-column composition. They are comparison examples only, not authorization for a three-theme system.
+No framework rewrite, new endpoint, cloud raw-file upload, OCR, drag-and-drop dependency, native shell, installer or paid design/model call is authorized merely for this correction.
 
-In scope: existing HTML/CSS/ES-module GUI, responsive presentation, accessibility states, import/preview, Learn, Explain, replay, feedback, Repair, Apply, history/data/recovery and scope-specific destructive-action confirmation. Reuse current business state and guards.
+## Retained engineering boundaries
 
-New paid product API calls in this task: **0**. Use existing isolated stub-provider/synthetic-media engineering tests.
+SOURCE-INGESTION-01R remains accepted: repo-owned ignored `.venv`, Python 3.14.6 setup, pinned pypdf 6.18.0, no runtime auto-install/private runtime coupling, local extraction, no OCR/raw-file provider fallback, 10 MB / 30 MB / 100 pages-slides / 200k extracted / 5000 selected limits.
 
-Not implied: React/Vue/Next rewrite, new bundler, second app, Python/PySide GUI, Electron/Tauri/native packaging/installer, public deployment, accounts/sync, OCR/RAG, realtime duplex speech, telemetry or paid design service.
+R3/R4 remains authoritative: original audio saved before ASR; strict segment validity; word timing PARTIAL without fabricated precision; critical replay/confirmation; raw/corrected transcript separation; source/anchor/attempt identity; content/delivery separation; meaningful remediation guard; no knowledge repair for supported/delivery; missing content has no audio timestamp; no global/PTE score or psychological/accent inference; history/export/delete/quota/pending-navigation and seven-day cleanup retained.
 
-## R1 reference package — actually created
+Models remain `whisper-1` + `gpt-5.6-luna`; new paid product API calls for R2 = 0. Last reviewed safe ledger remains known US$0.01179245, exposure US$0.06859995 / US$5, four unsettled reservations, US$10 cash ceiling. Codex must verify before/after safely and not recharge/reset.
 
-- one self-contained interactive HTML reference: three directions, twelve screen states, eight component/foundation groups and eight wireframes;
-- semantic tokens in CSS/JSON;
-- sixteen simple original SVG icons, no font files or third-party screenshot bundle;
-- research/decisions, design system, screen/handler contracts, asset/example prompts;
-- original instruction-only `study-ui-evidence` Skill, not installed;
-- consolidated Codex task and thirty-five product-integration acceptance items;
-- eight actual browser viewport screenshots, QA script, initial failure note, final log and JSON results.
+## Classification
 
-The reference does not read files, request a microphone, access product storage, call providers or manufacture audio. Input remains in the reference page only. Sample content is visibly labelled. Its reference navigation is not production navigation.
+Completed: R1 implementation and evidence package.
+Verified: R1 normal lineage; reported 44/44 Node, 26/26 Edge, 6/6 extraction and zero paid calls; actual product contains the local file input.
+Likely: a simpler neutral UI with a first-class file action will better match the owner's stated product expectation.
+Unknown: R2 visual result until implemented/reviewed; owner real file/mic journey remains deferred.
+Not Done: R2 correction and MASTER acceptance; OWNER-VALIDATION-01; external validation/release.
+Must Fix: simplify nonessential UI copy/chrome; remove deliberate Chinese-editorial styling; make file import unmistakable.
+User Decision Needed: none for this bounded correction.
+Future Optional: broader AT/device testing and other visual directions; do not expand now.
 
-Actual R1 checks: **210 layout cases**, **31 DOM/interaction checks**, **12 selected A-color contrast pairs**; no reported horizontal-overflow failures, assertion failures, JavaScript page errors or external HTTP requests. Scope is only the generated reference in Linux Chromium. These are NOT app Node/Windows Edge/owner tests or complete WCAG conformance.
+## Next Smallest Step
 
-Initial file navigation did not yield a usable page; subsequent set_content on that page failed with an execution-context error. The failed page was closed, and a new blank page rendered the generated HTML in memory. No security policy was weakened. Direct downloaded-file opening on Windows, production integration, 200% text zoom and assistive-technology testing remain unverified.
-
-The conversation ZIP/PNGs are not committed to the feature branch and Chat sandbox paths are not Windows paths. HANDOFF reproduces implementation-critical values, prompts and contracts so owner re-upload is not a prerequisite. Optional reference screenshots must not become mandatory material-transfer work for the owner.
-
-## Research basis
-
-R1 directly checked primary sources: Fluent 2 layout; W3C WCAG 2.2 contrast/target size/reflow and APG modal dialogs; Carbon AI labels; OpenAI Study mode; Anthropic frontend-design Skill; Vercel web-interface-guidelines; OpenAI Skills and Playwright Skill. Reference links and adopted/rejected methods are in HANDOFF and the R1 package.
-
-Existing source observations: current branding and warm-green styling; multiple stages expanded in the same page; direct destructive deletion handlers. These are code observations/design risks, not newly measured user friction or fabricated interviews.
-
-## Retained accepted engineering baseline
-
-SOURCE-INGESTION-01R remains accepted at a99d380:
-- repo-owned ignored `study-teachback-app/.venv`, ordinary Python 3.14.6 setup;
-- pinned pypdf 6.18.0, approved wheel SHA256 `05b762b77bcb9dcb4a7c91fcf5dded585b25bee7269ab3d3001d7c55fa1b324b`;
-- no private Codex/ChatGPT runtime dependency or automatic dependency installation;
-- isolated -I, restricted environment, 15-second extraction timeout;
-- missing runtime/dependency fails closed, zero provider call and unchanged ledger;
-- 10 MB input / 30 MB Office expansion / 100 pages-slides / 200k extracted chars / 5000 selected chars;
-- local raw-file extraction, explicit preview/selection, no OCR/raw-file provider fallback;
-- historical accepted extraction6/6, Node42/42, Edge23/23 at their stated synthetic/stub engineering scope, not rerun by MASTER here.
-
-R3/R4 protections remain: original audio locally saved before ASR; strict valid segments; partial word timing preserves zero-duration values without fabricated precision; real replay/critical-meaning confirmation; raw/corrected separation; source/anchor/attempt identity; content/delivery separation; meaningful-focus repair gating; no knowledge remediation for supported/delivery; missing content has no audio timestamp; export/history/quota/delete/pending-navigation and seven-day reopen cleanup.
-
-No psychological/intelligence/confidence/knowledge/accent inference from acoustic observations, no global/PTE score, no formal recording pause/resume. Historical failed receipts remain retained.
-
-## Models, budget, privacy and Git
-
-Existing model configuration only: whisper-1 and gpt-5.6-luna; semantic Responses store=false. Do not switch providers/models or change semantic contracts for aesthetics.
-
-Last reviewed historical ledger: known US$0.01179245; exposure US$0.06859995 / US$5; four unsettled reservations; BUILD-01 new-cash ceiling US$10. This is not a fresh read of the owner's machine. Codex checks the actual safe before/after ledger; no recharge/reset/relabel. Deleting learning data does not reset budget.
-
-Raw imported files remain local by default; selected text and ASR audio follow the existing explicitly approved cloud-processing boundaries. Do not describe local-first as fully offline or Australia-only processing. Exported copies/already-sent requests cannot be recalled by deletion.
-
-Do not commit raw owner files/audio, credentials/.env, browser profiles or .venv. Standing policy permits Codex normal fast-forward push of this named private non-default feature branch for this approved task, with tracked human-readable evidence and exact remote SHA. No merge/release/public share/force push/branch deletion/unrelated push.
-
-## Classification and next step
-
-Completed: retained engineering baseline; R1 research, layered references, assets, Skill, prompts and bounded implementation/acceptance task; correction of prior unverified delivery claims.
-Verified: exact remote feature ref; new reference-only checks and real generated files. Prior product test results are inherited historical evidence, not new runs.
-Likely: A is a lower-change path on the existing stack; a design judgment.
-Unknown: integrated Windows/Edge GUI, actual file/microphone journey, latency/usability, preference and learning efficacy.
-Not Done: Codex UI implementation, product regression, MASTER delta acceptance, Owner Validation, external study, packaging/release.
-Must Fix: prior wrong-product/unverifiable reference evidence excluded; production implementation must establish its own acceptance.
-User Decision Needed: none within the bounded UI task; new scope/provider/budget/packaging/release/risk requires owner decision.
-Future Optional: B/C themes, richer illustration, full Figma library, distribution/external learner research.
-
-**Next Smallest Step: Codex executes UI-UX-FOUNDATION-01 B1–B5 from the active HANDOFF with zero new paid product API calls, returns tracked sanitized evidence and exact remote SHA, then MASTER reviews only the new delta. Owner walkthrough remains deferred.**
+**Send one concise correction packet to the same Codex task: implement UI-UX-FOUNDATION-01R2 on top of `3ca0722...`, rerun focused + retained regressions with zero paid calls, push the same private feature branch, and return exact remote SHA/evidence for MASTER delta review.**
