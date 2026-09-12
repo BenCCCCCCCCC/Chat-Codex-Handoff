@@ -7,136 +7,114 @@ Role: 00 MASTER / authoritative dynamic state
 
 **UI-UX-FOUNDATION-01R2 — MASTER-ACCEPTED (ENGINEERING/UI SCOPE)**
 
-**LOCAL-LAUNCH-PREFLIGHT-01 — PASS / ROUTE A SELECTED**
+**LOCAL-LAUNCH-01 — MASTER-ACCEPTED (ENGINEERING SCOPE)**
 
-**LOCAL-LAUNCH-01 — BOUNDED WINDOWS LAUNCHER AUTHORIZED / NOT YET EXECUTED**
+**LOCAL-LAUNCH-SMOKE-01 — AUTHORIZED / NOT YET EXECUTED**
 
 **OWNER-VALIDATION-01 — OWNER-DEFERRED / NOT EXECUTED**
 
-Active product: **知而能讲**, existing local Web Study-first + spoken teach-back app.
-Flow remains:
-`local file extraction -> preview/select -> Learn -> continuous Explain -> replay/confirm -> Diagnose -> legitimate Repair/new attempt -> Apply`.
+Active product: **知而能讲**, Windows local-Web Study-first + spoken teach-back alpha.
 
-## Exact product state
-
-Private repo: `BenCCCCCCCCC/Chat-Codex-Handoff`
-Feature branch: `prototype/study-teachback-v0.1`
 Current MASTER-accepted feature checkpoint:
-`3a6137d9b39d8e2bdfef8e6366d9bceec7d01031`
+`a4a360d4e86a71db39213cb42baca29837b433bd`
 
-R2 is accepted at the bounded engineering/UI scope: Node45/45, Edge27/27 with synthetic media/stub providers, extraction6/6, prominent local file entry, import/preview zero provider calls, neutral sans-serif product UI, and unchanged safe ledger/new paid calls0. Owner Validation remains deferred.
+Feature branch:
+`prototype/study-teachback-v0.1`
 
-## LOCAL-LAUNCH-PREFLIGHT-01 — current/collision findings
+## LOCAL-LAUNCH-01 MASTER review
 
-### Current product source facts
+Git comparison confirms `a4a360d...` is one normal descendant commit ahead of the previously accepted `3a6137d...`.
 
-- Runtime is a loopback-only Node HTTP server at `127.0.0.1:4317` (`study-teachback-app/server.mjs`).
-- Today the operator must explicitly run `node study-teachback-app/server.mjs` and then open `http://127.0.0.1:4317`.
-- The app remains plain HTML/CSS/ES modules with no `package.json`/framework requirement in `study-teachback-app`.
-- Source extraction also depends on the existing repo-owned `.venv` / pinned pypdf contract; normal runtime never installs dependencies.
-- Provider credential remains process environment only (`OPENAI_API_KEY`); source code does not read or create `.env` and the launcher must not introduce secret persistence.
-- Ledger path is import-relative under `study-teachback-app/runtime/usage.json`, so launch CWD should not redefine ledger identity.
-- Browser learning data/microphone permissions are tied to the current localhost origin; preserving `http://127.0.0.1:4317` avoids an unnecessary storage/permission migration.
+Verified implementation:
+- repo-root `Start-Study.cmd` and `Stop-Study.cmd`;
+- `study-teachback-app/launch.ps1` plus focused launch tests;
+- paths resolve from the launcher location rather than caller CWD;
+- target remains exactly `http://127.0.0.1:4317/`;
+- an already verified product server is reused before new-start prerequisite checks;
+- unknown port owners and stale process state fail closed and are not killed blindly;
+- new startup requires already-configured local prerequisites and performs no automatic installation/system configuration;
+- readiness is confirmed before the browser-open boundary;
+- launcher-owned shutdown is identity-checked; reused servers are not claimed or stopped;
+- runtime ownership state is local/ignored and contains no learning data.
 
-### Verified external/current facts
+Verified evidence:
+- Windows PowerShell 5.1 launcher suite **14/14 PASS**;
+- repo-root and unrelated `System32` CWD paths PASS;
+- missing prerequisite cases fail closed;
+- free-port startup/readiness/open-boundary PASS;
+- timeout cleanup PASS;
+- unknown occupied port preserved PASS;
+- verified existing-server reuse PASS, including reuse when the caller environment lacks new-start prerequisites;
+- stale ownership refusal PASS;
+- Node regression **45/45 PASS**;
+- extraction regression **6/6 PASS**;
+- Edge not rerun because product HTML/JS/server/business logic did not change; accepted R2 Edge27/27 remains historical evidence only;
+- usage ledger before/after exactly unchanged;
+- new paid product API calls **0**.
 
-1. **Microsoft Edge can install any website as an app**, not only a manifest-defined PWA, and can create Start/taskbar/desktop shortcuts. Official support: `https://support.microsoft.com/en-us/edge/install-manage-or-uninstall-apps-in-microsoft-edge`.
-2. Edge PWAs can integrate with Windows, but that installation layer assumes the web origin is available; it does not itself start this repo's Node server or Python extractor. Official developer docs: `https://learn.microsoft.com/en-us/microsoft-edge/progressive-web-apps/ux`.
-3. `http://127.0.0.1` / `localhost` are potentially trustworthy origins for secure-context web APIs, so the existing local browser media path does not require HTTPS merely for local use. Current MDN secure-context reference: `https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts`.
-4. Current ChatGPT Desktop/Codex includes local folders, terminals and a built-in browser useful for development/review, but current official docs do not provide a mechanism that packages or starts this external local product for an end user. OpenAI references: `https://help.openai.com/en/articles/20001276/` and `https://help.openai.com/en/articles/20001277-using-the-built-in-browser-in-the-chatgpt-desktop-app`.
-5. **PWABuilder** is active and appropriate for packaging/installing web apps/store routes, but does not remove this product's local Node/Python sidecar startup requirement. Repo: `https://github.com/pwa-builder/PWABuilder`.
-6. **Nativefier** is archived/unmaintained since 2023 and explicitly recommends browser site-app shortcuts or Electron instead; reject as a new dependency. Repo: `https://github.com/nativefier/nativefier`.
-7. **Electron** is an established native wrapper, but official distribution guidance adds packaging/signing/update responsibilities; it would duplicate a browser engine and does not solve Python-sidecar packaging for free. `https://www.electronjs.org/docs/latest/tutorial/distribution-overview`.
-8. **Tauri** uses Windows WebView2 and is lighter than Electron in some cases, but adds Rust/build/installer integration and still requires an explicit sidecar/runtime design. Current prerequisites: `https://v2.tauri.app/start/prerequisites/`.
-9. Microsoft WebView2 has active official samples, but a bespoke WebView2 host is still a new native application layer, not a free launcher. `https://github.com/MicrosoftEdge/WebView2Samples`.
-10. Node single-executable applications are improving, but remain an additional packaging track and do not package the Python/pypdf extractor by themselves. Not selected for this alpha.
+Tracked evidence:
+`artifacts/study-teachback/local-launch-01/`
 
-### Route comparison
+## Evidence boundary
 
-**Route A — repo-owned Windows launcher: SELECTED.**
-Smallest change; preserves exact localhost origin, current Node/Python boundaries, IndexedDB/mic permissions and browser auto-updates. Can reduce `cd -> run server -> find/open URL` to one explicit launcher action. No framework or installer is required.
+The task contract explicitly allowed automated interception of browser opening, so the launcher is accepted at engineering scope.
 
-**Route B — PWA / Edge install-as-app: useful complement, NOT the primary solution now.**
-It can provide an app-like window/shortcut, but the local server still must be started. A service worker/offline shell does not remove network dependence of model calls and introduces caching/update surface. Do not add a service worker merely for optics. Manifest/favicon may be future polish after launcher behavior is proven.
+Still **Unknown / not yet verified**:
+- actual Windows Explorer/Shell double-click of `Start-Study.cmd`;
+- actual default-browser window opening to the exact URL;
+- actual visible console + Enter stop experience;
+- Ctrl+C/window-close behavior;
+- whether the Windows Shell environment currently carries all already-configured runtime prerequisites;
+- live learning/model behavior when the server was started by this launcher.
 
-**Route C — Electron/Tauri/WebView2/native installer: DEFER.**
-Potentially relevant only when the owner chooses real external distribution/installer packaging. Current single-owner alpha does not justify new build systems, code signing, runtime bundling or origin migration risk.
+No live learning/model request is needed for the next launch smoke.
+
+README also contains stale/over-broad wording: it presents double-click and Ctrl+C as normal verified paths even though those were not manually run, and it still states an outdated reason for Owner Validation being paused. This is a documentation/evidence mismatch, not a launcher-code blocker.
 
 ## Product decision
 
-**LOCAL-LAUNCH-PREFLIGHT-01 = PASS.**
+**LOCAL-LAUNCH-01 = MASTER-ACCEPTED at engineering scope.**
 
-Proceed with one bounded implementation experiment: **LOCAL-LAUNCH-01 — Windows One-Action Local Launcher**.
+No installer/native wrapper/PWA/service/background-daemon/store/public-release scope follows automatically.
 
-This is not authorization for an installer, native shell, startup daemon, Windows service, system-wide PATH mutation, browser policy change, PWA service worker, Microsoft Store publication or public release.
+## LOCAL-LAUNCH-SMOKE-01
 
-## LOCAL-LAUNCH-01 required behavior
+Next smallest experiment: one real Windows Shell/default-browser smoke, with **0 provider/model calls** and no learning/file/microphone operation.
 
-Goal: from the repository on the current Windows machine, reduce normal startup to one explicit launcher action while failing closed on uncertain state.
+Allowed:
+- invoke the real launcher through a Windows Shell/Explorer-equivalent path when safe;
+- verify the actual server/port identity and default-browser target;
+- verify the normal visible stop path when safely automatable, otherwise leave it Unknown and use the existing identity-checked recovery stop;
+- verify usage ledger unchanged;
+- correct README wording so it distinguishes verified automation from still-unverified manual shell behavior;
+- track a small smoke receipt and push only that bounded docs/evidence delta if anything changes.
 
-Implement a transparent repo-owned launcher; exact file split is Codex's choice but keep it small (for example one PowerShell launcher plus an optional tiny `.cmd` double-click entry and focused tests/docs).
+Do not install dependencies, alter OS/browser policy, add background services, package a native wrapper, or run a learning/model request.
 
-Required:
-- locate repo/app from the launcher file path, not the caller's current directory;
-- work from a fresh/non-repo shell directory;
-- require existing Node and existing repo-owned extractor environment; **never auto-install/download** Node/Python/pypdf;
-- safely check current extractor readiness without modifying it;
-- never read/write `.env`, credential stores, browser profiles or ChatGPT/Codex private files;
-- check whether `OPENAI_API_KEY` is available to the launch process without printing/logging its value; if unavailable, fail closed with a concise setup message rather than persisting a secret;
-- preserve port/origin `127.0.0.1:4317`;
-- if the expected app server is already running, reuse it and do not start a duplicate;
-- if port 4317 is occupied by an unknown/non-matching process, fail closed and **do not kill it**;
-- if starting a new server, make its lifetime/state visible and user-controlled; no hidden permanent daemon/service/autostart;
-- wait for safe readiness before opening the URL; do not open a broken page optimistically;
-- open only the exact loopback product URL; no browser automation, paste or send;
-- provide a clear shutdown/recovery path that only targets a launcher-owned/positively identified process;
-- no provider/model request merely from launching;
-- preserve all current app/ledger/storage/source/ASR contracts.
+If the real Shell path is blocked because the Shell environment lacks an already-configured prerequisite, return to MASTER as a product/bootstrap decision rather than silently persisting new configuration.
 
-Testing must use no live model call. A temporary fake key may be scoped only to a launcher smoke process if needed to exercise readiness, but it must not be persisted or sent to a provider. Record actual Windows PowerShell 5.1 behavior, fresh CWD behavior, already-running reuse, missing Node/venv/key, unknown port occupancy, startup readiness/open target, shutdown ownership and ledger before/after.
+## Retained boundaries
 
-Standing private fast-forward permission applies to the same named feature branch for this bounded approved work. Return exact remote SHA and tracked human-readable evidence. No merge/release follows automatically.
+All accepted source-ingestion, R3/R4, storage, budget and model boundaries remain unchanged. Owner Validation remains deferred and no real owner file/microphone journey has been executed.
 
 ## Classification
 
-Completed:
-- BUILD-01/R3/R4/source ingestion/portability;
-- UI-UX-FOUNDATION-01 R1/R2 and MASTER review;
-- LOCAL-LAUNCH-PREFLIGHT-01 research/collision check.
+Completed: UI R2; launch preflight; LOCAL-LAUNCH-01 implementation and MASTER engineering review.
 
-Verified:
-- current accepted product SHA `3a6137d...`;
-- current manual loopback server architecture and secret/extractor/ledger boundaries from source;
-- Edge/PWA/current wrapper facts listed above;
-- no existing lightweight option examined removes the local Node+Python startup requirement without integration work.
+Verified: accepted SHA `a4a360d...`; launcher fail-closed/ownership behavior; PS5.1 14/14; Node45/45; extraction6/6; unchanged ledger; zero new paid calls.
 
-Likely:
-- a repo-owned launcher is the lowest-cost way to make the current single-owner alpha feel materially more launchable without premature packaging.
+Likely: the launcher reduces the current manual repo/shell/server/URL startup burden once the real Shell path is confirmed.
 
-Unknown:
-- exact current-machine experience of one-action launch/reuse/shutdown until Codex runs the experiment;
-- whether a visible/minimized local service window is acceptable long term;
-- future external distribution/signing/runtime-bundling design;
-- real owner file/microphone journey.
+Unknown: real Explorer/default-browser/console lifecycle; owner journey; broader distribution/bootstrap.
 
-Not Done:
-- LOCAL-LAUNCH-01 implementation/review;
-- OWNER-VALIDATION-01;
-- installer/native packaging/store/public release/external validation.
+Not Done: LOCAL-LAUNCH-SMOKE-01; OWNER-VALIDATION-01; installer/native packaging/public release/external validation.
 
-Must Fix:
-- none currently known before launcher experiment.
+Must Fix: no launcher-code blocker; README evidence/status wording must be reconciled before claiming the end-user one-action path is fully validated.
 
-User Decision Needed:
-- none for the bounded repo-local launcher authorized by the owner's request to continue product/app landing;
-- installer/native wrapper, OS startup/background service, system-wide changes, public distribution, signing spend or new framework requires a new owner decision.
+User Decision Needed: none for the zero-provider Shell smoke. New credential-persistence/bootstrap design, installer/native wrapper/system startup/public distribution still require owner decision.
 
-Future Optional:
-- Edge site-as-app/PWA manifest/icon after launcher proves useful;
-- Node/Python runtime bundling;
-- Tauri/WebView2/Electron packaging only if external distribution becomes a real requirement;
-- UI footer copy polish/broader AT/device validation.
+Future Optional: Edge install-as-app/manifest/icon after the launch path is proven; broader AT/device testing; runtime bundling only when a real distribution need appears.
 
 ## Next Smallest Step
 
-**Codex implements LOCAL-LAUNCH-01 on top of `3a6137d...`, with zero paid product API calls, no installs/system changes, then pushes tracked evidence for MASTER delta review. Owner Validation remains deferred.**
+**Run LOCAL-LAUNCH-SMOKE-01 only. Do not start installer/native-wrapper/PWA work.**
