@@ -2,19 +2,19 @@
 
 ## Windows one-action launcher
 
-Double-click repo-root `Start-Study.cmd`, or invoke its full path from your configured terminal. It uses Windows PowerShell 5.1 without changing policy, resolves paths from the script, and opens only http://127.0.0.1:4317/ after readiness. Keep the control window open; Enter or Ctrl+C stops its own server. After abrupt window closure, use `Stop-Study.cmd` for identity-checked recovery. Finish learning requests before stopping: termination cannot recall already-sent provider requests.
+Entry: repo-root `Start-Study.cmd`, invoked from the Windows Shell or by full path from a configured terminal. Explorer double-click has not been manually verified. It uses Windows PowerShell 5.1 without changing policy, resolves paths from the script, and opens only http://127.0.0.1:4317/ after readiness. Keep the control window open. Enter is the intended normal stop; actual visible-console Enter and Ctrl+C behavior remain unverified (automated lifecycle tests exercised callbacks). After abrupt window closure, use `Stop-Study.cmd` for identity-checked recovery. Finish learning requests before stopping: termination cannot recall already-sent provider requests.
 
 An already-verified configured server is reused before checking caller prerequisites, and is never stopped by that invocation. For a new server, existing `node.exe` must be on the launch process PATH, the repo `.venv`/pypdf6.18.0 (or absolute STUDY_PYTHON) must be valid, and OPENAI_API_KEY must already be inherited. Explorer and a configured terminal can have different environments. Nothing is installed; no key, .env, PATH, registry or execution policy is persisted/modified.
 
 Identity combines safe status/UI checks with Node and the exact absolute server.mjs command-line path. Relative-path/unverifiable processes fail closed; their operator should stop them normally. Unknown port owners are never killed. Recovery requires recorded PID/start time/app identity in ignored runtime/launcher.json; stale state requires manual inspection, not a blind PID kill. No service/daemon/autostart is created.
 
-Launcher tests: `powershell.exe -NoProfile -File study-teachback-app/launch-tests.ps1`. Port4317 must be free; tests refuse pre-existing occupancy, use a temporary in-memory non-secret credential and intercept browser opening. Actual Explorer/default-browser and owner-microphone walkthrough are not tested. See `artifacts/study-teachback/local-launch-01/` for receipts.
+Launcher tests: `powershell.exe -NoProfile -File study-teachback-app/launch-tests.ps1`. Port4317 must be free; tests refuse pre-existing occupancy, use a temporary in-memory non-secret credential and intercept browser opening. The subsequent Shell smoke exercised real ShellExecute CMD invocation; see `artifacts/study-teachback/local-launch-smoke-01/` for its partial browser/console observation limits. Explorer mouse double-click, Ctrl+C and owner-microphone walkthrough remain unverified. See `artifacts/study-teachback/local-launch-01/` for receipts.
 
-OWNER-VALIDATION-01 remains paused pending MASTER portability review.
+Owner Validation: OWNER-DEFERRED / NOT EXECUTED.
 
 ## Source entry
 
-Use “从本机导入材料” on the initial Learn screen. MD/TXT/PDF/DOCX/PPTX are extracted locally; preview and select up to 5,000 characters into the existing source editor. Only pressing “开始一起学” sends selected text to the existing Tutor. Raw files are not uploaded to a provider or persisted. Recording remains directly inside the app.
+Use “选择学习文件” on the initial Learn screen. MD/TXT/PDF/DOCX/PPTX are extracted locally; preview and select up to 5,000 characters into the existing source editor. Only pressing “开始学习” sends selected text to the existing Tutor. Raw files are not uploaded to a provider or persisted. Recording remains directly inside the app.
 
 ## Explicit setup (Windows, from repo root)
 
