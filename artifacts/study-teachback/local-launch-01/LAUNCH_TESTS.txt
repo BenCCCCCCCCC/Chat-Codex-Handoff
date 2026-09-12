@@ -1,0 +1,18 @@
+PASS Windows PowerShell 5.1 execution
+PASS actual source bytes and PS51 syntax have no Markdown or escaping pollution
+PASS missing Node fails closed
+PASS missing extractor fails closed
+PASS invalid extractor dependency fails closed
+PASS missing runtime key fails closed without outputting it
+READY http://127.0.0.1:4317/ Keep this control window open. Stop-Study.cmd is recovery stop.
+PASS repo-root start readiness exact URL and owned shutdown
+READY http://127.0.0.1:4317/ Keep this control window open. Stop-Study.cmd is recovery stop.
+PASS fresh unrelated CWD plus recovery Stop entry
+PASS startup timeout does not open browser and cleans owned process
+PASS unknown occupied port is not killed
+REUSED_EXISTING_SERVER: This launcher will NOT stop it.
+REUSED_EXISTING_SERVER: This launcher will NOT stop it.
+PASS verified existing server reused with missing caller Node extractor and key
+PASS pre-existing correct server reused without acquiring stop ownership
+PASS stale PID record never stops unknown process
+PASS ledger identical and launcher provider endpoints absent

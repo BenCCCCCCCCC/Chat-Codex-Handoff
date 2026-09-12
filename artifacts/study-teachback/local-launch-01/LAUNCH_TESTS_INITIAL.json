@@ -1,0 +1,58 @@
+﻿{
+    "browserOpen":  "Intercepted exact URL; no actual browser interaction",
+    "cases":  [
+                  {
+                      "name":  "Windows PowerShell 5.1 execution",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "missing Node fails closed",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "missing extractor fails closed",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "invalid extractor dependency fails closed",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "missing runtime key fails closed without outputting it",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "repo-root start readiness exact URL and owned shutdown",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "fresh unrelated CWD plus recovery Stop entry",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "startup timeout does not open browser and cleans owned process",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "unknown occupied port is not killed",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "pre-existing correct server reused without acquiring stop ownership",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "stale PID record never stops unknown process",
+                      "status":  "PASS"
+                  },
+                  {
+                      "name":  "ledger identical and launcher provider endpoints absent",
+                      "status":  "PASS"
+                  }
+              ],
+    "providerCalls":  0,
+    "powershell":  "5.1.26100.9444",
+    "key":  "Temporary in-memory non-secret test value; not persisted or sent",
+    "ledgerBefore":  "03C05453D3B9A1002DD17B69E6B73C9BE836BA6E11A247FE6E18DC9038104147",
+    "ledgerAfter":  "03C05453D3B9A1002DD17B69E6B73C9BE836BA6E11A247FE6E18DC9038104147"
+}

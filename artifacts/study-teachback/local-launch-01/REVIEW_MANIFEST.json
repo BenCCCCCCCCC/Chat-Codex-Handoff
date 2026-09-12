@@ -1,0 +1,62 @@
+[
+  {
+    "path": "Start-Study.cmd",
+    "sha256": "b01404aa984b0c31bdc87dc6ce61002f347ee98201146236f7ef305ceabcf8f5",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "Stop-Study.cmd",
+    "sha256": "230cb282a866e00aa831cff917aa2d0aee07570af94fb7b186475d130a90a416",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/local-launch-01/DELIVERY_PACKET.md",
+    "sha256": "df651262f0a283e5000d267c24a0555dfe918107c48416f29892b87a884f43aa",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/local-launch-01/EXTRACTION_TESTS.txt",
+    "sha256": "b1930822b5e4124b4fc5e65a516fd53562a4daf596fd1ca1ad58cd144c72a529",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/local-launch-01/LAUNCH_TESTS.json",
+    "sha256": "f4886170534f44f6ca29e0f528fa8ab8de60384d72eb1b6e1d1995fe91036403",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/local-launch-01/LAUNCH_TESTS.txt",
+    "sha256": "4f28c3f6bd500ee86701d32d8c7e1c08f47b2d83148d9e7ef82c2c592d2db918",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/local-launch-01/LAUNCH_TESTS_INITIAL.json",
+    "sha256": "736d055560fb38b905b0bacf391856dd07ccc0a44083c22fddd4d6c9468851c8",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/local-launch-01/LEDGER_CHECK.json",
+    "sha256": "00ce7b793413ea4c7584b4d43c26272ad826be5636a7c909f8cdf429cc92d16b",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "artifacts/study-teachback/local-launch-01/NODE_TESTS.txt",
+    "sha256": "82b029d83d65e13bdb03b54fef81ec2c8a23e1049b9c99c5611289b6855122e8",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/README.md",
+    "sha256": "eae03ab0b86f1d45ae7b6423145ea60dc6862489d86e2525f9e3189fa607b5ef",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/launch-tests.ps1",
+    "sha256": "76ce4959f5d0a58b92b2b936d71331c3cfc340fa371e63883de308ec2d9c6daf",
+    "hashBasis": "git blob bytes"
+  },
+  {
+    "path": "study-teachback-app/launch.ps1",
+    "sha256": "82cacba9f0dbebc5c6f10507abbe21e441a510b44ce649c84a99438773b8d41b",
+    "hashBasis": "git blob bytes"
+  }
+]
