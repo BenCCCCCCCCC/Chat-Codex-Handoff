@@ -26,7 +26,7 @@ study-teachback-app/.venv/Scripts/python.exe -I -m pip --isolated install --inde
 node study-teachback-app/server.mjs
 ```
 
-Open http://127.0.0.1:4317 after owner validation resumes. `.venv` is ignored and must be recreated on another machine; it is not vendored. pypdf is pinned to 6.18.0 with the authorized wheel SHA256 in requirements-extractor.txt. Setup is explicit; the running application never installs/downloads dependencies. No global package install is needed.
+Local launch at http://127.0.0.1:4317 is available independently of Owner Validation, which remains OWNER-DEFERRED / NOT EXECUTED. `.venv` is ignored and must be recreated on another machine; it is not vendored. pypdf is pinned to 6.18.0 with the authorized wheel SHA256 in requirements-extractor.txt. Setup is explicit; the running application never installs/downloads dependencies. No global package install is needed.
 
 The default interpreter is `.venv/Scripts/python.exe` on Windows (`.venv/bin/python` on other systems, not verified here). Optional `STUDY_PYTHON` is an absolute, non-secret path to an operator-selected Python with pypdf 6.18.0. The subprocess receives only SystemRoot, uses `-I`, and has a 15-second timeout. Missing interpreter or missing/wrong pypdf returns a setup/dependency error, with no provider fallback. OPENAI_API_KEY remains server-side and is not passed to the extractor.
 
