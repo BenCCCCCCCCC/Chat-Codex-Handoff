@@ -5,105 +5,111 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**SOURCE-INGESTION-01R MASTER-ACCEPTED / OWNER-VALIDATION-01 RESUMED — REAL FILE + MICROPHONE WALKTHROUGH NEXT**
+**UI-UX-FOUNDATION-01 — DESIGN / REFERENCE PACKAGE PREPARED; CODEX IMPLEMENTATION AUTHORIZED, NOT YET EXECUTED**
 
-Active product flow:
+**OWNER-VALIDATION-01 — OWNER-DEFERRED / NOT EXECUTED**
 
-`MD/TXT/PDF/DOCX/PPTX -> local extraction -> preview/selection -> Learn -> Explain -> Diagnose -> Repair -> Re-explain -> Apply`
+The owner explicitly has no time for the real file + microphone walkthrough now and requested UI/UX/GUI productization, research into design references/Skills/styles/standards, layered example assets, and a consolidated Codex implementation prompt. This changes the next task; it does not invalidate the accepted engineering checkpoint and does not count synthetic checks as owner validation.
 
-MASTER directly reviewed private feature branch `prototype/study-teachback-v0.1` at remote HEAD:
+Active product remains 知而能讲, a bounded local-web Study-first + in-product spoken teach-back app:
+
+`MD/TXT/PDF/DOCX/PPTX -> local extraction -> preview/selection -> Learn -> Explain -> replay/confirm -> Diagnose -> Repair -> Re-explain -> Apply`
+
+## Authority and exact baseline
+
+Private repository: `BenCCCCCCCCC/Chat-Codex-Handoff`.
+Canonical ref: `meta/master-state`.
+Read `docs/master/CURRENT_STATE.md`, then `docs/master/HANDOFF.md`.
+
+Local product repo: `F:\Chat-Codex-Handoff\validation-repo`.
+Current feature branch: `prototype/study-teachback-v0.1`.
+Last MASTER-accepted feature checkpoint, and feature ref observed during this UI research:
 
 `a99d380473a1eac45ada67022c589d654db9c7cd`
 
-SOURCE-INGESTION-01R passes at the tested Windows/local-alpha scope. The portability blocker is closed. OWNER-VALIDATION-01 had already been owner-approved and was only paused; it is now resumed without a new approval because provider/model/budget/data boundaries are unchanged.
+No product-code implementation or feature-branch push has been performed by MASTER in this UI design turn. The handoff contains a self-contained implementation contract, design tokens, asset construction and prompt guidance; owner file/ZIP re-upload is not an execution prerequisite.
 
-## Authority
+Older owner-validation/readme instructions to run the walkthrough immediately or wait for portability review are superseded by this explicit owner deferral. The accepted portability fix stays closed.
 
-Repository `BenCCCCCCCCC/Chat-Codex-Handoff`, ref `meta/master-state`:
-1. `docs/master/CURRENT_STATE.md`
-2. `docs/master/HANDOFF.md`
-3. `docs/research/strategy-reset-01/OWNER_VALIDATION_01.md` — approved/resumed
-4. `docs/research/strategy-reset-01/SOURCE_INGESTION_01R_PORTABILITY.md` — PASS / closed
-5. `docs/research/strategy-reset-01/BUILD_01R4_FEEDBACK_ACTION_GATING.md` — PASS / closed
-6. earlier R3 / BUILD-01 contracts only as evidence boundaries.
+## New bounded decision — UI-UX-FOUNDATION-01
 
-## SOURCE-INGESTION-01R review — PASS
+Authorized: refine the existing local-web GUI, native HTML/CSS/ES-module presentation, responsive layout, accessibility states, source preview, Learn/Explain/replay/feedback/repair/Apply views, history/privacy/recovery, and confirmation before destructive deletion. Existing logic, data contracts and guards remain authoritative.
 
-GitHub comparison confirms `a99d380...` is one normal descendant commit ahead of `dc4893c...`.
+Default implementation direction: **A / 纸页书桌** — warm paper surfaces, dark ink/green, source + learning anchors beside a readable Tutor, single-focus recording, traceable feedback. This is a reversible MASTER design baseline, not a fabricated owner preference or validated learning-effect claim.
 
-Accepted runtime strategy:
-- repo-owned local virtual environment at `study-teachback-app/.venv`;
-- ordinary Python 3.14.6 used for setup;
-- pinned `pypdf==6.18.0` with approved wheel SHA256 `05b762b77bcb9dcb4a7c91fcf5dded585b25bee7269ab3d3001d7c55fa1b324b`;
-- `.venv` ignored and not committed;
-- normal application runtime never auto-installs/downloads dependencies;
-- launcher uses repo-relative venv Python, with optional absolute non-secret `STUDY_PYTHON` override;
-- no Codex/ChatGPT private runtime/cache dependency;
-- child process uses `-I`, restricted environment, 15-second timeout;
-- missing interpreter returns `EXTRACTOR_SETUP_REQUIRED`; missing/wrong pypdf returns `EXTRACTOR_DEPENDENCY_REQUIRED`;
-- missing runtime/dependency does not invoke provider and does not change ledger.
+B / 清晰工作台 and C / 静夜讲述 are layout/style comparison examples only. Do not ship a three-theme system.
 
-Source-ingestion behavior remains:
-- `.md/.txt/.pdf/.docx/.pptx` local extraction;
-- explicit preview/selection before Learn;
-- maximum 5,000 characters selected into the existing source editor;
-- no raw-file provider fallback and no automatic provider call on import;
-- no OCR for scanned/image-only PDFs;
-- 10 MB input, 30 MB Office expansion, 100 page/slide, 200k extracted-character limits.
+Current phase product API allowance: **0 new paid calls**. Use existing isolated stub-provider and synthetic-media engineering tests only. No owner walkthrough, external users, sensitive files/audio or new provider/model is required to complete this bounded UI implementation.
 
-Accepted verification:
-- extraction **6/6 PASS**;
-- Node **42/42 PASS**;
-- Edge **23/23 PASS** at actual Edge / synthetic-media / stub-provider engineering scope;
-- real missing-interpreter and empty-venv dependency cases fail closed over HTTP;
-- **0 new paid calls**;
-- live ledger unchanged: known conservative cost `US$0.01179245`, exposure `US$0.06859995 / US$5`, four historical unsettled reservations preserved;
-- historical initial portability-test failure is retained and final rerun passes.
+No React/Vue/Next rewrite, new build system, desktop/mobile native shell, Electron/Tauri/installer, public hosting, account/sync, OCR/RAG, real-time voice, telemetry or paid design service is implied. Necessary genuine scope/risk/paid expansion returns to owner.
 
-README now documents the file-import workflow, setup prerequisite, pinned dependency, limits, no-OCR/complex-layout limitations and current test state.
+## Research and reference package
 
-## Previously accepted engineering state — unchanged
+MASTER read the accepted index.html, style.css, app.mjs and README, plus canonical state. Source-supported observations: existing brand and warm green visual baseline; multiple stages expand in the same page; deletion currently executes directly. These are code observations/design risks, not measured user friction.
 
-Do not reopen unless owner validation contradicts it:
-- BUILD-01/R3/R4 engineering readiness;
-- real Whisper transcript + strict segment timestamp transport PASS;
-- word timing PARTIAL; unusable zero-duration provider values are preserved rather than fabricated;
-- critical timing uncertainty falls back to validated segment replay + human confirmation;
-- corrected bounded Luna necessary/sufficient verdict challenge 7/7 after retained failures were fixed rather than hidden;
-- content/delivery separation and R4 remediation gating;
+Primary references reviewed: Fluent 2 layout/typography/motion; W3C WCAG 2.2 contrast, target size, focus, reflow and APG modal dialogs; Carbon AI-label explainability; OpenAI Study mode and source-grounded notebook interaction patterns; Anthropic frontend-design, Vercel web-interface-guidelines, OpenAI Playwright/Skills methods. Borrow methods, not entire dependency stacks or unexamined Skill instructions. No third-party font files or screenshots were bundled.
+
+Prepared conversation artifact package: `UI_UX_FOUNDATION_01` — three directions, foundations/eight component families, eight wireframes, twelve-state interactive design reference, sixteen original SVG icons plus one decorative empty-state SVG, original project instruction Skill, asset/example prompts, Codex task and thirty-five integration acceptance items. Reference UI deliberately does not read files, record audio, access application storage or call providers. Its simulated content is visibly labelled.
+
+Reference-only checks actually performed in the test container: 40 viewport/state layout cases with no horizontal overflow/JS errors reported; 27 DOM/interaction/reference-layout checks passed; 13 selected A-token contrast pairs passed their stated thresholds. These are NOT production app/Windows Edge/owner tests and NOT complete WCAG conformance.
+
+Environment boundary: file:// and local-HTTP navigation were blocked by container policy; reference rendering used in-memory HTML. Actual downloaded-file opening, Windows deployment, actual Edge integration and human assistive-technology checks remain unverified. No user machine security policy was changed. Reference QA scripts are not production dependencies.
+
+## Accepted engineering baseline — unchanged
+
+SOURCE-INGESTION-01R is MASTER-ACCEPTED at a99d380...:
+- repo-owned `study-teachback-app/.venv`, ordinary Python 3.14.6 setup;
+- `pypdf==6.18.0`, approved wheel SHA256 `05b762b77bcb9dcb4a7c91fcf5dded585b25bee7269ab3d3001d7c55fa1b324b`;
+- ignored venv, no automatic runtime install/download, no Codex/ChatGPT private-runtime dependency;
+- optional absolute non-secret STUDY_PYTHON; isolated -I, restricted environment, 15-second timeout;
+- setup/dependency failures fail closed, no provider call and no ledger change;
+- 10 MB input, 30 MB Office expansion, 100 pages/slides, 200k extracted chars, 5,000 selected chars;
+- local extraction/explicit preview and selection; no OCR or raw-file cloud fallback;
+- accepted extraction 6/6, Node 42/42, Edge 23/23 at stated synthetic/stub engineering scope;
+- zero new paid calls in portability recovery and historical failed receipts retained.
+
+Previously accepted R3/R4 remains unchanged:
 - original audio saved before ASR;
-- export/quota/per-attempt-delete/pending-navigation/history/expiry paths at stated engineering scope.
+- strict valid segments; word timing PARTIAL with zero-duration values preserved, never fabricated;
+- segment replay + user confirmation for critical timing/ASR uncertainty;
+- corrected bounded necessary/sufficient logic challenge 7/7 after retained failures;
+- separate content/delivery channels; supported/delivery findings cannot offer targeted knowledge remediation;
+- meaningful-focus guard for repair/partial re-record;
+- raw/corrected transcript and source/anchor/attempt identity preserved;
+- history/export/delete/quota/pending-navigation and seven-day reopen-cleanup protections.
 
-## OWNER-VALIDATION-01 — resumed
+Do not infer intelligence, anxiety, confidence, accent quality, psychological state or knowledge from acoustics. No global/PTE-equivalence score, no formal recording pause/resume, no fabricated source quotes/audio spans. Missing content has no audio timestamp.
 
-The existing owner approval remains valid. The walkthrough should start with one low-risk owner-selected file using the new ingestion path, then continue the already-approved single real-owner microphone journey:
+## Models, budget and privacy
 
-`file import -> preview/select -> Learn -> Explain -> Diagnose -> Repair/Re-explain if warranted -> Apply -> export/history review`
+Existing approved models only: `whisper-1` + `gpt-5.6-luna`; semantic Responses calls retain store=false. No automatic provider/model switch.
 
-Use only owner-controlled non-sensitive source material and owner's own voice. Models remain `whisper-1` + `gpt-5.6-luna`; US$5 API exposure hard stop and US$10 BUILD-01 cash ceiling remain unchanged. At most one targeted re-explanation attempt is authorized if naturally reached.
+Last reviewed safe ledger summary (historical, not a fresh Windows read by MASTER): known conservative cost US$0.01179245; exposure US$0.06859995 / US$5; four unsettled reservations; BUILD-01 new-cash ceiling US$10. Codex must preserve and compare the live ledger while executing UI work; deleting learning data does not reset it. No recharge.
 
-Raw owner document and raw owner audio stay local by default and must not be committed. Only sanitized step-level evidence may be pushed to the private feature branch.
+Raw owner files/audio, secrets, .env, browser profiles and .venv must not be committed. Local-first is not a claim of entirely offline inference or Australia-only cloud processing. Exported copies and already-sent requests cannot be recalled by app deletion.
 
-Stop and return to MASTER on critical uncorrectable ASR meaning error, material diagnosis contradiction, fabricated/misattached evidence, remediation-gating regression, repeated API retry requirement, failed credential/budget/storage guard, or loss/corruption of original audio/source/attempt identity.
+Standing private workflow: Codex may normal fast-forward push this explicitly named non-default feature branch for the bounded approved UI task, with tracked human-readable review evidence and exact remote SHA. No merge/release, public share, force push, branch deletion or unrelated pushes.
 
-## State Summary
+MASTER's own writes remain limited to these two canonical documents on meta/master-state. No change to product code is implied by a canonical-doc commit.
 
-Completed: BUILD-01 through R4; SOURCE-INGESTION-01 + portability recovery; private remote review and engineering regressions.
+## State summary
 
-Verified: remote `a99d380...`; repo-owned `.venv` runtime contract; pypdf 6.18.0 pinned/hash-verified setup; extraction 6/6; Node 42/42; Edge 23/23; zero new paid calls and unchanged ledger.
+Completed: accepted BUILD-01/R3/R4, source ingestion and portability; new UI research, layered design references, original assets/Skill, implementation prompts and bounded acceptance contract.
 
-Likely: current Windows local-alpha runtime is coherent enough for a real file + microphone owner journey.
+Verified: source and feature checkpoint read; reference-only layout/DOM/color checks as above; prior engineering evidence retained, not newly rerun here.
 
-Unknown: owner real-document extraction quality, complex document reading order, real owner-mic ASR/live semantic behavior, owner-facing latency/friction.
+Likely: A offers a lower-change path to a coherent GUI on the current stack; this remains a design/implementation judgment.
 
-Not Done: resumed OWNER-VALIDATION-01 and post-walkthrough MASTER acceptance; external-user validation/release.
+Unknown: integrated Windows/Edge UI behavior, actual source/mic journey, user preference, latency/friction, learning efficacy and broader device support.
 
-Must Fix: none currently known before owner validation.
+Not Done: Codex UI implementation, actual product regression and MASTER delta acceptance; OWNER-VALIDATION-01; external study, native packaging, merge/release/deployment.
 
-User Decision Needed: none to resume the already-approved owner walkthrough. New decision only if a retained stop condition or new scope boundary appears.
+Must Fix: none currently unresolved in the reference package; production integration must establish its own results. Existing direct-deletion behavior is explicitly included in the approved UI improvement scope.
 
-Future Optional: installer UX, OCR, richer page/slide provenance, layout-aware extraction, broader OS/device compatibility, external learner study and learning-effect evaluation.
+User Decision Needed: none to execute this bounded UI task. New scope/provider/budget/packaging/release/risky actions require owner decision.
 
-## Next Smallest Step
+Future Optional: B/C themes, richer illustrations, Figma library, installer/distribution, external learner research; do not auto-implement.
 
-**Run OWNER-VALIDATION-01 from `a99d380...`: import one low-risk real file, preview/select material, complete one coherent real-owner microphone journey, push only sanitized evidence, then MASTER reviews only the new owner-validation evidence.**
+## Next smallest step
+
+**Codex reads the self-contained active HANDOFF and completes B1–B5 UI-UX-FOUNDATION-01 on the existing feature branch, with zero new paid product API calls. Return tracked sanitized evidence and exact remote SHA. MASTER reviews only the new delta. Do not ask the owner to perform a microphone walkthrough now.**
