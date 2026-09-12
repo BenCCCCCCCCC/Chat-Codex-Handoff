@@ -15,3 +15,12 @@ test('UI retains native import, nonnavigable brand, modal semantics and reduced 
   assert(!/<a class="brand"/.test(html));assert(!/https?:\/\/[^<]*\.(?:css|js|woff)/.test(html));
   assert(css.includes('prefers-reduced-motion'));assert(css.includes('scroll-margin'));assert(css.includes('min-height:44px'));
 });
+test('R2 native file entry is primary, neutral sans-serif, without reference chrome',()=>{
+  assert(html.includes('选择学习文件'));
+  assert(html.includes('PDF / DOCX / PPTX / TXT / MD · 最大 10 MB'));
+  assert(html.includes('仅在本机解析'));
+  assert(html.indexOf('id="sourceFile"')<html.indexOf('或直接粘贴文字'));
+  assert(html.includes('accept=".md,.txt,.pdf,.docx,.pptx"'));
+  assert(!/Noto Serif|Songti|SimSun|font-display/.test(css));
+  assert(!/01 \/|LEARN|EXPLAIN|DIAGNOSE|纸页书桌|设计示例|测试 badge/.test(html));
+});

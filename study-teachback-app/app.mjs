@@ -21,7 +21,7 @@ function renderTopic(){
   reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.source.title;$('sourceText').textContent=topic.source.text;
   $('goals').replaceChildren(...(topic.goals??[]).map(g=>el('li',g.text)));
   $('messages').replaceChildren(...topic.messages.map(m=>el('div',m.text,`message ${m.role}`)));$('messages').scrollTop=$('messages').scrollHeight;
-  $('question').textContent=topic.question??'';$('phase').textContent=topic.mode==='apply'||topic.mode==='apply_answer'?'APPLY · 换个情境试试':topic.mode==='repair'?'REPAIR · 再学这一点':'LEARN · 一起学';
+  $('question').textContent=topic.question??'';$('phase').textContent=topic.mode==='apply'||topic.mode==='apply_answer'?'换个情境试试':topic.mode==='repair'?'再学这一点':'一起学';
 }
 async function teach(message,mode='learn',focus=null){
   if(record||controller||processing)throw new Error('REQUEST_IN_PROGRESS');
@@ -39,27 +39,27 @@ async function teach(message,mode='learn',focus=null){
 let importPending=false;
 function updateCounts(){ $('sourceCount').textContent=`${$('source').value.length.toLocaleString()} / 5,000 字`;$('selectionCount').textContent=`已选 ${$('extractedText').value.slice($('extractedText').selectionStart,$('extractedText').selectionEnd).trim().length.toLocaleString()} 字`; }
 $('source').addEventListener('input',updateCounts);$('extractedText').addEventListener('select',updateCounts);
-function clearImport(){ $('selectionCount').textContent='已选 0 字';$('sourceFile').value='';$('extractedText').value='';$('importStatus').textContent='';reveal('importPreview',false); }
+function clearImport(){ $('selectedFile').textContent='';$('extractionState').textContent='';reveal('fileProgress',false); $('selectionCount').textContent='已选 0 字';$('sourceFile').value='';$('extractedText').value='';$('importStatus').textContent='';reveal('importPreview',false); }
 $('clearImport').onclick=clearImport;
 $('sourceFile').onchange=()=>act(async()=>{
   const file=$('sourceFile').files[0];if(!file)return;
   if(controller||importPending)return notice('请先等当前处理完成。');
-  clearImport();importPending=true;$('learn').disabled=true;$('sourceFile').disabled=true;
+  clearImport();$('selectedFile').textContent=file.name;$('extractionState').textContent='正在本机解析…';reveal('fileProgress');importPending=true;$('learn').disabled=true;$('sourceFile').disabled=true;
   try{
     if(file.size>10*1024*1024)throw new Error('FILE_TOO_LARGE');
-    notice('正在本机提取材料……');
+    notice('');
     const result=await api('/api/extract',await file.arrayBuffer(),{'X-Source-Format':file.name.split('.').pop().toLowerCase()});
     $('extractedText').value=result.blocks.map(b=>b.text).join('\n\n');
-    $('importStatus').textContent=`已提取 ${result.blocks.length} 个正文/页面/幻灯片区块。请核对顺序和空白页；选中所需文字后使用，尚未发送给模型。`;
+    $('extractionState').textContent='解析完成';$('importStatus').textContent=`${result.blocks.length} 个正文/页面/幻灯片区块。核对文字后，选取最多 5,000 字。`;
     if(!$('title').value.trim())$('title').value=file.name.replace(/\.[^.]+$/,'').slice(0,120);
-    reveal('importPreview');notice('请预览并选择这一轮要学习的文字。');
-  }finally{importPending=false;$('learn').disabled=false;$('sourceFile').disabled=false;}
+    reveal('importPreview');notice('');
+  }catch(e){$('extractionState').textContent='解析未完成，可重新选择文件或粘贴文字。';throw e;}finally{importPending=false;$('learn').disabled=false;$('sourceFile').disabled=false;}
 });
 function useImported(all){
   const preview=$('extractedText');const selected=(all?preview.value:preview.value.slice(preview.selectionStart,preview.selectionEnd)).trim();
   if(!selected)return notice('请先在预览中选中文字。');
   if(selected.length>5000)return notice('这一轮最多 5,000 字，请缩小选段；不会自动截断材料。');
-  $('source').value=selected;updateCounts();notice('选段已放入学习材料。可继续编辑，点击“开始一起学”才会发送给模型。');
+  $('source').value=selected;updateCounts();notice('选段已放入学习材料。可继续编辑，点击“开始学习”才会发送给模型。');
 }
 $('useSelection').onclick=()=>useImported(false);$('useAll').onclick=()=>useImported(true);
 $('learn').onclick=()=>act(async()=>{

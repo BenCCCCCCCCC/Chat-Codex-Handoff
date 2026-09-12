@@ -39,3 +39,9 @@ US$5 API exposure / US$10 new cash ceiling, no recharge or provider/model switch
 A / 纸页书桌 presentation on the existing app: paper/ink-green tokens, source and AI text separation, mobile source disclosure, real selection counts, continuous single-focus recording, labelled correction fields, and scoped Cancel-first deletion dialogs. Existing R3/R4, local ingestion, audio/version/ledger safeguards remain authoritative. Pending Tutor actions cannot start another Explain workflow.
 
 Current UI validation receipts are in `artifacts/study-teachback/ui-ux-foundation-01/`: fresh Node 44/44; extraction 6/6; see final versioned Edge receipt and Delivery Packet for the final browser count. Old counts above describe historical portability evidence. Actual Edge tests use isolated synthetic media/stub providers; new paid product API calls 0. Owner Validation is OWNER-DEFERRED / NOT EXECUTED. Native browser UI zoom, assistive technology and real owner microphone have not been tested in this task.
+
+## UI-UX-FOUNDATION-01R2
+
+The initial screen now prioritizes “选择学习文件”, supported formats, 10 MB limit and local parsing, followed by the secondary paste route. Filename and extraction status remain visible before preview/selection. Headings/body use the local sans-serif stack; decorative phase prefixes and repeated introductory copy are removed. Required data/replay/error/delete disclosures remain. No extraction protocol, model/provider, storage schema, ASR/feedback gate or budget change.
+
+Fresh R2: Node45/45, Edge27/27, extraction6/6. Focused checks cover visible native file entry at 1440/390, unchanged accepted extensions, filename/status and import/preview zero provider calls. Evidence: `artifacts/study-teachback/ui-ux-foundation-01r2/`. Owner Validation remains DEFERRED / NOT EXECUTED.
