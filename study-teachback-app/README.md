@@ -33,3 +33,9 @@ Run extraction tests with `.venv/Scripts/python.exe -B study-teachback-app/extra
 Existing Learn → Explain → Diagnose → Repair → Re-explain → Apply behavior is unchanged. Segment validity remains strict; unusable word times are preserved, and replay/confirmation is required. Supported/delivery findings do not expose knowledge remediation. Source, audio, raw/corrected versions, feedback and history retain existing local export/delete and seven-day expiry behavior.
 
 US$5 API exposure / US$10 new cash ceiling, no recharge or provider/model switch. No paid calls in this recovery. Owner validation remains paused; no release/public deployment implied.
+
+## UI-UX-FOUNDATION-01
+
+A / 纸页书桌 presentation on the existing app: paper/ink-green tokens, source and AI text separation, mobile source disclosure, real selection counts, continuous single-focus recording, labelled correction fields, and scoped Cancel-first deletion dialogs. Existing R3/R4, local ingestion, audio/version/ledger safeguards remain authoritative. Pending Tutor actions cannot start another Explain workflow.
+
+Current UI validation receipts are in `artifacts/study-teachback/ui-ux-foundation-01/`: fresh Node 44/44; extraction 6/6; see final versioned Edge receipt and Delivery Packet for the final browser count. Old counts above describe historical portability evidence. Actual Edge tests use isolated synthetic media/stub providers; new paid product API calls 0. Owner Validation is OWNER-DEFERRED / NOT EXECUTED. Native browser UI zoom, assistive technology and real owner microphone have not been tested in this task.
