@@ -1,122 +1,109 @@
-# Active Handoff — OWNER-VALIDATION-PROVENANCE-FIX-01
+# Active Handoff — OWNER-VALIDATION-01 CLEAN PHASE 2 RERUN
 
 Updated: 2026-09-12
 Role: 00 MASTER
-Status: **OWNER-VALIDATION-01 PAUSED / PROVENANCE MUST FIX AUTHORIZED**
+Status: **PROVENANCE FIX MASTER-ACCEPTED / CLEAN OWNER VALIDATION RERUN NEXT**
 
 ## Product binding
 
 Repo: `F:\Chat-Codex-Handoff\validation-repo`
 Branch: `prototype/study-teachback-v0.1`
-Base feature HEAD for this correction: `912bce6542eef4fe813f32fe4e160acd97ca2d71`
-Server/origin remains `http://127.0.0.1:4317`.
+Current accepted feature HEAD:
+`f6a000ca96fedfbeb9eaa803dfcd990a13d90c53`
 
-Read `docs/master/CURRENT_STATE.md` first. Preserve worktree/unrelated files; no reset/clean/force.
+Direct validation server/origin remains:
+`node study-teachback-app/server.mjs`
+`http://127.0.0.1:4317`
 
-## Owner-validation evidence retained
+Read `docs/master/CURRENT_STATE.md` first. Preserve unrelated work; no reset/clean/force.
+
+## Retained owner-validation evidence
 
 Phase 1 real owner file import/preview/selection = PASS.
 
-Phase 2 observed:
-- 2 explicit semantic requests after Learn started;
-- first provider-completed result rejected locally as `INVALID_SOURCE_QUOTE`;
-- no automatic retry;
-- second explicit owner question succeeded with source-grounded Tutor content;
-- safe cost/exposure delta US$0.00113830;
-- server/state remained usable.
+Original Phase 2 produced useful evidence but is not a clean provenance-valid journey:
+- first live Tutor result was rejected locally as `INVALID_SOURCE_QUOTE` after provider completion;
+- no automatic retry occurred;
+- one later explicit owner question produced a source-grounded answer;
+- owner then found that the automatic Learn starter was shown/persisted as `role:'user'` / `你的想法`;
+- walkthrough stopped before microphone.
 
-Do not repeat paid calls for this correction.
+The original contaminated topic must be preserved as evidence and not resumed.
 
-## Proven Must Fix
+## Accepted provenance fix
 
-Owner identified that this automatic starter instruction:
+MASTER reviewed `912bce... -> f6a000c...`.
 
-`请先帮我理解这段材料，从核心关系开始，问我一个简短问题。`
+Accepted behavior:
+- automatic Learn starter remains internal request input only;
+- it is not added to `topic.messages`;
+- it is not rendered as a user bubble;
+- it is excluded from later provider history;
+- initial validation rejection leaves no fabricated user entry;
+- the first genuine owner submission becomes the first real `role:'user'` message;
+- assistant replies continue normally;
+- no schema migration or historical-topic rewrite.
 
-appears as a `你的想法` user bubble.
-
-Source review confirms current flow:
-- new topic starts with `messages: []`;
-- `learn` invokes `teach(starterText)`;
-- `teach()` unconditionally performs `target.messages.push({role:'user', text:message})`.
-
-Therefore the app falsely attributes application-generated scaffolding to the owner, persists it as a user utterance, and may feed it into later history.
-
-This is a provenance defect, not just styling.
-
-## Required bounded fix
-
-Implement the smallest correction such that:
-
-1. The automatic initial Learn starter may still be passed internally to `/api/teach` for the first Tutor response.
-2. It is **not** added to `topic.messages` as a user entry.
-3. It is **not** rendered with `.message.user` / `你的想法`.
-4. If the initial provider result is rejected by local validation, no fabricated user-role item remains in the topic/history.
-5. The first genuine text typed/submitted by the owner becomes the first stored `role:'user'` message.
-6. Successful Tutor/assistant replies may still render normally.
-7. Genuine later user messages, repair/apply flow, source/attempt identity, ASR/replay, storage/history/delete and budget guards remain unchanged.
-8. Do not silently rewrite the already-existing owner-validation topic; preserve it as evidence. The clean validation rerun will create a new topic after this fix.
-
-Suggested shape only: add an explicit internal/bootstrap option to `teach()` or a tiny bootstrap wrapper so persistence/rendering is conditional. Do not introduce a new business state machine or schema migration.
-
-## Required tests/evidence
-
-New paid product API calls = **0**.
-
-At minimum:
-- focused source/unit assertion that initial Learn scaffolding is not stored as user history;
-- browser success-path: before actual owner input, no user-labelled bubble exists; first Tutor reply can display;
-- browser failure-path: simulated rejected initial Tutor output leaves no fabricated user message/history;
-- browser next-step: first actual owner submission creates the first user-labelled message and request history does not contain the fabricated starter;
-- retained Node and Edge regressions appropriate to the changed app/history logic;
-- safe ledger before/after unchanged;
-- no raw owner file/audio or private browser data in evidence.
-
-Track evidence under a focused directory such as:
+Evidence:
 `artifacts/study-teachback/owner-validation-provenance-fix-01/`
 
-## Scope boundaries
+Verified:
+- Node 48/48 PASS;
+- final Edge 29/29 PASS with zero page exceptions;
+- focused success/failure/first-real-user provenance tests PASS;
+- existing recording/replay/repair/apply/history/delete/recovery cases PASS;
+- ledger byte-identical during the fix;
+- new paid product/provider calls = 0.
 
-Do not fix unrelated extraction `&#x20;` formatting in this turn.
-Do not change prompts/models/providers/ASR semantics/extractor limits/persistence schema.
-Do not perform live owner microphone/file walkthrough while editing.
-Do not make paid product calls.
+Retained limitation:
+- first Edge run had one generic Promise exception only in the final exception assertion while all functional cases passed;
+- a full rerun after improved test exception capture passed without any production-code change;
+- investigate only if it reproduces.
 
-Standing authorization: normal fast-forward push to the same private feature branch only, with exact SHA returned. No merge/release.
+## Clean rerun — owner action
 
-## Return packet
+Do not resume the old topic.
 
-```text
-Status: OWNER-VALIDATION-PROVENANCE-FIX-01 READY_FOR_MASTER_REVIEW / BLOCKED
-Branch: prototype/study-teachback-v0.1
-Exact remote SHA: <sha>
-Base: 912bce6542eef4fe813f32fe4e160acd97ca2d71
-Changed: <files/scope>
-Provenance fix: <actual behavior>
-Tests: <actual counts/results>
-Failure-path test: <result>
-First-real-user test: <result>
-Ledger before/after: <safe summary>
-New paid product API calls: 0
-Evidence: <path>
-Must Fix / User Decision Needed / Future Optional
-Owner Validation: PAUSED / CLEAN RERUN NOT YET EXECUTED
-```
+1. Reload the product page so the browser loads the new `app.mjs`.
+2. Create a **new clean topic**. Use `学习新主题` / the normal new-topic path; do not delete the old evidence topic yet.
+3. Re-import `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`.
+4. Use the same coherent source text. Phase 1 semantics are already accepted; only spot-check that the file still parses normally.
+5. Click `开始学习`.
+6. Before the owner types anything, verify that the automatic starter does **not** appear as `你的想法` or any user bubble.
+7. If the Tutor initial response succeeds, only Tutor/assistant content should appear.
+8. If local validation rejects it again, no fabricated user bubble/history should appear.
+9. Owner sends exactly one genuine source-grounded question.
+10. Confirm that this genuine question is the first owner-authored bubble/message.
+11. Return screenshot/text to MASTER before using the microphone.
 
-## After MASTER acceptance
+Suggested genuine question:
+`我理解为完成注册只是获得申请资格，不代表一定能进去。那真正能进入还需要哪些条件？`
 
-Do not resume the old contaminated topic. Start a new topic using the same synthetic DOCX, re-import/select it, then rerun only the minimal Learn checkpoint. Phase 1 extraction semantics remain accepted unless the fix unexpectedly changes ingestion behavior.
+## Live-call boundary
+
+The already-approved one coherent owner journey continues. Avoid unnecessary retries. Current safe ledger before clean rerun is requests 39, known cost US$0.01293075, exposure US$0.06973825, unsettled 4. Existing US$5 exposure hard stop / US$10 cash ceiling remains.
+
+## Stop conditions
+
+Stop and return to MASTER if:
+- the automatic starter still appears/persists as owner-authored content;
+- a failed initial Tutor request leaves fabricated user history;
+- repeated provider retry becomes necessary;
+- source identity/state is lost;
+- any existing budget/storage/access guard fails.
+
+Do not start microphone recording until the clean Learn checkpoint passes.
 
 ## Classification
 
-Completed: Owner Validation Phase 1 plus bounded Phase 2 observation.
-Verified: provenance bug exists in current source; no automatic retry occurred; Phase 1 boundary held.
-Unknown: corrected behavior until implemented.
-Not Done: provenance fix, clean Learn rerun, microphone/ASR/diagnosis/apply/export.
-Must Fix: application-generated starter must not be represented or persisted as owner-authored content.
+Completed: Phase 1; original Phase 2 observation; provenance correction and MASTER acceptance.
+Verified: bounded provenance defect is fixed in source/tests; no paid calls for correction.
+Unknown: corrected behavior in the owner's real browser until the clean rerun.
+Not Done: clean Learn checkpoint; microphone/ASR; Diagnose/Repair/Apply; export/history; final owner-validation decision.
+Must Fix: none currently unresolved for provenance.
 User Decision Needed: none.
-Future Optional: extraction formatting polish.
+Future Optional: extraction `&#x20;` formatting cleanup; generic test-page exception only if reproduced.
 
 ## Next Smallest Step
 
-**Implement only OWNER-VALIDATION-PROVENANCE-FIX-01, test with stubs/synthetic fixtures and zero paid calls, push the same private feature branch, return exact SHA for MASTER review.**
+**Reload the updated product, create a new topic with the same synthetic DOCX, rerun one minimal Learn interaction, and return the real-browser result to MASTER.**
