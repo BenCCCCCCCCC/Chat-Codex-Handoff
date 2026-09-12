@@ -1,0 +1,159 @@
+{
+  "sourceCommit": "e79085b987741ac4df166b45e197d95cd53861c5",
+  "receipt": "browser-1789199195517.json",
+  "screenshots": [
+    {
+      "file": "1789199195517-initial-file-entry-1440.png",
+      "state": "initial-file-entry-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-initial-file-entry-390.png",
+      "state": "initial-file-entry-390",
+      "viewport": {
+        "width": 390,
+        "height": 900
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-preview.png",
+      "state": "preview",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-learn-1440.png",
+      "state": "learn-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-learn-1024.png",
+      "state": "learn-1024",
+      "viewport": {
+        "width": 1024,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-learn-768.png",
+      "state": "learn-768",
+      "viewport": {
+        "width": 768,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-learn-390.png",
+      "state": "learn-390",
+      "viewport": {
+        "width": 390,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-learn-320.png",
+      "state": "learn-320",
+      "viewport": {
+        "width": 320,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-text-200-percent.png",
+      "state": "text-200-percent",
+      "viewport": {
+        "width": 320,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-recording.png",
+      "state": "recording",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-partial-review.png",
+      "state": "partial-review",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-budget-stop.png",
+      "state": "budget-stop",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-delete-confirmation.png",
+      "state": "delete-confirmation",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-storage-failure.png",
+      "state": "storage-failure",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-supported.png",
+      "state": "supported",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-missing.png",
+      "state": "missing",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    },
+    {
+      "file": "1789199195517-history-delete.png",
+      "state": "history-delete",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "scope": "Actual product / synthetic fixtures / stub provider"
+    }
+  ]
+}
