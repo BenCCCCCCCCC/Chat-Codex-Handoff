@@ -5,7 +5,7 @@ Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**OWNER-VALIDATION-01 — IN PROGRESS / CLEAN PHASE 2 RERUN NEXT**
+**OWNER-VALIDATION-01 — IN PROGRESS / CLEAN PHASE 2 PASS / PHASE 3 MICROPHONE+ASR NEXT**
 
 **OWNER-VALIDATION-PROVENANCE-FIX-01 — MASTER-ACCEPTED**
 
@@ -22,11 +22,11 @@ Current accepted feature HEAD for validation:
 
 ### Phase 1 — PASS
 
-Owner used `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`.
+Owner imported `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx` in the real product.
 
 Verified:
 - local DOCX extraction worked;
-- critical necessary-vs-sufficient meaning remained intact;
+- necessary-vs-sufficient meaning remained intact;
 - same-day visitor badge, laboratory-open state and 18:00 limit remained understandable;
 - owner selected the extracted material into the learning source;
 - import/preview/use-all added 0 provider/model requests and the usage ledger remained byte-identical;
@@ -34,99 +34,111 @@ Verified:
 
 Minor non-blocking extraction formatting issue: literal `&#x20;` appeared after the title.
 
-### Original Phase 2 — useful but provenance-contaminated evidence
+### Original Phase 2 — provenance issue found and corrected
 
-Owner clicked `开始学习`, then sent one genuine source-grounded question.
+The first owner Learn run produced useful content evidence but also exposed a provenance defect: the automatic Learn starter was displayed/persisted as if owner-authored. MASTER paused before microphone.
 
-Observed:
-- 2 live semantic requests using the approved Luna model;
-- request 1 completed at provider level but local validation rejected `INVALID_SOURCE_QUOTE`;
-- automatic retry = NO;
-- request 2 completed and displayed a source-grounded answer;
-- known cost/exposure delta = US$0.00113830;
-- server/state remained usable.
+`OWNER-VALIDATION-PROVENANCE-FIX-01` corrected this at `f6a000c...`:
+- internal starter remains request input only;
+- it is not stored/rendered as `role:'user'`;
+- failed initial Tutor validation leaves no fabricated user history;
+- the first genuine owner input becomes the first stored/rendered user message;
+- Node 48/48 and Edge 29/29 PASS; zero paid calls for the correction.
 
-Tutor content on the successful reply correctly kept registration as necessary but not sufficient and referenced the same-day badge, open state and 18:00 limit without observed unsupported rules.
+### Clean Phase 2 rerun — PASS
 
-However, direct owner review found that the application-generated starter instruction was displayed and persisted as if it were an owner-authored `role:'user'` message. MASTER confirmed this as a provenance defect and paused the walkthrough before microphone.
+Owner reloaded the updated product, created a new clean topic with the same synthetic DOCX and reran the minimal Learn path in the real browser.
 
-## OWNER-VALIDATION-PROVENANCE-FIX-01 — MASTER review
+Verified from owner screenshots:
+- before any owner text, only Tutor/assistant content was visible; the automatic starter did not appear as `你的想法` or any user bubble;
+- the initial Tutor response remained source-grounded: registration was treated as necessary but not sufficient, with same-day badge, open-state and time constraints retained;
+- owner then sent one genuine question;
+- the first visible `你的想法` bubble is exactly the owner-authored question, not application scaffolding;
+- subsequent Tutor reply remained source-grounded and did not add an unsupported guarantee of entry.
 
-Git comparison confirms `f6a000c...` is one normal commit ahead of base `912bce...`.
+Decision:
 
-Production change is deliberately small:
-- `teach()` now accepts an explicit `internalStarter` option;
-- the initial automatic Learn instruction is still passed as the first internal teaching request input;
-- when `internalStarter=true`, it is not appended to `topic.messages`, not rendered as `.message.user`, and not included in later provider history;
-- successful assistant replies still persist/render normally;
-- genuine owner input still becomes a normal `role:'user'` message;
-- existing historical topics are not migrated or silently rewritten.
+**Clean Phase 2 = PASS. Provenance fix is confirmed in the real Owner browser.**
 
-Verified evidence:
-- Node 48/48 PASS;
-- Edge final rerun 29/29 PASS;
-- final Edge receipt reports zero page/console exceptions;
-- initial-success provenance case PASS;
-- initial local-validation rejection leaves no fabricated user history PASS;
-- first genuine owner input becomes the first stored/rendered user message PASS;
-- automatic starter is excluded from subsequent provider history on both success/failure paths;
-- existing recording/replay/repair/apply/history/delete/recovery regressions remain passing;
-- ledger before/after byte-identical;
-- requests remain 39, known cost US$0.01293075, exposure US$0.06973825, unsettled 4;
-- new paid product/provider calls for the fix = 0.
+The older contaminated topic remains evidence and must not be resumed.
 
-Evidence:
-`artifacts/study-teachback/owner-validation-provenance-fix-01/`
+## Phase 3 — physical microphone / ASR
 
-Evidence limitation retained:
-- the first Edge run passed all 29 functional checks but its final no-exception assertion observed one generic unclassified Promise exception;
-- after improved synthetic test exception capture, a full rerun passed 29/29 with zero page exceptions and no further production-code change;
-- treat the first-run event as retained test evidence, not a current blocking product defect unless it reproduces.
+Next goal: validate one real owner recording and the replay/correction boundary before any diagnosis.
 
-## Validation disposition
+Owner should use the current clean topic and:
+1. click `我来讲讲`;
+2. choose `无提示` for this bounded run;
+3. record roughly 20–45 seconds in natural language, not a polished script;
+4. explain that registration alone does not guarantee entry and mention relevant additional conditions;
+5. include one natural self-correction if comfortable, e.g. begin with an overstatement then explicitly correct it, to test withdrawn-claim handling later;
+6. keep the page visible during recording; do not switch tabs or hide the page because visibility interruption is treated conservatively;
+7. finish the recording and wait for original-audio save + ASR;
+8. once replay/transcript UI appears, **do not start diagnosis yet**;
+9. first play the original audio and inspect the raw transcript/segment timing;
+10. return transcript/screenshot to MASTER before confirming diagnosis.
 
-**OWNER-VALIDATION-PROVENANCE-FIX-01 = MASTER-ACCEPTED.**
+Critical checks before diagnosis:
+- original audio must be playable and retained;
+- all validated segments must be replayed;
+- negation/number/condition/term ASR errors must be corrected before confirmation;
+- word timing may be PARTIAL; no fabricated precision is required.
 
-Phase 1 remains PASS and does not need to be re-proven semantically.
+## Retained live-call boundary
 
-The previous contaminated topic must remain preserved as evidence and must not be resumed for microphone validation.
+The already-approved one coherent owner journey continues. Approved live models remain `whisper-1` + `gpt-5.6-luna`; no provider/model switch, recharge or stress loop. Existing US$5 exposure hard stop and US$10 cash ceiling remain.
 
-Next run must create a **new clean topic** using the same low-risk synthetic DOCX. Re-import/select the material, then rerun only the minimal Learn checkpoint needed to verify the owner-visible provenance fix in the real browser. After that, microphone/ASR may continue.
+The last explicitly read ledger before the provenance correction was requests 39, known cost US$0.01293075, exposure US$0.06973825, unsettled 4. The clean Phase 2 rerun used expected live Tutor requests; a fresh safe ledger checkpoint will be collected after the recording/ASR checkpoint unless a guard/error appears sooner.
 
-The existing direct server can remain in use if still healthy; because `server.mjs` serves product files from disk, the owner browser must reload/navigate to a fresh page so the updated `app.mjs` is loaded before creating the clean topic.
+## Stop conditions
 
-## Clean Phase 2 rerun criteria
-
-On the new topic:
-1. re-import the same DOCX and use the same coherent source text;
-2. click `开始学习`;
-3. before the owner types anything, there must be **no `你的想法` / user bubble** containing the automatic starter instruction;
-4. if the initial Tutor response succeeds, only assistant/Tutor content should appear;
-5. if the initial Tutor response is rejected again, there still must be no fabricated user bubble/history;
-6. owner then sends one genuine question;
-7. that genuine question must become the first visible/stored owner-authored message;
-8. return screenshot/text evidence to MASTER before microphone.
-
-Do not repeat stress tests or add more live calls than necessary for this clean checkpoint.
+Stop and return to MASTER if:
+- microphone permission cannot be obtained without unsafe workaround;
+- original audio is missing/corrupted;
+- ASR meaning errors in negation/number/conditions cannot be corrected safely;
+- source/attempt identity is lost;
+- repeated API retry becomes necessary;
+- storage/access/budget guard fails;
+- any diagnosis is shown before required replay/confirmation.
 
 ## Classification
 
-Completed: readiness; real-owner Phase 1; original Phase 2 observation; provenance correction and MASTER delta review.
+Completed:
+- readiness;
+- real-owner Phase 1;
+- provenance defect discovery/correction/MASTER acceptance;
+- clean real-browser Phase 2 rerun.
 
-Verified: Phase 1 import boundary; fail-closed `INVALID_SOURCE_QUOTE` with no automatic retry; provenance correction logic/tests; zero paid calls for the fix.
+Verified:
+- Phase 1 import boundary;
+- clean provenance in the Owner browser;
+- source-grounded Tutor behavior for the clean Learn path.
 
-Likely: clean rerun should allow Owner Validation to resume without the prior attribution defect.
+Likely:
+- the corrected clean topic is suitable to continue the same bounded owner journey into microphone/ASR.
 
-Unknown: real owner-visible corrected Learn behavior; physical microphone/ASR; diagnosis/repair/apply owner journey.
+Unknown:
+- real physical-microphone capture;
+- real ASR transcript/timing behavior;
+- replay/correction UX;
+- diagnosis/repair/apply/export-history owner journey.
 
-Not Done: clean Phase 2 rerun; Explain/ASR; Diagnose/Repair/Apply; export/history; final OWNER-VALIDATION acceptance.
+Not Done:
+- Phase 3 microphone/ASR/replay confirmation;
+- Diagnose/Repair/Apply;
+- export/history review;
+- final OWNER-VALIDATION acceptance.
 
-Must Fix: none currently unresolved for the bounded provenance defect.
+Must Fix:
+- none currently blocking Phase 3.
 
-User Decision Needed: none; continue the already-approved owner validation.
+User Decision Needed:
+- none; continue the already-approved bounded validation.
 
-Future Optional: literal `&#x20;` extraction cleanup; investigate test-page Promise exceptions only if reproduced.
+Future Optional:
+- literal `&#x20;` extraction cleanup;
+- investigate test-page Promise exception only if reproduced.
 
 ## Next Smallest Step
 
-**Owner reloads the updated product, creates a new clean topic with the same synthetic DOCX, reruns the minimal Learn checkpoint, and returns the real-browser result to MASTER. Do not begin microphone recording until this clean checkpoint passes.**
+**Owner records one 20–45 second natural explanation on the clean topic, waits for ASR, then returns the replay/transcript state to MASTER before any diagnosis confirmation.**
