@@ -135,6 +135,58 @@ Retain local extraction, explicit send, original audio, raw/corrected versions, 
 
 Schema/reference/quote validity is not entailment, learning efficacy or user benefit. Existing logic fixtures have bounded scope. Near-silence candidates are uncalibrated observations, not fluency, knowledge or personality scores.
 
+## 2026-09-28 targeted freshness / collision check
+
+Before the next speech-evidence implementation, MASTER checked current official transcription guidance and relevant browser-local audio libraries.
+
+Official OpenAI state:
+- whisper-1 was deprecated on 2026-08-26 and is scheduled for removal on 2027-02-26.
+- Current guidance recommends gpt-transcribe for general recorded-speech transcription.
+- Current official file-transcription guidance still directs timestamp-dependent workflows to whisper-1 for word/segment timestamps.
+- gpt-live-transcribe does not return word-level timestamps; application-level fallback is required when timestamps are necessary.
+
+Decision: do not deepen product architecture around Whisper-specific timing. Also do not switch models or spend money in this zero-call stage. Treat ASR text and timing/alignment as replaceable capabilities. Segment-level / approximate localization is acceptable where it supports the learning-diagnostic goal; exact word timing is not a product requirement unless later evidence proves it necessary.
+
+Existing-project check:
+- browser-local Silero VAD implementations already exist, including ricky0123/vad;
+- Meyda provides browser/JavaScript audio-feature extraction such as RMS and energy.
+
+Decision: do not add either dependency yet. The current lightweight local signal path is sufficient for the next fixture-based architecture experiment. Evaluate an existing VAD/feature library only if real-audio evidence later shows the current candidate detector is inadequate.
+
+## Phase split after owner clarification
+
+### Phase 3A — Diagnostic Localization Architecture / ZERO PRODUCT API CALLS
+
+Goal: validate the logic of combining, but not conflating, content evidence and speech-process evidence before paying for another live run.
+
+Required model separation:
+- contentFindings: source-grounded content/logic judgments;
+- processEvidence: observed recording/transcript-process signals with time/span references; no knowledge status and no required sourceQuote;
+- diagnosticTarget: a bounded worth-verifying / worth-re-explaining target that may cite both channels while preserving their separate evidence.
+
+Minimum zero-call fixture matrix:
+1. fluent but logically wrong -> content issue remains even with no process signal;
+2. hesitant but content-correct -> no knowledge deficit is created;
+3. omitted/uncertain relation plus overlapping pause/restart -> mark the relation as worth verifying, not as proven ignorance;
+4. explicit self-repair to a correct final stance -> content stays supported; process may retain self-repair evidence;
+5. critical ASR uncertainty/error before confirmation -> downstream diagnosis remains blocked;
+6. content gap without process evidence -> still produces the appropriate content follow-up.
+
+Initial process evidence should stay small: pause location, restart/self-repair, repetition and coarse pacing/segmentation only when deterministically supportable. Pitch, stress, pronunciation, emotion/confidence and global fluency scores are out of scope.
+
+### Phase 3B — Real Owner Speech Evidence / LATER EXPLICIT LIVE AUTHORIZATION
+
+Only after correctness fixes, cost/model/timing preflight and owner readiness:
+- physical microphone;
+- saved original audio;
+- approved ASR path;
+- local process evidence;
+- replay/correction;
+- two-panel feedback;
+- verify whether the combined system localizes a useful weak/less-familiar point better than content-only evidence without increasing false inference.
+
+Phase 3A does not prove real-audio accuracy or user benefit. Phase 3B is not authorized merely by completing Phase 3A.
+
 ## Implementation/process boundaries
 
 Prefer small behavior-preserving corrections over framework replacement. Preserve `http://127.0.0.1:4317`, IndexedDB identity/schema, raw audio and version relationships, existing models and caps. Data-policy work needs its own explicit migration/deletion tests.
@@ -166,6 +218,6 @@ Future Optional: dedicated interview features, broad directory cleanup, advanced
 
 ## Next Smallest Step
 
-Proceed with zero-product-API-cost clarification/static walkthrough and preparation of a small correctness batch (provenance, entry docs and recording registration), preserving existing data. No live requests now. The owner's next useful input is whether to remain zero-call or explicitly set a small bounded test budget; do not demand a complete business plan.
+Proceed in two bounded zero-product-API-cost batches before any live resumption: (A) correctness hygiene for provenance / entry docs / recording registration; then (B) Phase 3A diagnostic-localization separation + fixture matrix. Review each delta before starting the next. Preserve existing data and do not change retention/model/provider/database identity in these batches. No live requests now; a budget decision is only needed before Phase 3B.
 
 When the owner resumes live testing and data/cost preflight is satisfied, keep Phase3 minimal: one natural 20–45 second explanation -> saved original audio + ASR -> replay/transcript checkpoint to MASTER BEFORE diagnosis. Not executed until real evidence is returned.
