@@ -12,12 +12,12 @@ Role: 00 MASTER / authoritative dynamic state
 
 The owner stated on 2026-09-28 at 16:45 +10:00 that the previous Codex trigger had not been sent. No later dispatch or execution evidence has been received. Preparing this executable task does not start it.
 
-Next action: the owner sends the canonical Batch A trigger in HANDOFF to Codex. Codex performs A only, then returns evidence to MASTER. Do not automatically start B or a paid test.
+Next action: first run the HANDOFF **Project identity precheck** in the Codex project currently open. This is read-only and must stop after reporting cwd / Git root / branch / HEAD / remote. Only after the expected product checkout is confirmed should the owner send the canonical Batch A trigger. Codex then performs A only and returns evidence to MASTER. Do not automatically start B or a paid test.
 
 | Work item | Status | Exit / next decision |
 | --- | --- | --- |
 | Architecture and owner-goal clarification | Documented; no feature implementation | Use decisions below, do not repeat the same questions |
-| A: provenance, documentation entry, recording registration | Ready, not dispatched | A acceptance matrix in HANDOFF; return to MASTER |
+| Project identity precheck | Ready, not dispatched | Confirm correct local checkout; stop and report if wrong/ambiguous |\n| A: provenance, documentation entry, recording registration | Ready, not dispatched | Only after identity confirmation; A acceptance matrix in HANDOFF; return to MASTER |
 | B / Phase 3A: diagnostic evidence separation and fixtures | Planned, not started | Separate MASTER authorization after A delta review |
 | Phase 3B: physical audio / ASR / replay / diagnostic value | On hold, not started | Specific experiment need, data/cost preflight and owner permission |
 | Custom retention, reminders, replay UX | Direction recorded; behavior undecided | Separate design/migration decision, not silently included in A |
@@ -120,4 +120,4 @@ Must Fix: R02/R03/R05 within A; safe R01 handling before touching old data.
 User Decision Needed: nothing additional to prepare/start the bounded zero-call A; future spend, retention/migration and scope expansion still need decisions.
 Future Optional: broader reorganization, advanced prosody/pronunciation, separate interview product, cosmetic and non-blocking extraction cleanup.
 
-**Next smallest experiment: Codex reproduces and fixes R02/R03/R05 with isolated zero-live-call regression evidence, returns one A Delivery Packet, and stops for MASTER review.**
+**Next smallest experiment: run the read-only Project identity precheck. If and only if it matches the expected product checkout, dispatch Batch A; otherwise stop and resolve the project binding first.**
