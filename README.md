@@ -1,104 +1,34 @@
-# Lightweight Handoff Alpha v0.1
+# 知而能讲 — Study-first + in-app teach-back
 
-Lightweight Handoff is a small, local workflow for carrying an approved task from a ChatGPT MASTER Chat into Codex, doing bounded work in the correct repository, and returning an evidence-ready Delivery Packet to the original Chat for review.
+当前产品是 `study-teachback-app/`：先学习有限材料，再在应用内录音讲解、回听核对转写、查看反馈，并按需要补学、重讲或尝试新情境。当前阶段面向个人使用与作品展示；工程测试不代表学习效果或完整 owner 验收。
 
-It addresses a practical gap: ChatGPT can hold the product context and decisions while Codex works in a local checkout, but moving the task into Codex and the result back into the right Chat can otherwise require repeated copying, prompt rewriting, and manual target selection.
+## 产品入口
 
-## What the Alpha is
+- [产品说明与现有安装前提](study-teachback-app/README.md)
+- Windows 启动：[Start-Study.cmd](Start-Study.cmd)；异常关闭后的身份校验恢复：[Stop-Study.cmd](Stop-Study.cmd)
+- 新服务需要已有 Node、产品 Python 环境与指定版本 pypdf，以及服务端进程凭据。启动器不会自动安装、充值或修改系统策略。真实模型调用需要单独授权；启动说明不是调用授权。
 
-Alpha v0.1 combines two deliberately separate paths:
+历史 Phase 1 材料导入和 clean Phase 2 学习对话已接受；真实麦克风 Phase 3 尚未执行。当前本机记录、完整 owner journey、Explorer 双击和可见控制台停止行为不能据此认定通过。动态状态以以下 canonical 文档为准。
 
-- **ChatGPT to Codex:** Codex's official `New chat` flow adds an existing MASTER Chat as context, after which the user selects the intended local repository. This is the preferred entry point; the repository does not replace it.
-- **Codex to ChatGPT:** this repository's thin PowerShell helper resolves the Stop Hook's materialized Delivery Packet, copies it to the clipboard, and opens the repository's bound origin MASTER Chat.
+## 唯一动态状态与任务来源
 
-This is a working, repo-local product skeleton built around an official context entry and a small return helper. It is **not** a full bridge, GUI, installer, launcher, daemon, or SaaS product. It does not merge ChatGPT and Codex histories.
+仓库：`BenCCCCCCCCC/Chat-Codex-Handoff`；产品分支：`prototype/study-teachback-v0.1`。
 
-## Complete workflow
+权威分支是 **`meta/master-state`**，路径分别为：
 
-```text
-Existing MASTER Chat
-  -> official Existing Chat context in a new Codex task
-  -> correct local repository selected
-  -> bounded local execution
-  -> Delivery Packet + Review Evidence
-  -> configured Stop Hook materializes the packet
-  -> handoff.ps1 validates and prepares the return
-  -> original MASTER Chat opens
-  -> user manually pastes and sends
-  -> MASTER performs delta review
-```
+- [docs/master/CURRENT_STATE.md（canonical）](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/CURRENT_STATE.md)
+- [docs/master/HANDOFF.md（canonical）](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/HANDOFF.md)
 
-## Minimal use
+分支名不是目录前缀。产品 checkout 内的同名文件只是指针，不是第二份实时状态。执行前读取 canonical 分支并记录实际 commit；不要因旧本地副本而执行历史任务，也不要为了读文档切换产品分支。
 
-### Experimental local window
+## 开发交接工具（保留）
 
-The window offers `仅复制交付` for an already-open web/Desktop Chat and a separate `复制并打开网页对话` action. CLI equivalent: `.\handoff-kit\handoff.ps1 -CopyOnly` performs the same validation and clipboard preparation without opening a URL; no-argument behavior is unchanged. Copy-only does not select or verify the destination Chat. Delivery summary fields describe the captured packet, separately from current checkout HEAD.
+`handoff-kit/` 是开发工作流工具，不是当前学习产品。历史证据保留原路径。
 
-For users already combining Chat planning with local Codex work, double-click `Start-Handoff.cmd` in this checkout. The Chinese guided window previews the saved target and captured delivery before an explicit return action. It does not identify the current MASTER automatically or paste/send. Occasional one-shot edits may not need it. See [experimental window instructions](handoff-kit/ui/README.md); the original CLI workflow below remains available. Owner usability validation is still pending.
+- [Handoff CLI 说明](handoff-kit/README.md) 与 [实验窗口说明](handoff-kit/ui/README.md)
+- 窗口入口：[Start-Handoff.cmd](Start-Handoff.cmd)
+- 首次绑定：`.\handoff-kit\configure.ps1 -OriginChat 'https://chatgpt.com/g/PROJECT_ID/c/CONVERSATION_ID'`
+- 显式更换 MASTER：同一命令加 `-Rebind`；不会自动改绑。
+- Stop Hook 生成交付包后，运行 `.\handoff-kit\handoff.ps1 -CopyOnly` 仅复制，或 `.\handoff-kit\handoff.ps1` 复制并打开已绑定的网页对话。
 
-Prerequisites are Windows ChatGPT Desktop with Codex, the intended local Git checkout, the configured Stop Hook, and Windows PowerShell 5.1.
-
-### 1. Bind the origin Chat once
-
-Run from the repository:
-
-```powershell
-.\handoff-kit\configure.ps1 -OriginChat 'https://chatgpt.com/g/PROJECT_ID/c/CONVERSATION_ID'
-```
-
-`configure.ps1` validates the ChatGPT conversation URL and stores a repository-specific binding under the checkout's Git directory. The binding persists without becoming tracked product source, and a different origin Chat is not silently substituted or rebound.
-
-To deliberately replace that target with a new MASTER Chat, use the explicit rebind path:
-
-```powershell
-.\handoff-kit\configure.ps1 -OriginChat 'https://chatgpt.com/g/PROJECT_ID/c/NEW_CONVERSATION_ID' -Rebind
-```
-
-Without `-Rebind`, a different target continues to fail closed. An invalid rebind leaves the existing binding unchanged.
-
-### 2. Start a bounded Codex task
-
-In Codex, create a new chat, add the existing MASTER Chat as context, select the correct local repository, and send a minimal trigger for the task already approved in MASTER. Codex performs only that bounded work and produces a Delivery Packet with Review Evidence.
-
-### 3. Return the Delivery Packet
-
-After the Codex response has ended and the Stop Hook has materialized its packet, open a new Windows PowerShell 5.1 session in the same repository and run:
-
-```powershell
-.\handoff-kit\handoff.ps1
-```
-
-`handoff.ps1` takes no packet or Chat parameters. It loads the repository binding, reads the fixed Stop Hook metadata record, verifies that the metadata belongs to the current repository, validates the packet and origin URL, copies the packet exactly to the clipboard, and opens the bound MASTER Chat.
-
-The final control stays with the user: **no auto paste and no auto send**. Paste the packet and send it manually.
-
-For command details, safety checks, and the focused compatibility command, see the [handoff-kit technical instructions](handoff-kit/README.md).
-
-## Verified
-
-- Productization Spike 01 passed for the repo-local binding and Codex-to-ChatGPT return helper.
-- The official existing-Chat entry exposed the intended MASTER context to Codex together with the intended local repository.
-- A real documentation task completed the combined workflow end to end: official existing Chat context, local execution, evidence-ready Delivery Packet, Stop Hook materialization, `handoff.ps1`, exact clipboard content, the correct origin MASTER Chat, and manual paste/send.
-- That dogfood run required no full Task Packet copy, prompt rewrite, wrong-repository correction, missing-evidence follow-up, or manual copying of the Codex Delivery Packet.
-- The helper remains repo-local and fail-closed, and automatic paste/send is absent.
-- MF-01 was the first natural Must Fix: a concise Correction Packet returned to this same Codex task, and the explicit safe `-Rebind` passed focused tests and real current-MASTER handoff re-verification.
-
-## Not yet verified
-
-- Repeated net benefit across additional naturally occurring real tasks.
-- Whether an already-created Codex task automatically receives later updates made in the origin ChatGPT Chat.
-- External validation beyond the current private dogfood workflow.
-
-These are evidence gaps, not claims that the Alpha provides those capabilities. They do not expand the current Alpha surface.
-
-## Current boundaries
-
-Alpha v0.1 intentionally does not provide:
-
-- automatic paste or automatic send;
-- browser automation or a full-history/full-session bridge;
-- a custom ChatGPT-to-Codex transport that replaces the official existing-Chat entry;
-- a GUI, installer, launcher, background daemon, or hosted SaaS service;
-- automatic rebinding, implicit packet guessing, merge, release, or publishing behavior.
-
-The product's current value is the smaller loop: low configuration, the correct local and Chat targets, an evidence-ready return, and explicit user control over the final send.
+用户自行粘贴、发送，MASTER 审查 delta；工具不自动发送，不合并聊天历史，也不自动 push/merge。可不使用窗口，继续使用原 CLI 路径。

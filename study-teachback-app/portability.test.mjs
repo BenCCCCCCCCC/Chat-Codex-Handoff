@@ -6,6 +6,8 @@ import { spawnSync } from 'node:child_process';
 import { extractSource } from './ingestion.mjs';
 import { createServer } from './server.mjs';
 import { Ledger } from './ledger.mjs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 test('active extractor and setup have no private runtime coupling or automatic installer',()=>{
   for(const file of ['ingestion.mjs','extract_source.py','requirements-extractor.txt','README.md']){
@@ -16,7 +18,7 @@ test('active extractor and setup have no private runtime coupling or automatic i
 });
 
 test('real missing interpreter and empty venv fail closed over HTTP; ledger unchanged; providers never called',async()=>{
-  const root=mkdtempSync(fileURLToPath(new URL('./runtime/portability-',import.meta.url)));
+  const root=mkdtempSync(join(tmpdir(),'portability-'));
   const python=fileURLToPath(new URL('./.venv/Scripts/python.exe',import.meta.url));
   const creation=spawnSync(python,['-I','-m','venv','--without-pip',root+'/empty'],{windowsHide:true,env:{SystemRoot:process.env.SystemRoot}});
   assert.equal(creation.status,0);

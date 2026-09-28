@@ -1,60 +1,14 @@
-# Active Handoff
+# HANDOFF — 非权威指针
 
-## Phase
+本文件不是可执行工作包，不维护第二份当前任务列表。
 
-Source Maintenance Probe 01 — Private GitHub Canonical State.
+当前产品：**知而能讲 — Study-first + in-app teach-back**。产品代码分支为 `prototype/study-teachback-v0.1`，产品入口见 [README](../../study-teachback-app/README.md)。
 
-## Goal
+执行前按顺序读取仓库 `BenCCCCCCCCC/Chat-Codex-Handoff` 的 **`meta/master-state` 分支**：
 
-Test whether two stable files in a private GitHub repository can become the canonical source for frequently changing MASTER state, avoiding repeated ChatGPT Project Source delete/upload/version-suffix maintenance.
+1. [docs/master/CURRENT_STATE.md](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/CURRENT_STATE.md)
+2. [docs/master/HANDOFF.md](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/HANDOFF.md)
 
-## Completed Before This Probe
+记录实际读取的 canonical document commit。分支和路径是独立值；不要把 `meta/master-state` 当成本地目录，也不要为读取文档切换产品 checkout。权威文档无法读取时报告访问问题，不用历史副本代替。
 
-- Productization Spike 01 = PASS.
-- Official Existing-Chat → Codex Probe 01 = PASS.
-- Official Existing-Chat → Codex Probe 02 = PASS.
-- Preferred workflow established as official Chat → Codex context entry plus the existing Codex → Chat thin helper.
-- Custom Chat → Codex helper moved to Future Optional.
-
-## What This Probe Is Testing
-
-- Create `docs/master/CURRENT_STATE.md` and `docs/master/HANDOFF.md` at stable paths.
-- Commit only those files.
-- Create one private GitHub repository without a naming or remote collision.
-- Push only `prototype/lightweight-handoff-v0.1`.
-- Let MASTER recover the correct current state from GitHub without adding or deleting a Project Source.
-
-## Verified
-
-- Active repo: `F:\Chat-Codex-Handoff\validation-repo`.
-- Active branch: `prototype/lightweight-handoff-v0.1`.
-- Starting HEAD: `a48446f0572ecb5e94d35783dd1ace0eecb7c1ec`.
-- Existing unrelated untracked files are preserved and excluded from this probe's commit.
-- Project Source maintenance churn is a real observed cost.
-
-## Likely
-
-- Git commit/SHA identity and stable paths will provide a safer dynamic-state source than repeatedly versioning uploaded Project Source files.
-
-## Unknown
-
-- Whether MASTER can directly read both canonical files from the new private GitHub repository.
-- Whether the remote retrieval returns the exact intended commit without version confusion.
-- Final probe acceptance until MASTER performs that read.
-
-## Current User Authorization Boundary
-
-Authorized only for this probe: create one private GitHub repository, add it as `origin`, create one focused commit containing the two canonical state files, and push the current productization branch once.
-
-Not authorized: public visibility, merge, force push, other branches, tags, release, GitHub Actions, automatic future pushes, product feature expansion, or destructive remote changes.
-
-## Next Smallest Step
-
-After the bounded push, return a complete Delivery Packet through `handoff-kit\handoff.ps1`; MASTER then reads both canonical paths from GitHub and decides PASS or FAIL.
-
-## Do Not Start Yet
-
-- Another productization spike.
-- Custom Chat → Codex helper development.
-- Project Source CRUD automation or history migration.
-- Merge, release, Actions, automatic push, public repository, GUI, daemon, Safe Prefill, automatic paste/send, or full bridge work.
+完成当前授权批次后返回 Delivery Packet 供 MASTER 审查；本指针不自动授权后续批次、真实麦克风/provider 调用、push 或 merge。原 [Handoff 返回工具](../../handoff-kit/README.md) 保留，用户控制粘贴和发送。

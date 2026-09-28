@@ -1,24 +1,31 @@
-# Study-first + in-app teach-back
+# 知而能讲 — Study-first + in-app teach-back
 
-## Windows one-action launcher
+先理解有限材料，再在应用内讲解、回听并核对转写，查看反馈后补学、重讲或换情境应用。
 
-Entry: repo-root `Start-Study.cmd`, invoked from the Windows Shell or by full path from a configured terminal. Explorer double-click has not been manually verified. It uses Windows PowerShell 5.1 without changing policy, resolves paths from the script, and opens only http://127.0.0.1:4317/ after readiness. Keep the control window open. Enter is the intended normal stop; actual visible-console Enter and Ctrl+C behavior remain unverified (automated lifecycle tests exercised callbacks). After abrupt window closure, use `Stop-Study.cmd` for identity-checked recovery. Finish learning requests before stopping: termination cannot recall already-sent provider requests.
+## Canonical state
 
-An already-verified configured server is reused before checking caller prerequisites, and is never stopped by that invocation. For a new server, existing `node.exe` must be on the launch process PATH, the repo `.venv`/pypdf6.18.0 (or absolute STUDY_PYTHON) must be valid, and OPENAI_API_KEY must already be inherited. Explorer and a configured terminal can have different environments. Nothing is installed; no key, .env, PATH, registry or execution policy is persisted/modified.
+仓库 `BenCCCCCCCCC/Chat-Codex-Handoff`，产品分支 `prototype/study-teachback-v0.1`。唯一动态状态位于 **`meta/master-state` 分支**：
 
-Identity combines safe status/UI checks with Node and the exact absolute server.mjs command-line path. Relative-path/unverifiable processes fail closed; their operator should stop them normally. Unknown port owners are never killed. Recovery requires recorded PID/start time/app identity in ignored runtime/launcher.json; stale state requires manual inspection, not a blind PID kill. No service/daemon/autostart is created.
+- [CURRENT_STATE.md](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/CURRENT_STATE.md)
+- [HANDOFF.md](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/HANDOFF.md)
 
-Launcher tests: `powershell.exe -NoProfile -File study-teachback-app/launch-tests.ps1`. Port4317 must be free; tests refuse pre-existing occupancy, use a temporary in-memory non-secret credential and intercept browser opening. The subsequent Shell smoke exercised real ShellExecute CMD invocation; see `artifacts/study-teachback/local-launch-smoke-01/` for its partial browser/console observation limits. Explorer mouse double-click, Ctrl+C and owner-microphone walkthrough remain unverified. See `artifacts/study-teachback/local-launch-01/` for receipts.
+当前 checkout 的 `docs/master/` 仅指向上述权威文档。读取任务时记录文档 commit，不把分支名当目录，不执行旧副本中的历史 next steps。
 
-Owner Validation: OWNER-DEFERRED / NOT EXECUTED.
+历史 Phase 1 材料导入和 clean Phase 2 学习对话已接受；物理麦克风 Phase 3 尚未执行。真实录音、完整 owner journey、重复学习收益仍未验证。历史 Node/Edge 计数不代表当前版本 fresh results；各次交付包保存各自命令、版本和结果。
 
-## Source entry
+## Windows 启动与停止
 
-Use “选择学习文件” on the initial Learn screen. MD/TXT/PDF/DOCX/PPTX are extracted locally; preview and select up to 5,000 characters into the existing source editor. Only pressing “开始学习” sends selected text to the existing Tutor. Raw files are not uploaded to a provider or persisted. Recording remains directly inside the app.
+从仓库根目录运行 [Start-Study.cmd](../Start-Study.cmd)，或通过完整路径调用。启动器使用 Windows PowerShell 5.1，按脚本位置解析路径，只在就绪后打开 `http://127.0.0.1:4317/`。已有且身份可验证的服务会被复用；该次调用不会停止被复用的服务。
 
-## Explicit setup (Windows, from repo root)
+新服务要求启动进程 PATH 中已有 `node.exe`，产品 `.venv`/pypdf 6.18.0（或绝对路径 `STUDY_PYTHON`）有效，且已继承服务端 `OPENAI_API_KEY`。Explorer 与已配置终端可能有不同环境。不会自动安装或持久化 key、.env、PATH、注册表或执行策略。真实产品调用仍需当前授权，预算上限不是花费许可。
 
-Prerequisites: ordinary Python 3.14.6 (`py -3`), Node and Edge. Create the repo-owned environment once:
+保持控制窗口打开；正常停止设计为 Enter。Explorer 鼠标双击、可见控制台 Enter/Ctrl+C 的实际体验仍未验证。突然关窗后用 [Stop-Study.cmd](../Stop-Study.cmd) 做身份校验恢复。先完成学习请求再停止；停止不能撤回已发送的请求。
+
+服务身份由安全状态/UI 检查、Node 和精确绝对 `server.mjs` 命令行路径共同确认。未知端口占用者不会被终止；相对路径或不可验证进程会被拒绝。恢复校验 ignored `runtime/launcher.json` 中的 PID、启动时间和应用身份；陈旧状态需要人工检查。没有 service/daemon/autostart。
+
+## 已有显式安装前提（Windows，仓库根目录）
+
+需要普通 Python 3.14.6（`py -3`）、Node 和 Edge。已有环境可直接使用；以下是新机器的显式安装说明，不是本次任务的安装操作：
 
 ```powershell
 py -3 -m venv study-teachback-app/.venv
@@ -26,32 +33,31 @@ study-teachback-app/.venv/Scripts/python.exe -I -m pip --isolated install --inde
 node study-teachback-app/server.mjs
 ```
 
-Local launch at http://127.0.0.1:4317 is available independently of Owner Validation, which remains OWNER-DEFERRED / NOT EXECUTED. `.venv` is ignored and must be recreated on another machine; it is not vendored. pypdf is pinned to 6.18.0 with the authorized wheel SHA256 in requirements-extractor.txt. Setup is explicit; the running application never installs/downloads dependencies. No global package install is needed.
+`.venv` 被忽略，不随仓库分发。pypdf 6.18.0 与 wheel SHA256 固定在 `requirements-extractor.txt`。运行中的应用不会下载安装依赖，不需要全局安装。
 
-The default interpreter is `.venv/Scripts/python.exe` on Windows (`.venv/bin/python` on other systems, not verified here). Optional `STUDY_PYTHON` is an absolute, non-secret path to an operator-selected Python with pypdf 6.18.0. The subprocess receives only SystemRoot, uses `-I`, and has a 15-second timeout. Missing interpreter or missing/wrong pypdf returns a setup/dependency error, with no provider fallback. OPENAI_API_KEY remains server-side and is not passed to the extractor.
+默认解释器为 `.venv/Scripts/python.exe`；非 Windows 的 `.venv/bin/python` 路径未在这里验证。可选 `STUDY_PYTHON` 必须是已有 Python/pypdf 的绝对路径。提取子进程只收到 SystemRoot，使用 `-I`，超时 15 秒；缺少环境或版本不符就返回错误，不回退至 provider。API key 不传给提取器。
 
-## Limits
+## 材料、录音与保留边界
 
-10 MB input; 30 MB total Office ZIP expansion; 100 PDF pages/slides; 200,000 extracted characters; 5,000 characters selected for Learn. TXT/MD support UTF-8 or BOM-marked UTF-16. Invalid/encrypted/oversized documents fail closed. No OCR: image-only PDFs have no extractable text. Complex layout/reading order must be checked in preview. DOCX main-body/table paragraphs and PPTX slide text are supported; headers, notes, comments, charts and embedded image text are excluded.
+初始页面“选择学习文件”支持 MD/TXT/PDF/DOCX/PPTX。本机提取、预览后选取最多 5,000 字；点击“开始学习”才把所选文字发送给 Tutor。原文件不上传 provider、不持久化。录音在应用内进行。
 
-## Validation
+输入上限 10 MB；Office ZIP 总展开 30 MB；100 个 PDF 页面/幻灯片；提取 200,000 字符；单轮学习 5,000 字。TXT/MD 支持 UTF-8 或带 BOM 的 UTF-16。加密、非法、超限文件会被拒绝。不做 OCR；复杂版式需在预览中核对。DOCX 主体/表格段落与 PPTX 幻灯片文字受支持；页眉、备注、批注、图表和图片文字不在范围内。
 
-Portability run: extraction 6/6, Node 42/42, Edge 23/23 (see current evidence packet for actual outcome). Edge uses isolated synthetic media and stub providers, not an owner microphone run. Missing interpreter and dependency are exercised through real subprocesses and HTTP, with provider count zero and unchanged test ledger. Active extraction/setup source is checked for private runtime coupling. Historical evidence is retained.
+原声、raw/corrected 转写版本、来源和历史保持关联。词时间不可用时保留 PARTIAL 状态；诊断仍要求回听并确认。更正转写不是一次新口头表现。有效录音先保存并检查，再注册 attempt，注册与限额检查通过后才转写；重复注册同一 ID 不增加次数或重置提交额度。注册失败时保留已保存原声。
 
-Run extraction tests with `.venv/Scripts/python.exe -B study-teachback-app/extract_source_test.py` from repo root (prefix the executable path with `study-teachback-app/`). Run `node --test study-teachback-app/tests.mjs study-teachback-app/*.test.mjs` and `node study-teachback-app/browser-tests-r4.mjs`.
+现有七天过期、导出/删除行为不变。打开旧 profile 可能触发过期清理，不能把启动/重载当作只读检查。自定义 retention 仍需独立决策。US$5 exposure / US$10 cash 上限保持不变；不自动充值、不切换模型/provider。
 
-Existing Learn → Explain → Diagnose → Repair → Re-explain → Apply behavior is unchanged. Segment validity remains strict; unusable word times are preserved, and replay/confirmation is required. Supported/delivery findings do not expose knowledge remediation. Source, audio, raw/corrected versions, feedback and history retain existing local export/delete and seven-day expiry behavior.
+## 隔离工程验证
 
-US$5 API exposure / US$10 new cash ceiling, no recharge or provider/model switch. No paid calls in this recovery. Owner validation remains paused; no release/public deployment implied.
+从仓库根目录执行：
 
-## UI-UX-FOUNDATION-01
+```powershell
+node study-teachback-app/run-offline-tests.mjs node
+node study-teachback-app/run-offline-tests.mjs browser
+```
 
-A / 纸页书桌 presentation on the existing app: paper/ink-green tokens, source and AI text separation, mobile source disclosure, real selection counts, continuous single-focus recording, labelled correction fields, and scoped Cancel-first deletion dialogs. Existing R3/R4, local ingestion, audio/version/ledger safeguards remain authoritative. Pending Tutor actions cannot start another Explain workflow.
+包装器调用已有 Node suite / `browser-tests-r4.mjs`，只给测试进程 synthetic credential，拦截非 loopback 网络，限制 ledger 到测试目录，使用独立 Edge profile 与 synthetic media/fake provider。新日志写入 `artifacts/study-teachback/correctness-hygiene-01/<run-id>/`，不覆盖历史证据。浏览器测试不是物理麦克风测试。测试不证明 ASR/模型准确性或学习收益。
 
-Current UI validation receipts are in `artifacts/study-teachback/ui-ux-foundation-01/`: fresh Node 44/44; extraction 6/6; see final versioned Edge receipt and Delivery Packet for the final browser count. Old counts above describe historical portability evidence. Actual Edge tests use isolated synthetic media/stub providers; new paid product API calls 0. Owner Validation is OWNER-DEFERRED / NOT EXECUTED. Native browser UI zoom, assistive technology and real owner microphone have not been tested in this task.
+其他独立检查（本次未默认授权执行）：`study-teachback-app/.venv/Scripts/python.exe -B study-teachback-app/extract_source_test.py`；启动器测试 `powershell.exe -NoProfile -File study-teachback-app/launch-tests.ps1` 要求 4317 空闲并使用其专门隔离环境。不要通过真实 Start-Study 流程代替 Batch A 测试。
 
-## UI-UX-FOUNDATION-01R2
-
-The initial screen now prioritizes “选择学习文件”, supported formats, 10 MB limit and local parsing, followed by the secondary paste route. Filename and extraction status remain visible before preview/selection. Headings/body use the local sans-serif stack; decorative phase prefixes and repeated introductory copy are removed. Required data/replay/error/delete disclosures remain. No extraction protocol, model/provider, storage schema, ASR/feedback gate or budget change.
-
-Fresh R2: Node45/45, Edge27/27, extraction6/6. Focused checks cover visible native file entry at 1440/390, unchanged accepted extensions, filename/status and import/preview zero provider calls. Evidence: `artifacts/study-teachback/ui-ux-foundation-01r2/`. Owner Validation remains DEFERRED / NOT EXECUTED.
+开发交接工具见 [handoff-kit](../handoff-kit/README.md)；[Start-Handoff.cmd](../Start-Handoff.cmd) 与 Study 启动入口用途不同。完成一个批次后交回 MASTER，后续批次、真实调用及发布需要相应授权。

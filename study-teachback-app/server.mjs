@@ -3,7 +3,7 @@ import { extractSource } from './ingestion.mjs';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { semantic, transcribe, ledger } from './provider.mjs';
-import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue, repairFocus } from './core.mjs';
+import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue, repairFocus, waveDuration } from './core.mjs';
 import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
 
 const files={'/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css'};
@@ -28,7 +28,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       for await(const part of req){length+=part.length;requireValue(length<=limit,'INPUT_TOO_LARGE');parts.push(part);}
       const bytes=Buffer.concat(parts);
       if(path==='/api/extract')return json(200,await extractCall(bytes,req.headers['x-source-format']));
-      if(path==='/api/asr')return json(200,await asrCall(bytes,req.headers['x-attempt-id'],{signal:controller.signal}));
+      if(path==='/api/asr'){waveDuration(bytes);book.register(req.headers['x-attempt-id']);return json(200,await asrCall(bytes,req.headers['x-attempt-id'],{book,signal:controller.signal}));}
       requireValue(req.headers['content-type']==='application/json','CONTENT_TYPE');
       const b=JSON.parse(bytes.toString('utf8'));
       if(path==='/api/register'){book.register(b.attemptId);return json(200,{registered:true});}

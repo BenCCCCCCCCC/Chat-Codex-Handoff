@@ -30,8 +30,8 @@ export class Ledger {
       unsettled: reservations.filter(e => !settled.has(e.id)).length, cashSpentUSD: 0, cashNote: 'No purchase/recharge performed by app; provider billing balance not inspected.' };
   }
   register(attemptId) {
-    if(!/^[a-zA-Z0-9_-]{1,80}$/.test(attemptId))throw new Error('INVALID_ID');
-    return this.transaction(data=>{if(data.events.some(e=>e.type==='attempt'&&e.attemptId===attemptId))throw new Error('DUPLICATE_ATTEMPT');if(this.summary(data).attempts>=LIMITS.attempts)throw new Error('ATTEMPT_LIMIT');data.events.push({type:'attempt',attemptId,at:new Date().toISOString()});});
+    if(typeof attemptId!=='string'||!/^[a-zA-Z0-9_-]{1,80}$/.test(attemptId))throw new Error('INVALID_ID');
+    return this.transaction(data=>{if(data.events.some(e=>(e.type==='attempt'||e.type==='reserve'&&e.kind==='asr')&&e.attemptId===attemptId))return;if(this.summary(data).attempts>=LIMITS.attempts)throw new Error('ATTEMPT_LIMIT');data.events.push({type:'attempt',attemptId,at:new Date().toISOString()});});
   }
   reserve({ kind, attemptId = null, input = 0, output = 0, minutes = 0 }) {
     if (!['asr','semantic'].includes(kind) || ![input, output, minutes].every(x => Number.isFinite(x) && x >= 0)) throw new Error('INVALID_RESERVATION');

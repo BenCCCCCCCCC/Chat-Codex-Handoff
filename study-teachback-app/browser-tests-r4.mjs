@@ -1,46 +1,58 @@
 import { spawn } from 'node:child_process';
 import { mkdirSync,writeFileSync,mkdtempSync,readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import { createServer } from './server.mjs';
 import { Ledger } from './ledger.mjs';
 import { waveDuration,normalizeASR } from './core.mjs';
-const root=fileURLToPath(new URL('./runtime/',import.meta.url));mkdirSync(root,{recursive:true});
-const run=Date.now(), profile=mkdtempSync(root+'edge-test-');
-const calls=[],cases=[],errors=[];let failASR=null,delaySemantic=0,rejectStarter=false;const provenanceRequests=[];
+if(!process.env.STUDY_TEST_OUTPUT)throw Error('Run through run-offline-tests.mjs browser');
+const root=process.env.STUDY_TEST_OUTPUT+'/';mkdirSync(root,{recursive:true});
+const run=Date.now(), profile=process.env.STUDY_TEST_PROFILE??mkdtempSync(root+'edge-test-');
+const calls=[],cases=[],errors=[],network=[];let failASR=null,delaySemantic=0,rejectStarter=false,failTeach=false,failRegister=false;const provenanceRequests=[];
 const savedASR=normalizeASR(JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r2/SYNTHETIC_ASR_FIELDS.json',import.meta.url))),7.31);
 const savedWave=[...readFileSync(new URL('./runtime/synthetic-mandarin-v2.wav',import.meta.url))];
-const server=createServer({book:new Ledger(root+`browser-test-ledger-${run}.json`),semanticCall:async(prompt,input)=>{
+const testBook=new Ledger(root+`browser-test-ledger-${run}.json`),register=testBook.register.bind(testBook);
+testBook.register=id=>{if(failRegister)throw Error('LEDGER_LOCKED');return register(id);};
+const server=createServer({book:testBook,semanticCall:async(prompt,input)=>{
   calls.push({kind:input.mode??(input.events?'delivery':'content'),sourceId:input.source.id,focus:input.focus??null});if(delaySemantic)await new Promise(r=>setTimeout(r,delaySemantic));
   if(input.mode)provenanceRequests.push(structuredClone(input));
+  if(failTeach){failTeach=false;throw Error('API_RESULT_UNAVAILABLE');}
   if(rejectStarter){rejectStarter=false;return {value:{sourceId:input.source.id,message:'Rejected stub',goals:[{text:'Goal',sourceQuote:'NOT IN SOURCE'}],question:'Question'}};}
   if(input.mode)return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,message:input.mode==='apply'?'新情境：昨天浇过水，今天摸起来还是湿的。':'我们先看条件：干了才浇，湿的时候先不浇。',goals:[{text:'把条件和行动联系起来',sourceQuote:input.source.text}],question:input.mode==='apply'?'现在要浇水吗？为什么？':'你能换句话说说这个条件吗？'}};
   if(input.events)return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,attemptId:input.attempt.id,transcriptVersion:input.attempt.transcriptVersion,findings:[{status:'observation',message:'确认的近静音候选，可尝试在两句之间明确过渡。',sourceQuote:input.source.text,spanId:input.attempt.spans[0].id,quote:input.attempt.spans[0].text,eventId:input.events[0].id,repair:'再讲时试着提示句间关系。'}]}};
   return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,attemptId:input.attempt.id,transcriptVersion:input.attempt.transcriptVersion,findings:[{status:'incorrect',message:'工程补救 fixture：请澄清条件与行动的关系。',sourceQuote:input.source.text,spanId:input.attempt.spans[0].id,quote:input.attempt.spans[0].text,eventId:null,repair:'再用一个不同的情境说明条件。'}]}};
 },asrCall:async(bytes,id)=>{calls.push({kind:'asr',attemptId:id});if(failASR)throw new Error(failASR);const duration=waveDuration(bytes);return {model:'TEST_STUB_NOT_API',duration,text:'土壤干了才浇水，湿的先不浇。',spans:[{id:'s0',start:0,end:Math.min(1,duration),text:'土壤干了才浇水，湿的先不浇。'}],words:[],reviewRequired:true,alignment:'SYNTHETIC_TEST'};}});
-await new Promise(r=>server.listen(4318,'127.0.0.1',r));
-const edge=spawn('C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',['--headless=new','--disable-gpu','--no-first-run','--no-default-browser-check','--remote-debugging-address=127.0.0.1','--remote-debugging-port=9327',`--user-data-dir=${profile}`,'--autoplay-policy=no-user-gesture-required','about:blank'],{windowsHide:true,stdio:'ignore'});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const origin=`http://127.0.0.1:${server.address().port}`;
+const edge=spawn('C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',['--headless=new','--disable-gpu','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-component-update','--no-proxy-server','--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1','--remote-debugging-address=127.0.0.1','--remote-debugging-port=0',`--user-data-dir=${profile}`,'--autoplay-policy=no-user-gesture-required','about:blank'],{windowsHide:true,stdio:['ignore','ignore','pipe']});
+let edgeLog='';edge.stderr.on('data',chunk=>edgeLog+=chunk);edge.on('error',e=>edgeLog+=e.code);
 let ws,seq=0;const callbacks=new Map();
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 async function cdp(method,params={}){const id=++seq;return new Promise((resolve,reject)=>{const timer=setTimeout(()=>{callbacks.delete(id);reject(new Error('CDP_TIMEOUT '+method));},method==='Page.captureScreenshot'?45000:20000);callbacks.set(id,{resolve,reject,timer});ws.send(JSON.stringify({id,method,params}));});}
 async function evaluate(expression){const r=await cdp('Runtime.evaluate',{expression,awaitPromise:true,returnByValue:true});if(r.exceptionDetails)throw new Error(r.exceptionDetails.text+': '+r.exceptionDetails.exception?.description);return r.result?.value;}
 async function until(expression){for(let i=0;i<100;i++){try{if(await evaluate(expression))return;}catch(e){if(!e.message.includes("Cannot read properties of null"))throw e;}await pause(100);}throw new Error('WAIT_FAILED '+expression+' NOTICE='+await evaluate("document.getElementById('notice')?.textContent"));}
+async function reloadPage(){
+  await evaluate(`document.documentElement.dataset.testReload='old'`);await cdp('Page.reload');
+  await until(`document.documentElement.dataset.testReload!=='old' && document.getElementById('budget')?.textContent.length>0`);
+}
 const click=async id=>{await evaluate(`document.getElementById(${JSON.stringify(id)}).click()`);if(['deleteAttempt','deleteAll'].includes(id)){await until(`document.getElementById('deleteDialog').open`);await evaluate(`document.getElementById('deleteConfirm').click()`);}};
 const all=`(async()=>{const s=await import('/storage.mjs');const db=await s.openStore();const t=await db.all();db.close();return t.map(t=>({...t,attempts:t.attempts.map(a=>({...a,audio:{size:a.audio.size,type:a.audio.type}}))}));})()`;
 const screenshots=[];
-async function shot(name,target){if(target)await evaluate(`document.getElementById(${JSON.stringify(target)}).scrollIntoView({behavior:'instant',block:'start'})`);await pause(120);const r=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});const file=`${run}-${name}.png`;writeFileSync(new URL('../artifacts/study-teachback/owner-validation-provenance-fix-01/'+file,import.meta.url),Buffer.from(r.data,'base64'));screenshots.push({file,state:name,viewport:await evaluate('({width:innerWidth,height:innerHeight})'),scope:'Actual product / synthetic fixtures / stub provider'});}
+async function shot(name,target){if(target)await evaluate(`document.getElementById(${JSON.stringify(target)}).scrollIntoView({behavior:'instant',block:'start'})`);await pause(120);const r=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});const file=`${run}-${name}.png`;writeFileSync(join(root,file),Buffer.from(r.data,'base64'));screenshots.push({file,state:name,viewport:await evaluate('({width:innerWidth,height:innerHeight})'),scope:'Actual product / synthetic fixtures / stub provider'});}
 async function check(name,fn){try{await fn();cases.push({name,status:'PASS'});console.log('PASS '+name);}catch(e){cases.push({name,status:'FAIL',error:e.message});throw e;}}
 try{
-  let targets;for(let i=0;i<100;i++){try{targets=await(await fetch('http://127.0.0.1:9327/json/list')).json();if(targets.length)break;}catch{}await pause(100);}
+  let targets;for(let i=0;i<100;i++){try{const port=readFileSync(join(profile,'DevToolsActivePort'),'utf8').split('\n')[0];targets=await(await fetch(`http://127.0.0.1:${port}/json/list`)).json();if(targets.length)break;}catch{}await pause(100);}
   assert(targets?.length,'EDGE_CDP_UNAVAILABLE');ws=new WebSocket(targets.find(t=>t.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j;});
-  ws.onmessage=message=>{const m=JSON.parse(message.data);if(m.id){const cb=callbacks.get(m.id);if(cb){clearTimeout(cb.timer);callbacks.delete(m.id);m.error?cb.reject(new Error(m.error.message)):cb.resolve(m.result);}}else if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.exception?.description??m.params.exceptionDetails.text);};
+  ws.onmessage=message=>{const m=JSON.parse(message.data);if(m.id){const cb=callbacks.get(m.id);if(cb){clearTimeout(cb.timer);callbacks.delete(m.id);m.error?cb.reject(new Error(m.error.message)):cb.resolve(m.result);}}else if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.exception?.description??m.params.exceptionDetails.text);else if(m.method==='Network.requestWillBeSent')network.push(m.params.request.url);};
   await cdp('Runtime.enable');await cdp('Page.enable');await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
-  await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
-  await cdp('Page.navigate',{url:'http://127.0.0.1:4318/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
-  for(const rejected of [false,true])await check(`provenance initial ${rejected?'validation rejection':'success'} and first real owner input`,async()=>{
-    rejectStarter=rejected;const start=provenanceRequests.length;
+  await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='deferredDenied')await new Promise((resolve,reject)=>window.rejectPermission=()=>reject(new DOMException('test denied','NotAllowedError')));if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
+  await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
+  await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
+  for(const outcome of ['success','quote','request'])await check(`provenance initial ${outcome} and first/subsequent real owner input`,async()=>{
+    const rejected=outcome!=='success';rejectStarter=outcome==='quote';failTeach=outcome==='request';const start=provenanceRequests.length;
     await evaluate(`document.getElementById('title').value='Synthetic provenance';document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);await click('learn');
-    await until(rejected?`document.getElementById('notice').textContent.includes('INVALID_SOURCE_QUOTE')`:`document.querySelectorAll('.message.assistant').length===1`);
+    await until(rejected?`document.getElementById('notice').textContent.includes('${outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE'}')`:`document.querySelectorAll('.message.assistant').length===1`);
     assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),0);
     let t=(await evaluate(all))[0];assert.equal(t.messages.filter(m=>m.role==='user').length,0);assert.equal(t.messages.length,rejected?0:1);
     assert.equal(provenanceRequests.length,start+1);
@@ -49,8 +61,31 @@ try{
     t=(await evaluate(all))[0];assert.deepEqual(t.messages.filter(m=>m.role==='user').map(m=>m.text),['Synthetic owner question']);
     assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),1);assert.equal(provenanceRequests.length,start+2);
     assert(provenanceRequests.slice(start).every(r=>r.history.every(m=>!m.text.includes('请先帮我理解这段材料'))));
+    await evaluate(`document.getElementById('chat').value='Second synthetic owner input';document.getElementById('chatForm').requestSubmit()`);
+    await until(`document.querySelectorAll('.message.assistant').length===${rejected?2:3}`);
+    assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),2);
+    assert(provenanceRequests.at(-1).history.some(m=>m.text==='Synthetic owner question'));
     await evaluate(`(async()=>{const {openStore}=await import('/storage.mjs');const s=await openStore();await s.clear();s.close();})()`);
-    await cdp('Page.reload');await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
+    await reloadPage();await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
+  });
+  for(const mode of ['repair','apply'])for(const outcome of ['success','quote','request'])await check(`A1 browser ${mode}/${outcome} provenance, persistence and later real input`,async()=>{
+    const t={id:'action-provenance',createdAt:Date.now(),source:{id:'source',title:'Synthetic actions',text:'只有土壤干燥才浇水。'},goals:[],messages:[{role:'user',text:'Earlier actual question'}],attempts:[],mode:'learn'};
+    t.attempts=[{id:'synthetic-attempt',createdAt:Date.now(),source:t.source,kind:'full',duration:1,raw:{id:'raw',text:'test',spans:[{id:'s0',start:0,end:1,text:'test'}],reviewed:true},corrections:[],reports:[{channel:'content',transcriptVersion:'raw',findings:[{status:'missing',message:'Synthetic gap',sourceQuote:t.source.text,spanId:null,repair:'请说明条件。'}]}]}];
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob(['synthetic placeholder']);await db.put(t);db.close();})()`);
+    await reloadPage();await until(`!document.getElementById('workspace').hidden`);
+    await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+    const start=provenanceRequests.length;rejectStarter=outcome==='quote';failTeach=outcome==='request';
+    if(mode==='apply')await click('apply');else await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);
+    await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && document.getElementById('notice').textContent.includes('${outcome==='success'?'可以继续问':outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE'}')`);
+    assert.equal(provenanceRequests.length,start+1);assert.equal(provenanceRequests.at(-1).mode,mode);
+    const internal=provenanceRequests.at(-1).message;
+    assert.deepEqual((await evaluate(all))[0].messages.filter(m=>m.role==='user').map(m=>m.text),['Earlier actual question']);assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),1);
+    for(const text of ['First real answer','Next real question']){await evaluate(`document.getElementById('chat').value=${JSON.stringify(text)};document.getElementById('chatForm').requestSubmit()`);await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && document.getElementById('notice').textContent.includes('可以继续问')`);}
+    const saved=(await evaluate(all))[0];assert.deepEqual(saved.messages.filter(m=>m.role==='user').map(m=>m.text),['Earlier actual question','First real answer','Next real question']);
+    assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),3);assert(saved.messages.every(m=>m.text!==internal));assert(provenanceRequests.slice(start).every(r=>r.history.every(m=>m.text!==internal)));
+    assert(provenanceRequests.at(-1).history.some(m=>m.text==='First real answer'));
+    if(mode==='apply'&&outcome==='success'){assert.equal(saved.apply.answer,'First real answer');assert.equal(provenanceRequests[start+1].mode,'apply_answer');}
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
   });
   calls.length=0;
   await check('R2 prominent native file entry at desktop and mobile before any provider call',async()=>{
@@ -86,13 +121,26 @@ try{
     await evaluate(`document.documentElement.style.fontSize='';document.getElementById('chat').blur()`);
     await cdp('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
   });
-  await check('microphone denial preserves study state',async()=>{await click('explain');await evaluate(`window.testMic='denied'`);await click('start');await until(`document.getElementById('notice').textContent.includes('权限未允许')`);assert.equal((await evaluate(all))[0].attempts.length,0);});
-  await check('native MediaRecorder + decode + original IndexedDB Blob + timestamp adapter',async()=>{await evaluate(`window.testMic='tone'`);await click('start');await until(`!document.getElementById('finish').hidden`);await shot('recording','recording');assert(await evaluate(`document.body.dataset.recording==='true' && document.querySelector('.learning').hidden`));await pause(1400);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,1);assert(t.attempts[0].audio.size>0);assert(t.attempts[0].raw.spans.length);assert.equal(t.attempts[0].corrections.length,0);});
+  await check('microphone denial preserves study state and consumes no registration',async()=>{const before=testBook.summary().attempts;await click('explain');await evaluate(`window.testMic='denied'`);await click('start');await until(`document.getElementById('notice').textContent.includes('权限未允许')`);assert.equal((await evaluate(all))[0].attempts.length,0);assert.equal(testBook.summary().attempts,before);});
+  for(const kind of ['unsupported','startup'])await check(`A3 browser ${kind} consumes no attempt; UI recovers`,async()=>{
+    const before=testBook.summary().attempts;
+    await evaluate(`window.testMic='tone';window.savedSupported=MediaRecorder.isTypeSupported;window.savedStart=MediaRecorder.prototype.start;${kind==='unsupported'?"MediaRecorder.isTypeSupported=()=>false":"MediaRecorder.prototype.start=function(){throw Error('START_FAILED')}"}`);
+    await click('start');await until(`!document.getElementById('start').disabled`);assert.equal(testBook.summary().attempts,before);assert.equal((await evaluate(all))[0].attempts.length,0);assert(await evaluate(`!document.body.dataset.recording && document.getElementById('finish').hidden`));
+    await evaluate(`MediaRecorder.isTypeSupported=window.savedSupported;MediaRecorder.prototype.start=window.savedStart`);
+  });
+  await check('A3 pending permission blocks navigation, deletion and duplicate startup',async()=>{
+    const before=testBook.summary().attempts,id=(await evaluate(all))[0].id;
+    await evaluate(`window.testMic='deferredDenied'`);await click('start');await until(`!!window.rejectPermission`);
+    await click('revise');await evaluate(`document.getElementById('deleteAll').click();document.getElementById('start').click()`);
+    assert(await evaluate(`!document.getElementById('workspace').hidden && !document.getElementById('deleteDialog').open`));assert.equal((await evaluate(all))[0].id,id);
+    await evaluate(`window.rejectPermission()`);await until(`!document.getElementById('start').disabled`);assert.equal(testBook.summary().attempts,before);
+  });
+  await check('native MediaRecorder + decode + original IndexedDB Blob + exactly one registration',async()=>{const before=testBook.summary().attempts;await evaluate(`window.testMic='tone'`);await click('start');await until(`!document.getElementById('finish').hidden`);assert.equal(testBook.summary().attempts,before);await shot('recording','recording');assert(await evaluate(`document.body.dataset.recording==='true' && document.querySelector('.learning').hidden`));await pause(1400);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,1);assert(t.attempts[0].audio.size>0);assert(t.attempts[0].raw.spans.length);assert.equal(t.attempts[0].corrections.length,0);assert.equal(testBook.summary().attempts,before+1);assert.equal(testBook.read().events.filter(e=>e.type==='attempt'&&e.attemptId===t.attempts[0].id).length,1);});
   await check('diagnosis blocked before segment replay; correction keeps original identity and audio',async()=>{await shot('partial-review','attemptPanel');await click('confirm');await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);const before=(await evaluate(all))[0].attempts[0];await evaluate(`document.querySelector('#transcript textarea').value='只有土壤干燥才浇水，湿润时先不浇。'`);await click('confirm');await until(`document.querySelectorAll('.finding').length===1`);const after=(await evaluate(all))[0].attempts[0];assert.equal(after.id,before.id);assert.equal(after.audio.size,before.audio.size);assert.equal(after.raw.text,before.raw.text);assert.equal(after.corrections.length,1);assert.notEqual(after.raw.id,after.corrections[0].id);});
   await check('targeted repair routes feedback back into tutor',async()=>{await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);await until(`document.getElementById('phase').textContent.includes('再学这一点') && document.querySelectorAll('.message.assistant').length===2`);assert(calls.some(c=>c.kind==='repair'));});
   await check('partial re-record is a new attempt with parent and focus',async()=>{await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再讲这一点').click()`);await click('start');await until(`!document.getElementById('finish').hidden`);await pause(1200);await click('finish');await until(`document.getElementById('notice').textContent.includes('转写完成')`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,2);assert.equal(t.attempts[1].kind,'partial');assert.equal(t.attempts[1].parentId,t.attempts[0].id);assert.notEqual(t.attempts[1].id,t.attempts[0].id);});
   await check('new Apply task and answer stay separate from same-topic repair',async()=>{await click('apply');await until(`document.getElementById('phase').textContent.includes('换个情境') && document.getElementById('question').textContent.includes('现在')`);await evaluate(`document.getElementById('chat').value='不需要，因为还是湿的。';document.getElementById('chatForm').requestSubmit()`);await until(`document.querySelectorAll('.message.assistant').length===4`);assert((await evaluate(all))[0].apply.answer);});
-  await check('history reload preserves raw audio and corrected versions',async()=>{await cdp('Page.reload');await until(`!document.getElementById('workspace').hidden`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,2);assert.equal(t.attempts[0].corrections.length,1);assert(t.attempts[0].audio.size>0);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=4`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);});
+  await check('history reload preserves raw audio and corrected versions',async()=>{await reloadPage();await until(`!document.getElementById('workspace').hidden`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,2);assert.equal(t.attempts[0].corrections.length,1);assert(t.attempts[0].audio.size>0);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=4`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);});
   await check('API timeout then budget stop preserves one original attempt across explicit retry',async()=>{failASR='API_RESULT_UNAVAILABLE';await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(1100);await click('finish');await until(`document.getElementById('notice').textContent.includes('API_RESULT_UNAVAILABLE')`);let t=(await evaluate(all))[0],a=t.attempts.at(-1);assert.equal(t.attempts.length,3);const identity=a.id,size=a.audio.size;failASR='BUDGET_STOP';await click('retryAsr');await until(`document.getElementById('notice').textContent.includes('预算')`);await shot('budget-stop','notice');t=(await evaluate(all))[0];assert.equal(t.attempts.length,3);assert.equal(t.attempts.at(-1).id,identity);assert.equal(t.attempts.at(-1).audio.size,size);failASR=null;});
   await check('device interruption preserves original and skips semantic diagnosis',async()=>{await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await evaluate(`window.testTracks[0].dispatchEvent(new Event('ended'))`);await until(`document.getElementById('notice').textContent.includes('采集中断')`);assert((await evaluate(all))[0].attempts.at(-1).interrupted);});
   await check('decode failure retains original, shows retry state',async()=>{await evaluate(`window.savedDecode=AudioContext.prototype.decodeAudioData;AudioContext.prototype.decodeAudioData=async()=>{throw new DOMException('test','EncodingError')}`);await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await click('finish');await until(`document.getElementById('notice').textContent.includes('LOCAL_ERROR')`);assert((await evaluate(all))[0].attempts.at(-1).audio.size>0);await evaluate(`AudioContext.prototype.decodeAudioData=window.savedDecode`);});
@@ -119,8 +167,8 @@ try{
     await evaluate('IDBObjectStore.prototype.put=window.originalPut');await click('retrySave');await until(`document.getElementById('storageRecovery').hidden`);assert.equal((await evaluate(all))[0].attempts.length,count+1);
   });
   await check('pending semantic navigation cannot replace topic or misattach result',async()=>{delaySemantic=1200;const id=(await evaluate(all))[0].id;await evaluate(`document.getElementById('chat').value='还有问题';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('notice').textContent.includes('梳理')`);await click('revise');assert(await evaluate(`!document.getElementById('workspace').hidden`));await until(`document.getElementById('notice').textContent.includes('可以继续问')`);assert.equal((await evaluate(all))[0].id,id);delaySemantic=0;});
-  await check('seven-day expiry cleans linked objects but preserves live topic',async()=>{await evaluate(`(async()=>{const {openStore}=await import('/storage.mjs');const db=await openStore();await db.put({id:'expired-engineering',createdAt:Date.now()-8*86400000,source:{title:'expired'},attempts:[{audio:new Blob(['test'])}]});db.close();})()`);await cdp('Page.reload');await until(`!document.getElementById('workspace').hidden`);assert.equal((await evaluate(all)).length,1);});
-  await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(new URL('../artifacts/study-teachback/owner-validation-provenance-fix-01/browser-learning.png',import.meta.url),Buffer.from(r.data,'base64')));
+  await check('seven-day expiry cleans linked objects but preserves live topic',async()=>{await evaluate(`(async()=>{const {openStore}=await import('/storage.mjs');const db=await openStore();await db.put({id:'expired-engineering',createdAt:Date.now()-8*86400000,source:{title:'expired'},attempts:[{audio:new Blob(['test'])}]});db.close();})()`);await reloadPage();await until(`!document.getElementById('workspace').hidden`);assert.equal((await evaluate(all)).length,1);});
+  await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(join(root,'browser-learning.png'),Buffer.from(r.data,'base64')));
   await check('source revision creates distinct record, preserves prior source/attempts',async()=>{const before=(await evaluate(all))[0];await click('revise');await evaluate(`document.getElementById('source').value='新版规则：只有土壤干燥时才浇水。'`);await click('learn');await until(`document.querySelectorAll('.message.assistant').length===1`);const t=await evaluate(all);assert.equal(t.length,2);assert(t.some(x=>x.id===before.id&&x.source.text===before.source.text&&x.attempts.length===before.attempts.length));});
   await check('delete all actually removes IndexedDB topic and linked audio records',async()=>{await click('historyButton');await click('deleteAll');await until(`document.getElementById('notice').textContent.includes('全部本地学习对象已删除')`);assert.equal((await evaluate(all)).length,0);});
   await check('saved real ASR PARTIAL words replay through validated segment before diagnosis',async()=>{
@@ -132,7 +180,7 @@ try{
     await evaluate(`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认此候选并分析').click()`);await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);
     await evaluate(`document.querySelector('#observations button').click()`);await until(`document.querySelector('#observations button').textContent.includes('✓')`);await evaluate(`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认此候选并分析').click()`);await until(`document.querySelectorAll('.finding').length===2`);const reports=(await evaluate(all))[0].attempts[0].reports;assert.deepEqual(reports.map(r=>r.channel),['content','delivery']);assert.equal(reports[1].findings[0].status,'observation');assert.equal(await evaluate("[...document.querySelectorAll('.finding')].at(-1).querySelectorAll('button').length"),1);assert(calls.some(c=>c.kind==='delivery'));
   });
-  await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(new URL('../artifacts/study-teachback/owner-validation-provenance-fix-01/browser-real-asr.png',import.meta.url),Buffer.from(r.data,'base64')));
+  await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(join(root,'browser-real-asr.png'),Buffer.from(r.data,'base64')));
   await check('stale history navigation blocked and pending delete-all prevents late restoration',async()=>{
     await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'other-topic',createdAt:Date.now(),source:{id:'other-source',title:'不得切入',text:'工程材料'},goals:[],messages:[],attempts:[],mode:'learn'});db.close();})()`);
     await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=5`);delaySemantic=1200;await evaluate(`document.getElementById('chat').value='慢请求';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('notice').textContent.includes('梳理')`);
@@ -153,12 +201,20 @@ try{
       await click('fullAgain');assert.equal(await evaluate(`document.getElementById('recordTitle').textContent`),'我来讲讲');await click('cancelRecord');
     }
   });
+  await check('A3 registration failure retains saved original; retry registers same ID once before ASR',async()=>{
+    const before=testBook.summary().attempts,asrBefore=calls.filter(c=>c.kind==='asr').length;failRegister=true;
+    await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(900);await click('finish');
+    await until(`document.getElementById('notice').textContent.includes('LEDGER_LOCKED')`);
+    const a=(await evaluate(all))[0].attempts.at(-1);assert(a.audio.size>0);assert.equal(a.raw,null);assert.equal(testBook.summary().attempts,before);assert.equal(calls.filter(c=>c.kind==='asr').length,asrBefore);
+    failRegister=false;await click('retryAsr');await until(`document.getElementById('notice').textContent.includes('转写完成')`);
+    const after=(await evaluate(all))[0].attempts.at(-1);assert.equal(after.id,a.id);assert.deepEqual(after.audio,a.audio);assert.equal(testBook.summary().attempts,before+1);assert.equal(calls.filter(c=>c.kind==='asr').length,asrBefore+1);
+  });
   await check('topic deletion is scoped, cancel keeps topic, confirmed focus returns to history',async()=>{
     await click('historyButton');await until(`document.querySelector('#historyList .danger')`);const before=JSON.stringify(await evaluate(all));
     await evaluate(`document.querySelector('#historyList .danger').click()`);await until(`document.getElementById('deleteDialog').open`);await shot('history-delete');await click('deleteCancel');await pause(100);assert.equal(JSON.stringify(await evaluate(all)),before);
     await evaluate(`document.querySelector('#historyList .danger').click()`);await click('deleteConfirm');await until(`document.getElementById('historyList').textContent.includes('还没有')`);assert.equal((await evaluate(all)).length,0);await until(`document.activeElement.id==='historyTitle'`);
   });
-  assert.deepEqual(errors,[]);
+  assert.deepEqual(errors,[]);assert(network.every(url=>url.startsWith(origin+'/')||url.startsWith('blob:'+origin+'/')||url.startsWith('data:')),'unexpected browser network');
 }catch(e){cases.push({name:'suite completion',status:'FAIL',error:e.message});console.log('BROWSER FAILURE: '+e.message);}
-finally{writeFileSync(new URL(`../artifacts/study-teachback/owner-validation-provenance-fix-01/browser-${run}.json`,import.meta.url),JSON.stringify({at:new Date().toISOString(),kind:'EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER',cases,calls,screenshots,consoleErrors:errors,physicalMicrophone:false,liveAPI:false},null,2));try{await cdp('Browser.close');}catch{}ws?.close();edge.kill();await new Promise(r=>server.close(r));}
+finally{writeFileSync(join(root,'edge.log'),edgeLog);writeFileSync(join(root,`browser-${run}.json`),JSON.stringify({at:new Date().toISOString(),kind:'EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER',cases,calls,network,screenshots,consoleErrors:errors,physicalMicrophone:false,liveAPI:false},null,2));try{if(ws)await cdp('Browser.close');}catch{}ws?.close();edge.kill();await new Promise(r=>server.close(r));}
 if(cases.some(c=>c.status==='FAIL')||!cases.length)process.exitCode=1;

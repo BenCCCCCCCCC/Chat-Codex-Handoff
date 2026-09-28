@@ -1,7 +1,7 @@
 import { observations, waveBytes, revisedTranscript, validateFindings, remediationFocus, repairFocus } from './core.mjs';
 import { openStore } from './storage.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
-let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false;
+let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false,capturePending=false;
 const heard=new Set(),editors=new Map();
 const notice=message=>{$('notice').textContent=message;};
 const reveal=(id,show=true)=>{$(id).hidden=!show;};
@@ -24,7 +24,7 @@ function renderTopic(){
   $('question').textContent=topic.question??'';$('phase').textContent=topic.mode==='apply'||topic.mode==='apply_answer'?'换个情境试试':topic.mode==='repair'?'再学这一点':'一起学';
 }
 async function teach(message,mode='learn',focus=null,{internalStarter=false}={}){
-  if(record||controller||processing)throw new Error('REQUEST_IN_PROGRESS');
+  if(record||capturePending||controller||processing)throw new Error('REQUEST_IN_PROGRESS');
   if(mode==='repair')focus=repairFocus(focus);
   const target=topic,history=target.messages.slice();
   if(!internalStarter)target.messages.push({role:'user',text:message});target.mode=mode;await save();renderTopic();notice('正在一起梳理这段材料……');
@@ -64,7 +64,7 @@ function useImported(all){
 }
 $('useSelection').onclick=()=>useImported(false);$('useAll').onclick=()=>useImported(true);
 $('learn').onclick=()=>act(async()=>{
-  if(importPending||controller)return;
+  if(importPending||controller||capturePending||record||processing)return;
   if(!$('title').value.trim()||!$('source').value.trim())return notice('先写一个主题，再放入这一轮的有限材料。');
   clearImport();
   topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim(),text:$('source').value.trim()},goals:[],messages:[],attempts:[],mode:'learn'};await save();renderTopic();await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。','learn',null,{internalStarter:true});
@@ -74,39 +74,52 @@ function prepare(kind='full',focus=null,parentId=null){
   if(!canNavigate())return;if(!topic)return;if(kind==='partial')focus=repairFocus(focus);pending={kind,focus,parentId};reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'用自己的话说明这个概念、条件或过程。';$('recording').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});$('start').focus();$('timer').textContent='00:00';
 }
 $('explain').onclick=()=>prepare();$('fullAgain').onclick=()=>prepare('full',null,current?.id);
-$('cancelRecord').onclick=()=>{if(!record)reveal('recording',false);};
+$('cancelRecord').onclick=()=>{if(!record&&!capturePending)reveal('recording',false);};
 function stopRecording(interrupted=false){if(!record)return;record.interrupted ||= interrupted;if(record.recorder.state!=='inactive')record.recorder.stop();}
+function resetRecordingUI(){
+  delete document.body.dataset.recording;$('start').disabled=false;reveal('start');reveal('finish',false);$('assistance').disabled=false;reveal('materialPanel');reveal('chatForm');document.querySelector('.learning').hidden=false;$('promptView').textContent='';
+}
 $('finish').onclick=()=>stopRecording();
 $('start').onclick=()=>act(async()=>{
-  if(record||controller||processing||memoryOnly)return notice('请先等当前处理完成。');
-  $('start').disabled=true;let stream,context;
+  if(record||capturePending||controller||processing||memoryOnly)return notice('请先等当前处理完成。');
+  if(!topic||!pending)return;
+  const target=topic,plan={...pending},assistance=$('assistance').value;
+  const active=()=>topic===target&&!deleted.has(target.id);
+  capturePending=true;$('start').disabled=true;let stream,context;
   try{
-    const all=await db.all();if(all.reduce((n,t)=>n+t.attempts.length,0)>=60)throw new Error('ATTEMPT_LIMIT');
-    const attemptId=uid();await api('/api/register',{attemptId});
+    // The ledger's unchanged 60-attempt cap applies after valid audio is saved;
+    // retained invalid captures are not valid-attempt registrations.
+    if(!active())throw new Error('CAPTURE_CANCELLED');
+    const attemptId=uid();
     stream=await navigator.mediaDevices.getUserMedia({audio:{channelCount:1},video:false});
+    if(!active())throw new Error('CAPTURE_CANCELLED');
     const type=['audio/webm;codecs=opus','audio/webm'].find(x=>MediaRecorder.isTypeSupported(x));if(!type)throw new Error('RECORDING_FORMAT_UNSUPPORTED');
     context=new AudioContext();await context.resume();const analyser=context.createAnalyser();context.createMediaStreamSource(stream).connect(analyser);
+    if(!active())throw new Error('CAPTURE_CANCELLED');
     const recorder=new MediaRecorder(stream,{mimeType:type}),chunks=[];const started=performance.now();
-    record={id:attemptId,recorder,stream,context,started,interrupted:false,target:topic,kind:pending.kind,focus:pending.focus,parentId:pending.parentId,assistance:$('assistance').value};
+    record={id:attemptId,recorder,stream,context,started,interrupted:false,target,kind:plan.kind,focus:plan.focus,parentId:plan.parentId,assistance};
     const own=record;recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
     recorder.onerror=()=>stopRecording(true);stream.getAudioTracks().forEach(track=>{track.onended=()=>stopRecording(true);track.onmute=()=>stopRecording(true);});
     recorder.onstop=()=>act(async()=>{
+      try{
       clearInterval(own.tick);stream.getTracks().forEach(t=>{t.onended=null;t.onmute=null;t.stop();});await context.close();record=null;delete document.body.dataset.recording;
-      $('start').disabled=false;reveal('start');reveal('finish',false);$('assistance').disabled=false;reveal('materialPanel');reveal('chatForm');document.querySelector('.learning').hidden=false;$('promptView').textContent='';
+      resetRecordingUI();if(!active())throw new Error('CAPTURE_CANCELLED');
       const audio=new Blob(chunks,{type:recorder.mimeType});if(!audio.size)throw new Error('NO_AUDIO');
       const a={id:own.id,createdAt:Date.now(),kind:own.kind,focus:own.focus,parentId:own.parentId,assistance:own.assistance,source:structuredClone(own.target.source),anchors:structuredClone(own.target.goals),anchorVersion:own.target.anchorVersion??null,audio,captureDuration:Math.min(180,(performance.now()-started)/1000),interrupted:own.interrupted,raw:null,corrections:[],reports:[],status:'SAVED'};
       own.target.attempts.push(a);current=a;
       try{await save();}catch(e){renderAttempt();throw e;}
       reveal('recording',false);renderAttempt();await processAudio(a);
+      }finally{record=null;capturePending=false;resetRecordingUI();}
     });
+    recorder.start(1000);
     const samples=new Float32Array(analyser.fftSize);own.tick=setInterval(()=>{const seconds=(performance.now()-started)/1000;$('timer').textContent=`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(Math.floor(seconds%60)).padStart(2,'0')}`;analyser.getFloatTimeDomainData(samples);$('level').value=Math.min(1,Math.sqrt(samples.reduce((s,x)=>s+x*x,0)/samples.length)*5);if(seconds>=179.5)stopRecording();},100);
-    reveal('start',false);reveal('finish');$('assistance').disabled=true;reveal('materialPanel',own.assistance==='source');reveal('chatForm',false);document.querySelector('.learning').hidden=true;$('promptView').textContent=own.assistance==='keywords'?topic.goals.map(g=>g.text).join(' · '):'';document.body.dataset.recording='true';$('sourceDetails').open=true;recorder.start(1000);$('finish').focus();notice('正在录音。按“结束讲解”完成本次尝试。');
-  }catch(e){stream?.getTracks().forEach(t=>t.stop());if(context&&context.state!=='closed')await context.close();record=null;$('start').disabled=false;notice(e.name==='NotAllowedError'?'麦克风权限未允许。学习内容已保留，请在浏览器中允许麦克风后重试。':friendly(e.message));}
+    reveal('start',false);reveal('finish');$('assistance').disabled=true;reveal('materialPanel',own.assistance==='source');reveal('chatForm',false);document.querySelector('.learning').hidden=true;$('promptView').textContent=own.assistance==='keywords'?target.goals.map(g=>g.text).join(' · '):'';document.body.dataset.recording='true';$('sourceDetails').open=true;$('finish').focus();notice('正在录音。按“结束讲解”完成本次尝试。');
+  }catch(e){clearInterval(record?.tick);record=null;stream?.getTracks().forEach(t=>{t.onended=null;t.onmute=null;t.stop();});try{if(context&&context.state!=='closed')await context.close();}finally{capturePending=false;resetRecordingUI();}notice(e.name==='NotAllowedError'?'麦克风权限未允许。学习内容已保留，请在浏览器中允许麦克风后重试。':friendly(e.message));}
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&record)stopRecording(true);});
-window.addEventListener('beforeunload',e=>{if(record||memoryOnly||controller||processing){e.preventDefault();e.returnValue='';}});
+window.addEventListener('beforeunload',e=>{if(record||capturePending||memoryOnly||controller||processing){e.preventDefault();e.returnValue='';}});
 async function processAudio(a){
-  if(processing)throw new Error('REQUEST_IN_PROGRESS');processing=true;
+  if(processing)throw new Error('REQUEST_IN_PROGRESS');if(memoryOnly)throw new Error('STORAGE_FAILED');processing=true;
   notice('原声已保存，正在检查声音并转写……');let context;
   try{
     context=new AudioContext();const decoded=await context.decodeAudioData(await a.audio.arrayBuffer());a.duration=decoded.duration;
@@ -116,13 +129,14 @@ async function processAudio(a){
     if(a.interrupted||['NEAR_SILENT','CLIPPING'].includes(a.observation.reason)){a.status='SOUND_EVIDENCE_INSUFFICIENT';await save();renderAttempt();return notice('声音证据不足或采集中断。已保留原声，请回听后重新录制。');}
     const offline=new OfflineAudioContext(1,Math.ceil(decoded.duration*16000),16000),source=offline.createBufferSource();source.buffer=decoded;source.connect(offline.destination);source.start();const normalized=await offline.startRendering();
     const wav=waveBytes(normalized.getChannelData(0));
+    await api('/api/register',{attemptId:a.id});
     const result=await api('/api/asr',wav,{'Content-Type':'audio/wav','X-Attempt-Id':a.id});
     if(deleted.has(a.id)||!topic||deleted.has(topic.id))return;
     a.raw={...result,id:uid(),origin:'ASR',createdAt:Date.now()};a.status='REVIEW_REQUIRED';await save();renderAttempt();notice('转写完成。请逐段回听，检查关键字后再开始诊断。');
   }catch(e){a.status='PARTIAL';a.error=context?'ASR_OR_DECODE_FAILED':'DECODE_FAILED';try{await save();}catch{}renderAttempt();throw e;}
   finally{processing=false;if(context&&context.state!=='closed')await context.close();}
 }
-$('retryAsr').onclick=()=>act(()=>processAudio(current));
+$('retryAsr').onclick=()=>act(()=>{if(!canNavigate())return;return processAudio(current);});
 function latest(a){return a.corrections.at(-1)??a.raw;}
 function attemptRequest(a){const v=latest(a);return {id:a.id,sourceId:a.source.id,transcriptVersion:v.id,duration:a.duration,spans:v.spans,kind:a.kind,focus:a.focus,assistance:a.assistance,reviewed:v.reviewed===true,interrupted:a.interrupted};}
 function play(start=0,end=current?.duration,onComplete){
@@ -158,10 +172,10 @@ function renderFeedback(report){
   for(const f of report.findings){const card=el('article',undefined,'finding'),labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足',observation:'表达观察'};card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message),el('blockquote',`材料：${f.sourceQuote}`));
     if(f.spanId){const span=latest(current).spans.find(s=>s.id===f.spanId);card.append(el('blockquote',`本次原话：${f.quote}`),button('回听对应原声',()=>play(span.start,span.end)));}else card.append(el('p','未表达内容没有可对应的音频时间点。','muted'));
     let focus=null;try{focus=remediationFocus(f,report.channel);}catch{}
-    if(focus)card.append(button('再学这一点',async()=>{topic.focus=remediationFocus(f,report.channel);await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',remediationFocus(f,report.channel));$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',remediationFocus(f,report.channel),current.id)));$('feedback').append(card);
+    if(focus)card.append(button('再学这一点',async()=>{topic.focus=remediationFocus(f,report.channel);await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',remediationFocus(f,report.channel),{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',remediationFocus(f,report.channel),current.id)));$('feedback').append(card);
   }
 }
-$('apply').onclick=()=>act(()=>teach('给我一个新的、相关的应用情境，不要先公布答案。','apply'));
+$('apply').onclick=()=>act(()=>teach('给我一个新的、相关的应用情境，不要先公布答案。','apply',null,{internalStarter:true}));
 async function exportTopic(){
   if(!topic)return;const data=structuredClone(topic);for(const a of data.attempts){const bytes=new Uint8Array(await a.audio.arrayBuffer());let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));a.audio={mime:a.audio.type,base64:btoa(binary)};}
   const url=URL.createObjectURL(new Blob([JSON.stringify({format:'study-teachback-export-v1',exportedAt:new Date().toISOString(),notice:'导出副本不受应用内删除控制',topic:data},null,2)],{type:'application/json'}));const link=el('a');link.href=url;link.download=`study-${topic.id}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
@@ -173,13 +187,13 @@ function abortPending(){controller?.abort();}
 $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;abortPending();deleted.add(current.id);topic.attempts=topic.attempts.filter(a=>a.id!==current.id);await save();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);current=null;reveal('attemptPanel',false);notice('这次原声及其关联转写、纠正和反馈已从本地删除。已导出副本和已在途的云请求不受此操作控制。');});
 async function history(){if(memoryOnly)throw new Error('STORAGE_FAILED');if(processing)throw new Error('REQUEST_IN_PROGRESS');if(record)throw new Error('RECORDING_ACTIVE');if(controller)throw new Error('REQUEST_IN_PROGRESS');reveal('history');const list=$('historyList');list.replaceChildren();for(const t of await db.all()){const row=el('div');row.append(el('strong',t.source.title),el('p',`${new Date(t.createdAt).toLocaleString()} · ${t.attempts.length} 次讲解`,'muted'),button('继续学习',()=>{if(!canNavigate())return;topic=t;current=null;renderTopic();reveal('attemptPanel',false);reveal('history',false);}));for(const a of t.attempts)row.append(button(`${a.kind==='partial'?'局部':'完整'} · ${new Date(a.createdAt).toLocaleTimeString()}`,()=>{if(!canNavigate())return;topic=t;current=a;renderTopic();renderAttempt();reveal('history',false);}));row.append(button('删除主题',async()=>{abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');}await history();},'danger'));list.append(row);}if(!list.children.length)list.append(el('p','还没有保存的学习记录。'));$('history').scrollIntoView({behavior:'smooth'});}
 $('historyButton').onclick=()=>act(history);
-function canNavigate(){if(memoryOnly){notice(friendly('STORAGE_FAILED'));return false;}if(record||controller||processing||importPending){notice(friendly('REQUEST_IN_PROGRESS'));return false;}return true;}
+function canNavigate(){if(memoryOnly){notice(friendly('STORAGE_FAILED'));return false;}if(record||capturePending||controller||processing||importPending){notice(friendly('REQUEST_IN_PROGRESS'));return false;}return true;}
 function newTopic(){if(importPending)return false;if(!canNavigate())return false;abortPending();clearImport();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');$('title').value='';$('source').value='';updateCounts();return true;}
 $('newTopic').onclick=newTopic;$('revise').onclick=()=>{const s=topic.source;if(!newTopic())return;$('title').value=s.title;$('source').value=s.text;updateCounts();notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');};
 $('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
 // Presentation-only confirmation: cancellation never reaches the original destructive handler.
 function confirmDelete(scope,action,trigger){
-  if(record||processing){notice(friendly('REQUEST_IN_PROGRESS'));return;}
+  if(record||capturePending||processing){notice(friendly('REQUEST_IN_PROGRESS'));return;}
   const dialog=$('deleteDialog');if(dialog.open)return;
   $('deleteScope').textContent=scope;dialog.returnValue='';
   const restore=()=>{const target=trigger?.isConnected&&trigger.getClientRects().length?trigger:!$('history').hidden?$('historyTitle'):$('title');target.focus();};
