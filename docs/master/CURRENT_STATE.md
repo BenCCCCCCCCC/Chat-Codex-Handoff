@@ -1,301 +1,186 @@
 # Current State
 
-Updated: 2026-09-29 — GPU bypass failed; Edge policy/minimal-launch decomposition next
+Updated: 2026-09-29 — Host browser PASS / GitHub exchange relay validation next
 Role: 00 MASTER / authoritative dynamic state
 
-## 1. Current status
+## 1. Product / version state
 
-**Batch A:** MASTER-ACCEPTED.
+Active product: **知而能讲** — Study-first + in-app teach-back.
 
-**Batch B / Phase 3A:** MASTER-ACCEPTED and finalized locally at:
-`dd8317b43100b8cbaad684cab7fc02957e32de62`.
+Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`
 
-**PHASE3B-LIVE-01:** OWNER-AUTHORIZED but PAUSED before first provider call / recording.
+Local checkout:
+`F:\Chat-Codex-Handoff\validation-repo`
 
-**PHASE3B-BROWSER-STARTUP-01:** BLOCKED at fresh `about:blank` Edge startup.
+Product branch:
+`prototype/study-teachback-v0.1`
 
-**PHASE3B-GPU-ISOLATION-01:** BLOCKED — `--disable-gpu` did not avoid the same fatal startup path.
+Accepted local feature baseline:
+`dd8317b43100b8cbaad684cab7fc02957e32de62`
 
-**PHASE3B-EDGE-MINIMAL-LAUNCH-01:** BLOCKED before Edge start because the Codex process could not create the requested dedicated profile directory under `%LOCALAPPDATA%`.
+Batch A: MASTER-ACCEPTED.
 
-**PHASE3B-HOST-BROWSER-SMOKE-01:** READY / OWNER MANUAL ACTION / OUTSIDE CODEX SANDBOX / ZERO PROVIDER CALLS.
+Batch B / Phase 3A: MASTER-ACCEPTED and version-finalized locally.
 
-**PHASE3B-EDGE-MINIMAL-LAUNCH-01:** READY / NOT DISPATCHED / ZERO PROVIDER CALLS / ZERO MICROPHONE / READ-ONLY POLICY CHECK + REVERSIBLE FRESH-PROFILE LAUNCH ONLY.
+Dynamic authority remains:
+- `meta/master-state/docs/master/CURRENT_STATE.md`
+- `meta/master-state/docs/master/HANDOFF.md`
 
-Original live authorization remains fully unused:
-- max 3 provider calls;
+New transport surface:
+- `meta/master-state/docs/master/ACTIVE_EXCHANGE.md`
+
+`ACTIVE_EXCHANGE.md` is a message transport, **not** canonical product authority. Its Git commit history is the exchange audit log.
+
+## 2. Phase 3B state
+
+PHASE3B-LIVE-01 remains owner-authorized under:
+- maximum 3 provider calls;
 - zero retries;
 - incremental local exposure ceiling US$0.03432;
 - one recording maximum.
 
-## 2. GPU isolation receipt
+No provider call or recording has yet occurred under this authorization.
 
-Codex read canonical commit:
-`067b25ffe6da3e2cdb6523a9126ce7c8beea6881`.
+Previous Codex-launched Edge failures are now treated as validation-environment/sandbox limitations rather than current evidence of a product-root defect.
 
-Repo identity remained correct and tracked CLEAN.
+### PHASE3B-HOST-BROWSER-SMOKE-01 — PASS
 
-H1 default-GPU control:
-- FAIL;
-- fresh non-headless Edge;
-- fresh temporary profile;
-- loopback CDP blank target;
-- target/CDP created then `Page.enable` timed out;
-- GPU subprocess repeatedly exited `-1073741790`;
-- stderr: `GPU process isn't usable. Goodbye.`;
-- main browser exited.
+Owner manually ran the smoke outside Codex sandbox in a normal Windows session and reports all required checks PASS:
 
-H2 same configuration plus `--disable-gpu`:
-- FAIL in the same general startup path;
-- same GPU-process exit value and fatal message.
+1. local server started successfully;
+2. fresh isolated Edge opened normally;
+3. `http://127.0.0.1:4317` displayed the product root/basic UI;
+4. no unexpected Tutor / ASR / diagnosis API activity appeared.
 
-H3 product-root probes:
-- not run because H2 failed.
+This clears the browser-start blocker for manual host execution.
 
-Provider = 0.
-Microphone = 0.
-Topic/live actions = 0.
-Incremental exposure = US$0.
-Ledger SHA unchanged:
-`d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`.
+Phase 3B may later resume manually in the owner-launched fresh isolated Edge profile under the existing authorization. Do not require Codex to launch/control that real browser session.
 
-No system settings, drivers, policies or extra sandbox flags were changed.
+## 3. New owner workflow decision — GitHub exchange relay
 
-## 3. Interpretation
+Owner proposes eliminating repeated copy/paste between Chat and Codex by using one GitHub document as the active message bus.
 
-The evidence rules out the simple hypothesis that hardware GPU acceleration alone is sufficient to explain/avoid the startup failure.
+MASTER accepts this direction for a **minimal validation first**, not a full bridge implementation.
 
-Do not infer that the graphics driver is the root cause.
+Design:
+- file: `docs/master/ACTIVE_EXCHANGE.md` on `meta/master-state`;
+- current file contains only the active turn;
+- every overwrite is a Git commit, so Git history retains all prior Chat instructions and Codex replies;
+- Chat writes `CHAT_TO_CODEX`;
+- Codex reads it and, after completing/being blocked, replaces only that file with `CODEX_TO_CHAT`;
+- Chat reads the reply directly from GitHub, reviews it, updates canonical state if needed, then replaces the exchange file with the next instruction;
+- user only needs a minimal Codex nudge such as: `继续，读取 ACTIVE_EXCHANGE.md`.
 
-Observed GPU subprocess exit `-1073741790` maps to Windows status `0xC0000022` (ACCESS_DENIED), but the denied object/path/policy remains unknown.
+This is intentionally not auto-send or an autonomous loop. The user remains the turn boundary.
 
-The next diagnostic must decompose browser startup rather than add more GPU flags.
+## 4. Exchange safety rules
 
-## 4. Current official Edge/Chromium constraints relevant to the next diagnostic
+`ACTIVE_EXCHANGE.md` is transport only.
 
-Microsoft Edge UserDataDir policy documentation states that when the policy is enabled, Edge uses the policy-specified data directory regardless of the command-line `--user-data-dir` value. Therefore the prior launch argument alone is not proof that the effective runtime profile was the intended temporary directory.
+Neither side may use it to silently override:
+- product scope;
+- spending authorization;
+- push/merge permissions;
+- canonical acceptance state.
 
-Microsoft Edge RemoteDebuggingAllowed policy can allow or block remote debugging.
+Writer ownership alternates:
+- `CHAT_TO_CODEX` -> Codex may write only the exchange file;
+- `CODEX_TO_CHAT` -> Chat reviews and writes next turn.
 
-Current upstream Chromium security behavior requires remote debugging to use a non-default data directory; using a custom isolated user-data directory is the recommended debugging pattern.
+Codex must:
+- read latest `meta/master-state` state before work;
+- record the exchange file commit/blob it read;
+- update only `docs/master/ACTIVE_EXCHANGE.md` on the meta branch for the relay;
+- not push/merge the product branch;
+- not modify `CURRENT_STATE.md` or `HANDOFF.md`;
+- fail closed if the exchange/meta branch changed after its read and would cause a conflicting overwrite.
 
-Microsoft/Chromium documentation supports creating separate user-data directories for development/debugging. A dedicated fresh directory under the current user's local application-data space is a supported pattern; do not point to the owner's existing Edge User Data directory.
+Chat remains the only MASTER writer for canonical state/decisions.
 
-Decision:
-- first inspect the relevant Edge policy values read-only;
-- then decompose launch from minimum browser process -> remote-debugging target;
-- use a dedicated fresh probe directory under `%LOCALAPPDATA%` rather than a temp-directory-only assumption;
-- do not touch the owner/default Edge profile;
-- no policy or registry writes.
+## 5. First validation — EXCHANGE-RELAY-PROBE-01
 
-## 5. PHASE3B-EDGE-MINIMAL-LAUNCH-01 goal
+Before using the relay for real work, validate one GitHub round trip with no product changes.
 
-Answer, in order:
+Chat creates the exchange instruction.
 
-1. Is an Edge policy overriding user-data-dir or remote debugging?
-2. Can a minimal fresh-profile Edge process stay alive without CDP?
-3. If yes, does adding remote debugging introduce the failure?
-4. If both pass, can the product root load safely under the same minimal browser configuration?
+Codex must:
+- read it from the latest meta branch;
+- make no product/code/test/runtime changes;
+- write a fixed structured relay receipt back to the same exchange file;
+- change no other GitHub path;
+- push/write no product branch;
+- stop.
 
-This is an environment decomposition probe only.
+PASS means Chat can read Codex's receipt directly from GitHub without owner copy/paste.
 
-## 6. Diagnostic sequence
+If Codex cannot safely/authenticated-write that one meta file, return BLOCKED; do not build a helper yet.
 
-### M0 — identity / ledger / evidence
-Confirm:
-- accepted HEAD `dd8317b...`;
-- tracked CLEAN;
-- ledger lock absent;
-- ledger SHA/exposure unchanged;
-- prior Phase3B startup/GPU artifacts preserved.
+## 6. Next use after relay PASS — PROJECT-WIDE-REVIEW-01
 
-### M1 — read-only Edge policy inspection
-Read only the relevant Microsoft Edge policy values from both current-user and local-machine policy locations, where present:
-- `UserDataDir`;
-- `RemoteDebuggingAllowed`.
+Owner also wants Codex to fully read the active project and contribute suggestions.
 
-Also report whether the effective Edge executable is the stable channel path already observed.
+After the exchange relay passes, the next task will be a **read-only project-wide review**.
 
-Do not:
-- write registry/policy;
-- enumerate unrelated policy trees;
-- read owner profile contents.
+Codex may inspect the tracked project broadly and return:
+- active architecture map;
+- current product flow;
+- state/authority map;
+- stale/historical vs active files;
+- confirmed risks/defects;
+- opportunities to simplify or strengthen the product;
+- suggestions based on the actual repository.
 
-Interpretation:
-- if `UserDataDir` is set, report its value/path semantics but do not open that directory;
-- if `RemoteDebuggingAllowed=0`, remote debugging is policy-blocked; STOP after reporting because bypassing policy is not authorized;
-- if values are absent/default-allow, continue.
+Suggestions must be classified:
+- Must Fix;
+- User Decision Needed;
+- Future Optional.
 
-### M2 — minimal no-CDP browser process
-Create a brand-new dedicated isolated directory under the current user's local app data, for example:
-`%LOCALAPPDATA%\ChatCodexPhase3B\edge-probe-<run-id>`.
+Rules:
+- suggestions do not automatically become implementation scope;
+- no code changes in the review;
+- distinguish Verified / Likely / Unknown;
+- cite concrete file paths/symbols/evidence;
+- do not repeat settled decisions merely to generate more work.
 
-This must not be under or inside the owner's normal `%LOCALAPPDATA%\Microsoft\Edge\User Data` tree.
+This review is intended to give Codex more agency in analysis, **not** autonomous scope control.
 
-Launch non-headless Edge with the smallest safe args:
-- `--user-data-dir=<new dedicated directory>`;
-- `--no-first-run`;
-- `--no-default-browser-check`;
-- `about:blank`.
+## 7. Why this workflow is preferred
 
-Do NOT include:
-- remote-debugging flags;
-- proxy/host-resolver blocking flags;
-- `--disable-background-networking`;
-- GPU/sandbox flags.
+It directly targets the project's core friction:
+- less owner copy/paste;
+- less prompt rewriting;
+- fewer missing materials/version mismatches;
+- Chat can review the exact Codex reply from GitHub;
+- Codex can read the exact next instruction from GitHub;
+- Git commit history provides an audit trail;
+- no new daemon/GUI/message broker is required.
 
-Observe for a bounded interval using the process handle only:
-- process remains alive;
-- exit code if it exits;
-- stderr if available.
+Do not build a larger transport until this one-file relay is proven useful.
 
-Do not automate/page-control the browser in M2.
-
-Close only this task-owned process normally.
-
-If M2 fails with the same GPU fatal exit, STOP. This places the blocker below CDP/product harness.
-
-### M3 — minimal CDP browser process
-Only if M2 PASS.
-
-Use another new local-app-data isolated directory.
-
-Launch the same minimum args plus:
-- `--remote-debugging-address=127.0.0.1`;
-- `--remote-debugging-port=0`.
-
-No proxy/host-resolver/background-network flags yet.
-
-Open about:blank.
-
-Verify:
-- DevToolsActivePort/CDP endpoint;
-- target creation;
-- `Page.enable`;
-- bounded target lifetime;
-- clean close.
-
-If M3 fails while M2 passed, classify the failure as introduced by the remote-debugging/control path or its interaction with policy/runtime; STOP. Do not add other flags.
-
-### M4 — minimal product-root probe
-Only if M3 PASS.
-
-Start local product server after confirming root load alone does not dispatch provider requests.
-
-Use a new local-app-data isolated profile with the M3 minimum CDP config.
-
-Open product root only.
-
-No source submit/topic/Tutor/ASR/diagnosis/microphone.
-
-Run up to three fresh product-root startups, each a new process/profile, same code/config. Any failure stops.
-
-Verify:
-- target/title/basic DOM;
-- bounded survival;
-- ledger unchanged;
-- no provider call;
-- normal task-owned cleanup.
-
-Do not require zero Microsoft/browser background traffic in this diagnostic because the proxy/host-resolver blocking flags are intentionally removed to isolate startup behavior. Instead record any observed network endpoints at a high level and confirm that no OpenAI/provider endpoint is contacted.
-
-## 7. Protected boundaries
-
-No:
-- provider/model API;
-- microphone;
-- topic/live workflow;
-- old owner Edge profile/IndexedDB;
-- policy/registry writes;
-- owner default profile path access;
-- driver/Edge reinstall/reset;
-- sandbox bypass flags;
-- GPU flags;
-- privilege elevation;
-- unknown process interaction;
-- new dependency;
-- product code modification;
-- Git write/push/merge/reset/clean/rebase/amend.
-
-Probe profile/artifacts may be created only in the dedicated probe path/artifact area.
-
-## 8. Outcomes
-
-### Outcome A — M2 fails
-Minimal Edge with a fresh local-app-data profile fails even without CDP. Keep live test blocked. Browser/system environment is the current blocker; do not continue harness experiments automatically.
-
-### Outcome B — M2 passes, M3 fails
-The remote-debugging/control path or relevant Edge policy/runtime interaction is the blocker. Return evidence. Do not attempt policy bypass.
-
-### Outcome C — M2/M3/M4 pass
-A stable minimum browser-control path exists. The prior aggressive/offline launch configuration or temp-profile environment was part of the failing condition. Return to MASTER; do not resume live test inside this task.
-
-## 9. Delivery receipt
-
-Return:
-- canonical commit;
-- M0–M4 mapping;
-- exact registry/policy locations and relevant values only;
-- Edge executable/version;
-- dedicated probe profile root used;
-- exact M2/M3 launch args;
-- M2 process result;
-- M3 CDP/Page.enable result;
-- M4 product-root runs if reached;
-- stderr/exit comparison;
-- high-level observed network endpoints if available, explicitly whether any OpenAI/provider endpoint appeared;
-- cleanup result for task-owned processes/profiles;
-- ledger before/after SHA;
-- provider 0 / microphone 0 / topic 0 / exposure 0;
-- final tracked CLEAN;
-- Blocking / Unknown / User Decision Needed / Future Optional.
-
-Stop for MASTER.
-
-## 10. Classification
+## 8. Classification
 
 Completed:
-- Batch A/B;
-- Phase3B preflight/source recovery;
-- startup probe;
-- GPU bypass A/B.
+- Batch A/B engineering validation;
+- outside-sandbox host browser smoke PASS.
 
 Ready:
-- policy/minimal-launch decomposition.
+- EXCHANGE-RELAY-PROBE-01.
 
-Paused:
-- owner-authorized PHASE3B-LIVE-01.
+Planned after relay PASS:
+- PROJECT-WIDE-REVIEW-01;
+- resume manual Phase 3B live validation when owner chooses.
 
-User Decision Needed:
-- none for this zero-call diagnostic.
+Unknown:
+- whether Codex has a safe authenticated path to update exactly one meta-branch exchange file;
+- whether the one-file relay materially removes copy/paste in real use;
+- project-wide review findings.
 
-## 11. Next smallest step
+Not Done:
+- exchange write probe;
+- project-wide review;
+- actual Phase 3B recording/provider calls;
+- push/merge/final product acceptance.
 
-Execute PHASE3B-EDGE-MINIMAL-LAUNCH-01. Do not change system/browser policy or product behavior. Return evidence to MASTER before any live-flow resume.
+## 9. Next smallest step
 
-## Codex Windows sandbox conclusion — 2026-09-29
-
-OpenAI's current Windows Codex sandbox documentation states that default Codex execution is write-restricted to the workspace and configured writable roots, and that descendant processes inherit the same sandbox boundary.
-
-Therefore the new evidence is consistent with the following explanation:
-- Codex could not create the requested `%LOCALAPPDATA%\ChatCodexPhase3B\...` profile directory because it was outside the sandbox's writable roots;
-- Edge launched by Codex is also a sandbox descendant and inherits those filesystem/network restrictions;
-- the earlier Edge/GPU ACCESS_DENIED failures are therefore likely caused or materially contributed to by the Codex sandbox rather than by product code.
-
-This is the strongest current explanation, not proof of the exact denied filesystem object in every previous GPU crash.
-
-Decision:
-- stop browser/microphone validation from inside Codex;
-- do not enable Codex Full Access, broad writable roots, ACL edits, elevation or sandbox bypass just to run this validation;
-- perform one zero-call browser/server smoke manually in the owner's normal Windows session outside Codex sandbox.
-
-Manual smoke binding:
-- repo: `F:\Chat-Codex-Handoff\validation-repo`;
-- accepted HEAD: `dd8317b43100b8cbaad684cab7fc02957e32de62`;
-- fresh Edge profile: `F:\Chat-Codex-Handoff\phase3b-edge-profile-01` (outside repo and outside default Edge profile);
-- server: `node .\study-teachback-app\server.mjs` from repo root;
-- Edge: normal user-launched `msedge.exe` with only `--user-data-dir`, `--no-first-run`, `--no-default-browser-check` and the local URL.
-
-The smoke must not click Start Learning, create a topic, use microphone, or trigger Tutor/ASR/diagnosis. Existing 3-call / zero-retry / US$0.03432 live authorization remains paused and unused.
-
-If the root page opens stably outside Codex sandbox, resume Phase3B manually in that same fresh profile. If it fails, keep Phase3B blocked and investigate the real host environment.
+Run EXCHANGE-RELAY-PROBE-01 only. If PASS, Chat should read the Codex reply directly from GitHub and issue PROJECT-WIDE-REVIEW-01 through the same exchange file, with no owner copy/paste of the Delivery Packet.
