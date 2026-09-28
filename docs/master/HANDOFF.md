@@ -1,67 +1,93 @@
-# Active Handoff — PHASE3B-HOST-BROWSER-SMOKE-01
+# Active Handoff — EXCHANGE-RELAY-PROBE-01
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: OWNER MANUAL ACTION / OUTSIDE CODEX SANDBOX / ZERO PROVIDER CALLS
+Status: **READY / NO PRODUCT CHANGES / META EXCHANGE FILE ONLY**
 
-## Why manual
+## 1. Purpose
 
-OpenAI's Windows Codex sandbox is write-restricted to the workspace/configured writable roots, and child processes inherit the same boundary. The prior `%LOCALAPPDATA%` profile creation failure and Codex-launched Edge ACCESS_DENIED behavior are consistent with that sandbox. Do not use Full Access, broad writable roots, ACL/policy changes or elevation just to run this validation.
+Validate the owner's proposed one-file GitHub relay:
 
-## Binding
+Chat -> `ACTIVE_EXCHANGE.md` -> Codex -> same file -> Chat.
 
-Repo: `F:\Chat-Codex-Handoff\validation-repo`
-Branch: `prototype/study-teachback-v0.1`
-Accepted HEAD: `dd8317b43100b8cbaad684cab7fc02957e32de62`
-Fresh manual Edge profile: `F:\Chat-Codex-Handoff\phase3b-edge-profile-01`
+This probe must not modify product code, tests, runtime state, canonical state files, budgets or provider state.
 
-PHASE3B-LIVE-01 remains paused. Its existing authorization is unchanged and unused: max 3 provider calls, zero retries, incremental local exposure <= US$0.03432.
+## 2. Transport file
 
-## Owner manual smoke
+Path:
+`meta/master-state:docs/master/ACTIVE_EXCHANGE.md`
 
-Use normal Windows PowerShell opened by the owner, not a Codex-run terminal.
+The file is transport only.
 
-PowerShell window 1:
-```powershell
-git -C F:\Chat-Codex-Handoff\validation-repo rev-parse HEAD
-Set-Location F:\Chat-Codex-Handoff\validation-repo
-node .\study-teachback-app\server.mjs
-```
+Git history is the permanent exchange log; the current file holds only the active turn.
 
-Expected HEAD: `dd8317b43100b8cbaad684cab7fc02957e32de62`.
+## 3. Codex write permission for this probe
 
-Leave the server window open.
+The owner has requested this GitHub one-file relay workflow.
 
-PowerShell window 2:
-```powershell
-& "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" `
-  --user-data-dir="F:\Chat-Codex-Handoff\phase3b-edge-profile-01" `
-  --no-first-run `
-  --no-default-browser-check `
-  "http://127.0.0.1:4317"
-```
+For **this probe only**, Codex is authorized to write/update exactly:
+`docs/master/ACTIVE_EXCHANGE.md`
+on branch:
+`meta/master-state`.
 
-Verify only:
-- Edge opens normally;
-- product root loads and basic UI is visible;
-- browser remains stable;
-- no unexpected provider/API activity appears in server output.
+This does **not** authorize:
+- product-branch push;
+- merge;
+- changes to `CURRENT_STATE.md` or `HANDOFF.md`;
+- any other GitHub file;
+- code/test/runtime changes.
 
-Do NOT:
-- click `开始学习`;
-- submit the learning source;
-- create a topic intentionally;
-- grant/use microphone;
-- trigger Tutor/ASR/diagnosis;
-- inspect the normal Edge profile or old topics.
+Use the safest already-authenticated GitHub write path available.
 
-## Report to MASTER
+Do not copy credentials or read ChatGPT internal auth.
 
-Return:
-- server started successfully or exact error;
-- Edge opened successfully or exact error/crash;
-- product root visible yes/no;
-- any unexpected provider/API activity yes/no;
-- screenshot if useful.
+If no safe authenticated write path is available, do not improvise credentials; return BLOCKED in the Codex UI.
 
-Do not continue into live learning/recording until MASTER confirms the smoke result.
+## 4. Optimistic concurrency
+
+Codex must:
+1. read latest meta branch and exchange file;
+2. record the meta commit/file version it read;
+3. immediately before write, verify the exchange/meta state has not changed incompatibly;
+4. if it changed, STOP with conflict rather than overwriting a newer Chat instruction.
+
+Do not force-push.
+
+## 5. Required relay receipt
+
+Replace the current exchange file with a structured `CODEX_TO_CHAT` receipt containing:
+- same `turn_id`;
+- state = `CODEX_TO_CHAT`;
+- task = `EXCHANGE-RELAY-PROBE-01`;
+- meta commit/file version read;
+- actual repo root;
+- product branch;
+- product HEAD;
+- statement: no product files changed;
+- statement: no tests run;
+- statement: no provider/API call;
+- statement: no product push/merge;
+- GitHub write method used, without secrets;
+- result = `RELAY_WRITE_OK`;
+- Blocking / Unknown if any.
+
+Do not perform any other work.
+
+## 6. Acceptance
+
+PASS only if:
+- Codex reads the Chat instruction from GitHub;
+- Codex writes the receipt to the same exchange file;
+- no owner copy/paste of the Codex response is needed;
+- Chat can then read the receipt directly from GitHub;
+- no other repo/GitHub path changes.
+
+After PASS, MASTER will use the same relay for a read-only PROJECT-WIDE-REVIEW-01.
+
+## 7. User interaction
+
+For this first probe, owner only sends a tiny Codex message:
+
+`继续，读取 meta/master-state 的 docs/master/ACTIVE_EXCHANGE.md，并严格执行其中当前 turn。`
+
+After that, do not paste the task contents manually.
