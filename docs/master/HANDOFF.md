@@ -82,6 +82,62 @@ Required future correction evidence: exact checkout/branch/base/head; bounded di
 
 Broad directory restructuring, new retention UI and replay-policy redesign are not prerequisites for the first Phase3. Keep them separately scoped so review does not indefinitely postpone actual validation.
 
+## New active zero-call sequence
+
+Do not jump directly to the old paid Phase3 protocol.
+
+### Batch A — CORRECTNESS-HYGIENE-01
+
+Codex scope:
+- R02: app-generated Learn/Repair/Apply instructions must not become fabricated owner messages; retain genuine owner input and failure semantics.
+- R03: correct misleading repository/app entry documentation and point dynamic state explicitly to meta/master-state, while preserving the Handoff kit as retained tooling rather than pretending it vanished.
+- R05: failed microphone permission/startup must not consume a durable attempt registration; registration must be idempotent and enforced before any paid ASR submission.
+
+Constraints:
+- zero product API calls;
+- no retention, storage schema, model/provider, budget cap, origin, repository visibility, release/publish/push/merge change;
+- no broad directory move;
+- preserve unrelated work.
+
+Evidence required:
+- exact base/head/diff;
+- provenance regression for initial Learn, Repair, Apply, real owner input and failure cases;
+- denied/failed microphone startup does not consume registered-attempt quota;
+- repeated registration path is fail-safe/idempotent as designed;
+- relevant existing Node/browser stub tests;
+- tests not run / unknowns.
+
+### Batch B — DIAGNOSTIC-LOCALIZATION-01
+
+Start only after Batch A review.
+
+Goal: refactor the evidence model so content judgments and speech-process observations are separate inputs to a bounded localization/verification step.
+
+Required separation:
+- content finding can cite source + transcript;
+- process evidence can cite audio time/span/metric but must not require a content status or source quote;
+- cross-channel localization may prioritize a concept/reasoning transition for verification but cannot convert pause/restart/repetition alone into does-not-understand.
+
+Required zero-call fixture cases:
+- fluent wrong;
+- hesitant correct;
+- missing/uncertain relation + overlapping process signal;
+- correct explicit self-repair;
+- blocked/unreviewed critical ASR error;
+- content gap with no process event.
+
+Keep process evidence minimal in this batch: pause, restart/self-repair, repetition and coarse pacing/segmentation only where deterministic. No pronunciation, pitch/stress grading, emotion/confidence inference, PTE-equivalent score or new audio ML dependency.
+
+Target UI contract after domain tests: two clearly separated panels, 内容理解 and 讲解过程证据, with a focused follow-up such as 只重新解释这一关系 where warranted. UI polish is secondary to evidence separation.
+
+### Freshness finding affecting later live work
+
+Official OpenAI guidance current on 2026-09-28 states that whisper-1 is deprecated for shutdown on 2027-02-26. gpt-transcribe is recommended for general file transcription, while current word/segment timestamp guidance still depends on whisper-1; gpt-live-transcribe does not provide word-level timestamps.
+
+Therefore Batch A/B must not deepen hard dependencies on Whisper-specific timestamp shapes. ASR text and alignment/timing are replaceable capabilities. Do not switch models or make paid comparison calls in the zero-call sequence. Before real Phase3B, perform a focused migration/timing decision with current official docs and an explicit cost estimate.
+
+Existing browser-local VAD/feature libraries exist; do not add them in Batch B unless the fixture experiment itself cannot be performed without them. Real-audio inadequacy, not feature ambition, should trigger a dependency evaluation.
+
 ## Phase 3 protocol, retained for explicit later resumption
 
 After data/cost preflight and owner readiness:
@@ -105,4 +161,4 @@ Must Fix: bounded provenance/entrypoint/registration issues; safe old-data prefl
 User Decision Needed: whether to remain zero-call or name a bounded test budget; detailed replay/retention behavior before implementing those features.
 Future Optional: broad reorganization, separate interview features, advanced pronunciation/prosody scoring beyond diagnostic localization.
 
-Next smallest step: clarify the flow using a short source/feedback example and prepare the zero-call correction batch. Do not force a test now, reopen the five answered questions, or describe pending changes as shipped.
+Next smallest step: hand off Batch A — CORRECTNESS-HYGIENE-01 to Codex using the current MASTER context and run only its zero-call regression scope. Return Delivery Packet + review evidence to MASTER. After delta review, decide whether Batch B can start. Do not force a live test now or describe either batch as already implemented.
