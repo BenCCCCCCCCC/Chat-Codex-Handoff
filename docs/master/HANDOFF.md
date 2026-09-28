@@ -2,7 +2,7 @@
 
 Updated: 2026-09-28
 Role: 00 MASTER
-Status: **READY FOR OWNER DECISION / NOT AUTHORIZED / NOT STARTED**
+Status: **OWNER-AUTHORIZED / READY TO EXECUTE / NOT STARTED**
 
 ## 0. Binding
 
@@ -23,7 +23,7 @@ Canonical authority:
 and
 `meta/master-state/docs/master/HANDOFF.md`.
 
-Do not execute this task unless the owner explicitly authorizes it after reading the cost/request proposal.
+Owner authorization has been explicitly recorded: maximum 3 provider calls, zero retries, incremental local exposure ceiling US$0.03432. Execute only within this bounded protocol.
 
 ## 1. Experiment purpose
 
@@ -168,21 +168,47 @@ STOP with no retry for:
 - app requests a Repair/Apply or second ASR;
 - old owner-data risk.
 
-## 7. Explicit authorization requirement
+## 7. Explicit authorization — SATISFIED
 
-Do not execute unless owner gives an unambiguous authorization such as:
+Owner authorization recorded on 2026-09-28:
 
 `Authorize PHASE3B-LIVE-01 under the 3-call maximum, zero-retry, US$0.03432 local-exposure limit.`
 
-If owner does not authorize, remain stopped.
+This does not authorize any call outside sections 2–6, any retry, second recording, Repair/Apply, model migration, push/merge, or continuation after stop conditions.
 
-## 8. Classification
+## 8. Canonical execution trigger
 
-Ready:
-- bounded live experiment.
+```text
+执行已获 owner 授权的 PHASE3B-LIVE-01。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录实际 canonical commit。
+
+执行目录 F:\Chat-Codex-Handoff\validation-repo，分支 prototype/study-teachback-v0.1；accepted HEAD 必须是 dd8317b43100b8cbaad684cab7fc02957e32de62，tracked worktree 必须 clean。若不匹配立即停下，不要 fetch/pull/reset/rebase 修正。
+
+Owner 已明确授权边界：最多 3 次 provider calls、零重试、增量 local exposure 上限 US$0.03432。严格执行 HANDOFF L0–L5 和 stop rules，只做一次 20–45 秒真实中文录音。使用新 clean topic 和同一 bounded synthetic laboratory-visitor-rules source；不要检查旧 topic 是否还存在。
+
+调用上限：
+- exactly 1 次 ASR；
+- exactly 1 次 content-diagnosis semantic request；
+- at most 1 次初始 Tutor/Learn semantic request，仅当 fresh-topic 正常 UI 确实需要；
+- 0 Repair/Apply；
+- 0 retry；
+- maximum 3 provider calls total。
+
+先做 L0 身份/ledger 检查。L1 新建 clean topic；若 UI 不需要 Tutor 就不要调用。L2 由 owner 自然录制一次 20–45 秒中文，无提示，保存 original audio，仅提交 1 次 ASR。任何 provider/network/ledger/音频错误都立即停止，不重试。
+
+L3 必须先停在 replay/transcript checkpoint：让 owner 回听保存音频，对照 raw ASR，重点核对否定词、数字、条件、术语；只能修正 ASR 听错，保留 raw/corrected，不能把 owner 真正说错的内容改成正确答案。若仍有关键不确定性，停止并把 checkpoint 交 MASTER，不得进入 diagnosis。
+
+只有 transcript 可用后，L4 才允许 exactly 1 次 gpt-5.6-luna content diagnosis。process evidence 保持本地、零 semantic dispatch。检查“内容理解 / 讲解过程 / diagnostic target”，不得让 process-only signal 产生知识错误结论。不要 Repair/Apply，不要第二次录音。
+
+L5 返回完整证据：实际 provider call 数、ledger before/after SHA/summary、original audio 保存状态、raw/corrected transcript、关键 ASR 错误、content findings、process evidence、diagnostic target、owner 对 usefulness/replay burden/false inference 的判断、Unknown/Blocking/Future Optional。然后停止交 MASTER；禁止自动继续。
+```
+
+## 9. Classification
+
+Authorized:
+- one bounded PHASE3B-LIVE-01 execution under the recorded 3-call / zero-retry / US$0.03432 incremental exposure ceiling.
 
 Not Authorized:
-- all live provider and microphone actions.
+- second recording, retry, Repair/Apply provider calls, model migration, broader spend, push/merge, or any automatic continuation after this experiment.
 
 Next step:
-owner decision only.
+send the canonical execution trigger to Codex and execute only this bounded live experiment.
