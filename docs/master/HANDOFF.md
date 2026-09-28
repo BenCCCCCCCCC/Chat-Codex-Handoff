@@ -1,5 +1,34 @@
 # Active Handoff — CORRECTNESS-HYGIENE-01
 
+## 0. Project identity precheck
+
+Before dispatching Batch A, run one read-only identity check in the Codex project currently open. This check is mandatory because the owner is not certain which Codex project currently points to the product checkout.
+
+Expected identity:
+- local repo root: `F:\\Chat-Codex-Handoff\\validation-repo`
+- repository: `BenCCCCCCCCC/Chat-Codex-Handoff`
+- product branch: `prototype/study-teachback-v0.1`
+- expected accepted base: `f6a000ca96fedfbeb9eaa803dfcd990a13d90c53`
+
+Read-only checks only:
+- print/return the actual working directory;
+- resolve the Git top-level path;
+- report current branch;
+- report current HEAD;
+- report configured remotes if present;
+- report whether `study-teachback-app/`, `handoff-kit/`, and `.git` belong to this repo;
+- do not modify files, switch branch, fetch/pull/reset/clean, run tests, start the app, or call any provider API.
+
+PASS only if the repo root and branch match the expected product checkout. HEAD may differ only if there is already documented local work; if it differs, report the exact divergence and STOP before Batch A. If the path/branch/repo is wrong or ambiguous, stop and return the observed identity. Do not attempt to move/copy/create/switch projects automatically.
+
+### Canonical read-only precheck trigger
+
+```text
+先不要执行 Batch A，也不要修改任何文件。只做项目身份确认：告诉我当前 Codex 打开的实际工作目录、Git top-level、当前 branch、HEAD、remote（如有），并确认是否存在 study-teachback-app/ 和 handoff-kit/。预期项目是 F:\Chat-Codex-Handoff\validation-repo，分支 prototype/study-teachback-v0.1，仓库 BenCCCCCCCCC/Chat-Codex-Handoff，已接受基线 f6a000ca96fedfbeb9eaa803dfcd990a13d90c53。禁止 switch/fetch/pull/reset/clean、禁止运行测试、禁止启动应用、禁止 API 调用、禁止改文件。若路径或分支不匹配，立即停下，只报告你实际看到的项目身份；若匹配，也先停下等我下一条指令。
+```
+
+Only after MASTER/owner confirms this precheck is acceptable should the Batch A trigger in section 12 be sent.
+
 Updated: 2026-09-28 — executable task, not an execution receipt
 Role: 00 MASTER
 Status: **READY / NOT DISPATCHED / NOT STARTED**
