@@ -1,231 +1,123 @@
 # Current State
 
-Updated: 2026-09-28 (owner clarification after architecture review)
+Updated: 2026-09-28 — executable-task consolidation
 Role: 00 MASTER / authoritative dynamic state
 
-## Stage
+## 1. Current status and single next action
 
-**OWNER-VALIDATION-01 — CLEAN PHASE 2 PASS / PHASE 3 NOT EXECUTED / LIVE RESUMPTION ON COST-READINESS HOLD**
+**OWNER-VALIDATION-01: clean Phase 2 historically PASS; physical-microphone Phase 3 NOT EXECUTED.**
+**Batch A — CORRECTNESS-HYGIENE-01: READY / NOT DISPATCHED / NOT STARTED.**
+**Batch B — DIAGNOSTIC-LOCALIZATION-01 (Phase 3A): PLANNED / GATED BY MASTER REVIEW OF A.**
+**Phase 3B — real owner speech evidence: NOT STARTED / COST-READINESS HOLD.**
 
-**ARCHITECTURE-REVIEW-01 — REMOTE REVIEW COMPLETE / OWNER PRIORITIES RECORDED / REFACTOR NOT IMPLEMENTED**
+The owner stated on 2026-09-28 at 16:45 +10:00 that the previous Codex trigger had not been sent. No later dispatch or execution evidence has been received. Preparing this executable task does not start it.
 
-Active product: **知而能讲** (Study-first + in-app teach-back), not the historical Handoff helper.
-Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`
-Recorded local checkout: `F:\Chat-Codex-Handoff\validation-repo`
-Feature branch: `prototype/study-teachback-v0.1`
-Accepted feature HEAD, also confirmed as remote HEAD on 2026-09-28:
-`f6a000ca96fedfbeb9eaa803dfcd990a13d90c53`
+Next action: the owner sends the canonical Batch A trigger in HANDOFF to Codex. Codex performs A only, then returns evidence to MASTER. Do not automatically start B or a paid test.
 
-The local checkout, running server, browser records, microphone and current usage ledger have NOT been inspected in these remote review/clarification turns. Remote source is not proof of local synchronization.
+| Work item | Status | Exit / next decision |
+| --- | --- | --- |
+| Architecture and owner-goal clarification | Documented; no feature implementation | Use decisions below, do not repeat the same questions |
+| A: provenance, documentation entry, recording registration | Ready, not dispatched | A acceptance matrix in HANDOFF; return to MASTER |
+| B / Phase 3A: diagnostic evidence separation and fixtures | Planned, not started | Separate MASTER authorization after A delta review |
+| Phase 3B: physical audio / ASR / replay / diagnostic value | On hold, not started | Specific experiment need, data/cost preflight and owner permission |
+| Custom retention, reminders, replay UX | Direction recorded; behavior undecided | Separate design/migration decision, not silently included in A |
 
-## Authority and retained review evidence
+## 2. Repository and authority
 
-Dynamic authority is this file and `docs/master/HANDOFF.md` on `meta/master-state`.
-Same-named feature-branch files are stale Handoff-era state, not authority. Root/app README contradictions remain unresolved.
+Product: **知而能讲** — Study-first + in-app teach-back.
+Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`.
+Recorded local checkout: `F:\Chat-Codex-Handoff\validation-repo`.
+Feature branch: `prototype/study-teachback-v0.1`.
+Accepted feature HEAD and freshly re-read remote branch HEAD on 2026-09-28:
+`f6a000ca96fedfbeb9eaa803dfcd990a13d90c53`.
 
-The detailed pre-clarification architecture review is retained at immutable commit `9a3c77789f99add12f6523282a2114cc8cb78e39`, in these same two paths. The concise findings below remain active; that commit's unanswered-owner-question and immediate-next-action wording is superseded by this file.
+Dynamic authority is ONLY these files on branch `meta/master-state`:
+- `docs/master/CURRENT_STATE.md`: status, product decisions, evidence limits and execution order.
+- `docs/master/HANDOFF.md`: the self-contained active task, constraints, acceptance matrix, stop conditions, delivery contract and exact short trigger.
 
-Only canonical documentation is updated in this clarification. No feature code, stored records, models, budgets, repository visibility, publishing or release behavior changed. No local tests or product API requests were run.
+A branch name is not a directory prefix. Same-named files in the feature checkout are currently stale historical Handoff-tool documents; do not execute their old next steps. Batch A will replace misleading entry content with explicit ref-aware pointers, not create a second live state.
 
-## Owner decisions — confirmed in the current conversation
+Local HEAD, dirty work, running server, browser records, microphone and live ledger have not been inspected by MASTER. A remote read is not proof of local synchronization.
 
-### D1 — outcomes
+Detailed historical review is retained in these same paths at `9a3c77789f99add12f6523282a2114cc8cb78e39`. The complete pre-consolidation decisions and task history are retained at `e3dc9e1bd2a0b7bb7eb9c457eea67c1a8b576b87`. These are evidence references, not competing active instructions.
 
-Priority order: **stable personal use first; a demonstrable/job-search portfolio second**.
-External-user validation and commercialization are not the current priority. Portfolio work must use actual artifacts and verified results; do not invent adoption, learning gains or metrics. A polished demonstration does not replace real owner validation.
+## 3. Owner decisions — D1 through D7 retained
 
-### D2 — primary scenario
+**D1 — outcomes.** Stable personal use first; a demonstrable/job-search portfolio second. No current commercialization, broad release or external-user rollout priority. Portfolio claims must use real artifacts and evidence, not invented adoption or learning gains.
 
-Main intended audience: students. Primary provisional scenario: course concepts and learning material. The owner has not chosen a precise subject or a narrower student segment; do not invent one as a settled decision.
+**D2 — scenario.** Mainly students using course concepts and bounded learning materials. An exact course/niche is not fixed. Interview project explanation is an adjacent hypothesis, not an approved interview-coaching subsystem. Retain learning before teach-back and recording inside the app.
 
-Explaining an interview project is a plausible adjacent use of the same source-to-explanation flow, not proof that it works and not approval for a second interview-coaching product. No resume scoring, job matching or separate interview subsystem is added.
+**D3 — time and cost.** Phase 3 was deferred for lack of time and incomplete cost preparation, not demonstrated loss of interest or product failure. The owner will consider spending when necessity is high; no amount is authorized. Current instruction is zero additional live product API calls. This is an authorization boundary, not a newly implemented runtime switch. Do not ask for a budget without a concrete experiment rationale.
 
-Retain Study-first and in-app recording. Working product statement: help a student understand a bounded learning source, explain it in their own words, and use both content evidence and speech-process evidence to locate the specific concept relation, reasoning transition, retrieval point or explanation segment that is less familiar / less smooth, then practice that point again. The purpose is diagnostic localization of learning friction, not presentation polish, generic speaking performance or a PTE-equivalent score.
+**D4 — clarity and replay.** AI teaching, feedback and UI should be clear, direct, non-redundant, sufficiently complete, unambiguous and simply worded. Do not turn this into an invented fluency rubric for the owner. Replay means listening to the owner's saved audio and checking transcription. Restoring an ASR mishearing is not a new oral performance; editing a genuine spoken error into a correct answer cannot demonstrate improvement. No skip policy or required review burden has been approved. Current segment-replay gate remains unchanged in A.
 
-### D3 — reason for deferred Phase 3
+**D5 — retention.** Owner-approved requirement direction: customizable retention with a default and reminders. Exact duration, expiry anchor, reminder channel, grace period and existing-record migration remain undecided. A 30-day default is only a MASTER proposal. In-app reminders do not imply notification while the app is closed; local keep-until-manual-delete is not guaranteed backup. No retention change in A/B; do not delete first and claim the user was warned.
 
-The owner states **lack of time and incomplete cost preparation**. Do not infer low product value, lack of interest, microphone failure or confusing launch from non-completion. Repeated value remains unverified for independent reasons, not because this test was deferred.
+**D6 — diagnostic purpose and split.** Use content plus speech-process evidence to locate the specific concept relation or reasoning transition worth checking, not to polish presentation or reproduce PTE scoring. Feedback areas remain distinct: **内容理解** and **讲解过程** (internal evidence name: processEvidence / 表达过程证据). Content judges source-grounded correctness, completeness and logic. Process evidence describes observable recording/transcript phenomena. Pauses, restarts, repetitions or pitch alone do not prove lack of knowledge. Localization is a candidate followed by a targeted question/re-explanation, not a diagnosis of a person's stable ability. Do not infer anxiety, confidence, personality or accent quality. Judge an explicitly corrected final stance rather than penalizing the withdrawn statement again.
 
-Current working boundary: **zero additional product API calls until the owner is ready and explicitly resumes a bounded live test**. This is a planning/authorization hold, not a newly implemented application switch. Historical budget ceilings are not permission to spend now.
+**D7 — execution records.** Every actionable scope, constraint, acceptance test, evidence requirement, sequence and stop condition must be in the canonical files before a Codex trigger is provided. Chat is a convenience surface. Status may progress from ready -> in progress -> delivered/pending review -> MASTER accepted only with corresponding evidence; BLOCKED remains possible at any step. A Codex final response is not acceptance. No undocumented chat-only instruction may silently widen a batch.
 
-### D4 — clarity and replay uncertainty
+## 4. Retained historical evidence
 
-The owner does not yet understand replay or its workflow and has NOT approved a time burden, blanket full-replay policy, a skip policy or an adaptive-replay implementation.
+Phase 1: owner imported `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`. Local extraction/preview/selection worked; registration was necessary, not sufficient, with same-day badge, laboratory-open state and 18:00 limit preserved. Import actions caused zero provider requests and an unchanged ledger in that run. Literal `&#x20;` after the title remains a non-blocking extraction issue.
 
-Owner quality preference: non-redundant, clear, direct, sufficiently complete, unambiguous answers in simple wording. Operationalize this first for AI teaching/feedback and UI instructions; do not silently turn it into a new rubric for grading the owner's speech, accent or fluency.
+Initial-Learn provenance correction at `f6a000c...`: the internal starter is request context, not fabricated user speech. Historical Node48/48 and Edge29/29 passed with zero paid calls for that correction. These counts are NOT fresh runs.
 
-Replay means listening to one's own saved audio while checking the ASR transcript, not AI reading its answer aloud. It protects against transcription errors becoming false knowledge diagnoses. Correcting an ASR mishearing does not count as a new spoken performance; genuine spoken mistakes must not be silently rewritten into evidence of improvement.
+Clean Phase 2: real owner-browser screenshots confirmed no fabricated initial user bubble, genuine first owner input and source-grounded Tutor replies. Original contaminated topic is historical evidence only, not a clean baseline. Neither old topic is assumed to survive today.
 
-Current implementation still requires segment replay before diagnosis. A proposed UX may count genuine complete-player coverage rather than require redundant per-segment clicks. That proposal is not implemented or accepted as a replacement gate; do not bypass current Phase 3 replay/confirmation.
+Retained engineering acceptance: UI-UX-FOUNDATION-01R2 and LOCAL-LAUNCH-01 (engineering scope). These do not establish actual microphone success, complete owner flow or repeated learning benefit.
 
-### D5 — retention
+## 5. Active findings and routing
 
-The owner approves the requirement direction: **user-customizable retention, with a default and reminders**.
-This does not approve an exact duration, deletion anchor, retroactive migration, reminder channel, cloud backup or a current storage-policy change.
+| ID | Confirmed remote-source finding | Treatment |
+| --- | --- | --- |
+| R01 | openStore invokes expiry using topic createdAt + 7 days | Safe preflight before touching old records; no expiry invocation for inspection |
+| R02 | Generated Repair/Apply prompts omit internal provenance and become user-history entries | Batch A; preserve the accepted initial-Learn fix |
+| R03 | Root/app READMEs and feature-branch state misidentify current product/phase | Batch A; product-first entry and ref-aware pointers |
+| R04 | Runtime mixes historical probes/recovery scripts; synthetic fixture has a special retry allowance | Retained backlog; no broad move or cap/history change in A |
+| R05 | Registration precedes successful microphone startup and counts against attempt quota | Batch A; valid recording boundary and idempotency before ASR |
+| R06 | Schema, quote and reference validity cannot establish semantic entailment or learning benefit | Keep engineering, semantic and owner-value acceptance separate |
 
-MASTER proposal for later design, not an active default: offer a simple default such as 30 days for new records, finite/custom choices and an explicit keep-until-manual-delete choice with local-storage limits disclosed. Show expiry and in-app reminders; allow export or extension before irreversible deletion. An in-app reminder must not be described as a background notification while the app is closed. Decide reopen-after-expiry/grace behavior explicitly; do not delete first and then claim to have warned the user. Existing records require explicit migration/consent; do not silently extend or shorten their lifetime.
+R01 detail: an unchanged 2026-09-12 topic became eligible for expiry around 2026-09-19. Actual local survival is UNKNOWN. Do not ask the owner to reload or launch the application just to inspect it. Preserve available records through a safe export/read-only path when possible. If gone, recreate the synthetic source and perform only a minimal clean-topic sanity check before later live work. Do not promise restoration or reset the ledger. Batch A tests must use isolated synthetic data, not the owner's profile.
 
-### D6 — diagnostic role of speech evidence and feedback split
+## 6. Execution and validation structure
 
-The owner clarifies that expression analysis is primarily for **more precise localization of where the learner's logic/content is not yet familiar or the explanation process is not smooth**, not for training presentation style as an end in itself.
+Batch A fixes only R02/R03/R05 and their directly related tests/evidence. It does not create a new application architecture. Details and acceptance IDs A0-A4 are in HANDOFF. The separate meta-document commits made here are not feature changes.
 
-Feedback should be visibly separated into two areas:
-- **内容理解**: source-grounded correctness, completeness, conditions, concept relations, contradictions and unresolved logic.
-- **表达过程证据**: observable evidence from the original recording / aligned transcript such as pause location, restart/self-repair, repetition, pacing/segmentation and, only where technically validated and useful, energy/pitch-related features.
+Batch B / Phase 3A, after a separate MASTER decision, will test a small separation:
+- contentFindings: source-grounded judgments;
+- processEvidence: observable time/span/process evidence, no knowledge verdict and no mandatory textbook quote;
+- diagnosticTarget: a relation worth verifying, with separately attributable evidence.
 
-Speech-process evidence is a locator and supporting signal, not proof of misunderstanding. A pause, restart, pitch pattern or slower section must not by itself be converted into "you do not understand this". Cross-channel feedback may say that a specific logic transition is worth re-explaining when content evidence and process evidence converge, while preserving the evidence separately. Do not infer confidence, anxiety, personality, accent quality or a global fluency score.
+The six planned fixtures remain: fluent wrong; hesitant correct; an unexpressed/uncertain relation with related process evidence; explicit correct self-repair; unreviewed critical ASR error; content gap without process evidence. Fixtures test routing/invariants, not real recognition accuracy, model correctness or learning efficacy. Missing content has no literal spoken timestamp; association must cite a real neighboring segment or remain unlocalized. A restart/self-repair fixture is not proof of a working detector.
 
-### D7 — execution-state discipline
+Do not require pitch, stress, pronunciation scoring, emotion inference, new audio ML dependencies, full word alignment, an agent framework or broad directory migration. Preserve current raw/corrected provenance, origin and storage identity. More feature extraction is justified only by observed diagnostic need.
 
-The owner explicitly confirmed at 2026-09-28 16:45 +10:00 that the previously drafted Codex instruction had **not yet been sent**. Therefore Batch A and Batch B remain NOT STARTED. No implementation or local regression run may be inferred from the planning/docs work in MASTER.
+The earlier Phase 3 label is retained for the still-unrun microphone checkpoint. Phase 3A is zero-call preparatory validation; Phase 3B is the future real-speech/value work. Neither label converts a planned test into a completed one. Retention UI, broad cleanup and full replay redesign are not prerequisites for the first bounded owner recording.
 
-All actionable execution scope, constraints, tests, evidence requirements, stop conditions and sequence decisions must be recorded in the canonical GitHub files before MASTER asks the owner to send a Codex trigger. Chat wording is convenience only; GitHub canonical state must be sufficient for later audit/recovery.
+## 7. Public capability check and cost hold
 
-When a new instruction is prepared, the exact trigger or an equivalent self-contained execution block must also be stored in `docs/master/HANDOFF.md`. After Codex returns, MASTER must reconcile Delivery Packet evidence against the recorded batch before marking any item Completed/Verified.
+Rechecked official documentation on 2026-09-28 (documentation evidence only, no paid probe):
+- OpenAI deprecations lists whisper-1 announced deprecated on 2026-08-26 for shutdown on 2027-02-26: https://developers.openai.com/api/docs/deprecations
+- File transcription recommends gpt-transcribe for general recordings but still directs word/segment timestamp needs to whisper-1: https://developers.openai.com/api/docs/guides/speech-to-text
 
-## Product/UX proposals — not implemented
+Decision remains: preserve model/provider configuration in A/B; keep text and alignment conceptually replaceable; make a focused migration/timing decision before future live use, not inside this correctness batch. Other earlier model-specific statements must be rechecked when relevant rather than assumed from an archived note.
 
-Primary flow remains: selected course material -> clear short teaching -> own explanation -> dual evidence pipeline (ASR/content + original-audio speech process) -> transcript/audio check -> two-part grounded feedback -> optional focused relearning/re-explanation -> optional new application context.
+Existing-library candidates from the prior check remain ricky0123/vad and Meyda. No library was installed or validated in this app. No new dependency is needed for A or prewritten diagnostic fixtures. Re-evaluate a library only for an observed technical gap; do not repeat a full landscape review for each small fix.
 
-Feedback should keep **内容理解** and **表达过程证据** visually and semantically separate. The content panel should first answer what is correct or needs attention, explain the main unresolved source-grounded gap and offer one useful next step. The process panel should show only useful observable speech evidence and point to where the learner may want to re-explain; it must not downgrade knowledge merely because speech is hesitant. Put supporting source/audio references behind a clear expandable entry when appropriate. This is progressive disclosure, not omission of critical conditions. No arbitrary short-word limit, decorative repetition, compulsory problems when the explanation is already correct, global PTE-style score, or claims of comprehensive mastery from a limited response.
+Historical configured models: whisper-1 and gpt-5.6-luna. Historical application exposure US$5 and cash US$10 are ceilings, not funding permission or inspected account funds. No recharge, model switch, stress loop or automatic retry.
 
-Keep learning-content correctness distinct from wording/conciseness. Concision cannot justify dropping negation, necessary/sufficient conditions, numbers, terms or uncertainty.
+Historical pre-correction ledger: requests39, known estimated cost US$0.01293075, exposure US$0.06973825, unsettled4. Clean Phase2 made later calls. These are NOT today's totals. Before proposing live spend, read a safe fresh ledger, verify actual model/endpoint/rates, explain why a zero-call alternative is insufficient, and give a bounded request/retry cap and conservative estimate. No paid call solely to check readiness. Separate validation spending from recurring self-use cost.
 
-The next evidence to collect, when live testing resumes, is whether the two channels can correctly localize a concrete weak/less-familiar point without conflating speech behavior with knowledge, whether the owner recognizes the localization as useful and knows what to practice next, plus actual workflow/cost friction. This is not yet a learning-efficacy or market-demand result.
+## 8. Classification and next smallest step
 
-## Retained owner-validation evidence
+Completed: remote audit, owner decisions, task/document consolidation; historical Phase1 and clean Phase2 retained.
+Verified this turn: canonical files and remote branch identity read; public transcription documentation read. No local runtime verification.
+Likely: isolated focused fixes are enough to unblock the next engineering increment; dual evidence may help localization. These are not measured product outcomes.
+Unknown: local checkout/records/server/ledger, detector reliability, acceptable review effort, exact retention policy, justified budget and real-owner value.
+Not Done: dispatch or execution of A, B, real Phase3/3B, fresh local tests, feature refactor, retention/replay changes, complete owner acceptance.
+Must Fix: R02/R03/R05 within A; safe R01 handling before touching old data.
+User Decision Needed: nothing additional to prepare/start the bounded zero-call A; future spend, retention/migration and scope expansion still need decisions.
+Future Optional: broader reorganization, advanced prosody/pronunciation, separate interview product, cosmetic and non-blocking extraction cleanup.
 
-### Phase 1 — historical PASS
-
-Owner imported `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx` in the real product. Local extraction/preview/selection worked; registration necessary-vs-sufficient meaning, same-day badge, laboratory-open state and 18:00 constraint remained understandable. Import/preview/use-all added zero provider requests and the ledger was byte-identical. Minor non-blocking literal `&#x20;` after the title.
-
-### Initial-starter provenance correction and clean Phase 2 — historical PASS
-
-`OWNER-VALIDATION-PROVENANCE-FIX-01` was accepted at `f6a000c...`: initial internal Learn instruction is request input only, not a stored owner utterance; initial failure does not fabricate user history.
-
-Historical receipts: Node48/48, Edge29/29, zero paid correction calls. These were NOT rerun today.
-
-In the clean owner-browser rerun, only Tutor content appeared before genuine owner input; the first `你的想法` was the owner's real question. Tutor remained grounded in registration/badge/open-state/18:00 constraints without an unsupported entry guarantee.
-
-The original contaminated topic is evidence only. Neither old topic is assumed to still exist locally.
-
-Retained engineering acceptances: `UI-UX-FOUNDATION-01R2` and `LOCAL-LAUNCH-01` (engineering scope). None establishes physical-microphone success or final owner acceptance.
-
-## Active architecture findings
-
-### R01 — old-topic availability and expiry preflight
-
-`storage.mjs` runs `api.expire()` during `openStore()`, deleting whole topics using `createdAt + 7 days`, not latest attempt/activity. An unchanged 2026-09-12 topic became eligible around 2026-09-19. Actual survival/deletion is unknown.
-
-Do not advise reload/restart merely to inspect it. Preserve an available record via a safe export/read-only path when possible. Do not promise restoration, run expiry during inspection, change origin/database identity or erase the ledger. If expired, use the same synthetic material for a new clean topic plus minimal provenance/source sanity check before the first Phase 3 recording; no need to repeat all historical gates.
-
-### R02 — generated Repair/Apply instructions still stored as user messages
-
-`teach()` defaults `internalStarter=false`. The `再学这一点` and `试一个新情境` handlers omit that flag for app-generated instructions. Existing provenance tests cover initial Learn, not those actions.
-
-Must fix before claiming full-flow provenance; this does not reverse clean initial-Learn acceptance. A bounded correction must distinguish actual owner input from UI-triggered internal context and test Learn/Repair/Apply success/failure without provider calls. Not implemented.
-
-### R03 — misleading entry documentation
-
-Root README describes Handoff, app README repeats obsolete Owner Validation NOT EXECUTED, and feature-branch state copies point to old work. Correct product entrypoints and ref-aware pointers, without new suffix snapshots or automatic repository renaming. Not implemented.
-
-### R04 — runtime, probes and historical exceptions
-
-Runtime code shares a directory with browser-test revisions, credential/live probes and recovery scripts. Ledger includes a five-submission exception for `synthetic-mandarin-build01`; normal attempts use two. Separate responsibilities only where useful, retain evidence/history and caps, and check live hook/helper/launcher paths before moving anything. Broad directory restructuring is not a prerequisite for Phase 3.
-
-### R05 — registration precedes microphone success
-
-`/api/register` precedes `getUserMedia()`, and registrations count toward the 60-attempt limit even after failed capture startup. Actual remaining quota is unknown. Proposed bounded fix: idempotent registration at a valid recording boundary, before paid ASR; no historical ledger reset. Not implemented.
-
-### R06 — validity categories
-
-Retain local extraction, explicit send, original audio, raw/corrected versions, source/attempt/version binding, replay, content/delivery separation, reference validation and conservative budget reservations.
-
-Schema/reference/quote validity is not entailment, learning efficacy or user benefit. Existing logic fixtures have bounded scope. Near-silence candidates are uncalibrated observations, not fluency, knowledge or personality scores.
-
-## 2026-09-28 targeted freshness / collision check
-
-Before the next speech-evidence implementation, MASTER checked current official transcription guidance and relevant browser-local audio libraries.
-
-Official OpenAI state:
-- whisper-1 was deprecated on 2026-08-26 and is scheduled for removal on 2027-02-26.
-- Current guidance recommends gpt-transcribe for general recorded-speech transcription.
-- Current official file-transcription guidance still directs timestamp-dependent workflows to whisper-1 for word/segment timestamps.
-- gpt-live-transcribe does not return word-level timestamps; application-level fallback is required when timestamps are necessary.
-
-Decision: do not deepen product architecture around Whisper-specific timing. Also do not switch models or spend money in this zero-call stage. Treat ASR text and timing/alignment as replaceable capabilities. Segment-level / approximate localization is acceptable where it supports the learning-diagnostic goal; exact word timing is not a product requirement unless later evidence proves it necessary.
-
-Existing-project check:
-- browser-local Silero VAD implementations already exist, including ricky0123/vad;
-- Meyda provides browser/JavaScript audio-feature extraction such as RMS and energy.
-
-Decision: do not add either dependency yet. The current lightweight local signal path is sufficient for the next fixture-based architecture experiment. Evaluate an existing VAD/feature library only if real-audio evidence later shows the current candidate detector is inadequate.
-
-## Phase split after owner clarification
-
-### Phase 3A — Diagnostic Localization Architecture / ZERO PRODUCT API CALLS
-
-Goal: validate the logic of combining, but not conflating, content evidence and speech-process evidence before paying for another live run.
-
-Required model separation:
-- contentFindings: source-grounded content/logic judgments;
-- processEvidence: observed recording/transcript-process signals with time/span references; no knowledge status and no required sourceQuote;
-- diagnosticTarget: a bounded worth-verifying / worth-re-explaining target that may cite both channels while preserving their separate evidence.
-
-Minimum zero-call fixture matrix:
-1. fluent but logically wrong -> content issue remains even with no process signal;
-2. hesitant but content-correct -> no knowledge deficit is created;
-3. omitted/uncertain relation plus overlapping pause/restart -> mark the relation as worth verifying, not as proven ignorance;
-4. explicit self-repair to a correct final stance -> content stays supported; process may retain self-repair evidence;
-5. critical ASR uncertainty/error before confirmation -> downstream diagnosis remains blocked;
-6. content gap without process evidence -> still produces the appropriate content follow-up.
-
-Initial process evidence should stay small: pause location, restart/self-repair, repetition and coarse pacing/segmentation only when deterministically supportable. Pitch, stress, pronunciation, emotion/confidence and global fluency scores are out of scope.
-
-### Phase 3B — Real Owner Speech Evidence / LATER EXPLICIT LIVE AUTHORIZATION
-
-Only after correctness fixes, cost/model/timing preflight and owner readiness:
-- physical microphone;
-- saved original audio;
-- approved ASR path;
-- local process evidence;
-- replay/correction;
-- two-panel feedback;
-- verify whether the combined system localizes a useful weak/less-familiar point better than content-only evidence without increasing false inference.
-
-Phase 3A does not prove real-audio accuracy or user benefit. Phase 3B is not authorized merely by completing Phase 3A.
-
-## Implementation/process boundaries
-
-Prefer small behavior-preserving corrections over framework replacement. Preserve `http://127.0.0.1:4317`, IndexedDB identity/schema, raw audio and version relationships, existing models and caps. Data-policy work needs its own explicit migration/deletion tests.
-
-No new frontend/agent framework, vector store, microservices, cloud account system, public deployment, SaaS, separate interview mode, automatic paste/send or full Handoff bridge.
-
-Before a new implementation batch, do a targeted current official/existing-project check relevant to that gap. Do not reopen every settled architecture choice or run paid probes merely for freshness.
-
-Keep engineering tests, real owner workflow and repeatable value as separate acceptance categories. Review ordinary changes by delta; use stronger review for provenance, data loss, audio meaning and money. Do not require all future UX/retention improvements before one bounded Phase 3 run.
-
-## Cost boundary
-
-Historical approved models: `whisper-1` + `gpt-5.6-luna`; historical application exposure cap US$5 and cash ceiling US$10. These remain ceilings, not a current funding decision or a verified account balance. No switch, recharge, automatic retry or stress loop.
-
-Last explicitly read pre-correction ledger: requests39, known estimate US$0.01293075, exposure US$0.06973825, unsettled4. Clean Phase 2 subsequently used live Tutor requests. These figures are historical and MUST NOT be presented as today's balance/cost.
-
-Before renewed live authorization: verify actual configured endpoint/model/current public rates and a fresh safe ledger; present a bounded experiment's conservative estimate and its request/retry cap. Keep estimates separate from invoices and real account funds. Do not make a paid call solely to check readiness. Discuss development validation budget separately from later recurring personal-use budget; neither number is set by the owner's clarification.
-
-## Classification
-
-Completed: remote architecture review; owner priority/scenario/deferral clarification; canonical state/handoff update. Historical Phase1 and clean Phase2 retained.
-Verified: owner's stated decisions; remote feature HEAD; cited source-level behaviors. No new runtime verification.
-Likely: a course-learning-first product can also support some source-grounded project explanations; targeted replay/feedback simplification may reduce effort. Both remain hypotheses.
-Unknown: local data/server/ledger, exact test and ongoing budget, tolerated replay effort, precise course use case, exact retention/default/reminder semantics, microphone/ASR/downstream experience and repeated value.
-Not Done: Batch A (trigger not yet sent), Batch B, Phase3B onward, final owner acceptance, proposed code, feedback UI or retention changes, fresh tests/live pricing/ledger verification.
-Must Fix: R02 full-flow provenance and R03 misleading state entry; address R01 before risky continuation and R05 in a bounded correctness batch. Do not turn all architecture proposals into Phase3 blockers.
-User Decision Needed: live test budget/readiness before spending; exact retention and replay-policy tradeoffs before implementing those behaviors. Do not re-ask the five questions as though unanswered.
-Future Optional: dedicated interview features, broad directory cleanup, advanced pronunciation/prosody scoring beyond diagnostic need, literal `&#x20;` cleanup and cosmetic changes.
-
-## Next Smallest Step
-
-Proceed in two bounded zero-product-API-cost batches before any live resumption: (A) correctness hygiene for provenance / entry docs / recording registration; then (B) Phase 3A diagnostic-localization separation + fixture matrix. Review each delta before starting the next. Preserve existing data and do not change retention/model/provider/database identity in these batches. No live requests now; a budget decision is only needed before Phase 3B.
-
-When the owner resumes live testing and data/cost preflight is satisfied, keep Phase3 minimal: one natural 20–45 second explanation -> saved original audio + ASR -> replay/transcript checkpoint to MASTER BEFORE diagnosis. Not executed until real evidence is returned.
+**Next smallest experiment: Codex reproduces and fixes R02/R03/R05 with isolated zero-live-call regression evidence, returns one A Delivery Packet, and stops for MASTER review.**
