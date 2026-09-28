@@ -23,12 +23,12 @@ The architecture review read remote source; the owner then answered five product
 ## Owner decisions — use these, do not ask again
 
 1. Stable personal use comes first; demonstrable/job-search portfolio comes second. No near-term commercialization or external-user priority was chosen.
-2. Intended audience is mainly students, provisionally course concepts/learning material. No exact subject/niche is fixed. Interview project explanation is an adjacent hypothesis using the same source-grounded flow, not an approved separate product or tested capability.
+2. Intended audience is mainly students, provisionally course concepts/learning material. No exact subject/niche is fixed. Interview project explanation is an adjacent hypothesis using the same source-grounded flow, not an approved separate product or tested capability. Speech analysis is for locating where a learner's concept relation / reasoning transition / explanation segment is less familiar or less smooth, not for presentation polish as the primary goal.
 3. Phase3 was deferred because of time and incomplete cost preparation. Do not treat deferral as evidence of low value, unwillingness, poor usability or broken microphone.
 4. The owner is not yet clear on replay and has not accepted a replay burden/policy. They want answers that are non-redundant, clear, direct, sufficiently complete, unambiguous and simply worded. Apply that preference to AI teaching/feedback and UI instructions first; do not invent a spoken-fluency grading requirement.
 5. Retention must be customizable, with a default and reminders. Exact values, anchor, reminder channel and existing-data migration are not decided. This is a requirement, not an implemented feature.
 
-Retain Study-first, in-app recording, original audio and raw/corrected separation. Do not replace learning with testing alone.
+Retain Study-first, in-app recording, original audio and raw/corrected separation. Do not replace learning with testing alone. Feedback must remain separated into **内容理解** and **表达过程证据**. The first evaluates source-grounded content/logic; the second reports observable recording/process evidence and helps localize where to practice. Never infer that a pause alone proves lack of knowledge, and do not add a global speaking/PTE-style score.
 
 ## Effective cost boundary
 
@@ -48,7 +48,7 @@ Current `app.mjs` uses local audio playback; replay itself is not another ASR/mo
 
 Correction means restoring what was actually said. Editing a transcript into a better answer is not a new oral performance; genuine learning improvement requires new evidence such as a new explanation. Preserve raw and corrected versions.
 
-Feedback proposal: short conclusion -> main unresolved point with evidence -> one useful next action, with supporting detail clearly expandable. Keep essential conditions and uncertainty visible. Do not create arbitrary word limits, hide critical omissions, repeat the whole lesson, fabricate a problem when correct, or infer knowledge from hesitation/accent.
+Feedback proposal: two clearly separated panels. **内容理解**: short conclusion -> main unresolved content/logic point with source evidence -> one useful next action. **表达过程证据**: only useful observable audio/alignment evidence (for example pause location, restart/self-repair, repetition, pacing/segmentation, and later only validated pitch/energy features) -> where to re-explain. Supporting detail can be expandable. Keep essential conditions and uncertainty visible. Do not create arbitrary word limits, hide critical omissions, repeat the whole lesson, fabricate a problem when correct, infer knowledge from hesitation/accent, or infer confidence/anxiety/personality.
 
 ## Retention requirement and safe preflight
 
@@ -99,10 +99,10 @@ Stop for unsafe permission workarounds, missing/corrupt audio, unresolved critic
 Completed: owner decisions recorded; replay/output-quality distinction explained; current state/handoff updated.
 Verified: stated owner priorities and source-level playback behavior; no new local verification.
 Likely: course-focused flow may cover some project-explanation use; simpler evidence-grounded feedback may help. Neither proven.
-Unknown: current records/ledger, affordable live budget, acceptable replay effort, exact retention defaults/reminders, real audio/downstream value.
+Unknown: current records/ledger, affordable live budget, acceptable replay effort, exact retention defaults/reminders, which speech-process features are reliable/useful enough for this diagnostic purpose, and real audio/downstream value.
 Not Done: implementation, new tests, live calls, Phase3 and later owner acceptance.
 Must Fix: bounded provenance/entrypoint/registration issues; safe old-data preflight before risky continuation.
 User Decision Needed: whether to remain zero-call or name a bounded test budget; detailed replay/retention behavior before implementing those features.
-Future Optional: broad reorganization, separate interview features and richer expression analysis.
+Future Optional: broad reorganization, separate interview features, advanced pronunciation/prosody scoring beyond diagnostic localization.
 
 Next smallest step: clarify the flow using a short source/feedback example and prepare the zero-call correction batch. Do not force a test now, reopen the five answered questions, or describe pending changes as shipped.
