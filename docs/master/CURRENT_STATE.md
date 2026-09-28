@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-09-29 — Edge GPU startup blocker classified for isolated A/B diagnostic
+Updated: 2026-09-29 — GPU bypass failed; Edge policy/minimal-launch decomposition next
 Role: 00 MASTER / authoritative dynamic state
 
 ## 1. Current status
@@ -14,219 +14,257 @@ Role: 00 MASTER / authoritative dynamic state
 
 **PHASE3B-BROWSER-STARTUP-01:** BLOCKED at fresh `about:blank` Edge startup.
 
-**PHASE3B-GPU-ISOLATION-01:** READY / NOT DISPATCHED / ZERO PROVIDER CALLS / ZERO MICROPHONE / NO PRODUCT BEHAVIOR CHANGE.
+**PHASE3B-GPU-ISOLATION-01:** BLOCKED — `--disable-gpu` did not avoid the same fatal startup path.
+
+**PHASE3B-EDGE-MINIMAL-LAUNCH-01:** READY / NOT DISPATCHED / ZERO PROVIDER CALLS / ZERO MICROPHONE / READ-ONLY POLICY CHECK + REVERSIBLE FRESH-PROFILE LAUNCH ONLY.
 
 Original live authorization remains fully unused:
-- maximum 3 provider calls;
+- max 3 provider calls;
 - zero retries;
 - incremental local exposure ceiling US$0.03432;
 - one recording maximum.
 
-## 2. Browser-start blocker receipt
+## 2. GPU isolation receipt
 
-Codex reported:
-- canonical commit read: `8a72c5fce539ed164c6704bad47ea9068a3fafad`;
-- repo/branch/HEAD correct;
-- tracked worktree CLEAN;
-- ledger lock absent;
-- provider calls 0;
-- microphone 0;
-- topic/live actions 0;
-- exposure increment US$0;
-- ledger SHA unchanged:
-  `d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`.
+Codex read canonical commit:
+`067b25ffe6da3e2cdb6523a9126ce7c8beea6881`.
 
-Fresh non-headless Edge blank-target probe:
-- Edge path: `C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`;
-- Edge version: `154.0.4258.37`;
-- fresh temporary isolated profile;
-- loopback dynamic-port CDP;
-- `about:blank` target created;
-- `Page.enable` timed out;
-- GPU subprocess repeatedly exited with `-1073741790`;
+Repo identity remained correct and tracked CLEAN.
+
+H1 default-GPU control:
+- FAIL;
+- fresh non-headless Edge;
+- fresh temporary profile;
+- loopback CDP blank target;
+- target/CDP created then `Page.enable` timed out;
+- GPU subprocess repeatedly exited `-1073741790`;
 - stderr: `GPU process isn't usable. Goodbye.`;
-- browser main process exited `2147483651`;
-- normal `Browser.close` did not complete.
+- main browser exited.
 
-The previous unknown Access-denied Edge process was not touched.
+H2 same configuration plus `--disable-gpu`:
+- FAIL in the same general startup path;
+- same GPU-process exit value and fatal message.
 
-Product server/root was not launched because blank-target prerequisite failed.
+H3 product-root probes:
+- not run because H2 failed.
+
+Provider = 0.
+Microphone = 0.
+Topic/live actions = 0.
+Incremental exposure = US$0.
+Ledger SHA unchanged:
+`d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`.
+
+No system settings, drivers, policies or extra sandbox flags were changed.
 
 ## 3. Interpretation
 
-The GPU subprocess exit value `-1073741790` maps to Windows status `0xC0000022` (ACCESS_DENIED). This narrows the observed failure to a GPU-process startup/access path but does **not** establish whether the underlying cause is the graphics driver, Edge/ANGLE, security software, OS policy, permissions or another browser-runtime interaction.
+The evidence rules out the simple hypothesis that hardware GPU acceleration alone is sufficient to explain/avoid the startup failure.
 
-The browser main-process exit `2147483651` is recorded as evidence only; it does not independently identify root cause.
+Do not infer that the graphics driver is the root cause.
 
-MASTER will not authorize:
-- driver reinstall/update;
-- Edge reinstall/reset;
-- registry/group-policy changes;
-- hardware acceleration setting changes in the owner's normal profile;
-- `--disable-gpu-sandbox`;
-- privilege elevation;
-- killing unknown Edge/GPU processes.
+Observed GPU subprocess exit `-1073741790` maps to Windows status `0xC0000022` (ACCESS_DENIED), but the denied object/path/policy remains unknown.
 
-The next experiment is a reversible command-line A/B isolation using a brand-new temporary profile only.
+The next diagnostic must decompose browser startup rather than add more GPU flags.
 
-## 4. Current public documentation check
+## 4. Current official Edge/Chromium constraints relevant to the next diagnostic
 
-Chromium documentation describes `--disable-gpu` as a way to force the software path for compositing/rasterization when isolating GPU-process failures.
+Microsoft Edge UserDataDir policy documentation states that when the policy is enabled, Edge uses the policy-specified data directory regardless of the command-line `--user-data-dir` value. Therefore the prior launch argument alone is not proof that the effective runtime profile was the intended temporary directory.
 
-Microsoft Edge documentation explicitly warns that `--disable-gpu-sandbox` is an unsupported command-line flag with stability/security risks. Therefore this project must not use `--disable-gpu-sandbox`.
+Microsoft Edge RemoteDebuggingAllowed policy can allow or block remote debugging.
 
-This check supports using `--disable-gpu` only as a temporary diagnostic/run-local browser flag; it does not authorize changing machine-wide Edge policy or driver state.
+Current upstream Chromium security behavior requires remote debugging to use a non-default data directory; using a custom isolated user-data directory is the recommended debugging pattern.
 
-## 5. PHASE3B-GPU-ISOLATION-01 goal
+Microsoft/Chromium documentation supports creating separate user-data directories for development/debugging. A dedicated fresh directory under the current user's local application-data space is a supported pattern; do not point to the owner's existing Edge User Data directory.
 
-Answer one question:
+Decision:
+- first inspect the relevant Edge policy values read-only;
+- then decompose launch from minimum browser process -> remote-debugging target;
+- use a dedicated fresh probe directory under `%LOCALAPPDATA%` rather than a temp-directory-only assumption;
+- do not touch the owner/default Edge profile;
+- no policy or registry writes.
 
-> Does the accepted isolated Edge/CDP startup become stable when hardware GPU rendering is bypassed with the reversible `--disable-gpu` launch flag?
+## 5. PHASE3B-EDGE-MINIMAL-LAUNCH-01 goal
 
-This is an environment-classification probe, not a product fix.
+Answer, in order:
+
+1. Is an Edge policy overriding user-data-dir or remote debugging?
+2. Can a minimal fresh-profile Edge process stay alive without CDP?
+3. If yes, does adding remote debugging introduce the failure?
+4. If both pass, can the product root load safely under the same minimal browser configuration?
+
+This is an environment decomposition probe only.
 
 ## 6. Diagnostic sequence
 
-### G0 — identity / evidence preservation
-
+### M0 — identity / ledger / evidence
 Confirm:
 - accepted HEAD `dd8317b...`;
-- tracked worktree CLEAN;
+- tracked CLEAN;
 - ledger lock absent;
 - ledger SHA/exposure unchanged;
-- existing browser-start artifacts preserved.
+- prior Phase3B startup/GPU artifacts preserved.
 
-Do not touch the earlier Access-denied process/profile.
+### M1 — read-only Edge policy inspection
+Read only the relevant Microsoft Edge policy values from both current-user and local-machine policy locations, where present:
+- `UserDataDir`;
+- `RemoteDebuggingAllowed`.
 
-### G1 — default-GPU control
+Also report whether the effective Edge executable is the stable channel path already observed.
 
-Do **one** fresh control launch only if needed to confirm the previous exact failure is still reproducible under the same known-safe blank-target harness.
+Do not:
+- write registry/policy;
+- enumerate unrelated policy trees;
+- read owner profile contents.
 
-Use:
-- non-headless Edge;
-- new temporary profile;
-- loopback CDP;
-- `about:blank`;
-- no product server.
+Interpretation:
+- if `UserDataDir` is set, report its value/path semantics but do not open that directory;
+- if `RemoteDebuggingAllowed=0`, remote debugging is policy-blocked; STOP after reporting because bypassing policy is not authorized;
+- if values are absent/default-allow, continue.
 
-If it reproduces the GPU-process failure, stop the control and continue to G2.
+### M2 — minimal no-CDP browser process
+Create a brand-new dedicated isolated directory under the current user's local app data, for example:
+`%LOCALAPPDATA%\ChatCodexPhase3B\edge-probe-<run-id>`.
 
-If the default control unexpectedly passes, do not infer the issue is gone; record it and continue to G2 for the actual A/B comparison.
+This must not be under or inside the owner's normal `%LOCALAPPDATA%\Microsoft\Edge\User Data` tree.
 
-No repeated default attempts.
+Launch non-headless Edge with the smallest safe args:
+- `--user-data-dir=<new dedicated directory>`;
+- `--no-first-run`;
+- `--no-default-browser-check`;
+- `about:blank`.
 
-### G2 — software-rendering blank-target probe
+Do NOT include:
+- remote-debugging flags;
+- proxy/host-resolver blocking flags;
+- `--disable-background-networking`;
+- GPU/sandbox flags.
 
-Launch a brand-new non-headless Edge process/profile with the same safe arguments plus **only**:
-`--disable-gpu`.
+Observe for a bounded interval using the process handle only:
+- process remains alive;
+- exit code if it exits;
+- stderr if available.
 
-Do not use:
-- `--disable-gpu-sandbox`;
-- `--no-sandbox`;
-- policy/registry edits;
-- owner profile.
+Do not automate/page-control the browser in M2.
 
-Open only `about:blank`.
+Close only this task-owned process normally.
+
+If M2 fails with the same GPU fatal exit, STOP. This places the blocker below CDP/product harness.
+
+### M3 — minimal CDP browser process
+Only if M2 PASS.
+
+Use another new local-app-data isolated directory.
+
+Launch the same minimum args plus:
+- `--remote-debugging-address=127.0.0.1`;
+- `--remote-debugging-port=0`.
+
+No proxy/host-resolver/background-network flags yet.
+
+Open about:blank.
 
 Verify:
-- CDP target connection;
-- `Page.enable` succeeds;
-- target remains alive for bounded observation;
-- Edge does not exit;
-- task-owned process closes normally.
+- DevToolsActivePort/CDP endpoint;
+- target creation;
+- `Page.enable`;
+- bounded target lifetime;
+- clean close.
 
-If `--disable-gpu` blank target fails, STOP. Do not add more GPU flags or modify the machine.
+If M3 fails while M2 passed, classify the failure as introduced by the remote-debugging/control path or its interaction with policy/runtime; STOP. Do not add other flags.
 
-### G3 — software-rendering product-root probe
+### M4 — minimal product-root probe
+Only if M3 PASS.
 
-Only if G2 PASS.
+Start local product server after confirming root load alone does not dispatch provider requests.
 
-Start local product server in zero-provider-safe mode.
+Use a new local-app-data isolated profile with the M3 minimum CDP config.
 
-Use new temporary profiles/processes with the same launch configuration + `--disable-gpu`.
+Open product root only.
 
-Open product root only:
-- no learning source submit;
-- no `开始学习`;
-- no topic;
-- no microphone;
-- no provider action.
+No source submit/topic/Tutor/ASR/diagnosis/microphone.
 
-Run three fresh product-root startup probes. Any failure stops.
+Run up to three fresh product-root startups, each a new process/profile, same code/config. Any failure stops.
 
-Verify title/basic DOM, target lifetime, local-only requests, ledger unchanged and clean process shutdown.
+Verify:
+- target/title/basic DOM;
+- bounded survival;
+- ledger unchanged;
+- no provider call;
+- normal task-owned cleanup.
 
-## 7. Interpretation
+Do not require zero Microsoft/browser background traffic in this diagnostic because the proxy/host-resolver blocking flags are intentionally removed to isolate startup behavior. Instead record any observed network endpoints at a high level and confirm that no OpenAI/provider endpoint is contacted.
 
-### Outcome A — `--disable-gpu` stable
-
-If blank target and all three product-root starts PASS with `--disable-gpu`:
-- classify the current Phase3B startup blocker as isolated to the hardware-GPU browser path under this harness/environment;
-- do not claim the underlying driver/security cause is known;
-- do not change global Edge settings;
-- MASTER may authorize resuming the already-approved Phase3B live experiment using a fresh isolated Edge launched with `--disable-gpu`, because this changes browser rendering mode only and not product/provider behavior;
-- live provider budget remains unchanged.
-
-### Outcome B — `--disable-gpu` also fails
-
-If the blank target fails with `--disable-gpu`:
-- GPU hardware acceleration is not sufficient to explain/avoid the startup failure;
-- keep live Phase3B blocked;
-- return evidence;
-- do not try SwiftShader, sandbox-disabling, driver changes or extra flags automatically.
-
-## 8. Protected boundaries
+## 7. Protected boundaries
 
 No:
-- provider/model calls;
+- provider/model API;
 - microphone;
-- topic creation;
-- old owner data/profile;
+- topic/live workflow;
+- old owner Edge profile/IndexedDB;
+- policy/registry writes;
+- owner default profile path access;
+- driver/Edge reinstall/reset;
+- sandbox bypass flags;
+- GPU flags;
+- privilege elevation;
 - unknown process interaction;
-- driver/install/reset operations;
-- Edge/Windows policy/registry changes;
-- `--disable-gpu-sandbox` or `--no-sandbox`;
 - new dependency;
-- product code changes;
-- push/merge/reset/clean/rebase/amend.
+- product code modification;
+- Git write/push/merge/reset/clean/rebase/amend.
 
-Task/session artifacts may be written only under the Phase3B artifact area.
+Probe profile/artifacts may be created only in the dedicated probe path/artifact area.
+
+## 8. Outcomes
+
+### Outcome A — M2 fails
+Minimal Edge with a fresh local-app-data profile fails even without CDP. Keep live test blocked. Browser/system environment is the current blocker; do not continue harness experiments automatically.
+
+### Outcome B — M2 passes, M3 fails
+The remote-debugging/control path or relevant Edge policy/runtime interaction is the blocker. Return evidence. Do not attempt policy bypass.
+
+### Outcome C — M2/M3/M4 pass
+A stable minimum browser-control path exists. The prior aggressive/offline launch configuration or temp-profile environment was part of the failing condition. Return to MASTER; do not resume live test inside this task.
 
 ## 9. Delivery receipt
 
 Return:
-- canonical commit read;
-- G0–G3 mapping;
-- exact control/default args and `--disable-gpu` args;
-- Edge version/path;
-- control result;
-- software blank-target result;
-- 3 software product-root startup results if reached;
-- process cleanup result for task-owned processes;
-- GPU/browser stderr comparison;
+- canonical commit;
+- M0–M4 mapping;
+- exact registry/policy locations and relevant values only;
+- Edge executable/version;
+- dedicated probe profile root used;
+- exact M2/M3 launch args;
+- M2 process result;
+- M3 CDP/Page.enable result;
+- M4 product-root runs if reached;
+- stderr/exit comparison;
+- high-level observed network endpoints if available, explicitly whether any OpenAI/provider endpoint appeared;
+- cleanup result for task-owned processes/profiles;
 - ledger before/after SHA;
 - provider 0 / microphone 0 / topic 0 / exposure 0;
-- final tracked clean;
+- final tracked CLEAN;
 - Blocking / Unknown / User Decision Needed / Future Optional.
 
-Do not resume PHASE3B-LIVE-01 inside this diagnostic.
+Stop for MASTER.
 
 ## 10. Classification
 
 Completed:
-- Batch A/B.
-- Phase3B preflight/source recovery.
-- browser-start probe that isolated a GPU-process startup failure.
+- Batch A/B;
+- Phase3B preflight/source recovery;
+- startup probe;
+- GPU bypass A/B.
 
 Ready:
-- reversible GPU A/B isolation probe.
+- policy/minimal-launch decomposition.
 
 Paused:
-- owner-authorized Phase3B live experiment.
+- owner-authorized PHASE3B-LIVE-01.
 
 User Decision Needed:
-- none for this zero-call probe.
+- none for this zero-call diagnostic.
 
 ## 11. Next smallest step
 
-Execute PHASE3B-GPU-ISOLATION-01. If `--disable-gpu` establishes a stable fresh isolated browser/product-root path, return to MASTER before resuming live L1.
+Execute PHASE3B-EDGE-MINIMAL-LAUNCH-01. Do not change system/browser policy or product behavior. Return evidence to MASTER before any live-flow resume.
