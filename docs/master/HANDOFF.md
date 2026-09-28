@@ -1,8 +1,8 @@
-# Active Handoff — Batch B Finalization / B-FINALIZE-01
+# Active Handoff — PHASE3B-PREFLIGHT-01
 
 Updated: 2026-09-28
 Role: 00 MASTER
-Status: **READY / NOT DISPATCHED / VERSION-FINALIZATION ONLY**
+Status: **READY / NOT DISPATCHED / READ-ONLY / ZERO LIVE API CALLS**
 
 ## 0. Authority and binding
 
@@ -24,141 +24,171 @@ Execution checkout:
 Branch:
 `prototype/study-teachback-v0.1`
 
-Current HEAD before finalization:
-`f06900fa9dcffd7768a1ec283715a50f6570832e`
+Expected accepted local HEAD:
+`dd8317b43100b8cbaad684cab7fc02957e32de62`
 
-Preserve the current accepted uncommitted worktree containing:
-- Batch B diagnostic localization changes;
-- Replay Correction 01;
-- Replay Correction 02;
-- approved test-harness-only B-REPLAY-ENV-03 changes.
-
-Do not reset/clean/checkout/rebase/fetch/pull/amend.
+Do not try to match the older remote product branch. No fetch/pull/reset/rebase/checkout/clean/amend.
 
 ## 1. Task
 
-**Task ID: B-FINALIZE-01.**
+**Task ID: PHASE3B-PREFLIGHT-01.**
 
 Goal:
-create one focused **local** commit that freezes the already MASTER-accepted Batch B engineering state.
+collect the minimum safe local facts needed for MASTER to decide whether one real Phase 3B recording is necessary, technically ready and affordable.
 
-This is a version-finalization task only.
+This task is **read-only** and **zero live product/provider calls**.
 
-No new product behavior, test semantics, requirements or architecture changes are authorized.
+Do not modify product code, docs, runtime state, browser data or Git history. No commit.
 
-## 2. Preflight
+## 2. Mandatory preflight checks
 
-Before staging:
-- report HEAD;
-- report tracked modified/new files;
-- report unrelated untracked artifacts separately;
-- verify the accepted production/app source hashes and probe-harness diff still match the delivered B-REPLAY-ENV-03 bundle;
-- verify no tracked file has changed since the accepted probe packet.
+### P0 — repo identity
 
-If accepted tracked content has drifted, STOP and report. Do not reconstruct/reset.
+Report:
+- cwd;
+- Git top-level;
+- branch;
+- HEAD;
+- tracked worktree status;
+- unrelated untracked items separately.
 
-## 3. Allowed tracked files
+PASS requires HEAD exactly:
+`dd8317b43100b8cbaad684cab7fc02957e32de62`.
 
-Stage only the accepted Batch B/fix/probe files currently in the worktree.
+If HEAD/tracked work differs, STOP and report. Do not repair it.
 
-Expected tracked/new product/test surface includes:
-- `study-teachback-app/README.md`
-- `study-teachback-app/app.mjs`
-- `study-teachback-app/browser-tests-r4.mjs`
-- `study-teachback-app/correctness-hygiene.test.mjs`
-- `study-teachback-app/index.html`
-- `study-teachback-app/provenance.test.mjs`
-- `study-teachback-app/run-offline-tests.mjs`
-- `study-teachback-app/server.mjs`
-- `study-teachback-app/style.css`
-- `study-teachback-app/diagnostic-fixtures.mjs`
-- `study-teachback-app/diagnostic-localization.mjs`
-- `study-teachback-app/diagnostic-localization.test.mjs`
-- `study-teachback-app/replay-gate.test.mjs`
+### P1 — provider configuration read
 
-If the actual accepted tracked set differs, report exact diff against the accepted probe packet before staging.
+Read production source only.
 
-Do not stage:
-- `.codex/hooks.json`;
-- `T09_LIVE_PACKET.txt`;
-- historical artifact directories;
-- owner data;
-- review ZIPs;
-- unrelated untracked files.
+Report from `study-teachback-app/provider.mjs`:
+- configured transcription model name;
+- configured semantic model name;
+- transcription endpoint path/URL family;
+- semantic endpoint path/URL family;
+- currently requested transcription response/timestamp granularity options;
+- any timeout/retry behavior relevant to one bounded call.
 
-No blanket `git add .` or `git add -A`.
+Do not reveal or print credential values. Do not test provider access. Do not call model-list/model endpoints.
 
-## 4. Final checks
+### P2 — safe ledger read
 
-Before commit:
-- `git diff --check` must PASS;
-- compare staged content to the accepted worktree/probe hashes;
-- confirm no provider/model/retention/storage-schema/origin/budget/pricing/new dependency change beyond the already accepted Batch B scope;
-- confirm no live provider calls or owner-data actions are performed during finalization.
+Read the application ledger file directly from disk only if it exists:
+`study-teachback-app/runtime/usage.json`.
 
-No full validation suite needs to be rerun solely for version anchoring if the content is byte-identical to the accepted probe packet. If any content changes are required to make finalization possible, STOP and return to MASTER rather than editing.
+Do not start `server.mjs`, `Start-Study.cmd`, the browser app or any script that could create/reserve/settle a ledger event.
 
-## 5. Commit
+Before parsing:
+- compute file SHA256;
+- confirm no `.lock` file is present; if lock exists, report and STOP ledger interpretation rather than deleting it.
 
-Create one local commit only after all checks pass.
+Parse read-only and report:
+- ledger version/pricing metadata present in file;
+- total request reservations;
+- distinct attempts;
+- reserved minutes;
+- reserved input/output;
+- known estimated settled cost;
+- total exposure under existing reserve accounting;
+- unsettled reservation count;
+- latest few event types/categories only, with timestamps/model/kind/status where non-sensitive;
+- do not return source text, prompts, raw responses, secrets or owner content.
 
-Suggested message:
-`feat: separate diagnostic evidence and harden replay validation`
+Also read current hard limits and pricing constants from `ledger.mjs`.
 
-The exact message may be adjusted for clarity, but there must be only one focused Batch B finalization commit.
+Use existing pure summary logic only if it can be invoked with a temporary/read-only copy and is proven not to mutate the production file. Direct JSON parsing/calculation is preferred.
 
-Do not push, merge, amend, reset or rebase.
+### P3 — mechanical readiness only
 
-## 6. Delivery receipt
+Using only the read-only ledger/config facts:
+- state whether one additional normal owner ASR attempt and the expected bounded semantic steps are mechanically below the application hard caps;
+- do NOT infer provider account balance, billing credit, model access or API-key validity;
+- do NOT reserve anything;
+- do NOT call the provider.
+
+If exact semantic request count for the later experiment is not yet fixed, report a range/unknown rather than inventing one.
+
+### P4 — data safety
+
+Do not inspect the historical browser IndexedDB merely to see whether the old clean topic exists.
+
+Reason:
+opening the app/store can trigger expiry on old records.
+
+Do not use browser forensics, copy browser profile databases or alter timestamps.
+
+Report historical topic survival as UNKNOWN unless a safe pre-existing export/file is already present and can be read without touching live browser storage. Do not search unrelated user directories broadly.
+
+### P5 — zero-call proof
+
+Report:
+- files read;
+- hashes where useful;
+- commands executed;
+- confirmation that no app/server/browser was launched;
+- no microphone access;
+- no provider/API request;
+- no files changed;
+- no Git write operation;
+- final tracked worktree still clean.
+
+## 3. Protected boundaries
+
+No:
+- live ASR/Tutor/diagnosis/model-list/access probe;
+- API-key validation;
+- physical microphone;
+- app/browser launch;
+- owner browser profile/IndexedDB access;
+- code/doc/runtime write;
+- ledger reserve/settle/failure event;
+- provider/model/retention/storage-schema/budget change;
+- new dependency;
+- push/merge/commit/reset/clean/rebase/amend.
+
+If safe ledger read is impossible, return BLOCKED for that part. Do not weaken boundaries.
+
+## 4. Delivery receipt
 
 Return:
 - Task ID and canonical commit read;
-- repo/branch/base HEAD/final commit SHA;
-- exact staged/committed file list;
-- `git diff --stat <base>..<final>`;
-- `git diff --check` result;
-- final tracked worktree status;
-- unrelated untracked items preserved;
-- confirmation that committed tracked bytes match the accepted pre-finalization state;
-- confirmation: no new behavior/test-policy changes, no live product API, no push/merge;
-- Tests Not Run / Unknown / Blocking / User Decision Needed / Future Optional.
+- P0–P5 PASS / FAIL / BLOCKED / UNKNOWN mapping;
+- repo/branch/HEAD/worktree;
+- provider configuration facts;
+- ledger SHA and safe summary;
+- hard caps/constants;
+- mechanical headroom conclusion with caveats;
+- files/commands read-only evidence;
+- Tests Not Run;
+- Unknown;
+- Blocking;
+- User Decision Needed;
+- Future Optional.
 
-Do not begin Phase 3B.
+Do not propose or execute a live call inside this task.
 
-## 7. Stop conditions
-
-STOP if:
-- tracked content differs from the accepted B-REPLAY-ENV-03 state;
-- an additional code/test behavior change appears necessary;
-- staging would include unrelated files;
-- owner data/secrets might be included;
-- a push/merge/reset/amend would be required.
-
-## 8. Canonical short trigger
+## 5. Canonical short trigger
 
 ```text
-继续同一个 Batch B Codex 任务，执行版本固化：B-FINALIZE-01。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录实际 canonical commit。
+继续当前项目，执行只读预检：PHASE3B-PREFLIGHT-01。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录实际 canonical commit。
 
-保持 F:\Chat-Codex-Handoff\validation-repo、prototype/study-teachback-v0.1 和当前所有已验收但未提交的 Batch B + Replay Correction 01/02 + B-REPLAY-ENV-03 worktree。HEAD 当前应为 f06900fa9dcffd7768a1ec283715a50f6570832e。禁止 reset/clean/checkout/fetch/pull/rebase/amend。
+执行目录 F:\Chat-Codex-Handoff\validation-repo，分支 prototype/study-teachback-v0.1，本地 accepted HEAD 应为 dd8317b43100b8cbaad684cab7fc02957e32de62。若 HEAD 或 tracked work 不匹配立即停下，不要 fetch/pull/reset/rebase 修正。
 
-这一步只做版本固化，不允许新增或修改任何产品行为、测试语义、需求或架构。先核对当前 tracked bytes 与已验收的 B-REPLAY-ENV-03 包一致；若有漂移立即停下报告。
+严格按 HANDOFF P0–P5 只读执行：读取 provider.mjs 当前模型/endpoint/timestamp 配置；安全直接读取 study-teachback-app/runtime/usage.json 和 ledger.mjs 的 limits/pricing，先检查 lock，再计算当前本地 ledger summary 和机械 headroom。不要启动 app/server/browser，不要 openStore/IndexedDB，不要碰历史 owner topic，不要检查 API key 有效性，不要调用任何 provider/model/list endpoint，不要录音，不要修改任何文件或 Git 状态。
 
-只 stage HANDOFF 明确列出的 Batch B/两次 replay 修复/批准的 test-harness 文件；不要 stage .codex/hooks.json、T09_LIVE_PACKET.txt、历史 artifacts 或其他 untracked 文件，禁止 git add . / git add -A。git diff --check 必须 PASS。
-
-确认内容完全一致后创建一个 focused local commit（建议 message：feat: separate diagnostic evidence and harden replay validation）。禁止 push/merge。完成后返回 final commit SHA、完整 committed file list、base..final stat、diff-check、worktree status 和“无新行为变化/无 live API/无 push merge”确认，然后停下交 MASTER 审查。不要进入 Phase 3B。
+返回 repo/branch/HEAD、provider 配置、ledger SHA/summary、hard caps、是否机械上可容纳一次受限 Phase3B 尝试（不是消费授权）、P0–P5 证据、Unknown/Blocking/User Decision Needed，并确认 zero live API / zero file change / final tracked clean。完成后停下交 MASTER；不要开始真实 Phase 3B。
 ```
 
-## 9. Classification
+## 6. Classification
 
 Completed:
-- Batch B engineering/validation acceptance.
-- Environment probe accepted.
+- Batch B accepted and finalized locally at `dd8317b...`.
 
-Pending:
-- one local finalization commit as stable version anchor.
+Ready:
+- zero-call Phase 3B preflight.
 
-User Decision Needed:
-- none for finalization.
+Not Authorized:
+- real microphone / ASR / semantic provider calls.
 
 Next smallest step:
-send B-FINALIZE-01 to the same Codex task; commit the already-accepted state only; return the receipt and stop.
+send PHASE3B-PREFLIGHT-01 to Codex, return the read-only receipt to MASTER, then MASTER performs current public model/rate check and presents the owner a concrete live-test decision.
