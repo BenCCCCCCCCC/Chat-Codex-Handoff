@@ -1,15 +1,15 @@
-# Active Handoff — PHASE3B-LIVE-01 Proposal
+# Active Handoff — PHASE3B-BROWSER-STARTUP-01
 
-Updated: 2026-09-28
+Updated: 2026-09-29
 Role: 00 MASTER
-Status: **OWNER-AUTHORIZED / L0 PASS / MATERIAL RECOVERED / READY TO RESUME L1**
+Status: **READY / ZERO PROVIDER CALLS / NO MICROPHONE / DO NOT RESUME LIVE FLOW**
 
 ## 0. Binding
 
 Repository:
 `BenCCCCCCCCC/Chat-Codex-Handoff`
 
-Local checkout:
+Execution checkout:
 `F:\Chat-Codex-Handoff\validation-repo`
 
 Branch:
@@ -19,243 +19,224 @@ Accepted HEAD:
 `dd8317b43100b8cbaad684cab7fc02957e32de62`
 
 Canonical authority:
-`meta/master-state/docs/master/CURRENT_STATE.md`
-and
-`meta/master-state/docs/master/HANDOFF.md`.
+- `meta/master-state/docs/master/CURRENT_STATE.md`
+- `meta/master-state/docs/master/HANDOFF.md`
 
-Owner authorization has been explicitly recorded: maximum 3 provider calls, zero retries, incremental local exposure ceiling US$0.03432. Execute only within this bounded protocol.
+Original PHASE3B-LIVE-01 authorization remains recorded but is **paused** during this diagnostic:
+- maximum 3 provider calls;
+- zero retries;
+- incremental exposure ceiling US$0.03432.
 
-## 1. Experiment purpose
+This task must consume none of that allowance.
 
-One real owner recording is intended to answer only:
-- whether real capture/original-audio/ASR/replay works;
-- whether critical Mandarin transcript meaning survives or can be safely corrected;
-- whether local speech-process evidence co-locates with a useful reasoning transition;
-- whether combined content + process localization is useful to the owner;
-- whether replay burden is tolerable.
+## 1. Known blocker
 
-It does not prove learning efficacy or market demand.
+The previous live attempt passed L0 and had the source material available.
 
-## 1.1 Canonical synthetic source for L1
+A fresh isolated Edge profile was launched before `开始学习` was clicked. Browser control returned:
+`Target crashed`.
 
-The exact synthetic source is embedded here so Codex does not need a local file path, old browser topic, or invented substitute.
+No topic creation, Tutor call, recording, ASR or diagnosis occurred.
 
-Source provenance: owner's Library file `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`. It is synthetic validation material, not private course content.
+Provider calls = 0.
+Exposure increment = US$0.
+Ledger SHA unchanged:
+`d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`.
 
-Use the following text as the clean-topic learning source:
+The service process was exited.
+
+A later attempt to verify the isolated Edge process for cleanup returned `Access denied`. Its residual state is unknown. **Do not touch or kill that unknown process in this diagnostic.**
+
+Existing task artifacts:
+`artifacts/study-teachback/phase3b-live-01`
+
+## 2. Task
+
+**Task ID: PHASE3B-BROWSER-STARTUP-01.**
+
+Goal:
+diagnose the isolated Edge `Target crashed` event and establish a safe repeatable fresh-browser startup path for the accepted local product.
+
+This is an environment diagnostic only.
+
+Do not resume L1/live provider flow inside this task.
+
+## 3. D0 — identity/evidence preservation
+
+Before any new launch:
+- confirm cwd / Git root / branch / HEAD;
+- tracked worktree must remain CLEAN;
+- confirm ledger lock absent and record ledger SHA/exposure;
+- list existing files in `artifacts/study-teachback/phase3b-live-01`;
+- do not delete/overwrite those existing artifacts.
+
+If repo identity differs, STOP.
+
+## 4. D1 — inspect the failed launch
+
+Using only the current task/session artifacts and launcher/harness source/commands:
+- identify Edge executable path and version used;
+- record exact launch arguments;
+- record temporary `--user-data-dir` path if known;
+- record headless/non-headless mode;
+- record remote-debugging/CDP configuration;
+- record target/navigation timeline;
+- capture any process exit code, stderr, crash message or CDP disconnect reason already available;
+- determine the narrowest evidence-supported stage of failure:
+  - browser process creation;
+  - target creation;
+  - navigation;
+  - product-page load;
+  - browser-control attachment.
+
+Do not inspect owner Edge profile or unrelated system logs broadly.
+
+If root cause is provable from existing evidence, report it. Otherwise explicitly say UNKNOWN.
+
+## 5. D2 — fresh blank-target probe
+
+Launch a **new non-headless Microsoft Edge process** with a **brand-new temporary isolated profile**.
+
+Use the minimum safe arguments required for browser control. Do not reuse the prior profile.
+
+First open only `about:blank` or an equivalent blank local page.
+
+Verify:
+- newly launched process is owned/identifiable by this task;
+- browser target/CDP connection succeeds;
+- target remains alive for a bounded observation interval;
+- page is visible/non-headless;
+- no owner profile is used;
+- no external/provider request occurs.
+
+Cleanup:
+- close only the browser process/profile created by this probe using its known owned handle/PID/normal browser-control close path;
+- if cleanup returns Access denied, do not escalate or kill; record and STOP before further probes.
+
+If the blank target crashes, STOP and return evidence. Do not launch product/server.
+
+## 6. D3 — local product-root probe
+
+Only if D2 PASS.
+
+Start the accepted local server only for local page loading.
+
+Before launch, establish from code/config that simply loading the root page does not itself send Tutor/ASR/diagnosis requests.
+
+Launch a new non-headless Edge process with a new temporary profile.
+
+Navigate to the local product root only.
+
+Do **not**:
+- paste/click the learning source into a topic;
+- click `开始学习`;
+- create a topic intentionally;
+- grant/use microphone;
+- trigger any provider action.
+
+Verify:
+- target remains alive for a bounded interval;
+- expected product title/root DOM exists;
+- local/loopback requests only;
+- fresh profile contains no historical owner topic;
+- provider-call count/ledger unchanged.
+
+Close only this newly launched owned browser process/profile normally.
+
+If target crashes, collect bounded target/browser/server trace and STOP.
+
+## 7. D4 — repeatability
+
+If D3 PASS, repeat D3 **two additional times**, each with:
+- new Edge process;
+- new isolated temporary profile;
+- same launcher/configuration;
+- unchanged product code.
+
+Total product-root startup probes = 3.
+
+Any failure stops immediately. Do not restart the three-run sequence until green.
+
+Record run IDs, Edge version, target lifetime/result, visibility/focus where useful, cleanup status and local request summary.
+
+## 8. Protected boundaries
+
+No:
+- Tutor/ASR/diagnosis/model-list/provider access;
+- microphone;
+- `开始学习`;
+- live topic workflow;
+- old owner profile/IndexedDB inspection;
+- interaction with the unknown Access-denied Edge process;
+- privilege elevation;
+- Windows/browser policy change;
+- product/provider/model/retention/schema/budget change;
+- new dependency;
+- reset/clean/rebase/amend/push/merge.
+
+Session/test artifacts may be added only under the Phase3B artifact area. Do not commit them.
+
+## 9. Acceptance
+
+PASS requires:
+- D0 PASS;
+- blank target survives and closes cleanly;
+- local product root survives and closes cleanly in 3 fresh representative profiles/processes;
+- no provider call/microphone/topic interaction;
+- ledger unchanged;
+- tracked worktree CLEAN;
+- no interaction with owner profile or unknown residual process.
+
+This task does not prove real L1/L2 success. It only clears the browser-start blocker.
+
+## 10. Delivery receipt
+
+Return:
+- canonical commit read;
+- D0–D4 mapping;
+- exact Edge version/path and launch args;
+- original failed-launch stage/root cause if proven;
+- blank-target result;
+- 3 product-root startup results if reached;
+- cleanup result for each newly owned process/profile;
+- note that prior Access-denied process was untouched;
+- local request/network summary;
+- ledger before/after SHA/summary;
+- provider calls = 0;
+- microphone = 0;
+- topic creation/live actions = 0;
+- session artifact files created;
+- final tracked status;
+- Blocking / Unknown / User Decision Needed / Future Optional.
+
+Stop and return to MASTER. Do not resume PHASE3B-LIVE-01 in this task.
+
+## 11. Canonical trigger
 
 ```text
-实验室访客入场规则
-（OWNER-VALIDATION-01 测试材料）
+继续当前同一项目，但先暂停 PHASE3B-LIVE-01，执行零调用环境诊断：PHASE3B-BROWSER-STARTUP-01。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录 canonical commit。
 
-本文件为合成测试材料，仅用于验证本地文档提取、预览、选段与学习流程。
+目录 F:\Chat-Codex-Handoff\validation-repo，branch prototype/study-teachback-v0.1，accepted HEAD 必须仍为 dd8317b43100b8cbaad684cab7fc02957e32de62，tracked clean，ledger lock absent。原 live 授权的 3-call / zero-retry / US$0.03432 额度保持冻结，本任务必须 0 provider calls、0 microphone、0 topic/live action。
 
-一、访客入场规则
+按 HANDOFF D0–D4：先保留并检查已有 artifacts/study-teachback/phase3b-live-01 会话证据，记录上次 Edge executable/version/launch args/CDP/target timeline，能证明根因才下结论；不能就标 UNKNOWN。不要触碰上次那个 Access denied 的未知 Edge 进程，不要提权或强杀。
 
-• 只有已经完成注册的访客才有资格申请进入实验室。
-• 实际进入实验室前，访客还必须佩戴当天发放的访客证。
-• 完成注册并不意味着访客一定可以进入实验室。
-• 如果当天实验室关闭，即使访客已经完成注册并佩戴当天访客证，也不能进入实验室。
-• 访客证只在发放当天有效，次日不能继续使用。
-• 每天 18:00 后停止访客入场。
+然后用 brand-new temporary isolated profile 启动一个新的 non-headless Edge：先只验证 about:blank/blank target 能稳定存活并正常关闭；通过后才启动本地 server、用另一 fresh profile 只打开 product root，禁止点击“开始学习”、禁止创建 topic、禁止麦克风和任何 provider action。product-root startup 在完全相同代码/配置下用 3 个独立 fresh Edge process/profile 验证；任何一次失败立即停下，不要循环到偶然变绿。
 
-理解提示：“完成注册”是申请进入实验室所需的条件之一，但它本身并不能单独保证最终可以进入；开放状态、当天访客证和入场时间仍然会影响结果。
+只允许 loopback/local 请求和 task-owned 临时 profile/session artifacts；不要读取 owner Edge profile/IndexedDB。每个新启动的 Edge 只用自己的已知 handle/PID/正常 close 路径清理，若清理 Access denied 就停止，不要 escalation/kill。
 
-二、条件核对表
-
-已完成注册：不足以单独保证进入。只是必要条件之一；仍需满足当天访客证、开放状态和时间限制。
-
-佩戴当天访客证：不足以单独保证进入。仍然不能绕过实验室关闭状态或 18:00 后停止入场的限制。
-
-实验室关闭：这是阻止进入的状态；即使其他条件已经满足，此时仍不得进入。
-
-三、学习后解释问题
-
-学习后，请用自己的话解释：为什么“完成注册”不等于“一定可以进入实验室”？
-
-说明：回答时可以结合“当天访客证”“实验室是否开放”和“18:00 后停止入场”等条件，但不要照读原文。
+返回 D0–D4、Edge path/version/args、原 crash stage/root cause（若可证）、blank-target、3 次 product-root startup、每次 cleanup、local requests、ledger before/after SHA、0 provider/0 microphone/0 topic、artifact 清单、final tracked clean、Unknown/Blocking。然后停下交 MASTER，禁止在本任务内恢复真实 Phase 3B。
 ```
 
-The table content above is normalized into sentences only to remove DOCX extraction line wrapping; its meaning and conditions are unchanged.
+## 12. Classification
 
-Do not:
-- search the local disk for another copy;
-- inspect old browser topics;
-- substitute a different laboratory rule set;
-- add facts not present in this source.
+Ready:
+- zero-call browser startup diagnostic.
 
-## 2. Authorized scope if owner says yes
+Paused:
+- owner-authorized PHASE3B-LIVE-01.
 
-Source:
-use a **new clean topic** with the same bounded synthetic laboratory-visitor-rules material. Do not inspect/recover the old expirable topic.
-
-Owner speech:
-- one 20–45 second natural Mandarin explanation;
-- no prompt assistance;
-- explain why registration is not sufficient for entry and include relevant additional conditions;
-- natural self-correction allowed.
-
-Provider-call ceiling:
-- exactly one ASR submission;
-- exactly one content-diagnosis semantic request after transcript review;
-- at most one initial Tutor/Learn semantic request **only if normal fresh-topic UI requires it to reach recording**;
-- zero Repair/Apply calls;
-- zero automatic retries.
-
-Total maximum provider calls = **3**.
-Minimum expected provider calls = **2**.
-
-## 3. Cost boundary
-
-One ASR reservation under current ledger = US$0.018 exposure.
-
-One maximum semantic reservation = US$0.00816.
-
-Therefore:
-- ASR + diagnosis <= US$0.02616 incremental local exposure;
-- ASR + optional Tutor + diagnosis <= **US$0.03432** incremental local exposure.
-
-No retry is authorized.
-
-The current official `whisper-1` list price is US$0.006/minute; `gpt-5.6-luna` standard prices are US$0.20/M input, US$1.20/M output and US$0.25/M cache-write input. A conservative provider-billing estimate for one full ASR minute plus two max-sized semantic requests is <= ~US$0.02232, excluding account-specific billing effects.
-
-Cost estimate is not account balance.
-
-## 4. Model decision for this experiment
-
-Keep `whisper-1` for this single experiment because the validated application currently requires word/segment timestamps and current OpenAI guidance still directs timestamp-dependent file transcription to `whisper-1`.
-
-Do not interpret this as long-term approval. `whisper-1` is deprecated and scheduled for removal on 2027-02-26. After Phase 3B, perform a separate migration/timing decision before long-term/public use.
-
-Keep `gpt-5.6-luna` for semantic requests; no model change is needed for this bounded experiment.
-
-## 5. Execution checkpoints if authorized
-
-### L0 — pre-live identity
-Confirm:
-- HEAD = `dd8317b...`;
-- tracked clean;
-- ledger lock absent;
-- ledger SHA/exposure still consistent with the preflight or report any harmless drift before provider use.
-
-No old-topic inspection.
-
-### L1 — clean topic / optional Tutor
-Create a new clean topic from the same synthetic source.
-
-Source import/paste is local.
-
-If and only if the normal UI requires Tutor/Learn to reach recording, allow **one** Tutor semantic request. Otherwise skip it.
-
-If this request fails: STOP. No retry.
-
-### L2 — one physical recording + ASR
-Use `无提示`.
-
-Record one natural 20–45 second Mandarin explanation.
-
-Preserve original audio.
-
-Submit exactly **one** ASR request.
-
-If ASR/provider/ledger fails: STOP. No retry.
-
-### L3 — mandatory replay/transcript checkpoint
-Before any content diagnosis:
-- replay the saved audio through the validated replay path;
-- compare audio with raw ASR transcript;
-- inspect critical negations, numbers, conditions and domain terms;
-- correct only ASR mishearing;
-- preserve raw and corrected transcript versions;
-- do not turn a genuine spoken mistake into a corrected performance.
-
-If critical transcript uncertainty remains, STOP and return checkpoint evidence to MASTER before diagnosis.
-
-### L4 — one content diagnosis
-If transcript review is acceptable, allow exactly one `gpt-5.6-luna` content-diagnosis request.
-
-Local process evidence confirmation remains zero semantic/provider dispatch.
-
-Inspect:
-- 内容理解;
-- 讲解过程;
-- diagnostic target / focused next action;
-- whether process evidence is genuinely useful vs decorative;
-- whether any process-only signal creates a false knowledge judgment.
-
-No Repair/Apply provider call.
-
-### L5 — return evidence and stop
-Return:
-- provider calls actually made;
-- ledger before/after SHA/summary;
-- original-audio save status;
-- raw/corrected transcript checkpoint;
-- critical ASR errors/corrections;
-- content findings;
-- process evidence;
-- diagnostic target;
-- owner judgment: useful / not useful / mixed and why;
-- replay burden/friction;
-- any false inference;
-- Unknown / Blocking / Future Optional.
-
-Do not continue into a second recording.
-
-## 6. Stop rules
-
-STOP with no retry for:
-- provider 401/403/404/model-access failure;
-- provider/network failure;
-- ASR unusable transcript;
-- missing/corrupt original audio;
-- replay cannot complete;
-- source/attempt/version identity loss;
-- unexpected extra provider dispatch;
-- ledger/budget error;
-- app requests a Repair/Apply or second ASR;
-- old owner-data risk.
-
-## 7. Explicit authorization — SATISFIED
-
-Owner authorization recorded on 2026-09-28:
-
-`Authorize PHASE3B-LIVE-01 under the 3-call maximum, zero-retry, US$0.03432 local-exposure limit.`
-
-This does not authorize any call outside sections 2–6, any retry, second recording, Repair/Apply, model migration, push/merge, or continuation after stop conditions.
-
-## 8. Canonical resume trigger
-
-\`\`\`text
-继续已获 owner 授权的 PHASE3B-LIVE-01，从 L1 恢复。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录 actual canonical commit。
-
-上一次 L0 已 PASS，且 0 provider calls / 0 recording / US$0 exposure。先只做快速身份与 ledger-drift sanity check：执行目录 F:\Chat-Codex-Handoff\validation-repo，branch prototype/study-teachback-v0.1，accepted HEAD 必须仍为 dd8317b43100b8cbaad684cab7fc02957e32de62，tracked clean，ledger lock absent。若身份/ledger 出现异常漂移就停下；不要重新做旧 topic 检查。
-
-L1 材料已经由 MASTER 找回并完整嵌入最新 HANDOFF 的 “Canonical synthetic source for L1”。直接使用该正文新建 clean topic；不要再向 owner 要文件路径，不要搜本地旧副本，不要检查旧 topic，也不要编造替代材料。
-
-Owner 原授权不变：maximum 3 provider calls total、zero retries、incremental local exposure <= US$0.03432。正常 fresh-topic 入口确认会需要一次 Tutor，因此在授权内最多允许：
-- at most 1 initial Tutor/Learn semantic call；
-- exactly 1 ASR；
-- exactly 1 content-diagnosis semantic call；
-- 0 Repair/Apply；
-- 0 retry。
-
-按 HANDOFF L1–L5 执行。新建 clean topic 后如 UI 正常路径需要 Tutor，允许一次；失败立即停，不重试。随后让 owner 只录一次 20–45 秒自然中文、无提示，保存 original audio，仅提交 1 次 ASR。
-
-ASR 后必须先停在 replay/transcript checkpoint，让 owner 回听并核对 raw ASR 的否定词、数字、条件和术语。只能修 ASR 听错，保留 raw/corrected；不能把 owner 实际说错的内容改正确。若关键不确定性未解决，就停止交 MASTER，不得 diagnosis。
-
-只有 transcript 可用后才允许 exactly 1 次 gpt-5.6-luna content diagnosis。process evidence 必须保持本地零 semantic dispatch。检查 内容理解 / 讲解过程 / diagnostic target，不得由 process-only signal 制造知识错误结论。禁止 Repair/Apply 和第二次录音。
-
-最后返回实际 provider calls、ledger before/after SHA/summary、incremental exposure、original audio 保存状态、raw/corrected transcript、关键 ASR error/correction、content findings、process evidence、diagnostic target、owner usefulness/replay burden/false inference 判断及 Unknown/Blocking/Future Optional。然后停止交 MASTER，不得自动继续。
-\`\`\`
-
-## 9. Classification
-
-Authorized:
-- one bounded PHASE3B-LIVE-01 execution under the recorded 3-call / zero-retry / US$0.03432 incremental exposure ceiling.
-
-Not Authorized:
-- second recording, retry, Repair/Apply provider calls, model migration, broader spend, push/merge, or any automatic continuation after this experiment.
+User Decision Needed:
+- none for this diagnostic.
 
 Next step:
-send the canonical execution trigger to Codex and execute only this bounded live experiment.
+send the canonical trigger to Codex; diagnose startup only; return to MASTER.
