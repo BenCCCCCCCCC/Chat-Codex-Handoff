@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-09-28 — Batch B engineering acceptance / finalization commit pending
+Updated: 2026-09-28 — Batch B final baseline accepted / Phase 3B preflight next
 Role: 00 MASTER / authoritative dynamic state
 
 ## 1. Current status
@@ -9,201 +9,180 @@ Role: 00 MASTER / authoritative dynamic state
 
 **Batch A — CORRECTNESS-HYGIENE-01:** MASTER-ACCEPTED at local commit `f06900fa9dcffd7768a1ec283715a50f6570832e`; not pushed.
 
-**Batch B — DIAGNOSTIC-LOCALIZATION-01 / Phase 3A:** **MASTER-ACCEPTED AT ENGINEERING / VALIDATION SCOPE; FINALIZATION LOCAL COMMIT PENDING**.
+**Batch B — DIAGNOSTIC-LOCALIZATION-01 / Phase 3A:** **MASTER-ACCEPTED AND VERSION-FINALIZED**.
 
-**Replay Correction 01:** ACCEPTED — sparse-timeupdate coverage bookkeeping defect fixed.
+Accepted local Batch B baseline:
+`dd8317b43100b8cbaad684cab7fc02957e32de62`
+message: `feat: separate diagnostic evidence and harden replay validation`.
 
-**Replay Correction 02:** ACCEPTED — normalized replay/diagnostic time-coordinate mismatch and source-load ordering fixed.
-
-**Replay Environment Probe 03:** PASS — three fresh non-headless Edge representative runs passed with unchanged production replay code.
-
-**Phase 3B — real owner speech/value validation:** NOT STARTED / COST-READINESS HOLD.
+**Phase 3B — real owner speech/value validation:** NOT STARTED / PRE-FLIGHT REQUIRED / COST-READINESS HOLD.
 
 No live provider/model call is authorized.
 
-## 2. Repository and worktree identity
+## 2. Finalization receipt
 
-Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`.
+User relayed Codex B-FINALIZE-01 completion at 2026-09-28 20:49 +10:00.
 
-Local checkout: `F:\Chat-Codex-Handoff\validation-repo`.
+Canonical finalization task commit read:
+`4e070c281a0d14acb9bca5e5c4b513430bf08eaf`.
 
-Branch: `prototype/study-teachback-v0.1`.
-
-Current HEAD is still the accepted Batch A commit:
+Base HEAD:
 `f06900fa9dcffd7768a1ec283715a50f6570832e`.
 
-Batch B + Replay Corrections 01/02 + the test-harness-only environment probe changes remain intentionally uncommitted pending one focused finalization commit.
+Final local commit:
+`dd8317b43100b8cbaad684cab7fc02957e32de62`.
 
-Do not reset/clean/checkout/rebase/fetch/pull/amend or discard the current worktree.
+Committed tracked files: 13.
 
-Dynamic authority is only:
-- `meta/master-state/docs/master/CURRENT_STATE.md`
-- `meta/master-state/docs/master/HANDOFF.md`
+Stat:
+- 478 insertions
+- 35 deletions.
 
-## 3. Replay Environment Probe 03 review receipt
+Reported checks:
+- accepted ZIP/file hashes and 13 raw tracked file bytes matched;
+- staging/commit applied only repository CRLF->LF normalization already expected by Git;
+- worktree raw bytes were unchanged;
+- pre-commit, staged and base..final `diff --check` PASS;
+- final tracked worktree CLEAN;
+- unrelated `.codex/hooks.json`, `T09_LIVE_PACKET.txt`, historical artifacts and review ZIPs preserved/uncommitted;
+- no test rerun, no live API, no push/merge, no Phase 3B.
 
-User supplied `B-REPLAY-ENV-03-review.zip`.
+MASTER accepts the finalization receipt because it matches the previously approved B-FINALIZE-01 contract and reports no behavioral/test-policy changes. This acceptance is based on the returned Codex receipt; MASTER has not independently read the local Git object because the product branch remains unpushed.
 
-MASTER ZIP SHA256:
-`64fe8304daefd7ad3469fd839117cc8e8e56c57e119014586558ab20e910e798`.
+Remote feature branch may still show the older HEAD. Do not reset/pull/rebase local work to match remote merely because local accepted baseline is ahead.
 
-`SHA256SUMS.json` listed 34 bundle entries; MASTER recomputed and matched **34/34**.
+## 3. Accepted Batch B engineering scope
 
-Canonical task commit read by Codex:
-`26aaa57b7efae1d907fc92b94dd607549755c58f`.
+Batch B accepted engineering/validation outcomes:
+- explicit `contentFindings`, `processEvidence`, `diagnosticTarget` separation;
+- six deterministic diagnostic invariants;
+- process evidence alone cannot create a knowledge deficit;
+- missing content has no fabricated spoken timestamp;
+- 内容理解 / 讲解过程 UI separation;
+- local process evidence persistence/dedup/reload with zero semantic/provider dispatch in representative browser path;
+- replay genuine-coverage semantics hardened;
+- sparse-timeupdate accounting defect fixed;
+- replay/ASR time-coordinate mismatch fixed using normalized replay derivative while preserving original stored/exported audio;
+- source-load ordering fixed;
+- deterministic replay safety 10/10 in the accepted evidence;
+- one complete long browser run 46/46;
+- three fresh representative non-headless Edge runs 3/3 each.
 
-Only two test-harness files changed in the probe:
-- `study-teachback-app/browser-tests-r4.mjs`
-- `study-teachback-app/run-offline-tests.mjs`
+The historical long-headless native pause remains a test-environment limitation/unknown, not a demonstrated product replay defect after representative probe success.
 
-All Batch B production/app files and both replay corrections were byte-identical to the Correction 02 delivered state.
+Batch B acceptance does NOT verify:
+- physical microphone;
+- real ASR quality;
+- real local process detector usefulness;
+- real combined diagnostic value;
+- learning efficacy;
+- acceptable owner workflow/replay burden;
+- recurring cost.
 
-No product commit, push or merge was created during the probe.
+## 4. Product decisions retained
 
-## 4. Probe result
+Stable personal use first; portfolio/job-search demonstration second.
 
-Exactly three fresh non-headless Edge runs were executed, each with:
-- a new Edge process;
-- a new temporary isolated profile;
-- unchanged production code;
-- unchanged probe assertions;
-- trusted CDP pointer input for replay actions;
-- synthetic archived ASR / saved WAV only;
-- fake provider, test ledger and outbound-network guard.
+Main scenario: students learning bounded course concepts/material.
 
-Results:
+Speech/process evidence exists to help localize a concept/reasoning transition worth verifying, not to score presentation/PTE ability or infer psychology.
 
-| Run | Result |
-| --- | --- |
-| 1 | 3/3 PASS / exit 0 |
-| 2 | 3/3 PASS / exit 0 |
-| 3 | 3/3 PASS / exit 0 |
+Feedback remains separated into **内容理解** and **讲解过程**.
 
-All runs used Edge 154.0.4258.37.
+Retention customization with default/reminders remains required direction but exact policy/migration is undecided and not part of Phase 3B preflight.
 
-For every run:
-- transcript replay request [0, 6.460000038146973] achieved genuine coverage of 6.460000038146973;
-- process-candidate replay [2.92, 4.88] achieved genuine coverage of 1.96;
-- replay completion reason was genuine coverage;
-- critical clicks were recorded as trusted;
-- visibilityState was visible for replay samples;
-- content confirmation proceeded only after replay;
-- exactly one process report persisted;
-- duplicate process confirmation did not duplicate;
-- reload/history preserved the process report;
-- process report contained no knowledge status/sourceQuote leakage;
-- 内容理解 and 讲解过程 stayed separate;
-- process confirmation added no fake semantic call and did not change the test ledger;
-- observed external browser requests = 0;
-- production ledger hash remained unchanged.
+The owner stated that live spending is acceptable only when necessity is sufficiently high. Therefore do not request a budget number before presenting:
+1. what zero-call evidence can no longer answer;
+2. what exact live request(s) are required;
+3. a conservative cost bound;
+4. retry/stop rule.
 
-Some internal replay samples recorded temporary `hasFocus=false`; this did not interrupt coverage and no hidden replay sample occurred. This is evidence that continuous DOM focus is not required for the tested representative path, but it is not an OS-level audio-focus claim.
+## 5. Why Phase 3B is now potentially necessary
 
-## 5. Validation-strategy conclusion
+Zero-call engineering/fixture work has answered architecture and safety questions, but cannot answer the remaining product hypothesis:
 
-The evidence supports classifying the earlier unexplained early pause as a **long-running headless browser/test-environment reliability limitation**, not a newly demonstrated product replay defect.
+> On one real owner recording, does combining source-grounded content analysis with real speech-process evidence localize a genuinely useful weak/less-familiar concept/reasoning point better than content-only evidence, without creating false inference?
 
-Important limits:
-- the precise cause of the historical headless pause remains unknown;
-- multiple environment dimensions changed together (fresh/short session, non-headless, trusted input), so this probe does not isolate which one caused the difference;
-- three representative runs do not prove universal browser/device reliability or real-owner value.
+This requires at least one real physical recording and real transcription because:
+- fixture labels cannot validate microphone/capture behavior;
+- synthetic audio cannot validate real ASR errors or natural self-correction;
+- pre-labelled process evidence cannot show whether local pause/process observations are useful on real speech;
+- owner value/replay burden cannot be inferred from tests.
 
-The previous “three consecutive full long-headless suite passes” requirement is retired as a product acceptance gate because it confounded product replay correctness with headless-native-media stability.
+However, live testing is not yet authorized. First perform a zero-call preflight.
 
-Future replay validation strategy:
-1. deterministic replay safety suite;
-2. targeted fresh-browser native replay/B3 integration probe in an isolated representative browser session;
-3. full headless suite remains useful for broad regression, but a native-media early pause without an app cancellation path is classified separately as harness/environment instability unless reproduced in the representative path.
+## 6. Phase 3B preflight goals
 
-Do not weaken replay semantics or remove the long-suite assertion merely to make it green.
+**Task: PHASE3B-PREFLIGHT-01 / ZERO LIVE API CALLS.**
 
-## 6. Batch B final acceptance basis
+Preflight must establish:
+- actual local repo/branch/HEAD = accepted `dd8317b...`;
+- tracked worktree clean; unrelated untracked work preserved;
+- current production provider/model configuration from source;
+- safe current application ledger summary by read-only file inspection only;
+- whether ledger file is readable and internally consistent;
+- no app launch / no browser `openStore()` / no owner-data expiry trigger;
+- current local presence/absence of the historical clean topic remains UNKNOWN unless safely inspectable without invoking application expiry; do not attempt browser-data forensics merely to answer it;
+- no provider access probe or model call;
+- no microphone;
+- no credential value exposure.
 
-MASTER accepts Batch B at the scoped engineering/validation level based on the combined evidence across B + Corrections + Probe:
+MASTER will separately verify current official model/timestamp/pricing information on the public web before any live authorization.
 
-- contentFindings / processEvidence / diagnosticTarget separation is explicit;
-- six deterministic diagnostic invariants pass;
-- process evidence does not directly create a knowledge deficit;
-- missing content receives no fabricated spoken timestamp;
-- content/process UI regions are separate;
-- confirmed local process evidence persists and adds no semantic/provider dispatch;
-- replay gate preserves genuine-coverage semantics;
-- Correction 01 fixed sparse-event accounting;
-- Correction 02 fixed replay/ASR time-coordinate mismatch and source-load ordering;
-- Node 103/103, diagnostic 14/14 and replay safety 10/10 passed in Correction 02;
-- one complete long browser run passed 46/46 including B3;
-- three fresh non-headless representative runs now pass 3/3 each with unchanged production code.
+## 7. Preflight output needed
 
-**Must Fix:** none remaining inside Batch B scope.
+Codex must return:
+- repo root / branch / HEAD / tracked status;
+- production `provider.mjs` model names/endpoints only;
+- read-only ledger path, SHA256, parsed summary and latest relevant reservation/settlement/failure categories without source text/secrets;
+- whether any stale lock exists;
+- current application hard caps from `ledger.mjs`;
+- whether one new bounded Phase 3B attempt appears mechanically possible under the local ledger limits (this is not spending authorization);
+- exact files read and confirmation no files changed;
+- confirmation no app/browser launch, no API call, no microphone, no owner-data access;
+- Unknown/Blocked/User Decision Needed separately.
 
-**User Decision Needed:** none for finalization commit.
+Do not modify code/docs/product branch in preflight. Do not create a commit.
 
-**Future Optional:** causal investigation of long-headless native media pause; broader browser/device replay validation; legacy DELIVERY semantic route cleanup; replay UX redesign. None blocks Batch B acceptance.
+## 8. After preflight
 
-Batch B acceptance does NOT verify physical microphone, real ASR quality, real speech-process detector value, learning efficacy or final product acceptance.
+MASTER will:
+1. check current official transcription/model/timestamp contracts and public rates;
+2. compare them with local production configuration;
+3. estimate the minimum one-recording experiment cost conservatively;
+4. decide whether model migration/timing adaptation is required before live test;
+5. present the owner with a concrete necessity + cost + request-count proposal.
 
-## 7. Finalization requirement
+Only then may the owner authorize or decline Phase 3B.
 
-The accepted engineering state is still uncommitted. One focused local finalization commit is required to create a stable version anchor before moving to Phase 3B planning.
-
-The finalization step must:
-- make **no new product behavior changes**;
-- make no new test assertion/policy changes;
-- stage only the known Batch B + Replay Corrections 01/02 + approved harness-only probe files;
-- exclude unrelated untracked historical artifacts;
-- run `git diff --check` before commit;
-- optionally re-run only low-cost deterministic sanity tests if needed to confirm no worktree drift, but do not reopen validation scope;
-- create one local commit;
-- no push/merge/amend/reset;
-- return exact commit SHA, changed-file list, stat, worktree state and confirmation that no content changed after the accepted probe bundle.
-
-After MASTER verifies the finalization receipt, the local commit becomes the accepted Batch B feature baseline.
-
-## 8. Product decisions retained
-
-Stable personal use first; portfolio second.
-
-Primary scenario: students learning bounded course concepts/material.
-
-Speech/process evidence exists to locate a concept/reasoning transition worth verifying, not to score presentation/PTE performance or infer psychology.
-
-Retention customization remains required direction but is not part of Batch B.
-
-No live spend until a concrete Phase 3B experiment has:
-- a clear necessity not answerable by zero-call tests;
-- safe owner-data preflight;
-- current model/timestamp/rate check;
-- bounded request/retry/cost estimate;
-- explicit owner authorization.
+No live call is implied by completing preflight.
 
 ## 9. Classification
 
 Completed:
 - Batch A accepted.
-- Batch B architecture and zero-call validation accepted at engineering scope.
-- Replay Corrections 01/02 accepted.
-- Replay Environment Probe 03 passed.
+- Batch B engineering/validation accepted and version-finalized locally.
+- Replay corrections/probe accepted at engineering scope.
 
-Verified:
-- Environment probe bundle integrity 34/34.
-- Three representative non-headless Edge runs 3/3 each.
-- No production replay code change in Probe 03.
-- B3 persistence/zero-dispatch in all representative runs.
-- zero-live-call safeguards in delivered evidence.
+Verified from finalization receipt:
+- local Batch B commit SHA and focused scope;
+- no new behavior during finalization;
+- tracked clean state reported;
+- no live API/push/merge.
 
 Unknown:
-- exact historical long-headless pause cause;
-- physical microphone and real ASR behavior;
-- real diagnostic value and acceptable replay effort;
-- Phase 3B cost/value;
-- current owner-record survival/current ledger totals.
+- current live ledger totals until preflight reads them safely;
+- current public model/pricing/timestamp compatibility;
+- physical microphone/ASR/process value;
+- owner replay burden and real diagnostic benefit;
+- historical clean-topic survival.
 
 Not Done:
-- Batch B finalization local commit;
-- Phase 3B real owner speech/value validation;
-- retention/replay UX decisions;
+- PHASE3B-PREFLIGHT-01;
+- any Phase 3B live recording;
+- retention/replay UX product decisions;
 - push/merge/final product acceptance.
 
 ## 10. Next smallest step
 
-Execute **B-FINALIZE-01** from HANDOFF in the same Codex task/worktree: create the single focused local Batch B finalization commit with no behavior changes, return the version receipt, and stop. Do not begin Phase 3B automatically.
+Execute `PHASE3B-PREFLIGHT-01` from HANDOFF in the accepted local repo. It is read-only/zero-call. Return the preflight receipt to MASTER; do not perform a real recording or provider call.
