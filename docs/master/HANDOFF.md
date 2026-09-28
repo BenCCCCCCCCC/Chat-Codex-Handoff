@@ -82,6 +82,29 @@ Required future correction evidence: exact checkout/branch/base/head; bounded di
 
 Broad directory restructuring, new retention UI and replay-policy redesign are not prerequisites for the first Phase3. Keep them separately scoped so review does not indefinitely postpone actual validation.
 
+## Execution status — IMPORTANT
+
+**As of 2026-09-28 16:45 +10:00, the owner has NOT sent the previous Codex instruction.**
+
+Therefore:
+- Batch A — CORRECTNESS-HYGIENE-01 = NOT STARTED;
+- Batch B — DIAGNOSTIC-LOCALIZATION-01 = NOT STARTED;
+- no feature code change, local test run, live product API call, push or merge has occurred from these MASTER planning turns;
+- do not interpret canonical documentation commits as implementation evidence.
+
+MASTER discipline from this point:
+- every execution requirement must be captured in this canonical HANDOFF before a Codex trigger is given;
+- chat-only additions are not authoritative until written here;
+- after each Codex return, reconcile exact diff/tests/evidence against this file before updating Completed / Verified / Not Done.
+
+### Canonical Codex trigger for Batch A
+
+Use this only when the owner is ready to start Batch A:
+
+> Execute **Batch A — CORRECTNESS-HYGIENE-01** from the latest `meta/master-state/docs/master/CURRENT_STATE.md` and `meta/master-state/docs/master/HANDOFF.md`. Work only on R02 / R03 / R05 and the required zero-product-API regression coverage. Do not expand scope. Do not use live product APIs. Do not change retention, storage schema, model/provider, budget caps, origin, repository visibility, release/publish behavior, or perform a broad directory move. Preserve unrelated work. Do not push or merge. Return a Delivery Packet with exact checkout/branch/base/head, bounded diff/review evidence, tests run, tests not run, unknowns, and confirmation of zero product API calls.
+
+Codex must treat the detailed Batch A scope, constraints and evidence requirements below as authoritative even if the short trigger omits repeated detail.
+
 ## New active zero-call sequence
 
 Do not jump directly to the old paid Phase3 protocol.
