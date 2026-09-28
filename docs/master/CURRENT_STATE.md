@@ -40,7 +40,7 @@ Main intended audience: students. Primary provisional scenario: course concepts 
 
 Explaining an interview project is a plausible adjacent use of the same source-to-explanation flow, not proof that it works and not approval for a second interview-coaching product. No resume scoring, job matching or separate interview subsystem is added.
 
-Retain Study-first and in-app recording. Working product statement: help a student understand a bounded learning source, explain it in their own words, identify an evidence-grounded gap and practice that point again. Do not turn it into a testing-only or speech-scoring product.
+Retain Study-first and in-app recording. Working product statement: help a student understand a bounded learning source, explain it in their own words, and use both content evidence and speech-process evidence to locate the specific concept relation, reasoning transition, retrieval point or explanation segment that is less familiar / less smooth, then practice that point again. The purpose is diagnostic localization of learning friction, not presentation polish, generic speaking performance or a PTE-equivalent score.
 
 ### D3 — reason for deferred Phase 3
 
@@ -65,15 +65,25 @@ This does not approve an exact duration, deletion anchor, retroactive migration,
 
 MASTER proposal for later design, not an active default: offer a simple default such as 30 days for new records, finite/custom choices and an explicit keep-until-manual-delete choice with local-storage limits disclosed. Show expiry and in-app reminders; allow export or extension before irreversible deletion. An in-app reminder must not be described as a background notification while the app is closed. Decide reopen-after-expiry/grace behavior explicitly; do not delete first and then claim to have warned the user. Existing records require explicit migration/consent; do not silently extend or shorten their lifetime.
 
+### D6 — diagnostic role of speech evidence and feedback split
+
+The owner clarifies that expression analysis is primarily for **more precise localization of where the learner's logic/content is not yet familiar or the explanation process is not smooth**, not for training presentation style as an end in itself.
+
+Feedback should be visibly separated into two areas:
+- **内容理解**: source-grounded correctness, completeness, conditions, concept relations, contradictions and unresolved logic.
+- **表达过程证据**: observable evidence from the original recording / aligned transcript such as pause location, restart/self-repair, repetition, pacing/segmentation and, only where technically validated and useful, energy/pitch-related features.
+
+Speech-process evidence is a locator and supporting signal, not proof of misunderstanding. A pause, restart, pitch pattern or slower section must not by itself be converted into "you do not understand this". Cross-channel feedback may say that a specific logic transition is worth re-explaining when content evidence and process evidence converge, while preserving the evidence separately. Do not infer confidence, anxiety, personality, accent quality or a global fluency score.
+
 ## Product/UX proposals — not implemented
 
-Primary flow remains: selected course material -> clear short teaching -> own explanation -> transcript/audio check -> grounded feedback -> optional focused relearning/re-explanation -> optional new application context.
+Primary flow remains: selected course material -> clear short teaching -> own explanation -> dual evidence pipeline (ASR/content + original-audio speech process) -> transcript/audio check -> two-part grounded feedback -> optional focused relearning/re-explanation -> optional new application context.
 
-Feedback should first answer what is correct or needs attention, explain the main unresolved gap with its evidence, and offer one useful next step. Put supporting source/audio references behind a clear expandable entry when appropriate. This is progressive disclosure, not omission of critical conditions. No arbitrary short-word limit, decorative repetition, compulsory problems when the explanation is already correct, or claims of comprehensive mastery from a limited response.
+Feedback should keep **内容理解** and **表达过程证据** visually and semantically separate. The content panel should first answer what is correct or needs attention, explain the main unresolved source-grounded gap and offer one useful next step. The process panel should show only useful observable speech evidence and point to where the learner may want to re-explain; it must not downgrade knowledge merely because speech is hesitant. Put supporting source/audio references behind a clear expandable entry when appropriate. This is progressive disclosure, not omission of critical conditions. No arbitrary short-word limit, decorative repetition, compulsory problems when the explanation is already correct, global PTE-style score, or claims of comprehensive mastery from a limited response.
 
 Keep learning-content correctness distinct from wording/conciseness. Concision cannot justify dropping negation, necessary/sufficient conditions, numbers, terms or uncertainty.
 
-The next evidence to collect, when live testing resumes, is whether the owner understands the feedback and knows what to do next, plus actual workflow/cost friction. This is not yet a learning-efficacy or market-demand result.
+The next evidence to collect, when live testing resumes, is whether the two channels can correctly localize a concrete weak/less-familiar point without conflating speech behavior with knowledge, whether the owner recognizes the localization as useful and knows what to practice next, plus actual workflow/cost friction. This is not yet a learning-efficacy or market-demand result.
 
 ## Retained owner-validation evidence
 
@@ -152,7 +162,7 @@ Unknown: local data/server/ledger, exact test and ongoing budget, tolerated repl
 Not Done: Phase3 onward; final owner acceptance; proposed code, feedback UI or retention changes; fresh tests/live pricing/ledger verification.
 Must Fix: R02 full-flow provenance and R03 misleading state entry; address R01 before risky continuation and R05 in a bounded correctness batch. Do not turn all architecture proposals into Phase3 blockers.
 User Decision Needed: live test budget/readiness before spending; exact retention and replay-policy tradeoffs before implementing those behaviors. Do not re-ask the five questions as though unanswered.
-Future Optional: dedicated interview features, broad directory cleanup, richer expression analysis, literal `&#x20;` cleanup and cosmetic changes.
+Future Optional: dedicated interview features, broad directory cleanup, advanced pronunciation/prosody scoring beyond diagnostic need, literal `&#x20;` cleanup and cosmetic changes.
 
 ## Next Smallest Step
 
