@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-09-28 — Phase 3B preflight complete / owner live authorization decision pending
+Updated: 2026-09-29 — Phase 3B live attempt blocked before first call; browser-start diagnostic next
 Role: 00 MASTER / authoritative dynamic state
 
 ## 1. Current status
@@ -16,257 +16,221 @@ Accepted local feature baseline:
 
 **PHASE3B-PREFLIGHT-01:** PASS / zero-call / read-only.
 
-**PHASE3B-LIVE-01:** **OWNER-AUTHORIZED / L0 PASS / L1 MATERIAL BLOCKER RESOLVED / READY TO RESUME**.
+**PHASE3B-LIVE-01:** OWNER-AUTHORIZED / **BLOCKED AT L1 BEFORE FIRST PROVIDER CALL OR RECORDING**.
 
-Owner authorization received on 2026-09-28: **maximum 3 provider calls, zero retries, incremental local exposure ceiling US$0.03432**. Live execution is authorized only within the bounded PHASE3B-LIVE-01 protocol below; no broader spend or continuation is authorized.
+**PHASE3B-BROWSER-STARTUP-01:** READY / NOT DISPATCHED / ZERO PROVIDER CALLS / NO MICROPHONE.
 
-## 2. Phase 3B preflight receipt
+Original live authorization remains intact and unspent:
+- maximum 3 provider calls;
+- zero retries;
+- incremental local exposure ceiling US$0.03432;
+- one recording maximum.
 
-Codex reported canonical task commit:
-`102d593d1015b14111f382ead981a67ab8a9cd62`.
+No live provider/model call has yet occurred under this authorization.
 
-Repo / local state:
+## 2. L1 blocked execution receipt
+
+Codex read canonical commit:
+`72dee8644bdd7df820734afea6d7dbea8e2398cf`.
+
+Identity:
 - checkout `F:\Chat-Codex-Handoff\validation-repo`;
 - branch `prototype/study-teachback-v0.1`;
 - HEAD `dd8317b43100b8cbaad684cab7fc02957e32de62`;
-- tracked worktree CLEAN before and after preflight;
-- no app/server/browser launch;
-- no IndexedDB/openStore access;
-- no microphone;
-- no provider/API request;
-- no file or Git write.
-
-Production provider configuration read from source:
-- transcription: `whisper-1`, `/v1/audio/transcriptions`, `verbose_json`, word + segment timestamps, `zh`;
-- semantic: `gpt-5.6-luna`, `/v1/responses`, strict JSON schema, max 1,800 output tokens;
-- provider timeout 60 seconds;
-- no provider-layer automatic retry;
-- normal attempt permits at most two ASR submissions, but that allowance is not live authorization.
-
-Safe ledger read:
-- SHA256 `d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`;
-- no lock before/after read;
-- version 1 / 83 events;
-- 41 request reservations = 5 ASR + 36 semantic;
-- one distinct historical attempt;
-- 15 reserved minutes;
-- 164,237 reserved input;
-- 61,328 reserved output;
-- known settled estimate US$0.01399455;
-- current exposure US$0.07080205;
-- four unsettled reservations = 3 ASR + 1 semantic.
-
-Historical failures include several 2026-09-10 `whisper-1` ASR failures (three HTTP 401 and one network/validation failure with recorded HTTP 200). They do not prove current credential/model access state.
-
-Application mechanical headroom remains large:
-- exposure remaining US$4.92919795 of US$5;
-- attempts remaining 59 of 60;
-- requests remaining 259 of 300;
-- reserved minutes remaining 345 of 360;
-- reserved input remaining 835,763 of 1,000,000;
-- reserved output remaining 188,672 of 250,000.
-
-This is application hard-cap headroom only; it is not provider balance or spending permission.
-
-Historical clean-topic survival remains UNKNOWN and was intentionally not inspected because opening browser storage can trigger expiry.
-
-## 3.1 Phase 3B L0/L1 checkpoint
-
-Codex executed only L0 and stopped before any live experiment because the exact synthetic source was not present locally.
-
-Reported L0:
-- canonical commit read: `2b7c21b30d43c0c9b052c548dd1c0d7f4bbbb3b7`;
-- repo/branch/HEAD matched accepted `dd8317b...`;
 - tracked worktree CLEAN;
-- ledger lock absent;
-- ledger before/after unchanged at SHA256 `d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`;
-- provider calls 0;
-- incremental exposure US$0;
-- recordings 0;
-- no app/browser launch and no file modification.
+- ledger lock absent.
 
-L1 originally stopped because Codex correctly refused to invent the missing laboratory-visitor-rules material.
+The canonical laboratory-visitor-rules source was available from HANDOFF.
 
-MASTER then recovered the exact original synthetic test source from the owner's ChatGPT Library file `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx` and embedded the canonical text in HANDOFF. This resolves the material blocker without old-topic access, local filesystem searching, or user re-upload.
+Before clicking `开始学习`, Codex launched a fresh isolated Edge profile. Browser control returned:
+`Target crashed`.
 
-Existing owner authorization remains valid and unchanged: maximum 3 provider calls, zero retries, incremental local exposure ceiling US$0.03432.
+Consequences:
+- clean topic creation was not completed;
+- Tutor calls = 0;
+- ASR calls = 0;
+- content-diagnosis calls = 0;
+- recordings = 0;
+- retries = 0;
+- incremental exposure = US$0.
 
-No new provider call occurred while resolving the blocker.
+Ledger before/after remained byte-identical:
+`d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`.
 
-## 3. Current official public capability / pricing check — 2026-09-28
+Summary remained:
+- 41 reservations;
+- 1 distinct attempt;
+- 15 reserved minutes;
+- 164237 input / 61328 output;
+- known settled estimate US$0.01399455;
+- exposure US$0.07080205;
+- 4 unsettled.
 
-MASTER checked current OpenAI public API documentation without making a provider request.
+Codex exited the service process. When it attempted to verify the isolated Edge process for cleanup, the OS returned `Access denied`, so residual browser-process state is UNKNOWN.
 
-### Transcription
+Do not infer a browser crash root cause from this receipt.
 
-OpenAI deprecated `whisper-1` on 2026-08-26 and schedules removal on **2027-02-26**. Recommended long-term replacements are `gpt-transcribe` or `gpt-live-transcribe`.
+Uncommitted task artifacts were created under:
+`artifacts/study-teachback/phase3b-live-01`.
 
-Current file-transcription guidance recommends `gpt-transcribe` for new general-purpose transcription, but explicitly says to use `whisper-1` when word or segment timestamps are required.
+They are session evidence, not product-code changes. Tracked worktree remained CLEAN.
 
-Current listed prices:
-- `gpt-transcribe`: US$0.0045/minute.
-- `whisper-1`: US$0.006/minute.
+## 3. Classification of the blocker
 
-Decision for this one bounded Phase 3B experiment:
-- do **not** migrate ASR before the experiment;
-- retain `whisper-1` only because the existing validated replay/diagnostic path depends on word/segment timestamps and current official guidance still directs timestamp-dependent file transcription to it;
-- treat this as a temporary validation dependency, not the long-term architecture;
-- after Phase 3B, perform a separate timestamp/migration decision before long-term/public use.
+This is not evidence of:
+- provider failure;
+- microphone failure;
+- product learning-flow failure;
+- ASR failure;
+- ledger exhaustion;
+- replay failure.
 
-### Semantic model
+It is an **environment/browser-control startup blocker before L1 interaction**.
 
-`gpt-5.6-luna` remains an available current API model.
+Because no provider request or recording occurred, the existing owner authorization remains valid. No new spending decision is required to diagnose the blocker.
 
-Current standard price:
-- input US$0.20 / 1M tokens;
-- cached input US$0.02 / 1M tokens;
-- output US$1.20 / 1M tokens;
-- GPT-5.6 cache writes are 1.25x uncached input = US$0.25 / 1M tokens.
+The next step must diagnose browser startup separately and must not consume the live experiment budget.
 
-These match the local conservative pricing constants used by the current application ledger for semantic reservation.
+## 4. PHASE3B-BROWSER-STARTUP-01 goal
 
-No model switch is required for the single Phase 3B experiment.
+Determine why a fresh isolated Microsoft Edge target crashed under the live execution harness and establish one safe, repeatable way to open the accepted product in a fresh isolated browser session without touching the owner's normal profile.
 
-## 4. Why a live experiment is now justified
+This is a zero-provider-call environment diagnostic.
 
-Zero-call work has validated:
-- provenance;
-- attempt accounting;
-- content/process evidence separation;
-- localization invariants;
-- replay safety;
-- browser persistence;
-- zero semantic dispatch for local process evidence.
+No production product behavior change is authorized initially.
 
-It cannot answer:
-1. whether a physical owner recording survives the actual capture -> original audio -> ASR -> replay path;
-2. whether real Mandarin ASR preserves critical negation/numbers/conditions or creates important errors;
-3. whether current local process observations occur at useful reasoning transitions in natural speech;
-4. whether combined content + process localization identifies a point the owner personally finds useful rather than a fixture-oracle target;
-5. whether replay/transcript review burden is acceptable in real use.
+## 5. Diagnostic boundaries
 
-These remaining questions require one real recording. More fixture work would not substitute for them.
+Allowed:
+- read the current session artifacts under `artifacts/study-teachback/phase3b-live-01`;
+- inspect the exact Edge executable/path/version and launch arguments actually used;
+- inspect only crash/exit/stderr/DevTools/CDP evidence created by this task/session;
+- create a new temporary isolated Edge user-data directory;
+- launch fresh non-headless Edge on `about:blank`/equivalent local blank page;
+- start the local product server if necessary, provided no product/provider action is triggered;
+- open the product root in the new empty isolated profile and verify the page/target remains alive;
+- inspect page title/URL/visibility/focus and basic DOM availability;
+- use only loopback/local requests;
+- create test/session artifacts under the existing Phase 3B artifact area.
 
-## 5. Proposed PHASE3B-LIVE-01 — minimum experiment
+Not allowed:
+- click `开始学习`;
+- create a topic;
+- send Tutor/ASR/diagnosis calls;
+- microphone permission/use;
+- inspect the owner's normal Edge profile;
+- inspect old IndexedDB/topics;
+- reuse or attach to an unknown existing Edge process;
+- kill/terminate an unknown process;
+- elevate privileges or change Windows/browser policy;
+- delete a process/profile that returns Access denied;
+- modify product code/provider/model/retention/schema/budget;
+- retry the live experiment itself;
+- push/merge/reset/clean/rebase/amend.
 
-Use a fresh clean topic with the same bounded synthetic laboratory-visitor-rules source rather than inspecting/reusing an old expirable topic.
+## 6. Diagnostic sequence
 
-Target owner recording:
-- one natural Mandarin explanation;
-- 20–45 seconds;
-- no prompt assistance;
-- explain why registration alone does not guarantee entry and mention the additional source conditions;
-- genuine spontaneous self-correction is allowed;
-- do not memorize a supplied answer.
+### E0 — preserve evidence and identity
+Confirm accepted HEAD, tracked CLEAN, ledger unchanged/lock absent.
 
-Provider-request budget:
+Record the existing Phase3B live artifact file list before writing new diagnostic artifacts.
 
-### Required
-1. **one ASR request** using the current `whisper-1` timestamp path;
-2. **one semantic content-diagnosis request** using `gpt-5.6-luna`, only after the owner has replayed the audio and confirmed/corrected critical ASR transcript errors.
+Do not remove existing evidence.
 
-### Optional only if the fresh-topic UI requires it
-3. **at most one initial Tutor/Learn semantic request** to enter the normal recording flow.
+### E1 — inspect failed launch
+From existing session evidence and the exact launcher/harness code/command:
+- record Edge executable path/version;
+- record launch arguments;
+- record temporary profile path;
+- record CDP/DevTools endpoint/port behavior;
+- record process start/exit status if available;
+- record crash/stderr/event evidence if available;
+- identify whether `Target crashed` came before navigation, during product navigation, or after target creation.
 
-Local process evidence confirmation itself must remain zero semantic/provider dispatch.
+Do not infer beyond available evidence.
 
-No Repair/Apply follow-up provider call in this experiment.
+### E2 — blank-target probe
+Launch a new non-headless Edge process with a brand-new temporary profile using the minimum safe arguments.
 
-**No automatic retry.** If Tutor, ASR or diagnosis fails, stop and return to MASTER. The existing code may mechanically permit a second ASR submission, but PHASE3B-LIVE-01 does not authorize it.
+First navigate only to a blank local page/about:blank.
 
-Therefore authorized-call proposal if owner approves:
-- minimum 2 provider calls;
-- maximum 3 provider calls;
-- exactly 1 ASR;
-- 1 content diagnosis;
-- optional 1 initial Tutor only if required by normal UI flow;
-- 0 retries.
+Verify:
+- browser process starts;
+- DevTools/CDP target is created and remains alive for a bounded interval;
+- no Access denied is encountered for the newly launched owned process under normal cleanup;
+- no owner profile is involved.
 
-## 6. Conservative cost bound
+If blank-target probe crashes, STOP and return evidence. Do not launch the product.
 
-Current official/provider rates and local reserve rules give:
+### E3 — local product root probe
+Only if E2 PASS:
+- start the accepted local server in a zero-provider-safe manner;
+- open the product root in a new fresh isolated profile;
+- do not click `开始学习` or any provider-triggering action;
+- verify target remains alive;
+- verify product title/basic DOM loads;
+- confirm fresh profile has no historical topic data;
+- record only local/loopback network requests.
 
-### ASR
-For 20–45 seconds at current `whisper-1` price:
-- nominal provider cost roughly US$0.002–US$0.0045;
-- using a full one-minute provider-price conservatism: <= US$0.006;
-- the application ledger reserves a fixed 3-minute amount = **US$0.018 exposure** for one ASR submission.
+If the product root itself crashes, collect bounded browser/server/target evidence and STOP.
 
-### Semantic
-The application's maximum per semantic request reservation:
-- 24,000 input at cache-write rate US$0.25/M = US$0.006;
-- 1,800 output at US$1.20/M = US$0.00216;
-- total max reservation = **US$0.00816 per semantic request**.
+### E4 — repeatability
+If E3 PASS, repeat the fresh-browser product-root startup **two more times** in new temporary profiles/processes, unchanged launcher configuration.
 
-### Whole experiment
-If recording path needs only ASR + diagnosis:
-- incremental local exposure <= **US$0.02616**.
+Total representative startup runs = 3.
 
-If it also needs one Tutor call:
-- incremental local exposure <= **US$0.03432**.
+Any failure stops the sequence. Do not loop until green.
 
-At current exposure US$0.07080205, the maximum proposed experiment would move local exposure to <= **US$0.10512205**, far below the US$5 application ceiling.
+If all three PASS, classify the original `Target crashed` as an isolated harness/startup failure not currently reproducible in the representative fresh-browser startup path.
 
-A conservative provider-billing estimate using one full ASR minute plus two semantic requests at their maximum reservation size is <= about **US$0.02232** before any account-specific taxes/credits. Actual semantic usage is likely below the reservation maximum, but this is not guaranteed.
+## 7. Output required
 
-These numbers are cost estimates, not invoices, provider balance or proof that the API key/model access currently works.
+Return:
+- task ID and canonical commit;
+- accepted repo/branch/HEAD;
+- existing live artifact inventory;
+- exact Edge executable/version/launch args;
+- failed-launch evidence/root-cause if provable, otherwise UNKNOWN;
+- E2/E3/E4 results;
+- three startup-run results if reached;
+- process/profile cleanup results for processes launched by this diagnostic only;
+- explicit note that unknown Access-denied process was not touched;
+- local network/request observations;
+- ledger before/after SHA and summary;
+- confirmation of 0 provider calls / 0 microphone / 0 topic creation / 0 exposure;
+- any test/session-only files created;
+- Blocking / Unknown / User Decision Needed / Future Optional.
 
-## 7. Exact live stop rules if owner authorizes
+Do not resume live Phase 3B within this diagnostic. Return to MASTER first.
 
-The live task must:
-- use accepted HEAD `dd8317b...`;
-- create/use a new clean synthetic topic; do not inspect the old topic for survival;
-- preserve original audio and normalized replay derivative roles;
-- allow exactly one physical recording;
-- allow exactly one ASR submission;
-- stop at replay/transcript before diagnosis;
-- owner must replay and inspect critical negation, numbers, conditions and terms;
-- correct only ASR mishearing, preserving raw transcript; do not rewrite a genuine spoken mistake into a correct answer;
-- return the replay/transcript checkpoint to MASTER before content diagnosis if a critical transcript uncertainty remains;
-- only after transcript is usable, permit one content-diagnosis semantic request;
-- process evidence remains local and separate;
-- no Repair/Apply provider call;
-- no retry;
-- stop immediately for API 401/403/404/model access error, ASR unusable output, missing/corrupt original audio, replay failure, lost source/attempt/version identity, ledger/budget error, unexpected provider call or old-data risk.
+## 8. After the diagnostic
 
-Success of one recording is not learning-efficacy validation. It is only owner workflow + evidence-quality validation.
+If three representative startup runs PASS:
+- MASTER may authorize resuming the already-approved PHASE3B-LIVE-01 from L1 without new spending authorization;
+- the existing 3-call/zero-retry/US$0.03432 ceiling remains unchanged.
 
-## 8. Owner authorization — RECORDED
-
-Owner explicitly authorized: **PHASE3B-LIVE-01, maximum 3 provider calls, zero retries, incremental local exposure ceiling US$0.03432**.
-
-This authorizes only the bounded experiment defined here. It does not authorize a second recording, Repair/Apply calls, model migration, retries, broader validation spend, push/merge, or Phase 3B continuation beyond the recorded stop/checkpoint rules.
+If startup still fails:
+- keep PHASE3B-LIVE-01 blocked;
+- do not consume provider calls;
+- decide from the captured evidence whether the issue is launcher/harness-only, local Edge installation/policy, or product-page crash.
 
 ## 9. Classification
 
 Completed:
-- Batch A.
-- Batch B / Phase 3A.
-- PHASE3B-PREFLIGHT-01.
-- current official model/timestamp/rate check.
+- Batch A/B.
+- Phase3B preflight.
+- L0 of live task.
+- source-material recovery.
 
-Verified:
-- local mechanical headroom;
-- current local provider configuration;
-- ledger snapshot and clean tracked state from Codex receipt;
-- current public OpenAI transcription/model pricing/contracts.
+Blocked:
+- live L1 on fresh isolated Edge target crash.
 
-Likely:
-- one bounded live recording is now the smallest experiment that can answer the remaining owner-workflow and real-evidence questions.
+User Decision Needed:
+- none for the zero-call browser-start diagnostic.
 
-Unknown:
-- current API-key validity/provider account balance/model access;
-- historical topic survival;
-- real ASR quality;
-- physical microphone behavior;
-- owner usefulness/replay burden.
-
-Not Done:
-- PHASE3B-LIVE-01 execution;
-- ASR migration away from deprecated Whisper;
-- retention decisions;
-- push/merge/final product acceptance.
+Not Authorized in the diagnostic:
+- any provider call, microphone, topic creation, live-flow retry or product behavior change.
 
 ## 10. Next smallest step
 
-Resume the already-authorized **PHASE3B-LIVE-01** from L1 using the exact canonical synthetic source embedded in HANDOFF. L0 does not need to be repeated beyond a quick identity/ledger-drift sanity check. Codex must not search for or inspect old topics. Execute only the bounded 1-recording protocol, enforce the 3-call maximum / zero-retry / US$0.03432 incremental exposure ceiling, and return evidence to MASTER.
+Execute `PHASE3B-BROWSER-STARTUP-01` from HANDOFF. Diagnose browser startup only, return evidence, then MASTER decides whether to resume L1.
