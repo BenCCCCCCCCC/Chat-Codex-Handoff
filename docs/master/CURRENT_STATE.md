@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-09-28 — Batch B MASTER review / correction required
+Updated: 2026-09-28 — Replay Correction 01 reviewed / residual blocker remains
 Role: 00 MASTER / authoritative dynamic state
 
 ## 1. Current status
@@ -9,227 +9,199 @@ Role: 00 MASTER / authoritative dynamic state
 
 **Batch A — CORRECTNESS-HYGIENE-01:** MASTER-ACCEPTED at local commit `f06900fa9dcffd7768a1ec283715a50f6570832e`; not pushed.
 
-**Batch B — DIAGNOSTIC-LOCALIZATION-01 / Phase 3A:** DELIVERED / MASTER REVIEWED / **BLOCKED BEFORE ACCEPTANCE**.
+**Batch B — DIAGNOSTIC-LOCALIZATION-01 / Phase 3A:** architecture delivered; B1/B2/B4 accepted at scoped engineering/fixture level; overall **BLOCKED BEFORE ACCEPTANCE**.
 
-**Batch B Correction — REPLAY-GATE-01:** READY / NOT DISPATCHED / same Codex task and same uncommitted Batch B worktree.
+**Replay Correction 01 — B-REPLAY-GATE-01:** DELIVERED / MASTER REVIEWED / **PARTIAL FIX ONLY / BLOCKED**.
 
-**Phase 3B — real owner speech evidence:** NOT STARTED / COST-READINESS HOLD.
+**Replay Correction 02 — B-REPLAY-GATE-02:** READY / NOT DISPATCHED / same Codex task / preserve all current uncommitted Batch B + Correction 01 work.
+
+**Phase 3B:** NOT STARTED / COST-READINESS HOLD.
 
 No live provider/model call is authorized.
 
-## 2. Repository and authority
+## 2. Repository and worktree identity
 
 Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`.
 
 Local checkout: `F:\Chat-Codex-Handoff\validation-repo`.
 
-Product branch: `prototype/study-teachback-v0.1`.
+Branch: `prototype/study-teachback-v0.1`.
 
-Batch A accepted local base:
+HEAD remains the accepted Batch A commit:
 `f06900fa9dcffd7768a1ec283715a50f6570832e`.
 
-Batch B did not create a commit. Local HEAD remained `f06900f...`; Batch B changes are unstaged/uncommitted and must be preserved for the correction. Do not reset, clean, checkout away, or try to match the older remote feature HEAD.
+Batch B and both replay-correction changes are intentionally uncommitted until the full acceptance gate passes. Do not reset/clean/checkout/rebase/fetch/pull/amend or try to match the older remote feature branch.
 
 Dynamic authority is only:
 - `meta/master-state/docs/master/CURRENT_STATE.md`
 - `meta/master-state/docs/master/HANDOFF.md`
 
-## 3. Batch B review receipt
+## 3. Replay Correction 01 review receipt
 
-User supplied `Batch-B-review.zip`.
+User supplied `B-REPLAY-GATE-01-review.zip`.
 
-MASTER review ZIP SHA256:
-`02c85a14e87dc37e6577914a938fa7b0794acbdfda1dc0f1cefd8923a436e4af`.
+MASTER ZIP SHA256:
+`8d4fc8595a83e528af8022942ef4b4aa64ab696cffdf60b0f92e16705891caa5`.
 
-The bundle contains Delivery Packet, full patch, complete changed/new files, canonical snapshots, raw Node/browser/diagnostic logs, fixture outputs and identity/evidence receipts. All **93** entries listed in `SHA256SUMS.json` matched their recorded SHA256 values.
+`SHA256SUMS.json` listed 141 bundle entries; MASTER recomputed and matched **141/141**.
 
-Canonical Batch B task commit read by Codex:
-`066e76a3295acd6effd57a6920318fc595c295ae`.
+Canonical task commit read by Codex:
+`778bc1ffc76b84ebaa1d1e78b66f43ab59b042ea`.
 
-Batch B changed tracked files:
-- `study-teachback-app/README.md`
-- `app.mjs`
-- `browser-tests-r4.mjs`
-- `index.html`
-- `provenance.test.mjs`
-- `run-offline-tests.mjs`
-- `server.mjs`
-- `style.css`
-- new `diagnostic-localization.mjs`
-- new `diagnostic-fixtures.mjs`
-- new `diagnostic-localization.test.mjs`
+No correction commit was created because the mandatory final stability gate failed.
 
-Patch summary: 11 files, +281 / -23.
+Correction 01 added a focused replay test module and changed replay bookkeeping plus isolated browser diagnostics/test routing. Eight other Batch B product files remained byte-identical to the prior delivered B review.
 
-No Batch B commit was created because required browser regression did not complete.
+## 4. What Correction 01 proved
 
-## 4. Batch B technical review
+A real production replay bookkeeping defect was proven:
 
-MASTER code review finds the intended architecture direction substantially implemented:
+- old `play()` accumulated coverage from `timeupdate` deltas only when each delta was < 1 second;
+- a bounded 2.5-second main-thread delay produced sparse browser events while native media genuinely continued playing;
+- the old logic dropped the genuine large progress interval and removed its handler at the end, leaving insufficient accumulated coverage;
+- this caused a false failure even though playback was genuine.
 
-### B1 — evidence contracts
+Correction 01 changed replay accounting to consult native `HTMLMediaElement.played` continuity rather than discarding sparse event intervals. The focused sparse-event stress probe then passed without lowering the existing end/coverage tolerance.
 
-`contentFindings` reuses existing source/transcript validation.
+Focused replay regression coverage also passed for:
+- sparse genuine full coverage;
+- natural ended event;
+- insufficient coverage/unplayed jump;
+- seek to old played range;
+- stale replay callback;
+- late old play promise;
+- rejected play/source replacement.
 
-`processEvidence` is a distinct allowlisted contract with attempt/transcript identity, time/span location and provenance/confirmation. It rejects knowledge statuses, textbook `sourceQuote`, repair instructions and person-score fields.
+This is a valid partial fix and should be preserved.
 
-`diagnosticTarget` is derived from actionable content findings. Related process evidence is attached separately as co-located observation context, not as proof of misunderstanding.
+## 5. Why Correction 01 is still BLOCKED
 
-### B2 — deterministic localization
+Final gates:
+- Node: **100/100 PASS**.
+- Diagnostic: **14/14 PASS**.
+- Full browser stability run 1: **46/46 PASS** and B3 browser persistence/zero-dispatch test executed successfully.
+- Full browser stability run 2: **24 PASS, then the same replay assertion FAIL**; suite sentinel also fails.
+- Stability run 3: correctly NOT RUN by mandatory stop rule.
+- Production ledger hash remained unchanged across recorded runs.
+- No live provider traffic is evidenced.
 
-Six required fixtures match expected outputs:
-- fluent wrong -> one content target, no process evidence required;
-- hesitant correct -> supported content, one process observation, zero knowledge target;
-- uncertain relation + process evidence -> one content-based target with separate related process reference;
-- correct self-repair -> supported final stance, no unresolved target;
-- unreviewed ASR -> blocked with `ASR_REVIEW_REQUIRED`;
-- missing content/no process -> target exists with null content location and no fabricated audio timestamp.
+Therefore the required three consecutive full-browser PASS runs were not achieved.
 
-Focused diagnostic suite final result: **14/14 pass**.
+The residual failing browser trace is materially different from the first proven sparse-event bug:
+- play request occurred at currentTime 0;
+- play promise resolved successfully;
+- no later seek is recorded;
+- native currentTime advanced approximately 0 -> 0.217224 -> 0.484476 -> 0.751277 -> 0.781;
+- native played range advanced continuously from 0 to 0.781;
+- media ended naturally;
+- the replay button still remained unconfirmed.
 
-Full Node final result: **93/93 pass**.
+The external trace does **not** capture the exact requested replay `end`, internal `started/last/covered/genuine/active` values at the app handler, or the internal cancellation/completion reason. Thus an endpoint/rounding issue, internal cancellation path or another replay-state defect remains possible but unproven.
 
-### B3 — local process path
+MASTER code review therefore does not accept another speculative fix. The next correction must first expose the internal decision state/cancel reason in the isolated test environment, reproduce the residual path with that instrumentation, and identify a second bounded root cause.
 
-The active UI path now confirms local near-silence into `processEvidence` without semantic/provider dispatch. Unit/VM coverage confirms deduplication, transcript-version isolation, save failure recovery and zero dispatch.
+## 6. Batch B / correction status
 
-However the required native browser persistence/reload test was not reached because the full browser suite stopped earlier at the replay-completion regression. Therefore B3 is **PASS at unit/domain scope, browser E2E NOT COMPLETED**.
-
-The legacy server DELIVERY semantic route remains present but is no longer used by the active local process-confirmation UI. Cleanup is not required for this correction unless it causes a correctness problem.
-
-### B4 — UI
-
-The UI is split into:
-- **内容理解**
-- **讲解过程**
-
-Browser fixture screenshots/tests demonstrate the six diagnostic states and separate panels before the suite reaches the unrelated replay failure.
-
-### Zero-live-call evidence
-
-The existing isolated wrapper/guard remained active:
-- synthetic credential only;
-- non-loopback network guard;
-- isolated test ledgers/profiles;
-- fake/stub providers;
-- production ledger SHA unchanged across recorded runs:
-  `d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`;
-- browser observed external requests = 0 in recorded runs.
-
-No real ASR/Tutor/diagnosis/provider call is evidenced.
-
-## 5. Blocking finding — R07 replay-completion reliability
-
-Batch B cannot be MASTER-ACCEPTED yet because full browser regression repeatedly stops on the same pre-existing replay-completion check:
-
-`diagnosis blocked before segment replay; correction keeps original identity and audio`
-
-Observed failure:
-`WAIT_FAILED document.querySelector('#transcript button').textContent.includes('✓')`
-
-Recorded runs:
-- Batch B baseline browser: 18 checks passed, then replay failure.
-- Batch B browser run 1: 24 checks passed (including six new diagnostic fixtures), then same replay failure.
-- Batch B browser run 2: 24 checks passed, then same replay failure.
-
-This was a one-off/intermittent unknown in Batch A because an immediate exact retry passed 40/40. In Batch B it reproduced consistently. It is now a real regression/reliability blocker for acceptance because:
-1. B5 requires applicable full browser regression.
-2. B3 browser-level persistence/zero-dispatch check occurs after this point and was never reached.
-3. Phase 3B depends on replay being a trustworthy gate; weakening or bypassing it would invalidate the product evidence model.
-
-No evidence shows Batch B itself caused the replay failure; `play()` was not changed in the Batch B patch. The correction must determine whether the root cause is production replay-completion bookkeeping or the isolated headless test harness.
-
-## 6. Batch B acceptance status
-
-| ID | MASTER status | Conclusion |
+| ID | Status | Conclusion |
 | --- | --- | --- |
-| B0 | PASS | Correct local Batch A base and zero-live-call isolation evidenced. |
-| B1 | PASS | Channel contracts are explicitly separated and fail closed. |
-| B2 | PASS | Six fixture invariants and process→knowledge separation pass deterministically. |
-| B3 | PARTIAL / BLOCKED | Unit/domain local process confirmation passes; native browser save/reload check not reached. |
-| B4 | PASS (scoped) | Separate UI panels and six fixture presentations evidenced. |
-| B5 | BLOCKED | Full browser suite repeatedly fails at replay completion; no focused B commit created. |
+| B0 | PASS | Base/isolation established. |
+| B1 | PASS | content/process/target channel separation stands. |
+| B2 | PASS | Six diagnostic invariants stand. |
+| B3 | PASS in one complete browser run; reliability gate still blocks overall acceptance | Native local process evidence persisted/reloaded with zero provider dispatch in run 1. |
+| B4 | PASS scoped | Separate 内容理解 / 讲解过程 UI stands. |
+| B5 | BLOCKED | Full browser reliability not stable. |
+| C0-01 | PARTIAL | First replay root cause proven; residual root cause unknown. |
+| C1-01 | PARTIAL | First minimal correction valid but insufficient. |
+| C2-01 | PASS scoped | Focused replay tests pass. |
+| C3-01 | PASS in browser run 1 | B3 E2E reached and passed once. |
+| C4-01 | BLOCKED | 46/46 then replay failure; third run stopped. |
 
-**Must Fix:** R07 replay-completion reliability sufficient to complete the existing full browser suite and reach B3 browser E2E.
+**Must Fix:** R07b — residual replay completion/cancellation path.
 
-**User Decision Needed:** none. This is a natural Must Fix inside the already-approved Batch B acceptance boundary.
+**User Decision Needed:** none. This remains inside the already-approved replay reliability acceptance boundary.
 
-**Future Optional:** legacy DELIVERY semantic route/schema cleanup; broader replay UX redesign; new speech detectors/features. None belongs in R07 correction.
+**Future Optional:** replay UX redesign, adaptive replay policy, legacy DELIVERY route cleanup, broader player abstraction. None belongs in R07b.
 
-## 7. Correction policy
+## 7. Correction 02 principle
 
-Use the **same Codex task and same uncommitted Batch B worktree**. Do not restart Batch B or discard the delivered changes.
+Use the same Codex task and current uncommitted worktree. Preserve Batch B and Correction 01.
 
-The correction is narrowly limited to diagnosing and resolving R07 enough to satisfy the previously recorded replay semantics and complete B3/B5 evidence.
+Do not guess the second root cause from the external media trace. Add narrowly scoped **test-only/internal replay-state observability** sufficient to report:
+- requested `start/end`;
+- invocation identity;
+- `started`;
+- `last`;
+- `covered`;
+- currentTime;
+- played ranges;
+- `genuine` continuity decision;
+- `active()` result;
+- seeking state;
+- every cancellation/completion reason.
 
-Do not:
-- bypass replay;
-- auto-mark a segment heard;
-- weaken the coverage assertion merely to pass headless tests;
-- change the replay policy into a skip/adaptive policy;
-- add live provider calls;
-- change model/provider/retention/storage schema/budget;
-- add dependencies;
-- broaden into general media-player redesign;
-- push/merge/reset/clean/amend;
-- start Phase 3B.
+Production user-visible logs must not be added. A test-only observer/hook or equivalent auditable mechanism is acceptable if it does not change user behavior.
 
-## 8. Correction acceptance
+The next correction must preserve:
+- genuine replay coverage requirement;
+- no false completion on seek/jump;
+- stale invocation isolation;
+- failed play fail-closed behavior;
+- existing tolerance unless evidence demonstrates a bounded numerical/endpoint defect that needs a mathematically justified fix.
 
-R07 correction is accepted only if all of the following are evidenced:
+## 8. Correction 02 acceptance
 
-1. Reproduce/instrument the failure on the current Batch B worktree and identify whether the root cause is app playback bookkeeping, browser/test timing, or another bounded cause.
-2. Apply the smallest behavior-preserving fix. If the defect is test-only, prove production replay semantics remain unchanged. If production `play()` bookkeeping is defective, fix it without weakening the requirement that the requested segment is actually played.
-3. A replay must not be marked complete by seeking/jumping to the end, stale callbacks, a failed `play()`, or insufficient coverage.
-4. The previously unreachable B3 browser path must execute and pass:
-   - process confirmation before replay remains blocked;
-   - after valid replay, one process report is persisted;
-   - duplicate confirmation does not duplicate the report;
-   - reload/history preserves the process report;
-   - no semantic/provider dispatch and no test-ledger change.
-5. Full browser regression must complete successfully on the final code. Because the issue is reliability-sensitive, require **three consecutive exact full-browser PASS runs on unchanged code**; report fresh counts for each.
-6. Re-run full Node suite and focused diagnostic suite on final code; fresh counts must pass.
-7. `git diff --check` passes.
-8. After all checks pass, one focused local commit containing Batch B + the minimal R07 correction is permitted. No push/merge.
-9. Return a new review packet with complete patch/new files, root-cause evidence, commands/results and C0–C4 mapping.
+Correction 02 can close Batch B only if:
 
-## 9. Retained owner/product decisions
+1. The residual failure is reproduced or otherwise deterministically captured with internal replay-state evidence. Do not run unlimited attempts; use at most the bounded focused attempts defined in HANDOFF.
+2. Root cause #2 is evidence-backed.
+3. The smallest correction is applied without weakening replay semantics.
+4. Focused replay tests include the new root-cause regression.
+5. B3 browser persistence/reload/zero-dispatch test passes on final code.
+6. Full Node and diagnostic suites pass.
+7. Full browser suite passes **three consecutive exact runs on unchanged final code**.
+8. `git diff --check` passes.
+9. Zero-live-call and protected-boundary evidence remains valid.
+10. Only after all gates pass, create one focused local commit containing Batch B + Correction 01 + Correction 02. No push/merge.
+11. Return a complete review packet for MASTER inspection.
 
-Stable self-use first, portfolio second. Main scenario remains student course concepts/material.
+## 9. Retained product boundaries
 
-Speech/process analysis exists to localize a concept/reasoning transition worth checking, not to score speaking ability. Process evidence alone cannot prove misunderstanding.
+Stable personal use first; portfolio second.
 
-Retention customisation is recorded but not implemented here.
+The speech/process channel helps localize a concept/reasoning transition worth verifying. It is not a PTE score or psychological inference.
 
-No live spend until a later concrete Phase 3B rationale, cost preflight and explicit owner permission.
+No model/provider/retention/storage-schema/budget/new-audio-dependency change.
+
+No Phase 3B until Batch B is accepted and a separate real-use/cost decision is made.
 
 ## 10. Classification
 
 Completed:
 - Batch A accepted.
-- Batch B architecture implementation delivered and reviewed.
-- B1/B2/B4 accepted at the stated engineering/fixture scope.
+- Batch B architecture delivered/reviewed.
+- Correction 01 discovered and fixed one genuine sparse-event replay defect.
 
 Verified:
-- Batch B bundle integrity (93/93 recorded hashes).
-- 93/93 final Node and 14/14 focused diagnostic results.
-- Six fixture expected/actual equality.
-- Repeated browser replay failure on three recorded runs.
-- Zero-live-call safeguards/evidence within the delivered bundle.
+- Correction 01 bundle integrity 141/141.
+- Node 100/100 and diagnostic 14/14.
+- One final browser 46/46 including B3.
+- Residual replay failure in the next unchanged full-browser run.
+- Zero-live-call safeguards/evidence in the bundle.
 
 Unknown:
-- R07 exact root cause.
-- B3 native browser persistence path outcome.
-- Real microphone/ASR/process-detector behavior and diagnostic value.
-- Phase 3B cost/value.
+- second replay root cause;
+- real owner/audio behavior and diagnostic value;
+- Phase 3B cost/value;
+- current old owner-record survival.
 
 Not Done:
-- Batch B MASTER acceptance.
-- Focused Batch B commit.
-- Phase 3B.
-- Retention/replay redesign.
-- Push/merge/final owner acceptance.
+- Batch B MASTER acceptance;
+- focused Batch B commit;
+- Correction 02;
+- Phase 3B;
+- retention/replay UX redesign;
+- push/merge/final owner acceptance.
 
 ## 11. Next smallest step
 
-Send the canonical **Batch B Correction — REPLAY-GATE-01** trigger from HANDOFF to the same Codex task. Codex preserves the current uncommitted B work, fixes only R07, completes the blocked browser evidence, returns a correction review packet, and stops.
+Send **B-REPLAY-GATE-02** from HANDOFF to the same Codex task. Preserve all current uncommitted work. Instrument internal replay decision state in the isolated test environment, identify root cause #2, apply only the minimum fix, satisfy the same three-run stability gate, return a new review packet, and stop.
