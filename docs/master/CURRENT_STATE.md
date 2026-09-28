@@ -16,7 +16,7 @@ Accepted local feature baseline:
 
 **PHASE3B-PREFLIGHT-01:** PASS / zero-call / read-only.
 
-**PHASE3B-LIVE-01:** **OWNER-AUTHORIZED / READY TO EXECUTE / NOT STARTED**.
+**PHASE3B-LIVE-01:** **OWNER-AUTHORIZED / L0 PASS / L1 MATERIAL BLOCKER RESOLVED / READY TO RESUME**.
 
 Owner authorization received on 2026-09-28: **maximum 3 provider calls, zero retries, incremental local exposure ceiling US$0.03432**. Live execution is authorized only within the bounded PHASE3B-LIVE-01 protocol below; no broader spend or continuation is authorized.
 
@@ -69,6 +69,29 @@ Application mechanical headroom remains large:
 This is application hard-cap headroom only; it is not provider balance or spending permission.
 
 Historical clean-topic survival remains UNKNOWN and was intentionally not inspected because opening browser storage can trigger expiry.
+
+## 3.1 Phase 3B L0/L1 checkpoint
+
+Codex executed only L0 and stopped before any live experiment because the exact synthetic source was not present locally.
+
+Reported L0:
+- canonical commit read: `2b7c21b30d43c0c9b052c548dd1c0d7f4bbbb3b7`;
+- repo/branch/HEAD matched accepted `dd8317b...`;
+- tracked worktree CLEAN;
+- ledger lock absent;
+- ledger before/after unchanged at SHA256 `d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`;
+- provider calls 0;
+- incremental exposure US$0;
+- recordings 0;
+- no app/browser launch and no file modification.
+
+L1 originally stopped because Codex correctly refused to invent the missing laboratory-visitor-rules material.
+
+MASTER then recovered the exact original synthetic test source from the owner's ChatGPT Library file `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx` and embedded the canonical text in HANDOFF. This resolves the material blocker without old-topic access, local filesystem searching, or user re-upload.
+
+Existing owner authorization remains valid and unchanged: maximum 3 provider calls, zero retries, incremental local exposure ceiling US$0.03432.
+
+No new provider call occurred while resolving the blocker.
 
 ## 3. Current official public capability / pricing check — 2026-09-28
 
@@ -246,4 +269,4 @@ Not Done:
 
 ## 10. Next smallest step
 
-Dispatch the owner-authorized **PHASE3B-LIVE-01** to Codex using the canonical trigger in HANDOFF. Codex must execute only the bounded 1-recording protocol, stop at the mandated replay/transcript checkpoint when required, enforce the 3-call maximum / zero-retry / US$0.03432 incremental exposure ceiling, and return evidence to MASTER. No automatic second recording or follow-up batch.
+Resume the already-authorized **PHASE3B-LIVE-01** from L1 using the exact canonical synthetic source embedded in HANDOFF. L0 does not need to be repeated beyond a quick identity/ledger-drift sanity check. Codex must not search for or inspect old topics. Execute only the bounded 1-recording protocol, enforce the 3-call maximum / zero-retry / US$0.03432 incremental exposure ceiling, and return evidence to MASTER.
