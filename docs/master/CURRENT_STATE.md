@@ -75,6 +75,14 @@ Feedback should be visibly separated into two areas:
 
 Speech-process evidence is a locator and supporting signal, not proof of misunderstanding. A pause, restart, pitch pattern or slower section must not by itself be converted into "you do not understand this". Cross-channel feedback may say that a specific logic transition is worth re-explaining when content evidence and process evidence converge, while preserving the evidence separately. Do not infer confidence, anxiety, personality, accent quality or a global fluency score.
 
+### D7 — execution-state discipline
+
+The owner explicitly confirmed at 2026-09-28 16:45 +10:00 that the previously drafted Codex instruction had **not yet been sent**. Therefore Batch A and Batch B remain NOT STARTED. No implementation or local regression run may be inferred from the planning/docs work in MASTER.
+
+All actionable execution scope, constraints, tests, evidence requirements, stop conditions and sequence decisions must be recorded in the canonical GitHub files before MASTER asks the owner to send a Codex trigger. Chat wording is convenience only; GitHub canonical state must be sufficient for later audit/recovery.
+
+When a new instruction is prepared, the exact trigger or an equivalent self-contained execution block must also be stored in `docs/master/HANDOFF.md`. After Codex returns, MASTER must reconcile Delivery Packet evidence against the recorded batch before marking any item Completed/Verified.
+
 ## Product/UX proposals — not implemented
 
 Primary flow remains: selected course material -> clear short teaching -> own explanation -> dual evidence pipeline (ASR/content + original-audio speech process) -> transcript/audio check -> two-part grounded feedback -> optional focused relearning/re-explanation -> optional new application context.
@@ -211,7 +219,7 @@ Completed: remote architecture review; owner priority/scenario/deferral clarific
 Verified: owner's stated decisions; remote feature HEAD; cited source-level behaviors. No new runtime verification.
 Likely: a course-learning-first product can also support some source-grounded project explanations; targeted replay/feedback simplification may reduce effort. Both remain hypotheses.
 Unknown: local data/server/ledger, exact test and ongoing budget, tolerated replay effort, precise course use case, exact retention/default/reminder semantics, microphone/ASR/downstream experience and repeated value.
-Not Done: Phase3 onward; final owner acceptance; proposed code, feedback UI or retention changes; fresh tests/live pricing/ledger verification.
+Not Done: Batch A (trigger not yet sent), Batch B, Phase3B onward, final owner acceptance, proposed code, feedback UI or retention changes, fresh tests/live pricing/ledger verification.
 Must Fix: R02 full-flow provenance and R03 misleading state entry; address R01 before risky continuation and R05 in a bounded correctness batch. Do not turn all architecture proposals into Phase3 blockers.
 User Decision Needed: live test budget/readiness before spending; exact retention and replay-policy tradeoffs before implementing those behaviors. Do not re-ask the five questions as though unanswered.
 Future Optional: dedicated interview features, broad directory cleanup, advanced pronunciation/prosody scoring beyond diagnostic need, literal `&#x20;` cleanup and cosmetic changes.
