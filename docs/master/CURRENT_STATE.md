@@ -1,124 +1,185 @@
 # Current State
 
-Updated: 2026-09-28 — executable-task consolidation
+Updated: 2026-09-28 — Batch A MASTER review complete
 Role: 00 MASTER / authoritative dynamic state
 
-## 1. Current status and single next action
+## 1. Current status and next action
 
-**OWNER-VALIDATION-01: clean Phase 2 historically PASS; physical-microphone Phase 3 NOT EXECUTED.**
-**Project identity precheck = PASS (owner-reported all expected identity fields matched).**
-**Batch A — CORRECTNESS-HYGIENE-01: READY / NOT DISPATCHED / NOT STARTED.**
-**Batch B — DIAGNOSTIC-LOCALIZATION-01 (Phase 3A): PLANNED / GATED BY MASTER REVIEW OF A.**
-**Phase 3B — real owner speech evidence: NOT STARTED / COST-READINESS HOLD.**
+**OWNER-VALIDATION-01:** clean Phase 2 historically PASS; physical-microphone Phase 3 NOT EXECUTED.
 
-The owner stated on 2026-09-28 at 16:45 +10:00 that the previous Codex trigger had not been sent. No later dispatch or execution evidence has been received. Preparing this executable task does not start it.
+**Project identity precheck:** PASS.
 
-Next action: the read-only Project identity precheck has been reported by the owner as fully matching the expected product checkout. The owner may now send the canonical Batch A trigger. Codex performs A only and returns evidence to MASTER. Do not automatically start B or a paid test.
+**Batch A — CORRECTNESS-HYGIENE-01:** **MASTER-ACCEPTED** based on the delivered review bundle; local focused commit exists but was not pushed.
 
-| Work item | Status | Exit / next decision |
-| --- | --- | --- |
-| Architecture and owner-goal clarification | Documented; no feature implementation | Use decisions below, do not repeat the same questions |
-| Project identity precheck | PASS — owner reports all expected identity fields matched | Proceed to Batch A trigger |\n| A: provenance, documentation entry, recording registration | Ready, not dispatched | Only after identity confirmation; A acceptance matrix in HANDOFF; return to MASTER |
-| B / Phase 3A: diagnostic evidence separation and fixtures | Planned, not started | Separate MASTER authorization after A delta review |
-| Phase 3B: physical audio / ASR / replay / diagnostic value | On hold, not started | Specific experiment need, data/cost preflight and owner permission |
-| Custom retention, reminders, replay UX | Direction recorded; behavior undecided | Separate design/migration decision, not silently included in A |
+**Batch B — DIAGNOSTIC-LOCALIZATION-01 / Phase 3A:** **READY / NOT DISPATCHED / NOT STARTED**.
 
-## 2. Repository and authority
+**Phase 3B — real owner speech evidence:** NOT STARTED / COST-READINESS HOLD.
 
-Product: **知而能讲** — Study-first + in-app teach-back.
+Next action: the owner may send the canonical Batch B trigger in `docs/master/HANDOFF.md`. Codex performs B only, returns evidence, and stops for MASTER review. No live provider call or automatic Phase 3B.
+
+## 2. Repository, authority and feature identity
+
+Product: **知而能讲 — Study-first + in-app teach-back**.
+
 Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`.
+
 Recorded local checkout: `F:\Chat-Codex-Handoff\validation-repo`.
+
 Feature branch: `prototype/study-teachback-v0.1`.
-Accepted feature HEAD and freshly re-read remote branch HEAD on 2026-09-28:
+
+Remote feature branch remains at the old accepted remote HEAD because Batch A was intentionally not pushed:
 `f6a000ca96fedfbeb9eaa803dfcd990a13d90c53`.
 
+Batch A produced the focused **local** commit:
+`f06900fa9dcffd7768a1ec283715a50f6570832e`
+(`fix: preserve message provenance and valid recording attempts`).
+
+For Batch B, the expected local base is now `f06900fa9dcffd7768a1ec283715a50f6570832e`. Codex must verify this exact local identity before editing. A remote branch read cannot prove the local Batch A commit exists.
+
 Dynamic authority is ONLY these files on branch `meta/master-state`:
-- `docs/master/CURRENT_STATE.md`: status, product decisions, evidence limits and execution order.
-- `docs/master/HANDOFF.md`: the self-contained active task, constraints, acceptance matrix, stop conditions, delivery contract and exact short trigger.
+- `docs/master/CURRENT_STATE.md`
+- `docs/master/HANDOFF.md`
 
-A branch name is not a directory prefix. Same-named files in the feature checkout are currently stale historical Handoff-tool documents; do not execute their old next steps. Batch A will replace misleading entry content with explicit ref-aware pointers, not create a second live state.
+Same-named files in the product checkout are non-authoritative pointers after Batch A.
 
-Local HEAD, dirty work, running server, browser records, microphone and live ledger have not been inspected by MASTER. A remote read is not proof of local synchronization.
+## 3. Batch A review receipt
 
-Detailed historical review is retained in these same paths at `9a3c77789f99add12f6523282a2114cc8cb78e39`. The complete pre-consolidation decisions and task history are retained at `e3dc9e1bd2a0b7bb7eb9c457eea67c1a8b576b87`. These are evidence references, not competing active instructions.
+User supplied `Batch-A-review.zip`.
 
-## 3. Owner decisions — D1 through D7 retained
+MASTER review ZIP SHA256:
+`658f64c8427e8eee9231d118cf0364f2d64241578ded1995a21fdad28aad5965`.
 
-**D1 — outcomes.** Stable personal use first; a demonstrable/job-search portfolio second. No current commercialization, broad release or external-user rollout priority. Portfolio claims must use real artifacts and evidence, not invented adoption or learning gains.
+The bundle contained Delivery Packet, complete patch, three complete new files, raw Node/browser/focused/provenance logs, acceptance index, final verification, scope check and worktree receipt. All 71 non-self-referential bundle entries matched the SHA256 values in `acceptance-index.json`.
 
-**D2 — scenario.** Mainly students using course concepts and bounded learning materials. An exact course/niche is not fixed. Interview project explanation is an adjacent hypothesis, not an approved interview-coaching subsystem. Retain learning before teach-back and recording inside the app.
+Batch A canonical task commit actually read by Codex:
+`a9af29ffe95ec9213c83b0b7494c69e51b858a08`.
 
-**D3 — time and cost.** Phase 3 was deferred for lack of time and incomplete cost preparation, not demonstrated loss of interest or product failure. The owner will consider spending when necessity is high; no amount is authorized. Current instruction is zero additional live product API calls. This is an authorization boundary, not a newly implemented runtime switch. Do not ask for a budget without a concrete experiment rationale.
+Base:
+`f6a000ca96fedfbeb9eaa803dfcd990a13d90c53`.
 
-**D4 — clarity and replay.** AI teaching, feedback and UI should be clear, direct, non-redundant, sufficiently complete, unambiguous and simply worded. Do not turn this into an invented fluency rubric for the owner. Replay means listening to the owner's saved audio and checking transcription. Restoring an ASR mishearing is not a new oral performance; editing a genuine spoken error into a correct answer cannot demonstrate improvement. No skip policy or required review burden has been approved. Current segment-replay gate remains unchanged in A.
+Final local HEAD:
+`f06900fa9dcffd7768a1ec283715a50f6570832e`.
 
-**D5 — retention.** Owner-approved requirement direction: customizable retention with a default and reminders. Exact duration, expiry anchor, reminder channel, grace period and existing-record migration remain undecided. A 30-day default is only a MASTER proposal. In-app reminders do not imply notification while the app is closed; local keep-until-manual-delete is not guaranteed backup. No retention change in A/B; do not delete first and claim the user was warned.
+Changed tracked files: 13; +440 / -291. Final tracked worktree reported clean; unrelated pre-existing untracked artifacts were preserved.
 
-**D6 — diagnostic purpose and split.** Use content plus speech-process evidence to locate the specific concept relation or reasoning transition worth checking, not to polish presentation or reproduce PTE scoring. Feedback areas remain distinct: **内容理解** and **讲解过程** (internal evidence name: processEvidence / 表达过程证据). Content judges source-grounded correctness, completeness and logic. Process evidence describes observable recording/transcript phenomena. Pauses, restarts, repetitions or pitch alone do not prove lack of knowledge. Localization is a candidate followed by a targeted question/re-explanation, not a diagnosis of a person's stable ability. Do not infer anxiety, confidence, personality or accent quality. Judge an explicitly corrected final stance rather than penalizing the withdrawn statement again.
+Fresh final results:
+- Node: **79 pass / 0 fail / 0 skipped**.
+- Edge final exact retry: **40 pass / 0 fail**.
+- Base-to-final `git diff --check`: exit 0.
+- Final browser verification: 296 observed browser requests, 0 unexpected external browser requests, 0 console exceptions.
+- Production ledger SHA was reported unchanged across isolated test wrappers.
+- Protected production files remained unchanged: `provider.mjs`, `core.mjs`, `schemas.mjs`, `storage.mjs`, `requirements-extractor.txt`.
+- No push/merge, provider/model/retention/storage-schema/cap change.
 
-**D7 — execution records.** Every actionable scope, constraint, acceptance test, evidence requirement, sequence and stop condition must be in the canonical files before a Codex trigger is provided. Chat is a convenience surface. Status may progress from ready -> in progress -> delivered/pending review -> MASTER accepted only with corresponding evidence; BLOCKED remains possible at any step. A Codex final response is not acceptance. No undocumented chat-only instruction may silently widen a batch.
+One final-HEAD browser run timed out at a native replay-completion test after 18 passed checks; an exact-command retry with no code/assertion change passed 40/40. Cause/repeat-run stability remains unverified. Because replay production logic/audio algorithms were not changed in Batch A and the immediate exact retry passed, MASTER classifies this as **Future Optional / watch before Phase 3B**, not a Batch A blocker.
 
-## 4. Retained historical evidence
+## 4. Batch A acceptance matrix
 
-Phase 1: owner imported `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`. Local extraction/preview/selection worked; registration was necessary, not sufficient, with same-day badge, laboratory-open state and 18:00 limit preserved. Import actions caused zero provider requests and an unchanged ledger in that run. Literal `&#x20;` after the title remains a non-blocking extraction issue.
-
-Initial-Learn provenance correction at `f6a000c...`: the internal starter is request context, not fabricated user speech. Historical Node48/48 and Edge29/29 passed with zero paid calls for that correction. These counts are NOT fresh runs.
-
-Clean Phase 2: real owner-browser screenshots confirmed no fabricated initial user bubble, genuine first owner input and source-grounded Tutor replies. Original contaminated topic is historical evidence only, not a clean baseline. Neither old topic is assumed to survive today.
-
-Retained engineering acceptance: UI-UX-FOUNDATION-01R2 and LOCAL-LAUNCH-01 (engineering scope). These do not establish actual microphone success, complete owner flow or repeated learning benefit.
-
-## 5. Active findings and routing
-
-| ID | Confirmed remote-source finding | Treatment |
+| ID | MASTER result | Review conclusion |
 | --- | --- | --- |
-| R01 | openStore invokes expiry using topic createdAt + 7 days | Safe preflight before touching old records; no expiry invocation for inspection |
-| R02 | Generated Repair/Apply prompts omit internal provenance and become user-history entries | Batch A; preserve the accepted initial-Learn fix |
-| R03 | Root/app READMEs and feature-branch state misidentify current product/phase | Batch A; product-first entry and ref-aware pointers |
-| R04 | Runtime mixes historical probes/recovery scripts; synthetic fixture has a special retry allowance | Retained backlog; no broad move or cap/history change in A |
-| R05 | Registration precedes successful microphone startup and counts against attempt quota | Batch A; valid recording boundary and idempotency before ASR |
-| R06 | Schema, quote and reference validity cannot establish semantic entailment or learning benefit | Keep engineering, semantic and owner-value acceptance separate |
+| A0 | PASS | Expected base/branch matched; unrelated work preserved; isolated fake-provider/test-ledger boundary evidenced. |
+| A1 | PASS | Learn/Repair/Apply generated instructions no longer become owner messages; real typed owner inputs remain user history; success/rejection/failure paths covered. |
+| A2 | PASS | Root/app entry docs identify 知而能讲; product-branch state files became non-authoritative ref-aware pointers; historical Handoff kit preserved as tooling. |
+| A3 | PASS | Invalid/failed capture paths do not create durable valid-attempt registration; valid saved audio registers before ASR; same-ID registration is idempotent; cap/ledger failure guards remain before provider dispatch. |
+| A4 | PASS WITH DISCLOSED NON-BLOCKING UNKNOWN | Fresh 79/79 Node and 40/40 Edge; reviewable patch and zero-live-call evidence supplied; one intermittent replay test timeout retained as unknown. |
 
-R01 detail: an unchanged 2026-09-12 topic became eligible for expiry around 2026-09-19. Actual local survival is UNKNOWN. Do not ask the owner to reload or launch the application just to inspect it. Preserve available records through a safe export/read-only path when possible. If gone, recreate the synthetic source and perform only a minimal clean-topic sanity check before later live work. Do not promise restoration or reset the ledger. Batch A tests must use isolated synthetic data, not the owner's profile.
+**Must Fix:** none remaining for Batch A.
 
-## 6. Execution and validation structure
+**User Decision Needed:** none to prepare/start zero-call Batch B.
 
-Batch A fixes only R02/R03/R05 and their directly related tests/evidence. It does not create a new application architecture. Details and acceptance IDs A0-A4 are in HANDOFF. The separate meta-document commits made here are not feature changes.
+**Future Optional:** investigate headless replay-completion timing stability before treating browser replay as universally stable; this does not authorize replay UX redesign.
 
-Batch B / Phase 3A, after a separate MASTER decision, will test a small separation:
-- contentFindings: source-grounded judgments;
-- processEvidence: observable time/span/process evidence, no knowledge verdict and no mandatory textbook quote;
-- diagnosticTarget: a relation worth verifying, with separately attributable evidence.
+Batch A fake/stub tests are engineering evidence only. They do not verify physical microphone behavior, ASR/semantic accuracy, learning efficacy, speech-process detector validity or final owner acceptance.
 
-The six planned fixtures remain: fluent wrong; hesitant correct; an unexpressed/uncertain relation with related process evidence; explicit correct self-repair; unreviewed critical ASR error; content gap without process evidence. Fixtures test routing/invariants, not real recognition accuracy, model correctness or learning efficacy. Missing content has no literal spoken timestamp; association must cite a real neighboring segment or remain unlocalized. A restart/self-repair fixture is not proof of a working detector.
+## 5. Owner decisions retained
 
-Do not require pitch, stress, pronunciation scoring, emotion inference, new audio ML dependencies, full word alignment, an agent framework or broad directory migration. Preserve current raw/corrected provenance, origin and storage identity. More feature extraction is justified only by observed diagnostic need.
+**D1 — outcomes.** Stable personal use first; portfolio/job-search demonstration second. No current commercialization/broad rollout priority.
 
-The earlier Phase 3 label is retained for the still-unrun microphone checkpoint. Phase 3A is zero-call preparatory validation; Phase 3B is the future real-speech/value work. Neither label converts a planned test into a completed one. Retention UI, broad cleanup and full replay redesign are not prerequisites for the first bounded owner recording.
+**D2 — scenario.** Mainly students and bounded course concepts/learning material. Interview-project explanation is an adjacent hypothesis, not a separate approved interview product.
 
-## 7. Public capability check and cost hold
+**D3 — cost.** No live product API spend is authorized until a concrete necessary experiment has a safe preflight and explicit owner approval. Do not ask for a budget without a concrete rationale.
 
-Rechecked official documentation on 2026-09-28 (documentation evidence only, no paid probe):
-- OpenAI deprecations lists whisper-1 announced deprecated on 2026-08-26 for shutdown on 2027-02-26: https://developers.openai.com/api/docs/deprecations
-- File transcription recommends gpt-transcribe for general recordings but still directs word/segment timestamp needs to whisper-1: https://developers.openai.com/api/docs/guides/speech-to-text
+**D4 — clarity/replay.** Teaching/feedback/UI should be direct, clear, non-redundant, sufficiently complete and simple. Replay means checking the user's saved audio against ASR; transcript correction is not a new spoken performance.
 
-Decision remains: preserve model/provider configuration in A/B; keep text and alignment conceptually replaceable; make a focused migration/timing decision before future live use, not inside this correctness batch. Other earlier model-specific statements must be rechecked when relevant rather than assumed from an archived note.
+**D5 — retention.** User-customizable retention with default/reminders is required direction, but exact duration/grace/migration/reminder behavior is undecided and not part of B.
 
-Existing-library candidates from the prior check remain ricky0123/vad and Meyda. No library was installed or validated in this app. No new dependency is needed for A or prewritten diagnostic fixtures. Re-evaluate a library only for an observed technical gap; do not repeat a full landscape review for each small fix.
+**D6 — diagnostic purpose.** The speech channel exists to help localize which concept relation/reasoning transition is worth checking, not to score presentation/PTE performance. Feedback is separated into **内容理解** and **讲解过程**. A pause/restart/repetition cannot by itself prove misunderstanding.
 
-Historical configured models: whisper-1 and gpt-5.6-luna. Historical application exposure US$5 and cash US$10 are ceilings, not funding permission or inspected account funds. No recharge, model switch, stress loop or automatic retry.
+**D7 — execution records.** Every executable scope/constraint/test/evidence/stop condition is written to canonical GitHub before dispatch. Codex delivery is not acceptance until MASTER reconciles evidence.
 
-Historical pre-correction ledger: requests39, known estimated cost US$0.01293075, exposure US$0.06973825, unsettled4. Clean Phase2 made later calls. These are NOT today's totals. Before proposing live spend, read a safe fresh ledger, verify actual model/endpoint/rates, explain why a zero-call alternative is insufficient, and give a bounded request/retry cap and conservative estimate. No paid call solely to check readiness. Separate validation spending from recurring self-use cost.
+## 6. Active findings after Batch A
 
-## 8. Classification and next smallest step
+Resolved by A:
+- R02 generated Repair/Apply message provenance.
+- R03 misleading ordinary entry/state documents.
+- R05 invalid-attempt registration timing/idempotency.
 
-Completed: remote audit, owner decisions, task/document consolidation; historical Phase1 and clean Phase2 retained.
-Verified this turn: canonical files and remote branch identity read; public transcription documentation read. No local runtime verification.
-Likely: isolated focused fixes are enough to unblock the next engineering increment; dual evidence may help localization. These are not measured product outcomes.
-Unknown: local checkout/records/server/ledger, detector reliability, acceptable review effort, exact retention policy, justified budget and real-owner value.
-Not Done: dispatch or execution of A, B, real Phase3/3B, fresh local tests, feature refactor, retention/replay changes, complete owner acceptance.
-Must Fix: R02/R03/R05 within A; safe R01 handling before touching old data.
-User Decision Needed: nothing additional to prepare/start the bounded zero-call A; future spend, retention/migration and scope expansion still need decisions.
-Future Optional: broader reorganization, advanced prosody/pronunciation, separate interview product, cosmetic and non-blocking extraction cleanup.
+Retained:
+- R01 old-topic expiry risk: do not open/reload owner data merely to inspect it.
+- R04 broad runtime/probe organization: backlog; no broad cleanup in B.
+- R06 schema/reference validity is not semantic entailment or learning benefit.
 
-**Next smallest experiment: dispatch Batch A — CORRECTNESS-HYGIENE-01 using the canonical trigger in HANDOFF. Codex executes A only, returns Delivery Packet + review evidence, then stops for MASTER review.**
+New active architecture need for B:
+- Current content findings and speech-process observations are still too coupled.
+- Process evidence must become an observable evidence contract without a knowledge verdict or mandatory textbook quote.
+- Cross-channel localization must remain a **candidate for verification**, not a declaration that the learner does not understand.
+
+## 7. Batch B / Phase 3A target
+
+Batch B is a zero-live-call architecture/fixture task. It must establish three separate concepts:
+
+1. `contentFindings`: source-grounded correctness/completeness/logic findings.
+2. `processEvidence`: observable audio/transcript-process evidence with real time/span references where available; no `supported/missing/incorrect` knowledge status and no mandatory `sourceQuote`.
+3. `diagnosticTarget`: a bounded relation/focus worth verifying or re-explaining. It may reference content and process evidence separately, but process evidence alone cannot create a knowledge deficit.
+
+Required six fixtures:
+- fluent but logically wrong;
+- hesitant but content-correct;
+- uncertain/incorrect relation with related process evidence;
+- explicit self-repair to a correct final stance;
+- critical unreviewed ASR error;
+- content gap without process evidence.
+
+A missing content finding has no fabricated spoken timestamp. If process evidence is associated, the association must be to an independently real neighboring/expressed span and remain labelled as process evidence, not the time of the missing idea.
+
+Initial process scope stays small: current confirmed near-silence plus pre-labelled fixture evidence for restart/self-repair/repetition/coarse segmentation where needed to validate routing. No claim of a working new detector merely because a fixture type exists.
+
+No pitch/stress/pronunciation scoring, confidence/anxiety/personality inference, PTE-equivalent score, forced word alignment, new audio ML dependency, model/provider switch or live API call in B.
+
+## 8. Public capability/cost hold retained
+
+The previous official check remains relevant: `whisper-1` is scheduled for shutdown on 2027-02-26 and current timestamp guidance is model-specific. B must not deepen Whisper-specific timing assumptions. ASR text and alignment/timing remain replaceable capabilities. Segment-level/approximate localization is acceptable unless later real evidence proves word precision necessary.
+
+No model migration or paid comparison in B.
+
+## 9. Classification
+
+Completed:
+- Batch A implementation and MASTER review.
+- A0–A4 accepted as scoped engineering work.
+
+Verified:
+- Review bundle integrity.
+- Patch scope/evidence supplied for Batch A.
+- Fresh reported isolated Node/browser results and zero-live-call safeguards within the bundle.
+
+Likely:
+- The Batch A local commit is a suitable base for B, subject to Codex verifying the actual local HEAD/worktree before B edits.
+
+Unknown:
+- Physical microphone/real ASR behavior.
+- Real diagnostic value of process evidence.
+- Replay intermittent timing cause.
+- Owner data survival/current ledger totals.
+- Exact retention policy and later live budget.
+
+Not Done:
+- Batch B dispatch/implementation.
+- Phase 3B live owner speech/value experiment.
+- Retention/replay UX work.
+- Final owner acceptance.
+- Product push/merge.
+
+## 10. Next smallest step
+
+Dispatch **Batch B — DIAGNOSTIC-LOCALIZATION-01 / Phase 3A** using the canonical trigger in HANDOFF. Codex first verifies local HEAD `f06900f...`, then executes B only with zero live product API calls and returns one review packet. Stop for MASTER review before any real microphone/provider work.
