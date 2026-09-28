@@ -49,6 +49,12 @@ node study-teachback-app/server.mjs
 
 ## 隔离工程验证
 
+Phase 3A 将内容判断 `contentFindings` 与讲解过程 `processEvidence` 分开呈现。`diagnosticTargets` 仅从已核对内容中的可处理关系生成；同段过程观察只是独立上下文，不证明“不理解”。缺失内容没有音频时间点。过程证据不要求教材引用，也不包含知识状态、修复建议或人格评分。
+
+当前真实过程入口只保存回听确认的本地近静音候选，不调用语义模型；重启、自我修正、重复等类型仅由预标注 fixture 验证，不声称已有检测器。新证据复用现有 reports 集合，按 attempt／转写版本关联，无数据库版本升级。历史 delivery 报告只读呈现，不转成新定位证据。
+
+Batch B 使用同一隔离包装器：`node study-teachback-app/run-offline-tests.mjs node diagnostic-localization-01`、`node study-teachback-app/run-offline-tests.mjs diagnostic diagnostic-localization-01`、`node study-teachback-app/run-offline-tests.mjs browser diagnostic-localization-01`。证据写入对应的 `artifacts/study-teachback/diagnostic-localization-01/<run-id>/`；六个 fixture 的 expected／actual 保存在 `fixture-results.json`。
+
 从仓库根目录执行：
 
 ```powershell

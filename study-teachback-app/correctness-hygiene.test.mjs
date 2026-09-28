@@ -69,7 +69,7 @@ function captureHarness(kind='valid') {
   }
   const context=vm.createContext({$,topic:target,current:null,pending:{kind:'full',focus:null,parentId:null},record:null,capturePending:false,controller:null,processing:false,memoryOnly:false,
     deleted:new Set(),db:{all:async()=>[target]},uid:()=> 'capture-id',navigator:{mediaDevices:{getUserMedia:async()=>{events.push('permission');if(kind==='denied')throw new DOMException('denied','NotAllowedError');if(kind==='late')await permission;return stream;}}},
-    AudioContext:Audio,MediaRecorder:Recorder,Blob,Float32Array,structuredClone,performance:{now:()=>1000},setInterval:()=>1,clearInterval(){},
+    AudioContext:Audio,MediaRecorder:Recorder,Blob,Float32Array,structuredClone,replayWaves:new WeakMap(),performance:{now:()=>1000},setInterval:()=>1,clearInterval(){},
     OfflineAudioContext:class {createBufferSource(){return {connect(){},start(){}};}async startRendering(){return {getChannelData:()=>new Float32Array(16000)};}},
     waveBytes:()=>new ArrayBuffer(8),observations:()=>({reason:kind==='silent'?'NEAR_SILENT':kind==='clipping'?'CLIPPING':'UNVALIDATED_ACTIVITY'}),document:{body:{dataset:{}},querySelector:()=>({hidden:false})},
     reveal:(id,show=true)=>{$(id).hidden=!show;},notice:message=>events.push(message),friendly:x=>x,renderAttempt(){},

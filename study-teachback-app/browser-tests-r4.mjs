@@ -6,8 +6,11 @@ import assert from 'node:assert/strict';
 import { createServer } from './server.mjs';
 import { Ledger } from './ledger.mjs';
 import { waveDuration,normalizeASR } from './core.mjs';
+import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 if(!process.env.STUDY_TEST_OUTPUT)throw Error('Run through run-offline-tests.mjs browser');
 const root=process.env.STUDY_TEST_OUTPUT+'/';mkdirSync(root,{recursive:true});
+const environmentProbe=process.argv.includes('--environment-probe');
+const probe={mode:environmentProbe?'NON_HEADLESS_TRUSTED_POINTER':'EXISTING_SUITE',lifecycle:[],states:[],trustedInputs:[]};
 const run=Date.now(), profile=process.env.STUDY_TEST_PROFILE??mkdtempSync(root+'edge-test-');
 const calls=[],cases=[],errors=[],network=[];let failASR=null,delaySemantic=0,rejectStarter=false,failTeach=false,failRegister=false;const provenanceRequests=[];
 const savedASR=normalizeASR(JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r2/SYNTHETIC_ASR_FIELDS.json',import.meta.url))),7.31);
@@ -25,7 +28,7 @@ const server=createServer({book:testBook,semanticCall:async(prompt,input)=>{
 },asrCall:async(bytes,id)=>{calls.push({kind:'asr',attemptId:id});if(failASR)throw new Error(failASR);const duration=waveDuration(bytes);return {model:'TEST_STUB_NOT_API',duration,text:'土壤干了才浇水，湿的先不浇。',spans:[{id:'s0',start:0,end:Math.min(1,duration),text:'土壤干了才浇水，湿的先不浇。'}],words:[],reviewRequired:true,alignment:'SYNTHETIC_TEST'};}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const origin=`http://127.0.0.1:${server.address().port}`;
-const edge=spawn('C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',['--headless=new','--disable-gpu','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-component-update','--no-proxy-server','--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1','--remote-debugging-address=127.0.0.1','--remote-debugging-port=0',`--user-data-dir=${profile}`,'--autoplay-policy=no-user-gesture-required','about:blank'],{windowsHide:true,stdio:['ignore','ignore','pipe']});
+const edge=spawn('C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',[...(environmentProbe?['--window-size=1280,1000']:['--headless=new']),'--disable-gpu','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-component-update','--no-proxy-server','--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1','--remote-debugging-address=127.0.0.1','--remote-debugging-port=0',`--user-data-dir=${profile}`,'--autoplay-policy=no-user-gesture-required','about:blank'],{windowsHide:!environmentProbe,stdio:['ignore','ignore','pipe']});
 let edgeLog='';edge.stderr.on('data',chunk=>edgeLog+=chunk);edge.on('error',e=>edgeLog+=e.code);
 let ws,seq=0;const callbacks=new Map();
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
@@ -36,19 +39,83 @@ async function reloadPage(){
   await evaluate(`document.documentElement.dataset.testReload='old'`);await cdp('Page.reload');
   await until(`document.documentElement.dataset.testReload!=='old' && document.getElementById('budget')?.textContent.length>0`);
 }
+async function trustedPointer(expression,label){
+  await cdp('Page.bringToFront');
+  await evaluate(`(${expression}).scrollIntoView({behavior:'instant',block:'center'})`);await pause(120);
+  const point=await evaluate(`(()=>{const e=(${expression}),r=e.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;return {x,y,hit:e.contains(document.elementFromPoint(x,y)),visibilityState:document.visibilityState,hasFocus:document.hasFocus()};})()`);
+  assert(point.hit,`Pointer target obscured: ${label}`);assert.equal(point.visibilityState,'visible');probe.states.push({label,phase:'before-input',...point});
+  await cdp('Input.dispatchMouseEvent',{type:'mouseMoved',x:point.x,y:point.y});
+  await cdp('Input.dispatchMouseEvent',{type:'mousePressed',x:point.x,y:point.y,button:'left',clickCount:1});
+  await cdp('Input.dispatchMouseEvent',{type:'mouseReleased',x:point.x,y:point.y,button:'left',clickCount:1});
+  const input=await evaluate('window.probeInputs.at(-1)');assert(input?.trusted,`Untrusted input: ${label}`);probe.trustedInputs.push({label,...input});
+}
+async function probeState(label){probe.states.push({label,...await evaluate(`({visibilityState:document.visibilityState,hasFocus:document.hasFocus(),currentTime:document.getElementById('player').currentTime,duration:document.getElementById('player').duration,paused:document.getElementById('player').paused,ended:document.getElementById('player').ended})`)});}
 const click=async id=>{await evaluate(`document.getElementById(${JSON.stringify(id)}).click()`);if(['deleteAttempt','deleteAll'].includes(id)){await until(`document.getElementById('deleteDialog').open`);await evaluate(`document.getElementById('deleteConfirm').click()`);}};
 const all=`(async()=>{const s=await import('/storage.mjs');const db=await s.openStore();const t=await db.all();db.close();return t.map(t=>({...t,attempts:t.attempts.map(a=>({...a,audio:{size:a.audio.size,type:a.audio.type}}))}));})()`;
-const screenshots=[];
+const screenshots=[],replaySnapshots=[];
 async function shot(name,target){if(target)await evaluate(`document.getElementById(${JSON.stringify(target)}).scrollIntoView({behavior:'instant',block:'start'})`);await pause(120);const r=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});const file=`${run}-${name}.png`;writeFileSync(join(root,file),Buffer.from(r.data,'base64'));screenshots.push({file,state:name,viewport:await evaluate('({width:innerWidth,height:innerHeight})'),scope:'Actual product / synthetic fixtures / stub provider'});}
-async function check(name,fn){try{await fn();cases.push({name,status:'PASS'});console.log('PASS '+name);}catch(e){cases.push({name,status:'FAIL',error:e.message});throw e;}}
+async function check(name,fn){try{await fn();cases.push({name,status:'PASS'});console.log('PASS '+name);}catch(e){cases.push({name,status:'FAIL',error:e.message});throw e;}finally{try{const events=await evaluate('window.replayTrace');if(events?.length){replaySnapshots.push({name,events,internal:await evaluate('window.replayInternal')});writeFileSync(join(root,'replay-snapshots.json'),JSON.stringify(replaySnapshots,null,2));await evaluate('window.replayTrace=[];window.replayInternal=[]');}}catch{}}}
 try{
   let targets;for(let i=0;i<100;i++){try{const port=readFileSync(join(profile,'DevToolsActivePort'),'utf8').split('\n')[0];targets=await(await fetch(`http://127.0.0.1:${port}/json/list`)).json();if(targets.length)break;}catch{}await pause(100);}
   assert(targets?.length,'EDGE_CDP_UNAVAILABLE');ws=new WebSocket(targets.find(t=>t.type==='page').webSocketDebuggerUrl);await new Promise((r,j)=>{ws.onopen=r;ws.onerror=j;});
-  ws.onmessage=message=>{const m=JSON.parse(message.data);if(m.id){const cb=callbacks.get(m.id);if(cb){clearTimeout(cb.timer);callbacks.delete(m.id);m.error?cb.reject(new Error(m.error.message)):cb.resolve(m.result);}}else if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.exception?.description??m.params.exceptionDetails.text);else if(m.method==='Network.requestWillBeSent')network.push(m.params.request.url);};
-  await cdp('Runtime.enable');await cdp('Page.enable');await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
+  ws.onmessage=message=>{const m=JSON.parse(message.data);if(m.id){const cb=callbacks.get(m.id);if(cb){clearTimeout(cb.timer);callbacks.delete(m.id);m.error?cb.reject(new Error(m.error.message)):cb.resolve(m.result);}}else if(m.method==='Runtime.exceptionThrown')errors.push(m.params.exceptionDetails.exception?.description??m.params.exceptionDetails.text);else if(m.method==='Network.requestWillBeSent')network.push(m.params.request.url);else if(environmentProbe&&m.method==='Page.lifecycleEvent')probe.lifecycle.push(m.params);};
+  await cdp('Runtime.enable');await cdp('Page.enable');if(environmentProbe){probe.version=await cdp('Browser.getVersion');probe.profile=profile;probe.pid=edge.pid;await cdp('Page.setLifecycleEventsEnabled',{enabled:true});await cdp('Page.bringToFront');}await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
+  if(environmentProbe)await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.probeInputs=[];document.addEventListener('click',e=>{window.probeInputs.push({trusted:e.isTrusted,text:e.target.textContent,at:performance.now(),visibilityState:document.visibilityState,hasFocus:document.hasFocus()});},true);`});
+  await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.replayInternal=[];let replayInvocation=0;window.__studyReplayObserver=value=>{window.replayInternal.push({...value,visibilityState:document.visibilityState,hasFocus:document.hasFocus(),at:performance.now()});if(window.replayInternal.length>300)window.replayInternal.shift();};window.__studyReplayObserver.nextId=()=>++replayInvocation;`});
+  await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.replayTrace=[];const nativePlay=HTMLMediaElement.prototype.play;HTMLMediaElement.prototype.play=function(){if(this.id!=='player')return nativePlay.call(this);const p=this;let last=p.currentTime,covered=0;const log=type=>{if(type==='timeupdate'){const delta=p.currentTime-last;if(!p.paused&&delta>=0&&delta<1)covered+=delta;last=p.currentTime;}window.replayTrace.push({type,at:performance.now(),visibilityState:document.visibilityState,hasFocus:document.hasFocus(),time:p.currentTime,duration:p.duration,paused:p.paused,seeking:p.seeking,ended:p.ended,covered,played:Array.from({length:p.played.length},(_,i)=>[p.played.start(i),p.played.end(i)]),complete:document.querySelector('#transcript button')?.textContent});if(window.replayTrace.length>180)window.replayTrace.shift();};for(const type of ['playing','timeupdate','pause','ended','seeking','seeked','error'])p.addEventListener(type,()=>log(type));log('play-request');const result=nativePlay.call(p);result.then(()=>log('play-resolved'),()=>log('play-rejected'));return result;};`});
   await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='deferredDenied')await new Promise((resolve,reject)=>window.rejectPermission=()=>reject(new DOMException('test denied','NotAllowedError')));if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
+  if(environmentProbe){
+    const select=id=>`document.getElementById('${id}')`,historyAttempt=`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整'))`;
+    const confirmProcess=`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认并保存过程证据')`;
+    await check('E0 archived synthetic ASR diagnosis blocked before trusted native transcript replay',async()=>{
+      const source={id:'probe-source',title:'隔离 synthetic ASR 环境探针',text:savedASR.text};
+      const t={id:'probe-topic',createdAt:Date.now(),source,goals:[],messages:[],attempts:[{id:'probe-attempt',createdAt:Date.now(),source,kind:'full',focus:null,assistance:'none',duration:7.31,observation:JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r3/DELIVERY_ENGINEERING.json',import.meta.url))).acoustic,raw:{...savedASR,id:'probe-raw',origin:'ARCHIVED_SYNTHETIC_ASR'},corrections:[],reports:[],status:'REVIEW_REQUIRED'}]};
+      await evaluate(`(async()=>{const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob([new Uint8Array(${JSON.stringify(savedWave)})],{type:'audio/wav'});const db=await(await import('/storage.mjs')).openStore();await db.put(t);db.close();})()`);
+      await reloadPage();await until(`!document.getElementById('workspace').hidden`);await trustedPointer(select('historyButton'),'open history');await until(`document.querySelectorAll('#historyList button').length>=3`);await trustedPointer(historyAttempt,'open saved attempt');
+      assert.equal(calls.length,0);await trustedPointer(select('confirm'),'diagnosis before replay');await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);assert.equal(calls.length,0);
+    });
+    await check('E0 trusted saved-ASR 0–6.46 replay has genuine native coverage then fake content confirmation',async()=>{
+      await trustedPointer(`document.querySelector('#transcript button')`,'critical transcript replay');await until(`document.querySelector('#transcript button').textContent.includes('✓')`);await probeState('transcript replay complete');
+      const trace=await evaluate('window.replayInternal'),done=trace.find(x=>x.completionReason==='genuine-coverage');assert(done);assert.equal(done.start,0);assert.equal(done.end,savedASR.spans[0].end);assert(done.covered>=done.end-.3);assert(done.genuine&&done.active);assert(trace.every(x=>x.visibilityState==='visible'));
+      probe.transcriptCompletion=done;await trustedPointer(select('confirm'),'confirm reviewed content');await until(`document.querySelectorAll('#feedback .finding').length===1`);assert.equal(calls.length,1);assert.equal(calls[0].kind,'content');
+    });
+    await check('E0 B3 trusted candidate replay persists one process report with zero semantic dispatch',async()=>{
+      const before=calls.length,ledgerBefore=JSON.stringify(testBook.read());probe.processBefore={calls:before,ledger:JSON.parse(ledgerBefore)};
+      await trustedPointer(confirmProcess,'process before replay');await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);
+      await trustedPointer(`document.querySelector('#observations button')`,'critical candidate replay');await until(`document.querySelector('#observations button').textContent.includes('✓')`);await probeState('candidate replay complete');
+      const trace=await evaluate('window.replayInternal'),done=trace.filter(x=>x.completionReason==='genuine-coverage').at(-1);assert(done?.genuine);assert(done.covered>=done.end-done.start-.3);assert(trace.every(x=>x.visibilityState==='visible'));probe.candidateCompletion=done;
+      await trustedPointer(confirmProcess,'save local process');await until(`document.querySelectorAll('.processObservation').length===1`);
+      let reports=(await evaluate(all))[0].attempts[0].reports;assert.deepEqual(reports.map(r=>r.channel),['content','process']);assert.equal(reports[1].processEvidence.length,1);assert.equal(reports[1].processEvidence[0].confirmation,'human_confirmed');assert(!('sourceQuote' in reports[1].processEvidence[0]));assert(!('status' in reports[1].processEvidence[0]));
+      await trustedPointer(confirmProcess,'duplicate local process confirmation');await until(`document.getElementById('notice').textContent.includes('本机保存')`);assert.equal((await evaluate(all))[0].attempts[0].reports.length,2);assert.equal(calls.length,before);assert.equal(JSON.stringify(testBook.read()),ledgerBefore);
+      assert.equal(await evaluate(`document.querySelectorAll('#feedback .finding').length`),1);assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding,#processFeedback .diagnosticTarget').length`),0);assert.equal(await evaluate(`document.getElementById('contentHeading').textContent`),'内容理解');assert.equal(await evaluate(`document.getElementById('processHeading').textContent`),'讲解过程');
+      // Persist critical traces before the deliberate reload resets the document observer.
+      writeFileSync(join(root,'probe-candidate-trace.json'),JSON.stringify({internal:trace,native:await evaluate('window.replayTrace')},null,2));
+      await reloadPage();await until(`!document.getElementById('workspace').hidden`);await trustedPointer(select('historyButton'),'history after reload');await until(`document.querySelectorAll('#historyList button').length>=3`);await trustedPointer(historyAttempt,'saved attempt after reload');assert.equal(await evaluate(`document.querySelectorAll('.processObservation').length`),1);
+      reports=(await evaluate(all))[0].attempts[0].reports;assert.equal(reports.filter(r=>r.channel==='process').length,1);assert.equal(calls.length,before);assert.equal(JSON.stringify(testBook.read()),ledgerBefore);probe.processAfter={calls:calls.length,ledger:testBook.read(),processReports:reports.filter(r=>r.channel==='process'),persisted:true};await probeState('after reload');await shot('representative-probe','attemptPanel');
+    });
+  }else if(process.argv.includes('--replay-only')){
+    await check('C0 saved synthetic audio genuinely replays requested first second',async()=>{
+      const f=diagnosticFixtures[0],t={id:'replay-probe',createdAt:Date.now(),source:f.source,messages:[],goals:[],attempts:[{...f.attempt,source:f.source,duration:7.31,createdAt:Date.now(),raw:{id:'probe-raw',reviewed:false,text:'synthetic',spans:[{id:'s0',start:0,end:1,text:'synthetic'}]},corrections:[],reports:[]}]};
+      await evaluate(`(async()=>{const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob([new Uint8Array(${JSON.stringify(savedWave)})],{type:'audio/wav'});const db=await(await import('/storage.mjs')).openStore();await db.put(t);db.close();})()`);
+      await reloadPage();await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+      await evaluate(`document.querySelector('#transcript button').click()`);
+      await until(`!document.getElementById('player').paused && document.getElementById('player').currentTime>0`);
+      // Deterministic legitimate event-cadence stress: media continues on its own thread.
+      // No seeking, currentTime assignment or heard-state manipulation.
+      await evaluate(`(()=>{const until=performance.now()+2500;while(performance.now()<until){}return true;})()`);
+      await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
+    });
+    await check('C0 native synthetic recording replays requested first second',async()=>{
+      await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(1400);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1 && document.getElementById('notice').textContent.includes('转写完成')`);
+      await click('confirm');await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
+    });
+    await check('D0 residual short native recording plays through its requested endpoint',async()=>{
+      await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1 && document.getElementById('notice').textContent.includes('转写完成')`);
+      await click('confirm');await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
+    });
+  }else{
   for(const outcome of ['success','quote','request'])await check(`provenance initial ${outcome} and first/subsequent real owner input`,async()=>{
     const rejected=outcome!=='success';rejectStarter=outcome==='quote';failTeach=outcome==='request';const start=provenanceRequests.length;
     await evaluate(`document.getElementById('title').value='Synthetic provenance';document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);await click('learn');
@@ -70,7 +137,7 @@ try{
   });
   for(const mode of ['repair','apply'])for(const outcome of ['success','quote','request'])await check(`A1 browser ${mode}/${outcome} provenance, persistence and later real input`,async()=>{
     const t={id:'action-provenance',createdAt:Date.now(),source:{id:'source',title:'Synthetic actions',text:'只有土壤干燥才浇水。'},goals:[],messages:[{role:'user',text:'Earlier actual question'}],attempts:[],mode:'learn'};
-    t.attempts=[{id:'synthetic-attempt',createdAt:Date.now(),source:t.source,kind:'full',duration:1,raw:{id:'raw',text:'test',spans:[{id:'s0',start:0,end:1,text:'test'}],reviewed:true},corrections:[],reports:[{channel:'content',transcriptVersion:'raw',findings:[{status:'missing',message:'Synthetic gap',sourceQuote:t.source.text,spanId:null,repair:'请说明条件。'}]}]}];
+    t.attempts=[{id:'synthetic-attempt',createdAt:Date.now(),source:t.source,kind:'full',assistance:'none',duration:1,raw:{id:'raw',text:'test',spans:[{id:'s0',start:0,end:1,text:'test'}],reviewed:true},corrections:[],reports:[{channel:'content',sourceId:t.source.id,attemptId:'synthetic-attempt',transcriptVersion:'raw',findings:[{status:'missing',message:'Synthetic gap',sourceQuote:t.source.text,spanId:null,quote:null,eventId:null,repair:'请说明条件。'}]}]}];
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob(['synthetic placeholder']);await db.put(t);db.close();})()`);
     await reloadPage();await until(`!document.getElementById('workspace').hidden`);
     await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
@@ -86,6 +153,22 @@ try{
     assert(provenanceRequests.at(-1).history.some(m=>m.text==='First real answer'));
     if(mode==='apply'&&outcome==='success'){assert.equal(saved.apply.answer,'First real answer');assert.equal(provenanceRequests[start+1].mode,'apply_answer');}
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
+  });
+  for(const f of diagnosticFixtures)await check(`B4 zero-call UI fixture ${f.id}`,async()=>{
+    const before=calls.length,ledgerBefore=JSON.stringify(testBook.read());
+    const a={...f.attempt,source:f.source,createdAt:Date.now(),raw:{id:f.attempt.transcriptVersion,text:f.attempt.spans.map(s=>s.text).join(''),spans:f.attempt.spans,reviewed:f.attempt.reviewed},corrections:[],reports:[{...f.report,channel:'content'},...(f.evidence.length?[{channel:'process',attemptId:f.attempt.id,transcriptVersion:f.attempt.transcriptVersion,processEvidence:f.evidence}]:[])]};
+    const t={id:'diagnostic-ui',source:f.source,createdAt:Date.now(),goals:[],messages:[],attempts:[a],mode:'learn'};
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob(['synthetic placeholder']);await db.put(t);db.close();})()`);
+    await reloadPage();await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+    assert.equal(await evaluate(`document.querySelectorAll('#feedback .diagnosticTarget').length`),f.expected.targets??0);
+    assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .processObservation').length`),f.expected.process??0);
+    assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding, #processFeedback .diagnosticTarget, #feedback .processObservation').length`),0);
+    if(f.expected.blocked)assert.equal(await evaluate(`document.querySelectorAll('#feedback .finding').length`),0);
+    if(f.id==='gap-without-process')assert.equal(await evaluate(`[...document.querySelectorAll('#feedback button')].filter(b=>!['再学这一点','再讲这一点'].includes(b.textContent)).length`),0);
+    if(f.expected.targets){await evaluate(`[...document.querySelectorAll('#feedback button')].find(b=>b.textContent==='再讲这一点').click()`);assert.equal(await evaluate(`document.getElementById('recordFocus').textContent`),f.report.findings[0].repair);await click('cancelRecord');}
+    assert.equal(calls.length,before);assert.equal(JSON.stringify(testBook.read()),ledgerBefore);
+    await shot(`diagnostic-${f.id}`,'attemptPanel');
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();
   });
   calls.length=0;
   await check('R2 prominent native file entry at desktop and mobile before any provider call',async()=>{
@@ -176,9 +259,16 @@ try{
     await evaluate(`(async()=>{const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob([new Uint8Array(${JSON.stringify(savedWave)})],{type:'audio/wav'});const db=await (await import('/storage.mjs')).openStore();await db.put(t);db.close();})()`);
     await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);assert(await evaluate(`document.getElementById('reviewHint').textContent.includes('词级定位部分不可用')`));await click('confirm');await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);await click('confirm');await until(`document.querySelectorAll('.finding').length===1`);const a=(await evaluate(all))[0].attempts[0];assert.equal(a.raw.words[14].start,a.raw.words[14].end);assert.equal(a.raw.words[14].usable,false);assert.equal(a.corrections.length,1);
   });
-  await check('delivery requires candidate replay and stays separate from content reports',async()=>{
-    await evaluate(`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认此候选并分析').click()`);await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);
-    await evaluate(`document.querySelector('#observations button').click()`);await until(`document.querySelector('#observations button').textContent.includes('✓')`);await evaluate(`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认此候选并分析').click()`);await until(`document.querySelectorAll('.finding').length===2`);const reports=(await evaluate(all))[0].attempts[0].reports;assert.deepEqual(reports.map(r=>r.channel),['content','delivery']);assert.equal(reports[1].findings[0].status,'observation');assert.equal(await evaluate("[...document.querySelectorAll('.finding')].at(-1).querySelectorAll('button').length"),1);assert(calls.some(c=>c.kind==='delivery'));
+  await check('B3 local process confirmation requires replay, stores separate evidence and makes zero provider dispatches',async()=>{
+    const before=calls.length,ledgerBefore=JSON.stringify(testBook.read());
+    await evaluate(`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认并保存过程证据').click()`);await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);
+    await evaluate(`document.querySelector('#observations button').click()`);await until(`document.querySelector('#observations button').textContent.includes('✓')`);await evaluate(`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认并保存过程证据').click()`);await until(`document.querySelectorAll('.processObservation').length===1`);
+    const reports=(await evaluate(all))[0].attempts[0].reports;assert.deepEqual(reports.map(r=>r.channel),['content','process']);
+    const evidence=reports[1].processEvidence[0];assert.equal(evidence.confirmation,'human_confirmed');assert(!('sourceQuote' in evidence));assert(!('status' in evidence));assert.equal(calls.length,before);assert.equal(JSON.stringify(testBook.read()),ledgerBefore);
+    assert.equal(await evaluate(`document.querySelectorAll('#feedback .finding').length`),1);assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding, #processFeedback .diagnosticTarget').length`),0);
+    assert.equal(await evaluate(`document.getElementById('contentHeading').textContent`),'内容理解');assert.equal(await evaluate(`document.getElementById('processHeading').textContent`),'讲解过程');
+    await evaluate(`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认并保存过程证据').click()`);await until(`document.getElementById('notice').textContent.includes('本机保存')`);assert.equal((await evaluate(all))[0].attempts[0].reports.length,2);assert.equal(calls.length,before);
+    await reloadPage();await until(`!document.getElementById('workspace').hidden`);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);assert.equal(await evaluate(`document.querySelectorAll('.processObservation').length`),1);assert.equal(calls.length,before);
   });
   await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(join(root,'browser-real-asr.png'),Buffer.from(r.data,'base64')));
   await check('stale history navigation blocked and pending delete-all prevents late restoration',async()=>{
@@ -214,7 +304,9 @@ try{
     await evaluate(`document.querySelector('#historyList .danger').click()`);await until(`document.getElementById('deleteDialog').open`);await shot('history-delete');await click('deleteCancel');await pause(100);assert.equal(JSON.stringify(await evaluate(all)),before);
     await evaluate(`document.querySelector('#historyList .danger').click()`);await click('deleteConfirm');await until(`document.getElementById('historyList').textContent.includes('还没有')`);assert.equal((await evaluate(all)).length,0);await until(`document.activeElement.id==='historyTitle'`);
   });
+  }
   assert.deepEqual(errors,[]);assert(network.every(url=>url.startsWith(origin+'/')||url.startsWith('blob:'+origin+'/')||url.startsWith('data:')),'unexpected browser network');
 }catch(e){cases.push({name:'suite completion',status:'FAIL',error:e.message});console.log('BROWSER FAILURE: '+e.message);}
-finally{writeFileSync(join(root,'edge.log'),edgeLog);writeFileSync(join(root,`browser-${run}.json`),JSON.stringify({at:new Date().toISOString(),kind:'EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER',cases,calls,network,screenshots,consoleErrors:errors,physicalMicrophone:false,liveAPI:false},null,2));try{if(ws)await cdp('Browser.close');}catch{}ws?.close();edge.kill();await new Promise(r=>server.close(r));}
+finally{try{writeFileSync(join(root,'replay-trace.json'),JSON.stringify(await evaluate('window.replayTrace'),null,2));}catch{}
+writeFileSync(join(root,'edge.log'),edgeLog);writeFileSync(join(root,`browser-${run}.json`),JSON.stringify({at:new Date().toISOString(),kind:'EDGE_HEADLESS_REAL_BROWSER_WITH_SYNTHETIC_MEDIA_AND_STUBBED_PROVIDER',cases,calls,network,screenshots,consoleErrors:errors,physicalMicrophone:false,liveAPI:false,environmentProbe:probe},null,2));try{if(ws)await cdp('Browser.close');}catch{}ws?.close();edge.kill();await new Promise(r=>server.close(r));}
 if(cases.some(c=>c.status==='FAIL')||!cases.length)process.exitCode=1;

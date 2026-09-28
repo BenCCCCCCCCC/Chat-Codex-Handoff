@@ -1,8 +1,11 @@
-import { observations, waveBytes, revisedTranscript, validateFindings, remediationFocus, repairFocus } from './core.mjs';
+import { observations, waveBytes, revisedTranscript, validateFindings, repairFocus } from './core.mjs';
 import { openStore } from './storage.mjs';
+import { confirmLocalProcess, localize, processEvidence } from './diagnostic-localization.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
 let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false,capturePending=false;
 const heard=new Set(),editors=new Map();
+// Transient playback copies only. Original stored/exported audio is untouched.
+const replayWaves=new WeakMap();let replayOriginal=null,replayRequest=0;
 const notice=message=>{$('notice').textContent=message;};
 const reveal=(id,show=true)=>{$(id).hidden=!show;};
 function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
@@ -129,6 +132,7 @@ async function processAudio(a){
     if(a.interrupted||['NEAR_SILENT','CLIPPING'].includes(a.observation.reason)){a.status='SOUND_EVIDENCE_INSUFFICIENT';await save();renderAttempt();return notice('声音证据不足或采集中断。已保留原声，请回听后重新录制。');}
     const offline=new OfflineAudioContext(1,Math.ceil(decoded.duration*16000),16000),source=offline.createBufferSource();source.buffer=decoded;source.connect(offline.destination);source.start();const normalized=await offline.startRendering();
     const wav=waveBytes(normalized.getChannelData(0));
+    replayWaves.set(a.audio,new Blob([wav],{type:'audio/wav'}));
     await api('/api/register',{attemptId:a.id});
     const result=await api('/api/asr',wav,{'Content-Type':'audio/wav','X-Attempt-Id':a.id});
     if(deleted.has(a.id)||!topic||deleted.has(topic.id))return;
@@ -139,40 +143,107 @@ async function processAudio(a){
 $('retryAsr').onclick=()=>act(()=>{if(!canNavigate())return;return processAudio(current);});
 function latest(a){return a.corrections.at(-1)??a.raw;}
 function attemptRequest(a){const v=latest(a);return {id:a.id,sourceId:a.source.id,transcriptVersion:v.id,duration:a.duration,spans:v.spans,kind:a.kind,focus:a.focus,assistance:a.assistance,reviewed:v.reviewed===true,interrupted:a.interrupted};}
-function play(start=0,end=current?.duration,onComplete){
-  const player=$('player');player.currentTime=start;let last=start,covered=0;playEnd={end,onComplete,start};
-  player.ontimeupdate=()=>{const now=player.currentTime;if(!player.paused && now>=last && now-last<1)covered+=now-last;last=now;if(now>=end-.05){player.pause();player.ontimeupdate=null;if(covered>=Math.max(0,end-start-.3))onComplete?.();}};return player.play();
+async function play(start=0,end=current?.duration,onComplete){
+  const attempt=current,original=attempt.audio,request=++replayRequest;playEnd?.cancel('superseded');$('player').pause();
+  let wav=replayWaves.get(original);
+  if(!wav){let context;try{
+    context=new AudioContext();const decoded=await context.decodeAudioData(await original.arrayBuffer());
+    const offline=new OfflineAudioContext(1,Math.ceil(decoded.duration*16000),16000),source=offline.createBufferSource();source.buffer=decoded;source.connect(offline.destination);source.start();
+    const normalized=await offline.startRendering();wav=new Blob([waveBytes(normalized.getChannelData(0))],{type:'audio/wav'});replayWaves.set(original,wav);
+  }finally{if(context&&context.state!=='closed')await context.close();}}
+  if(request!==replayRequest||current!==attempt||deleted.has(attempt.id))return;
+  if(replayOriginal!==original){if(blobURL)URL.revokeObjectURL(blobURL);blobURL=URL.createObjectURL(wav);$('player').src=blobURL;replayOriginal=original;}
+  const player=$('player');if(player.readyState===0)await new Promise((resolve,reject)=>{
+    const done=()=>{player.removeEventListener('loadedmetadata',loaded);player.removeEventListener('error',failed);};
+    const loaded=()=>{done();resolve();},failed=()=>{done();reject(new Error('REPLAY_LOAD_FAILED'));};
+    player.addEventListener('loadedmetadata',loaded);player.addEventListener('error',failed);
+  });
+  if(request!==replayRequest||current!==attempt||deleted.has(attempt.id))return;
+  return playPrepared(start,end,onComplete);
+}
+function playPrepared(start,end,onComplete){
+  const player=$('player'),attempt=current,source=blobURL;playEnd?.cancel('superseded');player.pause();player.currentTime=start;
+  let started=false,last=start,covered=0;
+  const observer=globalThis.__studyReplayObserver,invocationId=observer?.nextId?.();
+  const observe=(event,details={})=>{if(typeof observer!=='function')return;try{observer({invocationId,event,start,end,started,last,covered,currentTime:player.currentTime,duration:player.duration,played:Array.from({length:player.played.length},(_,i)=>[player.played.start(i),player.played.end(i)]),genuine:null,active:active(),attemptMatches:current===attempt,blobMatches:blobURL===source,seeking:player.seeking,cancelReason:null,completionReason:null,...details});}catch{}};
+  const handlers={},state={cancel(reason){observe('cancel',{cancelReason:reason});for(const [type,fn] of Object.entries(handlers))player.removeEventListener(type,fn);if(playEnd===state)playEnd=null;}};playEnd=state;
+  const active=()=>playEnd===state&&current===attempt&&blobURL===source;
+  handlers.seeking=()=>{observe('seeking');if(started)state.cancel('seek-after-start');};
+  handlers.emptied=()=>state.cancel('emptied');handlers.error=()=>state.cancel('media-error');
+  handlers.timeupdate=handlers.ended=event=>{
+    observe(event?.type??'progress');
+    if(!active()||!started||player.seeking){observe('ignored-progress');return;}
+    const now=player.currentTime;
+    // Native played ranges distinguish actual media coverage from event cadence.
+    // Any seek after startup invalidates this invocation, including old played ranges.
+    let genuine=false;for(let i=0;i<player.played.length;i++)if(player.played.start(i)<=last&&player.played.end(i)>=now)genuine=true;
+    observe('continuity',{genuine});if(now<last||!genuine){state.cancel(now<last?'backward-progress':'no-native-continuity');return;}
+    covered+=Math.max(0,Math.min(now,end)-Math.max(last,start));last=now;observe('coverage',{genuine,completionEligible:now>=end-.05&&covered>0&&covered>=Math.max(0,end-start-.3)});
+    if(now>=end-.05){const complete=covered>0&&covered>=Math.max(0,end-start-.3);observe('endpoint',{genuine,completionEligible:complete,completionReason:complete?'genuine-coverage':'insufficient-coverage'});state.cancel(complete?'complete':'insufficient-coverage');player.pause();if(complete)onComplete?.();}
+  };
+  for(const [type,fn] of Object.entries(handlers))player.addEventListener(type,fn);
+  observe('play-request');return player.play().then(()=>{observe('play-resolved');if(active()){if(player.currentTime>start+.05||player.seeking){state.cancel('invalid-start-position');return;}started=true;observe('started');}},error=>{state.cancel('play-rejected');throw error;});
 }
 function renderAttempt(){
   if(!current)return;const a=current;heard.clear();editors.clear();reveal('attemptPanel');$('attemptKind').textContent=a.kind==='partial'?'局部新录音':'完整录音';
-  if(blobURL)URL.revokeObjectURL(blobURL);blobURL=URL.createObjectURL(a.audio);$('player').src=blobURL;
+  replayRequest++;replayOriginal=null;if(blobURL)URL.revokeObjectURL(blobURL);blobURL=URL.createObjectURL(a.audio);$('player').src=blobURL;
   $('audioStatus').textContent=`${a.duration?`${a.duration.toFixed(1)} 秒 · `:''}${a.interrupted?'采集中断 · ':''}${a.observation?.reason??'尚未完成声音检查'}。仅候选观测，非流利度评分。`;
-  $('rawText').textContent=a.raw?.text??'尚未取得转写';$('transcript').replaceChildren();$('feedback').replaceChildren();$('observations').replaceChildren();
+  $('rawText').textContent=a.raw?.text??'尚未取得转写';$('transcript').replaceChildren();$('feedback').replaceChildren();$('observations').replaceChildren();$('processFeedback').replaceChildren();
   reveal('retryAsr',!a.raw&&!a.interrupted);reveal('confirm',!!a.raw);reveal('reviewHint',!!a.raw);
   if(a.raw){$('reviewHint').textContent=a.raw.wordTiming?.status==='PARTIAL'?'词级定位部分不可用；请按整段回听，确认否定词、数字、条件和术语后再诊断。':'请逐段完整回听并确认关键字后再诊断。';const v=latest(a);v.spans.forEach(s=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=s.text;editor.rows=2;editor.maxLength=2000;editors.set(s.id,editor);const b=button(`回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{heard.add(s.id);b.textContent='已完整回听 ✓';}));row.append(b,editor);$('transcript').append(row);});
     if(v.reviewed)$('reviewHint').textContent='已保存核对版本。再次修改后需要重新回听确认；这不会创建新口头表现。';
-    for(const report of a.reports.filter(r=>r.transcriptVersion===v.id))renderFeedback(report);
+    for(const report of a.reports.filter(r=>r.transcriptVersion===v.id)){
+      if(report.channel==='content')renderFeedback(report);
+      else if(report.channel==='delivery')$('processFeedback').append(el('p','历史过程报告（旧格式，未作为定位证据）','muted'),...report.findings.map(f=>el('p',f.message)));
+    }
+    renderProcess(a);
   }
   const events=a.observation?.events??[];
-  if(events.length&&a.raw){$('observations').append(el('p','以下仅是近静音候选。完整回听确认确实影响表达后，才请求解释。','muted'));events.slice(0,8).forEach(event=>{const row=el('div'),b=button(`回听候选 ${event.start.toFixed(1)}–${event.end.toFixed(1)} 秒`,()=>play(Math.max(0,event.start-.5),Math.min(a.duration,event.end+.5),()=>{event.heard=true;b.textContent='候选已回听 ✓';}));const c=button('确认此候选并分析',async()=>{if(!event.heard)throw new Error('NOT_HEARD');if(!latest(a).reviewed)throw new Error('ASR_REVIEW_REQUIRED');await diagnose(a,'delivery',[{...event,confirmed:true}]);});row.append(b,c);$('observations').append(row);});}
+  if(events.length&&a.raw){$('observations').append(el('p','以下仅是本地近静音候选，不代表不理解。完整回听后可确认保存；不会为此调用模型。','muted'));events.slice(0,8).forEach(event=>{const row=el('div'),b=button(`回听候选 ${event.start.toFixed(1)}–${event.end.toFixed(1)} 秒`,()=>play(Math.max(0,event.start-.5),Math.min(a.duration,event.end+.5),()=>{event.heard=true;b.textContent='候选已回听 ✓';}));const c=button('确认并保存过程证据',()=>confirmProcess(a,event));row.append(b,c);$('observations').append(row);});}
+}
+function processFor(a){return a.reports.filter(r=>r.channel==='process'&&r.transcriptVersion===latest(a).id).flatMap(r=>r.processEvidence);}
+async function confirmProcess(a,event){
+  if(!canNavigate())return;
+  const target=topic;if(current!==a||!target?.attempts.includes(a)||deleted.has(a.id))throw new Error('INVALID_REFERENCE');
+  const evidence=confirmLocalProcess(attemptRequest(a),event,a.observation?.events??[]);
+  if(!processFor(a).some(e=>e.id===evidence.id))a.reports.push({channel:'process',attemptId:a.id,transcriptVersion:evidence.transcriptVersion,processEvidence:[evidence],createdAt:Date.now()});
+  processing=true;
+  try{await save();if(topic===target&&!deleted.has(a.id)){renderAttempt();notice('过程证据已在本机保存，未调用模型；它本身不表示理解有误。');}}finally{processing=false;}
+}
+function renderProcess(a){
+  let evidence;try{evidence=processEvidence(processFor(a),attemptRequest(a),a.observation?.events??[]);}catch{ $('processFeedback').append(el('p','过程证据引用无法核对，未用于定位。','muted'));return; }
+  const labels={near_silence:'近静音',restart:'重新起句',self_repair:'明确自我修正',repetition:'重复',coarse_segment:'粗粒度分段'};
+  for(const e of evidence){
+    const card=el('article',undefined,'processObservation');card.dataset.evidenceId=e.id;
+    card.append(el('strong',labels[e.type]),el('p',e.origin==='fixture'?'预标注示例，不代表已有检测器。':e.confirmation==='human_confirmed'?'本地候选，已回听确认。':'本地候选，尚未确认。'),el('p','这是讲解过程观察，不是知识判断。','muted'));
+    if(e.quote!==null)card.append(el('blockquote',e.quote));
+    const span=e.spanId&&latest(a).spans.find(s=>s.id===e.spanId),start=e.start??span?.start,end=e.end??span?.end;
+    if(start!==undefined)card.append(button(`回听过程 ${start.toFixed(1)}–${end.toFixed(1)} 秒`,()=>play(start,end)));
+    $('processFeedback').append(card);
+  }
 }
 $('confirm').onclick=()=>act(async()=>{
   const a=current; if(!a?.raw)return;if(a.raw.spans.some(s=>!heard.has(s.id)))throw new Error('NOT_HEARD');
-  const corrected=revisedTranscript(a,a.raw.spans.map(s=>({text:editors.get(s.id).value})));a.corrections.push(corrected);await save();await diagnose(a,'content');
+  const corrected=revisedTranscript(a,a.raw.spans.map(s=>({text:editors.get(s.id).value})));a.corrections.push(corrected);await save();await diagnose(a);
 });
-async function diagnose(a,channel,events=[]){
-  const request=attemptRequest(a);notice(channel==='content'?'正在核对内容和逻辑……':'正在解释已确认的声音候选……');
+async function diagnose(a){
+  const channel='content',events=[],request=attemptRequest(a);notice('正在核对内容和逻辑……');
   const result=await api('/api/diagnose',{source:a.source,attempt:request,channel,events});
   if(deleted.has(a.id)||!topic||deleted.has(topic.id))return;
   validateFindings(result.value,a.source,request,channel,events);a.reports.push({...result.value,channel,createdAt:Date.now()});a.status='DIAGNOSED';await save();renderAttempt();notice('反馈已与本次来源、转写版本和原声关联。可以继续学，也可以再讲。');
 }
 function renderFeedback(report){
-  $('feedback').append(el('h3',report.channel==='content'?'内容与逻辑':'表达观察'));
+  if(report.channel!=='content')return;
+  if(!latest(current).reviewed||current.interrupted){$('feedback').append(el('p','先回听并核对转写，再查看内容定位。','muted'));return;}
+  let targets=[];try{const {sourceId,attemptId,transcriptVersion,findings}=report;targets=localize({source:current.source,attempt:attemptRequest(current),report:{sourceId,attemptId,transcriptVersion,findings},evidence:processFor(current),events:current.observation?.events??[]}).diagnosticTargets;}catch{ $('feedback').append(el('p','该反馈尚未通过当前来源／转写校验，不生成定位建议。','muted')); }
   if(!report.findings.length)$('feedback').append(el('p','本次没有足够证据生成此类反馈。'));
-  for(const f of report.findings){const card=el('article',undefined,'finding'),labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足',observation:'表达观察'};card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message),el('blockquote',`材料：${f.sourceQuote}`));
+  for(const [index,f] of report.findings.entries()){const card=el('article',undefined,'finding'),labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足'};card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message),el('blockquote',`材料：${f.sourceQuote}`));
     if(f.spanId){const span=latest(current).spans.find(s=>s.id===f.spanId);card.append(el('blockquote',`本次原话：${f.quote}`),button('回听对应原声',()=>play(span.start,span.end)));}else card.append(el('p','未表达内容没有可对应的音频时间点。','muted'));
-    let focus=null;try{focus=remediationFocus(f,report.channel);}catch{}
-    if(focus)card.append(button('再学这一点',async()=>{topic.focus=remediationFocus(f,report.channel);await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',remediationFocus(f,report.channel),{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',remediationFocus(f,report.channel),current.id)));$('feedback').append(card);
+    const target=targets.find(t=>t.contentFindingIds.includes(`content:${current.id}:${report.transcriptVersion}:${index}`));
+    if(target){card.dataset.targetId=target.id;card.append(el('p',`值得核对的关系：${target.focus}`,'diagnosticTarget'));
+      if(target.processEvidenceIds.length)card.append(el('p',`另有 ${target.processEvidenceIds.length} 条同段过程观察，见“讲解过程”；时间相邻不证明理解有误。`,'muted'));
+      card.append(button('再学这一点',async()=>{topic.focus=target.focus;await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',target.focus,{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',target.focus,current.id)));}
+    $('feedback').append(card);
   }
 }
 $('apply').onclick=()=>act(()=>teach('给我一个新的、相关的应用情境，不要先公布答案。','apply',null,{internalStarter:true}));
