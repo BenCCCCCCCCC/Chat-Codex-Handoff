@@ -16,9 +16,9 @@ Accepted local feature baseline:
 
 **PHASE3B-PREFLIGHT-01:** PASS / zero-call / read-only.
 
-**PHASE3B-LIVE-01:** READY AS A PROPOSAL / **NOT AUTHORIZED / NOT STARTED**.
+**PHASE3B-LIVE-01:** **OWNER-AUTHORIZED / READY TO EXECUTE / NOT STARTED**.
 
-No live provider/model call is authorized until the owner explicitly approves the bounded live experiment below.
+Owner authorization received on 2026-09-28: **maximum 3 provider calls, zero retries, incremental local exposure ceiling US$0.03432**. Live execution is authorized only within the bounded PHASE3B-LIVE-01 protocol below; no broader spend or continuation is authorized.
 
 ## 2. Phase 3B preflight receipt
 
@@ -208,13 +208,11 @@ The live task must:
 
 Success of one recording is not learning-efficacy validation. It is only owner workflow + evidence-quality validation.
 
-## 8. Owner decision required
+## 8. Owner authorization — RECORDED
 
-The owner must explicitly choose one of:
-- **Authorize PHASE3B-LIVE-01 under the 2–3-call / zero-retry / <=US$0.03432 local-exposure plan**; or
-- **Do not authorize live spend yet**.
+Owner explicitly authorized: **PHASE3B-LIVE-01, maximum 3 provider calls, zero retries, incremental local exposure ceiling US$0.03432**.
 
-No implicit authorization is inferred from historical US$5/US$10 caps.
+This authorizes only the bounded experiment defined here. It does not authorize a second recording, Repair/Apply calls, model migration, retries, broader validation spend, push/merge, or Phase 3B continuation beyond the recorded stop/checkpoint rules.
 
 ## 9. Classification
 
@@ -241,11 +239,11 @@ Unknown:
 - owner usefulness/replay burden.
 
 Not Done:
-- PHASE3B-LIVE-01;
+- PHASE3B-LIVE-01 execution;
 - ASR migration away from deprecated Whisper;
 - retention decisions;
 - push/merge/final product acceptance.
 
 ## 10. Next smallest step
 
-Wait for explicit owner authorization or decline of the bounded PHASE3B-LIVE-01 plan. Do not call provider or microphone before that decision.
+Dispatch the owner-authorized **PHASE3B-LIVE-01** to Codex using the canonical trigger in HANDOFF. Codex must execute only the bounded 1-recording protocol, stop at the mandated replay/transcript checkpoint when required, enforce the 3-call maximum / zero-retry / US$0.03432 incremental exposure ceiling, and return evidence to MASTER. No automatic second recording or follow-up batch.
