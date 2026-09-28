@@ -1,277 +1,228 @@
-# Active Handoff — DIAGNOSTIC-LOCALIZATION-01 / Batch B
+# Active Handoff — Batch B Correction / REPLAY-GATE-01
 
-Updated: 2026-09-28 — executable task, not execution receipt
+Updated: 2026-09-28
 Role: 00 MASTER
-Status: **READY / NOT DISPATCHED / NOT STARTED**
+Status: **READY / NOT DISPATCHED / SAME TASK / PRESERVE UNCOMMITTED B WORK**
 
-## 0. Binding and mandatory preflight
+## 0. Authority and binding
 
-Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`.
+Repository:
+`BenCCCCCCCCC/Chat-Codex-Handoff`
 
-Canonical instruction branch: `meta/master-state`.
+Canonical branch:
+`meta/master-state`
 
-Read and record the actual immutable canonical commit used:
+Read latest:
 1. `docs/master/CURRENT_STATE.md`
 2. `docs/master/HANDOFF.md`
 
+Record the immutable canonical commit actually read.
+
 Execution checkout:
-`F:\Chat-Codex-Handoff\validation-repo`.
+`F:\Chat-Codex-Handoff\validation-repo`
 
-Execution branch:
-`prototype/study-teachback-v0.1`.
+Branch:
+`prototype/study-teachback-v0.1`
 
-Expected **local** Batch B base:
-`f06900fa9dcffd7768a1ec283715a50f6570832e`.
+Expected HEAD remains Batch A local commit:
+`f06900fa9dcffd7768a1ec283715a50f6570832e`
 
-Important: the remote product branch may still show `f6a000c...` because Batch A was intentionally not pushed. Do not reset/fetch/pull/switch merely to make local match remote.
+Important: Batch B changes are intentionally **uncommitted**. Preserve them exactly. Do not reset/clean/checkout/rebase/fetch/pull to remove them.
 
-Before editing:
-- report cwd / Git top-level / branch / HEAD;
-- report tracked/untracked worktree summary;
-- verify HEAD is exactly `f06900fa9dcffd7768a1ec283715a50f6570832e`;
-- verify Batch A tracked worktree is clean and unrelated untracked artifacts remain preserved;
-- if HEAD differs or there are conflicting tracked changes, STOP and report; do not reset/rebase/amend.
+Before editing, report:
+- HEAD;
+- tracked modified/new Batch B files;
+- unrelated untracked artifacts;
+- confirmation that the current worktree corresponds to the delivered Batch B patch.
 
-## 1. Goal
+If current tracked work no longer matches the delivered Batch B review bundle, STOP and report the divergence.
 
-**Task ID: DIAGNOSTIC-LOCALIZATION-01 / Batch B / Phase 3A.**
+## 1. Task
 
-Create a small, explicit evidence architecture that separates:
-- what the learner said about the source;
-- what was observably present in the explanation process;
-- which concept relation/reasoning transition is worth verifying next.
+**Task ID: B-REPLAY-GATE-01 / Correction Packet for DIAGNOSTIC-LOCALIZATION-01.**
 
-This is a **zero-live-product-API architecture + deterministic fixture validation task**. It is not physical microphone validation, not a new speech-scoring system and not a learning-efficacy test.
+This is a real Must Fix discovered during Batch B regression.
 
-## 2. Non-negotiable boundaries
+Goal:
+diagnose and minimally resolve the repeated replay-completion failure so the existing full browser suite can complete and the already-written B3 native browser process-evidence persistence test can actually run.
 
-Zero live product/provider calls:
-- no real ASR;
-- no real Tutor/content diagnosis/process diagnosis;
-- no TTS/model-list/access probe;
-- no provider fallback/retry.
+This correction does **not** reopen B1/B2/B4 architecture scope and does not authorize Phase 3B.
 
-Use isolated fake/stub providers, synthetic/pre-labelled fixtures and test ledgers only.
+## 2. Known evidence
 
-Do not:
-- modify provider/model configuration or switch away from current production models;
-- change retention/storage database schema/origin/budget caps/pricing/ledger history;
-- add a new audio ML/VAD/prosody dependency;
-- implement pronunciation, pitch/stress grading, emotion/confidence/personality inference or a global speaking/PTE score;
-- require exact word timing or hard-code Whisper-specific timing shapes;
-- perform broad directory migration/framework rewrite;
-- touch owner profile/audio/secrets;
-- push/merge/reset/clean/amend;
-- automatically start Phase 3B.
+The same check failed in:
+- Batch B baseline browser after 18 passing checks;
+- Batch B browser run after 24 passing checks;
+- second Batch B browser run after 24 passing checks.
 
-Preserve Batch A provenance, recording-registration and entry-document behavior.
+Failure:
+`WAIT_FAILED document.querySelector('#transcript button').textContent.includes('✓')`
 
-## 3. B0 — baseline and isolation
+Test:
+`diagnosis blocked before segment replay; correction keeps original identity and audio`
 
-Before feature edits:
-- inspect current relevant runtime/test code;
-- establish zero-live-call isolation using the existing Batch A test wrapper/guard rather than inventing a second framework;
-- run safe applicable baseline tests against local `f06900f...`;
-- record exact fresh baseline results and any pre-existing intermittent replay behavior separately;
-- do not launch the real owner profile/Start-Study as a shortcut.
+Batch A had previously observed one replay timeout followed by an exact 40/40 retry. The repeated Batch B failures upgrade this from a non-blocking unknown to an acceptance blocker.
 
-B0 PASS requires correct local base/worktree and auditable test isolation.
+Batch B did not modify the production `play()` function before this failure was observed, so do not assume B caused it.
 
-## 4. B1 — evidence contracts
+## 3. Non-negotiable replay semantics
 
-Introduce or refactor minimal domain contracts for the following three concepts.
+Do not make the suite green by weakening the safety gate.
 
-### 4.1 contentFindings
+A requested replay segment counts as complete only when the requested audio interval was genuinely played with the existing tolerance.
 
-Retain source-grounded content/logic semantics:
-- supported / missing / incorrect / unknown as applicable;
-- source/attempt/transcript identity;
-- source quote and transcript span/quote rules already validated by existing content logic;
-- final explicitly corrected stance remains authoritative over a withdrawn statement.
+Must NOT count as complete merely because:
+- currentTime was seeked/jumped near the end;
+- the user/browser skipped a large interval;
+- playback never successfully started;
+- a stale event/callback from another replay fires;
+- coverage is below the intended requirement.
 
-Do not weaken existing content validation.
+Do not replace replay with a checkbox, automatic confirmation, or a new skip/adaptive policy.
 
-### 4.2 processEvidence
+## 4. C0 — focused reproduction and root cause
 
-Process evidence is **observable evidence**, not a knowledge verdict.
+On the current uncommitted B worktree:
 
-Minimum contract properties should support:
-- stable evidence ID;
-- evidence type;
-- attempt/transcript identity where relevant;
-- real time interval and/or real span reference when available;
-- optional literal quote only when it is truly a substring of an existing transcript span;
-- provenance/confirmation state sufficient to distinguish pre-labelled fixture, local detector candidate and human-confirmed evidence.
+- use the existing zero-live-call wrapper/isolated Edge profile/synthetic saved audio;
+- reproduce the failing replay check in a focused way where possible;
+- collect bounded diagnostics for media state relevant to the failure (for example play promise/result, currentTime progression, timeupdate/playing/pause/ended/seeking events, requested interval, accumulated coverage and completion callback);
+- identify whether the defect is:
+  - production replay coverage bookkeeping,
+  - headless/browser event timing,
+  - test harness media control,
+  - or another bounded cause.
 
-Process evidence MUST NOT require or contain:
-- `supported/missing/incorrect/unknown` knowledge status;
-- mandatory textbook `sourceQuote`;
-- a repair instruction that implies a knowledge deficit;
-- confidence/anxiety/personality/accent judgment.
+Do not leave verbose debug logging in production unless it is genuinely needed product behavior. Diagnostic-only instrumentation may remain in test code only when useful and non-noisy.
 
-Current confirmed near-silence can be represented as process evidence. Pre-labelled restart/self-repair/repetition/coarse-segmentation fixture evidence may be used to validate the contract/routing, but must not be presented as proof that a production detector exists.
+C0 must end with an evidence-backed root-cause statement, not a guess.
 
-### 4.3 diagnosticTarget
+## 5. C1 — minimal correction
 
-A diagnostic target is a **worth-verifying / worth-re-explaining focus**, not a final diagnosis.
+Apply the smallest correction consistent with section 3.
 
-It must:
-- identify the concept relation/focus using real content-finding data;
-- reference the supporting content finding(s);
-- optionally reference related process evidence separately;
-- preserve which channel supports which statement;
-- never let process evidence alone create a knowledge deficit;
-- never fabricate a timestamp for missing content;
-- remain actionable with a focused follow-up such as “只重新解释这一关系”.
+If production `play()` / coverage bookkeeping is the root cause:
+- make completion robust to legitimate browser event cadence;
+- still reject seeks/skips/insufficient playback;
+- ensure replay state is isolated per invocation and old handlers cannot complete a newer replay.
 
-Avoid opaque numeric scores or invented probabilities.
+If the isolated test harness is the root cause:
+- fix only the harness/media-driving logic;
+- add a focused assertion proving production replay completion still requires genuine coverage.
 
-## 5. B2 — localization rules
+Do not redesign the player or replay UX.
 
-Implement a small deterministic localization layer, preferably a pure function/module suitable for direct unit testing.
+## 6. C2 — focused replay regression
 
-Required invariants:
+Add/adjust deterministic coverage for at least:
+- normal full requested-segment playback -> completion;
+- insufficient playback -> no completion;
+- seek/jump to end -> no false completion;
+- new replay supersedes stale callback/state;
+- rejected/failed play does not mark heard.
 
-1. **Fluent wrong:** an incorrect content finding creates a diagnostic target even when no process evidence exists.
-2. **Hesitant correct:** supported content plus pause/restart evidence does NOT create a knowledge-gap target. Process evidence may still be shown separately.
-3. **Uncertain/incorrect relation + related process evidence:** the target remains based on the content issue; related process evidence may be attached as corroborating localization context, not proof of ignorance.
-4. **Correct explicit self-repair:** final content remains supported; a self-repair process event may be retained, but must not recreate the withdrawn error as an unresolved target.
-5. **Critical unreviewed ASR:** downstream content/localization remains blocked until the transcript review requirement is satisfied.
-6. **Content gap without process evidence:** missing/incorrect/unknown content still produces the appropriate focused target without an audio timestamp.
+Use existing architecture where possible. Do not add a new media framework/dependency.
 
-For a `missing` finding, `spanId/quote` remain null. Do not attach a process timestamp as “when the missing idea occurred.” A separate neighboring process event may be referenced only as independently observed context.
+## 7. C3 — unblock Batch B native browser evidence
 
-## 6. B3 — process path and cost discipline
+The full browser suite must reach and PASS the Batch B test:
+`B3 local process confirmation requires replay, stores separate evidence and makes zero provider dispatches`.
 
-The current process/delivery path is too coupled to content because it requires content-like fields such as a textbook quote/knowledge-shaped output.
+Verify in the final browser run:
+- confirmation before candidate replay is blocked;
+- valid candidate replay then permits local process confirmation;
+- exactly one process report persists;
+- duplicate confirmation does not duplicate it;
+- reload/history preserves it;
+- process report contains no knowledge status or sourceQuote;
+- content finding and process section remain separate;
+- fake-provider call count does not increase;
+- test ledger is unchanged by process confirmation.
 
-Refactor only as much as necessary so a confirmed local process observation can be stored/rendered as process evidence without requiring a content verdict or textbook quote.
+Do not replace this with the existing VM/unit B3 test; both can coexist.
 
-Preferred direction for this batch:
-- confirmed local near-silence/process evidence should not require a provider semantic call merely to become process evidence;
-- keep replay/human confirmation for evidence that currently requires it;
-- if removing the process semantic call from the active UI path can be done minimally and safely, test that confirming process evidence adds **zero semantic/provider dispatches**;
-- do not remove the content-diagnosis model call or change provider transport/model settings;
-- do not perform a broad cleanup of old DELIVERY constants/routes unless required for correctness. Unused legacy code can be recorded as Future Optional rather than expanded scope.
+## 8. C4 — final stability/regression gate
 
-If a minimal local process-evidence path cannot be implemented without protected provider/schema changes beyond this task, STOP with the smallest proposed exception instead of silently widening scope.
+On unchanged final code:
 
-## 7. B4 — UI contract
+1. Run full Node suite -> PASS with fresh count.
+2. Run focused diagnostic suite -> PASS with fresh count.
+3. Run full browser suite **three consecutive times**, exact same code and command -> every run must complete PASS. No code/test change between these three runs.
+4. `git diff --check` -> PASS.
+5. Confirm zero live product/provider calls with the existing guard/receipts.
+6. Confirm protected boundaries unchanged:
+   - no provider/model switch;
+   - no retention/storage schema/budget-cap change;
+   - no new dependency;
+   - no owner profile/audio;
+   - no push/merge.
 
-Use two visibly and semantically separate areas:
+If any of the three consecutive browser runs fails at replay or another product-relevant assertion, return BLOCKED with evidence. Do not loop/retry until green.
 
-- **内容理解** — content/logic findings and focused learning action.
-- **讲解过程** — observable process evidence with replay/location context.
+## 9. Commit policy
 
-A process-only observation must not be styled/labeled as a content error.
+Only after C0–C4 pass:
+- create one focused local commit containing the delivered Batch B changes plus the minimal R07 correction;
+- stage only the known Batch B/correction files;
+- no push/merge/amend/reset.
 
-Where a diagnostic target exists, expose a focused next action such as re-explaining/relearning that relation. Do not redesign the whole app.
+If C0–C4 do not all pass, leave the worktree reviewable and do not create a false-success commit.
 
-Preserve raw/corrected transcript separation and existing replay requirement. This batch does not approve a new skip/adaptive replay policy.
-
-## 8. B5 — required zero-call fixture matrix
-
-At minimum, add deterministic tests for all six cases:
-
-| Fixture | Expected result |
-| --- | --- |
-| fluent wrong | content target exists; no process evidence required |
-| hesitant correct | content remains supported; process evidence separate; no knowledge target |
-| uncertain/incorrect relation + related process evidence | one content-based target references process evidence separately |
-| explicit correct self-repair | no unresolved knowledge target from withdrawn error; process self-repair may remain |
-| critical unreviewed ASR | localization blocked/fails closed |
-| content gap without process signal | content target exists; no fabricated audio timestamp |
-
-Fixture labels are oracle inputs for architecture tests, not real detector/model outputs.
-
-Also cover:
-- processEvidence rejects knowledge-status/sourceQuote leakage where the contract forbids it;
-- invalid event/span/time references fail closed;
-- content validation remains unchanged;
-- confirming local process evidence does not invoke a live provider and, if B3 local path is adopted, does not invoke the stub semantic process call either;
-- two UI areas render independently;
-- Batch A provenance/recording-registration regressions remain green.
-
-## 9. Regression and evidence
-
-Reuse Batch A's isolated wrapper/guard. No usable persistent credentials in tests. Block non-loopback outbound traffic. Use fresh run directories and test ledgers.
-
-Run the applicable existing Node/browser suites plus new focused B tests. Report actual commands/counts/exits; historical 79/79 and 40/40 are context, not future results.
-
-The previously observed intermittent native replay timeout is not a B implementation target. If it recurs, report it separately; do not weaken replay assertions or redesign replay to make the suite green.
-
-No real owner microphone test in B.
-
-One focused local commit for B is permitted only after required checks pass. Stage only B files. No push/merge/amend/reset.
-
-## 10. Acceptance matrix
-
-Report B0–B5 as PASS / FAIL / NOT RUN / BLOCKED:
-
-| ID | Acceptance |
-| --- | --- |
-| B0 | Correct Batch A local base/worktree; isolated zero-live-call baseline |
-| B1 | Explicit contentFindings/processEvidence/diagnosticTarget contracts with channel separation |
-| B2 | Six localization invariants behave deterministically without process→knowledge inference |
-| B3 | Process evidence can exist without textbook quote/knowledge verdict; local confirmed process path does not require an extra semantic provider call if implemented |
-| B4 | 内容理解 / 讲解过程 render separately; focused target action does not conflate channels |
-| B5 | Fresh focused + applicable regression evidence, complete delta and zero-live-call proof |
-
-## 11. Delivery Packet
+## 10. Delivery Packet
 
 Return:
-- Task ID and canonical document commit read.
-- Repo/branch/base/final local HEAD.
-- Exact changed-file list and complete reviewable patch/new files.
-- Commands, fresh results and B0–B5 mapping.
-- Zero-live-call enforcement/observations.
-- Exact fixture definitions and expected/actual outputs.
-- Confirmation that process evidence alone never generated a knowledge target.
-- Confirmation that missing content received no fabricated spoken timestamp.
-- Tests Not Run / Unknown / Blocking / User Decision Needed / Future Optional separately.
-- Confirmation: no provider/model/retention/storage schema/cap change, no new dependency, no push/merge, no Phase 3B.
+- Task ID and canonical commit read.
+- Root cause and evidence.
+- Repo/branch/base/final HEAD.
+- Exact changed file list and complete patch/new files.
+- C0/C1/C2/C3/C4 PASS/FAIL/BLOCKED mapping.
+- Fresh Node/focused diagnostic counts.
+- All three consecutive full-browser run counts/exits.
+- Explicit B3 browser persistence/zero-dispatch evidence.
+- Zero-live-call evidence.
+- Tests Not Run / Unknown / Blocking / User Decision Needed / Future Optional.
+- Confirmation no Phase 3B, push or merge.
 
-Because no product push is authorized, include reviewable patch/new-file contents in an attachment/response, not only an inaccessible local path.
+Package the review evidence so MASTER can inspect it without local-path assumptions.
 
-## 12. Stop conditions
+## 11. Stop conditions
 
-STOP and report if:
-- local HEAD is not the accepted Batch A local commit or tracked work conflicts;
-- canonical docs cannot be read;
-- safe zero-live-call isolation cannot be established;
-- a real provider call occurs/is about to occur;
-- owner data/credentials could be touched;
-- satisfying B requires model/provider switch, storage migration, new audio ML dependency, exact word alignment or broad architecture rewrite;
-- content/process separation would require weakening existing source/transcript validation;
+STOP if:
+- current uncommitted B work differs materially from the delivered review bundle;
+- safe isolated replay reproduction cannot be established;
+- the fix would require weakening replay confirmation;
+- a live provider call occurs/is about to occur;
+- owner data/credentials might be touched;
+- a new dependency, model/provider/storage/retention migration, or broad player rewrite is required;
 - unrelated work would be overwritten.
 
-Return after B even if PASS. Do not start Phase 3B automatically.
-
-## 13. Canonical short trigger
+## 12. Canonical correction trigger
 
 ```text
-执行 Batch B — DIAGNOSTIC-LOCALIZATION-01 / Phase 3A。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 分支中最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录实际 canonical commit。执行目录 F:\Chat-Codex-Handoff\validation-repo，分支 prototype/study-teachback-v0.1；先确认本地 HEAD 正好是 Batch A 已接受的本地 commit f06900fa9dcffd7768a1ec283715a50f6570832e，若不匹配或 tracked work 冲突就停下报告，不要 reset/fetch/pull 纠正。
+继续同一个 Batch B Codex 任务，执行 Correction Packet：B-REPLAY-GATE-01。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 分支最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录实际 canonical commit。
 
-严格按 HANDOFF 的 B0–B5 执行：把 contentFindings、processEvidence、diagnosticTarget 分开；processEvidence 只能是可观察过程证据，不得带知识 verdict 或强制教材 sourceQuote；process evidence 单独存在不能制造“不理解”结论；missing 内容不得伪造音频时间点。实现并验证六个 zero-call fixture，保持“内容理解 / 讲解过程”分区。优先让确认的本地过程证据不需要额外 semantic/provider 调用，但不要改内容诊断模型/provider。
+保持当前 F:\Chat-Codex-Handoff\validation-repo、prototype/study-teachback-v0.1 和现有未提交 Batch B 改动；HEAD 应仍为 f06900fa9dcffd7768a1ec283715a50f6570832e。不要 reset/clean/checkout/fetch/pull 丢掉 Batch B 工作。
 
-禁止真实产品 API、真实麦克风、模型/provider/retention/数据库 schema/预算上限修改、新音频 ML 依赖、PTE/情绪/人格/口音评分、push/merge、自动进入 Phase 3B。使用 Batch A 已建立的隔离测试框架。完成后返回完整 Delivery Packet、diff/new files、fresh tests、B0–B5 evidence 和所有未验证项，然后停下来交 MASTER 审查。
+只处理当前真实 Must Fix：重复出现的 replay-completion regression。按 HANDOFF C0–C4 先复现并用证据判断是 production replay bookkeeping 还是 headless/test harness 问题，再做最小修正。禁止通过降低覆盖要求、seek 到结尾、自动标记已回听、跳过 replay 等方式让测试变绿。
+
+修正后必须让 B3 浏览器级过程证据保存/刷新/零 semantic dispatch 测试真正执行并通过；最终 Node 和 focused diagnostic 全绿，并在完全不改代码/测试的情况下连续三次执行完整 browser suite 都 PASS。继续保持 zero live product API、无真实麦克风、无模型/provider/retention/数据库 schema/预算/新依赖变化，不 push/merge，不进入 Phase 3B。
+
+如果三次 browser 稳定性无法通过，就 BLOCKED 返回，不要反复重试到偶然成功。完成后返回新的完整 review packet、root-cause evidence、diff、C0–C4 结果和所有未验证项，然后停下交 MASTER 审查。
 ```
 
-## 14. Classification
+## 13. Classification
 
 Completed:
-- Batch A accepted by MASTER from delivered evidence.
+- Batch B implementation delivered and reviewed.
+- B1/B2/B4 accepted at scoped engineering/fixture level.
 
-Verified:
-- Batch A review-bundle integrity and scoped engineering evidence.
+Blocked:
+- Overall Batch B acceptance on R07 replay gate.
+- B3 native browser persistence evidence not reached.
+- B5 full browser regression.
 
-Ready:
-- Batch B executable specification.
+User Decision Needed:
+- none for this bounded correction.
 
-Not Done:
-- Batch B dispatch/execution.
-- Real microphone/ASR diagnostic-value validation.
-- Retention/replay UX work.
-- Push/merge/final owner acceptance.
-
-Next smallest step: owner sends the Batch B trigger. Codex executes B only and returns for MASTER review.
+Next smallest step:
+owner sends the correction trigger to the **same Codex task**. Codex preserves current B work, resolves only R07, returns evidence, and stops.
