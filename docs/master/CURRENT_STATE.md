@@ -16,6 +16,10 @@ Role: 00 MASTER / authoritative dynamic state
 
 **PHASE3B-GPU-ISOLATION-01:** BLOCKED — `--disable-gpu` did not avoid the same fatal startup path.
 
+**PHASE3B-EDGE-MINIMAL-LAUNCH-01:** BLOCKED before Edge start because the Codex process could not create the requested dedicated profile directory under `%LOCALAPPDATA%`.
+
+**PHASE3B-HOST-BROWSER-SMOKE-01:** READY / OWNER MANUAL ACTION / OUTSIDE CODEX SANDBOX / ZERO PROVIDER CALLS.
+
 **PHASE3B-EDGE-MINIMAL-LAUNCH-01:** READY / NOT DISPATCHED / ZERO PROVIDER CALLS / ZERO MICROPHONE / READ-ONLY POLICY CHECK + REVERSIBLE FRESH-PROFILE LAUNCH ONLY.
 
 Original live authorization remains fully unused:
@@ -268,3 +272,30 @@ User Decision Needed:
 ## 11. Next smallest step
 
 Execute PHASE3B-EDGE-MINIMAL-LAUNCH-01. Do not change system/browser policy or product behavior. Return evidence to MASTER before any live-flow resume.
+
+## Codex Windows sandbox conclusion — 2026-09-29
+
+OpenAI's current Windows Codex sandbox documentation states that default Codex execution is write-restricted to the workspace and configured writable roots, and that descendant processes inherit the same sandbox boundary.
+
+Therefore the new evidence is consistent with the following explanation:
+- Codex could not create the requested `%LOCALAPPDATA%\ChatCodexPhase3B\...` profile directory because it was outside the sandbox's writable roots;
+- Edge launched by Codex is also a sandbox descendant and inherits those filesystem/network restrictions;
+- the earlier Edge/GPU ACCESS_DENIED failures are therefore likely caused or materially contributed to by the Codex sandbox rather than by product code.
+
+This is the strongest current explanation, not proof of the exact denied filesystem object in every previous GPU crash.
+
+Decision:
+- stop browser/microphone validation from inside Codex;
+- do not enable Codex Full Access, broad writable roots, ACL edits, elevation or sandbox bypass just to run this validation;
+- perform one zero-call browser/server smoke manually in the owner's normal Windows session outside Codex sandbox.
+
+Manual smoke binding:
+- repo: `F:\Chat-Codex-Handoff\validation-repo`;
+- accepted HEAD: `dd8317b43100b8cbaad684cab7fc02957e32de62`;
+- fresh Edge profile: `F:\Chat-Codex-Handoff\phase3b-edge-profile-01` (outside repo and outside default Edge profile);
+- server: `node .\study-teachback-app\server.mjs` from repo root;
+- Edge: normal user-launched `msedge.exe` with only `--user-data-dir`, `--no-first-run`, `--no-default-browser-check` and the local URL.
+
+The smoke must not click Start Learning, create a topic, use microphone, or trigger Tutor/ASR/diagnosis. Existing 3-call / zero-retry / US$0.03432 live authorization remains paused and unused.
+
+If the root page opens stably outside Codex sandbox, resume Phase3B manually in that same fresh profile. If it fails, keep Phase3B blocked and investigate the real host environment.
