@@ -2,7 +2,7 @@
 
 Updated: 2026-09-28
 Role: 00 MASTER
-Status: **OWNER-AUTHORIZED / READY TO EXECUTE / NOT STARTED**
+Status: **OWNER-AUTHORIZED / L0 PASS / MATERIAL RECOVERED / READY TO RESUME L1**
 
 ## 0. Binding
 
@@ -35,6 +35,54 @@ One real owner recording is intended to answer only:
 - whether replay burden is tolerable.
 
 It does not prove learning efficacy or market demand.
+
+## 1.1 Canonical synthetic source for L1
+
+The exact synthetic source is embedded here so Codex does not need a local file path, old browser topic, or invented substitute.
+
+Source provenance: owner's Library file `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`. It is synthetic validation material, not private course content.
+
+Use the following text as the clean-topic learning source:
+
+```text
+实验室访客入场规则
+（OWNER-VALIDATION-01 测试材料）
+
+本文件为合成测试材料，仅用于验证本地文档提取、预览、选段与学习流程。
+
+一、访客入场规则
+
+• 只有已经完成注册的访客才有资格申请进入实验室。
+• 实际进入实验室前，访客还必须佩戴当天发放的访客证。
+• 完成注册并不意味着访客一定可以进入实验室。
+• 如果当天实验室关闭，即使访客已经完成注册并佩戴当天访客证，也不能进入实验室。
+• 访客证只在发放当天有效，次日不能继续使用。
+• 每天 18:00 后停止访客入场。
+
+理解提示：“完成注册”是申请进入实验室所需的条件之一，但它本身并不能单独保证最终可以进入；开放状态、当天访客证和入场时间仍然会影响结果。
+
+二、条件核对表
+
+已完成注册：不足以单独保证进入。只是必要条件之一；仍需满足当天访客证、开放状态和时间限制。
+
+佩戴当天访客证：不足以单独保证进入。仍然不能绕过实验室关闭状态或 18:00 后停止入场的限制。
+
+实验室关闭：这是阻止进入的状态；即使其他条件已经满足，此时仍不得进入。
+
+三、学习后解释问题
+
+学习后，请用自己的话解释：为什么“完成注册”不等于“一定可以进入实验室”？
+
+说明：回答时可以结合“当天访客证”“实验室是否开放”和“18:00 后停止入场”等条件，但不要照读原文。
+```
+
+The table content above is normalized into sentences only to remove DOCX extraction line wrapping; its meaning and conditions are unchanged.
+
+Do not:
+- search the local disk for another copy;
+- inspect old browser topics;
+- substitute a different laboratory rule set;
+- add facts not present in this source.
 
 ## 2. Authorized scope if owner says yes
 
@@ -176,31 +224,30 @@ Owner authorization recorded on 2026-09-28:
 
 This does not authorize any call outside sections 2–6, any retry, second recording, Repair/Apply, model migration, push/merge, or continuation after stop conditions.
 
-## 8. Canonical execution trigger
+## 8. Canonical resume trigger
 
-```text
-执行已获 owner 授权的 PHASE3B-LIVE-01。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录实际 canonical commit。
+\`\`\`text
+继续已获 owner 授权的 PHASE3B-LIVE-01，从 L1 恢复。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录 actual canonical commit。
 
-执行目录 F:\Chat-Codex-Handoff\validation-repo，分支 prototype/study-teachback-v0.1；accepted HEAD 必须是 dd8317b43100b8cbaad684cab7fc02957e32de62，tracked worktree 必须 clean。若不匹配立即停下，不要 fetch/pull/reset/rebase 修正。
+上一次 L0 已 PASS，且 0 provider calls / 0 recording / US$0 exposure。先只做快速身份与 ledger-drift sanity check：执行目录 F:\Chat-Codex-Handoff\validation-repo，branch prototype/study-teachback-v0.1，accepted HEAD 必须仍为 dd8317b43100b8cbaad684cab7fc02957e32de62，tracked clean，ledger lock absent。若身份/ledger 出现异常漂移就停下；不要重新做旧 topic 检查。
 
-Owner 已明确授权边界：最多 3 次 provider calls、零重试、增量 local exposure 上限 US$0.03432。严格执行 HANDOFF L0–L5 和 stop rules，只做一次 20–45 秒真实中文录音。使用新 clean topic 和同一 bounded synthetic laboratory-visitor-rules source；不要检查旧 topic 是否还存在。
+L1 材料已经由 MASTER 找回并完整嵌入最新 HANDOFF 的 “Canonical synthetic source for L1”。直接使用该正文新建 clean topic；不要再向 owner 要文件路径，不要搜本地旧副本，不要检查旧 topic，也不要编造替代材料。
 
-调用上限：
-- exactly 1 次 ASR；
-- exactly 1 次 content-diagnosis semantic request；
-- at most 1 次初始 Tutor/Learn semantic request，仅当 fresh-topic 正常 UI 确实需要；
+Owner 原授权不变：maximum 3 provider calls total、zero retries、incremental local exposure <= US$0.03432。正常 fresh-topic 入口确认会需要一次 Tutor，因此在授权内最多允许：
+- at most 1 initial Tutor/Learn semantic call；
+- exactly 1 ASR；
+- exactly 1 content-diagnosis semantic call；
 - 0 Repair/Apply；
-- 0 retry；
-- maximum 3 provider calls total。
+- 0 retry。
 
-先做 L0 身份/ledger 检查。L1 新建 clean topic；若 UI 不需要 Tutor 就不要调用。L2 由 owner 自然录制一次 20–45 秒中文，无提示，保存 original audio，仅提交 1 次 ASR。任何 provider/network/ledger/音频错误都立即停止，不重试。
+按 HANDOFF L1–L5 执行。新建 clean topic 后如 UI 正常路径需要 Tutor，允许一次；失败立即停，不重试。随后让 owner 只录一次 20–45 秒自然中文、无提示，保存 original audio，仅提交 1 次 ASR。
 
-L3 必须先停在 replay/transcript checkpoint：让 owner 回听保存音频，对照 raw ASR，重点核对否定词、数字、条件、术语；只能修正 ASR 听错，保留 raw/corrected，不能把 owner 真正说错的内容改成正确答案。若仍有关键不确定性，停止并把 checkpoint 交 MASTER，不得进入 diagnosis。
+ASR 后必须先停在 replay/transcript checkpoint，让 owner 回听并核对 raw ASR 的否定词、数字、条件和术语。只能修 ASR 听错，保留 raw/corrected；不能把 owner 实际说错的内容改正确。若关键不确定性未解决，就停止交 MASTER，不得 diagnosis。
 
-只有 transcript 可用后，L4 才允许 exactly 1 次 gpt-5.6-luna content diagnosis。process evidence 保持本地、零 semantic dispatch。检查“内容理解 / 讲解过程 / diagnostic target”，不得让 process-only signal 产生知识错误结论。不要 Repair/Apply，不要第二次录音。
+只有 transcript 可用后才允许 exactly 1 次 gpt-5.6-luna content diagnosis。process evidence 必须保持本地零 semantic dispatch。检查 内容理解 / 讲解过程 / diagnostic target，不得由 process-only signal 制造知识错误结论。禁止 Repair/Apply 和第二次录音。
 
-L5 返回完整证据：实际 provider call 数、ledger before/after SHA/summary、original audio 保存状态、raw/corrected transcript、关键 ASR 错误、content findings、process evidence、diagnostic target、owner 对 usefulness/replay burden/false inference 的判断、Unknown/Blocking/Future Optional。然后停止交 MASTER；禁止自动继续。
-```
+最后返回实际 provider calls、ledger before/after SHA/summary、incremental exposure、original audio 保存状态、raw/corrected transcript、关键 ASR error/correction、content findings、process evidence、diagnostic target、owner usefulness/replay burden/false inference 判断及 Unknown/Blocking/Future Optional。然后停止交 MASTER，不得自动继续。
+\`\`\`
 
 ## 9. Classification
 
