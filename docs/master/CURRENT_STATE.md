@@ -1,150 +1,161 @@
 # Current State
 
-Updated: 2026-09-28
+Updated: 2026-09-28 (owner clarification after architecture review)
 Role: 00 MASTER / authoritative dynamic state
 
 ## Stage
 
-**OWNER-VALIDATION-01 — IN PROGRESS / CLEAN PHASE 2 PASS / PHASE 3 NOT EXECUTED**
+**OWNER-VALIDATION-01 — CLEAN PHASE 2 PASS / PHASE 3 NOT EXECUTED / LIVE RESUMPTION ON COST-READINESS HOLD**
 
-**ARCHITECTURE-REVIEW-01 — REMOTE SOURCE REVIEW COMPLETE / REFACTOR PROPOSALS NOT IMPLEMENTED**
-
-The owner explicitly confirmed that the last test has not been performed and requested a broad review of product necessity, architecture, workflow, and development process before continuing. Do not treat the old instruction to immediately resume Phase 3 as the current next action.
+**ARCHITECTURE-REVIEW-01 — REMOTE REVIEW COMPLETE / OWNER PRIORITIES RECORDED / REFACTOR NOT IMPLEMENTED**
 
 Active product: **知而能讲** (Study-first + in-app teach-back), not the historical Handoff helper.
 Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`
-Local checkout recorded historically: `F:\Chat-Codex-Handoff\validation-repo`
+Recorded local checkout: `F:\Chat-Codex-Handoff\validation-repo`
 Feature branch: `prototype/study-teachback-v0.1`
-Accepted feature HEAD, also confirmed as the remote branch HEAD during this review:
+Accepted feature HEAD, also confirmed as remote HEAD on 2026-09-28:
 `f6a000ca96fedfbeb9eaa803dfcd990a13d90c53`
 
-The local checkout, browser storage, running server, microphone, and current usage ledger were NOT inspected during this review. Remote source is not proof of local synchronization.
+The local checkout, running server, browser records, microphone and current usage ledger have NOT been inspected in these remote review/clarification turns. Remote source is not proof of local synchronization.
 
-## Authority and current scope
+## Authority and retained review evidence
 
-Read this file and `docs/master/HANDOFF.md` on `meta/master-state` for dynamic state.
-The feature branch still contains stale Handoff-era copies at the same paths; those copies are not authoritative. The root README also describes the historical Handoff product, and the app README repeats outdated Owner Validation NOT EXECUTED statements. These are confirmed documentation defects, not evidence that the accepted clean Phase 2 has been reversed.
+Dynamic authority is this file and `docs/master/HANDOFF.md` on `meta/master-state`.
+Same-named feature-branch files are stale Handoff-era state, not authority. Root/app README contradictions remain unresolved.
 
-This review updates only the two canonical dynamic-state documents. It does not change feature code, storage retention, model/provider configuration, budgets, local files, repository visibility, or publishing/release behavior. No tests or live model calls were run in this review.
+The detailed pre-clarification architecture review is retained at immutable commit `9a3c77789f99add12f6523282a2114cc8cb78e39`, in these same two paths. The concise findings below remain active; that commit's unanswered-owner-question and immediate-next-action wording is superseded by this file.
 
-## Retained accepted engineering work
+Only canonical documentation is updated in this clarification. No feature code, stored records, models, budgets, repository visibility, publishing or release behavior changed. No local tests or product API requests were run.
 
-- `OWNER-VALIDATION-PROVENANCE-FIX-01` — MASTER-ACCEPTED for the initial Learn starter at the accepted feature HEAD.
-- `UI-UX-FOUNDATION-01R2` — MASTER-ACCEPTED.
-- `LOCAL-LAUNCH-01` — MASTER-ACCEPTED, engineering scope only.
-- Historical provenance-fix test receipts: Node 48/48, Edge 29/29, zero paid calls for that correction. These are retained historical results, not fresh 2026-09-28 runs.
+## Owner decisions — confirmed in the current conversation
 
-## OWNER-VALIDATION evidence retained
+### D1 — outcomes
 
-### Phase 1 — PASS
+Priority order: **stable personal use first; a demonstrable/job-search portfolio second**.
+External-user validation and commercialization are not the current priority. Portfolio work must use actual artifacts and verified results; do not invent adoption, learning gains or metrics. A polished demonstration does not replace real owner validation.
 
-The owner imported `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx` in the real product.
+### D2 — primary scenario
 
-Verified at that time:
-- local DOCX extraction worked;
-- necessary-vs-sufficient meaning remained intact;
-- same-day visitor badge, laboratory-open state and 18:00 limit remained understandable;
-- selected extracted material became the learning source;
-- import/preview/use-all added zero provider requests and the ledger remained byte-identical;
-- server remained ready.
+Main intended audience: students. Primary provisional scenario: course concepts and learning material. The owner has not chosen a precise subject or a narrower student segment; do not invent one as a settled decision.
 
-Minor non-blocking extraction issue: literal `&#x20;` after the title.
+Explaining an interview project is a plausible adjacent use of the same source-to-explanation flow, not proof that it works and not approval for a second interview-coaching product. No resume scoring, job matching or separate interview subsystem is added.
 
-### Original Phase 2 — initial-starter provenance defect corrected
+Retain Study-first and in-app recording. Working product statement: help a student understand a bounded learning source, explain it in their own words, identify an evidence-grounded gap and practice that point again. Do not turn it into a testing-only or speech-scoring product.
 
-The initial Learn starter was wrongly displayed/persisted as owner-authored. The correction at `f6a000c...` made that starter request input only, prevented fabricated user history on initial Tutor failure, and preserved the first genuine owner input as the first stored user message.
+### D3 — reason for deferred Phase 3
 
-The contaminated historical topic must not be resumed as a clean baseline. Do not assume its browser record still exists today.
+The owner states **lack of time and incomplete cost preparation**. Do not infer low product value, lack of interest, microphone failure or confusing launch from non-completion. Repeated value remains unverified for independent reasons, not because this test was deferred.
 
-### Clean Phase 2 rerun — PASS
+Current working boundary: **zero additional product API calls until the owner is ready and explicitly resumes a bounded live test**. This is a planning/authorization hold, not a newly implemented application switch. Historical budget ceilings are not permission to spend now.
 
-The owner created a clean topic using the same synthetic DOCX and performed the minimal Learn path in the real browser.
+### D4 — clarity and replay uncertainty
 
-Verified from the owner's screenshots:
-- before owner input, only Tutor/assistant content appeared;
-- the automatic initial starter was not shown as `你的想法`;
-- the first user bubble was exactly the owner-authored question;
-- the Tutor retained registration/badge/open-state/18:00 constraints without inventing a guarantee of entry.
+The owner does not yet understand replay or its workflow and has NOT approved a time burden, blanket full-replay policy, a skip policy or an adaptive-replay implementation.
 
-This acceptance remains valid for that historical run and that initial-entry scope.
+Owner quality preference: non-redundant, clear, direct, sufficiently complete, unambiguous answers in simple wording. Operationalize this first for AI teaching/feedback and UI instructions; do not silently turn it into a new rubric for grading the owner's speech, accent or fluency.
 
-## ARCHITECTURE-REVIEW-01 findings
+Replay means listening to one's own saved audio while checking the ASR transcript, not AI reading its answer aloud. It protects against transcription errors becoming false knowledge diagnoses. Correcting an ASR mishearing does not count as a new spoken performance; genuine spoken mistakes must not be silently rewritten into evidence of improvement.
 
-### R01 — retention makes the old Phase 3 continuation unsafe to assume
+Current implementation still requires segment replay before diagnosis. A proposed UX may count genuine complete-player coverage rather than require redundant per-segment clicks. That proposal is not implemented or accepted as a replacement gate; do not bypass current Phase 3 replay/confirmation.
 
-Confirmed source behavior: `storage.mjs` calls `api.expire()` during `openStore()`. It deletes entire topics based on topic `createdAt + 7 days`, not the date of the latest attempt.
+### D5 — retention
 
-The clean topic documented on 2026-09-12 is older than seven days on 2026-09-28. If that is still the same record and its timestamp was unchanged, it became eligible for deletion around 2026-09-19 on the next store opening. Actual local existence or deletion has NOT been verified.
+The owner approves the requirement direction: **user-customizable retention, with a default and reminders**.
+This does not approve an exact duration, deletion anchor, retroactive migration, reminder channel, cloud backup or a current storage-policy change.
 
-Do not tell the owner to reload/restart just to resume the old topic. First establish whether the record is still available and preserve it when safely possible. If it has expired, create a new clean topic from the same synthetic material, perform only the minimal provenance/source sanity check, then conduct the still-unrun Phase 3. Do not claim restoration without evidence. Do not silently extend retention or erase old ledger events.
+MASTER proposal for later design, not an active default: offer a simple default such as 30 days for new records, finite/custom choices and an explicit keep-until-manual-delete choice with local-storage limits disclosed. Show expiry and in-app reminders; allow export or extension before irreversible deletion. An in-app reminder must not be described as a background notification while the app is closed. Decide reopen-after-expiry/grace behavior explicitly; do not delete first and then claim to have warned the user. Existing records require explicit migration/consent; do not silently extend or shorten their lifetime.
 
-### R02 — generated-message provenance fix does not cover Repair and Apply
+## Product/UX proposals — not implemented
 
-Confirmed by source inspection:
-- `teach()` defaults `internalStarter=false` and then appends its message with `role:'user'`.
-- the `再学这一点` action calls `teach()` with an application-generated repair instruction without the internal flag;
-- the `试一个新情境` action does the same for Apply.
-- `provenance.test.mjs` covers the initial Learn entry, not these two action paths.
+Primary flow remains: selected course material -> clear short teaching -> own explanation -> transcript/audio check -> grounded feedback -> optional focused relearning/re-explanation -> optional new application context.
 
-Therefore those program-generated instructions are still stored as user messages. This is a new uncovered scope of the same defect; it does not invalidate the verified initial-Learn correction. A bounded correction should distinguish actual typed/spoken owner messages from UI-triggered application instructions and extend zero-provider-call regression coverage to Learn/Repair/Apply success and failure. Proposed code change is NOT implemented.
+Feedback should first answer what is correct or needs attention, explain the main unresolved gap with its evidence, and offer one useful next step. Put supporting source/audio references behind a clear expandable entry when appropriate. This is progressive disclosure, not omission of critical conditions. No arbitrary short-word limit, decorative repetition, compulsory problems when the explanation is already correct, or claims of comprehensive mastery from a limited response.
 
-### R03 — product/state identity is misleading at ordinary entry points
+Keep learning-content correctness distinct from wording/conciseness. Concision cannot justify dropping negation, necessary/sufficient conditions, numbers, terms or uncertainty.
 
-Root README, app README, and feature-branch state copies disagree with the canonical active product and phase. Proposed remedy: a product-first entry README and explicit ref-aware pointers, not more version-suffixed Current State files or immediate repository renaming.
+The next evidence to collect, when live testing resumes, is whether the owner understands the feedback and knows what to do next, plus actual workflow/cost friction. This is not yet a learning-efficacy or market-demand result.
 
-### R04 — application, experiments, and historical exceptions need clearer boundaries
+## Retained owner-validation evidence
 
-The app directory mixes runtime modules with browser-test revisions, credential/live-call probes, and recovery scripts. `ledger.mjs` contains a five-submission exception for historical `synthetic-mandarin-build01`, while normal attempts use two.
+### Phase 1 — historical PASS
 
-Proposed remedy: separate active runtime, zero-call tests, explicitly gated live tools, and retained evidence. Keep production caps unchanged and preserve historical ledger events. Do not move live hook/launcher/helper dependencies until their references are checked.
+Owner imported `OWNER_VALIDATION_01_测试材料_实验室访客规则.docx` in the real product. Local extraction/preview/selection worked; registration necessary-vs-sufficient meaning, same-day badge, laboratory-open state and 18:00 constraint remained understandable. Import/preview/use-all added zero provider requests and the ledger was byte-identical. Minor non-blocking literal `&#x20;` after the title.
 
-### R05 — registration occurs before successful microphone acquisition
+### Initial-starter provenance correction and clean Phase 2 — historical PASS
 
-`app.mjs` calls `/api/register` before `getUserMedia()`, while the ledger counts registration events towards the 60-attempt cap. Denied permission or failed capture can therefore consume registered attempts despite no saved recording. Confirmed call ordering; the owner's actual remaining quota is unknown.
+`OWNER-VALIDATION-PROVENANCE-FIX-01` was accepted at `f6a000c...`: initial internal Learn instruction is request input only, not a stored owner utterance; initial failure does not fabricate user history.
 
-Proposed remedy: make recording creation and budget registration distinct, with a single/idempotent registration after successful acquisition or durable audio save and before any paid ASR call. Do not retroactively delete billing/attempt events merely to restore quota.
+Historical receipts: Node48/48, Edge29/29, zero paid correction calls. These were NOT rerun today.
 
-### R06 — engineering validity is not semantic or product validity
+In the clean owner-browser rerun, only Tutor content appeared before genuine owner input; the first `你的想法` was the owner's real question. Tutor remained grounded in registration/badge/open-state/18:00 constraints without an unsupported entry guarantee.
 
-Existing safeguards worth retaining: local source extraction, explicit send, original audio retention, raw/corrected transcript versions, source/attempt/version binding, required replay, content/delivery separation, quote/reference validation, and conservative budget reservations.
+The original contaminated topic is evidence only. Neither old topic is assumed to still exist locally.
 
-`validateTeaching`/`validateFindings` enforce schema/references/quote presence; they cannot prove that a conclusion follows from the quoted source. Existing logic fixtures already acknowledge this separation. Keep schema validity, semantic correctness, and user benefit as separate acceptance categories.
+Retained engineering acceptances: `UI-UX-FOUNDATION-01R2` and `LOCAL-LAUNCH-01` (engineering scope). None establishes physical-microphone success or final owner acceptance.
 
-Near-silence candidates are explicitly uncalibrated observations, not measures of knowledge, personality, or fluency. Do not strengthen these claims.
+## Active architecture findings
 
-## Product/refactor proposals — not new approved requirements
+### R01 — old-topic availability and expiry preflight
 
-Working value hypothesis: help adult Chinese learners learn a bounded source, explain it themselves, find an evidence-grounded gap, and repair/re-explain it. Preserve Study-first and in-app recording; do not replace the product with manual audio uploads or a generic chat wrapper.
+`storage.mjs` runs `api.expire()` during `openStore()`, deleting whole topics using `createdAt + 7 days`, not latest attempt/activity. An unchanged 2026-09-12 topic became eligible around 2026-09-19. Actual survival/deletion is unknown.
 
-Focus validation on whether the grounded recording/review/repair loop provides enough additional value over ordinary assisted study to justify its effort. Market necessity, willingness to repeat, and willingness to pay remain unverified.
+Do not advise reload/restart merely to inspect it. Preserve an available record via a safe export/read-only path when possible. Do not promise restoration, run expiry during inspection, change origin/database identity or erase the ledger. If expired, use the same synthetic material for a new clean topic plus minimal provenance/source sanity check before the first Phase 3 recording; no need to repeat all historical gates.
 
-Prefer a small modular monolith with clearer UI/workflow/domain/provider/storage/test boundaries. Do not introduce a new frontend framework, agent framework, vector database, microservices, cloud accounts, or full Handoff bridge merely to look more structured.
+### R02 — generated Repair/Apply instructions still stored as user messages
 
-Preserve `http://127.0.0.1:4317`, the current IndexedDB name/schema, raw/corrected separation, and live-call boundaries during an initial behavior-preserving refactor. Changing origin or schema requires an explicit data-migration plan.
+`teach()` defaults `internalStarter=false`. The `再学这一点` and `试一个新情境` handlers omit that flag for app-generated instructions. Existing provenance tests cover initial Learn, not those actions.
 
-Potential UX improvement, pending design approval: count actually played audio coverage across segments so one complete playback can satisfy the existing review requirement; never replace required replay with an unchecked confirmation. Retention duration and research/validation friction need owner input before changing behavior.
+Must fix before claiming full-flow provenance; this does not reverse clean initial-Learn acceptance. A bounded correction must distinguish actual owner input from UI-triggered internal context and test Learn/Repair/Apply success/failure without provider calls. Not implemented.
 
-## Live-call boundary retained, not exercised by this audit
+### R03 — misleading entry documentation
 
-Approved owner journey models remain `whisper-1` and `gpt-5.6-luna`. No provider/model switch, recharge, or stress loop. US$5 application exposure hard stop and US$10 cash ceiling remain. The application budget ledger is not a live account billing balance.
+Root README describes Handoff, app README repeats obsolete Owner Validation NOT EXECUTED, and feature-branch state copies point to old work. Correct product entrypoints and ref-aware pointers, without new suffix snapshots or automatic repository renaming. Not implemented.
 
-The last explicitly read ledger before the provenance correction was requests 39, known cost US$0.01293075, exposure US$0.06973825, unsettled 4. The clean Phase 2 run subsequently used expected live Tutor requests; these figures are HISTORICAL and not current. No fresh ledger was read today.
+### R04 — runtime, probes and historical exceptions
 
-No additional live request is authorized solely by this review. Existing bounded owner-journey authorization remains subject to preflight/data checks and its original stop conditions. Do not retry ASR without explicit approval after reviewing the failure evidence.
+Runtime code shares a directory with browser-test revisions, credential/live probes and recovery scripts. Ledger includes a five-submission exception for `synthetic-mandarin-build01`; normal attempts use two. Separate responsibilities only where useful, retain evidence/history and caps, and check live hook/helper/launcher paths before moving anything. Broad directory restructuring is not a prerequisite for Phase 3.
+
+### R05 — registration precedes microphone success
+
+`/api/register` precedes `getUserMedia()`, and registrations count toward the 60-attempt limit even after failed capture startup. Actual remaining quota is unknown. Proposed bounded fix: idempotent registration at a valid recording boundary, before paid ASR; no historical ledger reset. Not implemented.
+
+### R06 — validity categories
+
+Retain local extraction, explicit send, original audio, raw/corrected versions, source/attempt/version binding, replay, content/delivery separation, reference validation and conservative budget reservations.
+
+Schema/reference/quote validity is not entailment, learning efficacy or user benefit. Existing logic fixtures have bounded scope. Near-silence candidates are uncalibrated observations, not fluency, knowledge or personality scores.
+
+## Implementation/process boundaries
+
+Prefer small behavior-preserving corrections over framework replacement. Preserve `http://127.0.0.1:4317`, IndexedDB identity/schema, raw audio and version relationships, existing models and caps. Data-policy work needs its own explicit migration/deletion tests.
+
+No new frontend/agent framework, vector store, microservices, cloud account system, public deployment, SaaS, separate interview mode, automatic paste/send or full Handoff bridge.
+
+Before a new implementation batch, do a targeted current official/existing-project check relevant to that gap. Do not reopen every settled architecture choice or run paid probes merely for freshness.
+
+Keep engineering tests, real owner workflow and repeatable value as separate acceptance categories. Review ordinary changes by delta; use stronger review for provenance, data loss, audio meaning and money. Do not require all future UX/retention improvements before one bounded Phase 3 run.
+
+## Cost boundary
+
+Historical approved models: `whisper-1` + `gpt-5.6-luna`; historical application exposure cap US$5 and cash ceiling US$10. These remain ceilings, not a current funding decision or a verified account balance. No switch, recharge, automatic retry or stress loop.
+
+Last explicitly read pre-correction ledger: requests39, known estimate US$0.01293075, exposure US$0.06973825, unsettled4. Clean Phase 2 subsequently used live Tutor requests. These figures are historical and MUST NOT be presented as today's balance/cost.
+
+Before renewed live authorization: verify actual configured endpoint/model/current public rates and a fresh safe ledger; present a bounded experiment's conservative estimate and its request/retry cap. Keep estimates separate from invoices and real account funds. Do not make a paid call solely to check readiness. Discuss development validation budget separately from later recurring personal-use budget; neither number is set by the owner's clarification.
 
 ## Classification
 
-Completed: historical readiness, real-owner Phase 1, initial-starter provenance correction, clean Phase 2; remote source/structure review on 2026-09-28.
-Verified today: remote branch HEAD, relevant source behavior and documentation contradictions.
-Unknown: local HEAD/server/storage/ledger, survival of the old clean topic, physical microphone/ASR/replay UX, downstream diagnosis/repair/apply/export journey, repeated learning benefit.
-Not Done: Phase 3 and onward; final Owner Validation; proposed code/documentation-entry refactor; fresh test rerun.
-Must address before automatic continuation: stale continuation assumption caused by seven-day expiry. No actual data loss is asserted.
-Must fix before claiming full-flow provenance: generated Repair/Apply instructions stored as user-authored.
-User decisions needed: primary near-term outcome/use case, why Phase 3 was deferred, acceptable review effort, and desired learning-history retention.
-Future Optional: literal `&#x20;` cleanup; unrelated test-page exception only if reproduced; cosmetic or framework changes.
+Completed: remote architecture review; owner priority/scenario/deferral clarification; canonical state/handoff update. Historical Phase1 and clean Phase2 retained.
+Verified: owner's stated decisions; remote feature HEAD; cited source-level behaviors. No new runtime verification.
+Likely: a course-learning-first product can also support some source-grounded project explanations; targeted replay/feedback simplification may reduce effort. Both remain hypotheses.
+Unknown: local data/server/ledger, exact test and ongoing budget, tolerated replay effort, precise course use case, exact retention/default/reminder semantics, microphone/ASR/downstream experience and repeated value.
+Not Done: Phase3 onward; final owner acceptance; proposed code, feedback UI or retention changes; fresh tests/live pricing/ledger verification.
+Must Fix: R02 full-flow provenance and R03 misleading state entry; address R01 before risky continuation and R05 in a bounded correctness batch. Do not turn all architecture proposals into Phase3 blockers.
+User Decision Needed: live test budget/readiness before spending; exact retention and replay-policy tradeoffs before implementing those behaviors. Do not re-ask the five questions as though unanswered.
+Future Optional: dedicated interview features, broad directory cleanup, richer expression analysis, literal `&#x20;` cleanup and cosmetic changes.
 
 ## Next Smallest Step
 
-Review the findings with the owner and settle the product priorities. Establish old-topic availability without causing an avoidable expiry/reload loss. Then prepare a bounded zero-call correction/refactor batch with explicit regression scope; do not restart the whole project and do not mark the still-unrun microphone test PASS.
+Proceed with zero-product-API-cost clarification/static walkthrough and preparation of a small correctness batch (provenance, entry docs and recording registration), preserving existing data. No live requests now. The owner's next useful input is whether to remain zero-call or explicitly set a small bounded test budget; do not demand a complete business plan.
 
-If the owner chooses to resume Phase 3 after that preflight, retain the original boundary: one natural 20–45 second recording, original-audio save and ASR, replay/transcript checkpoint returned to MASTER BEFORE any diagnosis confirmation.
+When the owner resumes live testing and data/cost preflight is satisfied, keep Phase3 minimal: one natural 20–45 second explanation -> saved original audio + ASR -> replay/transcript checkpoint to MASTER BEFORE diagnosis. Not executed until real evidence is returned.
