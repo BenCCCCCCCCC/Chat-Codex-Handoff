@@ -1,194 +1,188 @@
-# Active Handoff — PHASE3B-PREFLIGHT-01
+# Active Handoff — PHASE3B-LIVE-01 Proposal
 
 Updated: 2026-09-28
 Role: 00 MASTER
-Status: **READY / NOT DISPATCHED / READ-ONLY / ZERO LIVE API CALLS**
+Status: **READY FOR OWNER DECISION / NOT AUTHORIZED / NOT STARTED**
 
-## 0. Authority and binding
+## 0. Binding
 
 Repository:
 `BenCCCCCCCCC/Chat-Codex-Handoff`
 
-Canonical branch:
-`meta/master-state`
-
-Read latest:
-1. `docs/master/CURRENT_STATE.md`
-2. `docs/master/HANDOFF.md`
-
-Record the immutable canonical commit actually read.
-
-Execution checkout:
+Local checkout:
 `F:\Chat-Codex-Handoff\validation-repo`
 
 Branch:
 `prototype/study-teachback-v0.1`
 
-Expected accepted local HEAD:
+Accepted HEAD:
 `dd8317b43100b8cbaad684cab7fc02957e32de62`
 
-Do not try to match the older remote product branch. No fetch/pull/reset/rebase/checkout/clean/amend.
+Canonical authority:
+`meta/master-state/docs/master/CURRENT_STATE.md`
+and
+`meta/master-state/docs/master/HANDOFF.md`.
 
-## 1. Task
+Do not execute this task unless the owner explicitly authorizes it after reading the cost/request proposal.
 
-**Task ID: PHASE3B-PREFLIGHT-01.**
+## 1. Experiment purpose
 
-Goal:
-collect the minimum safe local facts needed for MASTER to decide whether one real Phase 3B recording is necessary, technically ready and affordable.
+One real owner recording is intended to answer only:
+- whether real capture/original-audio/ASR/replay works;
+- whether critical Mandarin transcript meaning survives or can be safely corrected;
+- whether local speech-process evidence co-locates with a useful reasoning transition;
+- whether combined content + process localization is useful to the owner;
+- whether replay burden is tolerable.
 
-This task is **read-only** and **zero live product/provider calls**.
+It does not prove learning efficacy or market demand.
 
-Do not modify product code, docs, runtime state, browser data or Git history. No commit.
+## 2. Authorized scope if owner says yes
 
-## 2. Mandatory preflight checks
+Source:
+use a **new clean topic** with the same bounded synthetic laboratory-visitor-rules material. Do not inspect/recover the old expirable topic.
 
-### P0 — repo identity
+Owner speech:
+- one 20–45 second natural Mandarin explanation;
+- no prompt assistance;
+- explain why registration is not sufficient for entry and include relevant additional conditions;
+- natural self-correction allowed.
 
-Report:
-- cwd;
-- Git top-level;
-- branch;
-- HEAD;
-- tracked worktree status;
-- unrelated untracked items separately.
+Provider-call ceiling:
+- exactly one ASR submission;
+- exactly one content-diagnosis semantic request after transcript review;
+- at most one initial Tutor/Learn semantic request **only if normal fresh-topic UI requires it to reach recording**;
+- zero Repair/Apply calls;
+- zero automatic retries.
 
-PASS requires HEAD exactly:
-`dd8317b43100b8cbaad684cab7fc02957e32de62`.
+Total maximum provider calls = **3**.
+Minimum expected provider calls = **2**.
 
-If HEAD/tracked work differs, STOP and report. Do not repair it.
+## 3. Cost boundary
 
-### P1 — provider configuration read
+One ASR reservation under current ledger = US$0.018 exposure.
 
-Read production source only.
+One maximum semantic reservation = US$0.00816.
 
-Report from `study-teachback-app/provider.mjs`:
-- configured transcription model name;
-- configured semantic model name;
-- transcription endpoint path/URL family;
-- semantic endpoint path/URL family;
-- currently requested transcription response/timestamp granularity options;
-- any timeout/retry behavior relevant to one bounded call.
+Therefore:
+- ASR + diagnosis <= US$0.02616 incremental local exposure;
+- ASR + optional Tutor + diagnosis <= **US$0.03432** incremental local exposure.
 
-Do not reveal or print credential values. Do not test provider access. Do not call model-list/model endpoints.
+No retry is authorized.
 
-### P2 — safe ledger read
+The current official `whisper-1` list price is US$0.006/minute; `gpt-5.6-luna` standard prices are US$0.20/M input, US$1.20/M output and US$0.25/M cache-write input. A conservative provider-billing estimate for one full ASR minute plus two max-sized semantic requests is <= ~US$0.02232, excluding account-specific billing effects.
 
-Read the application ledger file directly from disk only if it exists:
-`study-teachback-app/runtime/usage.json`.
+Cost estimate is not account balance.
 
-Do not start `server.mjs`, `Start-Study.cmd`, the browser app or any script that could create/reserve/settle a ledger event.
+## 4. Model decision for this experiment
 
-Before parsing:
-- compute file SHA256;
-- confirm no `.lock` file is present; if lock exists, report and STOP ledger interpretation rather than deleting it.
+Keep `whisper-1` for this single experiment because the validated application currently requires word/segment timestamps and current OpenAI guidance still directs timestamp-dependent file transcription to `whisper-1`.
 
-Parse read-only and report:
-- ledger version/pricing metadata present in file;
-- total request reservations;
-- distinct attempts;
-- reserved minutes;
-- reserved input/output;
-- known estimated settled cost;
-- total exposure under existing reserve accounting;
-- unsettled reservation count;
-- latest few event types/categories only, with timestamps/model/kind/status where non-sensitive;
-- do not return source text, prompts, raw responses, secrets or owner content.
+Do not interpret this as long-term approval. `whisper-1` is deprecated and scheduled for removal on 2027-02-26. After Phase 3B, perform a separate migration/timing decision before long-term/public use.
 
-Also read current hard limits and pricing constants from `ledger.mjs`.
+Keep `gpt-5.6-luna` for semantic requests; no model change is needed for this bounded experiment.
 
-Use existing pure summary logic only if it can be invoked with a temporary/read-only copy and is proven not to mutate the production file. Direct JSON parsing/calculation is preferred.
+## 5. Execution checkpoints if authorized
 
-### P3 — mechanical readiness only
+### L0 — pre-live identity
+Confirm:
+- HEAD = `dd8317b...`;
+- tracked clean;
+- ledger lock absent;
+- ledger SHA/exposure still consistent with the preflight or report any harmless drift before provider use.
 
-Using only the read-only ledger/config facts:
-- state whether one additional normal owner ASR attempt and the expected bounded semantic steps are mechanically below the application hard caps;
-- do NOT infer provider account balance, billing credit, model access or API-key validity;
-- do NOT reserve anything;
-- do NOT call the provider.
+No old-topic inspection.
 
-If exact semantic request count for the later experiment is not yet fixed, report a range/unknown rather than inventing one.
+### L1 — clean topic / optional Tutor
+Create a new clean topic from the same synthetic source.
 
-### P4 — data safety
+Source import/paste is local.
 
-Do not inspect the historical browser IndexedDB merely to see whether the old clean topic exists.
+If and only if the normal UI requires Tutor/Learn to reach recording, allow **one** Tutor semantic request. Otherwise skip it.
 
-Reason:
-opening the app/store can trigger expiry on old records.
+If this request fails: STOP. No retry.
 
-Do not use browser forensics, copy browser profile databases or alter timestamps.
+### L2 — one physical recording + ASR
+Use `无提示`.
 
-Report historical topic survival as UNKNOWN unless a safe pre-existing export/file is already present and can be read without touching live browser storage. Do not search unrelated user directories broadly.
+Record one natural 20–45 second Mandarin explanation.
 
-### P5 — zero-call proof
+Preserve original audio.
 
-Report:
-- files read;
-- hashes where useful;
-- commands executed;
-- confirmation that no app/server/browser was launched;
-- no microphone access;
-- no provider/API request;
-- no files changed;
-- no Git write operation;
-- final tracked worktree still clean.
+Submit exactly **one** ASR request.
 
-## 3. Protected boundaries
+If ASR/provider/ledger fails: STOP. No retry.
 
-No:
-- live ASR/Tutor/diagnosis/model-list/access probe;
-- API-key validation;
-- physical microphone;
-- app/browser launch;
-- owner browser profile/IndexedDB access;
-- code/doc/runtime write;
-- ledger reserve/settle/failure event;
-- provider/model/retention/storage-schema/budget change;
-- new dependency;
-- push/merge/commit/reset/clean/rebase/amend.
+### L3 — mandatory replay/transcript checkpoint
+Before any content diagnosis:
+- replay the saved audio through the validated replay path;
+- compare audio with raw ASR transcript;
+- inspect critical negations, numbers, conditions and domain terms;
+- correct only ASR mishearing;
+- preserve raw and corrected transcript versions;
+- do not turn a genuine spoken mistake into a corrected performance.
 
-If safe ledger read is impossible, return BLOCKED for that part. Do not weaken boundaries.
+If critical transcript uncertainty remains, STOP and return checkpoint evidence to MASTER before diagnosis.
 
-## 4. Delivery receipt
+### L4 — one content diagnosis
+If transcript review is acceptable, allow exactly one `gpt-5.6-luna` content-diagnosis request.
 
+Local process evidence confirmation remains zero semantic/provider dispatch.
+
+Inspect:
+- 内容理解;
+- 讲解过程;
+- diagnostic target / focused next action;
+- whether process evidence is genuinely useful vs decorative;
+- whether any process-only signal creates a false knowledge judgment.
+
+No Repair/Apply provider call.
+
+### L5 — return evidence and stop
 Return:
-- Task ID and canonical commit read;
-- P0–P5 PASS / FAIL / BLOCKED / UNKNOWN mapping;
-- repo/branch/HEAD/worktree;
-- provider configuration facts;
-- ledger SHA and safe summary;
-- hard caps/constants;
-- mechanical headroom conclusion with caveats;
-- files/commands read-only evidence;
-- Tests Not Run;
-- Unknown;
-- Blocking;
-- User Decision Needed;
-- Future Optional.
+- provider calls actually made;
+- ledger before/after SHA/summary;
+- original-audio save status;
+- raw/corrected transcript checkpoint;
+- critical ASR errors/corrections;
+- content findings;
+- process evidence;
+- diagnostic target;
+- owner judgment: useful / not useful / mixed and why;
+- replay burden/friction;
+- any false inference;
+- Unknown / Blocking / Future Optional.
 
-Do not propose or execute a live call inside this task.
+Do not continue into a second recording.
 
-## 5. Canonical short trigger
+## 6. Stop rules
 
-```text
-继续当前项目，执行只读预检：PHASE3B-PREFLIGHT-01。先读取 BenCCCCCCCCC/Chat-Codex-Handoff 的 meta/master-state 最新 docs/master/CURRENT_STATE.md 和 docs/master/HANDOFF.md，并记录实际 canonical commit。
+STOP with no retry for:
+- provider 401/403/404/model-access failure;
+- provider/network failure;
+- ASR unusable transcript;
+- missing/corrupt original audio;
+- replay cannot complete;
+- source/attempt/version identity loss;
+- unexpected extra provider dispatch;
+- ledger/budget error;
+- app requests a Repair/Apply or second ASR;
+- old owner-data risk.
 
-执行目录 F:\Chat-Codex-Handoff\validation-repo，分支 prototype/study-teachback-v0.1，本地 accepted HEAD 应为 dd8317b43100b8cbaad684cab7fc02957e32de62。若 HEAD 或 tracked work 不匹配立即停下，不要 fetch/pull/reset/rebase 修正。
+## 7. Explicit authorization requirement
 
-严格按 HANDOFF P0–P5 只读执行：读取 provider.mjs 当前模型/endpoint/timestamp 配置；安全直接读取 study-teachback-app/runtime/usage.json 和 ledger.mjs 的 limits/pricing，先检查 lock，再计算当前本地 ledger summary 和机械 headroom。不要启动 app/server/browser，不要 openStore/IndexedDB，不要碰历史 owner topic，不要检查 API key 有效性，不要调用任何 provider/model/list endpoint，不要录音，不要修改任何文件或 Git 状态。
+Do not execute unless owner gives an unambiguous authorization such as:
 
-返回 repo/branch/HEAD、provider 配置、ledger SHA/summary、hard caps、是否机械上可容纳一次受限 Phase3B 尝试（不是消费授权）、P0–P5 证据、Unknown/Blocking/User Decision Needed，并确认 zero live API / zero file change / final tracked clean。完成后停下交 MASTER；不要开始真实 Phase 3B。
-```
+`Authorize PHASE3B-LIVE-01 under the 3-call maximum, zero-retry, US$0.03432 local-exposure limit.`
 
-## 6. Classification
+If owner does not authorize, remain stopped.
 
-Completed:
-- Batch B accepted and finalized locally at `dd8317b...`.
+## 8. Classification
 
 Ready:
-- zero-call Phase 3B preflight.
+- bounded live experiment.
 
 Not Authorized:
-- real microphone / ASR / semantic provider calls.
+- all live provider and microphone actions.
 
-Next smallest step:
-send PHASE3B-PREFLIGHT-01 to Codex, return the read-only receipt to MASTER, then MASTER performs current public model/rate check and presents the owner a concrete live-test decision.
+Next step:
+owner decision only.
