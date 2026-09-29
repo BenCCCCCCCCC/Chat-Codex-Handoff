@@ -1,11 +1,11 @@
 # Current State
 
-Updated: 2026-09-29 — Host browser PASS / GitHub exchange relay validation next
+Updated: 2026-09-29 — GitHub exchange relay PASS / project-wide review dispatched
 Role: 00 MASTER / authoritative dynamic state
 
-## 1. Product / version state
+## 1. Active product / version
 
-Active product: **知而能讲** — Study-first + in-app teach-back.
+Product: **知而能讲** — Study-first + in-app teach-back.
 
 Repository: `BenCCCCCCCCC/Chat-Codex-Handoff`
 
@@ -22,165 +22,229 @@ Batch A: MASTER-ACCEPTED.
 
 Batch B / Phase 3A: MASTER-ACCEPTED and version-finalized locally.
 
-Dynamic authority remains:
+Dynamic authority:
 - `meta/master-state/docs/master/CURRENT_STATE.md`
 - `meta/master-state/docs/master/HANDOFF.md`
 
-New transport surface:
+Transport only:
 - `meta/master-state/docs/master/ACTIVE_EXCHANGE.md`
 
-`ACTIVE_EXCHANGE.md` is a message transport, **not** canonical product authority. Its Git commit history is the exchange audit log.
+## 2. Phase 3B
 
-## 2. Phase 3B state
-
-PHASE3B-LIVE-01 remains owner-authorized under:
+PHASE3B-LIVE-01 remains owner-authorized:
 - maximum 3 provider calls;
 - zero retries;
-- incremental local exposure ceiling US$0.03432;
+- incremental local exposure <= US$0.03432;
 - one recording maximum.
 
 No provider call or recording has yet occurred under this authorization.
 
-Previous Codex-launched Edge failures are now treated as validation-environment/sandbox limitations rather than current evidence of a product-root defect.
+### Host browser smoke — PASS
 
-### PHASE3B-HOST-BROWSER-SMOKE-01 — PASS
+Owner manually validated outside the Codex sandbox:
+- local server starts;
+- fresh isolated Edge opens;
+- product root at `http://127.0.0.1:4317` displays;
+- basic UI is visible;
+- no unexpected Tutor / ASR / diagnosis API activity appears.
 
-Owner manually ran the smoke outside Codex sandbox in a normal Windows session and reports all required checks PASS:
+Therefore the prior Codex-launched Edge failures are classified as validation-environment / Codex-sandbox limitations, not current evidence that the product root is broken.
 
-1. local server started successfully;
-2. fresh isolated Edge opened normally;
-3. `http://127.0.0.1:4317` displayed the product root/basic UI;
-4. no unexpected Tutor / ASR / diagnosis API activity appeared.
+The real Phase 3B browser/microphone flow should be owner-driven outside Codex sandbox when resumed.
 
-This clears the browser-start blocker for manual host execution.
+## 3. GitHub exchange relay — PASS
 
-Phase 3B may later resume manually in the owner-launched fresh isolated Edge profile under the existing authorization. Do not require Codex to launch/control that real browser session.
+Task:
+`EXCHANGE-RELAY-PROBE-01`.
 
-## 3. New owner workflow decision — GitHub exchange relay
+Chat wrote:
+`docs/master/ACTIVE_EXCHANGE.md`
+at commit:
+`6c4582dcb5ad92d15bfa7cdc6f1949cb5734d119`.
 
-Owner proposes eliminating repeated copy/paste between Chat and Codex by using one GitHub document as the active message bus.
+Codex read that instruction and replaced only the same exchange file with a `CODEX_TO_CHAT` receipt at:
+`9f4e36675a54bcd1a485675131f474e0d546d114`.
 
-MASTER accepts this direction for a **minimal validation first**, not a full bridge implementation.
+MASTER directly read the receipt from GitHub.
 
-Design:
-- file: `docs/master/ACTIVE_EXCHANGE.md` on `meta/master-state`;
-- current file contains only the active turn;
-- every overwrite is a Git commit, so Git history retains all prior Chat instructions and Codex replies;
-- Chat writes `CHAT_TO_CODEX`;
-- Codex reads it and, after completing/being blocked, replaces only that file with `CODEX_TO_CHAT`;
-- Chat reads the reply directly from GitHub, reviews it, updates canonical state if needed, then replaces the exchange file with the next instruction;
-- user only needs a minimal Codex nudge such as: `继续，读取 ACTIVE_EXCHANGE.md`.
+Verified receipt:
+- result = `RELAY_WRITE_OK`;
+- actual repo root = `F:/Chat-Codex-Handoff/validation-repo`;
+- product branch = `prototype/study-teachback-v0.1`;
+- product HEAD = `dd8317b43100b8cbaad684cab7fc02957e32de62`;
+- tracked worktree CLEAN;
+- no product files changed;
+- no tests run;
+- no provider/API call;
+- no product push/merge;
+- no runtime/budget/provider/canonical-state modification.
 
-This is intentionally not auto-send or an autonomous loop. The user remains the turn boundary.
+Commit comparison `6c4582d... -> 9f4e366...` showed exactly one changed path:
+`docs/master/ACTIVE_EXCHANGE.md`.
 
-## 4. Exchange safety rules
+**EXCHANGE-RELAY-PROBE-01 = PASS.**
 
-`ACTIVE_EXCHANGE.md` is transport only.
+## 4. Exchange workflow — accepted for continued validation
 
-Neither side may use it to silently override:
-- product scope;
-- spending authorization;
-- push/merge permissions;
-- canonical acceptance state.
+The user no longer needs to copy full Codex Delivery Packets between Codex and Chat when the exchange succeeds.
 
-Writer ownership alternates:
-- `CHAT_TO_CODEX` -> Codex may write only the exchange file;
-- `CODEX_TO_CHAT` -> Chat reviews and writes next turn.
+Turn pattern:
+1. Chat reviews current state.
+2. Chat writes `CHAT_TO_CODEX` into `ACTIVE_EXCHANGE.md`.
+3. Owner sends only a tiny Codex nudge: `继续，读取 ACTIVE_EXCHANGE.md`.
+4. Codex executes the current turn.
+5. Codex writes `CODEX_TO_CHAT` back into the same file.
+6. Owner returns to Chat and only says Codex executed.
+7. Chat reads the reply directly from GitHub, updates canonical state, and writes the next turn.
 
-Codex must:
-- read latest `meta/master-state` state before work;
-- record the exchange file commit/blob it read;
-- update only `docs/master/ACTIVE_EXCHANGE.md` on the meta branch for the relay;
-- not push/merge the product branch;
-- not modify `CURRENT_STATE.md` or `HANDOFF.md`;
-- fail closed if the exchange/meta branch changed after its read and would cause a conflicting overwrite.
+Git history is the transport audit trail.
 
-Chat remains the only MASTER writer for canonical state/decisions.
+The file is not canonical authority and cannot override MASTER decisions.
 
-## 5. First validation — EXCHANGE-RELAY-PROBE-01
+Codex may write only `ACTIVE_EXCHANGE.md` on the meta branch unless another explicit authorization is recorded.
 
-Before using the relay for real work, validate one GitHub round trip with no product changes.
+## 5. PROJECT-WIDE-REVIEW-01 — dispatched
 
-Chat creates the exchange instruction.
+Owner explicitly requested:
+- Codex should fully understand/read the active project body;
+- Codex may proactively make suggestions;
+- suggestions should help improve the project, not merely respond mechanically.
 
-Codex must:
-- read it from the latest meta branch;
-- make no product/code/test/runtime changes;
-- write a fixed structured relay receipt back to the same exchange file;
-- change no other GitHub path;
-- push/write no product branch;
-- stop.
+MASTER authorizes a **read-only project-wide review**.
 
-PASS means Chat can read Codex's receipt directly from GitHub without owner copy/paste.
+Purpose:
+give Codex broad analytical context and surface real architecture/product/maintainability risks before further implementation.
 
-If Codex cannot safely/authenticated-write that one meta file, return BLOCKED; do not build a helper yet.
+No implementation is authorized.
 
-## 6. Next use after relay PASS — PROJECT-WIDE-REVIEW-01
+### Required review coverage
 
-Owner also wants Codex to fully read the active project and contribute suggestions.
+Codex must first inventory tracked files and state what it actually reviewed.
 
-After the exchange relay passes, the next task will be a **read-only project-wide review**.
+It should fully read the active text/code/config/test surface, including as applicable:
+- repository root active docs/config;
+- `study-teachback-app/` source, UI, provider, ledger, storage, core/schema, launch helpers and tests;
+- retained `handoff-kit/` and related integration tooling;
+- tracked `.codex/` project configuration relevant to workflow;
+- active tracked docs outside generated artifact directories;
+- recent Git history sufficient to understand Batch A/B and current baseline;
+- canonical `CURRENT_STATE.md`, `HANDOFF.md` and current exchange state from `meta/master-state`.
 
-Codex may inspect the tracked project broadly and return:
-- active architecture map;
-- current product flow;
-- state/authority map;
-- stale/historical vs active files;
-- confirmed risks/defects;
-- opportunities to simplify or strengthen the product;
-- suggestions based on the actual repository.
+Historical/raw/generated artifacts do not need byte-by-byte review. Codex must list skipped categories/path patterns and explain why they are not part of the project body review.
 
-Suggestions must be classified:
-- Must Fix;
-- User Decision Needed;
-- Future Optional.
+If a tracked file cannot be read, state it explicitly rather than claiming complete coverage.
 
-Rules:
-- suggestions do not automatically become implementation scope;
-- no code changes in the review;
-- distinguish Verified / Likely / Unknown;
-- cite concrete file paths/symbols/evidence;
-- do not repeat settled decisions merely to generate more work.
+### Required outputs
 
-This review is intended to give Codex more agency in analysis, **not** autonomous scope control.
+1. **Coverage manifest**
+   - tracked-file inventory summary;
+   - fully reviewed areas;
+   - intentionally skipped generated/history/binary areas;
+   - unread/blocked files.
 
-## 7. Why this workflow is preferred
+2. **Architecture map**
+   - major components and responsibilities;
+   - runtime/data/provider/test boundaries;
+   - authoritative state vs retained historical tooling;
+   - browser/manual validation boundary.
 
-It directly targets the project's core friction:
-- less owner copy/paste;
-- less prompt rewriting;
-- fewer missing materials/version mismatches;
-- Chat can review the exact Codex reply from GitHub;
-- Codex can read the exact next instruction from GitHub;
-- Git commit history provides an audit trail;
-- no new daemon/GUI/message broker is required.
+3. **End-to-end product flow**
+   - source input/learning;
+   - owner input;
+   - recording/ASR/replay;
+   - contentFindings/processEvidence/diagnosticTarget;
+   - feedback/follow-up/history;
+   - cost/ledger guard.
 
-Do not build a larger transport until this one-file relay is proven useful.
+4. **Current strengths**
+   - only evidence-backed strengths;
+   - distinguish engineering validation from real-user validation.
 
-## 8. Classification
+5. **Confirmed risks / defects**
+   - actual source-level or structural issues;
+   - cite paths/symbols/evidence;
+   - do not restate already-fixed Batch A/B defects as open.
+
+6. **Simplification / maintainability opportunities**
+   - duplicated responsibilities;
+   - stale/legacy entrypoints;
+   - test/production coupling;
+   - state/document drift risk;
+   - removable complexity;
+   - only where supported by current repo.
+
+7. **Product suggestions**
+   - useful improvements Codex believes could materially improve stable personal use or portfolio demonstration;
+   - do not invent market demand;
+   - do not turn speaking-process signals into psychological or global fluency judgments.
+
+8. **Handoff/exchange workflow suggestions**
+   - assess whether the new single-file GitHub exchange is sufficient;
+   - identify concurrency/history/permissions/turn-state risks;
+   - suggest only the smallest improvements if evidence warrants them.
+
+9. **Classification**
+   - Must Fix;
+   - User Decision Needed;
+   - Future Optional.
+
+10. **Evidence status**
+    - Verified;
+    - Likely;
+    - Unknown.
+
+11. **Recommended next smallest experiments**
+    - no more than a small set;
+    - recommendations only, not execution.
+
+### Boundaries
+
+No:
+- product/code/test/runtime modification;
+- local commit;
+- provider/API call;
+- microphone;
+- live Phase 3B;
+- GitHub product-branch push/merge;
+- canonical state modification;
+- new dependency;
+- automatic implementation of suggestions.
+
+Codex is allowed to update only `docs/master/ACTIVE_EXCHANGE.md` on `meta/master-state` with the review result.
+
+Suggestions that depend on current external OpenAI/third-party capabilities must be marked `Needs MASTER freshness check` unless directly verified in the review; they must not be treated as Must Fix solely from stale knowledge.
+
+## 6. Why this review is allowed
+
+This is an explicit owner-requested scope expansion in **analysis only**, not implementation.
+
+Codex is encouraged to make independent observations and recommendations.
+
+Codex remains an advisor/executor; MASTER and owner retain scope/priority decisions.
+
+## 7. Classification
 
 Completed:
 - Batch A/B engineering validation;
-- outside-sandbox host browser smoke PASS.
+- host browser smoke;
+- GitHub one-file exchange probe.
 
-Ready:
-- EXCHANGE-RELAY-PROBE-01.
+In Progress / Dispatched:
+- PROJECT-WIDE-REVIEW-01 via ACTIVE_EXCHANGE.
 
-Planned after relay PASS:
-- PROJECT-WIDE-REVIEW-01;
-- resume manual Phase 3B live validation when owner chooses.
-
-Unknown:
-- whether Codex has a safe authenticated path to update exactly one meta-branch exchange file;
-- whether the one-file relay materially removes copy/paste in real use;
-- project-wide review findings.
+Paused but authorized:
+- PHASE3B-LIVE-01.
 
 Not Done:
-- exchange write probe;
-- project-wide review;
-- actual Phase 3B recording/provider calls;
-- push/merge/final product acceptance.
+- project-wide review result;
+- real Phase 3B recording/provider calls;
+- long-term Whisper migration;
+- retention policy;
+- product push/merge/final owner acceptance.
 
-## 9. Next smallest step
+## 8. Next smallest step
 
-Run EXCHANGE-RELAY-PROBE-01 only. If PASS, Chat should read the Codex reply directly from GitHub and issue PROJECT-WIDE-REVIEW-01 through the same exchange file, with no owner copy/paste of the Delivery Packet.
+Owner sends only:
+`继续，读取 meta/master-state 的 docs/master/ACTIVE_EXCHANGE.md，并严格执行当前 turn。`
+
+After Codex writes the review reply, owner should not paste it. Return to MASTER with only `Codex 已执行`; MASTER reads the review directly from GitHub.
