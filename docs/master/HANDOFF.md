@@ -1,30 +1,32 @@
-# Active Handoff — PHASE3B PROCESS-EVIDENCE CHECKPOINT
+# Active Handoff — PROCESS-EVIDENCE-LIVE-GAP-01
 
-Status: WAITING_OWNER / DO NOT START DIAGNOSIS
+Status: WAITING_OWNER / DIAGNOSIS PAUSED
 
-The real owner recording reached replay/transcript review.
+## What is now known
 
-Owner reports pauses and filler words such as “额……” were spoken but are not visible in the transcript.
+If filler words such as 额/嗯 are absent from raw/corrected transcript, the content-diagnosis channel does not secretly analyze them.
 
-Do not click “确认已回听，开始诊断” yet.
+Content diagnosis receives transcript text/spans only and intentionally excludes audio duration/pause/energy/delivery signals.
 
-Owner should:
-1. expand “原始转写（保留不改）” and inspect whether fillers are absent there too;
-2. use the full audio player to replay around:
-   - 0–3.8s
-   - 9.1–9.4s
-   - 15.0–16.6s
-   - 21.3–22.0s
-3. report where an actual pause/filler occurred;
-4. do not manually insert filler words into the corrected transcript unless they change semantic meaning and were genuinely omitted by ASR.
+Process evidence is a separate audio-derived channel.
 
-Reason:
-content transcript and speech-process evidence are intentionally separate channels. Manual filler insertion would fabricate process evidence instead of validating the audio-derived process path.
+The current live screenshot shows UNVALIDATED_ACTIVITY but no visible process-candidate replay rows, so the actual hesitation/pause may not have been captured by the current conservative near-silence detector.
 
-Return to MASTER with:
-- whether raw transcript contains “额/嗯” or not;
-- approximate timestamp(s) where the owner hears hesitation/filler/pause;
-- whether the full audio replay is faithful;
-- whether the four content segments otherwise match what was actually said.
+## Do not
 
-No diagnosis, Repair/Apply, or second recording yet.
+- do not click content diagnosis yet
+- do not manually insert filler words into corrected transcript merely to represent hesitation
+- do not make a second recording
+- do not retry ASR
+
+## Owner next evidence
+
+Preferred:
+1. replay the full original audio;
+2. note approximate timestamps where a genuine pause/额/嗯 occurred;
+3. report them to MASTER.
+
+Optional stronger evidence:
+use the product Export function for the current topic/attempt and upload the exported JSON to MASTER. The export contains the saved original audio and transcript versions and can be inspected with zero provider calls.
+
+No diagnosis call until MASTER classifies whether the process-evidence path needs correction first.
