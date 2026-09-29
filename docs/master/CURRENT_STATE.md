@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-09-29 — Batch C MASTER-ACCEPTED / Phase 3B owner checkpoint next
+Updated: 2026-09-29 — SETUP-FLOW-01 MASTER-ACCEPTED / Phase 3B owner live checkpoint next
 Role: 00 MASTER / authoritative dynamic state
 
 ## 1. Active product / version
@@ -17,402 +17,199 @@ Product branch:
 `prototype/study-teachback-v0.1`
 
 Accepted local feature baseline:
-`ab5d2ea9ad23359fe6cc3dc8abc0e963511996b2`
+`89c23a155ac7c32e6357b33144edf93bd9850309`
 
-Commit message:
-`fix: harden learning confirmation and budget boundaries`
+Commit:
+`feat: make learning setup source-first`
 
-Batch A: MASTER-ACCEPTED.
-Batch B / Phase 3A: MASTER-ACCEPTED.
-Batch C / CORRECTNESS-BOUNDARIES-01: **MASTER-ACCEPTED**.
+Accepted sequence:
+- Batch A: MASTER-ACCEPTED
+- Batch B / Phase 3A: MASTER-ACCEPTED
+- Batch C / correctness boundaries: MASTER-ACCEPTED
+- SETUP-FLOW-01: **MASTER-ACCEPTED**
 
-No product push/merge has been authorized or performed.
+No product push/merge is authorized or performed.
 
-## 2. Batch C final acceptance
+## 2. SETUP-FLOW-01 acceptance
 
 Base:
-`dd8317b43100b8cbaad684cab7fc02957e32de62`
-
-Final local commit:
 `ab5d2ea9ad23359fe6cc3dc8abc0e963511996b2`
 
-Exactly seven Batch C files were committed:
+Final local commit:
+`89c23a155ac7c32e6357b33144edf93bd9850309`
+
+Exactly 9 product/test files committed:
 - `study-teachback-app/app.mjs`
 - `study-teachback-app/browser-tests-r4.mjs`
 - `study-teachback-app/core.mjs`
-- `study-teachback-app/correctness-boundaries.test.mjs`
-- `study-teachback-app/correctness-hygiene.test.mjs`
+- `study-teachback-app/index.html`
+- `study-teachback-app/provenance.test.mjs`
 - `study-teachback-app/run-offline-tests.mjs`
+- `study-teachback-app/schemas.mjs`
 - `study-teachback-app/server.mjs`
+- `study-teachback-app/setup-flow.test.mjs`
 
 Final diff:
-171 insertions / 12 deletions.
+112 insertions / 16 deletions.
 
 Accepted evidence:
-- MF-01 reproduced and fixed.
-- MF-02 reproduced and fixed.
-- MF-03 reproduced and fixed.
-- focused correctness suite: 11/11 PASS.
-- full isolated Node/offline suite: 114/114 PASS.
-- host browser r4 suite outside Codex sandbox: 46/46 PASS.
-- MF-02 delayed-diagnosis/double-confirm browser case PASS.
-- git diff checks PASS.
-- 50/50 host source hashes matched before staging, before commit and after commit.
-- no code/test drift after host browser validation.
-- final tracked worktree CLEAN.
-- production ledger SHA unchanged.
-- live provider calls 0.
-- physical microphone 0.
+- focused setup-flow: 9/9 PASS;
+- full Node/offline: 123/123 PASS;
+- fresh host browser outside Codex sandbox: **50/50 PASS**;
+- host wrapper exit 0;
+- 51/51 host sourceSHA256 entries matched current files before staging, before commit and after commit;
+- no product/test source changed after host browser validation;
+- git diff checks PASS;
+- tracked worktree CLEAN;
+- production ledger SHA unchanged;
+- live provider calls 0;
+- physical microphone 0;
 - incremental exposure 0.
-- no model/provider/retention/schema/cap/dependency change.
 
-MASTER independently verified the meta exchange reply after dispatch changed only:
+MASTER independently verified the finalization meta reply changed only:
 `docs/master/ACTIVE_EXCHANGE.md`.
 
-## 3. Batch C fixes now in accepted baseline
+## 3. Accepted source-first setup behavior
 
-### MF-01
-Tutor output/history contract is consistent at 4000 characters for accepted assistant messages and re-input assistant history, while aggregate request/input guards remain bounded.
+Required user input:
+- learning source/material only.
 
-### MF-02
-Content confirmation is mutually exclusive before transcript-version mutation. Repeated confirmation while save/diagnosis is pending cannot create an extra correction or second dispatch; the first report stays visible/current.
+Title:
+- file import: locally derived from filename without final extension;
+- direct paste: first meaningful non-empty line;
+- local fallback: `学习材料`;
+- manual title is optional metadata, never required to Start/Learn;
+- no AI/provider call is used for title generation.
 
-### MF-03
-Unreadable ledger state returns controlled `503 BUDGET_UNAVAILABLE`, paid routes fail closed, the server remains available, and the UI no longer silently displays stale budget text.
+Optional setup context:
+- `这次重点想学什么？（可选）`
+- `已经掌握了什么？（可选）`
 
-## 4. Operating model — proactive Codex/Astra self-review
+Semantics:
+- stored as setupContext metadata;
+- not inserted/rendered as `role=user` history;
+- focus guides emphasis;
+- known is owner self-report, not proof of mastery;
+- supplied source remains authoritative;
+- no extra provider call is introduced.
 
-Within explicit MASTER scope, Codex/Astra may:
-- analyze and recommend;
-- implement;
-- identify edge cases;
-- run tests;
-- review its own diff;
-- perform up to two in-scope self-correction passes;
-- return extra recommendations separately.
+Legacy topics without setupContext receive empty defaults.
 
-Codex must stop for MASTER/owner if:
-- scope expands;
-- a product tradeoff appears;
-- new spend/live actions are required;
-- new dependency/framework/model/provider/schema/retention policy is required;
-- push/merge/public release/high-risk/data-loss action is needed;
-- blocker persists after bounded self-correction;
-- next change would be speculative.
+## 4. Phase 3B live authorization
 
-MASTER / GPT-5.6 remains responsible for scope, freshness, independent review, classification and final acceptance.
-
-## 5. GitHub exchange
-
-Single-file relay is accepted for the current serial workflow.
-
-Authority:
-- `docs/master/CURRENT_STATE.md`
-- `docs/master/HANDOFF.md`
-
-Transport only:
-- `docs/master/ACTIVE_EXCHANGE.md`
-
-Supported states:
-- `CHAT_TO_CODEX`
-- `CODEX_TO_CHAT`
-- `WAITING_OWNER`
-
-Codex may write only ACTIVE_EXCHANGE on the meta branch unless a later explicit authorization says otherwise.
-
-## 6. Phase 3B authorization
-
-The owner previously authorized PHASE3B-LIVE-01:
-- maximum 3 provider calls;
+Owner authorization remains valid and fully unused:
+- maximum 3 provider calls total;
 - zero retries;
 - incremental local exposure ceiling US$0.03432;
 - one real recording maximum.
 
-This authorization remains valid and fully unused.
-
-Current known ledger before live use:
-- reservations 41;
-- attempts 1;
-- reserved minutes 15;
-- reserved input/output 164237 / 61328;
-- known settled estimate US$0.01399455;
+Known pre-live ledger snapshot remains:
+- 41 reservations;
+- 1 attempt;
+- 15 reserved minutes;
+- 164237 / 61328 reserved input/output;
+- known cost US$0.01399455;
 - exposure US$0.07080205;
-- unsettled 4;
-- ledger SHA `d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`.
+- 4 unsettled;
+- SHA `d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`.
 
-Host browser smoke outside Codex sandbox already PASS.
+No live allowance has been consumed by A/B/C/setup-flow work.
 
-## 7. Phase 3B execution model
+## 5. Phase 3B execution boundary
 
-Real browser/microphone work must be owner-driven in a normal Windows session outside Codex sandbox.
+Real browser/microphone work is owner-driven outside Codex sandbox.
+
+For the first live checkpoint:
+- use a new clean topic;
+- prefer the actual synthetic DOCX file import path to validate intended file-first UX;
+- leave both optional setup-context fields empty in this first live experiment to avoid adding another experimental variable;
+- one normal Tutor/Learn call if the clean flow requires it;
+- one 20–45 second natural Mandarin explanation with no prompt assistance;
+- exactly one ASR submission;
+- replay and transcript review;
+- STOP before content diagnosis.
+
+The remaining content-diagnosis semantic call is reserved until MASTER reviews the replay/transcript checkpoint.
+
+## 6. Owner manual material
 
 Use:
-- normal PowerShell to start local server;
-- fresh isolated Edge profile already validated;
-- canonical synthetic laboratory-visitor-rules source;
-- one 20–45 second natural Mandarin explanation;
-- no prompt assistance;
-- exactly one ASR submission;
-- stop at replay/transcript checkpoint before diagnosis.
+`OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`
 
-At the checkpoint the owner returns to MASTER with:
-- raw transcript;
-- corrected transcript if ASR misheard anything;
-- screenshot if useful;
-- whether original audio saved;
-- whether replay works;
-- any critical uncertainty in negation/numbers/conditions/terms.
+Expected source semantics:
+- completed registration is necessary but not sufficient;
+- same-day visitor badge is required;
+- lab must be open;
+- badge is valid only on issue day;
+- no visitor admission after 18:00.
 
-Do not click/trigger content diagnosis until MASTER reviews the checkpoint unless the canonical handoff explicitly says otherwise.
+Prompt for the owner explanation:
+`为什么完成注册不等于一定可以进入实验室？`
 
-This preserves the remaining semantic diagnosis call for a controlled second step.
+Do not memorize/read a supplied answer.
 
-## 8. Product-wide review backlog retained
+## 7. GitHub exchange / Astra autonomy
 
-User Decision Needed later:
-- portable synthetic audio fixture / clean-clone reproducibility;
+Canonical authority:
+- `CURRENT_STATE.md`
+- `HANDOFF.md`
+
+Transport:
+- `ACTIVE_EXCHANGE.md`
+
+Authorized ACTIVE_EXCHANGE replies on `meta/master-state` are transport commits and are distinct from product push/merge.
+
+Codex/Astra may iterate freely inside an approved scope through analysis, implementation, testing and self-review.
+
+Mandatory return to MASTER when:
+- same failure signature survives three meaningful fix/test cycles;
+- scope/product tradeoff changes;
+- unapproved spend/live call is needed;
+- new dependency/framework/model/provider/schema/retention policy is needed;
+- destructive/high-risk action is needed;
+- push/merge/public release is needed;
+- next change would be speculative.
+
+MASTER/GPT-5.6 retains product scope, freshness checks and final acceptance.
+
+## 8. Retained backlog
+
+User decisions later:
+- portable fixed synthetic audio fixture / clean-clone reproducibility;
 - atomic ledger persistence/recovery;
 - historical helper/live entrypoint lifecycle;
 - retention/export/recovery policy;
 - long-term ASR migration.
 
-Future Optional:
-- small-step app.mjs decomposition;
-- active-vs-legacy test/helper index;
-- handoff-kit documented as fallback behind GitHub exchange;
+Future optional:
+- small-step app decomposition;
+- active-vs-legacy helper/test index;
+- handoff-kit documented as fallback;
 - focused diagnostic UX;
 - synthetic portfolio demo;
-- replay burden measurement.
+- replay-burden measurement.
 
-None blocks the owner Phase 3B checkpoint now.
+None blocks the current live checkpoint.
 
 ## 9. Classification
 
 Completed:
-- Batch A/B/C engineering corrections and validation;
-- GitHub exchange relay;
+- engineering corrections through SETUP-FLOW-01;
+- GitHub relay;
 - project-wide Codex review;
-- outside-sandbox host browser validation.
+- host browser validation.
 
-Ready / Waiting Owner:
-- Phase 3B owner-led recording through replay/transcript checkpoint.
+Ready / WAITING OWNER:
+- Phase 3B live flow through replay/transcript checkpoint.
 
 Not Done:
-- real ASR checkpoint;
-- content diagnosis live call;
-- real usefulness/replay-burden assessment;
+- real Tutor/ASR checkpoint;
+- live content diagnosis;
+- real usefulness / false-inference / replay-burden validation;
 - long-term ASR migration;
 - retention decisions;
 - product push/merge/final product acceptance.
 
 ## 10. Next smallest step
 
-Owner performs the first half of PHASE3B-LIVE-01 manually outside Codex sandbox:
-clean topic -> optional Tutor if required -> one natural recording -> one ASR -> replay/transcript checkpoint -> stop and return to MASTER.
-
-
-## Owner Phase 3B manual protocol — explicit steps
-
-Owner requested a concrete, self-contained procedure before beginning the live test.
-
-Protocol: start local server from normal owner PowerShell; open the validated isolated Edge outside Codex sandbox; create a new clean topic from the exact laboratory-visitor-rules source in HANDOFF; run the normal Learn entry once if required; record one natural 20–45 second Mandarin explanation with no prompt; allow exactly one ASR submission; replay and compare raw ASR against actual speech; correct only ASR mishearing; stop before content diagnosis and return the checkpoint to MASTER.
-
-Expected provider use by the replay checkpoint: at most one Tutor semantic call, exactly one ASR call, zero diagnosis calls. No retries. Any Tutor/ASR/audio/replay/ledger failure stops the experiment.
-
-
-## PHASE3B-L1-START-LEARN-NO-RESPONSE — 2026-09-29
-
-Owner began the manual Phase3B flow outside Codex sandbox and reports that clicking Start/Learn produced no visible response.
-
-Do not click Start/Learn again until MASTER determines whether the first click dispatched a Tutor/provider request. Existing authorization permits at most one initial Tutor call and zero retries.
-
-Unknown: whether POST /api/teach was sent; whether the server received it; whether provider dispatch began; whether the click failed before network; whether UI failed to render.
-
-No recording/ASR/diagnosis may proceed until this blocker is classified.
-
-
-## PHASE3B-L1 title validation root cause — 2026-09-29
-
-Owner screenshots show the direct-paste source was present but the Topic/Title field was empty when Start/Learn was clicked.
-
-Current app start handler checks title and source before topic creation/provider work; if either is empty it returns with the notice `先写一个主题，再放入这一轮的有限材料。` and does not call teach()/provider.
-
-Therefore the first Start/Learn click did not consume the authorized Tutor semantic call and is not counted as a provider retry.
-
-Owner may set title to `实验室访客入场规则` and click Start/Learn once. That click is the first authorized Tutor attempt if the normal flow dispatches Tutor.
-
-UX note retained: the required title field and validation feedback were not obvious enough to the owner. This is a usability observation, not a Phase3B blocker after the title is supplied.
-
-
-## Owner product decision — source-first setup, no required manual title
-
-Owner explicitly rejected the current requirement that the user must fill the Topic/Title field before Start/Learn.
-
-Decision:
-- the learning material is the required input;
-- the user should not be required to invent or type a topic/title;
-- title is generated automatically and is metadata, not a prerequisite;
-- the user may optionally provide learning context:
-  1. what they especially want to learn/focus on;
-  2. what they believe they already understand/master;
-- those optional fields are setup context, not chat-history user messages and not proof of mastery;
-- Tutor may use them to prioritize explanation while remaining bounded by the supplied source.
-
-Title behavior:
-- file upload/import: derive title locally from the filename without extension;
-- direct paste: derive title locally from the first meaningful non-empty line, bounded to a sensible display length;
-- if no meaningful line exists but source text is valid, use a neutral local fallback such as “学习材料”, without a provider call;
-- user may rename later only as optional metadata, but title is never required to start learning.
-
-The observed Start/Learn no-response was therefore both:
-- a correctly identified empty-title validation return in current code; and
-- a product UX/design defect relative to the owner’s intended flow.
-
-Because no Tutor/provider call was dispatched, PHASE3B-LIVE-01 has consumed 0 calls and 0 exposure. The live experiment is paused until this setup-flow correction is accepted.
-
-## SETUP-FLOW-01
-
-Status: READY / DISPATCHED THROUGH ACTIVE_EXCHANGE / ZERO LIVE API.
-
-Goal:
-remove required manual title entry, add optional learning-focus/already-known context, preserve provenance and source-grounding, and keep setup minimal.
-
-Acceptance:
-- valid source alone can start learning;
-- file import auto-title works;
-- direct-paste auto-title works;
-- empty/manual title is no longer a blocker;
-- optional focus/known context is persisted as setup metadata and reaches Tutor as explicit setup context;
-- it is not inserted into messages as a user utterance;
-- “already known” is treated as owner self-report, not validated mastery;
-- no extra provider call is introduced;
-- existing source limits, provenance, Batch A/B/C behavior and budget boundaries remain unchanged;
-- zero live provider calls in implementation/testing.
-
-Codex/Astra may analyze, recommend, self-review and make up to two in-scope correction passes under the proactive operating rule. It must not expand into broader onboarding redesign, retention, model/provider, schema migration, new dependency, or live Phase3B.
-
-Next step: Codex executes SETUP-FLOW-01 through ACTIVE_EXCHANGE and returns evidence to MASTER.
-
-
-## SETUP-FLOW-01 relay delivery failure — 2026-09-29
-
-Owner reports Codex executed SETUP-FLOW-01, but GitHub meta/master-state shows no commit after the CHAT_TO_CODEX dispatch commit `24f462de06845d4069077b63539a759009489cc8`.
-
-Therefore the execution result is currently unverified by MASTER and must not be inferred from owner memory or partial UI text.
-
-Recovery policy: do not rerun SETUP-FLOW-01 automatically. Codex should inspect the existing local worktree/current artifacts only, summarize the already-performed work, and write the missing CODEX_TO_CHAT receipt to ACTIVE_EXCHANGE. If the local work is absent/incomplete, report that explicitly instead of reimplementing.
-
-This is an exchange delivery failure, not yet a product acceptance failure.
-
-
-## Permanent relay rule — meta exchange write is not product push
-
-The previous SETUP-FLOW relay recovery exposed an ambiguity: Codex interpreted “no commit/push” as forbidding the GitHub transport write itself.
-
-Permanent distinction:
-- product branch commit/push/merge remains separately controlled by MASTER;
-- an authorized ACTIVE_EXCHANGE reply on `meta/master-state` **must** be written through the GitHub connector and therefore creates a meta-branch commit;
-- that meta transport commit is not a product push/merge and is allowed whenever the current turn authorizes an exchange reply;
-- Codex must not replace this with a repo-local artifact copy.
-
-Required relay close-out:
-1. write only `docs/master/ACTIVE_EXCHANGE.md` on `meta/master-state`;
-2. use optimistic concurrency with the incoming exchange blob/version;
-3. read back the file from the resulting commit;
-4. verify `state=CODEX_TO_CHAT`, correct `turn_id`, and full receipt content;
-5. verify the meta commit changed only ACTIVE_EXCHANGE;
-6. if any step fails, report BLOCKED in Codex UI; do not claim relay success.
-
-## Astra autonomy envelope — expanded
-
-Within an explicitly approved task, Codex/Astra may independently:
-- inspect broader relevant project context;
-- propose and choose the smallest coherent approach;
-- add/adjust in-scope tests and helpers;
-- refactor touched code locally when directly necessary for correctness/maintainability;
-- implement;
-- run tests and fault/edge-case checks;
-- review its own diff;
-- fix in-scope defects it discovers;
-- iterate repeatedly without asking MASTER for every small edit;
-- return extra recommendations separately.
-
-There is no fixed two-pass limit for ordinary in-scope corrections. Codex may iterate until acceptance criteria pass, subject to stop conditions.
-
-Hard stop:
-- if the same failure signature remains unresolved after three meaningful fix/test cycles, return to MASTER instead of continuing to churn;
-- stop immediately for scope expansion, new product tradeoff, unapproved spend/live calls, new dependency/framework/model/provider/storage schema/retention policy, destructive/high-risk action, push/merge/public release, or speculative next change.
-
-Recommendations remain non-executable unless already inside the approved task.
-
-
-## SETUP-FLOW-01 recovered result — remote relay verified
-
-Remote recovery result: NEEDS_HOST_VERIFY.
-
-Verified relay:
-- recovery dispatch commit: 03ba43515e1583d3347b955f559033bb04d6bad0;
-- Codex wrote the receipt to GitHub meta/master-state;
-- comparison shows exactly one changed path: docs/master/ACTIVE_EXCHANGE.md.
-
-Local SETUP-FLOW-01 state:
-- base/final HEAD remains ab5d2ea9ad23359fe6cc3dc8abc0e963511996b2;
-- product changes are uncommitted;
-- changed files: app.mjs, browser-tests-r4.mjs, core.mjs, index.html, provenance.test.mjs, run-offline-tests.mjs, schemas.mjs, server.mjs, plus new setup-flow.test.mjs;
-- valid source alone can start Learn;
-- direct paste derives a local title from the first meaningful line;
-- file import derives title from filename without final extension;
-- fallback title is 学习材料;
-- optional focus/known fields are setupContext metadata, not role=user messages;
-- already-known is explicitly treated as owner self-report, not mastery evidence;
-- no extra provider request is introduced.
-
-Fresh deterministic evidence:
-- focused setup-flow: 9/9 PASS;
-- full Node/offline: 123/123 PASS;
-- git diff --check: PASS;
-- production ledger SHA unchanged;
-- live provider calls 0;
-- microphone 0;
-- incremental exposure 0.
-
-Codex browser attempt was blocked before application cases by the known Codex-sandbox Edge/CDP environment limitation. Therefore SETUP-FLOW-01 is pending one host-side browser validation before final commit/MASTER acceptance.
-
-### Current Astra autonomy rule supersedes older pass-count language
-
-Any earlier statement limiting Codex to two self-correction passes is superseded.
-
-Within an approved task Astra may iterate as needed inside scope until acceptance passes or a stop condition is triggered.
-
-Mandatory return to MASTER:
-- same failure signature survives three meaningful fix/test cycles;
-- scope/product tradeoff changes;
-- unapproved spend/live call;
-- new dependency/framework/model/provider/schema/retention policy;
-- destructive/high-risk action;
-- push/merge/public release;
-- next step would be speculative.
-
-This gives Astra broad engineering autonomy without transferring product-scope authority.
-
-
-## SETUP-FLOW-01 host browser verification — 2026-09-29
-
-Owner ran from normal Windows PowerShell outside Codex sandbox:
-
-`node .\study-teachback-app\run-offline-tests.mjs browser setup-flow-01`
-
-Observed host result:
-- output directory: `artifacts/study-teachback/setup-flow-01/browser-1790660416802-ZP4imb`;
-- all visible functional cases PASS;
-- new setup source-only/context combinations PASS;
-- existing provenance / Batch A/B/C browser regressions PASS;
-- isolation summary: synthetic credential / loopback only / test ledgers only / blocked outbound attempts=0;
-- wrapper receipt exit=0;
-- production ledger SHA before/after unchanged.
-
-The suite adds four setup-specific browser cases to the prior 46-case r4 baseline, so the expected total is 50/50 PASS. Codex must read the host receipt directly during finalization and confirm the exact recorded count before commit.
-
-This clears the current SETUP-FLOW-01 browser-validation blocker for the unchanged tested worktree.
-
-If any product/test source changes after this host run, this evidence becomes stale for that changed state.
+Owner starts the accepted product outside Codex sandbox, imports the synthetic DOCX into a new clean topic without manually entering a title, performs one natural recording and one ASR, reviews replay/transcript, then stops and returns the checkpoint to MASTER.
