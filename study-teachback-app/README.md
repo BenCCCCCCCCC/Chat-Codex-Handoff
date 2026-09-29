@@ -1,6 +1,6 @@
 # 知而能讲 — Study-first + in-app teach-back
 
-先理解有限材料，再在应用内讲解、回听并核对转写，查看反馈后补学、重讲或换情境应用。
+先理解有限材料，再在应用内讲解、确认当前转写文字（可选回听），查看反馈后补学、重讲或换情境应用。
 
 ## Canonical state
 
@@ -11,7 +11,9 @@
 
 当前 checkout 的 `docs/master/` 仅指向上述权威文档。读取任务时记录文档 commit，不把分支名当目录，不执行旧副本中的历史 next steps。
 
-历史 Phase 1 材料导入和 clean Phase 2 学习对话已接受；物理麦克风 Phase 3 尚未执行。真实录音、完整 owner journey、重复学习收益仍未验证。历史 Node/Edge 计数不代表当前版本 fresh results；各次交付包保存各自命令、版本和结果。
+截至 2026-09-30，已接受的产品行为基线为 `aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`（可选转写回听）。Phase 3B 真实 owner 验证已完成：1 次 Tutor、1 次真实录音、1 次 ASR、1 次内容诊断，重试 0 次。原三次 live 调用授权已全部用完，没有后续真实调用授权；新实验须另行明确授权。动态状态以 canonical 文档为准。
+
+真实样本的内容反馈识别了访客证、开放状态和当天有效条件，并指出未表达 18:00 截止条件。16–18 秒的过程迟疑与该遗漏不在同一目标上，不能据此推断迟疑证明知识缺口。该样本支持内容／过程证据分离，不证明跨课程、跨用户或重复学习收益。阶段正式关闭仍待 MASTER 决定；历史 Node/Edge 计数仅适用于各自交付包记录的版本。
 
 ## Windows 启动与停止
 
@@ -39,11 +41,11 @@ node study-teachback-app/server.mjs
 
 ## 材料、录音与保留边界
 
-初始页面“选择学习文件”支持 MD/TXT/PDF/DOCX/PPTX。本机提取、预览后选取最多 5,000 字；点击“开始学习”才把所选文字发送给 Tutor。原文件不上传 provider、不持久化。录音在应用内进行。
+初始页面“选择学习文件”支持 MD/TXT/PDF/DOCX/PPTX。本机提取后，规范化全文在 1–5,000 字内会自动填入学习材料，并保留预览和手动选段覆盖；超过 5,000 字须明确选择子段，不静默截断。点击“开始学习”才把学习材料发送给 Tutor。原文件不上传 provider、不持久化。录音在应用内进行。
 
 输入上限 10 MB；Office ZIP 总展开 30 MB；100 个 PDF 页面/幻灯片；提取 200,000 字符；单轮学习 5,000 字。TXT/MD 支持 UTF-8 或带 BOM 的 UTF-16。加密、非法、超限文件会被拒绝。不做 OCR；复杂版式需在预览中核对。DOCX 主体/表格段落与 PPTX 幻灯片文字受支持；页眉、备注、批注、图表和图片文字不在范围内。
 
-原声、raw/corrected 转写版本、来源和历史保持关联。词时间不可用时保留 PARTIAL 状态；诊断仍要求回听并确认。更正转写不是一次新口头表现。有效录音先保存并检查，再注册 attempt，注册与限额检查通过后才转写；重复注册同一 ID 不增加次数或重置提交额度。注册失败时保留已保存原声。
+原声、raw/corrected 转写版本、来源和历史保持关联。词时间不可用时保留 PARTIAL 状态。内容诊断在明确确认当前文字后进行，不要求逐段回听完成；完整播放器和逐段回听均可选。ASR 可能误听否定词、数字、条件和术语，建议回听或修改后继续。新文字版本以 `USER_TRANSCRIPT_CONFIRMATION` 记录确认，`reviewed` 表示文字确认而非音频播放证明；回听完成仅是临时页面反馈，重新打开不要求重复播放。旧版本来源保留，更正转写不是一次新口头表现，也不会自动添加填充词。有效录音先保存并检查，再注册 attempt，注册与限额检查通过后才转写；重复注册同一 ID 不增加次数或重置提交额度。注册失败时保留已保存原声。
 
 现有七天过期、导出/删除行为不变。打开旧 profile 可能触发过期清理，不能把启动/重载当作只读检查。自定义 retention 仍需独立决策。US$5 exposure / US$10 cash 上限保持不变；不自动充值、不切换模型/provider。
 
@@ -51,7 +53,7 @@ node study-teachback-app/server.mjs
 
 Phase 3A 将内容判断 `contentFindings` 与讲解过程 `processEvidence` 分开呈现。`diagnosticTargets` 仅从已核对内容中的可处理关系生成；同段过程观察只是独立上下文，不证明“不理解”。缺失内容没有音频时间点。过程证据不要求教材引用，也不包含知识状态、修复建议或人格评分。
 
-当前真实过程入口只保存回听确认的本地近静音候选，不调用语义模型；重启、自我修正、重复等类型仅由预标注 fixture 验证，不声称已有检测器。新证据复用现有 reports 集合，按 attempt／转写版本关联，无数据库版本升级。历史 delivery 报告只读呈现，不转成新定位证据。
+当前过程入口支持本地长近静音候选与有界短停顿聚集候选，仍属于 `UNVALIDATED_ACTIVITY`，不识别词汇“额/嗯”，自然语音误报／漏报率尚未充分验证。过程证据须完成对应候选片段的真实回听，并确认所关联转写，才可在本机保存，不额外调用语义模型。过程观察不能单独生成知识缺陷判断。重新起句、自我修正、重复等类型仅由预标注 fixture 验证，不声称已有检测器。新证据复用现有 reports 集合，按 attempt／转写版本关联，无数据库版本升级。历史 delivery 报告只读呈现，不转成新定位证据。
 
 Batch B 使用同一隔离包装器：`node study-teachback-app/run-offline-tests.mjs node diagnostic-localization-01`、`node study-teachback-app/run-offline-tests.mjs diagnostic diagnostic-localization-01`、`node study-teachback-app/run-offline-tests.mjs browser diagnostic-localization-01`。证据写入对应的 `artifacts/study-teachback/diagnostic-localization-01/<run-id>/`；六个 fixture 的 expected／actual 保存在 `fixture-results.json`。
 
