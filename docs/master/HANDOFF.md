@@ -80,9 +80,11 @@ Candidate narrow differentiator:
 
 Owner decisions:
 - support multiple sources conceptually;
-- source roles auto-inferred, user-correctable;
-- source conflict must be surfaced;
-- user chooses authority when the conflict matters;
+- typical scope can be topic/week or several weeks/module depending on the learner; whole-course/semester is not the default target;
+- source roles auto-inferred, user-correctable, shown compactly/expandably rather than requiring blocking up-front confirmation;
+- every detected source conflict is surfaced;
+- diagnosis-relevant conflicts require user arbitration before the affected diagnosis/priority is finalized;
+- irrelevant conflicts remain visible but non-blocking;
 - structured learning goal is allowed;
 - repair priority = prerequisite dependency + severity + source/goal-supported importance;
 - no guessed exam importance without evidence;
@@ -123,25 +125,32 @@ Do not freeze numerical KPI thresholds until a calibration run exists.
 
 Do **not** implement multi-file UI.
 
-First proposed probe:
-`NATIVE-COLLISION-PROBE-01`
+`NATIVE-COLLISION-PROBE-01` is **OWNER APPROVED**.
 
-Reuse the preserved Phase 3B sample and product result and compare against a strong native/general learning baseline.
+Before running the native baseline, execute:
+`NATIVE-COLLISION-PROBE-01-PREP`
 
-No new 知而能讲 live call.
+PREP is read-only:
+- recover the exact preserved Phase 3B source identity;
+- recover the exact confirmed learner explanation/transcript used for diagnosis;
+- recover the exact accepted content diagnosis/result;
+- provide artifact paths / receipts / hashes sufficient to bind them;
+- distinguish raw ASR from confirmed/corrected text;
+- no reconstruction from summaries;
+- no product changes;
+- no live calls;
+- no product commit/push/merge.
+
+After PREP returns, MASTER freezes the Study-mode baseline prompt and scoring sheet.
 
 If no meaningful diagnostic advantage remains, Pivot/Stop.
-If a meaningful gap remains, then build the controlled benchmark before product UI.
+If a meaningful gap remains, proceed to the controlled multi-source benchmark before product UI.
 
 ## Current exchange
 
-`MASTER_HOLD`
+`CHAT_TO_CODEX`
 
-No Codex task active.
+Active task:
+`NATIVE-COLLISION-PROBE-01-PREP`
 
-Owner still needs to approve/decline the native collision probe.
-
-Open questions:
-1. typical source-set scope: topic/week vs module vs whole course;
-2. whether only diagnosis-relevant conflicts should interrupt;
-3. whether inferred source roles should be shown/confirmed up front or only when they affect a decision.
+This is evidence retrieval only, not implementation.

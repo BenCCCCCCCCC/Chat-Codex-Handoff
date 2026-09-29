@@ -110,15 +110,18 @@ Accepted owner decisions:
 - Phase 4 benchmark should use multi-source cases rather than implement "unlimited upload".
 
 ### Source conflict
-- if sources conflict on a diagnosis-relevant claim, the system must not silently choose;
-- surface the conflict;
-- let the user decide which source / interpretation has authority;
+- any detected source conflict should be surfaced to the learner in a lightweight way;
+- if the conflict can change the current diagnosis or remediation priority, the system must not silently choose and must ask the user to arbitrate the relevant authority/interpretation before finalizing the affected judgment;
+- if the conflict is not relevant to the current diagnosis/priority, it remains visible but non-blocking;
 - source roles may guide context but do not authorize silent conflict resolution.
 
 ### Source roles
 Default:
 - infer roles automatically;
-- user can correct them.
+- user can correct them;
+- do not require a blocking up-front confirmation step;
+- inferred roles may be shown compactly / behind a small expandable control;
+- ask for explicit confirmation when a role materially affects conflict handling or remediation priority.
 
 Possible roles include:
 - primary course material / textbook;
@@ -261,11 +264,20 @@ Comparative numeric pass thresholds will be frozen only after the first calibrat
 Phase 4A must NOT start by implementing multi-file UI.
 
 First:
-**NATIVE-COLLISION-PROBE-01**
+**NATIVE-COLLISION-PROBE-01 — APPROVED**
 - reuse the existing Phase 3B source/transcript/result;
 - compare with a strong native/general baseline;
 - no new 知而能讲 live provider call;
 - determine whether the narrower diagnostic layer offers any value over generic current tools.
+
+Before the native comparison, run one read-only preparation step:
+**NATIVE-COLLISION-PROBE-01-PREP**
+- recover the exact preserved Phase 3B confirmed learner transcript/explanation and accepted diagnosis/result from local artifacts;
+- bind them to the exact source/receipt;
+- do not reconstruct wording from summaries;
+- do not modify product files;
+- do not run Tutor/ASR/diagnosis or any live provider call;
+- do not commit on the product branch.
 
 If that comparison shows no meaningful diagnostic advantage:
 - Pivot/Stop diagnostic productization;
@@ -303,26 +315,34 @@ If there is a meaningful diagnostic/safety gap:
 
 ## 11. Current state
 
-**MASTER_HOLD**
+**NATIVE-COLLISION-PROBE-01 APPROVED / PREP DISPATCHED**
 
-No Codex implementation task is active.
+Owner decisions resolved:
+- typical source-set scope should support both topic/week and multi-week/module workflows depending on the learner; whole-course/semester is not the default Phase 4 target;
+- all source conflicts should be surfaced;
+- diagnosis-relevant conflicts are blocking for the affected diagnosis/priority until user arbitration;
+- irrelevant conflicts remain visible but non-blocking;
+- inferred source roles should not require a blocking up-front confirmation; show them compactly/expandably and ask explicitly when a role changes conflict/priority handling.
 
-Next smallest action:
-owner approves or declines running the already-proposed `NATIVE-COLLISION-PROBE-01`.
+Current task:
+`NATIVE-COLLISION-PROBE-01-PREP`
 
-The new Phase 4A multi-source decisions are frozen as product direction, but they do not authorize implementation.
+This task is read-only evidence preparation, not product implementation.
 
-## 12. Open product questions for the owner
+## 12. Probe preparation acceptance
 
-1. Typical source-set scope:
-   - one lecture/week/topic bundle;
-   - several weeks/module;
-   - whole course/semester.
-   This affects retrieval and authority design more than a raw file-count limit.
+Codex/Astra must return:
+- exact local repo / branch / HEAD / tracked status;
+- exact preserved Phase 3B source artifact identity;
+- exact confirmed learner transcript/explanation text used for diagnosis;
+- exact accepted content diagnosis/result text or structured payload used for the Phase 3B decision;
+- paths/receipt IDs/hashes that bind those artifacts;
+- clear distinction between raw ASR transcript and user-confirmed/corrected transcript if both exist;
+- no reconstruction from summaries;
+- no source/test/product changes;
+- live provider calls / recording / ASR / diagnosis = 0;
+- no product commit/push/merge.
 
-2. Conflict interruption:
-   Proposed default: interrupt only when a conflict can change the current diagnosis or repair priority; keep irrelevant conflicts non-blocking.
-   Owner decision still needed.
+If the exact transcript/result cannot be recovered, return BLOCKED with the missing artifact/path rather than inventing it.
 
-3. When source roles are inferred, should the learner see/confirm the inferred roles before studying, or only when a role affects a conflict/priority decision?
-   Owner decision still needed.
+After PREP returns, MASTER will freeze the native-baseline prompt and scoring sheet before the user runs the Study-mode comparison.

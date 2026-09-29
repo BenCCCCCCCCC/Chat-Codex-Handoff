@@ -1,99 +1,70 @@
 # ACTIVE_EXCHANGE
 
-state: MASTER_HOLD
-turn_id: PHASE4A-SCOPE-FROZEN
-task: NONE
+state: CHAT_TO_CODEX
+turn_id: NATIVE-COLLISION-PROBE-01-PREP
+task: NATIVE-COLLISION-PROBE-01-PREP
 writer: CHAT_MASTER
 transport_only: true
-status: PHASE4A_PRODUCT_DIRECTION_FROZEN / NO_IMPLEMENTATION_DISPATCHED
+status: DISPATCHED / READ_ONLY_EVIDENCE_PREP
 accepted_base_head: 20be403f7bb736ab0cde2758af7306a00c2290db
 
-## Current decision
+## Owner approval
 
-Phase 3B remains CLOSED / PASS.
+Owner approved `NATIVE-COLLISION-PROBE-01`.
 
-Phase 4A product direction has been refined and frozen for planning.
+Resolved Phase 4 product decisions:
+- normal source-set scope can be a topic/week bundle or a several-week/module bundle depending on the learner;
+- whole-course/semester is not the default Phase 4 target;
+- all detected source conflicts should be surfaced;
+- if a conflict can change diagnosis or remediation priority, the affected judgment must wait for user arbitration rather than silently selecting a source;
+- irrelevant conflicts remain visible but non-blocking;
+- source roles are auto-inferred and user-correctable;
+- role confirmation is not a blocking up-front step; inferred roles may be shown in a compact/expandable control and should be explicitly confirmed when a role affects conflict/priority.
 
-No Codex implementation task is active.
+## Task
 
-## Owner decisions captured
+Prepare the exact preserved Phase 3B comparison input for `NATIVE-COLLISION-PROBE-01`.
 
-- portfolio / AI Product Manager evidence is primary objective;
-- students are primary users;
-- result priority: wrong -> missing -> repair first -> weak/uncertain -> mastery last;
-- no overall mastery score required;
-- multiple sources are required conceptually;
-- final upload-count limit is not frozen;
-- source roles should be auto-inferred and user-correctable;
-- diagnosis-relevant source conflicts must be surfaced;
-- user must arbitrate the relevant conflict rather than the system silently selecting;
-- structured learning goal is allowed;
-- remediation priority is prerequisite dependency + error severity + importance supported by source/goal;
-- do not guess exam importance without evidence;
-- diagnostic depth may vary by source/goal;
-- process/pause evidence is de-prioritized and cannot independently prove misunderstanding.
+This is read-only evidence retrieval. It is **not** a product implementation task.
 
-## Collision update
+Start by reading the latest:
+1. docs/master/CURRENT_STATE.md
+2. docs/master/HANDOFF.md
+3. docs/master/ACTIVE_EXCHANGE.md
 
-Generic multi-source and evidence-first learning is already strongly represented.
+Then verify:
+- repo = F:\Chat-Codex-Handoff\validation-repo
+- branch = prototype/study-teachback-v0.1
+- HEAD begins from accepted local HEAD 20be403f7bb736ab0cde2758af7306a00c2290db unless a later local HEAD is documented by the current authoritative state
+- tracked worktree status
 
-Gemini Notebook publicly supports many sources, source selection, citations, automatic categorization/labels and manual label changes.
+Locate the preserved Phase 3B owner-validation artifacts for:
+`OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`
 
-Gemini Study Notebooks already provide learning goals, diagnostic quizzes, knowledge-gap identification and ranked next-priority lessons.
+Return, without paraphrasing:
+1. exact source artifact identity/path and, if available, content/hash/receipt binding;
+2. exact raw ASR transcript;
+3. exact user-confirmed/corrected transcript/explanation actually used for content diagnosis;
+4. exact accepted content-diagnosis result/output or structured payload used in the Phase 3B decision;
+5. artifact/receipt/export paths and hashes/IDs sufficient to prove the above belong to the same preserved attempt;
+6. explicit note of any field that cannot be recovered exactly.
 
-Current FeynmanAI open source also covers source grounding, learner contracts, observable attempts, source selection/anchors and evidence-backed next actions.
+Important:
+- do not reconstruct transcript or diagnosis wording from MASTER summaries;
+- distinguish raw ASR from user-confirmed/corrected text;
+- do not modify product/source/test/documentation files;
+- do not rerun Tutor/ASR/diagnosis;
+- live provider calls = 0;
+- recording = 0;
+- ASR = 0;
+- diagnosis calls = 0;
+- do not create a product commit;
+- do not push/merge.
 
-Therefore "multi-file", "automatic categorization", "goal", "gap finding", "next action" and "evidence first" are not sufficient differentiation.
+If exact comparison inputs cannot be recovered, return `BLOCKED / EXACT_ARTIFACT_MISSING` with the missing item and searched locations.
 
-Candidate narrower product question:
+## Return
 
-> Can explicit source-authority/conflict handling make multi-source diagnostic error/omission/repair-priority judgments more reliable and trustworthy?
+Write `CODEX_TO_CHAT` to this ACTIVE_EXCHANGE with the exact recovered evidence and read-only verification.
 
-## Frozen Phase 4A benchmark question
-
-`Multi-source Diagnostic Prioritization Benchmark`
-
-Planning only.
-
-No UI or ingestion implementation is approved.
-
-Initial benchmark should use controlled 2–4 source bundles with ground truth and evaluate:
-- errors;
-- omissions;
-- unsupported diagnoses;
-- prerequisite/severity priority;
-- source conflict surfacing;
-- user authority correction;
-- learning-goal sensitivity;
-- abstention;
-- verbose-correct / fluent-wrong robustness.
-
-Do not invent numerical KPI pass thresholds before calibration.
-
-## Immediate next proposed experiment
-
-`NATIVE-COLLISION-PROBE-01`
-
-Still awaiting explicit owner approval.
-
-It should precede multi-source implementation:
-- reuse preserved Phase 3B sample/result;
-- compare to a strong native/general baseline;
-- no new 知而能讲 live provider call.
-
-No product code change.
-No new recording/ASR/diagnosis.
-No push/merge.
-
-## Open owner questions
-
-1. Typical source-set scope:
-   topic/week vs module vs whole course.
-
-2. Conflict interruption:
-   proposed default is to interrupt only when conflict can change the current diagnosis or remediation priority; irrelevant conflict stays non-blocking.
-
-3. Inferred source roles:
-   show/confirm up front, or reveal only when a role affects conflict/priority.
-
-Next action belongs to the owner / MASTER.
+No Phase 4 implementation is authorized by this task.
