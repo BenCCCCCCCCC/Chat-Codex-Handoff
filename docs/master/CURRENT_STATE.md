@@ -257,3 +257,44 @@ Decision:
 Status: FILE-IMPORT-AUTO-USE-01 READY / DISPATCHED THROUGH ACTIVE_EXCHANGE / ZERO LIVE API.
 
 Phase3B remains paused until this owner-observed setup friction is corrected and verified.
+
+
+## FILE-IMPORT-AUTO-USE-01 recovered result — 2026-09-29
+
+Codex returned NEEDS_HOST_VERIFY.
+
+Verified relay:
+- dispatch commit: 30b01fdd50f375e89c32be16a693b3908ad6602a;
+- response changed only docs/master/ACTIVE_EXCHANGE.md.
+
+Local implementation state:
+- base/final HEAD remains 89c23a155ac7c32e6357b33144edf93bd9850309;
+- changes remain uncommitted;
+- changed files:
+  - study-teachback-app/app.mjs
+  - study-teachback-app/browser-tests-r4.mjs
+  - study-teachback-app/run-offline-tests.mjs
+  - new study-teachback-app/file-import-auto-use.test.mjs
+
+Implemented behavior:
+- extracted full text length 1..5000 auto-populates the actual learning source after successful extraction;
+- filename-derived title remains local;
+- preview remains visible;
+- user can still intentionally override with a selected subset;
+- extracted text >5000 is not silently truncated or auto-chunked and requires explicit subsection selection;
+- direct paste and setupContext behavior remain unchanged;
+- no provider call is added during extraction.
+
+Fresh deterministic evidence:
+- focused import suite: 8/8 PASS;
+- full Node/offline: 131/131 PASS;
+- git diff --check: PASS;
+- browser syntax check PASS;
+- production ledger SHA unchanged;
+- live provider calls 0;
+- microphone 0;
+- incremental exposure 0.
+
+Codex browser attempt was environment-blocked before application cases by the known Windows Codex sandbox Edge/CDP limitation.
+
+Therefore FILE-IMPORT-AUTO-USE-01 is pending one host-side browser validation before final commit/MASTER acceptance.
