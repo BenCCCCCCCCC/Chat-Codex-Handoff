@@ -668,3 +668,42 @@ Default behavior for future authorized turns:
 8. Do not reread every historical artifact mechanically on every turn. Prefer current canonical state + targeted repo exploration; expand only when it helps answer a real question.
 
 MASTER/GPT-5.6 remains final scope, product decision and acceptance authority.
+
+
+## PROCESS-EVIDENCE-FEASIBILITY-01 project-aware self-review — NEEDS_HOST_REVERIFY
+
+Astra found an in-scope UI reachability defect after the prior host PASS.
+
+Problem:
+- long near-silence events are stored before short-pause-cluster events;
+- renderAttempt used the first eight events;
+- with 8+ long events, short-pause candidates could be detected but never shown;
+- visible order could also be non-chronological.
+
+Post-host correction:
+- keep the eight-row cap;
+- preserve representation of both detector types;
+- fill spare capacity by time;
+- show visible rows chronologically;
+- preserve original event IDs/objects/stored order;
+- show visible/total candidate count.
+
+Post-host edited files:
+- study-teachback-app/app.mjs
+- study-teachback-app/process-evidence.test.mjs
+- study-teachback-app/browser-tests-r4.mjs
+
+Fresh zero-call evidence:
+- focused 33/33 PASS
+- full Node/offline 150/150 PASS
+- git diff --check PASS
+- live provider 0
+- additional ASR 0
+- production ledger unchanged
+
+The previous host receipt was 51/51 PASS for the pre-correction bytes and is now stale. Fresh host verification is required.
+
+Broader project observations retained:
+- stale README/CURRENT_STATE historical status text can mislead future operators into repeating already-consumed live actions;
+- existing owner audio is not automatically reanalysed by the new detector;
+- legacy paid delivery route still exists, while current process confirmation is local/provider-free.
