@@ -852,3 +852,27 @@ After diagnosis, owner returns the visible 内容理解 / 讲解过程证据 / t
 ## Documentation cleanup queued
 
 After the Phase3B diagnosis checkpoint, reconcile stale root/product README and historical CURRENT_STATE summary wording that still implies Phase 3 was never executed or live allowance was unused.
+
+
+## REPLAY-GATE-UX-01 — owner live friction
+
+Owner clicked `确认已回听，开始诊断` after reopening the preserved attempt and saw no apparent response.
+
+Code-grounded cause:
+- renderAttempt clears the in-memory `heard` set whenever the attempt is rerendered/reopened;
+- the confirm handler checks every raw transcript span is present in `heard`;
+- if any span is missing, it throws `NOT_HEARD` before calling `diagnose(..., 'content')`;
+- therefore this blocked click consumed **0 content-diagnosis provider calls**.
+
+Current UI requires each per-span replay button to finish once in the current rendered session. Listening to the full audio player does not satisfy this gate.
+
+Owner-facing meaning of “ASR semantic error”:
+- correct only transcription errors that change the meaning of what was actually spoken, e.g. 不→ omitted, 18:00→20:00, open→closed;
+- do not insert omitted filler words such as 额/嗯 or pauses merely to represent delivery/process evidence.
+
+UX finding / Must Fix candidate:
+- full-player replay is not credited toward the per-span replay gate;
+- reopening/rerendering resets the in-memory replay completion state;
+- the NOT_HEARD notice is easy to miss, making the diagnosis button appear unresponsive.
+
+Do not implement this UX fix during the remaining live diagnosis checkpoint. Record it for post-Phase3B triage.
