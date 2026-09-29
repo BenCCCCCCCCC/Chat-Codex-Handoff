@@ -22,7 +22,7 @@ The remaining evidence is one browser regression outside the Codex Windows sandb
 
 Owner will run from a normal Windows PowerShell:
 
-node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01-host
+node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01
 
 After the owner reports PASS/FAIL to MASTER, MASTER will replace this file with a new CHAT_TO_CODEX turn.
 
@@ -31,3 +31,13 @@ After the owner reports PASS/FAIL to MASTER, MASTER will replace this file with 
 In future authorized turns Codex may analyze, recommend, self-review, test and perform bounded in-scope self-correction as defined in the latest CURRENT_STATE/HANDOFF.
 
 WAITING_OWNER is not execution authorization.
+
+
+## Correction
+
+Previous owner attempt did not execute tests because MASTER supplied an invalid batch name.
+
+Use exactly:
+`node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01`
+
+Remain in WAITING_OWNER until MASTER receives the real PASS/FAIL result.
