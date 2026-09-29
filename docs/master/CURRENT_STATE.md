@@ -303,3 +303,44 @@ Therefore the execution result is currently unverified by MASTER and must not be
 Recovery policy: do not rerun SETUP-FLOW-01 automatically. Codex should inspect the existing local worktree/current artifacts only, summarize the already-performed work, and write the missing CODEX_TO_CHAT receipt to ACTIVE_EXCHANGE. If the local work is absent/incomplete, report that explicitly instead of reimplementing.
 
 This is an exchange delivery failure, not yet a product acceptance failure.
+
+
+## Permanent relay rule — meta exchange write is not product push
+
+The previous SETUP-FLOW relay recovery exposed an ambiguity: Codex interpreted “no commit/push” as forbidding the GitHub transport write itself.
+
+Permanent distinction:
+- product branch commit/push/merge remains separately controlled by MASTER;
+- an authorized ACTIVE_EXCHANGE reply on `meta/master-state` **must** be written through the GitHub connector and therefore creates a meta-branch commit;
+- that meta transport commit is not a product push/merge and is allowed whenever the current turn authorizes an exchange reply;
+- Codex must not replace this with a repo-local artifact copy.
+
+Required relay close-out:
+1. write only `docs/master/ACTIVE_EXCHANGE.md` on `meta/master-state`;
+2. use optimistic concurrency with the incoming exchange blob/version;
+3. read back the file from the resulting commit;
+4. verify `state=CODEX_TO_CHAT`, correct `turn_id`, and full receipt content;
+5. verify the meta commit changed only ACTIVE_EXCHANGE;
+6. if any step fails, report BLOCKED in Codex UI; do not claim relay success.
+
+## Astra autonomy envelope — expanded
+
+Within an explicitly approved task, Codex/Astra may independently:
+- inspect broader relevant project context;
+- propose and choose the smallest coherent approach;
+- add/adjust in-scope tests and helpers;
+- refactor touched code locally when directly necessary for correctness/maintainability;
+- implement;
+- run tests and fault/edge-case checks;
+- review its own diff;
+- fix in-scope defects it discovers;
+- iterate repeatedly without asking MASTER for every small edit;
+- return extra recommendations separately.
+
+There is no fixed two-pass limit for ordinary in-scope corrections. Codex may iterate until acceptance criteria pass, subject to stop conditions.
+
+Hard stop:
+- if the same failure signature remains unresolved after three meaningful fix/test cycles, return to MASTER instead of continuing to churn;
+- stop immediately for scope expansion, new product tradeoff, unapproved spend/live calls, new dependency/framework/model/provider/storage schema/retention policy, destructive/high-risk action, push/merge/public release, or speculative next change.
+
+Recommendations remain non-executable unless already inside the approved task.
