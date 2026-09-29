@@ -707,3 +707,21 @@ Broader project observations retained:
 - stale README/CURRENT_STATE historical status text can mislead future operators into repeating already-consumed live actions;
 - existing owner audio is not automatically reanalysed by the new detector;
 - legacy paid delivery route still exists, while current process confirmation is local/provider-free.
+
+
+## PROCESS-EVIDENCE-FEASIBILITY-01 fresh host reverify PASS — 2026-09-29
+
+Owner reran the host browser suite after the project-aware post-host UI correction.
+
+Owner screenshot confirms:
+- all visible browser cases PASS;
+- short-gap candidate replay/local-save/no-semantic-call case PASS;
+- isolation remains synthetic credential / loopback only / test ledgers only / blocked outbound attempts=0;
+- wrapper receipt exit=0;
+- error=null;
+- production ledger SHA before/after identical;
+- unchanged=true.
+
+This revalidates the corrected bytes after the prior host evidence became stale.
+
+Astra must now read the fresh host receipt directly, confirm the exact case count and sourceSHA256 binding, perform final self-review, and create one focused local commit only if no additional source/test changes are needed.
