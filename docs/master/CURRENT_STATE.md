@@ -17,7 +17,7 @@ Product branch:
 `prototype/study-teachback-v0.1`
 
 Accepted local feature baseline:
-`ac875a100b159781037746ea0b8bd2188457d13a`
+`bdd0635597006881d6f8f7213122ae53ccbc99a9`
 
 Commit:
 `fix: auto-use small imported learning materials`
@@ -725,3 +725,72 @@ Owner screenshot confirms:
 This revalidates the corrected bytes after the prior host evidence became stale.
 
 Astra must now read the fresh host receipt directly, confirm the exact case count and sourceSHA256 binding, perform final self-review, and create one focused local commit only if no additional source/test changes are needed.
+
+
+## PROCESS-EVIDENCE-FEASIBILITY-01 MASTER acceptance — 2026-09-29
+
+Final local commit:
+`bdd0635597006881d6f8f7213122ae53ccbc99a9`
+
+Commit:
+`feat: add bounded short-pause process evidence`
+
+Base:
+`ac875a100b159781037746ea0b8bd2188457d13a`
+
+Exactly six files committed:
+- study-teachback-app/core.mjs
+- study-teachback-app/diagnostic-localization.mjs
+- study-teachback-app/app.mjs
+- study-teachback-app/browser-tests-r4.mjs
+- study-teachback-app/run-offline-tests.mjs
+- study-teachback-app/process-evidence.test.mjs
+
+Accepted evidence:
+- focused 33/33 PASS;
+- full Node/offline 150/150 PASS;
+- fresh host browser after project-aware UI correction 51/51 PASS;
+- wrapper exit 0 / error null;
+- browser console errors empty;
+- 53/53 source hashes matched before staging, before commit and after commit;
+- no source/test drift after fresh host reverify;
+- git diff checks PASS;
+- final tracked worktree CLEAN;
+- production ledger unchanged;
+- live provider calls 0;
+- additional ASR 0;
+- physical microphone 0;
+- incremental exposure 0.
+
+Accepted behavior:
+- preserve existing >=0.7s long near-silence candidate;
+- add bounded short-pause-cluster candidate;
+- no lexical filler claim;
+- replay and reviewed transcript required before process confirmation;
+- process evidence is local/provider-free and cannot create content knowledge deficits by itself;
+- UI preserves both detector types under the eight-row cap and displays visible candidates chronologically;
+- local deterministic convergence may only mark a bounded target worth verifying.
+
+Known limitation:
+- natural-speech false-positive/false-negative rates remain unknown;
+- the existing owner attempt was saved before this detector existed and is not automatically recomputed/migrated.
+
+New accepted local baseline:
+`bdd0635597006881d6f8f7213122ae53ccbc99a9`.
+
+## Next smallest experiment — existing owner attempt zero-call reanalysis
+
+Do not spend the remaining content-diagnosis call yet.
+
+Before resuming live diagnosis, verify whether the preserved 21.96s owner recording, when processed by the newly accepted detector, actually yields the expected short-pause candidate around the owner-confirmed 16–18s hesitation.
+
+Constraints:
+- zero provider/API;
+- zero new ASR;
+- zero new recording;
+- no modification of the stored owner attempt;
+- do not upload owner raw audio/export to GitHub;
+- return only derived timing/event evidence to canonical state.
+
+If the new detector finds a bounded candidate overlapping the real hesitation, MASTER can decide whether to continue the existing live validation path.
+If it does not, do not force a process finding; record the miss and reconsider the detector/validation plan.
