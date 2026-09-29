@@ -444,3 +444,19 @@ Next evidence options:
 2. export the current topic/attempt locally and provide the export to MASTER for zero-provider audio/process inspection.
 
 No second recording or diagnosis call is authorized yet.
+
+
+## PROCESS-EVIDENCE-LIVE-GAP-01 — owner timestamp confirmed
+
+Owner confirms the actual hesitation/filler occurred approximately at **16–18 seconds**.
+
+This is especially informative because the visible ASR segment spans 16.6–19.1 seconds and contains semantic text, while the hesitation/filler itself is omitted from the transcript.
+
+Therefore the gap is not explained merely by an ASR segment boundary. It is a voiced/process event inside a recognized speech segment.
+
+Implication:
+- content transcript cannot represent this hesitation reliably;
+- the current near-silence-only process detector may miss voiced fillers such as “额/嗯” even when they materially mark a reasoning transition;
+- the final content-diagnosis call remains paused because it would not validate the missing process-evidence behavior.
+
+Next smallest experiment: zero-provider local audit of the saved original audio around 16–18s, preferably using the product export so the audio, raw/corrected transcript and attempt identity remain bound together.
