@@ -55,7 +55,14 @@ $('sourceFile').onchange=()=>act(async()=>{
     const result=await api('/api/extract',await file.arrayBuffer(),{'X-Source-Format':file.name.split('.').pop().toLowerCase()});
     $('extractedText').value=result.blocks.map(b=>b.text).join('\n\n');
     $('extractionState').textContent='解析完成';$('importStatus').textContent=`${result.blocks.length} 个正文/页面/幻灯片区块。核对文字后，选取最多 5,000 字。`;
-    reveal('importPreview');notice('');
+    reveal('importPreview');
+    if($('extractedText').value.trim().length<=5000){
+      useImported(true);
+      notice('全文已放入学习材料，可以直接开始学习；也可从预览中重新选取片段。');
+    }else{
+      notice('文件超过 5,000 字，请在预览中选取最多 5,000 字，再点击“使用选中文字”。未自动替换现有学习材料。');
+      updateCounts();
+    }
   }catch(e){$('extractionState').textContent='解析未完成，可重新选择文件或粘贴文字。';throw e;}finally{importPending=false;$('learn').disabled=false;$('sourceFile').disabled=false;}
 });
 function useImported(all){

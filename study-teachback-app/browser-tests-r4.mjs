@@ -197,6 +197,7 @@ try{
     const before=calls.length;
     await evaluate(`const dt=new DataTransfer();dt.items.add(new File(['条件：只有持票者才可以入场。\\n补充：闭馆时不能入场。'],'fixture.md',{type:'text/plain'}));document.getElementById('sourceFile').files=dt.files;document.getElementById('sourceFile').dispatchEvent(new Event('change'));`);
     await until(`!document.getElementById('importPreview').hidden`);assert.equal(calls.length,before);assert.equal(await evaluate(`document.getElementById('selectedFile').textContent`),'fixture.md');assert.equal(await evaluate(`document.getElementById('extractionState').textContent`),'解析完成');await shot('preview','fileProgress');
+    assert(await evaluate(`document.getElementById('source').value===document.getElementById('extractedText').value.trim() && document.getElementById('title').value==='fixture' && document.getElementById('sourceCount').textContent.startsWith(document.getElementById('source').value.length.toLocaleString())`));
     await evaluate(`const p=document.getElementById('extractedText');p.setSelectionRange(0,18);`);await click('useSelection');
     assert.equal(await evaluate(`document.getElementById('source').value`),await evaluate(`document.getElementById('extractedText').value.slice(0,18).trim()`));
     const selectedText=await evaluate(`document.getElementById('source').value`);await evaluate(`document.getElementById('extractedText').value='字'.repeat(5001)`);await click('useAll');assert.equal(await evaluate(`document.getElementById('source').value`),selectedText);assert.equal(calls.length,before);
