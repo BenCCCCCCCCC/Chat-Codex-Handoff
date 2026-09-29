@@ -1,23 +1,39 @@
 # ACTIVE_EXCHANGE
 
-state: WAITING_OWNER
-turn_id: PROCESS-EVIDENCE-FEASIBILITY-01-HOST-VERIFY
-task: PROCESS-EVIDENCE-FEASIBILITY-01
+state: CHAT_TO_CODEX
+turn_id: PROCESS-EVIDENCE-FEASIBILITY-01-FINALIZE
+task: PROCESS-EVIDENCE-FEASIBILITY-01-FINALIZE
 writer: CHAT_MASTER
 transport_only: true
 accepted_base_head: ac875a100b159781037746ea0b8bd2188457d13a
 
-Implementation exists locally and is uncommitted.
+## Instruction
 
-Evidence:
-- focused 28/28 PASS
-- full Node/offline 145/145 PASS
-- git diff --check PASS
-- live provider calls 0
-- additional ASR 0
+Finalize PROCESS-EVIDENCE-FEASIBILITY-01 according to the latest CURRENT_STATE.md and HANDOFF.md.
 
-Owner must run outside Codex:
-node .\study-teachback-app\run-offline-tests.mjs browser process-evidence-feasibility-01
+Host browser validation now PASSed outside Codex sandbox for the current unchanged worktree.
 
-Do not execute Codex work while WAITING_OWNER.
-Do not resume live diagnosis.
+Owner-observed host evidence:
+- all displayed browser cases PASS
+- new short-gap local replay/save/no-semantic-call case PASS
+- wrapper exit 0
+- isolated synthetic credential / loopback / test ledgers
+- production ledger SHA unchanged
+
+Before commit:
+- inspect the host artifact receipt directly;
+- confirm exact PASS count and sourceSHA256 binding;
+- independently self-review the full diff;
+- confirm no post-host source/test drift.
+
+Critical rule:
+if any product/test source change is required after host PASS, do NOT finalize with stale host evidence; return NEEDS_HOST_REVERIFY.
+
+If no post-host change is needed:
+- stage only the six files listed in HANDOFF;
+- run git diff --check;
+- create one focused local commit;
+- no push/merge;
+- write CODEX_TO_CHAT to this remote ACTIVE_EXCHANGE and verify readback/sole meta path.
+
+Do not resume live owner diagnosis.
