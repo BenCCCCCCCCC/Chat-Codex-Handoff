@@ -16,3 +16,12 @@ Owner evidence to collect:
 Do not reload, do not click Start/Learn again, do not record, do not use ASR or diagnosis.
 
 Return evidence to MASTER.
+
+## L1 correction: required topic title
+
+Before clicking Start/Learn, set the Topic/Title field to:
+`实验室访客入场规则`
+
+The first prior click with an empty title returned before provider dispatch and did not consume the Tutor allowance.
+
+After filling the title, click Start/Learn once. Do not click repeatedly while a request is pending.
