@@ -1,71 +1,74 @@
-# Active Handoff — SETUP-FLOW-01 RELAY RECOVERY v2
+# Active Handoff — SETUP-FLOW-01 HOST VERIFY
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: RECOVER EXISTING RESULT / REMOTE EXCHANGE WRITE EXPLICITLY AUTHORIZED
+Status: WAITING_OWNER / OUTSIDE CODEX SANDBOX / ZERO LIVE API
 
-## 1. Do not re-execute SETUP-FLOW-01
+## 1. Current implementation evidence
 
-The owner reports the original task was executed in a previous Codex chat.
+SETUP-FLOW-01 is implemented locally but uncommitted.
 
-A local draft receipt exists at:
-F:\Chat-Codex-Handoff\validation-repo\artifacts\study-teachback\setup-flow-01\meta-master-state\docs\master\ACTIVE_EXCHANGE.md
+Focused setup tests:
+9/9 PASS.
 
-Read that local receipt plus the current local worktree/artifacts only to recover what already happened.
+Full Node/offline:
+123/123 PASS.
 
-Do not redo implementation or rerun tests merely to create a relay message.
+git diff --check:
+PASS.
 
-## 2. Critical transport clarification
+Live provider calls:
+0.
 
-“Do not commit/push product” does NOT prohibit the exchange write.
+Codex browser run:
+environment-blocked before product cases due to known Windows Codex sandbox Edge/CDP limitation.
 
-For this recovery turn, Codex is explicitly authorized and required to update exactly:
-`docs/master/ACTIVE_EXCHANGE.md`
-on:
-`meta/master-state`
-using the authenticated GitHub connector / Contents API.
+## 2. Owner host browser command
 
-That write will create a GitHub meta-branch commit. This is expected and authorized transport behavior.
+Run from normal Windows PowerShell, not Codex terminal:
 
-Not authorized:
-- product-branch commit/push/merge;
-- CURRENT_STATE.md or HANDOFF.md changes;
-- any other GitHub path.
+Set-Location F:\Chat-Codex-Handoff\validation-repo
+node .\study-teachback-app\run-offline-tests.mjs browser setup-flow-01
 
-## 3. Required receipt
+Do not reset/clean/checkout the current worktree.
 
-Write the recovered SETUP-FLOW-01 result as CODEX_TO_CHAT.
+## 3. PASS expectations
 
-Include:
-- original task result: COMPLETE / NEEDS_HOST_VERIFY / BLOCKED;
-- exact local base/final HEAD and commit status;
-- exact changed files;
-- implementation summary;
-- tests already run/results;
-- zero-live-call evidence;
-- provenance/setup-context evidence;
-- whether host browser verification is required;
-- self-review findings;
-- Blocking / Unknown / User Decision Needed / Future Optional.
+The browser suite should execute the new setup cases, including:
+- source-only Start/Learn succeeds;
+- direct-paste title derivation;
+- focus-only / known-only / both / neither context combinations;
+- setupContext persists/reloads;
+- setup context does not render/store as user-message history;
+- new-topic clearing;
+- existing provenance/browser regressions remain green.
 
-If local evidence is incomplete, say so. Do not fill gaps by reimplementation.
+This is isolated fake-provider/test-ledger validation, not live Phase3B.
 
-## 4. Required relay verification
+## 4. Report to MASTER
 
-After GitHub update:
-- read back ACTIVE_EXCHANGE from the returned commit;
-- verify same recovery turn_id and state CODEX_TO_CHAT;
-- verify full receipt is present;
-- verify the meta commit changed only ACTIVE_EXCHANGE.
+Return:
+- PASS/FAIL;
+- final pass/fail count;
+- exact error if any.
 
-Only then report relay success in Codex UI.
+No long logs needed unless requested.
 
-If connector write/readback/path verification fails, report BLOCKED and leave product state untouched.
+## 5. After PASS
 
-## 5. Astra autonomy rule
+MASTER will dispatch a new ACTIVE_EXCHANGE turn for Astra to:
+- read the host receipt;
+- independently self-review current setup-flow diff;
+- iterate only if an in-scope issue is found;
+- if no post-host source changes are needed, create one focused local commit;
+- if source/test changes are made after host PASS, return NEEDS_HOST_REVERIFY rather than relying on stale host evidence.
 
-For future execution tasks Astra may analyze, recommend, implement, test, self-review and iterate freely inside approved scope until acceptance passes.
+## 6. Astra autonomy
 
-Stop for MASTER on scope/risk boundaries, or if the same failure signature survives three meaningful fix/test cycles.
+Within the approved SETUP-FLOW-01 scope Astra may iterate freely through analysis, implementation, testing and self-review.
 
-This recovery turn itself is evidence recovery only; do not use autonomy to reopen SETUP-FLOW-01 implementation.
+No fixed two-pass limit applies.
+
+Stop if the same failure survives three meaningful fix/test cycles or if scope/risk boundaries require MASTER.
+
+Do not resume Phase3B until setup-flow is accepted.
