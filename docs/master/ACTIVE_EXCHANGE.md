@@ -1,67 +1,99 @@
 # ACTIVE_EXCHANGE
 
 state: MASTER_HOLD
-turn_id: PHASE4-PREIMPLEMENTATION-COLLISION
+turn_id: PHASE4A-SCOPE-FROZEN
 task: NONE
 writer: CHAT_MASTER
 transport_only: true
-status: COLLISION_CHECK_COMPLETE / AWAITING_OWNER_NATIVE_PROBE_APPROVAL
+status: PHASE4A_PRODUCT_DIRECTION_FROZEN / NO_IMPLEMENTATION_DISPATCHED
 accepted_base_head: 20be403f7bb736ab0cde2758af7306a00c2290db
 
 ## Current decision
 
 Phase 3B remains CLOSED / PASS.
 
-Fresh Phase 4 pre-implementation collision check is complete.
+Phase 4A product direction has been refined and frozen for planning.
 
-MASTER found strong overlap for the generic product shape:
-- native ChatGPT Study: uploaded materials + guided/Socratic learning + understanding checks;
-- native ChatGPT Voice/GPT-Live: files + Projects + voice;
-- NotebookLM: source-grounded study outputs / quizzes / citations;
-- commercial teach-back products: spoken explain-back + gap finding;
-- current GitHub projects: teach-back / tutoring / file-context / voice patterns.
+No Codex implementation task is active.
 
-Therefore no new generic teach-back feature is approved.
+## Owner decisions captured
 
-## Candidate differentiation
+- portfolio / AI Product Manager evidence is primary objective;
+- students are primary users;
+- result priority: wrong -> missing -> repair first -> weak/uncertain -> mastery last;
+- no overall mastery score required;
+- multiple sources are required conceptually;
+- final upload-count limit is not frozen;
+- source roles should be auto-inferred and user-correctable;
+- diagnosis-relevant source conflicts must be surfaced;
+- user must arbitrate the relevant conflict rather than the system silently selecting;
+- structured learning goal is allowed;
+- remediation priority is prerequisite dependency + error severity + importance supported by source/goal;
+- do not guess exam importance without evidence;
+- diagnostic depth may vary by source/goal;
+- process/pause evidence is de-prioritized and cannot independently prove misunderstanding.
 
-The only currently evidence-supported candidate is narrower:
+## Collision update
 
-source-grounded diagnostic localization of the learner's weak concept / relation / reasoning transition, while keeping content evidence separate from speech/process evidence and never using process evidence alone as proof of a knowledge gap.
+Generic multi-source and evidence-first learning is already strongly represented.
 
-This is still a hypothesis.
+Gemini Notebook publicly supports many sources, source selection, citations, automatic categorization/labels and manual label changes.
 
-## Proposed next experiment
+Gemini Study Notebooks already provide learning goals, diagnostic quizzes, knowledge-gap identification and ranked next-priority lessons.
+
+Current FeynmanAI open source also covers source grounding, learner contracts, observable attempts, source selection/anchors and evidence-backed next actions.
+
+Therefore "multi-file", "automatic categorization", "goal", "gap finding", "next action" and "evidence first" are not sufficient differentiation.
+
+Candidate narrower product question:
+
+> Can explicit source-authority/conflict handling make multi-source diagnostic error/omission/repair-priority judgments more reliable and trustworthy?
+
+## Frozen Phase 4A benchmark question
+
+`Multi-source Diagnostic Prioritization Benchmark`
+
+Planning only.
+
+No UI or ingestion implementation is approved.
+
+Initial benchmark should use controlled 2–4 source bundles with ground truth and evaluate:
+- errors;
+- omissions;
+- unsupported diagnoses;
+- prerequisite/severity priority;
+- source conflict surfacing;
+- user authority correction;
+- learning-goal sensitivity;
+- abstention;
+- verbose-correct / fluent-wrong robustness.
+
+Do not invent numerical KPI pass thresholds before calibration.
+
+## Immediate next proposed experiment
 
 `NATIVE-COLLISION-PROBE-01`
 
-No Codex implementation.
+Still awaiting explicit owner approval.
 
-Reuse the completed Phase 3B sample and preserved 知而能讲 result.
+It should precede multi-source implementation:
+- reuse preserved Phase 3B sample/result;
+- compare to a strong native/general baseline;
+- no new 知而能讲 live provider call.
 
-Native baseline:
-- same source;
-- same confirmed learner explanation/transcript;
-- ChatGPT Study mode.
+No product code change.
+No new recording/ASR/diagnosis.
+No push/merge.
 
-Optional second native baseline:
-- ChatGPT Voice + file/Project only if needed.
+## Open owner questions
 
-Compare:
-- detection of the omitted 18:00 condition;
-- false positives;
-- localization precision;
-- source grounding;
-- actionability;
-- whether hesitation/process evidence is wrongly converted into a knowledge judgment;
-- manual friction.
+1. Typical source-set scope:
+   topic/week vs module vs whole course.
 
-## Authorization
+2. Conflict interruption:
+   proposed default is to interrupt only when conflict can change the current diagnosis or remediation priority; irrelevant conflict stays non-blocking.
 
-No new app-side live provider call is authorized.
-No new recording / ASR / diagnosis is authorized.
-No product code change is authorized.
-No push/merge is authorized.
+3. Inferred source roles:
+   show/confirm up front, or reveal only when a role affects conflict/priority.
 
-Next action belongs to the owner:
-approve or decline NATIVE-COLLISION-PROBE-01.
+Next action belongs to the owner / MASTER.

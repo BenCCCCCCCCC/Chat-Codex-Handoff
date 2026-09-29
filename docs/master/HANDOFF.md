@@ -1,9 +1,7 @@
 # HANDOFF — NEW MASTER CHAT START
 
 Updated: 2026-09-30
-Purpose: compact authoritative handoff for the next Chat / 00 MASTER conversation.
-
-## Read first
+Purpose: current authoritative product handoff.
 
 Repository:
 `BenCCCCCCCCC/Chat-Codex-Handoff`
@@ -11,144 +9,139 @@ Repository:
 Canonical branch:
 `meta/master-state`
 
-Read in this order:
+Read in order:
 1. `docs/master/CURRENT_STATE.md`
 2. `docs/master/HANDOFF.md`
 3. `docs/master/ACTIVE_EXCHANGE.md`
 
-Do not reconstruct current state from historical numbered/version-suffixed files unless evidence is needed.
-
-## Product
+## Accepted baseline
 
 Active product:
 **知而能讲**
 
-Accepted local HEAD:
-`20be403f7bb736ab0cde2758af7306a00c2290db`
-
-Accepted commit:
-`docs: align entry guides with completed Phase 3B validation`
-
-Behavior baseline:
-`aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`
-`fix: make transcript replay optional for content diagnosis`
-
-Local checkout:
+Local repo:
 `F:\Chat-Codex-Handoff\validation-repo`
 
 Product branch:
 `prototype/study-teachback-v0.1`
 
-No product push/merge authorized.
-
-## Phase 3B — CLOSED / PASS
-
-MASTER has formally closed Phase 3B for the bounded validation question.
-
-Validated:
-- one real source-first owner flow;
-- Tutor 1;
-- real microphone recording 1;
-- ASR 1;
-- content diagnosis 1;
-- retries 0;
-- content/process separation on the real sample;
-- accepted optional-replay UX;
-- current entry documentation aligned.
-
-This does not validate:
-- broad learning efficacy;
-- detector accuracy at scale;
-- generalization across users/courses/speech patterns;
-- process-only knowledge diagnosis.
-
-Original live authorization is fully consumed.
-No further live provider calls are authorized.
-
-Production ledger:
-`1d6a29631982daf6cd540622f2dabee3d2c48b24dbda8a8879dbb2ca7b215a21`
-
-## Accepted documentation cleanup
-
-`DOC-CLEANUP-PHASE3B-01` is accepted.
-
-Commit:
+Accepted local HEAD:
 `20be403f7bb736ab0cde2758af7306a00c2290db`
 
-Changed only:
-- `README.md`
-- `study-teachback-app/README.md`
+Behavior baseline:
+`aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`
 
-Evidence:
-- 11 insertions / 7 deletions;
-- targeted stale-state search clean;
-- diff checks PASS;
-- final tracked worktree clean;
-- no runtime/test changes;
-- live calls 0;
-- no push/merge.
+Phase 3B:
+**CLOSED / PASS for bounded feasibility.**
 
-## Phase 4 pre-implementation collision result
+No product push/merge authorized.
+Original Phase 3B live allowance is fully consumed.
 
-Fresh 2026-09-30 review found strong collision with the generic product shape.
+## Current product objective
 
-Current native overlap:
-- ChatGPT Study mode supports uploaded learning materials, guided/Socratic teaching and understanding checks;
-- Study mode currently does not apply inside Projects and documents dictation rather than a unified live-voice Study workflow;
-- ChatGPT Voice/GPT-Live supports files and Projects.
+Portfolio / AI Product Manager evidence first.
 
-Current external/open-source overlap:
-- NotebookLM covers source-grounded study outputs and quizzes;
-- multiple products already market spoken Explain Back / Feynman / gap-finding workflows;
-- GitHub projects such as `VihaanMotwani/deep-study-skills` and `GibbonTech/feynman-learning-app` cover teach-back, tutoring, file context and/or voice.
+Primary user:
+students.
 
-MASTER decision:
-do not build more generic teach-back features.
+Desired feedback order:
+1. what is wrong;
+2. what is missing;
+3. what to repair first;
+4. possible weak/uncertain areas;
+5. avoid unsupported global mastery claims.
 
-The remaining candidate differentiation is:
-**precise source-grounded gap localization + strict separation between content-understanding evidence and speech/process evidence.**
+No overall mastery score is currently required.
 
-That value is not yet proven.
+## Phase 4 collision result
 
-## Proposed next Phase 4 experiment
+Generic AI tutoring / teach-back / multi-source learning is heavily collided.
 
+Current products already cover combinations of:
+- uploaded materials;
+- multiple sources;
+- source-grounded citations;
+- learning goals;
+- diagnostic quizzes;
+- knowledge-gap identification;
+- next-priority recommendations;
+- teach-back;
+- voice;
+- source selection;
+- automatic source categorization.
+
+Do not build generic multi-file or teach-back features as differentiation.
+
+## Frozen Phase 4 product direction
+
+Candidate narrow differentiator:
+
+**multi-source diagnostic reliability under explicit source authority and conflict.**
+
+Owner decisions:
+- support multiple sources conceptually;
+- source roles auto-inferred, user-correctable;
+- source conflict must be surfaced;
+- user chooses authority when the conflict matters;
+- structured learning goal is allowed;
+- repair priority = prerequisite dependency + severity + source/goal-supported importance;
+- no guessed exam importance without evidence;
+- diagnostic resolution can vary by source/goal; default standard depth is acceptable later;
+- conclusion-first result;
+- process evidence is de-prioritized and cannot independently prove a knowledge gap.
+
+## Phase 4A
+
+Name:
+`Multi-source Diagnostic Prioritization Benchmark`
+
+This is currently a **frozen product question, not an implementation task**.
+
+Hypotheses:
+- distinguish error / omission / no issue;
+- choose repair priority correctly;
+- surface diagnosis-relevant source conflicts instead of silently resolving;
+- adapt valid priority/depth to learning goal;
+- do not convert speaking style/hesitation into knowledge judgment.
+
+Initial benchmark:
+- controlled ground-truth cases;
+- 2–4 sources per case;
+- multi-source consistency/complementarity/conflict;
+- prerequisite/severity priority;
+- same source set with different goals;
+- verbose-correct vs fluent-wrong;
+- insufficient evidence / abstention;
+- user correction of inferred source role.
+
+Metrics:
+error/omission precision-recall, unsupported diagnosis, conflict surfacing, silent conflict resolution, top remediation priority, goal sensitivity, false process inference, traceability, abstention.
+
+Do not freeze numerical KPI thresholds until a calibration run exists.
+
+## Immediate next gate
+
+Do **not** implement multi-file UI.
+
+First proposed probe:
 `NATIVE-COLLISION-PROBE-01`
 
-No code changes.
+Reuse the preserved Phase 3B sample and product result and compare against a strong native/general learning baseline.
 
-Reuse the existing Phase 3B source / confirmed learner explanation / accepted product result.
+No new 知而能讲 live call.
 
-Compare against:
-1. ChatGPT Study mode using the same source and same explanation/transcript;
-2. optionally ChatGPT Voice + file/Project if the first comparison leaves a meaningful voice-specific question.
+If no meaningful diagnostic advantage remains, Pivot/Stop.
+If a meaningful gap remains, then build the controlled benchmark before product UI.
 
-Judge:
-- correct omission detection;
-- false positives;
-- localization precision;
-- source grounding;
-- actionable feedback;
-- content/process contamination;
-- manual friction.
+## Current exchange
 
-Important:
-the current product should not be rerun for this probe unless MASTER later authorizes new live calls. Use the preserved Phase 3B output as its side of the comparison.
+`MASTER_HOLD`
 
-## Current state
+No Codex task active.
 
-No Codex implementation task is active.
+Owner still needs to approve/decline the native collision probe.
 
-ACTIVE_EXCHANGE remains MASTER_HOLD until the owner approves the Phase 4 native-collision probe.
-
-## Hard boundaries
-
-Without fresh owner approval:
-- no new product feature;
-- no new app-side live provider calls;
-- no new recording/ASR/diagnosis;
-- no schema/retention/model/provider/budget change;
-- no push/merge/public release.
-
-## Next
-
-Owner decides whether to run NATIVE-COLLISION-PROBE-01.
+Open questions:
+1. typical source-set scope: topic/week vs module vs whole course;
+2. whether only diagnosis-relevant conflicts should interrupt;
+3. whether inferred source roles should be shown/confirmed up front or only when they affect a decision.
