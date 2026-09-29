@@ -1,73 +1,160 @@
-# Active Handoff — REPLAY-REVIEW-UX-01
+# HANDOFF — NEW MASTER CHAT START
 
 Updated: 2026-09-29
-Role: 00 MASTER
-Status: CHAT_TO_CODEX / ZERO PROVIDER / OWNER UX DECISION
+Purpose: compact authoritative handoff for the next Chat / 00 MASTER conversation.
 
-Accepted product HEAD:
-bdd0635597006881d6f8f7213122ae53ccbc99a9
+## Read first
 
-## Owner decision
+Repository:
+`BenCCCCCCCCC/Chat-Codex-Handoff`
 
-Per-span replay must not be a hard prerequisite for content diagnosis.
+Canonical branch:
+`meta/master-state`
 
-Replay remains useful for checking ASR errors, but normal users should be able to continue without mechanically finishing every span.
+Read in this order:
+1. `docs/master/CURRENT_STATE.md`
+2. `docs/master/HANDOFF.md`
+3. `docs/master/ACTIVE_EXCHANGE.md`
 
-## Required behavior
+Do not reconstruct current state from old version-suffixed historical files unless evidence is needed.
 
-1. Content diagnosis should be available once a valid ASR transcript exists.
-2. Do not require all transcript spans to be in an in-memory heard set before content diagnosis.
-3. Keep clear warning:
-   - diagnosis uses the current transcript;
-   - ASR may mishear negation, numbers, conditions and terms;
-   - user may replay/edit before continuing.
-4. Per-span replay remains optional.
-5. Full audio player remains available.
-6. User edits remain explicit corrections; do not add filler words automatically.
-7. Process-candidate confirmation may still require replay of that specific process event before saving process evidence.
-8. No extra semantic/provider call.
-9. Do not conflate transcript review with process evidence.
-10. Remove or revise misleading NOT_HEARD behavior for content diagnosis.
+## Product
 
-## Review-state UX
+Active product:
+**知而能讲**
 
-Astra should inspect the simplest coherent treatment of replay state after rerender.
+Accepted local product HEAD:
+`bdd0635597006881d6f8f7213122ae53ccbc99a9`
 
-Goal:
-- do not show a misleading “must replay again” impression after diagnosis;
-- avoid persisting false claims that audio was reviewed if it was not;
-- if a transcript version is explicitly confirmed for diagnosis, represent that confirmation honestly and separately from per-span playback completion.
+Local checkout:
+`F:\Chat-Codex-Handoff\validation-repo`
 
-Astra may choose the smallest coherent implementation after inspecting current data model and adjacent replay/process gates.
+Product branch:
+`prototype/study-teachback-v0.1`
 
-## Project-aware autonomy
+No product push/merge authorized.
 
-Read canonical state and current product context first.
+## What has already happened
 
-Astra may inspect surrounding replay, transcript-version, process-confirmation, storage/export and browser-test flows.
+Real Phase 3B validation is complete:
+- source-first DOCX import validated;
+- Tutor 1 call;
+- real owner recording 1;
+- ASR 1 call;
+- content diagnosis 1 call;
+- retries 0;
+- live authorization fully consumed.
 
-Inside this UX scope, iterate freely.
+Real content result:
+- visitor badge condition: captured;
+- lab open/closed condition: captured;
+- badge same-day validity: captured;
+- 18:00 cutoff: omitted.
 
-Outside-scope findings return separately as Must Fix candidate / User Decision Needed / Future Optional / Project observations.
+Real process result:
+- old saved long pause ~14.54–15.42s;
+- owner-confirmed hesitation around 16–18s;
+- accepted detector reanalysis finds short-pause cluster ~16.08–17.24s.
 
-## Tests
+Content omission and process hesitation did not converge on the same target, so no causal/knowledge inference is justified. This is a positive validation of evidence separation.
 
-Zero provider only.
+## Current task
 
-Cover at least:
-- content diagnosis can proceed without playing every span;
-- current transcript/corrections are what content diagnosis receives;
-- optional span replay still works;
-- no extra provider request;
-- process-event confirmation still requires event replay if that safety gate is retained;
-- rerender/history reload does not produce misleading hard-gate state;
-- existing provenance/process/content regressions remain green.
+Task:
+`REPLAY-REVIEW-UX-01`
 
-Run focused + full Node/offline + browser stub if possible.
+Owner decision:
+per-span replay is recommended, not mandatory for content diagnosis.
 
-If UI changed and Codex browser is environment-blocked, return NEEDS_HOST_VERIFY without final commit.
+Codex implemented the change but left it uncommitted because its browser environment failed before app cases.
 
-No live API.
-No new recording.
-No ASR.
-No push/merge.
+Current implementation evidence:
+- focused 36/36 PASS
+- full Node/offline 151/151 PASS
+- diff check PASS
+- browser syntax PASS
+- zero live API
+- production ledger unchanged
+
+Exact modified files:
+- app.mjs
+- core.mjs
+- index.html
+- correctness-boundaries.test.mjs
+- browser-tests-r4.mjs
+- run-offline-tests.mjs
+
+## Immediate next action
+
+Owner runs:
+
+```powershell
+Set-Location F:\Chat-Codex-Handoff\validation-repo
+node .\study-teachback-app\run-offline-tests.mjs browser replay-review-ux-01
+```
+
+Do not tell Codex to continue before this host result.
+
+If PASS:
+1. record host PASS in CURRENT_STATE/HANDOFF;
+2. dispatch finalization through ACTIVE_EXCHANGE;
+3. require Astra to read fresh receipt/source hashes;
+4. allow focused local commit only if no post-host source/test edits;
+5. if any source/test edit occurs after host PASS, require another host reverify.
+
+If FAIL:
+- do not rerun blindly;
+- classify exact failure first;
+- let Astra fix in-scope issues under project-aware autonomy;
+- fresh host verification required after source/test changes.
+
+## Current ACTIVE_EXCHANGE meaning
+
+Expected state after this handoff:
+`WAITING_OWNER`
+
+It should point to the host browser validation above.
+
+## Important boundaries
+
+- no further Phase3B live provider calls are authorized;
+- no new recording/ASR/diagnosis;
+- no product push/merge;
+- no retention/model/provider/schema changes without MASTER/owner decision;
+- raw owner audio/export must not be uploaded to GitHub;
+- process evidence must remain separate from knowledge judgment.
+
+## Codex/Astra autonomy
+
+Astra is allowed to understand the project and explore broadly:
+- read canonical docs;
+- inspect recent commits;
+- inspect adjacent modules/tests;
+- identify hidden coupling/risk;
+- self-correct inside approved scope.
+
+Broad exploration does not grant broad implementation scope.
+
+Return outside-scope findings as:
+- Must Fix candidate
+- User Decision Needed
+- Future Optional
+- Project observations
+
+## Required phase-end reporting
+
+Every phase/gate should explicitly state:
+- Completed
+- Not Done
+- Verified
+- Likely
+- Unknown
+- next smallest experiment
+
+## After REPLAY-REVIEW-UX-01 finalization
+
+Next recommended MASTER work:
+1. documentation cleanup so README/canonical summaries reflect completed Phase 3B;
+2. decide whether current Phase 3B evidence is sufficient to close the current validation phase;
+3. only then choose the next productization step;
+4. do not jump directly to full software/product expansion.
