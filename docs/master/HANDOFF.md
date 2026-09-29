@@ -16,17 +16,21 @@ Read in this order:
 2. `docs/master/HANDOFF.md`
 3. `docs/master/ACTIVE_EXCHANGE.md`
 
-Do not reconstruct current state from old version-suffixed historical files unless evidence is needed.
+Do not reconstruct current state from historical numbered/version-suffixed files unless evidence is needed.
 
 ## Product
 
 Active product:
 **知而能讲**
 
-Accepted local product HEAD:
-`aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`
+Accepted local HEAD:
+`20be403f7bb736ab0cde2758af7306a00c2290db`
 
 Accepted commit:
+`docs: align entry guides with completed Phase 3B validation`
+
+Behavior baseline:
+`aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`
 `fix: make transcript replay optional for content diagnosis`
 
 Local checkout:
@@ -37,101 +41,97 @@ Product branch:
 
 No product push/merge authorized.
 
-## Phase 3B — completed
+## Phase 3B — CLOSED / PASS
 
-Real owner validation consumed:
-- Tutor semantic: 1
-- real microphone recording: 1
-- ASR: 1
-- content diagnosis: 1
-- retries: 0
+MASTER has formally closed Phase 3B for the bounded validation question.
 
-The original live authorization is fully consumed.
+Validated:
+- one real source-first owner flow;
+- Tutor 1;
+- real microphone recording 1;
+- ASR 1;
+- content diagnosis 1;
+- retries 0;
+- content/process separation on the real sample;
+- accepted optional-replay UX;
+- current entry documentation aligned.
+
+This does not validate:
+- broad learning efficacy;
+- detector accuracy at scale;
+- generalization across users/courses/speech patterns;
+- process-only knowledge diagnosis.
+
+Original live authorization is fully consumed.
 No further live provider calls are authorized.
 
-Accepted real result:
-- content captured badge/open-state/same-day validity;
-- content omitted 18:00 admission cutoff;
-- process hesitation around 16–18s did not converge on the omitted 18:00 target;
-- content/process evidence therefore remains separated.
-
-Production ledger remains:
+Production ledger:
 `1d6a29631982daf6cd540622f2dabee3d2c48b24dbda8a8879dbb2ca7b215a21`
 
-## REPLAY-REVIEW-UX-01 — accepted
+## Accepted documentation cleanup
 
-Owner decision:
-per-span replay is recommended, not mandatory for content diagnosis.
+`DOC-CLEANUP-PHASE3B-01` is accepted.
 
-Accepted semantics:
-- content diagnosis uses explicit current transcript confirmation;
-- ASR warning remains;
-- transcript replay is optional;
-- playback completion is transient UI state;
-- `USER_TRANSCRIPT_CONFIRMATION` is text confirmation, not playback proof;
-- process-candidate confirmation still requires replay of that specific candidate;
-- no extra provider call or schema/retention/model/provider/budget change.
+Commit:
+`20be403f7bb736ab0cde2758af7306a00c2290db`
 
-Final evidence accepted by MASTER:
-- browser 52/52 PASS;
-- 53/53 sourceSHA256 matched before staging, before commit, after commit;
-- focused 36/36 PASS;
-- Node/offline 151/151 PASS;
+Changed only:
+- `README.md`
+- `study-teachback-app/README.md`
+
+Evidence:
+- 11 insertions / 7 deletions;
+- targeted stale-state search clean;
 - diff checks PASS;
-- exactly six authorized files;
-- no post-host source/test drift;
-- tracked worktree clean;
-- production ledger unchanged;
-- finalization live calls 0;
-- no product push/merge.
+- final tracked worktree clean;
+- no runtime/test changes;
+- live calls 0;
+- no push/merge.
 
-## Current task
+## Current state
 
-Task:
-`DOC-CLEANUP-PHASE3B-01`
+There is **no active Codex implementation task**.
 
-Purpose:
-bring current-facing documentation into alignment with the accepted Phase 3B and REPLAY-REVIEW-UX-01 state.
+Do not ask Codex to continue a previous gate.
+Do not start a new feature from historical Next Step text.
 
-This is documentation-only.
+The next action belongs to MASTER + owner:
+choose the next bounded product/validation question.
 
-Codex/Astra should:
-1. read latest CURRENT_STATE / HANDOFF / ACTIVE_EXCHANGE;
-2. verify repo = `F:\Chat-Codex-Handoff\validation-repo`;
-3. verify branch = `prototype/study-teachback-v0.1`;
-4. verify HEAD = `aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`;
-5. inspect root README, product README, and other current canonical/entry-point docs for stale current-state claims;
-6. correct only current-facing documentation that says or implies:
-   - Phase 3 has not run;
-   - live allowance remains available;
-   - transcript replay is still mandatory before content diagnosis;
-   - another older product HEAD is the current accepted baseline;
-7. preserve immutable historical handoffs as historical evidence;
-8. run targeted post-edit searches and `git diff --check`;
-9. stage documentation only;
-10. create one focused local documentation commit;
-11. do not push/merge;
-12. return CODEX_TO_CHAT with commit, exact changed paths, diff summary, search evidence, checks, and unresolved ambiguity if any.
+Before new implementation:
+1. identify the real observed user cost/problem;
+2. check latest official/current capability where relevant;
+3. check existing projects/collision where relevant;
+4. approve at most one smallest experiment;
+5. keep implementation scope bounded.
+
+## Open user decisions
+
+- next productization/validation question;
+- retention policy and migration semantics;
+- long-term ASR migration/timing strategy;
+- legacy paid delivery route disposition;
+- any new live validation budget/authorization.
+
+## Future optional
+
+- compact active-vs-historical test/helper index;
+- small-step app.mjs decomposition;
+- milestone documentation-consistency check;
+- consented offline natural-speech evaluation with defined FP/FN criteria;
+- synthetic portfolio demo;
+- replay-burden measurement.
 
 ## Hard boundaries
 
-Do not:
-- modify product code or tests;
-- change schema, retention, model, provider, budget, dependency, or framework;
-- run live provider calls;
-- record audio;
-- run ASR or content diagnosis;
-- push or merge product branch;
-- start a new productization feature;
-- rewrite accurate historical snapshots merely to make old wording look current.
+Without a new MASTER/owner decision, do not:
+- run new live provider calls;
+- record new validation audio;
+- change schema/retention/model/provider/budget;
+- push/merge/public release;
+- begin a new productization feature;
+- expand into full app/platform work.
 
-If a required correction would need product/code behavior changes, stop and return User Decision Needed rather than implementing it.
+## Next
 
-## After this task
-
-MASTER will:
-1. review the documentation-only delta;
-2. decide whether current Phase 3B evidence is sufficient to formally close the validation phase;
-3. only then choose the next productization step.
-
-Do not jump directly to new feature development.
+MASTER and owner choose the next bounded question.
