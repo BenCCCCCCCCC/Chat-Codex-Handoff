@@ -1,54 +1,75 @@
 # ACTIVE_EXCHANGE
 
-state: MASTER_HOLD
-turn_id: NATIVE-COLLISION-PROBE-01-RECONCILE
-task: NONE
+state: CHAT_TO_CODEX
+turn_id: PHASE3B-DIAGNOSIS-UX-AUDIT-01
+task: PHASE3B-DIAGNOSIS-UX-AUDIT-01
 writer: CHAT_MASTER
 transport_only: true
-status: EXACT_EVIDENCE_RECOVERED / OWNER_HISTORY_RECONCILIATION_REQUIRED
+status: DISPATCHED / READ_ONLY_UX_AUDIT
 accepted_base_head: 20be403f7bb736ab0cde2758af7306a00c2290db
 
-## PREP review
+## Context
 
-`NATIVE-COLLISION-PROBE-01-PREP` is accepted as a successful read-only evidence-recovery step.
+Owner cannot reliably recall whether one or more diagnosis submissions occurred.
+Owner believes transcript edit/reconfirmation probably occurred and reports that diagnosis/result feedback felt too weak to make the current state obvious.
 
-Verified:
-- repo/branch/HEAD matched accepted state;
-- tracked worktree clean;
-- exact source, raw ASR, confirmed transcript and structured reports were recovered locally;
-- artifact/log/export hashes were recovered;
-- no local product/source/test/documentation changes;
-- no product commit/push/merge;
-- live provider / recording / ASR / diagnosis calls this turn = 0;
-- transport commit only changed ACTIVE_EXCHANGE.
+Treat those statements as owner recollection, not verified history.
 
-## Blocking discrepancy
+## Task
 
-Do not run the native baseline yet.
+Read-only local audit only.
 
-Canonical Phase 3B state records one content-diagnosis call.
+1. Structurally compare the two preserved diagnosis/transcript versions:
+- timestamps;
+- version/record identifiers or hashes;
+- whether transcript content changed;
+- structural magnitude of the change without quoting private full text;
+- report finding counts/types;
+- whether reports coexist, supersede, append, or overwrite;
+- temporal relationship to the two settled semantic requests;
+- unresolved ambiguity.
 
-Preserved evidence shows:
-- two distinct content reports;
-- two confirmed versions about 100 seconds apart;
-- two settled semantic requests temporally associated with those reports.
+2. Audit the current accepted diagnosis interaction:
+- duplicate/double-submit protection;
+- request locking/idempotency;
+- diagnosis button disabled/loading state;
+- loading feedback;
+- transcript editability during request;
+- success feedback;
+- result visibility/focus/navigation;
+- result-to-transcript-version binding;
+- stale-result behavior after transcript edits;
+- explicit re-diagnosis behavior and labels;
+- version/history visibility;
+- rapid-click/keyboard-submit edge cases.
 
-The ledger does not directly bind request IDs to the attempt, so MASTER must not infer:
-- that the second event was a retry;
-- which report was the intended accepted baseline;
-- that the historical one-call count is correct or incorrect.
+3. Return:
+- Verified;
+- Likely;
+- Unknown;
+- Must Fix candidates;
+- User Decision Needed;
+- Future Optional;
+- recommended minimal state machine;
+- recommended visual-feedback hierarchy.
 
-Full verbatim source/transcript/report content remains local because remote repository disclosure was not explicitly authorized.
+Design goal:
+Confirmed transcript -> Diagnosing -> Diagnosis complete -> Transcript edited -> Prior result stale -> Explicit re-diagnosis.
 
-## Next action
+Animation or page transition may be recommended only when it reinforces these states.
 
-Owner-history reconciliation only.
+## Boundaries
 
-Ask the owner:
-1. Do you remember intentionally triggering content diagnosis once or more than once during the Phase 3B owner test?
-2. Do you remember editing/reconfirming the transcript between results?
-3. Do you remember seeing/reviewing one result or two?
+No file changes.
+No product commit.
+No live provider calls.
+No recording.
+No ASR.
+No diagnosis.
+No push/merge.
+Do not transport private full transcript/report text to GitHub.
 
-If owner memory is insufficient, MASTER may dispatch a read-only structural diff of the two local report/transcript versions. No live calls, no product changes, no private full-text GitHub transport.
+## Return
 
-No Phase 4 implementation is authorized.
+Write CODEX_TO_CHAT to ACTIVE_EXCHANGE with the audit result.
+NATIVE-COLLISION-PROBE-01 remains blocked until MASTER reviews this audit.
