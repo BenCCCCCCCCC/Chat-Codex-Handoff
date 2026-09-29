@@ -1,146 +1,73 @@
-# Active Handoff — PHASE3B-LIVE-01 FINAL CONTENT DIAGNOSIS
+# Active Handoff — REPLAY-REVIEW-UX-01
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: WAITING_OWNER / ONE REMAINING LIVE CALL AUTHORIZED / NO RETRY
+Status: CHAT_TO_CODEX / ZERO PROVIDER / OWNER UX DECISION
 
 Accepted product HEAD:
 bdd0635597006881d6f8f7213122ae53ccbc99a9
 
-## Live budget state
+## Owner decision
 
-Already used:
-- 1 Tutor semantic call
-- 1 ASR call
-- 1 real recording
+Per-span replay must not be a hard prerequisite for content diagnosis.
 
-Remaining authorized:
-- exactly 1 content-diagnosis semantic call
-- zero retries
+Replay remains useful for checking ASR errors, but normal users should be able to continue without mechanically finishing every span.
 
-No second recording.
-No second ASR.
-No Repair/Apply.
+## Required behavior
 
-## Before clicking diagnosis
+1. Content diagnosis should be available once a valid ASR transcript exists.
+2. Do not require all transcript spans to be in an in-memory heard set before content diagnosis.
+3. Keep clear warning:
+   - diagnosis uses the current transcript;
+   - ASR may mishear negation, numbers, conditions and terms;
+   - user may replay/edit before continuing.
+4. Per-span replay remains optional.
+5. Full audio player remains available.
+6. User edits remain explicit corrections; do not add filler words automatically.
+7. Process-candidate confirmation may still require replay of that specific process event before saving process evidence.
+8. No extra semantic/provider call.
+9. Do not conflate transcript review with process evidence.
+10. Remove or revise misleading NOT_HEARD behavior for content diagnosis.
 
-Prefer to restart onto accepted HEAD so current UI code is loaded while preserving IndexedDB data in the same isolated Edge profile.
+## Review-state UX
 
-Verify:
-git -C F:\Chat-Codex-Handoff\validation-repo rev-parse HEAD
+Astra should inspect the simplest coherent treatment of replay state after rerender.
 
-Expected:
-bdd0635597006881d6f8f7213122ae53ccbc99a9
+Goal:
+- do not show a misleading “must replay again” impression after diagnosis;
+- avoid persisting false claims that audio was reviewed if it was not;
+- if a transcript version is explicitly confirmed for diagnosis, represent that confirmation honestly and separately from per-span playback completion.
 
-If HEAD differs, STOP.
+Astra may choose the smallest coherent implementation after inspecting current data model and adjacent replay/process gates.
 
-Restart server from normal PowerShell:
-Set-Location F:\Chat-Codex-Handoff\validation-repo
-node .\study-teachback-app\server.mjs
+## Project-aware autonomy
 
-Open/reload the same isolated Edge profile at:
-http://127.0.0.1:4317
+Read canonical state and current product context first.
 
-Open the existing owner topic/attempt. Do not create a new topic.
+Astra may inspect surrounding replay, transcript-version, process-confirmation, storage/export and browser-test flows.
 
-## Transcript review
+Inside this UX scope, iterate freely.
 
-Use the existing raw/corrected transcript.
+Outside-scope findings return separately as Must Fix candidate / User Decision Needed / Future Optional / Project observations.
 
-Do not insert filler words such as 额/嗯 merely to represent process evidence.
+## Tests
 
-Replay/confirm every required transcript segment if the UI still requires it.
+Zero provider only.
 
-Only correct actual ASR semantic mishearing.
+Cover at least:
+- content diagnosis can proceed without playing every span;
+- current transcript/corrections are what content diagnosis receives;
+- optional span replay still works;
+- no extra provider request;
+- process-event confirmation still requires event replay if that safety gate is retained;
+- rerender/history reload does not produce misleading hard-gate state;
+- existing provenance/process/content regressions remain green.
 
-## Final live action
+Run focused + full Node/offline + browser stub if possible.
 
-Click:
-确认已回听，开始诊断
+If UI changed and Codex browser is environment-blocked, return NEEDS_HOST_VERIFY without final commit.
 
-Exactly once.
-
-Do not retry if provider/ledger/UI returns an error.
-
-## What to capture
-
-After the content diagnosis returns, provide MASTER:
-- screenshot of the full feedback area;
-- exact 内容理解 findings/text;
-- any 讲解过程证据 shown;
-- any “值得验证 / 重新解释” target;
-- whether the UI still shows historical old process candidates only;
-- any error/notice.
-
-Do not click:
-- Repair
-- Apply
-- re-record
-- retry ASR
-- another diagnosis
-
-## Interpretation boundary
-
-MASTER already has independently derived real-audio process evidence:
-- long near-silence about 14.54–15.42s;
-- short-pause cluster about 16.08–17.24s overlapping owner-confirmed hesitation.
-
-Do not manually force these into the transcript/UI.
-
-After the one content call, MASTER will evaluate whether content findings and process evidence converge or appropriately remain separate.
-
-
-## Resume the preserved owner attempt after restart
-
-Using the same isolated Edge profile intentionally preserves IndexedDB topics and attempts across server/browser restarts.
-
-Expected after reopen:
-- the prior topic/source/Tutor state may already be visible;
-- this does NOT mean a new file upload or new recording is required.
-
-To reopen the preserved real recording:
-1. click `学习记录` in the top-right;
-2. find the existing `OWNER_VALIDATION_01_测试材料_实验室访客规则` topic;
-3. under that topic, choose the saved attempt button labelled like `完整 · <time>`;
-4. do not click `继续学习` if the goal is to reopen the prior recording;
-5. do not click `我来讲讲`, which would start a new recording flow.
-
-Selecting the saved attempt restores the `回听与反馈` panel with the original audio/transcript/report state.
-
-Then follow the current final-content-diagnosis instructions. No new recording or ASR is authorized.
-
-
-## Owner screenshot — preserved attempt restored
-
-Owner successfully reopened the original saved attempt in the same isolated Edge profile.
-
-Verified:
-- prior ~22s audio is present;
-- four transcript spans are present;
-- the saved complete attempt appears in 学习记录;
-- the historical process section still shows only the old saved candidate set, which is expected because old attempts are not automatically recomputed with the new detector;
-- the separate 我来讲讲 panel must not be used.
-
-Next:
-1. replay all four transcript spans until fully heard;
-2. edit only genuine semantic ASR errors;
-3. do not insert 额/嗯 manually;
-4. click 确认已回听，开始诊断 exactly once;
-5. no retry;
-6. do not Repair/Apply/re-record;
-7. return full feedback to MASTER.
-
-
-## Current diagnosis-button recovery
-
-The previous owner click did not dispatch the content diagnosis because the per-span replay gate was not satisfied after reopening the attempt.
-
-To proceed:
-1. click each of the four per-span `回听 x–y 秒` buttons;
-2. let each segment play to its end until the button changes to `已完整回听 ✓`;
-3. do not edit text unless the ASR changed semantic meaning;
-4. do not insert 额/嗯 or pauses;
-5. after all four are marked heard, click `确认已回听，开始诊断` exactly once;
-6. no retry if an actual provider request then fails.
-
-The blocked pre-gate click consumed zero provider calls.
+No live API.
+No new recording.
+No ASR.
+No push/merge.
