@@ -342,49 +342,71 @@ Verified current UX issues:
 - older report versions are persisted but hidden by latest-version filtering;
 - existing in-flight lock prevents simultaneous duplicate dispatch but is not durable idempotency.
 
-## 12. Current gate — DIAGNOSIS-STATE-UX-01
+## 12. DIAGNOSIS-STATE-UX-01 — IMPLEMENTED / HOST VERIFY REQUIRED
+
+Codex/Astra implemented the bounded P1 diagnosis-state UX locally on top of accepted HEAD.
+
+Current product files are **uncommitted** pending host browser validation.
+
+Exact changed files:
+- study-teachback-app/app.mjs
+- study-teachback-app/index.html
+- study-teachback-app/style.css
+- study-teachback-app/correctness-boundaries.test.mjs
+- study-teachback-app/correctness-hygiene.test.mjs
+- study-teachback-app/diagnostic-localization.test.mjs
+- study-teachback-app/browser-tests-r4.mjs
+- study-teachback-app/run-offline-tests.mjs
+
+Diff:
+- 92 insertions / 25 deletions.
+
+Implemented bounded behavior:
+- local diagnosis state distinguishes awaiting confirmation / diagnosing / complete / edited-stale / failure;
+- diagnosis action is disabled synchronously while pending;
+- submitted transcript editors become readonly through request + final save;
+- result stays on the same page and exposes a strong current-result entry;
+- successful completion can focus/scroll to a focusable result heading;
+- reduced-motion uses instant scrolling;
+- current result shows transcript-version prefix and report time;
+- editing immediately marks prior result stale;
+- stale/pending result keeps findings/playback but does not present repair actions as current;
+- changed text exposes explicit re-diagnosis CTA;
+- exact revert to a saved transcript version restores current/reuse state;
+- unchanged completed text reuses the stored result and does not create a new correction/version/provider request;
+- prior result remains visible during new request / known failure;
+- no durable cross-tab/reload idempotency or persistence-contract expansion.
+
+Deterministic evidence:
+- focused review: 40/40 PASS;
+- full Node/offline: 155/155 PASS;
+- final receipts bind 53/53 source hashes to current worktree;
+- JavaScript syntax PASS;
+- git diff --check PASS;
+- production ledger unchanged;
+- live provider / recording / ASR / diagnosis / incremental paid exposure = 0.
+
+Browser evidence:
+- Codex sandbox browser attempt failed before application cases at CDP Runtime.enable because Edge GPU process was unusable;
+- therefore browser PASS is **not** claimed;
+- native keyboard/focus/visual behavior remains host-unverified.
 
 MASTER decision:
-The P1 diagnosis-state UX defects are now a real observed product problem and may be fixed before the Phase 4 native comparison.
+**implementation is provisionally acceptable, but final acceptance/commit is blocked only on fresh host browser verification.**
 
-Approved minimal behavior:
-1. before request: explicit confirmed/current transcript state;
-2. on submit: synchronously disable diagnosis action and make submitted transcript fields readonly;
-3. show local adjacent state such as "诊断中…" rather than relying on the global notice;
-4. after success: clear "诊断完成" state and a strong current-result entry;
-5. keep the result on the same page; use focus/scroll to a focusable result heading when appropriate;
-6. no mandatory full-page transition;
-7. subtle motion/spinner may reinforce state but must respect reduced-motion and never replace text state;
-8. bind the visible result to the confirmed transcript version/time;
-9. if transcript text changes, mark the prior result stale and disable/qualify actions that would falsely imply it applies to the new draft;
-10. CTA becomes explicit "确认修改并重新诊断" only when content differs from the confirmed version;
-11. if the learner edits and then returns exactly to the confirmed text, reuse the existing current result;
-12. unchanged text must not create a new version/request by default;
-13. preserve prior result for inspection while a new diagnosis is pending/fails.
+Host command from normal Windows PowerShell at repo root:
 
-Implementation boundary:
-- P1 local interaction/state only;
-- no durable cross-tab/reload idempotency contract;
-- no schema/storage migration;
-- no provider/ledger contract change;
-- no new model/provider;
-- no live calls;
-- no full version-history productization beyond the minimum current/stale version label;
-- no Phase 4 multi-source implementation.
+`node .\study-teachback-app\run-offline-tests.mjs browser diagnosis-state-ux-01`
 
-Required tests should be zero-provider and cover at least:
-- rapid/double activation while pending;
-- transcript readonly while pending;
-- dirty -> stale;
-- dirty -> revert -> current/reuse;
-- unchanged completed click does not dispatch;
-- explicit changed-text re-diagnosis path;
-- prior-result retention during pending/failure;
-- keyboard activation through the same guarded state;
-- result completion focus/visibility behavior where testable;
-- no extra provider call in deterministic tests.
+Do not assume the expected case count; read the fresh receipt/result.
 
-If browser execution is blocked in Codex sandbox, return the deterministic result and request host verification rather than claiming browser PASS.
+If host verification passes and source hashes bind to the unchanged worktree:
+- no additional product edit is needed;
+- Codex may then perform final project-aware self-review and create one focused local commit;
+- no push/merge.
+
+If any source/test byte changes after host PASS:
+- host verification must be repeated.
 
 ## 13. Native-collision probe status
 

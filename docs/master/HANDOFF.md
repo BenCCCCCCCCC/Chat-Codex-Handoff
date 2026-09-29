@@ -137,32 +137,33 @@ Verified:
 Do not call the second historical submission a retry.
 Do not claim a verified single diagnosis call.
 
-## Active task
+## DIAGNOSIS-STATE-UX-01 status
 
-`DIAGNOSIS-STATE-UX-01`
+Implementation is complete locally but remains uncommitted.
 
-This is a bounded P1 interaction-state fix.
+Evidence:
+- 8 changed files;
+- 92 insertions / 25 deletions;
+- focused 40/40 PASS;
+- full Node/offline 155/155 PASS;
+- 53/53 final sourceSHA256 binding;
+- syntax + diff checks PASS;
+- production ledger unchanged;
+- live calls / recording / ASR / diagnosis = 0.
 
-Implement only:
-- disabled + local busy diagnosis state;
-- readonly submitted transcript while request pending;
-- explicit diagnosis-complete state;
-- strong same-page result entry with focus/scroll as appropriate;
-- current result bound visibly to confirmed transcript version/time;
-- dirty/stale state after edits;
-- explicit changed-text re-diagnosis action;
-- unchanged-text result reuse / no new request;
-- prior-result retention during pending/failure;
-- zero-provider tests.
+Codex sandbox browser did **not** reach application cases because Edge CDP/GPU startup failed.
 
-Do not implement:
-- durable cross-tab/reload idempotency;
-- schema/storage migration;
-- provider/ledger contract changes;
-- full version-history product;
-- full-page result navigation;
-- Phase 4 multi-source features;
-- live provider calls;
-- push/merge.
+Therefore current gate is owner host browser verification, not more implementation.
 
-After this task returns, MASTER reviews the delta before resuming `NATIVE-COLLISION-PROBE-01`.
+Run from normal Windows PowerShell at:
+`F:\Chat-Codex-Handoff\validation-repo`
+
+Command:
+`node .\study-teachback-app\run-offline-tests.mjs browser diagnosis-state-ux-01`
+
+Do not ask Codex to edit anything before this host run.
+
+If host PASSes with current source hashes, MASTER will dispatch only final self-review + focused local commit.
+
+NATIVE-COLLISION-PROBE-01 remains paused until this UX fix is accepted.
+
