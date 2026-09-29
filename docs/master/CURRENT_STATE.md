@@ -23,7 +23,7 @@ Batch A: MASTER-ACCEPTED.
 Batch B / Phase 3A: MASTER-ACCEPTED and finalized locally.
 
 Batch C / CORRECTNESS-BOUNDARIES-01:
-**IMPLEMENTED IN WORKTREE / FOCUSED+NODE PASS / BROWSER VALIDATION PENDING / NOT COMMITTED**.
+**IMPLEMENTED IN WORKTREE / FOCUSED+NODE+HOST-BROWSER PASS / FINAL SELF-REVIEW+LOCAL COMMIT PENDING**.
 
 ## 2. Batch C receipt
 
@@ -265,11 +265,12 @@ Completed:
 - MF-01/02/03 reproduction and implementation;
 - focused 11/11 and Node 114/114.
 
-Must Fix before Batch C acceptance:
-- host-side isolated browser r4 validation for MF-02.
+Host browser validation:
+- PASS outside Codex sandbox.
+- The MF-02 delayed-diagnosis/double-confirm browser case executed and passed.
 
-Waiting Owner:
-- one host browser command.
+Pending before Batch C acceptance:
+- Codex final independent diff self-review and focused local commit, with no post-validation code drift.
 
 Not authorized:
 - live Phase3B;
@@ -278,9 +279,7 @@ Not authorized:
 
 ## 11. Next smallest step
 
-Owner runs the single host-side browser regression command outside Codex sandbox and reports PASS/FAIL to MASTER.
-
-Do not nudge Codex while ACTIVE_EXCHANGE is WAITING_OWNER.
+Codex performs BATCH-C-FINALIZE-01 through ACTIVE_EXCHANGE: inspect the host-browser artifact, independently self-review the Batch C diff, optionally rerun deterministic zero-call sanity tests, and create one focused local commit only if no code/test content changes are needed after the accepted host-browser validation.
 
 
 ## 11. Batch C review result — 2026-09-29
@@ -360,3 +359,25 @@ Correct host command:
 `node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01`
 
 No Batch C acceptance status changed because the browser suite did not start.
+
+
+## Host browser verification receipt — 2026-09-29
+
+Owner ran from normal Windows PowerShell outside Codex sandbox:
+
+`node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01`
+
+The accepted run created:
+`artifacts/study-teachback/correctness-boundaries-01/browser-1790650146813-0XtnC0`
+
+Observed result:
+- browser suite executed normally;
+- all printed functional cases PASS;
+- MF-02 browser case `C2 diagnosis replay gate and delayed double confirm preserve one visible current-version report` PASS;
+- isolation summary: synthetic credential / loopback only / test ledgers only / blocked outbound attempts=0;
+- wrapper receipt exit = 0;
+- production ledger SHA before/after unchanged.
+
+This clears the browser-evidence blocker for the current unchanged Batch C worktree.
+
+If any product/test source is modified after this host run, the host-browser evidence is stale for that modified state and MASTER must decide whether a new host validation is required.
