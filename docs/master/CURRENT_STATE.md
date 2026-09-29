@@ -213,3 +213,16 @@ Not Done:
 ## 10. Next smallest step
 
 Owner starts the accepted product outside Codex sandbox, imports the synthetic DOCX into a new clean topic without manually entering a title, performs one natural recording and one ASR, reviews replay/transcript, then stops and returns the checkpoint to MASTER.
+
+
+## SETUP-FLOW-01 MASTER acceptance — 2026-09-29
+
+Final local commit: `89c23a155ac7c32e6357b33144edf93bd9850309` (`feat: make learning setup source-first`).
+
+MASTER accepts SETUP-FLOW-01 based on: focused 9/9 PASS; Node/offline 123/123 PASS; host browser 50/50 PASS; 51/51 host source hashes matched before staging/commit/after commit; no post-host source/test drift; final tracked worktree CLEAN; zero live provider/microphone/exposure; no model/provider/retention/schema/cap/dependency change.
+
+Accepted behavior: source material alone is sufficient to start; file import title derives locally from filename; direct-paste title derives locally from first meaningful line; fallback title is `学习材料`; optional focus/known are setup metadata rather than role=user history; known is owner self-report rather than mastery evidence; no extra provider call is introduced.
+
+New accepted local baseline is `89c23a155ac7c32e6357b33144edf93bd9850309`.
+
+PHASE3B-LIVE-01 remains authorized and unused. The next owner checkpoint should use the actual synthetic DOCX file import path, no manual title, optional focus/known left blank, one Learn/Tutor call at most, one natural 20–45 second recording, exactly one ASR, then stop at replay/transcript before diagnosis.
