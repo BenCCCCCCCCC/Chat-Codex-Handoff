@@ -121,26 +121,48 @@ error/omission precision-recall, unsupported diagnosis, conflict surfacing, sile
 
 Do not freeze numerical KPI thresholds until a calibration run exists.
 
-## Immediate next gate
+## Diagnosis UX audit
 
-Do **not** implement multi-file UI.
+The read-only audit is complete.
 
-`NATIVE-COLLISION-PROBE-01` remains OWNER APPROVED, but the native comparison is temporarily blocked by evidence reconciliation.
+Verified:
+- the two preserved transcript versions have identical final transcript content;
+- they were reconfirmed about 100 seconds apart;
+- two distinct diagnosis reports coexist and differ;
+- current UX allows completed same-text resubmission after the in-flight lock releases;
+- diagnosis CTA/loading/completion/stale-version states are not explicit enough;
+- transcript remains editable while request is pending and unsaved typing can be overwritten;
+- current result is not marked stale after transcript edits.
 
-`NATIVE-COLLISION-PROBE-01-PREP` successfully recovered exact preserved local evidence with zero new live calls and no product changes.
+Do not call the second historical submission a retry.
+Do not claim a verified single diagnosis call.
 
-However:
-- two distinct content reports / confirmed versions exist about 100 seconds apart;
-- two settled semantic ledger requests are temporally associated;
-- canonical history currently says one diagnosis call;
-- full private transcript/report text was intentionally not transported to GitHub.
+## Active task
 
-MASTER must reconcile owner history before selecting the baseline report or changing the recorded call count.
+`DIAGNOSIS-STATE-UX-01`
 
-If owner memory is insufficient, run one more read-only local structural comparison of report/version 1 vs 2; do not expose private full text remotely unless explicitly authorized.
+This is a bounded P1 interaction-state fix.
 
-## Current exchange
+Implement only:
+- disabled + local busy diagnosis state;
+- readonly submitted transcript while request pending;
+- explicit diagnosis-complete state;
+- strong same-page result entry with focus/scroll as appropriate;
+- current result bound visibly to confirmed transcript version/time;
+- dirty/stale state after edits;
+- explicit changed-text re-diagnosis action;
+- unchanged-text result reuse / no new request;
+- prior-result retention during pending/failure;
+- zero-provider tests.
 
-`MASTER_HOLD`
+Do not implement:
+- durable cross-tab/reload idempotency;
+- schema/storage migration;
+- provider/ledger contract changes;
+- full version-history product;
+- full-page result navigation;
+- Phase 4 multi-source features;
+- live provider calls;
+- push/merge.
 
-No Codex task active until owner-history reconciliation.
+After this task returns, MASTER reviews the delta before resuming `NATIVE-COLLISION-PROBE-01`.

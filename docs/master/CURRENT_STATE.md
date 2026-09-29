@@ -41,7 +41,7 @@ Phase 3B:
 
 Verified:
 - one real source-first owner flow completed;
-- Tutor 1 / real recording 1 / ASR 1 / diagnosis 1 / retries 0;
+- Tutor 1 / real recording 1 / ASR 1; exact historical diagnosis-call count is under reconciliation because two preserved diagnosis submissions/results were recovered;
 - content/process evidence separation held on the sample;
 - optional transcript replay UX accepted;
 - current entry docs aligned;
@@ -313,42 +313,83 @@ If there is a meaningful diagnostic/safety gap:
 - external participant study;
 - push/merge/public release.
 
-## 11. Current state
+## 11. Diagnosis UX audit — ACCEPTED
 
-**MASTER_HOLD — NATIVE-COLLISION-PROBE-01 RECONCILIATION REQUIRED**
+Read-only audit result:
+- two preserved transcript versions contain identical final transcript content;
+- the versions were reconfirmed about 100 seconds apart;
+- two distinct diagnosis reports coexist;
+- report 1: 2 supported findings;
+- report 2: 2 supported + 1 missing finding;
+- two settled semantic requests are strongly time-associated with the two reports;
+- direct request-ID -> report binding is not stored;
+- exact owner intent remains unknown.
 
-`NATIVE-COLLISION-PROBE-01-PREP` recovered the exact local evidence successfully, but the baseline is not yet frozen.
+MASTER interpretation:
+- do not describe the second event as a retry;
+- do not keep claiming a verified single diagnosis call;
+- same-input result variance is itself relevant evidence for Phase 4 evaluation;
+- future native comparison must not cherry-pick the more favorable preserved report.
 
-Verified PREP facts:
-- accepted local HEAD remained `20be403f7bb736ab0cde2758af7306a00c2290db`;
-- tracked worktree clean;
-- no product/source/test/documentation changes;
-- no product commit/push/merge;
-- live provider / recording / ASR / diagnosis calls this turn = 0;
-- exact stored source, raw ASR text/spans, confirmed transcript and structured content reports were recovered from preserved local artifacts;
-- source/export/log bindings and hashes were recovered;
-- full verbatim evidence was not transported to GitHub because repository disclosure approval was not established.
+Verified current UX issues:
+- diagnosis button is not disabled or relabelled while processing;
+- transcript textareas remain editable while the submitted snapshot is pending;
+- pending edits can be overwritten on success rerender;
+- completed result is not visually/version-bound strongly enough;
+- editing transcript after a result does not mark that result stale;
+- unchanged text can be reconfirmed into a new version and spend another diagnosis call;
+- no explicit re-diagnosis state/label exists;
+- older report versions are persisted but hidden by latest-version filtering;
+- existing in-flight lock prevents simultaneous duplicate dispatch but is not durable idempotency.
 
-Blocking discrepancy:
-- canonical Phase 3B history says one content-diagnosis call;
-- preserved local record contains two distinct content reports for two confirmed versions about 100 seconds apart;
-- production ledger contains two temporally associated settled semantic requests;
-- request-to-attempt binding is temporal rather than direct;
-- MASTER must not label the second event a retry or select a baseline report without owner-history reconciliation.
+## 12. Current gate — DIAGNOSIS-STATE-UX-01
 
-Therefore:
-- do not run the native baseline yet;
-- do not freeze the scoring sheet against either report yet;
-- do not change the historical call count yet;
-- ask the owner to reconcile what actually happened during Phase 3B.
+MASTER decision:
+The P1 diagnosis-state UX defects are now a real observed product problem and may be fixed before the Phase 4 native comparison.
 
-## 12. Next smallest step
+Approved minimal behavior:
+1. before request: explicit confirmed/current transcript state;
+2. on submit: synchronously disable diagnosis action and make submitted transcript fields readonly;
+3. show local adjacent state such as "诊断中…" rather than relying on the global notice;
+4. after success: clear "诊断完成" state and a strong current-result entry;
+5. keep the result on the same page; use focus/scroll to a focusable result heading when appropriate;
+6. no mandatory full-page transition;
+7. subtle motion/spinner may reinforce state but must respect reduced-motion and never replace text state;
+8. bind the visible result to the confirmed transcript version/time;
+9. if transcript text changes, mark the prior result stale and disable/qualify actions that would falsely imply it applies to the new draft;
+10. CTA becomes explicit "确认修改并重新诊断" only when content differs from the confirmed version;
+11. if the learner edits and then returns exactly to the confirmed text, reuse the existing current result;
+12. unchanged text must not create a new version/request by default;
+13. preserve prior result for inspection while a new diagnosis is pending/fails.
 
-Owner-history reconciliation only.
+Implementation boundary:
+- P1 local interaction/state only;
+- no durable cross-tab/reload idempotency contract;
+- no schema/storage migration;
+- no provider/ledger contract change;
+- no new model/provider;
+- no live calls;
+- no full version-history productization beyond the minimum current/stale version label;
+- no Phase 4 multi-source implementation.
 
-Need to determine:
-1. whether the owner intentionally triggered content diagnosis once or more than once;
-2. whether the learner transcript was edited/reconfirmed between the two stored report versions;
-3. which result, if any, was the one the owner actually reviewed/accepted during Phase 3B.
+Required tests should be zero-provider and cover at least:
+- rapid/double activation while pending;
+- transcript readonly while pending;
+- dirty -> stale;
+- dirty -> revert -> current/reuse;
+- unchanged completed click does not dispatch;
+- explicit changed-text re-diagnosis path;
+- prior-result retention during pending/failure;
+- keyboard activation through the same guarded state;
+- result completion focus/visibility behavior where testable;
+- no extra provider call in deterministic tests.
 
-If owner memory is insufficient, the next allowed step is another read-only local evidence comparison that reports non-sensitive structural differences between report/version 1 and report/version 2. No live calls or product changes.
+If browser execution is blocked in Codex sandbox, return the deterministic result and request host verification rather than claiming browser PASS.
+
+## 13. Native-collision probe status
+
+`NATIVE-COLLISION-PROBE-01` remains OWNER APPROVED but paused until DIAGNOSIS-STATE-UX-01 is reviewed.
+
+The native comparison will later treat same-input output stability as an evaluation dimension; the two preserved product reports must not be silently collapsed to whichever is more favorable.
+
+No new live product diagnosis is authorized.
