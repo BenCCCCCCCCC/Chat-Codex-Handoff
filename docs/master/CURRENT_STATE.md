@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-09-29 — Project-wide Codex review accepted / correctness Batch C dispatched
+Updated: 2026-09-29 — Batch C code/focused tests pass; host browser verification pending; proactive Codex self-review mode adopted
 Role: 00 MASTER / authoritative dynamic state
 
 ## 1. Active product / version
@@ -15,211 +15,269 @@ Local checkout:
 Product branch:
 `prototype/study-teachback-v0.1`
 
-Accepted local feature baseline:
+Accepted committed baseline before Batch C:
 `dd8317b43100b8cbaad684cab7fc02957e32de62`
 
 Batch A: MASTER-ACCEPTED.
 
-Batch B / Phase 3A: MASTER-ACCEPTED and version-finalized locally.
+Batch B / Phase 3A: MASTER-ACCEPTED and finalized locally.
 
-Dynamic authority:
-- `meta/master-state/docs/master/CURRENT_STATE.md`
-- `meta/master-state/docs/master/HANDOFF.md`
+Batch C / CORRECTNESS-BOUNDARIES-01:
+**IMPLEMENTED IN WORKTREE / FOCUSED+NODE PASS / BROWSER VALIDATION PENDING / NOT COMMITTED**.
 
-Transport only:
-- `meta/master-state/docs/master/ACTIVE_EXCHANGE.md`
+## 2. Batch C receipt
 
-## 2. Phase 3B state
+Codex returned `BLOCKED_BROWSER_VALIDATION` through ACTIVE_EXCHANGE.
 
-PHASE3B-LIVE-01 remains owner-authorized under:
-- maximum 3 provider calls;
-- zero retries;
-- incremental local exposure <= US$0.03432;
-- one recording maximum.
-
-No provider call or recording has occurred under that authorization.
-
-Host browser smoke outside Codex sandbox = PASS:
-- server starts;
-- fresh isolated Edge opens;
-- product root/UI displays;
-- no unexpected Tutor/ASR/diagnosis provider activity.
-
-The live experiment remains PAUSED while the newly found correctness boundaries are fixed and regression-tested. Existing live authorization remains intact and unspent.
-
-## 3. GitHub exchange relay
-
-EXCHANGE-RELAY-PROBE-01 = PASS.
-
-Verified:
-- Chat wrote one `CHAT_TO_CODEX` turn;
-- Codex read it and wrote `CODEX_TO_CHAT` to the same file;
-- MASTER read the receipt directly from GitHub;
-- comparison showed only `docs/master/ACTIVE_EXCHANGE.md` changed;
-- no product change/test/provider call/push/merge.
-
-Accepted workflow:
-1. MASTER writes the next turn to `ACTIVE_EXCHANGE.md`.
-2. Owner sends only a minimal Codex nudge.
-3. Codex executes and writes its reply back to the same exchange file.
-4. Owner returns to Chat with only “Codex 已执行”.
-5. MASTER reads the result directly, updates canonical state and writes the next turn.
-
-The exchange file is transport, not product authority.
-
-## 4. PROJECT-WIDE-REVIEW-01 — COMPLETE
-
-Codex returned `REVIEW_COMPLETE_WITH_FINDINGS`.
-
-MASTER verified the review commit after dispatch changed only:
+MASTER verified the meta-branch reply changed only:
 `docs/master/ACTIVE_EXCHANGE.md`.
 
-Coverage reported by Codex:
-- Git tracked files: 338;
-- active project body after excluding generated/historical evidence areas: 81 tracked files;
-- all 81 active files fully read;
-- recent 12 commits inspected;
-- three selected historical evidence receipts sampled;
-- 257 historical/generated files under `artifacts/**` and `study-teachback-app/evidence/**` intentionally not byte-read;
-- owner profile/IndexedDB/credentials/live runtime ledger not inspected;
-- no active tracked body files unread/blocked.
+Local product identity reported:
+- repo root `F:/Chat-Codex-Handoff/validation-repo`;
+- branch `prototype/study-teachback-v0.1`;
+- base/final HEAD still `dd8317b43100b8cbaad684cab7fc02957e32de62`;
+- no local Batch C commit;
+- six tracked modified files plus one new untracked test file;
+- no staging.
 
-This coverage is sufficient for the requested architecture/project review while preserving the distinction between active source and historical evidence.
+Changed Batch C files:
+1. `study-teachback-app/core.mjs`
+2. `study-teachback-app/server.mjs`
+3. `study-teachback-app/app.mjs`
+4. new `study-teachback-app/correctness-boundaries.test.mjs`
+5. `study-teachback-app/correctness-hygiene.test.mjs`
+6. `study-teachback-app/browser-tests-r4.mjs`
+7. `study-teachback-app/run-offline-tests.mjs`
 
-## 5. Project-wide review — MASTER assessment
+## 3. Batch C technical assessment
 
-The review confirms the accepted architecture:
-- source/local ingestion;
-- Tutor/learning dialogue;
-- real owner recording;
-- original audio + raw/corrected transcript;
-- replay gate;
-- content findings separated from local process evidence;
-- diagnostic target based on content, optionally contextualized by process evidence;
-- server/provider/ledger boundaries;
-- IndexedDB local topic/history/export/delete;
-- retained Handoff tooling separate from the learning product;
-- GitHub meta branch as MASTER state plus ACTIVE_EXCHANGE as transport.
+### MF-01 — Tutor/history length contract
 
-Codex also identified three distinct source-level correctness boundaries in the current accepted local baseline. MASTER accepts them as **Must Fix before resuming Phase3B live validation**.
+Pre-fix isolated reproduction:
+- 2500-char accepted assistant reply -> next turn 200;
+- 2501-char reply -> next turn failed 422 before second stub dispatch;
+- 4000-char reply -> next turn failed 422 before second stub dispatch.
 
-### MF-01 — Tutor output/history length contract mismatch
+Correction:
+- shared `TUTOR_MESSAGE_LIMIT=4000`;
+- runtime Tutor output validation and assistant-history validation now use the same ceiling;
+- user-message limits remain unchanged;
+- no truncation/provenance rewriting;
+- aggregate HTTP/input caps remain intact.
 
-Evidence reported:
-- `study-teachback-app/core.mjs` accepts Tutor message output up to 4000 characters;
-- `app.mjs` stores accepted assistant messages in history;
-- `server.mjs /api/teach` later revalidates each recent history item with a 2500-character bound.
+Focused regression now verifies 2500/2501/4000 accepted continuity and 4001 rejection.
 
-Consequence:
-a Tutor output accepted by the product at 2501–4000 characters can later cause the next otherwise-normal learning request to fail locally before provider dispatch.
+MASTER assessment: **PASS at focused/offline scope**.
 
-Required correction:
-unify accepted Tutor output and re-input history contract with explicit handling; do not silently rewrite provenance/history.
+### MF-02 — content confirmation concurrency
 
-### MF-02 — repeated content confirmation can advance transcript version during pending diagnosis
+Pre-fix actual-handler VM reproduction:
+- double confirm while first diagnosis pending created two correction versions;
+- only one diagnosis dispatched;
+- report attached to v1 while latest became v2;
+- visible result count became 0.
 
-Evidence reported:
-- content confirm mutates/saves a correction before the existing API in-flight guard rejects a second diagnosis request;
-- a rapid/repeated confirm can therefore create a later transcript version while the first diagnosis is still in flight;
-- the earlier report can then be filtered out as non-latest.
+Post-fix:
+- processing lock begins before correction mutation;
+- repeated confirm during save/diagnosis creates no new correction and no second dispatch;
+- first report remains latest/visible;
+- lock releases on success/failure;
+- later legitimate edited confirmation can create the next version;
+- replay/raw/corrected provenance unchanged.
 
-Required correction:
-make confirm/save/dispatch one mutually exclusive operation before any version mutation; repeated confirm while busy must not create a new correction or second dispatch.
+Focused VM tests PASS.
 
-### MF-03 — GET /api/status ledger errors escape the request-level controlled boundary
+The new browser-r4 double-confirm assertion did not run because Edge/CDP failed before product navigation in the Codex sandbox.
 
-Evidence reported:
-- status summary is read outside the POST try/catch;
-- ledger read/JSON errors can throw `LEDGER_UNREADABLE`;
-- the async request callback lacks a controlled status-path error response.
+MASTER assessment: **PASS at VM/offline scope; host browser validation still required before Batch C acceptance**.
 
-Required correction:
-fail closed with a controlled “budget/status unavailable” response; never reset ledger, release reservations or allow provider work as a recovery shortcut.
+### MF-03 — /api/status unreadable ledger boundary
 
-These findings do not revoke Batch A/B acceptance; they are newly discovered correctness boundaries in the accepted source.
+Pre-fix isolated reproduction showed `LEDGER_UNREADABLE` escaping the status callback boundary.
 
-## 6. CORRECTNESS-BOUNDARIES-01 / Batch C
+Post-fix:
+- `GET /api/status` returns controlled 503 `BUDGET_UNAVAILABLE`;
+- healthy status remains normal;
+- paid routes fail closed while ledger state is unreadable;
+- server/root remains available;
+- provider dispatch count remains 0;
+- corrupt/unreadable synthetic ledger bytes remain unchanged;
+- no reset/release/fabricated zero summary;
+- UI explicitly shows budget unavailable.
 
-MASTER authorizes one bounded zero-provider-call correction covering MF-01, MF-02 and MF-03 only.
+MASTER assessment: **PASS at focused/offline scope**.
 
-Goals:
-- reproduce each boundary in isolated regression first where practical;
-- apply minimum behavior-preserving fixes;
-- run focused + applicable existing offline/browser stub regression;
-- preserve Batch A/B behavior;
-- no live provider, microphone or Phase3B.
+## 4. Batch C fresh evidence
 
-Exact task is in HANDOFF and dispatched through ACTIVE_EXCHANGE.
+Final focused correctness-boundaries suite:
+**11/11 PASS**.
 
-## 7. Project-wide suggestions retained but NOT automatically implemented
+Full isolated Node/offline suite:
+**114/114 PASS**.
 
-### User Decision Needed / retained backlog
+`git diff --check`:
+PASS.
 
-**UD-02 — portable synthetic audio fixture**
-Current browser suite reads an ignored synthetic WAV. Decide later whether to check in a fixed synthetic fixture with hash/provenance or document deterministic preparation. A clean clone must not silently substitute different audio and claim equivalent coverage.
+Protected files unchanged:
+- provider.mjs
+- ledger.mjs
+- storage.mjs
+- schemas.mjs
+- dependency declaration
+- replay function region
 
-**UD-03 — ledger atomic persistence**
-Current ledger writes the whole JSON directly. A separate decision is needed for atomic replacement/recovery and fault injection. Locks solve concurrency, not interrupted-write atomicity. Do not auto-reset unresolved reservations.
+Production ledger hash remained:
+`D17AF9EC53787E484CD66B8928A80023D7A7A9570372F3FA64AA4C71F7E9C525`.
 
-**UD-04 — historical entrypoint lifecycle**
-Legacy browser suites/live helpers/delivery semantic paths remain. Decide later whether to explicitly mark/segregate them or gradually remove after consumer checks.
+Live provider/API calls = 0.
+Physical microphone = 0.
+Phase3B actions = 0.
+Incremental exposure = 0.
 
-**UD-05 — real owner validation**
-Resume the already-authorized owner-led Phase3B only after Batch C is accepted. Existing spend authorization remains valid.
+Browser r4:
+BLOCKED before first functional case by the already-known Codex-sandbox Edge GPU/CDP startup limitation.
+This is not evidence that MF-02 failed in the product browser.
 
-**UD-06 — retention/export/recovery**
-Custom retention/default/reminders remain desired. Export currently does not imply one-click re-import/recovery. Exact policy remains owner decision.
+## 5. Next validation for Batch C
 
-### Future Optional
+Run exactly one host-side browser regression outside Codex sandbox from a normal owner PowerShell:
 
-- Small-step extraction of pure state transitions/dependency seams from `app.mjs` when touching related behavior; no broad refactor.
-- Mark one active browser suite and classify r3/legacy suites/helpers explicitly.
-- Treat GitHub exchange as primary workflow and retained handoff-kit as fallback.
-- Product UX: emphasize one most useful content relation + focused next action while preserving process evidence as non-diagnostic observation.
-- Synthetic/fake-provider portfolio demo that clearly distinguishes engineering validity from learning efficacy.
-- Measure replay burden before changing replay policy.
-- ASR/Whisper migration remains a separate current-capability decision; external claims require MASTER freshness check.
+`node study-teachback-app/run-offline-tests.mjs browser correctness-boundaries-01-host`
 
-## 8. Exchange workflow improvements retained
+This uses the existing isolated stub/fake-provider browser suite and the current Batch C worktree.
 
-The current single-file relay is sufficient for the current single-owner serial workflow.
+Do not run it from Codex.
 
-Future minimal conventions, if needed:
-- fixed `state`, `turn_id`, `writer`, `in_reply_to` fields;
-- duplicate Codex nudge should not repeat completed work;
-- write-before check of exchange content plus canonical commit;
-- write-after check that only ACTIVE_EXCHANGE changed and read-back succeeded;
-- stronger branch-level CAS only if real concurrent writers appear.
+PASS requirement:
+- full r4 suite completes;
+- new MF-02 delayed-diagnosis/double-confirm case executes and passes;
+- no live provider call;
+- no owner profile/microphone.
 
-Do not build a daemon/message broker while the one-file relay is sufficient.
+If PASS, MASTER can authorize Codex to self-review the diff and create one focused Batch C local commit.
 
-## 9. Classification
+If FAIL in a product assertion, MASTER writes a correction turn into ACTIVE_EXCHANGE; Codex may self-diagnose and iterate inside the same MF-01/02/03 scope.
 
-Completed:
-- Batch A/B engineering validation;
-- host browser smoke;
-- GitHub exchange relay validation;
-- PROJECT-WIDE-REVIEW-01.
+## 6. Operating model update — proactive Codex/Astra self-review
 
-Must Fix / In Progress:
-- CORRECTNESS-BOUNDARIES-01 (MF-01/02/03).
+Owner explicitly wants Codex/Astra to contribute more than mechanical execution.
 
-Paused but already authorized:
-- PHASE3B-LIVE-01.
+Accepted operating model:
+
+### MASTER / Chat GPT-5.6
+Responsible for:
+- project scope and phase gates;
+- owner decisions;
+- current external/freshness verification;
+- independent review of Codex findings/evidence;
+- deciding which recommendations become Must Fix / Decision / Optional;
+- final acceptance.
+
+### Codex/Astra
+Within an explicitly authorized task, Codex is encouraged to:
+- inspect relevant project context before acting;
+- propose the smallest implementation approach;
+- identify risks/edge cases independently;
+- implement within scope;
+- run self-checks/tests;
+- review its own diff against acceptance criteria;
+- fix defects it finds that are clearly **inside the already-approved scope**;
+- return additional recommendations separately.
+
+### Bounded self-iteration
+
+Codex does not need to return to MASTER for every small in-scope defect it discovers during implementation/testing.
+
+It may perform up to **two self-correction passes after the initial implementation** when:
+- the problem is directly caused by or required to satisfy the current task;
+- no new product requirement is introduced;
+- no spending/public release/push-merge/data-loss/high-risk action is required;
+- no new dependency/framework/model/provider/storage-schema/retention policy is introduced.
+
+Codex must stop and return to MASTER if:
+- the same blocker remains after the bounded self-correction passes;
+- scope must expand;
+- a user/product tradeoff appears;
+- a paid/live call not already authorized is needed;
+- evidence is ambiguous enough that another change would be speculative.
+
+This uses model diversity for independent analysis while retaining owner/MASTER scope control.
+
+### Recommendations
+
+Codex may always include:
+- Must Fix candidates;
+- User Decision Needed;
+- Future Optional;
+- simplification ideas;
+- test/maintainability suggestions.
+
+It must not implement recommendation-only items unless they are already inside the authorized task or MASTER subsequently promotes them into scope.
+
+## 7. GitHub exchange state machine
+
+The one-file exchange remains accepted.
+
+Supported states now include:
+- `CHAT_TO_CODEX`
+- `CODEX_TO_CHAT`
+- `WAITING_OWNER`
+
+`WAITING_OWNER` means Codex must not execute/repeat the previous turn if nudged; the next action is outside Codex until MASTER writes a new `CHAT_TO_CODEX` turn.
+
+This prevents duplicate execution while waiting for a manual host/browser/user step.
+
+## 8. Backlog retained from project-wide review
 
 User Decision Needed later:
-- portable fixture;
-- atomic ledger persistence;
-- legacy entrypoint cleanup;
-- retention/recovery policy;
-- exact timing of live owner experiment after Batch C.
+- portable fixed synthetic audio fixture / clean-clone reproducibility;
+- atomic ledger replacement/recovery strategy;
+- lifecycle of historical browser/live/helper entrypoints;
+- retention/export/recovery policy;
+- timing of real Phase3B after Batch C.
 
-Unknown:
-- trigger frequency of MF-01 in natural Tutor output;
-- real timing frequency of MF-02;
-- actual damaged-ledger behavior until isolated regression;
-- real owner ASR/usefulness/replay burden.
+Future Optional:
+- small-step app.mjs decomposition when touched naturally;
+- active-vs-legacy test/helper index;
+- handoff-kit explicitly documented as fallback behind GitHub exchange;
+- focused diagnostic UX;
+- synthetic portfolio demonstration;
+- replay burden measurement;
+- long-term ASR migration after freshness check.
 
-## 10. Next smallest step
+## 9. Phase 3B
 
-Codex executes only CORRECTNESS-BOUNDARIES-01 through ACTIVE_EXCHANGE, writes the review/delivery result back to the exchange file, and stops for MASTER review. Owner need not copy the response.
+Existing owner authorization remains intact and unused:
+- max 3 calls;
+- zero retries;
+- incremental exposure <= US$0.03432;
+- one recording.
+
+Host browser root smoke already PASS outside Codex sandbox.
+
+Phase3B remains PAUSED until Batch C is accepted and committed.
+
+## 10. Classification
+
+Completed:
+- exchange relay;
+- project-wide Codex review;
+- MF-01/02/03 reproduction and implementation;
+- focused 11/11 and Node 114/114.
+
+Must Fix before Batch C acceptance:
+- host-side isolated browser r4 validation for MF-02.
+
+Waiting Owner:
+- one host browser command.
+
+Not authorized:
+- live Phase3B;
+- additional backlog implementation;
+- product push/merge.
+
+## 11. Next smallest step
+
+Owner runs the single host-side browser regression command outside Codex sandbox and reports PASS/FAIL to MASTER.
+
+Do not nudge Codex while ACTIVE_EXCHANGE is WAITING_OWNER.
