@@ -292,3 +292,14 @@ Acceptance:
 Codex/Astra may analyze, recommend, self-review and make up to two in-scope correction passes under the proactive operating rule. It must not expand into broader onboarding redesign, retention, model/provider, schema migration, new dependency, or live Phase3B.
 
 Next step: Codex executes SETUP-FLOW-01 through ACTIVE_EXCHANGE and returns evidence to MASTER.
+
+
+## SETUP-FLOW-01 relay delivery failure — 2026-09-29
+
+Owner reports Codex executed SETUP-FLOW-01, but GitHub meta/master-state shows no commit after the CHAT_TO_CODEX dispatch commit `24f462de06845d4069077b63539a759009489cc8`.
+
+Therefore the execution result is currently unverified by MASTER and must not be inferred from owner memory or partial UI text.
+
+Recovery policy: do not rerun SETUP-FLOW-01 automatically. Codex should inspect the existing local worktree/current artifacts only, summarize the already-performed work, and write the missing CODEX_TO_CHAT receipt to ACTIVE_EXCHANGE. If the local work is absent/incomplete, report that explicitly instead of reimplementing.
+
+This is an exchange delivery failure, not yet a product acceptance failure.
