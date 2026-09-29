@@ -56,3 +56,31 @@ Return to MASTER with:
 Stop immediately for provider/ASR/audio/replay/ledger/version errors.
 No Repair/Apply.
 No second recording.
+
+
+## Exact local server startup commands
+
+Use a normal Windows PowerShell window opened by the owner, not a Codex-run terminal.
+
+Run:
+
+```powershell
+Set-Location F:\Chat-Codex-Handoff\validation-repo
+node .\study-teachback-app\server.mjs
+```
+
+Expected output:
+
+```text
+Study Teach-back: http://127.0.0.1:4317 (loopback only)
+```
+
+Leave this PowerShell window open while using the product.
+
+Then open the product in the validated isolated Edge profile, or manually browse to:
+
+`http://127.0.0.1:4317`
+
+To stop the local server after the test, return to the server PowerShell window and press `Ctrl+C`.
+
+Do not close the server window before finishing the current browser test.
