@@ -226,3 +226,34 @@ Accepted behavior: source material alone is sufficient to start; file import tit
 New accepted local baseline is `89c23a155ac7c32e6357b33144edf93bd9850309`.
 
 PHASE3B-LIVE-01 remains authorized and unused. The next owner checkpoint should use the actual synthetic DOCX file import path, no manual title, optional focus/known left blank, one Learn/Tutor call at most, one natural 20–45 second recording, exactly one ASR, then stop at replay/transcript before diagnosis.
+
+
+## FILE-IMPORT-AUTO-USE-01 — new Must Fix from live owner setup
+
+Owner attempted the accepted source-first flow with the synthetic DOCX.
+
+Observed UI:
+- file extraction completed successfully;
+- preview contained the document text;
+- preview showed selected count = 0;
+- the actual learning-source textarea remained 0 / 5,000;
+- top notice said to first place material into the learning round;
+- Start/Learn therefore remained a local validation no-op.
+
+No Tutor/provider call was dispatched, so PHASE3B-LIVE-01 still has 0 calls and 0 incremental exposure consumed.
+
+Owner product requirement is stricter than the current implementation:
+- uploading a small supported file should itself make the parsed material ready for learning;
+- the user should not need a second “use all text” action for a file already fully parsed and within the source-size limit.
+
+Decision:
+- for imported/extracted text whose normalized full text length is <= 5,000 characters, automatically place the full extracted text into the learning source after successful extraction and derive title from filename;
+- keep preview visible for transparency/edit/reselection;
+- preserve manual selected-text override if the user intentionally wants a subset;
+- for extracted text > 5,000 characters, do not silently truncate or auto-pick an arbitrary chunk; require explicit selection/subset and show a clear local notice;
+- direct-paste behavior remains unchanged;
+- no AI/provider call for this behavior.
+
+Status: FILE-IMPORT-AUTO-USE-01 READY / DISPATCHED THROUGH ACTIVE_EXCHANGE / ZERO LIVE API.
+
+Phase3B remains paused until this owner-observed setup friction is corrected and verified.
