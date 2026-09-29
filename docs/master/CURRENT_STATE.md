@@ -599,3 +599,25 @@ MASTER assessment:
 Next gate: host browser validation from normal Windows PowerShell.
 
 The remaining live content diagnosis stays paused.
+
+
+## PROCESS-EVIDENCE-FEASIBILITY-01 host browser PASS — 2026-09-29
+
+Owner ran the host browser regression outside Codex sandbox:
+
+`node .\study-teachback-app\run-offline-tests.mjs browser process-evidence-feasibility-01`
+
+Observed:
+- all displayed browser cases PASS;
+- the new case `short-gap candidate replays and saves locally without a semantic call` PASS;
+- isolation remained synthetic credential / loopback only / test ledgers only / blocked outbound attempts=0;
+- wrapper receipt exit=0;
+- production ledger SHA before/after unchanged.
+
+This clears the browser-validation blocker for the current unchanged PROCESS-EVIDENCE-FEASIBILITY-01 worktree.
+
+Before commit, Astra must inspect the host artifact/receipt directly and confirm:
+- exact PASS count;
+- exact sourceSHA256 set and no source/test drift after the host run.
+
+If any source/test code changes after this host PASS, the browser evidence becomes stale and host re-verification is required.
