@@ -460,3 +460,71 @@ Implication:
 - the final content-diagnosis call remains paused because it would not validate the missing process-evidence behavior.
 
 Next smallest experiment: zero-provider local audit of the saved original audio around 16–18s, preferably using the product export so the audio, raw/corrected transcript and attempt identity remain bound together.
+
+
+## PROCESS-EVIDENCE-LIVE-GAP-01 — exported real-audio audit
+
+MASTER inspected the owner export `study-7ee62c5e-c106-46e4-b7a7-2f60e46b819d.json` locally with zero provider calls.
+
+Export facts:
+- attempt duration: 21.96s;
+- status: REVIEW_REQUIRED;
+- reports: none;
+- raw ASR omits filler words such as 额/嗯;
+- visible ASR span s2 is 16.56–19.14s with semantic text `以及访客证他只是当天有效`;
+- saved process observation contains exactly one `near_silence_candidate`: 14.54–15.42s;
+- detector config: 20ms frames, RMS threshold 0.008, minimum candidate duration 0.7s.
+
+MASTER decoded the embedded original WebM audio locally and inspected the PCM around the owner-confirmed hesitation region with the same 20ms / RMS threshold basis.
+
+Around 16–18s, low-energy runs were approximately:
+- 16.08–16.22s: 0.14s;
+- 16.74–16.94s: 0.20s;
+- 16.96–17.28s: 0.32s.
+
+None reaches the current 0.7s continuous near-silence rule. Much of 16–18s remains voiced/active.
+
+This explains the live miss:
+- the owner's hesitation/filler is not a long continuous silence;
+- current detector is intentionally a conservative near-silence detector;
+- it can detect the separate 14.54–15.42s silence, but not the voiced/fragmented hesitation the owner remembers at 16–18s.
+
+Do not claim automatic lexical detection of “额”. The owner-confirmed filler is ground truth from replay, while the acoustic evidence shows why the existing near-silence rule does not surface it.
+
+Additional source-flow finding:
+- the main `确认已回听，开始诊断` action triggers the content channel;
+- process/delivery analysis is a separate per-candidate action after replay confirmation;
+- therefore the current main diagnosis flow does not automatically produce the intended two-channel combined diagnostic experience.
+
+Conclusion:
+PROCESS-EVIDENCE-LIVE-GAP-01 is VERIFIED as a real product-validation gap, not merely a display omission.
+
+The remaining live content-diagnosis call stays paused.
+
+## PROCESS-EVIDENCE-FEASIBILITY-01
+
+Status: DISPATCHED THROUGH ACTIVE_EXCHANGE / ZERO PROVIDER / NO NEW RECORDING.
+
+Goal:
+use the real live evidence to improve process-evidence localization without conflating process with knowledge judgment or adding another paid ASR/semantic call.
+
+Preferred architecture direction to evaluate:
+- contentFindings: existing source-grounded semantic diagnosis;
+- processEvidence: local audio/timing observations, no knowledge status;
+- diagnosticTarget: deterministic combination only when content finding and process evidence converge on the same span/transition;
+- processEvidence alone must never become “you do not understand this”.
+
+Astra may investigate and implement the smallest evidence-backed improvement inside scope.
+
+At minimum evaluate:
+1. keep existing long near-silence candidate;
+2. add a deterministic short-pause / micro-pause-cluster observation if supported by local PCM evidence;
+3. do not classify a voiced sound as lexical “额/嗯” unless the system has reliable evidence;
+4. do not insert fillers into transcript;
+5. do not add a second ASR pass;
+6. do not add a semantic delivery call merely to describe local process evidence;
+7. consider rendering processEvidence locally and combining it with content findings after the one existing content diagnosis call.
+
+No new dependency/model/provider. If voiced-filler detection itself cannot be made reliable with current deterministic local evidence, Astra must say so rather than invent a heuristic label.
+
+The real owner export/audio is not authorized for upload to GitHub. Canonical state contains only derived non-sensitive timing/feature evidence.
