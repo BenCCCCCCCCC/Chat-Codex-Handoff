@@ -876,3 +876,56 @@ UX finding / Must Fix candidate:
 - the NOT_HEARD notice is easy to miss, making the diagnosis button appear unresponsive.
 
 Do not implement this UX fix during the remaining live diagnosis checkpoint. Record it for post-Phase3B triage.
+
+
+## PHASE3B-LIVE-01 final content diagnosis — completed
+
+Owner successfully executed the one remaining content-diagnosis semantic call on the preserved real attempt.
+
+Observed UI behavior:
+- diagnosis request visibly entered busy state and returned;
+- 内容理解 cards rendered successfully;
+- no retry was used;
+- the per-span replay buttons reverted from “已完整回听 ✓” to their time labels after diagnosis because renderAttempt clears the in-memory heard set and rebuilds the UI.
+
+Live authorization is now fully consumed:
+- Tutor semantic: 1
+- ASR: 1
+- content diagnosis: 1
+- retries: 0
+- real recording: 1
+
+No further live provider calls are authorized under PHASE3B-LIVE-01.
+
+Visible content-diagnosis result from the real attempt:
+- supported: learner mentioned the need for a valid visitor badge and lab open/closed condition;
+- supported: learner mentioned the visitor badge is valid only on the issue day / unusable the next day;
+- not expressed: learner did not mention the 18:00 visitor-admission cutoff.
+
+Process evidence remains separate:
+- historical saved attempt UI still shows the old near-silence candidate about 14.54–15.42s;
+- independent zero-call reanalysis with the accepted detector found a short-pause cluster about 16.08–17.24s overlapping the owner-confirmed hesitation;
+- the content gap (18:00 cutoff) does not overlap that hesitation region, so there is no evidence to claim the hesitation caused or proved the missing 18:00 knowledge point.
+
+This is a useful Phase3B outcome: content and process evidence appropriately remain separate when they do not converge.
+
+## OWNER UX DECISION — replay review should not be a hard diagnosis gate
+
+Owner explicitly states that completing every per-span replay should not be mandatory before proceeding to diagnosis.
+
+Current behavior:
+- diagnosis hard-blocks unless every transcript span has been replayed to completion in the current rendered session;
+- full-player replay does not satisfy this gate;
+- reopening/rerendering clears the in-memory heard state;
+- after diagnosis rerender, the visible per-span checkmarks disappear.
+
+Owner direction:
+- per-span replay remains available and recommended;
+- it must not be a hard prerequisite for content diagnosis;
+- diagnosis may proceed using the current transcript after clear warning that ASR can mishear negation, numbers, conditions and terms;
+- user corrections should still be allowed before diagnosis;
+- process-candidate confirmation may continue to require replay of that specific process candidate;
+- do not weaken content/process evidence separation;
+- do not add provider calls.
+
+Status: REPLAY-REVIEW-UX-01 ready for zero-provider engineering.
