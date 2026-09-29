@@ -30,7 +30,7 @@ Batch C changes are currently uncommitted. Do not reset/clean/checkout.
 Run from a normal Windows PowerShell, not a Codex terminal:
 
 Set-Location F:\Chat-Codex-Handoff\validation-repo
-node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01-host
+node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01
 
 ## 4. Report to MASTER
 
@@ -65,3 +65,11 @@ For future authorized tasks Codex/Astra may analyze, recommend, self-review, tes
 It must stop for scope expansion, product tradeoffs, unapproved spend/live actions, new dependency/model/schema/retention changes, push/merge/public release/high-risk actions, or repeated unresolved blockers.
 
 MASTER/GPT-5.6 remains the independent scope and acceptance gate.
+
+
+## Command correction
+
+The earlier suffix `correctness-boundaries-01-host` was invalid and caused `INVALID_TEST_BATCH` before any test ran.
+
+Use exactly:
+`node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01`
