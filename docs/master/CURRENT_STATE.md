@@ -394,3 +394,25 @@ Mandatory return to MASTER:
 - next step would be speculative.
 
 This gives Astra broad engineering autonomy without transferring product-scope authority.
+
+
+## SETUP-FLOW-01 host browser verification — 2026-09-29
+
+Owner ran from normal Windows PowerShell outside Codex sandbox:
+
+`node .\study-teachback-app\run-offline-tests.mjs browser setup-flow-01`
+
+Observed host result:
+- output directory: `artifacts/study-teachback/setup-flow-01/browser-1790660416802-ZP4imb`;
+- all visible functional cases PASS;
+- new setup source-only/context combinations PASS;
+- existing provenance / Batch A/B/C browser regressions PASS;
+- isolation summary: synthetic credential / loopback only / test ledgers only / blocked outbound attempts=0;
+- wrapper receipt exit=0;
+- production ledger SHA before/after unchanged.
+
+The suite adds four setup-specific browser cases to the prior 46-case r4 baseline, so the expected total is 50/50 PASS. Codex must read the host receipt directly during finalization and confirm the exact recorded count before commit.
+
+This clears the current SETUP-FLOW-01 browser-validation blocker for the unchanged tested worktree.
+
+If any product/test source changes after this host run, this evidence becomes stale for that changed state.
