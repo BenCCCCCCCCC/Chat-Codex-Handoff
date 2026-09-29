@@ -1,49 +1,70 @@
-# Active Handoff — PROCESS-EVIDENCE-FEASIBILITY-01 HOST REVERIFY
+# Active Handoff — PROCESS-EVIDENCE-FEASIBILITY-01 FINALIZE AFTER FRESH HOST PASS
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: WAITING_OWNER / FRESH HOST VERIFY REQUIRED
+Status: CHAT_TO_CODEX / FINAL SELF-REVIEW + LOCAL COMMIT
 
-## Why
+## Binding
 
-Project-aware Astra review found a post-host UI reachability issue:
-- previous UI took the first eight process events
-- enough long near-silence events could hide every short-pause candidate
+Repo:
+F:\Chat-Codex-Handoff\validation-repo
 
-Correction now keeps the eight-row cap while ensuring both detector types can be represented, fills spare capacity by time, sorts visible rows chronologically, and shows visible/total candidate count.
+Branch:
+prototype/study-teachback-v0.1
 
-Because source/test files changed after the previous host PASS, that PASS is stale.
+Base HEAD:
+ac875a100b159781037746ea0b8bd2188457d13a
 
-## Fresh deterministic evidence
+Current PROCESS-EVIDENCE-FEASIBILITY-01 changes remain uncommitted.
 
-- focused 33/33 PASS
-- full Node/offline 150/150 PASS
-- git diff --check PASS
-- live provider calls 0
-- additional ASR 0
+## Fresh accepted evidence
 
-## Owner host command
+Focused:
+33/33 PASS.
 
-Set-Location F:\Chat-Codex-Handoff\validation-repo
-node .\study-teachback-app\run-offline-tests.mjs browser process-evidence-feasibility-01
+Full Node/offline:
+150/150 PASS.
 
-Do not reset/clean/checkout the worktree.
+Fresh host browser outside Codex sandbox after project-aware UI correction:
+PASS.
 
-## Fresh browser expectations
+Owner screenshot confirms:
+- visible cases all PASS;
+- short-gap local replay/save/no-semantic-call case PASS;
+- wrapper exit 0;
+- error null;
+- isolated synthetic credential / loopback / test ledgers;
+- production ledger SHA unchanged.
 
-- short-pause row remains reachable even with many long events
-- long and short candidate types can both appear within the eight-row cap
-- visible rows are chronological
-- visible/total count is coherent
-- replay/local confirmation still works
-- local process confirmation makes no provider request
-- process evidence alone creates no content deficit
-- existing setup/provenance/replay regressions remain green
+## Finalization instructions
 
-Known synthetic moist-soil audio may play; expected test media.
+Astra must:
+1. read the fresh host artifact/receipt directly;
+2. confirm exact browser case count and 0 failures;
+3. confirm sourceSHA256 binding to the current worktree;
+4. confirm no source/test drift after the fresh host run;
+5. independently self-review the complete six-file task in project context;
+6. run git diff --check;
+7. if no further source/test edits are needed, stage only the six task files and create one focused local commit;
+8. no product push/merge;
+9. return full CODEX_TO_CHAT via remote ACTIVE_EXCHANGE.
 
-Do not resume live diagnosis.
+Expected files:
+- study-teachback-app/core.mjs
+- study-teachback-app/diagnostic-localization.mjs
+- study-teachback-app/app.mjs
+- study-teachback-app/browser-tests-r4.mjs
+- study-teachback-app/run-offline-tests.mjs
+- study-teachback-app/process-evidence.test.mjs
 
-After PASS, MASTER will dispatch final self-review/commit.
+Suggested commit:
+feat: add bounded short-pause process evidence
 
-Documentation cleanup for stale README/CURRENT_STATE historical wording remains a follow-up after this gate.
+Critical:
+if Astra changes any product/test source after the fresh host run, do not commit using stale evidence; return NEEDS_HOST_REVERIFY.
+
+Do not resume live owner diagnosis.
+Do not make live provider/API calls.
+Do not push/merge.
+
+Also return broader project observations separately without implementing out-of-scope items.
