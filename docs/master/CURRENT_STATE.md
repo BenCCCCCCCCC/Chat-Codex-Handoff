@@ -229,3 +229,16 @@ Do not click Start/Learn again until MASTER determines whether the first click d
 Unknown: whether POST /api/teach was sent; whether the server received it; whether provider dispatch began; whether the click failed before network; whether UI failed to render.
 
 No recording/ASR/diagnosis may proceed until this blocker is classified.
+
+
+## PHASE3B-L1 title validation root cause — 2026-09-29
+
+Owner screenshots show the direct-paste source was present but the Topic/Title field was empty when Start/Learn was clicked.
+
+Current app start handler checks title and source before topic creation/provider work; if either is empty it returns with the notice `先写一个主题，再放入这一轮的有限材料。` and does not call teach()/provider.
+
+Therefore the first Start/Learn click did not consume the authorized Tutor semantic call and is not counted as a provider retry.
+
+Owner may set title to `实验室访客入场规则` and click Start/Learn once. That click is the first authorized Tutor attempt if the normal flow dispatches Tutor.
+
+UX note retained: the required title field and validation feedback were not obvious enough to the owner. This is a usability observation, not a Phase3B blocker after the title is supplied.
