@@ -108,3 +108,24 @@ To reopen the preserved real recording:
 Selecting the saved attempt restores the `回听与反馈` panel with the original audio/transcript/report state.
 
 Then follow the current final-content-diagnosis instructions. No new recording or ASR is authorized.
+
+
+## Owner screenshot — preserved attempt restored
+
+Owner successfully reopened the original saved attempt in the same isolated Edge profile.
+
+Verified:
+- prior ~22s audio is present;
+- four transcript spans are present;
+- the saved complete attempt appears in 学习记录;
+- the historical process section still shows only the old saved candidate set, which is expected because old attempts are not automatically recomputed with the new detector;
+- the separate 我来讲讲 panel must not be used.
+
+Next:
+1. replay all four transcript spans until fully heard;
+2. edit only genuine semantic ASR errors;
+3. do not insert 额/嗯 manually;
+4. click 确认已回听，开始诊断 exactly once;
+5. no retry;
+6. do not Repair/Apply/re-record;
+7. return full feedback to MASTER.
