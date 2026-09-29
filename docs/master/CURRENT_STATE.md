@@ -528,3 +528,74 @@ At minimum evaluate:
 No new dependency/model/provider. If voiced-filler detection itself cannot be made reliable with current deterministic local evidence, Astra must say so rather than invent a heuristic label.
 
 The real owner export/audio is not authorized for upload to GitHub. Canonical state contains only derived non-sensitive timing/feature evidence.
+
+
+## PROCESS-EVIDENCE-FEASIBILITY-01 result — NEEDS_HOST_VERIFY
+
+Codex/Astra completed a bounded zero-provider implementation and returned NEEDS_HOST_VERIFY.
+
+Base/final HEAD remains:
+`ac875a100b159781037746ea0b8bd2188457d13a`
+
+Changes are uncommitted.
+
+Changed files:
+- study-teachback-app/core.mjs
+- study-teachback-app/diagnostic-localization.mjs
+- study-teachback-app/app.mjs
+- study-teachback-app/browser-tests-r4.mjs
+- study-teachback-app/run-offline-tests.mjs
+- new study-teachback-app/process-evidence.test.mjs
+
+Chosen evidence rule:
+- preserve existing long near-silence: >=0.7s continuous internal near-silence;
+- add `short_pause_cluster_candidate` using the same 20ms / RMS<0.008 frame evidence;
+- cluster requires at least 3 substantial short gaps, each 0.12..0.50s;
+- qualifying gaps contribute >=0.60s low-energy duration total;
+- candidate span 0.8..2.0s;
+- require >=0.30s above-threshold activity between gaps;
+- >=0.7s long gap breaks a cluster;
+- emitted cluster gaps are consumed to avoid repeated overlapping candidates;
+- candidate count bounded.
+
+Semantics:
+- candidate is `UNVALIDATED_ACTIVITY`, not VAD/ASR/lexical filler detection;
+- no automatic “额/嗯” label;
+- replay confirmation remains mandatory;
+- process evidence has no knowledge status;
+- process-only evidence cannot create missing/incorrect content findings;
+- final-correct/self-repaired content remains content-supported;
+- content/process convergence is computed locally only when evidence overlaps the same bounded spoken span/transition.
+
+Existing architecture remains:
+- main replay-confirm action sends only content diagnosis;
+- process confirmation remains local and provider-free;
+- localizer may combine confirmed process context with an existing content target after content findings return;
+- no extra delivery semantic call is required.
+
+Derived timing fixture from MASTER's non-sensitive real-sample timing evidence:
+- accepted baseline produced only e0 near-silence 14.54..15.42;
+- current implementation produces same e0 plus e1 short-pause cluster 16.08..17.28;
+- this overlaps the owner-confirmed 16..18s hesitation region without claiming the lexical filler itself.
+
+Fresh evidence:
+- focused process/localization: 28/28 PASS;
+- full Node/offline: 145/145 PASS;
+- git diff --check PASS;
+- browser syntax PASS;
+- live provider calls 0;
+- additional ASR 0;
+- microphone 0;
+- incremental exposure 0.
+
+Codex browser attempt failed before product cases due to the known Windows Codex sandbox Edge/GPU/CDP limitation. All receipt source hashes matched the final uncommitted worktree.
+
+MASTER assessment:
+- evidence model and separation are acceptable for host validation;
+- lexical filler detection remains deliberately out of scope;
+- natural-speech false-positive/false-negative rates remain unknown;
+- existing owner attempt is not automatically recomputed/migrated by this implementation.
+
+Next gate: host browser validation from normal Windows PowerShell.
+
+The remaining live content diagnosis stays paused.
