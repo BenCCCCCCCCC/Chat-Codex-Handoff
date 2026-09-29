@@ -34,29 +34,30 @@ Product branch:
 
 No product push/merge authorized.
 
-## What has already happened
+## Real Phase 3B — completed
 
-Real Phase 3B validation is complete:
-- source-first DOCX import validated;
-- Tutor 1 call;
-- real owner recording 1;
-- ASR 1 call;
-- content diagnosis 1 call;
-- retries 0;
-- live authorization fully consumed.
+Real owner validation used:
+- Tutor semantic 1
+- real microphone recording 1
+- ASR 1
+- content diagnosis 1
+- retries 0
+
+The original live authorization is fully consumed.
+No further live provider calls are authorized.
 
 Real content result:
-- visitor badge condition: captured;
-- lab open/closed condition: captured;
-- badge same-day validity: captured;
-- 18:00 cutoff: omitted.
+- visitor badge condition captured;
+- lab open/closed condition captured;
+- badge same-day validity captured;
+- 18:00 cutoff omitted.
 
 Real process result:
-- old saved long pause ~14.54–15.42s;
+- historical long pause ~14.54–15.42s;
 - owner-confirmed hesitation around 16–18s;
 - accepted detector reanalysis finds short-pause cluster ~16.08–17.24s.
 
-Content omission and process hesitation did not converge on the same target, so no causal/knowledge inference is justified. This is a positive validation of evidence separation.
+Content omission and process hesitation did not converge on the same target, so no causal/knowledge inference is justified.
 
 ## Current task
 
@@ -66,58 +67,69 @@ Task:
 Owner decision:
 per-span replay is recommended, not mandatory for content diagnosis.
 
-Codex implemented the change but left it uncommitted because its browser environment failed before app cases.
+Codex/Astra implemented it locally; changes are still uncommitted.
+
+Implemented direction:
+- remove hard requirement to replay every transcript span before content diagnosis;
+- diagnosis uses explicit current transcript confirmation;
+- warn that ASR can mishear negation/numbers/conditions/terms;
+- per-span and full-audio replay remain optional;
+- playback completion is transient UI feedback, not persisted as false proof;
+- process-candidate confirmation still requires replay of that specific candidate;
+- no extra provider call.
 
 Current implementation evidence:
 - focused 36/36 PASS
 - full Node/offline 151/151 PASS
-- diff check PASS
 - browser syntax PASS
-- zero live API
+- git diff --check PASS
+- zero live API / ASR / recordings
 - production ledger unchanged
 
-Exact modified files:
-- app.mjs
-- core.mjs
-- index.html
-- correctness-boundaries.test.mjs
-- browser-tests-r4.mjs
-- run-offline-tests.mjs
+## Host browser gate — PASS
 
-## Immediate next action
-
-Owner runs:
+Owner ran:
 
 ```powershell
 Set-Location F:\Chat-Codex-Handoff\validation-repo
 node .\study-teachback-app\run-offline-tests.mjs browser replay-review-ux-01
 ```
 
-Do not tell Codex to continue before this host result.
+Owner screenshot confirms:
+- all visible cases PASS
+- exit 0
+- error null
+- production ledger before/after identical
+- unchanged=true
 
-If PASS:
-1. record host PASS in CURRENT_STATE/HANDOFF;
-2. dispatch finalization through ACTIVE_EXCHANGE;
-3. require Astra to read fresh receipt/source hashes;
-4. allow focused local commit only if no post-host source/test edits;
-5. if any source/test edit occurs after host PASS, require another host reverify.
+Exact total case count and sourceSHA256 binding still must be read directly from the fresh host receipt by Astra before commit.
 
-If FAIL:
-- do not rerun blindly;
-- classify exact failure first;
-- let Astra fix in-scope issues under project-aware autonomy;
-- fresh host verification required after source/test changes.
+## Immediate next action
 
-## Current ACTIVE_EXCHANGE meaning
+Do **not** ask the owner to rerun the host browser test unless Astra changes source/test bytes.
 
-Expected state after this handoff:
-`WAITING_OWNER`
+MASTER should dispatch Astra finalization:
+1. read fresh host receipt and exact case count;
+2. verify sourceSHA256 binding to current worktree;
+3. perform project-aware final self-review;
+4. confirm no post-host source/test drift;
+5. run git diff --check;
+6. if unchanged, stage only the six REPLAY-REVIEW-UX-01 files and create one focused local commit;
+7. no push/merge;
+8. return CODEX_TO_CHAT via ACTIVE_EXCHANGE;
+9. if any source/test edit is needed after host PASS, return NEEDS_HOST_REVERIFY.
 
-It should point to the host browser validation above.
+Expected modified files:
+- study-teachback-app/app.mjs
+- study-teachback-app/core.mjs
+- study-teachback-app/index.html
+- study-teachback-app/correctness-boundaries.test.mjs
+- study-teachback-app/browser-tests-r4.mjs
+- study-teachback-app/run-offline-tests.mjs
 
 ## Important boundaries
 
-- no further Phase3B live provider calls are authorized;
+- no further live provider calls;
 - no new recording/ASR/diagnosis;
 - no product push/merge;
 - no retention/model/provider/schema changes without MASTER/owner decision;
@@ -126,7 +138,7 @@ It should point to the host browser validation above.
 
 ## Codex/Astra autonomy
 
-Astra is allowed to understand the project and explore broadly:
+Astra may understand the project and explore broadly:
 - read canonical docs;
 - inspect recent commits;
 - inspect adjacent modules/tests;
@@ -141,19 +153,9 @@ Return outside-scope findings as:
 - Future Optional
 - Project observations
 
-## Required phase-end reporting
-
-Every phase/gate should explicitly state:
-- Completed
-- Not Done
-- Verified
-- Likely
-- Unknown
-- next smallest experiment
-
 ## After REPLAY-REVIEW-UX-01 finalization
 
-Next recommended MASTER work:
+Next MASTER work:
 1. documentation cleanup so README/canonical summaries reflect completed Phase 3B;
 2. decide whether current Phase 3B evidence is sufficient to close the current validation phase;
 3. only then choose the next productization step;
