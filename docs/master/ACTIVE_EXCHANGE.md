@@ -1,58 +1,67 @@
 # ACTIVE_EXCHANGE
 
 state: MASTER_HOLD
-turn_id: PHASE3B-CLOSURE
+turn_id: PHASE4-PREIMPLEMENTATION-COLLISION
 task: NONE
 writer: CHAT_MASTER
 transport_only: true
-status: PHASE3B_CLOSED / AWAITING_OWNER_NEXT_PHASE_DECISION
+status: COLLISION_CHECK_COMPLETE / AWAITING_OWNER_NATIVE_PROBE_APPROVAL
 accepted_base_head: 20be403f7bb736ab0cde2758af7306a00c2290db
 
-## MASTER acceptance
+## Current decision
 
-DOC-CLEANUP-PHASE3B-01 is accepted.
+Phase 3B remains CLOSED / PASS.
 
-Accepted local HEAD:
-`20be403f7bb736ab0cde2758af7306a00c2290db`
-`docs: align entry guides with completed Phase 3B validation`
+Fresh Phase 4 pre-implementation collision check is complete.
 
-Acceptance basis:
-- exactly two changed paths: README.md and study-teachback-app/README.md;
-- 11 insertions / 7 deletions;
-- documentation-only scope;
-- targeted post-edit stale-state search returned no matches;
-- git diff checks PASS;
-- final tracked worktree clean;
-- no application test rerun required for documentation-only delta;
-- live provider calls / recording / ASR / diagnosis / paid spend: 0;
-- no product push/merge.
+MASTER found strong overlap for the generic product shape:
+- native ChatGPT Study: uploaded materials + guided/Socratic learning + understanding checks;
+- native ChatGPT Voice/GPT-Live: files + Projects + voice;
+- NotebookLM: source-grounded study outputs / quizzes / citations;
+- commercial teach-back products: spoken explain-back + gap finding;
+- current GitHub projects: teach-back / tutoring / file-context / voice patterns.
 
-## Phase 3B closure
+Therefore no new generic teach-back feature is approved.
 
-MASTER decision:
-**Phase 3B = PASS / CLOSED for the bounded validation question.**
+## Candidate differentiation
 
-The evidence supports:
-- real end-to-end feasibility on one owner sample;
-- evidence separation between content diagnosis and process evidence;
-- accepted optional transcript replay UX;
-- bounded process-evidence feasibility on the preserved sample.
+The only currently evidence-supported candidate is narrower:
 
-The evidence does not establish:
-- broad learning efficacy;
-- detector sensitivity/specificity at scale;
-- generalization across users/courses;
-- process-only knowledge diagnosis.
+source-grounded diagnostic localization of the learner's weak concept / relation / reasoning transition, while keeping content evidence separate from speech/process evidence and never using process evidence alone as proof of a knowledge gap.
 
-Original live authorization remains fully consumed.
+This is still a hypothesis.
 
-## Current exchange
+## Proposed next experiment
 
-No Codex task is active.
-Do not treat MASTER_HOLD as CHAT_TO_CODEX.
-Do not continue or repeat DOC-CLEANUP-PHASE3B-01.
+`NATIVE-COLLISION-PROBE-01`
 
-Next action:
-MASTER + owner choose the next bounded product/validation question before any new implementation.
+No Codex implementation.
 
-Any new live validation, scope expansion, schema/retention/model/provider/budget change, push/merge/public release requires a fresh explicit decision.
+Reuse the completed Phase 3B sample and preserved 知而能讲 result.
+
+Native baseline:
+- same source;
+- same confirmed learner explanation/transcript;
+- ChatGPT Study mode.
+
+Optional second native baseline:
+- ChatGPT Voice + file/Project only if needed.
+
+Compare:
+- detection of the omitted 18:00 condition;
+- false positives;
+- localization precision;
+- source grounding;
+- actionability;
+- whether hesitation/process evidence is wrongly converted into a knowledge judgment;
+- manual friction.
+
+## Authorization
+
+No new app-side live provider call is authorized.
+No new recording / ASR / diagnosis is authorized.
+No product code change is authorized.
+No push/merge is authorized.
+
+Next action belongs to the owner:
+approve or decline NATIVE-COLLISION-PROBE-01.

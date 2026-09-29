@@ -88,50 +88,67 @@ Evidence:
 - live calls 0;
 - no push/merge.
 
+## Phase 4 pre-implementation collision result
+
+Fresh 2026-09-30 review found strong collision with the generic product shape.
+
+Current native overlap:
+- ChatGPT Study mode supports uploaded learning materials, guided/Socratic teaching and understanding checks;
+- Study mode currently does not apply inside Projects and documents dictation rather than a unified live-voice Study workflow;
+- ChatGPT Voice/GPT-Live supports files and Projects.
+
+Current external/open-source overlap:
+- NotebookLM covers source-grounded study outputs and quizzes;
+- multiple products already market spoken Explain Back / Feynman / gap-finding workflows;
+- GitHub projects such as `VihaanMotwani/deep-study-skills` and `GibbonTech/feynman-learning-app` cover teach-back, tutoring, file context and/or voice.
+
+MASTER decision:
+do not build more generic teach-back features.
+
+The remaining candidate differentiation is:
+**precise source-grounded gap localization + strict separation between content-understanding evidence and speech/process evidence.**
+
+That value is not yet proven.
+
+## Proposed next Phase 4 experiment
+
+`NATIVE-COLLISION-PROBE-01`
+
+No code changes.
+
+Reuse the existing Phase 3B source / confirmed learner explanation / accepted product result.
+
+Compare against:
+1. ChatGPT Study mode using the same source and same explanation/transcript;
+2. optionally ChatGPT Voice + file/Project if the first comparison leaves a meaningful voice-specific question.
+
+Judge:
+- correct omission detection;
+- false positives;
+- localization precision;
+- source grounding;
+- actionable feedback;
+- content/process contamination;
+- manual friction.
+
+Important:
+the current product should not be rerun for this probe unless MASTER later authorizes new live calls. Use the preserved Phase 3B output as its side of the comparison.
+
 ## Current state
 
-There is **no active Codex implementation task**.
+No Codex implementation task is active.
 
-Do not ask Codex to continue a previous gate.
-Do not start a new feature from historical Next Step text.
-
-The next action belongs to MASTER + owner:
-choose the next bounded product/validation question.
-
-Before new implementation:
-1. identify the real observed user cost/problem;
-2. check latest official/current capability where relevant;
-3. check existing projects/collision where relevant;
-4. approve at most one smallest experiment;
-5. keep implementation scope bounded.
-
-## Open user decisions
-
-- next productization/validation question;
-- retention policy and migration semantics;
-- long-term ASR migration/timing strategy;
-- legacy paid delivery route disposition;
-- any new live validation budget/authorization.
-
-## Future optional
-
-- compact active-vs-historical test/helper index;
-- small-step app.mjs decomposition;
-- milestone documentation-consistency check;
-- consented offline natural-speech evaluation with defined FP/FN criteria;
-- synthetic portfolio demo;
-- replay-burden measurement.
+ACTIVE_EXCHANGE remains MASTER_HOLD until the owner approves the Phase 4 native-collision probe.
 
 ## Hard boundaries
 
-Without a new MASTER/owner decision, do not:
-- run new live provider calls;
-- record new validation audio;
-- change schema/retention/model/provider/budget;
-- push/merge/public release;
-- begin a new productization feature;
-- expand into full app/platform work.
+Without fresh owner approval:
+- no new product feature;
+- no new app-side live provider calls;
+- no new recording/ASR/diagnosis;
+- no schema/retention/model/provider/budget change;
+- no push/merge/public release.
 
 ## Next
 
-MASTER and owner choose the next bounded question.
+Owner decides whether to run NATIVE-COLLISION-PROBE-01.

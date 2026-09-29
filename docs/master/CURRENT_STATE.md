@@ -151,32 +151,120 @@ The cleanup corrected current-facing claims about:
 
 Historical snapshots were intentionally not rewritten.
 
-## 7. Current gate
+## 7. Phase 4 pre-implementation collision check — COMPLETE / MASTER HOLD
 
-**MASTER HOLD — no Codex implementation task is active.**
+Date: 2026-09-30
 
-Phase 3B has closed.
-Do not start a new productization feature automatically.
+Question:
+Before building more of 知而能讲, does the remaining proposed value already exist in current native/market/open-source products?
 
-Before any new implementation, MASTER must:
-1. define the next product question;
-2. identify the real observed user cost it addresses;
-3. perform a fresh official/current capability check where relevant;
-4. perform a fresh existing-project/collision check where relevant;
-5. select at most one bounded next experiment;
-6. obtain user decision for any scope expansion, live spend, retention/model/provider/schema change, push/merge/public release, or other consequential tradeoff.
+### Official/current collision
 
-## 8. Must Fix / User Decision / Future Optional
+Verified current OpenAI capability:
+- ChatGPT Study mode can work from uploaded course materials, use Socratic guidance, ask open-ended questions, quiz the learner, and check understanding.
+- Study mode is currently a regular-chat capability, not a Project capability.
+- Study mode documentation explicitly supports voice dictation.
+- GPT-Live/Voice now supports file uploads and Projects and can reference Project chats, sources and instructions.
+
+Interpretation:
+"source material + AI tutor + understanding checks + voice" is already strongly covered by native ChatGPT surfaces, even though the exact Study-mode + Project + live-voice combination is not documented as one unified workflow.
+
+### Existing-product collision
+
+Verified current examples include:
+- NotebookLM: source-grounded study guides, quizzes and flashcards with source citations.
+- Intu AI Study Hub: voice Explain Back, transcript, conceptual-clarity evaluation and missing-step feedback.
+- LaoshiAI / TeachBack-style products: spoken explain-back and gap finding.
+- BrainBack-style explain-back products: structured explanation grading and explicit gap feedback.
+
+### GitHub/open-source collision
+
+Current GitHub examples include:
+- VihaanMotwani/deep-study-skills: Guided Tutor, Study Companion and Teach-Back Student for ChatGPT/Codex; voice-friendly interaction and explicit evidence boundaries.
+- GibbonTech/feynman-learning-app: file import, voice input, Feynman-style explanation and knowledge-gap identification.
+- other 2026 teach-back / learning-coach repositories exist and reinforce that generic Feynman/teach-back workflow is not an empty space.
+
+### MASTER product decision
+
+Do **not** treat any of these as sufficient differentiation by themselves:
+- upload material;
+- AI teaches;
+- learner explains back;
+- voice input;
+- generic "find knowledge gaps";
+- quizzes / flashcards / Socratic prompts.
+
+The only currently evidence-supported candidate differentiator is narrower:
+
+> source-grounded diagnostic localization of *what concept / relation / reasoning transition is weak*, while keeping content understanding evidence separate from speech/process evidence and refusing to infer knowledge gaps from process signals alone.
+
+That differentiator is still a hypothesis, not validated product value.
+
+Therefore:
+**do not build Phase 4 features yet.**
+
+## 8. Proposed Phase 4 question
+
+Proposed question:
+
+> Does 知而能讲's evidence-separated diagnostic layer produce materially more precise, actionable and trustworthy gap localization than a strong native/general teach-back baseline?
+
+This question comes before:
+- retention systems;
+- spaced repetition;
+- dashboards;
+- more process detectors;
+- broader speech analytics;
+- app decomposition for feature growth;
+- new tutoring modes.
+
+## 9. Proposed next smallest experiment — NATIVE-COLLISION-PROBE-01
+
+No code change.
+
+Use the already-completed Phase 3B owner sample so the current product does **not** need to spend another Tutor/ASR/diagnosis call.
+
+Compare the preserved 知而能讲 result against a native ChatGPT baseline using the same source and the same confirmed learner transcript/explanation.
+
+Primary baseline:
+- ChatGPT Study mode + same source + same learner explanation/transcript.
+
+Optional second baseline only if useful and available:
+- ChatGPT Voice/file or Voice/Project workflow using the same source.
+
+Evaluate:
+1. Did it correctly identify the real omitted 18:00 condition?
+2. Did it avoid inventing gaps not supported by the source?
+3. Did it localize the gap to the right concept/relation/condition?
+4. Is the feedback actionable rather than generic?
+5. Does it preserve source grounding?
+6. Does it incorrectly use hesitation/process behavior as proof of missing knowledge?
+7. How many manual steps are required?
+8. Does our current product provide a meaningful advantage after accounting for setup friction?
+
+Decision rule:
+- if native baseline is effectively equivalent on the important dimensions, Pivot/Stop further diagnostic productization;
+- if our evidence-separated localization is materially clearer or safer, continue with a bounded diagnostic-value validation;
+- do not infer broad learning efficacy from this probe.
+
+## 10. Authorization state
+
+No new live product/API validation is authorized yet.
+
+The proposed native comparison can reuse the already-preserved Phase 3B product output, so no new 知而能讲 provider call is required.
+
+Owner decision is needed before running any new paid/live app-side validation beyond the native baseline.
+
+## 11. Must Fix / User Decision / Future Optional
 
 ### Must Fix
-None for Phase 3B closure.
+None.
 
 ### User Decision Needed
-- choose the next productization/validation question;
+- approve running NATIVE-COLLISION-PROBE-01 as the next bounded Phase 4 validation;
 - retention policy: customizable retention/default/reminders and migration semantics;
 - long-term ASR migration/timing strategy before deeper dependence on current timestamp behavior;
-- whether legacy paid delivery route should later be removed/deprecated/documented;
-- any new live validation requires fresh explicit authorization and cost boundary.
+- any new app-side live validation requires fresh explicit authorization and cost boundary.
 
 ### Future Optional
 - compact current-vs-historical test/helper index;
@@ -186,28 +274,27 @@ None for Phase 3B closure.
 - synthetic portfolio demo;
 - replay-burden measurement after optional-replay UX.
 
-## 9. Verified / Likely / Unknown
+## 12. Verified / Likely / Unknown
 
 Verified:
-- Phase 3B bounded feasibility flow completed;
-- original live allowance is fully consumed;
-- content/process separation worked on the real sample;
-- REPLAY-REVIEW-UX-01 is accepted;
-- current entry documentation is aligned;
-- accepted local HEAD is `20be403...`.
+- Phase 3B bounded feasibility flow completed and is closed;
+- current native ChatGPT learning/voice capabilities substantially overlap generic source-first tutoring and voice interaction;
+- current market/open-source products substantially overlap generic Feynman/teach-back and gap-finding workflows;
+- accepted local HEAD remains `20be403f7bb736ab0cde2758af7306a00c2290db`.
 
 Likely:
-- the current product architecture is coherent enough to justify selecting the next bounded product question rather than continuing Phase 3B.
+- differentiation, if any, must come from diagnostic evidence quality / localization / evidence separation rather than from the generic teach-back workflow.
 
 Unknown:
+- whether that narrower diagnostic layer is materially better than the native baseline;
 - learning efficacy beyond the single bounded sample;
 - detector sensitivity/specificity across natural speech;
 - broader course/user generalization;
 - final retention policy;
 - final long-term ASR strategy.
 
-## 10. Next smallest step
+## 13. Next smallest step
 
-No Codex task is dispatched.
+Await owner approval for NATIVE-COLLISION-PROBE-01.
 
-MASTER and owner choose the next bounded product question first.
+No Codex implementation task is dispatched.
