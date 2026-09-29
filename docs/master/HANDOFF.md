@@ -1,32 +1,21 @@
-# Active Handoff — PROCESS-EVIDENCE-LIVE-GAP-01
+# Active Handoff — PROCESS-EVIDENCE-LIVE-AUDIT-01
 
-Status: WAITING_OWNER / DIAGNOSIS PAUSED
+Status: WAITING_OWNER / ZERO PROVIDER / DIAGNOSIS PAUSED
 
-## What is now known
+Owner confirmed a real hesitation/filler around 16–18 seconds.
 
-If filler words such as 额/嗯 are absent from raw/corrected transcript, the content-diagnosis channel does not secretly analyze them.
+The visible ASR segment spans 16.6–19.1 seconds but omits that hesitation, so this is likely a voiced process event inside recognized speech rather than a simple silent gap.
 
-Content diagnosis receives transcript text/spans only and intentionally excludes audio duration/pause/energy/delivery signals.
+Do not start content diagnosis yet.
 
-Process evidence is a separate audio-derived channel.
+Preferred next evidence:
+- use the product Export action for the current topic/attempt;
+- upload the exported JSON to MASTER.
 
-The current live screenshot shows UNVALIDATED_ACTIVITY but no visible process-candidate replay rows, so the actual hesitation/pause may not have been captured by the current conservative near-silence detector.
+The export preserves the bound original audio plus transcript versions and reports. MASTER/Astra can then inspect the 16–18s audio locally with zero provider calls.
 
-## Do not
-
-- do not click content diagnosis yet
-- do not manually insert filler words into corrected transcript merely to represent hesitation
-- do not make a second recording
-- do not retry ASR
-
-## Owner next evidence
-
-Preferred:
-1. replay the full original audio;
-2. note approximate timestamps where a genuine pause/额/嗯 occurred;
-3. report them to MASTER.
-
-Optional stronger evidence:
-use the product Export function for the current topic/attempt and upload the exported JSON to MASTER. The export contains the saved original audio and transcript versions and can be inspected with zero provider calls.
-
-No diagnosis call until MASTER classifies whether the process-evidence path needs correction first.
+Do not:
+- manually insert 额/嗯 into corrected transcript to fabricate process evidence;
+- make a second recording;
+- retry ASR;
+- spend the remaining diagnosis call.
