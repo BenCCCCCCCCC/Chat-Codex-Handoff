@@ -1,92 +1,201 @@
-# Active Handoff — PROJECT-WIDE-REVIEW-01
+# Active Handoff — CORRECTNESS-BOUNDARIES-01 / Batch C
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: **DISPATCHED THROUGH ACTIVE_EXCHANGE / READ-ONLY PROJECT REVIEW**
+Status: **DISPATCHED THROUGH ACTIVE_EXCHANGE / ZERO LIVE API / BOUNDED CORRECTION**
 
-## 1. Task
+## 1. Binding
 
-Codex performs a broad read-only review of the active project and returns its analysis through:
-`meta/master-state/docs/master/ACTIVE_EXCHANGE.md`.
+Repository:
+`BenCCCCCCCCC/Chat-Codex-Handoff`
 
-The task is analysis only.
+Local checkout:
+`F:\Chat-Codex-Handoff\validation-repo`
 
-No product implementation is authorized.
+Product branch:
+`prototype/study-teachback-v0.1`
 
-## 2. Required coverage
+Expected base HEAD:
+`dd8317b43100b8cbaad684cab7fc02957e32de62`
 
-Before conclusions, inventory the tracked project and report review coverage.
+Canonical authority:
+- `meta/master-state/docs/master/CURRENT_STATE.md`
+- `meta/master-state/docs/master/HANDOFF.md`
 
-Fully review the active project body:
-- root active docs/config;
-- `study-teachback-app/` source/UI/runtime modules/tests/helpers;
-- retained `handoff-kit/` and related integration tooling;
-- tracked workflow/project config such as relevant `.codex/` files;
-- active tracked documentation outside generated artifact/raw-evidence directories;
-- relevant recent Git history;
-- latest canonical `CURRENT_STATE.md` and `HANDOFF.md`.
+Transport:
+- `meta/master-state/docs/master/ACTIVE_EXCHANGE.md`
 
-Do not spend time byte-reading every historical/generated artifact. List skipped path categories and reasons.
+Before editing:
+- verify repo/branch/HEAD;
+- tracked worktree must be CLEAN;
+- preserve unrelated untracked artifacts;
+- if identity/tracked state differs, STOP; do not reset/fetch/pull/rebase.
 
-Do not claim complete project review if material active tracked files were not read.
+## 2. Task
 
-## 3. Required analysis
+**Task ID: CORRECTNESS-BOUNDARIES-01 / Batch C.**
 
-Return:
-- coverage manifest;
-- architecture map;
-- end-to-end product flow;
-- state/authority map;
-- active vs stale/historical file map;
-- evidence-backed strengths;
-- confirmed source/architecture risks;
-- simplification/maintainability opportunities;
-- product suggestions;
-- GitHub exchange/handoff workflow assessment;
-- Must Fix / User Decision Needed / Future Optional;
-- Verified / Likely / Unknown;
-- next smallest experiment recommendations.
+Fix only MF-01, MF-02 and MF-03 from PROJECT-WIDE-REVIEW-01.
 
-Every Must Fix should cite concrete files/symbols/evidence.
+This is a correctness batch, not a refactor or feature batch.
 
-Do not reopen already-fixed Batch A/B issues unless current accepted HEAD still contains a distinct unresolved problem.
+Zero live product/provider API calls.
 
-## 4. Recommendation authority
+No physical microphone or Phase3B.
 
-Codex is explicitly encouraged to make suggestions.
+## 3. C0 — safe baseline / isolation
 
-However:
-- suggestions do not become implementation scope;
-- no code is changed;
-- no tests are changed/run merely to implement a suggestion;
-- no provider call;
-- no Phase3B execution;
-- no push/merge;
-- no CURRENT_STATE/HANDOFF write.
+Use the accepted existing offline isolation:
+- fake/stub providers;
+- isolated test ledger;
+- no usable persistent provider credentials in test subprocesses;
+- outbound provider/network guard where already available.
 
-Recommendations dependent on current external capabilities should be marked `Needs MASTER freshness check` unless verified.
+Inspect affected code/tests first.
 
-## 5. Exchange return
+Run only safe applicable baseline/focused tests necessary to establish behavior.
 
-Read the current `ACTIVE_EXCHANGE.md` and record its turn/version.
+Historical counts are context, not fresh evidence.
 
-At the end, overwrite only that same file with:
-- state = `CODEX_TO_CHAT`;
-- same turn_id;
-- task = `PROJECT-WIDE-REVIEW-01`;
-- review coverage;
-- full structured findings;
-- classification;
-- unknowns;
-- recommended next steps;
-- no-change receipt.
+## 4. C1 — MF-01 Tutor/history contract
 
-Use optimistic concurrency and fail closed on exchange conflict.
+First reproduce with fake provider if practical:
+- accepted Tutor output boundary 2500 / 2501 / 4000;
+- store accepted assistant output;
+- send a subsequent normal owner message;
+- demonstrate current failure for an output accepted by `validateTeaching` but rejected as history.
 
-No other GitHub file may be changed.
+Fix with the smallest explicit contract change.
 
-## 6. Stop
+Required properties:
+- any Tutor output accepted and persisted by current product can be represented safely in the next Tutor request history;
+- no silent provenance rewrite;
+- no arbitrary hidden truncation that changes meaning without explicit contract;
+- input-size budget remains bounded;
+- current normal shorter messages unaffected.
 
-After writing the review into ACTIVE_EXCHANGE, stop.
+If choosing a lower unified output ceiling, make the acceptance contract consistent at generation/runtime/UI and add boundary tests.
+If choosing history handling, preserve deterministic bounded request size and message identity/meaning.
 
-Do not auto-start a fix or Phase 3B.
+Do not change model/provider/pricing/caps.
+
+## 5. C2 — MF-02 content-confirm concurrency
+
+Reproduce with delayed fake diagnosis:
+- one content confirm begins;
+- before first diagnosis settles, trigger confirm again;
+- verify pre-fix version/request/report inconsistency.
+
+Fix by making the entire confirm -> correction version creation/save -> diagnosis dispatch operation mutually exclusive **before any mutation**.
+
+Required:
+- a repeated confirm while pending creates no new correction version;
+- only one diagnosis dispatch;
+- first result remains associated with the current version and visible;
+- busy feedback/state is clear enough to avoid silent no-op ambiguity;
+- edited transcript after pending finishes can create the next legitimate version;
+- existing raw/corrected provenance and replay gate remain unchanged.
+
+Do not solve by weakening latest-version validation.
+
+## 6. C3 — MF-03 /api/status ledger error boundary
+
+Use isolated fake/corrupt/unreadable ledger conditions only.
+
+Reproduce a status summary/read failure without touching production ledger.
+
+Fix so:
+- `GET /api/status` returns a controlled fail-closed response/status;
+- server process/request loop remains alive;
+- provider work remains unavailable when budget state is unreadable/unknown;
+- no ledger reset;
+- no reservation release;
+- no fabricated zero-usage summary;
+- normal healthy status remains unchanged.
+
+Do not change ledger schema/caps/pricing.
+
+## 7. C4 — regression
+
+Required focused coverage:
+- MF-01 boundary accepted-output -> next-turn history;
+- MF-02 delayed-provider double confirm;
+- MF-03 status ledger failure plus subsequent server availability.
+
+Also run relevant existing:
+- Node/offline suite;
+- provenance/correctness tests;
+- applicable browser stub suite if the MF-02/UI behavior is browser-level and safe under existing isolation.
+
+No real browser owner profile, no live provider.
+
+If headless media flake unrelated to these paths appears, classify separately per current canonical strategy; do not edit replay code.
+
+Run `git diff --check`.
+
+## 8. Scope protection
+
+Do not implement:
+- portable synthetic WAV packaging;
+- atomic ledger rewrite/recovery;
+- retention changes;
+- legacy helper cleanup;
+- ASR/model migration;
+- broad `app.mjs` refactor;
+- exchange workflow changes;
+- Phase3B.
+
+No new dependency.
+
+No push/merge/reset/clean/rebase/amend.
+
+One focused local Batch C commit is permitted only if required tests pass and the diff is bounded.
+
+## 9. Delivery / exchange return
+
+At completion, update only:
+`meta/master-state/docs/master/ACTIVE_EXCHANGE.md`
+with `CODEX_TO_CHAT` for the same turn.
+
+Include:
+- canonical/exchange versions read;
+- base/final HEAD and commit status;
+- exact changed files;
+- reproduction evidence for MF-01/02/03;
+- fix summary;
+- focused + regression commands/results;
+- zero-live-call evidence;
+- `diff --check`;
+- Tests Not Run;
+- Unknown;
+- Blocking;
+- User Decision Needed;
+- Future Optional;
+- confirmation no product push/merge and no Phase3B.
+
+Do not change CURRENT_STATE.md or HANDOFF.md.
+
+Use optimistic concurrency on ACTIVE_EXCHANGE and stop on conflict.
+
+## 10. Stop conditions
+
+STOP if:
+- accepted base/worktree differs;
+- safe zero-live-call isolation cannot be established;
+- a fix requires provider/model/storage schema/retention/cap change;
+- unrelated work would be overwritten;
+- live provider/user data might be touched;
+- scope expands beyond MF-01/02/03.
+
+## 11. Classification
+
+Authorized:
+- bounded correction of MF-01/02/03;
+- isolated zero-call regression;
+- one focused local commit after passing evidence;
+- one ACTIVE_EXCHANGE reply write.
+
+Not Authorized:
+- other suggestions from PROJECT-WIDE-REVIEW-01;
+- live Phase3B;
+- product push/merge.
