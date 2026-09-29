@@ -794,3 +794,61 @@ Constraints:
 
 If the new detector finds a bounded candidate overlapping the real hesitation, MASTER can decide whether to continue the existing live validation path.
 If it does not, do not force a process finding; record the miss and reconsider the detector/validation plan.
+
+
+## OWNER-AUDIO-LOCAL-REANALYSIS-01 — MASTER zero-call result
+
+MASTER performed a rule-equivalent local reanalysis of the preserved 21.96s owner audio from the private export. The raw export/audio itself was not uploaded to GitHub.
+
+Using the accepted detector parameters:
+- 20ms frames;
+- RMS threshold 0.008;
+- existing long near-silence >=0.7s;
+- short-pause cluster: >=3 qualifying gaps of 0.12..0.50s, >=0.60s qualifying quiet total, span 0.8..2.0s, >=0.30s active sound between gaps;
+
+derived real-audio evidence includes:
+- long near-silence: approximately 14.54–15.42s;
+- short-pause cluster candidate: approximately 2.26–4.14s;
+- short-pause cluster candidate: approximately 16.08–17.24s.
+
+For the owner-confirmed 16–18s hesitation region, the qualifying short low-energy gaps were approximately:
+- 16.08–16.22s;
+- 16.74–16.92s;
+- 16.96–17.24s.
+
+Those three gaps total approximately 0.60s quiet within a 1.16s span with approximately 0.56s active sound between them, satisfying the accepted bounded short-pause-cluster rule.
+
+This provides real-audio feasibility evidence that the accepted detector would surface a bounded process candidate overlapping the owner-confirmed hesitation without labeling the lexical filler itself.
+
+Important limitation:
+- the old stored attempt observation is not automatically recomputed/migrated in IndexedDB;
+- therefore the existing UI may still show only its historical old observation unless process evidence is rederived;
+- for this validation, MASTER can combine the independently derived real-audio process timing with the upcoming content finding without mutating the saved attempt.
+
+## Phase 3B remaining content diagnosis — MASTER approval
+
+The originally authorized maximum-three-call live experiment has used:
+- Tutor semantic: 1;
+- ASR: 1;
+- remaining content diagnosis: 1.
+
+MASTER now approves use of the **one remaining content-diagnosis semantic call** on the same existing owner attempt.
+
+No retry is authorized.
+
+Purpose:
+- evaluate source-grounded content findings on the real explanation;
+- then compare those findings against independently derived real-audio process evidence;
+- verify that content and process evidence remain separate and only converge when supported.
+
+Do not make a new recording.
+Do not run ASR again.
+Do not use Repair/Apply.
+
+If content diagnosis fails, stop with no retry.
+
+After diagnosis, owner returns the visible 内容理解 / 讲解过程证据 / target feedback to MASTER for final Phase3B assessment.
+
+## Documentation cleanup queued
+
+After the Phase3B diagnosis checkpoint, reconcile stale root/product README and historical CURRENT_STATE summary wording that still implies Phase 3 was never executed or live allowance was unused.
