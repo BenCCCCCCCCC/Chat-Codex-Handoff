@@ -1,111 +1,134 @@
-# Active Handoff — BATCH-C-FINALIZE-01
+# Active Handoff — PHASE3B-LIVE-01 / OWNER CHECKPOINT
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: DISPATCHED THROUGH ACTIVE_EXCHANGE / FINAL SELF-REVIEW + LOCAL VERSION ANCHOR
+Status: **OWNER ACTION / AUTHORIZED LIVE BUDGET / STOP BEFORE DIAGNOSIS**
 
 ## 1. Binding
 
 Repo:
-F:\Chat-Codex-Handoff\validation-repo
+`F:\Chat-Codex-Handoff\validation-repo`
 
 Branch:
-prototype/study-teachback-v0.1
+`prototype/study-teachback-v0.1`
 
-Base HEAD:
-dd8317b43100b8cbaad684cab7fc02957e32de62
+Accepted HEAD:
+`ab5d2ea9ad23359fe6cc3dc8abc0e963511996b2`
 
-Batch C changes remain uncommitted.
+Run the real browser outside Codex sandbox.
 
-## 2. Accepted evidence before finalization
+Existing authorization:
+- max 3 provider calls total;
+- zero retries;
+- incremental local exposure <= US$0.03432;
+- one recording maximum.
 
-Focused correctness-boundaries:
-11/11 PASS.
+At this checkpoint use at most:
+- one Tutor/Learn semantic call if normal fresh-topic flow requires it;
+- exactly one ASR call.
 
-Full isolated Node/offline:
-114/114 PASS.
+Do not use the content-diagnosis call yet.
 
-git diff --check:
-PASS.
+## 2. Start server
 
-Host browser run outside Codex sandbox:
-artifact directory:
-artifacts/study-teachback/correctness-boundaries-01/browser-1790650146813-0XtnC0
+Normal owner PowerShell:
 
-Owner screenshot/receipt evidence:
-- browser functional suite completed;
-- C2 delayed-diagnosis/double-confirm current-version report case PASS;
-- wrapper exit 0;
-- synthetic credential / loopback only / test ledgers only;
-- production ledger before/after hash unchanged.
+```powershell
+Set-Location F:\Chat-Codex-Handoff\validation-repo
+node .\study-teachback-app\server.mjs
+```
 
-## 3. Task
+Keep it open.
 
-Perform one independent Astra/Codex final self-review of the current Batch C diff.
+## 3. Open isolated Edge
 
-Check:
-- MF-01 contract consistency;
-- MF-02 mutation/concurrency/version behavior;
-- MF-03 fail-closed status/budget behavior;
-- no regression against Batch A/B provenance/replay/budget boundaries;
-- scope bounded to the seven Batch C files;
-- no hidden model/provider/retention/schema/cap changes.
+Normal owner PowerShell:
 
-You may rerun deterministic zero-call focused/Node tests if useful.
+```powershell
+& "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" `
+  --user-data-dir="F:\Chat-Codex-Handoff\phase3b-edge-profile-01" `
+  --no-first-run `
+  --no-default-browser-check `
+  "http://127.0.0.1:4317"
+```
 
-## 4. Self-correction rule
+Use only this fresh isolated profile.
 
-If self-review finds no code/test change needed:
-- create one focused local Batch C commit;
-- no push/merge;
-- return receipt through ACTIVE_EXCHANGE.
+## 4. Clean source
 
-If self-review finds an in-scope defect that requires any product/test source change:
-- you may analyze and prepare the minimum correction under the proactive self-review rule;
-- BUT do not create the final commit while relying on the existing host-browser PASS;
-- return CODEX_TO_CHAT with result NEEDS_HOST_REVERIFY and explain the exact new diff/reason;
-- MASTER will decide whether another host browser validation is required.
+Create a new clean topic using the canonical synthetic source already preserved in project state:
 
-Do not silently modify code after host validation and then claim the old host run validates the new bytes.
+核心规则:
+- 完成注册只是必要条件之一，不保证进入；
+- 必须佩戴当天发放的访客证；
+- 实验室关闭时不得进入；
+- 访客证仅当天有效；
+- 18:00 后停止访客入场。
 
-## 5. Commit policy
+Do not inspect/reuse old topics.
 
-If no post-host code/test drift is required, stage only the seven Batch C files:
-- study-teachback-app/core.mjs
-- study-teachback-app/server.mjs
-- study-teachback-app/app.mjs
-- study-teachback-app/correctness-boundaries.test.mjs
-- study-teachback-app/correctness-hygiene.test.mjs
-- study-teachback-app/browser-tests-r4.mjs
-- study-teachback-app/run-offline-tests.mjs
+If the UI requires Learn/Tutor to reach recording, one Tutor call is allowed.
 
-No blanket git add.
+No retry if it fails.
 
-Run git diff --check before commit.
+## 5. Recording
 
-Create one focused local commit.
+Choose no prompt assistance.
 
-Suggested message:
-fix: harden learning confirmation and budget boundaries
+Record one natural 20–45 second Mandarin explanation of:
 
-No push/merge/amend/reset/rebase.
+“为什么完成注册不等于一定可以进入实验室？”
 
-## 6. Exchange return
+Do not read a supplied script.
 
-Update only meta/master-state/docs/master/ACTIVE_EXCHANGE.md.
+Natural self-correction is allowed.
 
-Return:
-- canonical/exchange versions read;
-- self-review findings;
-- whether any code/test content changed after host validation;
-- final test commands/results, if rerun;
-- git diff --check;
-- exact committed file list;
-- base/final HEAD;
-- final tracked status;
-- unrelated untracked preserved;
-- no live provider/microphone/Phase3B;
-- no push/merge;
-- additional recommendations separately as Must Fix candidate / User Decision Needed / Future Optional.
+Preserve original audio.
 
-Stop after writing the exchange reply.
+Submit exactly one ASR request.
+
+No retry on failure.
+
+## 6. Mandatory stop checkpoint
+
+After ASR:
+- replay the saved audio;
+- compare raw ASR to what was actually spoken;
+- check negation, numbers, conditions and key terms;
+- correct only ASR mishearing;
+- preserve raw and corrected versions;
+- do not turn an actual spoken mistake into a corrected performance.
+
+Then STOP.
+
+Do not click content diagnosis yet.
+
+Return to MASTER with:
+- raw transcript;
+- corrected transcript, or “no correction needed”;
+- whether original audio saved;
+- whether replay completed normally;
+- any critical ASR uncertainty;
+- screenshot if useful.
+
+MASTER will then decide whether the remaining one content-diagnosis call may proceed.
+
+## 7. Stop rules
+
+Stop immediately with no retry for:
+- Tutor/provider failure;
+- ASR/provider failure;
+- missing/corrupt original audio;
+- replay failure;
+- critical transcript uncertainty;
+- unexpected extra provider call;
+- ledger/budget error;
+- source/attempt/version identity problem.
+
+Do not perform Repair/Apply or a second recording.
+
+## 8. Codex state
+
+ACTIVE_EXCHANGE is WAITING_OWNER.
+
+Do not nudge Codex during this manual checkpoint.
