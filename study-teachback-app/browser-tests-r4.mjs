@@ -298,6 +298,15 @@ try{
     await evaluate(`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认并保存过程证据').click()`);await until(`document.getElementById('notice').textContent.includes('本机保存')`);assert.equal((await evaluate(all))[0].attempts[0].reports.length,2);assert.equal(calls.length,before);
     await reloadPage();await until(`!document.getElementById('workspace').hidden`);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);assert.equal(await evaluate(`document.querySelectorAll('.processObservation').length`),1);assert.equal(calls.length,before);
   });
+  await check('short-gap candidate replays and saves locally without a semantic call',async()=>{
+    const before=calls.length;
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=(await db.all())[0];t.attempts[0].observation.events.push({id:'cluster-test',type:'short_pause_cluster_candidate',start:1,end:2.2});await db.put(t);db.close();})()`);
+    await reloadPage();await until(`!document.getElementById('workspace').hidden`);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+    await evaluate(`window.testClusterRow=[...document.querySelectorAll('#observations button')].find(b=>b.textContent.includes('短间隔聚集')).parentElement;window.testClusterRow.querySelector('button').click()`);await until(`window.testClusterRow.querySelector('button').textContent.includes('✓')`);
+    await evaluate(`window.testClusterRow.querySelector('button:last-child').click()`);await until(`document.getElementById('processFeedback').textContent.includes('短低能量间隔聚集')`);
+    assert.equal(calls.length,before);assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding').length`),0);
+    const a=(await evaluate(all))[0].attempts[0];assert(a.reports.some(r=>r.channel==='process'&&r.processEvidence.some(e=>e.type==='short_pause_cluster'&&e.confirmation==='human_confirmed')));
+  });
   await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(join(root,'browser-real-asr.png'),Buffer.from(r.data,'base64')));
   await check('stale history navigation blocked and pending delete-all prevents late restoration',async()=>{
     await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'other-topic',createdAt:Date.now(),source:{id:'other-source',title:'不得切入',text:'工程材料'},goals:[],messages:[],attempts:[],mode:'learn'});db.close();})()`);

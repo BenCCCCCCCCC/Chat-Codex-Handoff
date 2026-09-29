@@ -11,7 +11,7 @@ export function contentFindings(report, source, attempt) {
 }
 
 const processKeys = ['id','type','attemptId','transcriptVersion','start','end','spanId','quote','origin','confirmation','eventId'];
-const processTypes = ['near_silence','restart','self_repair','repetition','coarse_segment'];
+const processTypes = ['near_silence','short_pause_cluster','restart','self_repair','repetition','coarse_segment'];
 export function processEvidence(values, attempt, events = []) {
   const a = attemptValue(attempt);
   requireValue(Array.isArray(values) && values.length <= 150, 'INVALID_PROCESS_EVIDENCE');
@@ -32,7 +32,7 @@ export function processEvidence(values, attempt, events = []) {
     requireValue(e.quote === null || span && typeof e.quote === 'string' && e.quote.trim() && span.text.includes(e.quote), 'INVALID_PROCESS_QUOTE');
     if(e.origin === 'local_detector') {
       const event = events.find(event => event.id === e.eventId);
-      requireValue(e.type === 'near_silence' && event?.type === 'near_silence_candidate' && e.start === event.start && e.end === event.end, 'INVALID_PROCESS_EVENT');
+      requireValue((e.type === 'near_silence' && event?.type === 'near_silence_candidate' || e.type === 'short_pause_cluster' && event?.type === 'short_pause_cluster_candidate') && e.start === event.start && e.end === event.end, 'INVALID_PROCESS_EVENT');
       requireValue(e.confirmation !== 'human_confirmed' || event.heard === true && a.reviewed && !a.interrupted, 'PROCESS_REVIEW_REQUIRED');
     }
     return {...e};
@@ -42,7 +42,7 @@ export function processEvidence(values, attempt, events = []) {
 export function confirmLocalProcess(attempt, event, events) {
   requireValue(event?.heard === true, 'NOT_HEARD');
   requireValue(attempt.reviewed && !attempt.interrupted, 'ASR_REVIEW_REQUIRED');
-  const value = {id:`process:${attempt.id}:${attempt.transcriptVersion}:${event.id}`,type:'near_silence',attemptId:attempt.id,transcriptVersion:attempt.transcriptVersion,
+  const value = {id:`process:${attempt.id}:${attempt.transcriptVersion}:${event.id}`,type:event.type==='short_pause_cluster_candidate'?'short_pause_cluster':'near_silence',attemptId:attempt.id,transcriptVersion:attempt.transcriptVersion,
     start:event.start,end:event.end,spanId:null,quote:null,origin:'local_detector',confirmation:'human_confirmed',eventId:event.id};
   return processEvidence([value], attempt, events)[0];
 }

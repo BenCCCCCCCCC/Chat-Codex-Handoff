@@ -120,12 +120,28 @@ export function observations(channels, sampleRate, interrupted = false) {
   if(interrupted)return {...result,reason:'CAPTURE_INTERRUPTED'};
   if(rms<0.008 || zero/pcm.length>0.995)return {...result,reason:'NEAR_SILENT'};
   if(clipping>0.01)return {...result,reason:'CLIPPING'};
-  let start=null; const size=Math.max(1,Math.round(sampleRate*.02));
+  let start=null; const size=Math.max(1,Math.round(sampleRate*.02)), gaps=[];
   for(let i=0;i<=pcm.length;i+=size) {
     let power=0; const end=Math.min(i+size,pcm.length); for(let j=i;j<end;j++)power+=pcm[j]*pcm[j];
     const quiet=i<pcm.length && Math.sqrt(power/Math.max(1,end-i))<0.008;
     if(quiet && start===null) start=i/sampleRate;
-    if(!quiet && start!==null) { const stop=Math.min(i/sampleRate,duration); if(start>0.1 && stop<duration-.1 && stop-start>=.7) result.events.push({id:`e${result.events.length}`,type:'near_silence_candidate',start,end:stop}); start=null; }
+    if(!quiet && start!==null) { const stop=Math.min(i/sampleRate,duration); if(start>0.1 && stop<duration-.1){gaps.push({start,end:stop});if(stop-start>=.7) result.events.push({id:`e${result.events.length}`,type:'near_silence_candidate',start,end:stop});} start=null; }
+  }
+  // Conservative, unvalidated timing candidate, NOT lexical filler/hesitation detection.
+  // >=3 substantial short gaps in <=2s, >=0.6s low energy and >=0.3s activity.
+  // Tiny syllable gaps alone cannot qualify; long silences break a cluster.
+  for(let i=0;i<gaps.length&&result.events.filter(e=>e.type==='short_pause_cluster_candidate').length<8;i++){
+    const firstLength=gaps[i].end-gaps[i].start;if(firstLength<.12-1e-9||firstLength>.5+1e-9)continue;
+    let low=0,substantial=0,count=0;
+    for(let j=i;j<gaps.length;j++){
+      const g=gaps[j],length=g.end-g.start,span=g.end-gaps[i].start;
+      if(length>=.7||span>2)break;
+      low+=length;
+      if(length>=.12-1e-9&&length<=.5+1e-9){count++;substantial+=length;}
+      if(count>=3&&substantial>=.6-1e-9&&span-low>=.3-1e-9&&span>=.8){
+        result.events.push({id:`e${result.events.length}`,type:'short_pause_cluster_candidate',start:gaps[i].start,end:g.end});i=j;break;
+      }
+    }
   }
   // No reliable VAD: these events may be background/noise. Require human replay confirmation before interpretation.
   return result;

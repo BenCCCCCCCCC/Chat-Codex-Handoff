@@ -207,7 +207,13 @@ function renderAttempt(){
     renderProcess(a);
   }
   const events=a.observation?.events??[];
-  if(events.length&&a.raw){$('observations').append(el('p','以下仅是本地近静音候选，不代表不理解。完整回听后可确认保存；不会为此调用模型。','muted'));events.slice(0,8).forEach(event=>{const row=el('div'),b=button(`回听候选 ${event.start.toFixed(1)}–${event.end.toFixed(1)} 秒`,()=>play(Math.max(0,event.start-.5),Math.min(a.duration,event.end+.5),()=>{event.heard=true;b.textContent='候选已回听 ✓';}));const c=button('确认并保存过程证据',()=>confirmProcess(a,event));row.append(b,c);$('observations').append(row);});}
+  // Keep the eight-row limit without starving either detector type. Preserve IDs
+  // and stored order; reserve up to four per type, then fill spare rows by time.
+  const ordered=events.slice().sort((x,y)=>x.start-y.start);
+  const visible=['near_silence_candidate','short_pause_cluster_candidate'].flatMap(type=>ordered.filter(e=>e.type===type).slice(0,4));
+  for(const event of ordered)if(visible.length<8&&!visible.includes(event))visible.push(event);
+  visible.sort((x,y)=>x.start-y.start);
+  if(events.length&&a.raw){$('observations').append(el('p',`以下是本地低能量间隔候选，不能识别“额/嗯”，也不代表不理解。回听并核对转写后可确认保存；不会为此调用模型。显示 ${visible.length} / ${events.length} 条候选。`,'muted'));visible.forEach(event=>{const row=el('div'),b=button(`回听候选（${event.type==='short_pause_cluster_candidate'?'短间隔聚集':'近静音'}） ${event.start.toFixed(1)}–${event.end.toFixed(1)} 秒`,()=>play(Math.max(0,event.start-.5),Math.min(a.duration,event.end+.5),()=>{event.heard=true;b.textContent='候选已回听 ✓';}));const c=button('确认并保存过程证据',()=>confirmProcess(a,event));row.append(b,c);$('observations').append(row);});}
 }
 function processFor(a){return a.reports.filter(r=>r.channel==='process'&&r.transcriptVersion===latest(a).id).flatMap(r=>r.processEvidence);}
 async function confirmProcess(a,event){
@@ -220,7 +226,7 @@ async function confirmProcess(a,event){
 }
 function renderProcess(a){
   let evidence;try{evidence=processEvidence(processFor(a),attemptRequest(a),a.observation?.events??[]);}catch{ $('processFeedback').append(el('p','过程证据引用无法核对，未用于定位。','muted'));return; }
-  const labels={near_silence:'近静音',restart:'重新起句',self_repair:'明确自我修正',repetition:'重复',coarse_segment:'粗粒度分段'};
+  const labels={near_silence:'近静音',short_pause_cluster:'短低能量间隔聚集',restart:'重新起句',self_repair:'明确自我修正',repetition:'重复',coarse_segment:'粗粒度分段'};
   for(const e of evidence){
     const card=el('article',undefined,'processObservation');card.dataset.evidenceId=e.id;
     card.append(el('strong',labels[e.type]),el('p',e.origin==='fixture'?'预标注示例，不代表已有检测器。':e.confirmation==='human_confirmed'?'本地候选，已回听确认。':'本地候选，尚未确认。'),el('p','这是讲解过程观察，不是知识判断。','muted'));
@@ -243,7 +249,7 @@ async function diagnose(a){
   const channel='content',events=[],request=attemptRequest(a);notice('正在核对内容和逻辑……');
   const result=await api('/api/diagnose',{source:a.source,attempt:request,channel,events});
   if(deleted.has(a.id)||!topic||deleted.has(topic.id))return;
-  validateFindings(result.value,a.source,request,channel,events);a.reports.push({...result.value,channel,createdAt:Date.now()});a.status='DIAGNOSED';await save();renderAttempt();notice('反馈已与本次来源、转写版本和原声关联。可以继续学，也可以再讲。');
+  validateFindings(result.value,a.source,request,channel,events);a.reports.push({...result.value,channel,createdAt:Date.now()});a.status='DIAGNOSED';await save();renderAttempt();notice('内容反馈已关联原声。过程候选需另行回听确认，确认后会在本机核对同段关联，不调用模型。');
 }
 function renderFeedback(report){
   if(report.channel!=='content')return;
