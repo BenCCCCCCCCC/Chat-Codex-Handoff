@@ -1,37 +1,50 @@
 # ACTIVE_EXCHANGE
 
-state: WAITING_OWNER
-turn_id: REPLAY-REVIEW-UX-01-HOST-VERIFY
-task: REPLAY-REVIEW-UX-01
+state: CHAT_TO_CODEX
+turn_id: REPLAY-REVIEW-UX-01-FINALIZE
+task: REPLAY-REVIEW-UX-01-FINALIZE
 writer: CHAT_MASTER
 transport_only: true
 accepted_base_head: bdd0635597006881d6f8f7213122ae53ccbc99a9
 
-## Current state
+## Host evidence
 
-Codex/Astra implemented REPLAY-REVIEW-UX-01 locally and left changes uncommitted.
+Owner host browser validation PASSed outside Codex sandbox for the current uncommitted REPLAY-REVIEW-UX-01 bytes.
 
-Evidence:
-- focused 36/36 PASS
-- full Node/offline 151/151 PASS
-- browser syntax PASS
-- git diff --check PASS
-- zero live API / ASR / recordings
-- production ledger unchanged
+Owner screenshot confirms:
+- all visible browser cases PASS
+- wrapper exit 0
+- error null
+- production ledger before/after identical
+- unchanged=true
 
-Codex browser attempt was environment-blocked before application cases.
+## Finalization instruction
 
-## Owner action
+Read latest CURRENT_STATE.md and HANDOFF.md first.
 
-Run outside Codex in normal Windows PowerShell:
+Then:
+1. inspect the fresh host artifact/receipt directly;
+2. confirm exact browser case count and 0 failures;
+3. confirm sourceSHA256 binding to the current worktree;
+4. confirm no source/test drift after the host run;
+5. perform project-aware final self-review of REPLAY-REVIEW-UX-01;
+6. run git diff --check;
+7. if no further source/test edits are needed, stage only the six authorized task files and create one focused local commit;
+8. no product push/merge;
+9. write full CODEX_TO_CHAT back to this remote ACTIVE_EXCHANGE and verify readback/sole meta path.
 
-node .\study-teachback-app\run-offline-tests.mjs browser replay-review-ux-01
+Expected files:
+- study-teachback-app/app.mjs
+- study-teachback-app/core.mjs
+- study-teachback-app/index.html
+- study-teachback-app/correctness-boundaries.test.mjs
+- study-teachback-app/browser-tests-r4.mjs
+- study-teachback-app/run-offline-tests.mjs
 
-Run from:
-F:\Chat-Codex-Handoff\validation-repo
+Critical:
+if any source/test edit is needed after this host PASS, do not commit with stale evidence; return NEEDS_HOST_REVERIFY.
 
-Do not execute Codex work while state is WAITING_OWNER.
-
-Do not make live provider calls.
-
-After owner reports PASS/FAIL, MASTER decides the next exchange turn.
+No live provider/API.
+No recording.
+No ASR.
+No diagnosis.
