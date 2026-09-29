@@ -147,26 +147,22 @@ Codex browser result:
 - therefore NOT a browser PASS.
 
 Current result:
-**NEEDS_HOST_VERIFY**
+**HOST PASS / FINALIZATION PENDING**
 
-## 7. Next mandatory gate
+## 7. Current gate
 
-Owner must run from normal Windows PowerShell:
+Owner host browser validation has PASSed outside Codex sandbox for the current uncommitted REPLAY-REVIEW-UX-01 bytes.
 
-```powershell
-Set-Location F:\Chat-Codex-Handoff\validation-repo
-node .\study-teachback-app\run-offline-tests.mjs browser replay-review-ux-01
-```
+Owner screenshot confirms:
+- all visible browser cases PASS;
+- wrapper exit 0;
+- error null;
+- production ledger before/after identical;
+- unchanged=true.
 
-Expected full browser suite:
-- 52 cases total (prior 51 + new history-confirmation UX case), exact count must be read from the fresh receipt rather than assumed.
+Exact total browser case count and sourceSHA256 binding must be read from the fresh receipt by Astra before commit.
 
-If host PASS:
-- MASTER dispatches final project-aware self-review;
-- if no post-host source/test drift, Astra creates one focused local commit;
-- if Astra edits product/test source after the host run, return NEEDS_HOST_REVERIFY.
-
-Do not run any live provider call while doing this gate.
+Next: final project-aware self-review and focused local commit only if there is no post-host source/test drift. Any post-host source/test edit requires fresh host reverify.
 
 ## 8. Codex/Astra operating model
 
@@ -215,7 +211,7 @@ Likely:
 - optional replay UX is the correct owner direction and is internally coherent.
 
 Unknown:
-- fresh host browser behavior of REPLAY-REVIEW-UX-01;
+- exact fresh host browser case count/source-hash binding until Astra reads the receipt;
 - natural-speech detector sensitivity/specificity at scale;
 - long-term usefulness across courses/users;
 - final retention policy;
@@ -223,4 +219,4 @@ Unknown:
 
 ## 11. Next smallest experiment
 
-Run the single host browser command for `replay-review-ux-01`, return PASS/FAIL receipt to MASTER, then finalize the local commit if unchanged.
+Astra reads the fresh host receipt/source hashes, performs final project-aware self-review, and creates one focused local commit if unchanged. No live provider calls.
