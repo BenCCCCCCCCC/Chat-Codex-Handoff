@@ -1,201 +1,67 @@
-# Active Handoff — CORRECTNESS-BOUNDARIES-01 / Batch C
+# Active Handoff — BATCH-C-HOST-BROWSER-VERIFY-01
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: **DISPATCHED THROUGH ACTIVE_EXCHANGE / ZERO LIVE API / BOUNDED CORRECTION**
+Status: WAITING_OWNER / OUTSIDE CODEX SANDBOX / ZERO LIVE API
 
-## 1. Binding
+## 1. Why this step is manual
 
-Repository:
-`BenCCCCCCCCC/Chat-Codex-Handoff`
+Batch C focused tests and the complete isolated Node/offline suite passed.
 
-Local checkout:
-`F:\Chat-Codex-Handoff\validation-repo`
+The only missing evidence is browser execution of the MF-02 repeated-confirm case.
 
-Product branch:
-`prototype/study-teachback-v0.1`
+Codex cannot provide trustworthy Edge browser evidence in its current Windows sandbox; the owner has already demonstrated that normal Edge works outside that sandbox.
 
-Expected base HEAD:
-`dd8317b43100b8cbaad684cab7fc02957e32de62`
+## 2. Binding
 
-Canonical authority:
-- `meta/master-state/docs/master/CURRENT_STATE.md`
-- `meta/master-state/docs/master/HANDOFF.md`
+Repo:
+F:\Chat-Codex-Handoff\validation-repo
 
-Transport:
-- `meta/master-state/docs/master/ACTIVE_EXCHANGE.md`
+Branch:
+prototype/study-teachback-v0.1
 
-Before editing:
-- verify repo/branch/HEAD;
-- tracked worktree must be CLEAN;
-- preserve unrelated untracked artifacts;
-- if identity/tracked state differs, STOP; do not reset/fetch/pull/rebase.
+Base HEAD remains:
+dd8317b43100b8cbaad684cab7fc02957e32de62
 
-## 2. Task
+Batch C changes are currently uncommitted. Do not reset/clean/checkout.
 
-**Task ID: CORRECTNESS-BOUNDARIES-01 / Batch C.**
+## 3. Owner command
 
-Fix only MF-01, MF-02 and MF-03 from PROJECT-WIDE-REVIEW-01.
+Run from a normal Windows PowerShell, not a Codex terminal:
 
-This is a correctness batch, not a refactor or feature batch.
+Set-Location F:\Chat-Codex-Handoff\validation-repo
+node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01-host
 
-Zero live product/provider API calls.
+## 4. Report to MASTER
 
-No physical microphone or Phase3B.
+Return only:
+- PASS or FAIL;
+- final pass/fail count;
+- exact error if it fails.
 
-## 3. C0 — safe baseline / isolation
+Long logs are not needed unless MASTER asks.
 
-Use the accepted existing offline isolation:
-- fake/stub providers;
-- isolated test ledger;
-- no usable persistent provider credentials in test subprocesses;
-- outbound provider/network guard where already available.
+## 5. After PASS
 
-Inspect affected code/tests first.
+MASTER will send a new CHAT_TO_CODEX turn authorizing Codex to:
+- inspect the host browser result/artifact;
+- self-review the Batch C diff;
+- run only any final deterministic zero-call sanity check it deems necessary;
+- create one focused local Batch C commit if evidence is complete;
+- return via ACTIVE_EXCHANGE.
 
-Run only safe applicable baseline/focused tests necessary to establish behavior.
+## 6. After FAIL
 
-Historical counts are context, not fresh evidence.
+MASTER will classify the failure.
 
-## 4. C1 — MF-01 Tutor/history contract
+If it is an in-scope Batch C product/test defect, Codex may receive a correction turn and use the bounded self-review/self-correction loop.
 
-First reproduce with fake provider if practical:
-- accepted Tutor output boundary 2500 / 2501 / 4000;
-- store accepted assistant output;
-- send a subsequent normal owner message;
-- demonstrate current failure for an output accepted by `validateTeaching` but rejected as history.
+If it is host/environment-only, do not edit product code speculatively.
 
-Fix with the smallest explicit contract change.
+## 7. Proactive Codex rule
 
-Required properties:
-- any Tutor output accepted and persisted by current product can be represented safely in the next Tutor request history;
-- no silent provenance rewrite;
-- no arbitrary hidden truncation that changes meaning without explicit contract;
-- input-size budget remains bounded;
-- current normal shorter messages unaffected.
+For future authorized tasks Codex/Astra may analyze, recommend, self-review, test and perform up to two in-scope correction passes without returning for every small defect.
 
-If choosing a lower unified output ceiling, make the acceptance contract consistent at generation/runtime/UI and add boundary tests.
-If choosing history handling, preserve deterministic bounded request size and message identity/meaning.
+It must stop for scope expansion, product tradeoffs, unapproved spend/live actions, new dependency/model/schema/retention changes, push/merge/public release/high-risk actions, or repeated unresolved blockers.
 
-Do not change model/provider/pricing/caps.
-
-## 5. C2 — MF-02 content-confirm concurrency
-
-Reproduce with delayed fake diagnosis:
-- one content confirm begins;
-- before first diagnosis settles, trigger confirm again;
-- verify pre-fix version/request/report inconsistency.
-
-Fix by making the entire confirm -> correction version creation/save -> diagnosis dispatch operation mutually exclusive **before any mutation**.
-
-Required:
-- a repeated confirm while pending creates no new correction version;
-- only one diagnosis dispatch;
-- first result remains associated with the current version and visible;
-- busy feedback/state is clear enough to avoid silent no-op ambiguity;
-- edited transcript after pending finishes can create the next legitimate version;
-- existing raw/corrected provenance and replay gate remain unchanged.
-
-Do not solve by weakening latest-version validation.
-
-## 6. C3 — MF-03 /api/status ledger error boundary
-
-Use isolated fake/corrupt/unreadable ledger conditions only.
-
-Reproduce a status summary/read failure without touching production ledger.
-
-Fix so:
-- `GET /api/status` returns a controlled fail-closed response/status;
-- server process/request loop remains alive;
-- provider work remains unavailable when budget state is unreadable/unknown;
-- no ledger reset;
-- no reservation release;
-- no fabricated zero-usage summary;
-- normal healthy status remains unchanged.
-
-Do not change ledger schema/caps/pricing.
-
-## 7. C4 — regression
-
-Required focused coverage:
-- MF-01 boundary accepted-output -> next-turn history;
-- MF-02 delayed-provider double confirm;
-- MF-03 status ledger failure plus subsequent server availability.
-
-Also run relevant existing:
-- Node/offline suite;
-- provenance/correctness tests;
-- applicable browser stub suite if the MF-02/UI behavior is browser-level and safe under existing isolation.
-
-No real browser owner profile, no live provider.
-
-If headless media flake unrelated to these paths appears, classify separately per current canonical strategy; do not edit replay code.
-
-Run `git diff --check`.
-
-## 8. Scope protection
-
-Do not implement:
-- portable synthetic WAV packaging;
-- atomic ledger rewrite/recovery;
-- retention changes;
-- legacy helper cleanup;
-- ASR/model migration;
-- broad `app.mjs` refactor;
-- exchange workflow changes;
-- Phase3B.
-
-No new dependency.
-
-No push/merge/reset/clean/rebase/amend.
-
-One focused local Batch C commit is permitted only if required tests pass and the diff is bounded.
-
-## 9. Delivery / exchange return
-
-At completion, update only:
-`meta/master-state/docs/master/ACTIVE_EXCHANGE.md`
-with `CODEX_TO_CHAT` for the same turn.
-
-Include:
-- canonical/exchange versions read;
-- base/final HEAD and commit status;
-- exact changed files;
-- reproduction evidence for MF-01/02/03;
-- fix summary;
-- focused + regression commands/results;
-- zero-live-call evidence;
-- `diff --check`;
-- Tests Not Run;
-- Unknown;
-- Blocking;
-- User Decision Needed;
-- Future Optional;
-- confirmation no product push/merge and no Phase3B.
-
-Do not change CURRENT_STATE.md or HANDOFF.md.
-
-Use optimistic concurrency on ACTIVE_EXCHANGE and stop on conflict.
-
-## 10. Stop conditions
-
-STOP if:
-- accepted base/worktree differs;
-- safe zero-live-call isolation cannot be established;
-- a fix requires provider/model/storage schema/retention/cap change;
-- unrelated work would be overwritten;
-- live provider/user data might be touched;
-- scope expands beyond MF-01/02/03.
-
-## 11. Classification
-
-Authorized:
-- bounded correction of MF-01/02/03;
-- isolated zero-call regression;
-- one focused local commit after passing evidence;
-- one ACTIVE_EXCHANGE reply write.
-
-Not Authorized:
-- other suggestions from PROJECT-WIDE-REVIEW-01;
-- live Phase3B;
-- product push/merge.
+MASTER/GPT-5.6 remains the independent scope and acceptance gate.
