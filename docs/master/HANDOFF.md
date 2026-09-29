@@ -112,3 +112,38 @@ During browser regression an audible Chinese phrase about moist soil/watering ma
 Stop rules: provider/ASR/audio/replay/ledger/version errors -> STOP with no retry.
 No Repair/Apply.
 No second recording.
+
+## Verify accepted local baseline before Phase 3B
+
+Before starting the local server, verify the local checkout is exactly the accepted baseline.
+
+Normal Windows PowerShell:
+
+```powershell
+git -C F:\Chat-Codex-Handoff\validation-repo rev-parse HEAD
+git -C F:\Chat-Codex-Handoff\validation-repo status --short
+```
+
+Expected HEAD:
+
+```text
+ac875a100b159781037746ea0b8bd2188457d13a
+```
+
+Expected tracked status: no tracked modifications.
+
+If HEAD differs, STOP and report to MASTER; do not reset/pull/fetch/rebase automatically.
+
+If HEAD matches:
+1. stop any old server with Ctrl+C;
+2. start a fresh server from the accepted checkout;
+3. close the old isolated Edge window;
+4. relaunch the isolated Edge profile or perform a hard refresh;
+5. then begin the owner Phase 3B flow.
+
+Server command:
+
+```powershell
+Set-Location F:\Chat-Codex-Handoff\validation-repo
+node .\study-teachback-app\server.mjs
+```
