@@ -281,3 +281,68 @@ Not authorized:
 Owner runs the single host-side browser regression command outside Codex sandbox and reports PASS/FAIL to MASTER.
 
 Do not nudge Codex while ACTIVE_EXCHANGE is WAITING_OWNER.
+
+
+## 11. Batch C review result — 2026-09-29
+
+Codex returned CORRECTNESS-BOUNDARIES-01 with:
+- focused correctness-boundaries suite: 11/11 PASS;
+- full isolated Node/offline suite: 114/114 PASS;
+- git diff --check: PASS;
+- provider/API calls: 0;
+- microphone: 0;
+- Phase3B actions: 0;
+- no local Batch C commit yet.
+
+MF-01, MF-02 and MF-03 were reproduced in isolated tests and minimally corrected.
+
+The only missing evidence is browser execution of the MF-02 delayed-diagnosis / repeated-confirm case. The browser suite did not reach any functional case because Edge/CDP failed at startup inside the known Codex Windows sandbox environment.
+
+MASTER status:
+- MF-01: PASS at focused/offline scope.
+- MF-02: PASS at VM/offline scope; host browser validation still required.
+- MF-03: PASS at focused/offline scope.
+- Batch C overall: PENDING HOST BROWSER VALIDATION / NOT COMMITTED.
+
+Next manual command from a normal owner PowerShell, outside Codex:
+
+node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01-host
+
+Do not run this browser step from Codex.
+
+## 12. Operating model — proactive Codex/Astra self-review
+
+Owner authorizes a more proactive Codex role inside explicitly approved task scope.
+
+Within an authorized task Codex may:
+- inspect relevant project context;
+- recommend the smallest approach;
+- identify edge cases;
+- implement;
+- run tests;
+- review its own diff;
+- fix defects clearly inside the same approved scope;
+- return additional recommendations separately.
+
+Codex may perform up to two in-scope self-correction passes after initial implementation without returning to MASTER for every small defect.
+
+Codex must stop for MASTER/owner when:
+- scope must expand;
+- a product tradeoff is required;
+- unapproved spending/live calls are needed;
+- a new dependency/framework/model/provider/storage-schema/retention policy is needed;
+- push/merge/public release/high-risk/data-loss action is needed;
+- the same blocker remains after bounded self-correction;
+- the next change would be speculative.
+
+Codex recommendations do not automatically become implementation scope.
+
+MASTER / GPT-5.6 remains responsible for:
+- scope and phase gates;
+- owner decisions;
+- external freshness checks;
+- independent review;
+- Must Fix / User Decision / Future Optional classification;
+- final acceptance.
+
+This operating model intentionally uses model diversity: Codex/Astra can analyze and self-check independently, while MASTER/GPT-5.6 remains the acceptance and scope-control layer.
