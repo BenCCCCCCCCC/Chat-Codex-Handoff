@@ -381,3 +381,39 @@ PHASE3B-LIVE-01 remains authorized and fully unused:
 The real owner flow may now resume from a fresh product session using accepted HEAD `ac875a100...`.
 
 Because the local product baseline changed since the last manual session, owner should restart the local server and reload/reopen the isolated Edge session before live testing.
+
+
+## PHASE3B real-speech observation — process evidence gap candidate
+
+Owner reached the real replay/transcript checkpoint with one ~22 second Mandarin recording.
+
+Visible ASR segments in the owner screenshot:
+- 3.8–9.1s
+- 9.4–15.0s
+- 16.6–19.1s
+- 19.1–21.3s
+
+Owner reports that natural hesitation/filler speech such as “额……” and pauses were present in the actual recording but are not represented in the visible transcript text.
+
+The UI currently shows:
+`UNVALIDATED_ACTIVITY · 仅候选观测，非流利度评分`
+
+This is a valuable Phase3B finding.
+
+Interpretation:
+- semantic ASR text must not be treated as a verbatim record of discourse fillers/process behavior;
+- fillers/pauses should remain a separate process-evidence channel grounded in audio/timing, not manually reconstructed into content transcript;
+- transcript correction should remain for meaning-affecting ASR errors, not for manually manufacturing process evidence.
+
+Do not spend the remaining content-diagnosis call yet.
+
+Before deciding whether this is an implementation gap, owner should:
+1. expand the raw transcript and verify whether fillers are absent there too;
+2. replay the full audio around the visible timing gaps, especially 0–3.8s and 15.0–16.6s;
+3. confirm where hesitation/filler actually occurred;
+4. do not edit “额/嗯” into the corrected transcript merely to make process evidence visible.
+
+Current candidate finding:
+`PROCESS-EVIDENCE-LIVE-GAP-01`.
+
+No diagnosis call is authorized until MASTER classifies this live process-evidence behavior.
