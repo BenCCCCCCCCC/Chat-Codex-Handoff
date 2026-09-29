@@ -41,3 +41,17 @@ Use exactly:
 `node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01`
 
 Remain in WAITING_OWNER until MASTER receives the real PASS/FAIL result.
+
+
+## Owner host browser run started
+
+Owner executed the corrected command successfully from normal Windows PowerShell:
+
+node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01
+
+The runner accepted the batch and created output under:
+artifacts/study-teachback/correctness-boundaries-01/browser-1790650146813-0XtnC0
+
+No PASS/FAIL result has been reported yet.
+
+Remain in WAITING_OWNER. Do not execute Codex work until MASTER receives the final host-browser result.
