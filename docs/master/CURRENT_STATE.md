@@ -315,34 +315,40 @@ If there is a meaningful diagnostic/safety gap:
 
 ## 11. Current state
 
-**NATIVE-COLLISION-PROBE-01 APPROVED / PREP DISPATCHED**
+**MASTER_HOLD — NATIVE-COLLISION-PROBE-01 RECONCILIATION REQUIRED**
 
-Owner decisions resolved:
-- typical source-set scope should support both topic/week and multi-week/module workflows depending on the learner; whole-course/semester is not the default Phase 4 target;
-- all source conflicts should be surfaced;
-- diagnosis-relevant conflicts are blocking for the affected diagnosis/priority until user arbitration;
-- irrelevant conflicts remain visible but non-blocking;
-- inferred source roles should not require a blocking up-front confirmation; show them compactly/expandably and ask explicitly when a role changes conflict/priority handling.
+`NATIVE-COLLISION-PROBE-01-PREP` recovered the exact local evidence successfully, but the baseline is not yet frozen.
 
-Current task:
-`NATIVE-COLLISION-PROBE-01-PREP`
+Verified PREP facts:
+- accepted local HEAD remained `20be403f7bb736ab0cde2758af7306a00c2290db`;
+- tracked worktree clean;
+- no product/source/test/documentation changes;
+- no product commit/push/merge;
+- live provider / recording / ASR / diagnosis calls this turn = 0;
+- exact stored source, raw ASR text/spans, confirmed transcript and structured content reports were recovered from preserved local artifacts;
+- source/export/log bindings and hashes were recovered;
+- full verbatim evidence was not transported to GitHub because repository disclosure approval was not established.
 
-This task is read-only evidence preparation, not product implementation.
+Blocking discrepancy:
+- canonical Phase 3B history says one content-diagnosis call;
+- preserved local record contains two distinct content reports for two confirmed versions about 100 seconds apart;
+- production ledger contains two temporally associated settled semantic requests;
+- request-to-attempt binding is temporal rather than direct;
+- MASTER must not label the second event a retry or select a baseline report without owner-history reconciliation.
 
-## 12. Probe preparation acceptance
+Therefore:
+- do not run the native baseline yet;
+- do not freeze the scoring sheet against either report yet;
+- do not change the historical call count yet;
+- ask the owner to reconcile what actually happened during Phase 3B.
 
-Codex/Astra must return:
-- exact local repo / branch / HEAD / tracked status;
-- exact preserved Phase 3B source artifact identity;
-- exact confirmed learner transcript/explanation text used for diagnosis;
-- exact accepted content diagnosis/result text or structured payload used for the Phase 3B decision;
-- paths/receipt IDs/hashes that bind those artifacts;
-- clear distinction between raw ASR transcript and user-confirmed/corrected transcript if both exist;
-- no reconstruction from summaries;
-- no source/test/product changes;
-- live provider calls / recording / ASR / diagnosis = 0;
-- no product commit/push/merge.
+## 12. Next smallest step
 
-If the exact transcript/result cannot be recovered, return BLOCKED with the missing artifact/path rather than inventing it.
+Owner-history reconciliation only.
 
-After PREP returns, MASTER will freeze the native-baseline prompt and scoring sheet before the user runs the Study-mode comparison.
+Need to determine:
+1. whether the owner intentionally triggered content diagnosis once or more than once;
+2. whether the learner transcript was edited/reconfirmed between the two stored report versions;
+3. which result, if any, was the one the owner actually reviewed/accepted during Phase 3B.
+
+If owner memory is insufficient, the next allowed step is another read-only local evidence comparison that reports non-sensitive structural differences between report/version 1 and report/version 2. No live calls or product changes.

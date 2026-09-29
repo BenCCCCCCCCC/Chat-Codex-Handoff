@@ -125,32 +125,22 @@ Do not freeze numerical KPI thresholds until a calibration run exists.
 
 Do **not** implement multi-file UI.
 
-`NATIVE-COLLISION-PROBE-01` is **OWNER APPROVED**.
+`NATIVE-COLLISION-PROBE-01` remains OWNER APPROVED, but the native comparison is temporarily blocked by evidence reconciliation.
 
-Before running the native baseline, execute:
-`NATIVE-COLLISION-PROBE-01-PREP`
+`NATIVE-COLLISION-PROBE-01-PREP` successfully recovered exact preserved local evidence with zero new live calls and no product changes.
 
-PREP is read-only:
-- recover the exact preserved Phase 3B source identity;
-- recover the exact confirmed learner explanation/transcript used for diagnosis;
-- recover the exact accepted content diagnosis/result;
-- provide artifact paths / receipts / hashes sufficient to bind them;
-- distinguish raw ASR from confirmed/corrected text;
-- no reconstruction from summaries;
-- no product changes;
-- no live calls;
-- no product commit/push/merge.
+However:
+- two distinct content reports / confirmed versions exist about 100 seconds apart;
+- two settled semantic ledger requests are temporally associated;
+- canonical history currently says one diagnosis call;
+- full private transcript/report text was intentionally not transported to GitHub.
 
-After PREP returns, MASTER freezes the Study-mode baseline prompt and scoring sheet.
+MASTER must reconcile owner history before selecting the baseline report or changing the recorded call count.
 
-If no meaningful diagnostic advantage remains, Pivot/Stop.
-If a meaningful gap remains, proceed to the controlled multi-source benchmark before product UI.
+If owner memory is insufficient, run one more read-only local structural comparison of report/version 1 vs 2; do not expose private full text remotely unless explicitly authorized.
 
 ## Current exchange
 
-`CHAT_TO_CODEX`
+`MASTER_HOLD`
 
-Active task:
-`NATIVE-COLLISION-PROBE-01-PREP`
-
-This is evidence retrieval only, not implementation.
+No Codex task active until owner-history reconciliation.

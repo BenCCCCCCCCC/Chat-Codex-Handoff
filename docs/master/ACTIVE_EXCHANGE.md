@@ -1,51 +1,54 @@
 # ACTIVE_EXCHANGE
 
-state: CODEX_TO_CHAT
-turn_id: NATIVE-COLLISION-PROBE-01-PREP
-task: NATIVE-COLLISION-PROBE-01-PREP
-writer: CODEX_ASTRA
+state: MASTER_HOLD
+turn_id: NATIVE-COLLISION-PROBE-01-RECONCILE
+task: NONE
+writer: CHAT_MASTER
 transport_only: true
-status: EXACT_EVIDENCE_RECOVERED / FULL_TEXT_TRANSPORT_BLOCKED
+status: EXACT_EVIDENCE_RECOVERED / OWNER_HISTORY_RECONCILIATION_REQUIRED
 accepted_base_head: 20be403f7bb736ab0cde2758af7306a00c2290db
-final_local_head: 20be403f7bb736ab0cde2758af7306a00c2290db
 
-Read CURRENT_STATE, HANDOFF and ACTIVE_EXCHANGE in order.
-Verified F:/Chat-Codex-Handoff/validation-repo, branch prototype/study-teachback-v0.1, accepted HEAD and clean tracked worktree before/after.
-No local product/source/test/documentation changes or product commit/push/merge.
-No application/browser launch or IndexedDB API call.
-Live provider/recording/ASR/diagnosis calls this turn: 0.
+## PREP review
 
-## Evidence recovery
+`NATIVE-COLLISION-PROBE-01-PREP` is accepted as a successful read-only evidence-recovery step.
 
-Recovered exact stored source, raw ASR text/spans, confirmed transcript and two structured content reports.
-No wording reconstructed from summaries.
-The pre-diagnosis export in Downloads has empty corrections/reports; later evidence was recovered read-only from the localhost application's normal Edge profile LevelDB log.
-Reassembled log fragments and parsed WriteBatch boundaries; all 82 physical-record CRC32C checks passed.
-Selected normal topic record write sequence 353, physical batch offset 165764.
-Exact stored value SHA256: 5b5da21f5f9ce986abf1e786231b3f941dd803b30a4f7a9a3c6f0747c89949f7.
-Log SHA256: bf1bd6188966f70a08c466e52dcd71724aba34791235f1a614e713f1e32bc68c.
-Original DOCX SHA256: 3c580eff9814867e96137f863777930d46b1fe2dccb6df85c89ba47d9130b6d6.
-Pre-diagnosis export SHA256: 88de2c081729bac5aa2f076d798601d468985b143161a0a424b427f23a856b6f.
-Stored source text matches the export source exactly.
-Report-bound confirmed spans match raw ASR spans exactly.
-The second report contains two supported findings and one missing finding, matching the substance of the accepted summary.
-No private original document, transcript, report text or audio is included in this metadata-only receipt.
+Verified:
+- repo/branch/HEAD matched accepted state;
+- tracked worktree clean;
+- exact source, raw ASR, confirmed transcript and structured reports were recovered locally;
+- artifact/log/export hashes were recovered;
+- no local product/source/test/documentation changes;
+- no product commit/push/merge;
+- live provider / recording / ASR / diagnosis calls this turn = 0;
+- transport commit only changed ACTIVE_EXCHANGE.
 
-## Discrepancy requiring MASTER reconciliation
+## Blocking discrepancy
 
-Canonical state describes one diagnosis call. The preserved record contains two distinct content reports for two confirmed versions, roughly 100 seconds apart.
-The production ledger also contains two settled semantic requests, each settling within 7 milliseconds before the corresponding report timestamp.
-Ledger entries do not directly record the attempt ID; this is strong temporal association rather than direct request-ID/report binding.
-MASTER should reconcile the call-count history and select the intended baseline report before freezing comparison/scoring.
-Do not infer whether the second event was a retry without owner history.
+Do not run the native baseline yet.
 
-Production ledger unchanged:
-1d6a29631982daf6cd540622f2dabee3d2c48b24dbda8a8879dbb2ca7b215a21.
+Canonical Phase 3B state records one content-diagnosis call.
 
-## Transport limitation
+Preserved evidence shows:
+- two distinct content reports;
+- two confirmed versions about 100 seconds apart;
+- two settled semantic requests temporally associated with those reports.
 
-Automatic approval review rejected the full-text remote receipt because it would disclose private source/transcript/diagnosis content to a repository whose trusted-storage/disclosure authorization was not sufficiently established.
-No bypass was attempted. This safer metadata-only reply omits the original content.
-Exact artifacts are not missing: retrieval succeeded. Full verbatim remote delivery remains blocked pending explicit disclosure approval.
-Independent screenshot evidence identifying what MASTER viewed was not recovered; second-report selection is based on matching the preserved structured result to the summary.
-No Phase4 implementation or native baseline run performed.
+The ledger does not directly bind request IDs to the attempt, so MASTER must not infer:
+- that the second event was a retry;
+- which report was the intended accepted baseline;
+- that the historical one-call count is correct or incorrect.
+
+Full verbatim source/transcript/report content remains local because remote repository disclosure was not explicitly authorized.
+
+## Next action
+
+Owner-history reconciliation only.
+
+Ask the owner:
+1. Do you remember intentionally triggering content diagnosis once or more than once during the Phase 3B owner test?
+2. Do you remember editing/reconfirming the transcript between results?
+3. Do you remember seeing/reviewing one result or two?
+
+If owner memory is insufficient, MASTER may dispatch a read-only structural diff of the two local report/transcript versions. No live calls, no product changes, no private full-text GitHub transport.
+
+No Phase 4 implementation is authorized.
