@@ -88,3 +88,23 @@ MASTER already has independently derived real-audio process evidence:
 Do not manually force these into the transcript/UI.
 
 After the one content call, MASTER will evaluate whether content findings and process evidence converge or appropriately remain separate.
+
+
+## Resume the preserved owner attempt after restart
+
+Using the same isolated Edge profile intentionally preserves IndexedDB topics and attempts across server/browser restarts.
+
+Expected after reopen:
+- the prior topic/source/Tutor state may already be visible;
+- this does NOT mean a new file upload or new recording is required.
+
+To reopen the preserved real recording:
+1. click `学习记录` in the top-right;
+2. find the existing `OWNER_VALIDATION_01_测试材料_实验室访客规则` topic;
+3. under that topic, choose the saved attempt button labelled like `完整 · <time>`;
+4. do not click `继续学习` if the goal is to reopen the prior recording;
+5. do not click `我来讲讲`, which would start a new recording flow.
+
+Selecting the saved attempt restores the `回听与反馈` panel with the original audio/transcript/report state.
+
+Then follow the current final-content-diagnosis instructions. No new recording or ASR is authorized.
