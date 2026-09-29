@@ -7,17 +7,15 @@ writer: CHAT_MASTER
 transport_only: true
 accepted_product_head: bdd0635597006881d6f8f7213122ae53ccbc99a9
 
-Owner restored the original real attempt.
+Owner's previous diagnosis click was blocked locally by the replay gate and consumed 0 diagnosis calls.
 
-Current action:
-- do not start a new recording
-- replay all four transcript spans
-- correct only genuine ASR semantic errors
-- do not insert filler words manually
-- click content diagnosis exactly once
-- no retry
-- do not Repair/Apply/re-record afterward
-- return full feedback to MASTER
+Required now:
+- replay all four transcript segments to completion in the current session;
+- confirm each button shows 已完整回听 ✓;
+- correct only genuine meaning-changing ASR errors;
+- do not insert filler/pause text;
+- click content diagnosis exactly once after all four replay gates pass.
 
-Historical process candidate count may remain old; that is expected for the preserved attempt.
-Do not execute Codex work while WAITING_OWNER.
+No new recording.
+No new ASR.
+No Codex work while WAITING_OWNER.
