@@ -1,28 +1,36 @@
 # ACTIVE_EXCHANGE
 
-state: WAITING_OWNER
-turn_id: PHASE3B-LIVE-01-OWNER-CHECKPOINT-V2
-task: PHASE3B-LIVE-01
+state: CHAT_TO_CODEX
+turn_id: FILE-IMPORT-AUTO-USE-01
+task: FILE-IMPORT-AUTO-USE-01
 writer: CHAT_MASTER
 transport_only: true
-accepted_product_head: 89c23a155ac7c32e6357b33144edf93bd9850309
+accepted_base_head: 89c23a155ac7c32e6357b33144edf93bd9850309
 
-SETUP-FLOW-01 is MASTER-ACCEPTED and finalized locally.
+## Instruction
 
-Owner action now happens outside Codex sandbox.
+Execute FILE-IMPORT-AUTO-USE-01 as defined in the latest CURRENT_STATE.md and HANDOFF.md.
 
-Use the actual synthetic DOCX through the file-import path:
-OWNER_VALIDATION_01_测试材料_实验室访客规则.docx
+Owner-observed issue:
+a supported DOCX parsed successfully, but the preview text was not automatically placed into the actual learning source. The user had to discover and click “use all text” before Start/Learn could work.
 
-Do not manually enter a title.
-Leave optional focus/known fields empty for this first live experiment.
+Owner intent:
+uploading a small supported file should be sufficient to make the material ready for learning.
 
-Owner may perform:
-- one clean Learn/Tutor start
-- one 20–45 second natural Mandarin recording
-- exactly one ASR
-- replay/transcript review
+Required:
+- <=5000 extracted characters: auto-populate full source locally after extraction;
+- >5000: no silent truncation or arbitrary chunk; require explicit subsection selection with clear notice;
+- preserve preview and intentional manual subset override;
+- preserve filename title, setupContext provenance and zero extra provider calls.
 
-STOP before content diagnosis and return the checkpoint to MASTER.
+Use Astra autonomy inside scope:
+analyze -> design -> implement -> test -> self-review -> iterate until acceptance or stop condition.
 
-Do not execute Codex work while state is WAITING_OWNER.
+No live provider/API.
+No Phase3B.
+No model/provider/budget/retention/dependency changes.
+No push/merge.
+
+At completion write CODEX_TO_CHAT back to this same remote ACTIVE_EXCHANGE.md and verify the relay write/readback/sole meta path as required by the permanent relay rule.
+
+If browser UI validation cannot run reliably inside Codex sandbox, return NEEDS_HOST_VERIFY without final product commit.
