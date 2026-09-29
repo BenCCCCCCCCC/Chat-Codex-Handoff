@@ -97,11 +97,12 @@ Legacy topics without setupContext receive empty defaults.
 
 ## 4. Phase 3B live authorization
 
-Owner authorization remains valid and fully unused:
+Owner authorization remains valid but is now partially consumed:
 - maximum 3 provider calls total;
 - zero retries;
-- incremental local exposure ceiling US$0.03432;
-- one real recording maximum.
+- one real recording maximum;
+- owner live checkpoint has already used 1 Tutor semantic call and 1 ASR call;
+- the remaining live call is being held for content diagnosis pending MASTER approval.
 
 Known pre-live ledger snapshot remains:
 - 41 reservations;
@@ -113,7 +114,7 @@ Known pre-live ledger snapshot remains:
 - 4 unsettled;
 - SHA `d17af9ec53787e484cd66b8928a80023d7a7a9570372f3fa64aa4c71f7e9c525`.
 
-No live allowance has been consumed by A/B/C/setup-flow work.
+A/B/C/setup-flow engineering work consumed no live allowance. The later owner Phase 3B checkpoint consumed one Tutor call and one ASR call.
 
 ## 5. Phase 3B execution boundary
 
@@ -621,3 +622,49 @@ Before commit, Astra must inspect the host artifact/receipt directly and confirm
 - exact sourceSHA256 set and no source/test drift after the host run.
 
 If any source/test code changes after this host PASS, the browser evidence becomes stale and host re-verification is required.
+
+
+## Codex/Astra project-awareness default
+
+Owner wants Codex/Astra to operate with enough project context to reason independently rather than acting as a narrow command executor.
+
+Default behavior for future authorized turns:
+
+1. Read canonical authority first:
+   - docs/master/CURRENT_STATE.md
+   - docs/master/HANDOFF.md
+   - docs/master/ACTIVE_EXCHANGE.md
+
+2. Establish repository/project context before implementation:
+   - verify repo / branch / HEAD / tracked status;
+   - read root README and active product README/entry documentation as needed;
+   - inspect recent relevant commits/history;
+   - inspect the current task's implementation, tests and adjacent modules.
+
+3. Astra may autonomously expand its **reading/analysis scope** anywhere in the repository when useful to:
+   - test assumptions;
+   - understand upstream/downstream coupling;
+   - identify architecture risks;
+   - find duplicated/conflicting behavior;
+   - discover missing tests or simpler implementation paths;
+   - compare current behavior against the owner's accepted product direction.
+
+4. Reading/analysis scope may be broad; **implementation scope remains bounded by the current MASTER-approved task**.
+
+5. Inside approved implementation scope Astra may:
+   - choose the engineering approach;
+   - refactor touched code when directly necessary;
+   - add/adjust tests/helpers;
+   - iterate through implementation/test/self-review until acceptance or a stop condition.
+
+6. Findings outside approved implementation scope must be returned separately as:
+   - Must Fix candidate
+   - User Decision Needed
+   - Future Optional
+   They are not automatically implemented.
+
+7. Astra should include a concise “Project observations” section when broader exploration discovers something materially relevant.
+
+8. Do not reread every historical artifact mechanically on every turn. Prefer current canonical state + targeted repo exploration; expand only when it helps answer a real question.
+
+MASTER/GPT-5.6 remains final scope, product decision and acceptance authority.
