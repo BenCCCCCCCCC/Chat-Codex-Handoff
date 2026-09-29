@@ -344,3 +344,53 @@ Hard stop:
 - stop immediately for scope expansion, new product tradeoff, unapproved spend/live calls, new dependency/framework/model/provider/storage schema/retention policy, destructive/high-risk action, push/merge/public release, or speculative next change.
 
 Recommendations remain non-executable unless already inside the approved task.
+
+
+## SETUP-FLOW-01 recovered result — remote relay verified
+
+Remote recovery result: NEEDS_HOST_VERIFY.
+
+Verified relay:
+- recovery dispatch commit: 03ba43515e1583d3347b955f559033bb04d6bad0;
+- Codex wrote the receipt to GitHub meta/master-state;
+- comparison shows exactly one changed path: docs/master/ACTIVE_EXCHANGE.md.
+
+Local SETUP-FLOW-01 state:
+- base/final HEAD remains ab5d2ea9ad23359fe6cc3dc8abc0e963511996b2;
+- product changes are uncommitted;
+- changed files: app.mjs, browser-tests-r4.mjs, core.mjs, index.html, provenance.test.mjs, run-offline-tests.mjs, schemas.mjs, server.mjs, plus new setup-flow.test.mjs;
+- valid source alone can start Learn;
+- direct paste derives a local title from the first meaningful line;
+- file import derives title from filename without final extension;
+- fallback title is 学习材料;
+- optional focus/known fields are setupContext metadata, not role=user messages;
+- already-known is explicitly treated as owner self-report, not mastery evidence;
+- no extra provider request is introduced.
+
+Fresh deterministic evidence:
+- focused setup-flow: 9/9 PASS;
+- full Node/offline: 123/123 PASS;
+- git diff --check: PASS;
+- production ledger SHA unchanged;
+- live provider calls 0;
+- microphone 0;
+- incremental exposure 0.
+
+Codex browser attempt was blocked before application cases by the known Codex-sandbox Edge/CDP environment limitation. Therefore SETUP-FLOW-01 is pending one host-side browser validation before final commit/MASTER acceptance.
+
+### Current Astra autonomy rule supersedes older pass-count language
+
+Any earlier statement limiting Codex to two self-correction passes is superseded.
+
+Within an approved task Astra may iterate as needed inside scope until acceptance passes or a stop condition is triggered.
+
+Mandatory return to MASTER:
+- same failure signature survives three meaningful fix/test cycles;
+- scope/product tradeoff changes;
+- unapproved spend/live call;
+- new dependency/framework/model/provider/schema/retention policy;
+- destructive/high-risk action;
+- push/merge/public release;
+- next step would be speculative.
+
+This gives Astra broad engineering autonomy without transferring product-scope authority.
