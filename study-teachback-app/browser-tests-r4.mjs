@@ -118,6 +118,16 @@ try{
       await click('confirm');await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
     });
   }else{
+  for(const setupContext of [{focus:'',known:''},{focus:'条件',known:''},{focus:'',known:'了解定义'},{focus:'条件',known:'了解定义'}])await check(`setup source-only title and persisted metadata ${JSON.stringify(setupContext)}`,async()=>{
+    const before=provenanceRequests.length;
+    await evaluate(`document.getElementById('title').value='';document.getElementById('source').value='只有土壤干燥才浇水。';document.getElementById('setupFocus').value=${JSON.stringify(setupContext.focus)};document.getElementById('setupKnown').value=${JSON.stringify(setupContext.known)};`);
+    await click('learn');await until(`document.querySelectorAll('.message.assistant').length===1`);
+    assert.equal(provenanceRequests.length,before+1);assert.deepEqual(provenanceRequests.at(-1).setupContext,setupContext);assert.deepEqual(provenanceRequests.at(-1).history,[]);
+    await reloadPage();await until(`!document.getElementById('workspace').hidden`);
+    const t=(await evaluate(all))[0];assert.equal(t.source.title,'只有土壤干燥才浇水。');assert.deepEqual(t.setupContext,setupContext);assert.equal(t.messages.filter(m=>m.role==='user').length,0);assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),0);
+    await click('newTopic');assert.equal(await evaluate(`document.getElementById('setupFocus').value+document.getElementById('setupKnown').value`),'');
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();
+  });
   for(const outcome of ['success','quote','request'])await check(`provenance initial ${outcome} and first/subsequent real owner input`,async()=>{
     const rejected=outcome!=='success';rejectStarter=outcome==='quote';failTeach=outcome==='request';const start=provenanceRequests.length;
     await evaluate(`document.getElementById('title').value='Synthetic provenance';document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);await click('learn');

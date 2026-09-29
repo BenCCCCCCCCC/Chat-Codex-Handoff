@@ -1,4 +1,4 @@
-import { observations, waveBytes, revisedTranscript, validateFindings, repairFocus } from './core.mjs';
+import { observations, waveBytes, revisedTranscript, validateFindings, repairFocus, autoTitle, setupContextValue } from './core.mjs';
 import { openStore } from './storage.mjs';
 import { confirmLocalProcess, localize, processEvidence } from './diagnostic-localization.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
@@ -31,7 +31,7 @@ async function teach(message,mode='learn',focus=null,{internalStarter=false}={})
   if(mode==='repair')focus=repairFocus(focus);
   const target=topic,history=target.messages.slice();
   if(!internalStarter)target.messages.push({role:'user',text:message});target.mode=mode;await save();renderTopic();notice('正在一起梳理这段材料……');
-  try{const r=await api('/api/teach',{source:target.source,mode,message,focus,history});
+  try{const r=await api('/api/teach',{source:target.source,mode,message,focus,history,setupContext:target.setupContext});
     if(deleted.has(target.id)||topic!==target)return;
     target.messages.push({role:'assistant',text:r.value.message});target.question=r.value.question;
     if(!target.goals.length){target.goals=r.value.goals;target.anchorVersion=uid();target.source.anchors=structuredClone(target.goals);target.source.anchorVersion=target.anchorVersion;}
@@ -55,7 +55,6 @@ $('sourceFile').onchange=()=>act(async()=>{
     const result=await api('/api/extract',await file.arrayBuffer(),{'X-Source-Format':file.name.split('.').pop().toLowerCase()});
     $('extractedText').value=result.blocks.map(b=>b.text).join('\n\n');
     $('extractionState').textContent='解析完成';$('importStatus').textContent=`${result.blocks.length} 个正文/页面/幻灯片区块。核对文字后，选取最多 5,000 字。`;
-    if(!$('title').value.trim())$('title').value=file.name.replace(/\.[^.]+$/,'').slice(0,120);
     reveal('importPreview');notice('');
   }catch(e){$('extractionState').textContent='解析未完成，可重新选择文件或粘贴文字。';throw e;}finally{importPending=false;$('learn').disabled=false;$('sourceFile').disabled=false;}
 });
@@ -63,14 +62,16 @@ function useImported(all){
   const preview=$('extractedText');const selected=(all?preview.value:preview.value.slice(preview.selectionStart,preview.selectionEnd)).trim();
   if(!selected)return notice('请先在预览中选中文字。');
   if(selected.length>5000)return notice('这一轮最多 5,000 字，请缩小选段；不会自动截断材料。');
-  $('source').value=selected;updateCounts();notice('选段已放入学习材料。可继续编辑，点击“开始学习”才会发送给模型。');
+  $('source').value=selected;$('title').value=autoTitle(selected,$('selectedFile').textContent);updateCounts();notice('选段已放入学习材料。可继续编辑，点击“开始学习”才会发送给模型。');
 }
 $('useSelection').onclick=()=>useImported(false);$('useAll').onclick=()=>useImported(true);
 $('learn').onclick=()=>act(async()=>{
   if(importPending||controller||capturePending||record||processing)return;
-  if(!$('title').value.trim()||!$('source').value.trim())return notice('先写一个主题，再放入这一轮的有限材料。');
+  if(!$('source').value.trim())return notice('请先放入这一轮的学习材料。');
+  if($('source').value.length>5000)return notice('这一轮最多 5,000 字，请缩小材料。');
+  const setupContext=setupContextValue({focus:$('setupFocus').value,known:$('setupKnown').value});
   clearImport();
-  topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim(),text:$('source').value.trim()},goals:[],messages:[],attempts:[],mode:'learn'};await save();renderTopic();await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。','learn',null,{internalStarter:true});
+  topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim()||autoTitle($('source').value),text:$('source').value.trim()},setupContext,goals:[],messages:[],attempts:[],mode:'learn'};await save();renderTopic();await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。','learn',null,{internalStarter:true});
 });
 $('chatForm').onsubmit=e=>{e.preventDefault();if(!canNavigate())return;act(async()=>{const message=$('chat').value.trim();if(!message)return;$('chat').value='';if(topic.mode==='apply'&&topic.apply){topic.apply.answer=message;await teach(message,'apply_answer',topic.apply.question);}else await teach(message,topic.mode==='repair'?'repair':'learn',topic.focus??null);});};
 function prepare(kind='full',focus=null,parentId=null){
@@ -264,8 +265,8 @@ $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;abortPending();d
 async function history(){if(memoryOnly)throw new Error('STORAGE_FAILED');if(processing)throw new Error('REQUEST_IN_PROGRESS');if(record)throw new Error('RECORDING_ACTIVE');if(controller)throw new Error('REQUEST_IN_PROGRESS');reveal('history');const list=$('historyList');list.replaceChildren();for(const t of await db.all()){const row=el('div');row.append(el('strong',t.source.title),el('p',`${new Date(t.createdAt).toLocaleString()} · ${t.attempts.length} 次讲解`,'muted'),button('继续学习',()=>{if(!canNavigate())return;topic=t;current=null;renderTopic();reveal('attemptPanel',false);reveal('history',false);}));for(const a of t.attempts)row.append(button(`${a.kind==='partial'?'局部':'完整'} · ${new Date(a.createdAt).toLocaleTimeString()}`,()=>{if(!canNavigate())return;topic=t;current=a;renderTopic();renderAttempt();reveal('history',false);}));row.append(button('删除主题',async()=>{abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');}await history();},'danger'));list.append(row);}if(!list.children.length)list.append(el('p','还没有保存的学习记录。'));$('history').scrollIntoView({behavior:'smooth'});}
 $('historyButton').onclick=()=>act(history);
 function canNavigate(){if(memoryOnly){notice(friendly('STORAGE_FAILED'));return false;}if(record||capturePending||controller||processing||importPending){notice(friendly('REQUEST_IN_PROGRESS'));return false;}return true;}
-function newTopic(){if(importPending)return false;if(!canNavigate())return false;abortPending();clearImport();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');$('title').value='';$('source').value='';updateCounts();return true;}
-$('newTopic').onclick=newTopic;$('revise').onclick=()=>{const s=topic.source;if(!newTopic())return;$('title').value=s.title;$('source').value=s.text;updateCounts();notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');};
+function newTopic(){if(importPending)return false;if(!canNavigate())return false;abortPending();clearImport();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');$('title').value='';$('source').value='';$('setupFocus').value='';$('setupKnown').value='';updateCounts();return true;}
+$('newTopic').onclick=newTopic;$('revise').onclick=()=>{const s=topic.source,context=topic.setupContext;if(!newTopic())return;$('setupFocus').value=context?.focus??'';$('setupKnown').value=context?.known??'';$('title').value=s.title;$('source').value=s.text;updateCounts();notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');};
 $('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
 // Presentation-only confirmation: cancellation never reaches the original destructive handler.
 function confirmDelete(scope,action,trigger){

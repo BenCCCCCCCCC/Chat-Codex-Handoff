@@ -1,5 +1,22 @@
 export const RETENTION_MS = 7 * 86400000;
 export const TUTOR_MESSAGE_LIMIT = 4000;
+export function autoTitle(source, filename='') {
+  const clean=value=>value.replace(/[\p{Cc}\p{Cf}]/gu,'').trim();
+  const name=clean(filename.replace(/\.[^.]+$/u,''));
+  const line=source.split(/\r?\n/u).map(clean).find(value=>/[\p{L}\p{N}]/u.test(value));
+  return (name||line||'学习材料').slice(0,120);
+}
+export function setupContextValue(value) {
+  if(value==null)return {focus:'',known:''};
+  requireValue(typeof value==='object'&&!Array.isArray(value),'INVALID_SETUP_CONTEXT');
+  const result={};
+  for(const key of ['focus','known']){
+    const field=value[key]??'';
+    requireValue(typeof field==='string'&&field.length<=500,'INVALID_SETUP_CONTEXT');
+    result[key]=field.trim();
+  }
+  return result;
+}
 export function requireValue(ok, code) { if (!ok) throw new Error(code); }
 export function text(value, max = 12000) { requireValue(typeof value === 'string' && value.trim().length > 0 && value.length <= max, 'INVALID_TEXT'); return value; }
 export function identifier(value) { requireValue(typeof value === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(value), 'INVALID_ID'); return value; }

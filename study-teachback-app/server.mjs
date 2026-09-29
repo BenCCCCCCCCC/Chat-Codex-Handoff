@@ -3,7 +3,7 @@ import { extractSource } from './ingestion.mjs';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { semantic, transcribe, ledger } from './provider.mjs';
-import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue, repairFocus, waveDuration, TUTOR_MESSAGE_LIMIT } from './core.mjs';
+import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue, repairFocus, waveDuration, TUTOR_MESSAGE_LIMIT, setupContextValue } from './core.mjs';
 import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
 
 const files={'/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
@@ -42,7 +42,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       const source=sourceValue(b.source);
       if(path==='/api/teach'){
         requireValue(['learn','repair','apply','apply_answer'].includes(b.mode),'INVALID_MODE');
-        const input={source,mode:b.mode,message:text(b.message,2000),focus:b.mode==='repair'?repairFocus(b.focus):b.focus?text(b.focus,1000):null,history:Array.isArray(b.history)?b.history.slice(-6).map(m=>({role:m.role==='assistant'?'assistant':'user',text:text(m.text,m.role==='assistant'?TUTOR_MESSAGE_LIMIT:2500)})):[]};
+        const input={source,setupContext:setupContextValue(b.setupContext),mode:b.mode,message:text(b.message,2000),focus:b.mode==='repair'?repairFocus(b.focus):b.focus?text(b.focus,1000):null,history:Array.isArray(b.history)?b.history.slice(-6).map(m=>({role:m.role==='assistant'?'assistant':'user',text:text(m.text,m.role==='assistant'?TUTOR_MESSAGE_LIMIT:2500)})):[]};
         const result=await semanticCall(TEACH,input,teachingSchema,{signal:controller.signal});return json(200,{...result,value:validateTeaching(result.value,source)});
       }
       const attempt=attemptValue(b.attempt), input=contentInput(source,attempt);

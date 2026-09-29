@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import { autoTitle, setupContextValue } from './core.mjs';
 import { localize } from './diagnostic-localization.mjs';
 const source=readFileSync(process.env.STUDY_TEST_APP_SOURCE??new URL('./app.mjs',import.meta.url),'utf8');
 const teach=source.slice(source.indexOf('async function teach('),source.indexOf('let importPending'));
@@ -26,7 +27,7 @@ for(const mode of ['learn','repair','apply'])for(const outcome of ['success','qu
   const node=()=>({textContent:'',value:'',hidden:false,children:[],append(...v){this.children.push(...v);},replaceChildren(...v){this.children=v;},scrollIntoView(){},dataset:{}});
   const $=id=>{if(!nodes.has(id))nodes.set(id,node());return nodes.get(id);};
   let reject=outcome!=='success';
-  const context=vm.createContext({$,topic:{id:'topic',source:{id:'source',title:'Synthetic',text:'Rule'},messages:[],goals:[],attempts:[]},
+  const context=vm.createContext({autoTitle,setupContextValue,$,topic:{id:'topic',source:{id:'source',title:'Synthetic',text:'Rule'},messages:[],goals:[],attempts:[]},
     current:{id:'attempt',source:{id:'source',title:'Synthetic',text:'Rule'},duration:1,kind:'full',assistance:'none',raw:{id:'raw',reviewed:true,spans:[{id:'s0',start:0,end:1,text:'Rule'}]}},record:null,capturePending:false,controller:null,processing:false,importPending:false,
     localize,processFor:()=>[],attemptRequest:a=>({id:a.id,sourceId:a.source.id,transcriptVersion:a.raw.id,duration:a.duration,kind:a.kind,assistance:a.assistance,reviewed:a.raw.reviewed,spans:a.raw.spans}),
     deleted:new Set(),structuredClone,uid:()=> 'synthetic-id',clearImport(){},repairFocus:x=>x,remediationFocus:()=> 'Condition',latest:a=>a.raw,
