@@ -158,8 +158,10 @@ export function waveDuration(bytes) {
   requireValue(v.getUint32(16,true)===16 && v.getUint16(20,true)===1 && v.getUint16(22,true)===1 && v.getUint32(24,true)===16000 && v.getUint32(28,true)===32000 && v.getUint16(32,true)===2 && v.getUint16(34,true)===16 && v.getUint32(40,true)===bytes.byteLength-44 && (bytes.byteLength-44)%2===0,'INVALID_WAV_FORMAT');
   const duration=(bytes.byteLength-44)/32000;requireValue(duration>0 && duration<=180,'DURATION_LIMIT');return duration;
 }
+// reviewed means explicit confirmation of transcript words, not audio playback.
+// The separate version retains explicit edits; raw ASR stays unchanged.
 export function revisedTranscript(attempt, spans) {
   requireValue(spans.length===attempt.raw.spans.length,'INVALID_SPANS');
-  return { id:crypto.randomUUID(), at:Date.now(), origin:'USER_REPLAY_CORRECTION', spans: spans.map((s,i)=>({...attempt.raw.spans[i],text:text(s.text,2000)})), reviewed:true };
+  return { id:crypto.randomUUID(), at:Date.now(), origin:'USER_TRANSCRIPT_CONFIRMATION', spans: spans.map((s,i)=>({...attempt.raw.spans[i],text:text(s.text,2000)})), reviewed:true };
 }
 export function prune(records, now=Date.now()) { return records.filter(r=>Number.isFinite(r.createdAt)&&r.createdAt+RETENTION_MS>now); }

@@ -41,7 +41,7 @@ function confirmationHarness(){
   const a={id:'attempt',source,duration:1,kind:'full',assistance:'none',audio:new Blob(['synthetic']),raw:{id:'raw',text:'Enter when open.',spans:[{id:'s0',start:0,end:1,text:'Enter when open.'}]},corrections:[],reports:[]};
   let saveGate=null;
   const context=vm.createContext({$,current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),
-    heard:new Set(),editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
+    editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
     blobURL:null,replayRequest:0,replayOriginal:null,URL:{createObjectURL:()=> 'blob:synthetic',revokeObjectURL(){}},
     notice:x=>notices.push(x),friendly:x=>x,act:async fn=>{try{await fn();}catch(e){notices.push(e.message);}},
     reveal(){},el:()=>({setAttribute(){},append(){}}),button:()=>({}),renderProcess(){},renderFeedback:r=>visible.push(r),updateBudget(){},
@@ -51,7 +51,8 @@ function confirmationHarness(){
   vm.runInContext(app.slice(app.indexOf('function latest('),app.indexOf('async function play(')),context);
   vm.runInContext(app.slice(app.indexOf('function renderAttempt('),app.indexOf('function processFor(')),context);
   vm.runInContext(app.slice(app.indexOf("$('confirm').onclick"),app.indexOf('function renderFeedback(')),context);
-  return {a,context,pending,saved,visible,notices,click:()=>$('confirm').onclick(),review(text='Enter when open.') {context.heard.add('s0');context.editors.set('s0',{value:text});},blockSave(){let release;saveGate=new Promise(r=>release=r);return ()=>{saveGate=null;release();};}};
+  vm.runInContext('renderAttempt()',context);
+  return {a,context,pending,saved,visible,notices,node:$,render:()=>vm.runInContext('renderAttempt()',context),click:()=>$('confirm').onclick(),review(text='Enter when open.') {context.editors.set('s0',{value:text});},blockSave(){let release;saveGate=new Promise(r=>release=r);return ()=>{saveGate=null;release();};}};
 }
 const drain=async()=>{for(let i=0;i<30;i++)await Promise.resolve();};
 
@@ -72,9 +73,8 @@ test('C2 lock precedes asynchronous persistence and releases after save failure'
   assert.equal(during,1);assert.equal(h.pending.length,1);
   h.review();h.context.save=async()=>{throw Error('STORAGE_FAILED');};await h.click();assert.equal(h.context.processing,false);assert.equal(h.pending.length,1);
 });
-test('C2 no replay creates no correction; failed provider releases operation for explicit later confirmation',async()=>{
-  const h=confirmationHarness();await h.click();assert.equal(h.a.corrections.length,0);assert(h.notices.includes('NOT_HEARD'));
-  h.review();const first=h.click();await drain();h.pending[0].reject(Error('SYNTHETIC_FAILURE'));await first;
+test('C2 no replay still allows diagnosis; failed provider releases operation for explicit later confirmation',async()=>{
+  const h=confirmationHarness();const first=h.click();await drain();assert.equal(h.pending.length,1);assert.equal(h.a.corrections[0].origin,'USER_TRANSCRIPT_CONFIRMATION');assert(!h.notices.includes('NOT_HEARD'));h.pending[0].reject(Error('SYNTHETIC_FAILURE'));await first;
   assert.equal(h.context.processing,false);assert.equal(h.context.controller,null);
   const next=h.click();await drain();h.pending[1].resolve();await next;assert.equal(h.visible.length,1);
 });
@@ -126,4 +126,17 @@ test('C3 unavailable status replaces stale budget display without showing zero u
   const context=vm.createContext({$:()=>node,fetch:async()=>({ok:false,json:async()=>({error:'BUDGET_UNAVAILABLE'})})});
   vm.runInContext(app.slice(app.indexOf('async function updateBudget('),app.indexOf('function renderTopic(')),context);
   await vm.runInContext('updateBudget()',context);assert.match(node.textContent,/预算状态暂不可用/);assert(!node.textContent.includes('$0'));
+});
+
+
+test('review UX confirms current edits without playback; reload keeps honest confirmation and raw audio',async()=>{
+  const h=confirmationHarness(),raw=JSON.stringify(h.a.raw),audio=h.a.audio;
+  assert.match(h.node('reviewHint').textContent,/逐段回听不是必需步骤/);
+  h.review('Do not enter when closed.');const first=h.click();await drain();
+  assert.equal(h.pending.length,1);assert.equal(h.pending[0].request.attempt.spans[0].text,'Do not enter when closed.');
+  assert.equal(h.pending[0].request.attempt.reviewed,true);assert.equal(h.a.corrections[0].origin,'USER_TRANSCRIPT_CONFIRMATION');
+  h.pending[0].resolve();await first;h.render();
+  assert.match(h.node('reviewHint').textContent,/这不表示音频已回听/);assert.match(h.node('reviewHint').textContent,/否定词、数字、条件和术语/);
+  assert.equal(h.context.editors.get('s0').value,'Do not enter when closed.');assert.equal(JSON.stringify(h.a.raw),raw);assert.equal(h.a.audio,audio);
+  assert.equal(h.pending.length,1);assert.equal(h.a.corrections[0].heard,undefined);
 });

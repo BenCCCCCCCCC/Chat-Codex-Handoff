@@ -3,7 +3,7 @@ import { openStore } from './storage.mjs';
 import { confirmLocalProcess, localize, processEvidence } from './diagnostic-localization.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
 let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false,capturePending=false;
-const heard=new Set(),editors=new Map();
+const editors=new Map();
 // Transient playback copies only. Original stored/exported audio is untouched.
 const replayWaves=new WeakMap();let replayOriginal=null,replayRequest=0;
 const notice=message=>{$('notice').textContent=message;};
@@ -11,7 +11,7 @@ const reveal=(id,show=true)=>{$(id).hidden=!show;};
 function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
 function button(label,fn,cls='quiet'){const b=el('button',label,cls);b.onclick=()=>label==='删除主题'?confirmDelete('删除这个主题及其全部讲解、原声、转写和反馈。',fn,b):act(fn);return b;}
 async function act(fn){try{await fn();}catch(e){notice(friendly(e.message));}}
-function friendly(code){const messages={EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先回听并确认转写，尤其是否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请逐段完整回听后再确认。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
+function friendly(code){const messages={EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先确认用于诊断的转写；建议回听检查否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请先完整回听这个过程候选，再保存过程证据。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
 async function save(){if(!topic||deleted.has(topic.id))return;try{await db.put(topic);memoryOnly=false;reveal('storageRecovery',false);}catch{memoryOnly=true;reveal('storageRecovery');throw new Error('STORAGE_FAILED');}}
 async function api(path,body,headers={}){
   if(controller||record)throw new Error('REQUEST_IN_PROGRESS');
@@ -144,7 +144,7 @@ async function processAudio(a){
     await api('/api/register',{attemptId:a.id});
     const result=await api('/api/asr',wav,{'Content-Type':'audio/wav','X-Attempt-Id':a.id});
     if(deleted.has(a.id)||!topic||deleted.has(topic.id))return;
-    a.raw={...result,id:uid(),origin:'ASR',createdAt:Date.now()};a.status='REVIEW_REQUIRED';await save();renderAttempt();notice('转写完成。请逐段回听，检查关键字后再开始诊断。');
+    a.raw={...result,id:uid(),origin:'ASR',createdAt:Date.now()};a.status='REVIEW_REQUIRED';await save();renderAttempt();notice('转写完成。诊断将使用当前文字；建议回听检查关键字，也可直接确认文字并继续。');
   }catch(e){a.status='PARTIAL';a.error=context?'ASR_OR_DECODE_FAILED':'DECODE_FAILED';try{await save();}catch{}renderAttempt();throw e;}
   finally{processing=false;if(context&&context.state!=='closed')await context.close();}
 }
@@ -193,13 +193,13 @@ function playPrepared(start,end,onComplete){
   observe('play-request');return player.play().then(()=>{observe('play-resolved');if(active()){if(player.currentTime>start+.05||player.seeking){state.cancel('invalid-start-position');return;}started=true;observe('started');}},error=>{state.cancel('play-rejected');throw error;});
 }
 function renderAttempt(){
-  if(!current)return;const a=current;heard.clear();editors.clear();reveal('attemptPanel');$('attemptKind').textContent=a.kind==='partial'?'局部新录音':'完整录音';
+  if(!current)return;const a=current;editors.clear();reveal('attemptPanel');$('attemptKind').textContent=a.kind==='partial'?'局部新录音':'完整录音';
   replayRequest++;replayOriginal=null;if(blobURL)URL.revokeObjectURL(blobURL);blobURL=URL.createObjectURL(a.audio);$('player').src=blobURL;
   $('audioStatus').textContent=`${a.duration?`${a.duration.toFixed(1)} 秒 · `:''}${a.interrupted?'采集中断 · ':''}${a.observation?.reason??'尚未完成声音检查'}。仅候选观测，非流利度评分。`;
   $('rawText').textContent=a.raw?.text??'尚未取得转写';$('transcript').replaceChildren();$('feedback').replaceChildren();$('observations').replaceChildren();$('processFeedback').replaceChildren();
   reveal('retryAsr',!a.raw&&!a.interrupted);reveal('confirm',!!a.raw);reveal('reviewHint',!!a.raw);
-  if(a.raw){$('reviewHint').textContent=a.raw.wordTiming?.status==='PARTIAL'?'词级定位部分不可用；请按整段回听，确认否定词、数字、条件和术语后再诊断。':'请逐段完整回听并确认关键字后再诊断。';const v=latest(a);v.spans.forEach(s=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=s.text;editor.rows=2;editor.maxLength=2000;editors.set(s.id,editor);const b=button(`回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{heard.add(s.id);b.textContent='已完整回听 ✓';}));row.append(b,editor);$('transcript').append(row);});
-    if(v.reviewed)$('reviewHint').textContent='已保存核对版本。再次修改后需要重新回听确认；这不会创建新口头表现。';
+  if(a.raw){$('reviewHint').textContent=(a.raw.wordTiming?.status==='PARTIAL'?'词级定位部分不可用。':'')+'诊断使用当前转写。ASR 可能误听否定词、数字、条件和术语；建议回听或修改后继续，逐段回听不是必需步骤。';const v=latest(a);v.spans.forEach(s=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=s.text;editor.rows=2;editor.maxLength=2000;editors.set(s.id,editor);const b=button(`可选回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{b.textContent='本次页面已播放 ✓';}));row.append(b,editor);$('transcript').append(row);});
+    if(v.reviewed)$('reviewHint').textContent+=' 已保存用于诊断的文字确认；这不表示音频已回听。修改后可再次确认，不会创建新口头表现。';
     for(const report of a.reports.filter(r=>r.transcriptVersion===v.id)){
       if(report.channel==='content')renderFeedback(report);
       else if(report.channel==='delivery')$('processFeedback').append(el('p','历史过程报告（旧格式，未作为定位证据）','muted'),...report.findings.map(f=>el('p',f.message)));
@@ -238,10 +238,10 @@ function renderProcess(a){
 }
 $('confirm').onclick=()=>act(async()=>{
   if(record||capturePending||controller||processing)throw new Error('REQUEST_IN_PROGRESS');
-  const a=current; if(!a?.raw)return;if(a.raw.spans.some(s=>!heard.has(s.id)))throw new Error('NOT_HEARD');
+  const a=current; if(!a?.raw)return;
   processing=true;
   try{
-    notice('正在保存核对版本并核对内容，请稍候……');
+    notice('正在保存当前文字确认并核对内容，请稍候……');
     const corrected=revisedTranscript(a,a.raw.spans.map(s=>({text:editors.get(s.id).value})));a.corrections.push(corrected);await save();await diagnose(a);
   }finally{processing=false;}
 });
@@ -253,7 +253,7 @@ async function diagnose(a){
 }
 function renderFeedback(report){
   if(report.channel!=='content')return;
-  if(!latest(current).reviewed||current.interrupted){$('feedback').append(el('p','先回听并核对转写，再查看内容定位。','muted'));return;}
+  if(!latest(current).reviewed||current.interrupted){$('feedback').append(el('p','先确认用于诊断的转写，再查看内容定位。','muted'));return;}
   let targets=[];try{const {sourceId,attemptId,transcriptVersion,findings}=report;targets=localize({source:current.source,attempt:attemptRequest(current),report:{sourceId,attemptId,transcriptVersion,findings},evidence:processFor(current),events:current.observation?.events??[]}).diagnosticTargets;}catch{ $('feedback').append(el('p','该反馈尚未通过当前来源／转写校验，不生成定位建议。','muted')); }
   if(!report.findings.length)$('feedback').append(el('p','本次没有足够证据生成此类反馈。'));
   for(const [index,f] of report.findings.entries()){const card=el('article',undefined,'finding'),labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足'};card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message),el('blockquote',`材料：${f.sourceQuote}`));
