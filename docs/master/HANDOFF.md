@@ -1,27 +1,71 @@
-# Active Handoff — SETUP-FLOW-01 RELAY RECOVERY
+# Active Handoff — SETUP-FLOW-01 RELAY RECOVERY v2
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: RECOVER EXISTING RESULT ONLY / DO NOT RE-EXECUTE PRODUCT TASK
+Status: RECOVER EXISTING RESULT / REMOTE EXCHANGE WRITE EXPLICITLY AUTHORIZED
 
-## Purpose
+## 1. Do not re-execute SETUP-FLOW-01
 
-The owner reports SETUP-FLOW-01 already executed locally, but ACTIVE_EXCHANGE was never replaced with CODEX_TO_CHAT.
+The owner reports the original task was executed in a previous Codex chat.
 
-Do not redo SETUP-FLOW-01.
+A local draft receipt exists at:
+F:\Chat-Codex-Handoff\validation-repo\artifacts\study-teachback\setup-flow-01\meta-master-state\docs\master\ACTIVE_EXCHANGE.md
 
-## Required recovery
+Read that local receipt plus the current local worktree/artifacts only to recover what already happened.
 
-1. Read latest CURRENT_STATE.md, HANDOFF.md and ACTIVE_EXCHANGE.md.
-2. Inspect the existing local repo/worktree and any SETUP-FLOW-01 artifacts/tests already produced.
-3. Determine what was actually changed/run.
-4. Do not make additional product/test changes merely to complete the relay.
-5. If the task was completed, write a full CODEX_TO_CHAT receipt for SETUP-FLOW-01.
-6. If the task was incomplete/blocked, write that exact status instead.
-7. Do not create a new commit unless one already existed from the prior execution; do not commit now just for recovery.
+Do not redo implementation or rerun tests merely to create a relay message.
 
-Return through ACTIVE_EXCHANGE only.
+## 2. Critical transport clarification
 
-Include exact changed files, base/final HEAD, commit status, tests/results, zero-live-call evidence, self-review result, and whether host browser validation is needed.
+“Do not commit/push product” does NOT prohibit the exchange write.
 
-No CURRENT_STATE/HANDOFF edits. No push/merge. No Phase3B.
+For this recovery turn, Codex is explicitly authorized and required to update exactly:
+`docs/master/ACTIVE_EXCHANGE.md`
+on:
+`meta/master-state`
+using the authenticated GitHub connector / Contents API.
+
+That write will create a GitHub meta-branch commit. This is expected and authorized transport behavior.
+
+Not authorized:
+- product-branch commit/push/merge;
+- CURRENT_STATE.md or HANDOFF.md changes;
+- any other GitHub path.
+
+## 3. Required receipt
+
+Write the recovered SETUP-FLOW-01 result as CODEX_TO_CHAT.
+
+Include:
+- original task result: COMPLETE / NEEDS_HOST_VERIFY / BLOCKED;
+- exact local base/final HEAD and commit status;
+- exact changed files;
+- implementation summary;
+- tests already run/results;
+- zero-live-call evidence;
+- provenance/setup-context evidence;
+- whether host browser verification is required;
+- self-review findings;
+- Blocking / Unknown / User Decision Needed / Future Optional.
+
+If local evidence is incomplete, say so. Do not fill gaps by reimplementation.
+
+## 4. Required relay verification
+
+After GitHub update:
+- read back ACTIVE_EXCHANGE from the returned commit;
+- verify same recovery turn_id and state CODEX_TO_CHAT;
+- verify full receipt is present;
+- verify the meta commit changed only ACTIVE_EXCHANGE.
+
+Only then report relay success in Codex UI.
+
+If connector write/readback/path verification fails, report BLOCKED and leave product state untouched.
+
+## 5. Astra autonomy rule
+
+For future execution tasks Astra may analyze, recommend, implement, test, self-review and iterate freely inside approved scope until acceptance passes.
+
+Stop for MASTER on scope/risk boundaries, or if the same failure signature survives three meaningful fix/test cycles.
+
+This recovery turn itself is evidence recovery only; do not use autonomy to reopen SETUP-FLOW-01 implementation.
