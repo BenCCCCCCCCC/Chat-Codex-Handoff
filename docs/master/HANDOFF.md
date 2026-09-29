@@ -1,6 +1,6 @@
 # HANDOFF — NEW MASTER CHAT START
 
-Updated: 2026-09-29
+Updated: 2026-09-30
 Purpose: compact authoritative handoff for the next Chat / 00 MASTER conversation.
 
 ## Read first
@@ -24,7 +24,10 @@ Active product:
 **知而能讲**
 
 Accepted local product HEAD:
-`bdd0635597006881d6f8f7213122ae53ccbc99a9`
+`aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`
+
+Accepted commit:
+`fix: make transcript replay optional for content diagnosis`
 
 Local checkout:
 `F:\Chat-Codex-Handoff\validation-repo`
@@ -34,129 +37,101 @@ Product branch:
 
 No product push/merge authorized.
 
-## Real Phase 3B — completed
+## Phase 3B — completed
 
-Real owner validation used:
-- Tutor semantic 1
-- real microphone recording 1
-- ASR 1
-- content diagnosis 1
-- retries 0
+Real owner validation consumed:
+- Tutor semantic: 1
+- real microphone recording: 1
+- ASR: 1
+- content diagnosis: 1
+- retries: 0
 
 The original live authorization is fully consumed.
 No further live provider calls are authorized.
 
-Real content result:
-- visitor badge condition captured;
-- lab open/closed condition captured;
-- badge same-day validity captured;
-- 18:00 cutoff omitted.
+Accepted real result:
+- content captured badge/open-state/same-day validity;
+- content omitted 18:00 admission cutoff;
+- process hesitation around 16–18s did not converge on the omitted 18:00 target;
+- content/process evidence therefore remains separated.
 
-Real process result:
-- historical long pause ~14.54–15.42s;
-- owner-confirmed hesitation around 16–18s;
-- accepted detector reanalysis finds short-pause cluster ~16.08–17.24s.
+Production ledger remains:
+`1d6a29631982daf6cd540622f2dabee3d2c48b24dbda8a8879dbb2ca7b215a21`
 
-Content omission and process hesitation did not converge on the same target, so no causal/knowledge inference is justified.
-
-## Current task
-
-Task:
-`REPLAY-REVIEW-UX-01`
+## REPLAY-REVIEW-UX-01 — accepted
 
 Owner decision:
 per-span replay is recommended, not mandatory for content diagnosis.
 
-Codex/Astra implemented it locally; changes are still uncommitted.
-
-Implemented direction:
-- remove hard requirement to replay every transcript span before content diagnosis;
-- diagnosis uses explicit current transcript confirmation;
-- warn that ASR can mishear negation/numbers/conditions/terms;
-- per-span and full-audio replay remain optional;
-- playback completion is transient UI feedback, not persisted as false proof;
+Accepted semantics:
+- content diagnosis uses explicit current transcript confirmation;
+- ASR warning remains;
+- transcript replay is optional;
+- playback completion is transient UI state;
+- `USER_TRANSCRIPT_CONFIRMATION` is text confirmation, not playback proof;
 - process-candidate confirmation still requires replay of that specific candidate;
-- no extra provider call.
+- no extra provider call or schema/retention/model/provider/budget change.
 
-Current implementation evidence:
-- focused 36/36 PASS
-- full Node/offline 151/151 PASS
-- browser syntax PASS
-- git diff --check PASS
-- zero live API / ASR / recordings
-- production ledger unchanged
+Final evidence accepted by MASTER:
+- browser 52/52 PASS;
+- 53/53 sourceSHA256 matched before staging, before commit, after commit;
+- focused 36/36 PASS;
+- Node/offline 151/151 PASS;
+- diff checks PASS;
+- exactly six authorized files;
+- no post-host source/test drift;
+- tracked worktree clean;
+- production ledger unchanged;
+- finalization live calls 0;
+- no product push/merge.
 
-## Host browser gate — PASS
+## Current task
 
-Owner ran:
+Task:
+`DOC-CLEANUP-PHASE3B-01`
 
-```powershell
-Set-Location F:\Chat-Codex-Handoff\validation-repo
-node .\study-teachback-app\run-offline-tests.mjs browser replay-review-ux-01
-```
+Purpose:
+bring current-facing documentation into alignment with the accepted Phase 3B and REPLAY-REVIEW-UX-01 state.
 
-Owner screenshot confirms:
-- all visible cases PASS
-- exit 0
-- error null
-- production ledger before/after identical
-- unchanged=true
+This is documentation-only.
 
-Exact total case count and sourceSHA256 binding still must be read directly from the fresh host receipt by Astra before commit.
+Codex/Astra should:
+1. read latest CURRENT_STATE / HANDOFF / ACTIVE_EXCHANGE;
+2. verify repo = `F:\Chat-Codex-Handoff\validation-repo`;
+3. verify branch = `prototype/study-teachback-v0.1`;
+4. verify HEAD = `aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`;
+5. inspect root README, product README, and other current canonical/entry-point docs for stale current-state claims;
+6. correct only current-facing documentation that says or implies:
+   - Phase 3 has not run;
+   - live allowance remains available;
+   - transcript replay is still mandatory before content diagnosis;
+   - another older product HEAD is the current accepted baseline;
+7. preserve immutable historical handoffs as historical evidence;
+8. run targeted post-edit searches and `git diff --check`;
+9. stage documentation only;
+10. create one focused local documentation commit;
+11. do not push/merge;
+12. return CODEX_TO_CHAT with commit, exact changed paths, diff summary, search evidence, checks, and unresolved ambiguity if any.
 
-## Immediate next action
+## Hard boundaries
 
-Do **not** ask the owner to rerun the host browser test unless Astra changes source/test bytes.
+Do not:
+- modify product code or tests;
+- change schema, retention, model, provider, budget, dependency, or framework;
+- run live provider calls;
+- record audio;
+- run ASR or content diagnosis;
+- push or merge product branch;
+- start a new productization feature;
+- rewrite accurate historical snapshots merely to make old wording look current.
 
-MASTER should dispatch Astra finalization:
-1. read fresh host receipt and exact case count;
-2. verify sourceSHA256 binding to current worktree;
-3. perform project-aware final self-review;
-4. confirm no post-host source/test drift;
-5. run git diff --check;
-6. if unchanged, stage only the six REPLAY-REVIEW-UX-01 files and create one focused local commit;
-7. no push/merge;
-8. return CODEX_TO_CHAT via ACTIVE_EXCHANGE;
-9. if any source/test edit is needed after host PASS, return NEEDS_HOST_REVERIFY.
+If a required correction would need product/code behavior changes, stop and return User Decision Needed rather than implementing it.
 
-Expected modified files:
-- study-teachback-app/app.mjs
-- study-teachback-app/core.mjs
-- study-teachback-app/index.html
-- study-teachback-app/correctness-boundaries.test.mjs
-- study-teachback-app/browser-tests-r4.mjs
-- study-teachback-app/run-offline-tests.mjs
+## After this task
 
-## Important boundaries
+MASTER will:
+1. review the documentation-only delta;
+2. decide whether current Phase 3B evidence is sufficient to formally close the validation phase;
+3. only then choose the next productization step.
 
-- no further live provider calls;
-- no new recording/ASR/diagnosis;
-- no product push/merge;
-- no retention/model/provider/schema changes without MASTER/owner decision;
-- raw owner audio/export must not be uploaded to GitHub;
-- process evidence must remain separate from knowledge judgment.
-
-## Codex/Astra autonomy
-
-Astra may understand the project and explore broadly:
-- read canonical docs;
-- inspect recent commits;
-- inspect adjacent modules/tests;
-- identify hidden coupling/risk;
-- self-correct inside approved scope.
-
-Broad exploration does not grant broad implementation scope.
-
-Return outside-scope findings as:
-- Must Fix candidate
-- User Decision Needed
-- Future Optional
-- Project observations
-
-## After REPLAY-REVIEW-UX-01 finalization
-
-Next MASTER work:
-1. documentation cleanup so README/canonical summaries reflect completed Phase 3B;
-2. decide whether current Phase 3B evidence is sufficient to close the current validation phase;
-3. only then choose the next productization step;
-4. do not jump directly to full software/product expansion.
+Do not jump directly to new feature development.

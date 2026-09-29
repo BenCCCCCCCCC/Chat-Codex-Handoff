@@ -1,6 +1,6 @@
 # CURRENT_STATE — Chat ↔ Codex Handoff / 知而能讲
 
-Updated: 2026-09-29
+Updated: 2026-09-30
 Authority: 00 MASTER
 Repository: BenCCCCCCCCC/Chat-Codex-Handoff
 Local checkout: F:\Chat-Codex-Handoff\validation-repo
@@ -26,10 +26,10 @@ Legacy Handoff tooling remains retained infrastructure/history, not the active p
 ## 2. Accepted local product baseline
 
 Accepted HEAD:
-`bdd0635597006881d6f8f7213122ae53ccbc99a9`
+`aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`
 
 Commit:
-`feat: add bounded short-pause process evidence`
+`fix: make transcript replay optional for content diagnosis`
 
 No product push/merge has been authorized or performed.
 
@@ -40,6 +40,7 @@ Accepted milestones:
 - SETUP-FLOW-01 — source-first setup: accepted
 - FILE-IMPORT-AUTO-USE-01 — small imported files auto-populate learning source: accepted
 - PROCESS-EVIDENCE-FEASIBILITY-01 — long-silence + bounded short-pause-cluster process evidence: accepted
+- REPLAY-REVIEW-UX-01 — optional transcript replay for content diagnosis: accepted
 
 ## 3. Phase 3B real owner validation — COMPLETED
 
@@ -51,16 +52,16 @@ Real owner test used:
 - 1 content-diagnosis semantic call
 - retries: 0
 
-Therefore the original max-3-call live authorization is **fully consumed**.
+The original live authorization is **fully consumed**.
 No further live provider calls are authorized under PHASE3B-LIVE-01.
 
-Current production ledger hash after completed live validation:
+Current production ledger hash:
 `1d6a29631982daf6cd540622f2dabee3d2c48b24dbda8a8879dbb2ca7b215a21`
 
 ## 4. Verified real-test findings
 
 ### Content diagnosis
-Real explanation successfully captured:
+Real explanation captured:
 - visitor must have a valid/same-day badge;
 - lab open/closed state matters;
 - visitor badge is valid only on the issue day / unusable the next day.
@@ -69,127 +70,116 @@ Real explanation omitted:
 - 18:00 visitor-admission cutoff.
 
 ### Process evidence
-Old stored attempt originally contained:
-- near-silence candidate about 14.54–15.42s.
-
-Owner replay confirmed hesitation/filler around 16–18s.
-
-Zero-provider reanalysis of the preserved original audio showed the accepted detector would derive:
+Preserved original audio analysis supports:
 - long near-silence about 14.54–15.42s;
 - short-pause cluster about 2.26–4.14s;
 - short-pause cluster about 16.08–17.24s.
 
-Important interpretation:
-- the 16–18s process hesitation overlaps the visitor-badge/day-validity explanation;
-- the content omission is the 18:00 cutoff;
-- those do **not** converge on the same target;
-- therefore there is no evidence to claim the hesitation proves the missing 18:00 knowledge point.
+Owner replay confirmed hesitation/filler around 16–18s.
 
-This is a successful validation of evidence separation.
+The 16–18s hesitation overlaps the visitor-badge/day-validity explanation, while the content omission is the 18:00 cutoff. They do not converge on the same target, so the process evidence does not prove the missing knowledge point.
 
-## 5. Accepted process-evidence model
+This is accepted evidence that content diagnosis and process evidence must remain separated.
 
-Current accepted detector:
-- existing internal continuous near-silence >=0.7s;
-- bounded `short_pause_cluster_candidate`;
-- 20ms frames / RMS threshold 0.008;
-- at least 3 qualifying gaps of 0.12..0.50s;
-- >=0.60s qualifying quiet total;
-- candidate span 0.8..2.0s;
-- >=0.30s above-threshold activity between gaps;
-- long silence breaks a cluster;
-- candidate remains UNVALIDATED_ACTIVITY;
-- human replay required before saving process evidence.
-
-Explicit non-capabilities:
-- no lexical “额/嗯” detector;
-- no confidence/anxiety/personality/accent/global fluency inference;
-- no PTE-style score;
-- no process-only knowledge judgment.
-
-## 6. Current uncommitted task — REPLAY-REVIEW-UX-01
+## 5. REPLAY-REVIEW-UX-01 — ACCEPTED
 
 Owner decision:
-per-span replay should be recommended, not a hard prerequisite for content diagnosis.
+per-span transcript replay is recommended, not mandatory for content diagnosis.
 
-Codex/Astra implemented this on top of accepted HEAD, but it is **uncommitted pending host browser verification**.
-
-Exact modified files:
-- study-teachback-app/app.mjs
-- study-teachback-app/core.mjs
-- study-teachback-app/index.html
-- study-teachback-app/correctness-boundaries.test.mjs
-- study-teachback-app/browser-tests-r4.mjs
-- study-teachback-app/run-offline-tests.mjs
-
-Implemented behavior:
-- removes content diagnosis hard gate requiring every span to be replayed;
-- diagnosis uses the current explicit transcript confirmation;
+Accepted behavior:
+- content diagnosis can proceed after explicit confirmation of the current transcript text;
 - warning remains that ASR may mishear negation/numbers/conditions/terms;
-- per-span/full-player replay remain optional;
-- replay completion is transient UI feedback, not falsely persisted;
-- transcript confirmation uses `USER_TRANSCRIPT_CONFIRMATION` rather than pretending the user replay-corrected;
-- old saved origins remain untouched;
-- process-candidate confirmation still requires replay of that specific candidate;
+- per-span and full-audio replay remain optional for transcript review;
+- playback completion remains transient UI feedback, not persisted as false proof;
+- `USER_TRANSCRIPT_CONFIRMATION` records text confirmation, not playback proof;
+- legacy saved origins remain compatible;
+- process-candidate confirmation still requires genuine replay of that specific candidate;
 - no extra provider call;
-- no schema migration/model/provider/retention/budget change.
+- no schema migration, model/provider, retention, or budget change.
 
-Fresh deterministic evidence:
-- focused: 36/36 PASS
-- full Node/offline: 151/151 PASS
-- browser syntax: PASS
-- git diff --check: PASS
-- production ledger unchanged
-- live API / ASR / recording: 0
+Finalization evidence reported by Codex/Astra and accepted by MASTER:
+- host browser: 52/52 PASS, 0 failures;
+- host sourceSHA256 binding: 53/53 matched before staging, before commit, and after commit;
+- focused deterministic suite: 36/36 PASS;
+- full Node/offline suite: 151/151 PASS;
+- `git diff --check` and staged diff check: PASS;
+- exactly six authorized files, 47 insertions / 29 deletions;
+- no post-host source/test drift;
+- final tracked worktree clean; unrelated untracked artifacts left untouched;
+- production ledger unchanged;
+- live provider calls / recordings / ASR / diagnosis during finalization: 0;
+- no product push/merge.
 
-Codex browser result:
-- blocked before application cases by known Edge GPU/CDP sandbox failure;
-- therefore NOT a browser PASS.
+MASTER decision:
+**REPLAY-REVIEW-UX-01 = ACCEPTED.**
 
-Current result:
-**HOST PASS / FINALIZATION PENDING**
+## 6. Current gate — DOC-CLEANUP-PHASE3B-01
 
-## 7. Current gate
+Reason:
+Codex identified stale current-facing documentation that still describes Phase 3 as not executed, live allowance as unused, or predates the accepted optional-replay UX.
 
-Owner host browser validation has PASSed outside Codex sandbox for the current uncommitted REPLAY-REVIEW-UX-01 bytes.
+Approved scope is documentation-only.
 
-Owner screenshot confirms:
-- all visible browser cases PASS;
-- wrapper exit 0;
-- error null;
-- production ledger before/after identical;
-- unchanged=true.
+In scope:
+- root README;
+- product README;
+- other currently active/canonical/entry-point documentation that presents stale current-state claims;
+- targeted search for stale current-facing statements;
+- one focused local documentation commit.
 
-Exact total browser case count and sourceSHA256 binding must be read from the fresh receipt by Astra before commit.
+Required corrections where applicable:
+- Phase 3B real owner validation has completed;
+- original live allowance is fully consumed;
+- accepted product HEAD is `aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`;
+- transcript replay is optional for content diagnosis after explicit current-text confirmation;
+- process-candidate confirmation still requires replay of the specific candidate;
+- content/process evidence separation remains mandatory.
 
-Next: final project-aware self-review and focused local commit only if there is no post-host source/test drift. Any post-host source/test edit requires fresh host reverify.
+Do not rewrite immutable historical handoffs merely because they accurately describe an earlier point in time.
 
-## 8. Codex/Astra operating model
+Out of scope:
+- product code or test changes;
+- new product behavior;
+- schema / retention / model / provider / budget changes;
+- new dependency/framework;
+- live provider calls, recording, ASR, or diagnosis;
+- product push/merge/public release.
 
-Default for future Codex turns:
+Acceptance:
+1. verify repo / branch / HEAD starts at accepted baseline;
+2. identify current-facing stale docs before editing;
+3. change documentation only;
+4. preserve historical evidence as historical evidence;
+5. targeted search confirms no known stale current-facing Phase 3 / allowance / replay requirement claims remain in active entry docs;
+6. `git diff --check` PASS;
+7. create one focused local documentation commit;
+8. no product push/merge;
+9. return CODEX_TO_CHAT through ACTIVE_EXCHANGE with changed paths, search evidence, diff summary, commit, and any unresolved ambiguity.
+
+## 7. Codex/Astra operating model
+
+Default:
 1. read CURRENT_STATE.md / HANDOFF.md / ACTIVE_EXCHANGE.md first;
 2. verify repo / branch / HEAD / tracked status;
-3. inspect active product entry docs and recent relevant history as useful;
-4. autonomously expand **reading/analysis scope** across the repo when needed;
+3. inspect active product entry docs and relevant history as useful;
+4. reading/analysis scope may expand across the repo;
 5. implementation scope remains bounded by the current MASTER-approved task;
-6. inside approved scope, Astra may analyze -> design -> implement -> test -> self-review -> iterate;
-7. stop if the same failure signature survives 3 meaningful fix/test cycles;
-8. stop for scope expansion, product tradeoff, live spend, new dependency/framework/model/provider/schema/retention, destructive/high-risk action, push/merge/public release;
-9. outside-scope findings return as Must Fix candidate / User Decision Needed / Future Optional / Project observations.
+6. stop for scope expansion, product tradeoff, live spend, new dependency/framework/model/provider/schema/retention, destructive/high-risk action, push/merge/public release;
+7. outside-scope findings return as Must Fix candidate / User Decision Needed / Future Optional / Project observations.
 
-Authorized `ACTIVE_EXCHANGE.md` writes on meta/master-state are transport commits and are distinct from product push/merge.
+Authorized ACTIVE_EXCHANGE writes on meta/master-state are transport commits and are distinct from product push/merge.
 
-## 9. Must Fix / User Decision / Future Optional
+## 8. Must Fix / User Decision / Future Optional
 
 ### Must Fix
-- finish REPLAY-REVIEW-UX-01 host verification and finalization;
-- reconcile stale root/product README and historical canonical text that still says Phase 3 was not run or allowance unused.
+- complete DOC-CLEANUP-PHASE3B-01 so current-facing docs match the accepted Phase 3B and replay state.
 
 ### User Decision Needed
 - retention policy: customizable retention/default/reminders and migration semantics;
 - long-term ASR migration/timing strategy before deeper dependence on current timestamp behavior;
 - whether legacy paid delivery route should later be removed/deprecated/documented;
-- any new live validation requires fresh explicit authorization and cost boundary.
+- any new live validation requires fresh explicit authorization and cost boundary;
+- after documentation cleanup, whether current Phase 3B evidence is sufficient to close this validation phase.
 
 ### Future Optional
 - small-step app.mjs decomposition;
@@ -199,24 +189,27 @@ Authorized `ACTIVE_EXCHANGE.md` writes on meta/master-state are transport commit
 - synthetic portfolio demo;
 - replay-burden measurement after UX change.
 
-## 10. Verified / Likely / Unknown
+## 9. Verified / Likely / Unknown
 
 Verified:
 - Phase 3B real flow completed with 1 Tutor + 1 ASR + 1 diagnosis and 0 retries;
+- original Phase 3B live allowance is fully consumed;
 - content/process separation worked on the real sample;
 - accepted short-pause detector can surface the owner-confirmed hesitation on preserved audio;
-- REPLAY-REVIEW-UX-01 Node/offline tests pass.
+- REPLAY-REVIEW-UX-01 passed host-bound and deterministic finalization evidence and is accepted at `aa240f8...`.
 
 Likely:
-- optional replay UX is the correct owner direction and is internally coherent.
+- current Phase 3B evidence is sufficient to support a formal phase-closure decision after documentation consistency is restored.
 
 Unknown:
-- exact fresh host browser case count/source-hash binding until Astra reads the receipt;
 - natural-speech detector sensitivity/specificity at scale;
 - long-term usefulness across courses/users;
 - final retention policy;
-- final ASR migration choice.
+- final ASR migration choice;
+- whether Phase 3B should formally close until DOC-CLEANUP-PHASE3B-01 returns.
 
-## 11. Next smallest experiment
+## 10. Next smallest step
 
-Astra reads the fresh host receipt/source hashes, performs final project-aware self-review, and creates one focused local commit if unchanged. No live provider calls.
+Codex/Astra performs DOC-CLEANUP-PHASE3B-01 only, commits documentation locally, and returns CODEX_TO_CHAT.
+
+No new live experiment or new productization feature is authorized.
