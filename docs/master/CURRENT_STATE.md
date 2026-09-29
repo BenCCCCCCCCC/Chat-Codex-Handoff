@@ -17,10 +17,10 @@ Product branch:
 `prototype/study-teachback-v0.1`
 
 Accepted local feature baseline:
-`89c23a155ac7c32e6357b33144edf93bd9850309`
+`ac875a100b159781037746ea0b8bd2188457d13a`
 
 Commit:
-`feat: make learning setup source-first`
+`fix: auto-use small imported learning materials`
 
 Accepted sequence:
 - Batch A: MASTER-ACCEPTED
