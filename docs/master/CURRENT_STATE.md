@@ -1,6 +1,6 @@
 # Current State
 
-Updated: 2026-09-29 — GitHub exchange relay PASS / project-wide review dispatched
+Updated: 2026-09-29 — Project-wide Codex review accepted / correctness Batch C dispatched
 Role: 00 MASTER / authoritative dynamic state
 
 ## 1. Active product / version
@@ -29,222 +29,197 @@ Dynamic authority:
 Transport only:
 - `meta/master-state/docs/master/ACTIVE_EXCHANGE.md`
 
-## 2. Phase 3B
+## 2. Phase 3B state
 
-PHASE3B-LIVE-01 remains owner-authorized:
+PHASE3B-LIVE-01 remains owner-authorized under:
 - maximum 3 provider calls;
 - zero retries;
 - incremental local exposure <= US$0.03432;
 - one recording maximum.
 
-No provider call or recording has yet occurred under this authorization.
+No provider call or recording has occurred under that authorization.
 
-### Host browser smoke — PASS
-
-Owner manually validated outside the Codex sandbox:
-- local server starts;
+Host browser smoke outside Codex sandbox = PASS:
+- server starts;
 - fresh isolated Edge opens;
-- product root at `http://127.0.0.1:4317` displays;
-- basic UI is visible;
-- no unexpected Tutor / ASR / diagnosis API activity appears.
+- product root/UI displays;
+- no unexpected Tutor/ASR/diagnosis provider activity.
 
-Therefore the prior Codex-launched Edge failures are classified as validation-environment / Codex-sandbox limitations, not current evidence that the product root is broken.
+The live experiment remains PAUSED while the newly found correctness boundaries are fixed and regression-tested. Existing live authorization remains intact and unspent.
 
-The real Phase 3B browser/microphone flow should be owner-driven outside Codex sandbox when resumed.
+## 3. GitHub exchange relay
 
-## 3. GitHub exchange relay — PASS
+EXCHANGE-RELAY-PROBE-01 = PASS.
 
-Task:
-`EXCHANGE-RELAY-PROBE-01`.
+Verified:
+- Chat wrote one `CHAT_TO_CODEX` turn;
+- Codex read it and wrote `CODEX_TO_CHAT` to the same file;
+- MASTER read the receipt directly from GitHub;
+- comparison showed only `docs/master/ACTIVE_EXCHANGE.md` changed;
+- no product change/test/provider call/push/merge.
 
-Chat wrote:
-`docs/master/ACTIVE_EXCHANGE.md`
-at commit:
-`6c4582dcb5ad92d15bfa7cdc6f1949cb5734d119`.
+Accepted workflow:
+1. MASTER writes the next turn to `ACTIVE_EXCHANGE.md`.
+2. Owner sends only a minimal Codex nudge.
+3. Codex executes and writes its reply back to the same exchange file.
+4. Owner returns to Chat with only “Codex 已执行”.
+5. MASTER reads the result directly, updates canonical state and writes the next turn.
 
-Codex read that instruction and replaced only the same exchange file with a `CODEX_TO_CHAT` receipt at:
-`9f4e36675a54bcd1a485675131f474e0d546d114`.
+The exchange file is transport, not product authority.
 
-MASTER directly read the receipt from GitHub.
+## 4. PROJECT-WIDE-REVIEW-01 — COMPLETE
 
-Verified receipt:
-- result = `RELAY_WRITE_OK`;
-- actual repo root = `F:/Chat-Codex-Handoff/validation-repo`;
-- product branch = `prototype/study-teachback-v0.1`;
-- product HEAD = `dd8317b43100b8cbaad684cab7fc02957e32de62`;
-- tracked worktree CLEAN;
-- no product files changed;
-- no tests run;
-- no provider/API call;
-- no product push/merge;
-- no runtime/budget/provider/canonical-state modification.
+Codex returned `REVIEW_COMPLETE_WITH_FINDINGS`.
 
-Commit comparison `6c4582d... -> 9f4e366...` showed exactly one changed path:
+MASTER verified the review commit after dispatch changed only:
 `docs/master/ACTIVE_EXCHANGE.md`.
 
-**EXCHANGE-RELAY-PROBE-01 = PASS.**
+Coverage reported by Codex:
+- Git tracked files: 338;
+- active project body after excluding generated/historical evidence areas: 81 tracked files;
+- all 81 active files fully read;
+- recent 12 commits inspected;
+- three selected historical evidence receipts sampled;
+- 257 historical/generated files under `artifacts/**` and `study-teachback-app/evidence/**` intentionally not byte-read;
+- owner profile/IndexedDB/credentials/live runtime ledger not inspected;
+- no active tracked body files unread/blocked.
 
-## 4. Exchange workflow — accepted for continued validation
+This coverage is sufficient for the requested architecture/project review while preserving the distinction between active source and historical evidence.
 
-The user no longer needs to copy full Codex Delivery Packets between Codex and Chat when the exchange succeeds.
+## 5. Project-wide review — MASTER assessment
 
-Turn pattern:
-1. Chat reviews current state.
-2. Chat writes `CHAT_TO_CODEX` into `ACTIVE_EXCHANGE.md`.
-3. Owner sends only a tiny Codex nudge: `继续，读取 ACTIVE_EXCHANGE.md`.
-4. Codex executes the current turn.
-5. Codex writes `CODEX_TO_CHAT` back into the same file.
-6. Owner returns to Chat and only says Codex executed.
-7. Chat reads the reply directly from GitHub, updates canonical state, and writes the next turn.
+The review confirms the accepted architecture:
+- source/local ingestion;
+- Tutor/learning dialogue;
+- real owner recording;
+- original audio + raw/corrected transcript;
+- replay gate;
+- content findings separated from local process evidence;
+- diagnostic target based on content, optionally contextualized by process evidence;
+- server/provider/ledger boundaries;
+- IndexedDB local topic/history/export/delete;
+- retained Handoff tooling separate from the learning product;
+- GitHub meta branch as MASTER state plus ACTIVE_EXCHANGE as transport.
 
-Git history is the transport audit trail.
+Codex also identified three distinct source-level correctness boundaries in the current accepted local baseline. MASTER accepts them as **Must Fix before resuming Phase3B live validation**.
 
-The file is not canonical authority and cannot override MASTER decisions.
+### MF-01 — Tutor output/history length contract mismatch
 
-Codex may write only `ACTIVE_EXCHANGE.md` on the meta branch unless another explicit authorization is recorded.
+Evidence reported:
+- `study-teachback-app/core.mjs` accepts Tutor message output up to 4000 characters;
+- `app.mjs` stores accepted assistant messages in history;
+- `server.mjs /api/teach` later revalidates each recent history item with a 2500-character bound.
 
-## 5. PROJECT-WIDE-REVIEW-01 — dispatched
+Consequence:
+a Tutor output accepted by the product at 2501–4000 characters can later cause the next otherwise-normal learning request to fail locally before provider dispatch.
 
-Owner explicitly requested:
-- Codex should fully understand/read the active project body;
-- Codex may proactively make suggestions;
-- suggestions should help improve the project, not merely respond mechanically.
+Required correction:
+unify accepted Tutor output and re-input history contract with explicit handling; do not silently rewrite provenance/history.
 
-MASTER authorizes a **read-only project-wide review**.
+### MF-02 — repeated content confirmation can advance transcript version during pending diagnosis
 
-Purpose:
-give Codex broad analytical context and surface real architecture/product/maintainability risks before further implementation.
+Evidence reported:
+- content confirm mutates/saves a correction before the existing API in-flight guard rejects a second diagnosis request;
+- a rapid/repeated confirm can therefore create a later transcript version while the first diagnosis is still in flight;
+- the earlier report can then be filtered out as non-latest.
 
-No implementation is authorized.
+Required correction:
+make confirm/save/dispatch one mutually exclusive operation before any version mutation; repeated confirm while busy must not create a new correction or second dispatch.
 
-### Required review coverage
+### MF-03 — GET /api/status ledger errors escape the request-level controlled boundary
 
-Codex must first inventory tracked files and state what it actually reviewed.
+Evidence reported:
+- status summary is read outside the POST try/catch;
+- ledger read/JSON errors can throw `LEDGER_UNREADABLE`;
+- the async request callback lacks a controlled status-path error response.
 
-It should fully read the active text/code/config/test surface, including as applicable:
-- repository root active docs/config;
-- `study-teachback-app/` source, UI, provider, ledger, storage, core/schema, launch helpers and tests;
-- retained `handoff-kit/` and related integration tooling;
-- tracked `.codex/` project configuration relevant to workflow;
-- active tracked docs outside generated artifact directories;
-- recent Git history sufficient to understand Batch A/B and current baseline;
-- canonical `CURRENT_STATE.md`, `HANDOFF.md` and current exchange state from `meta/master-state`.
+Required correction:
+fail closed with a controlled “budget/status unavailable” response; never reset ledger, release reservations or allow provider work as a recovery shortcut.
 
-Historical/raw/generated artifacts do not need byte-by-byte review. Codex must list skipped categories/path patterns and explain why they are not part of the project body review.
+These findings do not revoke Batch A/B acceptance; they are newly discovered correctness boundaries in the accepted source.
 
-If a tracked file cannot be read, state it explicitly rather than claiming complete coverage.
+## 6. CORRECTNESS-BOUNDARIES-01 / Batch C
 
-### Required outputs
+MASTER authorizes one bounded zero-provider-call correction covering MF-01, MF-02 and MF-03 only.
 
-1. **Coverage manifest**
-   - tracked-file inventory summary;
-   - fully reviewed areas;
-   - intentionally skipped generated/history/binary areas;
-   - unread/blocked files.
+Goals:
+- reproduce each boundary in isolated regression first where practical;
+- apply minimum behavior-preserving fixes;
+- run focused + applicable existing offline/browser stub regression;
+- preserve Batch A/B behavior;
+- no live provider, microphone or Phase3B.
 
-2. **Architecture map**
-   - major components and responsibilities;
-   - runtime/data/provider/test boundaries;
-   - authoritative state vs retained historical tooling;
-   - browser/manual validation boundary.
+Exact task is in HANDOFF and dispatched through ACTIVE_EXCHANGE.
 
-3. **End-to-end product flow**
-   - source input/learning;
-   - owner input;
-   - recording/ASR/replay;
-   - contentFindings/processEvidence/diagnosticTarget;
-   - feedback/follow-up/history;
-   - cost/ledger guard.
+## 7. Project-wide suggestions retained but NOT automatically implemented
 
-4. **Current strengths**
-   - only evidence-backed strengths;
-   - distinguish engineering validation from real-user validation.
+### User Decision Needed / retained backlog
 
-5. **Confirmed risks / defects**
-   - actual source-level or structural issues;
-   - cite paths/symbols/evidence;
-   - do not restate already-fixed Batch A/B defects as open.
+**UD-02 — portable synthetic audio fixture**
+Current browser suite reads an ignored synthetic WAV. Decide later whether to check in a fixed synthetic fixture with hash/provenance or document deterministic preparation. A clean clone must not silently substitute different audio and claim equivalent coverage.
 
-6. **Simplification / maintainability opportunities**
-   - duplicated responsibilities;
-   - stale/legacy entrypoints;
-   - test/production coupling;
-   - state/document drift risk;
-   - removable complexity;
-   - only where supported by current repo.
+**UD-03 — ledger atomic persistence**
+Current ledger writes the whole JSON directly. A separate decision is needed for atomic replacement/recovery and fault injection. Locks solve concurrency, not interrupted-write atomicity. Do not auto-reset unresolved reservations.
 
-7. **Product suggestions**
-   - useful improvements Codex believes could materially improve stable personal use or portfolio demonstration;
-   - do not invent market demand;
-   - do not turn speaking-process signals into psychological or global fluency judgments.
+**UD-04 — historical entrypoint lifecycle**
+Legacy browser suites/live helpers/delivery semantic paths remain. Decide later whether to explicitly mark/segregate them or gradually remove after consumer checks.
 
-8. **Handoff/exchange workflow suggestions**
-   - assess whether the new single-file GitHub exchange is sufficient;
-   - identify concurrency/history/permissions/turn-state risks;
-   - suggest only the smallest improvements if evidence warrants them.
+**UD-05 — real owner validation**
+Resume the already-authorized owner-led Phase3B only after Batch C is accepted. Existing spend authorization remains valid.
 
-9. **Classification**
-   - Must Fix;
-   - User Decision Needed;
-   - Future Optional.
+**UD-06 — retention/export/recovery**
+Custom retention/default/reminders remain desired. Export currently does not imply one-click re-import/recovery. Exact policy remains owner decision.
 
-10. **Evidence status**
-    - Verified;
-    - Likely;
-    - Unknown.
+### Future Optional
 
-11. **Recommended next smallest experiments**
-    - no more than a small set;
-    - recommendations only, not execution.
+- Small-step extraction of pure state transitions/dependency seams from `app.mjs` when touching related behavior; no broad refactor.
+- Mark one active browser suite and classify r3/legacy suites/helpers explicitly.
+- Treat GitHub exchange as primary workflow and retained handoff-kit as fallback.
+- Product UX: emphasize one most useful content relation + focused next action while preserving process evidence as non-diagnostic observation.
+- Synthetic/fake-provider portfolio demo that clearly distinguishes engineering validity from learning efficacy.
+- Measure replay burden before changing replay policy.
+- ASR/Whisper migration remains a separate current-capability decision; external claims require MASTER freshness check.
 
-### Boundaries
+## 8. Exchange workflow improvements retained
 
-No:
-- product/code/test/runtime modification;
-- local commit;
-- provider/API call;
-- microphone;
-- live Phase 3B;
-- GitHub product-branch push/merge;
-- canonical state modification;
-- new dependency;
-- automatic implementation of suggestions.
+The current single-file relay is sufficient for the current single-owner serial workflow.
 
-Codex is allowed to update only `docs/master/ACTIVE_EXCHANGE.md` on `meta/master-state` with the review result.
+Future minimal conventions, if needed:
+- fixed `state`, `turn_id`, `writer`, `in_reply_to` fields;
+- duplicate Codex nudge should not repeat completed work;
+- write-before check of exchange content plus canonical commit;
+- write-after check that only ACTIVE_EXCHANGE changed and read-back succeeded;
+- stronger branch-level CAS only if real concurrent writers appear.
 
-Suggestions that depend on current external OpenAI/third-party capabilities must be marked `Needs MASTER freshness check` unless directly verified in the review; they must not be treated as Must Fix solely from stale knowledge.
+Do not build a daemon/message broker while the one-file relay is sufficient.
 
-## 6. Why this review is allowed
-
-This is an explicit owner-requested scope expansion in **analysis only**, not implementation.
-
-Codex is encouraged to make independent observations and recommendations.
-
-Codex remains an advisor/executor; MASTER and owner retain scope/priority decisions.
-
-## 7. Classification
+## 9. Classification
 
 Completed:
 - Batch A/B engineering validation;
 - host browser smoke;
-- GitHub one-file exchange probe.
+- GitHub exchange relay validation;
+- PROJECT-WIDE-REVIEW-01.
 
-In Progress / Dispatched:
-- PROJECT-WIDE-REVIEW-01 via ACTIVE_EXCHANGE.
+Must Fix / In Progress:
+- CORRECTNESS-BOUNDARIES-01 (MF-01/02/03).
 
-Paused but authorized:
+Paused but already authorized:
 - PHASE3B-LIVE-01.
 
-Not Done:
-- project-wide review result;
-- real Phase 3B recording/provider calls;
-- long-term Whisper migration;
-- retention policy;
-- product push/merge/final owner acceptance.
+User Decision Needed later:
+- portable fixture;
+- atomic ledger persistence;
+- legacy entrypoint cleanup;
+- retention/recovery policy;
+- exact timing of live owner experiment after Batch C.
 
-## 8. Next smallest step
+Unknown:
+- trigger frequency of MF-01 in natural Tutor output;
+- real timing frequency of MF-02;
+- actual damaged-ledger behavior until isolated regression;
+- real owner ASR/usefulness/replay burden.
 
-Owner sends only:
-`继续，读取 meta/master-state 的 docs/master/ACTIVE_EXCHANGE.md，并严格执行当前 turn。`
+## 10. Next smallest step
 
-After Codex writes the review reply, owner should not paste it. Return to MASTER with only `Codex 已执行`; MASTER reads the review directly from GitHub.
+Codex executes only CORRECTNESS-BOUNDARIES-01 through ACTIVE_EXCHANGE, writes the review/delivery result back to the exchange file, and stops for MASTER review. Owner need not copy the response.
