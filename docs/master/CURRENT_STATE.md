@@ -218,3 +218,14 @@ Owner requested a concrete, self-contained procedure before beginning the live t
 Protocol: start local server from normal owner PowerShell; open the validated isolated Edge outside Codex sandbox; create a new clean topic from the exact laboratory-visitor-rules source in HANDOFF; run the normal Learn entry once if required; record one natural 20–45 second Mandarin explanation with no prompt; allow exactly one ASR submission; replay and compare raw ASR against actual speech; correct only ASR mishearing; stop before content diagnosis and return the checkpoint to MASTER.
 
 Expected provider use by the replay checkpoint: at most one Tutor semantic call, exactly one ASR call, zero diagnosis calls. No retries. Any Tutor/ASR/audio/replay/ledger failure stops the experiment.
+
+
+## PHASE3B-L1-START-LEARN-NO-RESPONSE — 2026-09-29
+
+Owner began the manual Phase3B flow outside Codex sandbox and reports that clicking Start/Learn produced no visible response.
+
+Do not click Start/Learn again until MASTER determines whether the first click dispatched a Tutor/provider request. Existing authorization permits at most one initial Tutor call and zero retries.
+
+Unknown: whether POST /api/teach was sent; whether the server received it; whether provider dispatch began; whether the click failed before network; whether UI failed to render.
+
+No recording/ASR/diagnosis may proceed until this blocker is classified.
