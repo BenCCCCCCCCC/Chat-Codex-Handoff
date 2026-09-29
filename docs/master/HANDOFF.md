@@ -129,3 +129,18 @@ Next:
 5. no retry;
 6. do not Repair/Apply/re-record;
 7. return full feedback to MASTER.
+
+
+## Current diagnosis-button recovery
+
+The previous owner click did not dispatch the content diagnosis because the per-span replay gate was not satisfied after reopening the attempt.
+
+To proceed:
+1. click each of the four per-span `回听 x–y 秒` buttons;
+2. let each segment play to its end until the button changes to `已完整回听 ✓`;
+3. do not edit text unless the ASR changed semantic meaning;
+4. do not insert 额/嗯 or pauses;
+5. after all four are marked heard, click `确认已回听，开始诊断` exactly once;
+6. no retry if an actual provider request then fails.
+
+The blocked pre-gate click consumed zero provider calls.
