@@ -1,32 +1,20 @@
 # ACTIVE_EXCHANGE
 
 state: WAITING_OWNER
-turn_id: PHASE3B-LIVE-01-OWNER-CHECKPOINT-V3
+turn_id: PHASE3B-PROCESS-EVIDENCE-CHECKPOINT
 task: PHASE3B-LIVE-01
 writer: CHAT_MASTER
 transport_only: true
 accepted_product_head: ac875a100b159781037746ea0b8bd2188457d13a
 
-FILE-IMPORT-AUTO-USE-01 is MASTER-ACCEPTED and finalized locally.
+Owner reached real replay/transcript review.
 
-Owner action now happens outside Codex sandbox.
+Observed candidate issue:
+natural pauses/filler words such as “额……” were spoken but are not visible in the transcript.
 
-Use the synthetic DOCX through the real file-import path:
-OWNER_VALIDATION_01_测试材料_实验室访客规则.docx
+Do not execute Codex work yet.
+Do not start content diagnosis.
 
-Expected after extraction:
-- learning source auto-populates automatically
-- title derives from filename
-- no manual use-all step
+Owner must first compare raw transcript with full-audio replay and report where the hesitation/filler/pause actually occurred.
 
-Leave optional focus/known fields empty.
-
-Owner may perform:
-- one clean Learn/Tutor start
-- one 20–45 second natural Mandarin recording
-- exactly one ASR
-- replay/transcript review
-
-STOP before content diagnosis and return checkpoint to MASTER.
-
-Do not execute Codex work while state is WAITING_OWNER.
+This is a PROCESS-EVIDENCE-LIVE-GAP-01 checkpoint, not yet an implementation authorization.
