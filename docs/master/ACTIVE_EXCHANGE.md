@@ -7,20 +7,17 @@ writer: CHAT_MASTER
 transport_only: true
 accepted_product_head: bdd0635597006881d6f8f7213122ae53ccbc99a9
 
-PROCESS-EVIDENCE-FEASIBILITY-01 is MASTER-ACCEPTED.
+Owner restored the original real attempt.
 
-MASTER zero-call reanalysis of the preserved owner audio found a qualifying short-pause cluster around 16.08–17.24s overlapping the owner-confirmed 16–18s hesitation.
+Current action:
+- do not start a new recording
+- replay all four transcript spans
+- correct only genuine ASR semantic errors
+- do not insert filler words manually
+- click content diagnosis exactly once
+- no retry
+- do not Repair/Apply/re-record afterward
+- return full feedback to MASTER
 
-The existing stored attempt is not migrated/recomputed.
-
-Owner is now authorized to use the one remaining live call:
-exactly one content diagnosis on the existing attempt.
-
-No retry.
-No new recording.
-No new ASR.
-No Repair/Apply.
-
-After diagnosis, return the visible feedback to MASTER.
-
-Do not execute Codex work while state is WAITING_OWNER.
+Historical process candidate count may remain old; that is expected for the preserved attempt.
+Do not execute Codex work while WAITING_OWNER.
