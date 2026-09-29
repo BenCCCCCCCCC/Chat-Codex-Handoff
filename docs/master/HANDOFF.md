@@ -1,46 +1,90 @@
-# Active Handoff — OWNER-AUDIO-LOCAL-REANALYSIS-01
+# Active Handoff — PHASE3B-LIVE-01 FINAL CONTENT DIAGNOSIS
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: ZERO-PROVIDER EVIDENCE CHECK / DO NOT RESUME DIAGNOSIS
+Status: WAITING_OWNER / ONE REMAINING LIVE CALL AUTHORIZED / NO RETRY
 
 Accepted product HEAD:
 bdd0635597006881d6f8f7213122ae53ccbc99a9
 
-## Goal
+## Live budget state
 
-Re-evaluate the already-preserved real owner attempt with the newly accepted process detector before using the remaining content-diagnosis call.
+Already used:
+- 1 Tutor semantic call
+- 1 ASR call
+- 1 real recording
 
-Known real attempt:
-- duration about 21.96s
-- owner-confirmed hesitation/filler around 16–18s
-- old saved observation had only near-silence 14.54–15.42s
-- raw ASR omitted the filler
+Remaining authorized:
+- exactly 1 content-diagnosis semantic call
+- zero retries
 
-## Required evidence
+No second recording.
+No second ASR.
+No Repair/Apply.
 
-Use the preserved local export/audio only if available to MASTER/Codex locally and authorized.
+## Before clicking diagnosis
 
-Do not:
-- call provider/API
-- run ASR
-- make a new recording
-- mutate or migrate the stored owner attempt
-- upload owner audio/export to GitHub
+Prefer to restart onto accepted HEAD so current UI code is loaded while preserving IndexedDB data in the same isolated Edge profile.
 
-Compute the current accepted detector on the original audio bytes and report only derived evidence:
-- detector config/version
-- near-silence events
-- short-pause-cluster events
-- whether any event overlaps 16–18s
-- exact event times/types
-- whether quality gates suppress the detector
-- whether this agrees/disagrees with owner replay observation
+Verify:
+git -C F:\Chat-Codex-Handoff\validation-repo rev-parse HEAD
 
-If the original owner export is unavailable in Codex local workspace, do not fabricate. Return that limitation and let MASTER perform/route the zero-call evidence check.
+Expected:
+bdd0635597006881d6f8f7213122ae53ccbc99a9
 
-## Separate documentation follow-up
+If HEAD differs, STOP.
 
-Stale README/CURRENT_STATE historical status text is confirmed as a documentation Must Fix, but do not mix that cleanup into the audio evidence check.
+Restart server from normal PowerShell:
+Set-Location F:\Chat-Codex-Handoff\validation-repo
+node .\study-teachback-app\server.mjs
 
-Do not resume live diagnosis.
+Open/reload the same isolated Edge profile at:
+http://127.0.0.1:4317
+
+Open the existing owner topic/attempt. Do not create a new topic.
+
+## Transcript review
+
+Use the existing raw/corrected transcript.
+
+Do not insert filler words such as 额/嗯 merely to represent process evidence.
+
+Replay/confirm every required transcript segment if the UI still requires it.
+
+Only correct actual ASR semantic mishearing.
+
+## Final live action
+
+Click:
+确认已回听，开始诊断
+
+Exactly once.
+
+Do not retry if provider/ledger/UI returns an error.
+
+## What to capture
+
+After the content diagnosis returns, provide MASTER:
+- screenshot of the full feedback area;
+- exact 内容理解 findings/text;
+- any 讲解过程证据 shown;
+- any “值得验证 / 重新解释” target;
+- whether the UI still shows historical old process candidates only;
+- any error/notice.
+
+Do not click:
+- Repair
+- Apply
+- re-record
+- retry ASR
+- another diagnosis
+
+## Interpretation boundary
+
+MASTER already has independently derived real-audio process evidence:
+- long near-silence about 14.54–15.42s;
+- short-pause cluster about 16.08–17.24s overlapping owner-confirmed hesitation.
+
+Do not manually force these into the transcript/UI.
+
+After the one content call, MASTER will evaluate whether content findings and process evidence converge or appropriately remain separate.
