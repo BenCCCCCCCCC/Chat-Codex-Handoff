@@ -1,30 +1,23 @@
-# Active Handoff — FILE-IMPORT-AUTO-USE-01 HOST VERIFY
+# Active Handoff — FILE-IMPORT-AUTO-USE-01 FINALIZE
 
-Updated: 2026-09-29
-Role: 00 MASTER
-Status: WAITING_OWNER / OUTSIDE CODEX SANDBOX / ZERO LIVE API
+Status: DISPATCHED THROUGH ACTIVE_EXCHANGE
 
-Current evidence:
-- focused import tests 8/8 PASS
-- full Node/offline 131/131 PASS
-- git diff --check PASS
-- live provider calls 0
-- product changes uncommitted
+Host browser verification outside Codex sandbox: PASS.
 
-Owner host command:
+Before final commit Astra must:
+- inspect the latest host browser receipt for file-import-auto-use-01 and report exact PASS count / exit / source hashes
+- verify no source/test drift after host run
+- independently self-review the file-import-auto-use diff
+- inspect browser-test media/fixture paths to determine whether the owner-heard moist-soil/watering Chinese audio came from intentional synthetic replay media
 
-Set-Location F:\Chat-Codex-Handoff\validation-repo
-node .\study-teachback-app\run-offline-tests.mjs browser file-import-auto-use-01
+If the audio is traceable to a synthetic fixture used by the browser suite, classify it as expected test-environment playback and do not change product behavior.
+If it is not traceable, report it as Unknown/Future investigation; do not speculate or modify product audio behavior without evidence.
 
-Expected browser behavior:
-- small parsed file auto-populates the actual learning source
-- filename title is present
-- source count updates
-- preview stays available
-- manual subset override still works
-- >5000 extracted text is not silently truncated/auto-used
-- prior setup/provenance/browser regressions remain green
+If no post-host source/test change is needed:
+- stage only FILE-IMPORT-AUTO-USE-01 files
+- git diff --check
+- create one focused local commit
+- no push/merge
+- return full CODEX_TO_CHAT receipt via remote ACTIVE_EXCHANGE
 
-Return PASS/FAIL and final count to MASTER.
-
-Do not resume Phase3B yet.
+If any source/test change is made after host PASS, return NEEDS_HOST_REVERIFY instead of relying on stale host evidence.
