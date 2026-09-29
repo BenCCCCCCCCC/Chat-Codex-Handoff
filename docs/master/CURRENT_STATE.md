@@ -298,3 +298,10 @@ Fresh deterministic evidence:
 Codex browser attempt was environment-blocked before application cases by the known Windows Codex sandbox Edge/CDP limitation.
 
 Therefore FILE-IMPORT-AUTO-USE-01 is pending one host-side browser validation before final commit/MASTER acceptance.
+
+
+## FILE-IMPORT-AUTO-USE-01 host browser result
+
+Owner reports the host browser regression `browser file-import-auto-use-01` PASSed outside Codex sandbox. This clears the browser-validation gate for the unchanged current worktree, pending Astra receipt/hash verification before commit.
+
+Owner also observed an occasional audible Chinese phrase during the browser regression, approximately about moist soil / watering. MASTER inspected the main product files `app.mjs`, `index.html`, and `server.mjs` on the product branch and found no `speechSynthesis`/TTS API usage and no matching phrase text. Because the browser suite intentionally exercises replay/media paths, the leading hypothesis is synthetic test-media playback rather than product-generated speech. This must be verified from the test fixture/artifacts before classification.
