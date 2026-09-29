@@ -7,9 +7,9 @@ import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 const repo = fileURLToPath(new URL('../', import.meta.url));
 const mode = process.argv[2];
-if (!['node', 'browser-env', 'replay', 'browser-replay', 'browser', 'focused', 'diagnostic', 'provenance-baseline'].includes(mode)) throw Error('Use node, browser, focused, diagnostic or provenance-baseline');
+if (!['node', 'browser-env', 'replay', 'browser-replay', 'browser', 'focused', 'boundaries', 'diagnostic', 'provenance-baseline'].includes(mode)) throw Error('Use node, browser, focused, boundaries, diagnostic or provenance-baseline');
 const batch=process.argv[3]??'correctness-hygiene-01';
-if(!['correctness-hygiene-01','diagnostic-localization-01'].includes(batch))throw Error('INVALID_TEST_BATCH');
+if(!['correctness-hygiene-01','diagnostic-localization-01','correctness-boundaries-01'].includes(batch))throw Error('INVALID_TEST_BATCH');
 const parent = join(repo, 'artifacts/study-teachback', batch);
 mkdirSync(parent, { recursive: true });
 const output = mkdtempSync(join(parent, `${mode}-${Date.now()}-`));
@@ -28,7 +28,7 @@ if(mode==='provenance-baseline'){
   if(base.status!==0){writeFileSync(join(output,'baseline-source-error.log'),`${base.error?.code??''}\n${base.stderr??''}`);throw Error('BASELINE_SOURCE_UNAVAILABLE: '+output);}
   env.STUDY_TEST_APP_SOURCE=join(output,'accepted-base-app.mjs');writeFileSync(env.STUDY_TEST_APP_SOURCE,base.stdout);
 }
-const files = mode === 'browser-env' ? ['study-teachback-app/browser-tests-r4.mjs','--environment-probe'] : mode === 'browser-replay' ? ['study-teachback-app/browser-tests-r4.mjs','--replay-only'] : mode === 'browser' ? ['study-teachback-app/browser-tests-r4.mjs'] : mode === 'replay' ? ['--test','study-teachback-app/replay-gate.test.mjs'] : mode === 'diagnostic' ? ['--test','study-teachback-app/diagnostic-localization.test.mjs'] : mode === 'provenance-baseline' ? ['--test','study-teachback-app/provenance.test.mjs'] : mode === 'focused' ? ['--test', 'study-teachback-app/correctness-hygiene.test.mjs'] : ['--test', 'study-teachback-app/tests.mjs', ...readdirSync(new URL('./', import.meta.url)).filter(f => f.endsWith('.test.mjs')).sort().map(f => `study-teachback-app/${f}`)];
+const files = mode === 'boundaries' ? ['--test','study-teachback-app/correctness-boundaries.test.mjs'] : mode === 'browser-env' ? ['study-teachback-app/browser-tests-r4.mjs','--environment-probe'] : mode === 'browser-replay' ? ['study-teachback-app/browser-tests-r4.mjs','--replay-only'] : mode === 'browser' ? ['study-teachback-app/browser-tests-r4.mjs'] : mode === 'replay' ? ['--test','study-teachback-app/replay-gate.test.mjs'] : mode === 'diagnostic' ? ['--test','study-teachback-app/diagnostic-localization.test.mjs'] : mode === 'provenance-baseline' ? ['--test','study-teachback-app/provenance.test.mjs'] : mode === 'focused' ? ['--test', 'study-teachback-app/correctness-hygiene.test.mjs'] : ['--test', 'study-teachback-app/tests.mjs', ...readdirSync(new URL('./', import.meta.url)).filter(f => f.endsWith('.test.mjs')).sort().map(f => `study-teachback-app/${f}`)];
 const args = ['--import', guard, ...files];
 const ledger = join(repo, 'study-teachback-app/runtime/usage.json');
 const hash = () => existsSync(ledger) ? createHash('sha256').update(readFileSync(ledger)).digest('hex') : 'ABSENT';

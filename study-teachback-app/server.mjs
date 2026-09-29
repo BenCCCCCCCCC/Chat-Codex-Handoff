@@ -3,7 +3,7 @@ import { extractSource } from './ingestion.mjs';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { semantic, transcribe, ledger } from './provider.mjs';
-import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue, repairFocus, waveDuration } from './core.mjs';
+import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue, repairFocus, waveDuration, TUTOR_MESSAGE_LIMIT } from './core.mjs';
 import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
 
 const files={'/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
@@ -18,12 +18,19 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
     if(req.method==='GET' && files[path]){
       try {const file=files[path];res.writeHead(200,{...headers,'Content-Type':file.endsWith('.html')?'text/html; charset=utf-8':file.endsWith('.css')?'text/css':'text/javascript'});res.end(await readFile(new URL(file,import.meta.url)));}catch{json(500,{error:'FILE_UNAVAILABLE'});}return;
     }
-    if(req.method==='GET' && path==='/api/status')return json(200,{keyConfigured:!!process.env.OPENAI_API_KEY,ledger:book.summary(),models:['whisper-1','gpt-5.6-luna']});
+    if(req.method==='GET' && path==='/api/status'){
+      try{return json(200,{keyConfigured:!!process.env.OPENAI_API_KEY,ledger:book.summary(),models:['whisper-1','gpt-5.6-luna']});}
+      catch{return json(503,{error:'BUDGET_UNAVAILABLE'});}
+    }
     if(req.method!=='POST'||req.headers.origin!==origin||req.headers['x-study-request']!=='1')return json(403,{error:'ORIGIN_REJECTED'});
     if(!['/api/teach','/api/diagnose','/api/asr','/api/register','/api/extract'].includes(path))return json(404,{error:'NOT_FOUND'});
     if(busy)return json(409,{error:'REQUEST_IN_PROGRESS'});
     busy=true; const controller=new AbortController();res.on('close',()=>{if(!res.writableEnded)controller.abort();});
     try {
+      // Unknown budget state must fail before any paid-work dispatch or registration.
+      if(path!=='/api/extract'){
+        try{book.summary();}catch{return json(503,{error:'BUDGET_UNAVAILABLE'});}
+      }
       const limit=path==='/api/extract'?10*1024*1024:path==='/api/asr'?5_760_044:80000;const parts=[];let length=0;
       for await(const part of req){length+=part.length;requireValue(length<=limit,'INPUT_TOO_LARGE');parts.push(part);}
       const bytes=Buffer.concat(parts);
@@ -35,7 +42,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       const source=sourceValue(b.source);
       if(path==='/api/teach'){
         requireValue(['learn','repair','apply','apply_answer'].includes(b.mode),'INVALID_MODE');
-        const input={source,mode:b.mode,message:text(b.message,2000),focus:b.mode==='repair'?repairFocus(b.focus):b.focus?text(b.focus,1000):null,history:Array.isArray(b.history)?b.history.slice(-6).map(m=>({role:m.role==='assistant'?'assistant':'user',text:text(m.text,2500)})):[]};
+        const input={source,mode:b.mode,message:text(b.message,2000),focus:b.mode==='repair'?repairFocus(b.focus):b.focus?text(b.focus,1000):null,history:Array.isArray(b.history)?b.history.slice(-6).map(m=>({role:m.role==='assistant'?'assistant':'user',text:text(m.text,m.role==='assistant'?TUTOR_MESSAGE_LIMIT:2500)})):[]};
         const result=await semanticCall(TEACH,input,teachingSchema,{signal:controller.signal});return json(200,{...result,value:validateTeaching(result.value,source)});
       }
       const attempt=attemptValue(b.attempt), input=contentInput(source,attempt);

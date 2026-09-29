@@ -13,12 +13,14 @@ const environmentProbe=process.argv.includes('--environment-probe');
 const probe={mode:environmentProbe?'NON_HEADLESS_TRUSTED_POINTER':'EXISTING_SUITE',lifecycle:[],states:[],trustedInputs:[]};
 const run=Date.now(), profile=process.env.STUDY_TEST_PROFILE??mkdtempSync(root+'edge-test-');
 const calls=[],cases=[],errors=[],network=[];let failASR=null,delaySemantic=0,rejectStarter=false,failTeach=false,failRegister=false;const provenanceRequests=[];
+let diagnosisGate=null;
 const savedASR=normalizeASR(JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r2/SYNTHETIC_ASR_FIELDS.json',import.meta.url))),7.31);
 const savedWave=[...readFileSync(new URL('./runtime/synthetic-mandarin-v2.wav',import.meta.url))];
 const testBook=new Ledger(root+`browser-test-ledger-${run}.json`),register=testBook.register.bind(testBook);
 testBook.register=id=>{if(failRegister)throw Error('LEDGER_LOCKED');return register(id);};
 const server=createServer({book:testBook,semanticCall:async(prompt,input)=>{
   calls.push({kind:input.mode??(input.events?'delivery':'content'),sourceId:input.source.id,focus:input.focus??null});if(delaySemantic)await new Promise(r=>setTimeout(r,delaySemantic));
+  if(!input.mode&&!input.events&&diagnosisGate)await diagnosisGate;
   if(input.mode)provenanceRequests.push(structuredClone(input));
   if(failTeach){failTeach=false;throw Error('API_RESULT_UNAVAILABLE');}
   if(rejectStarter){rejectStarter=false;return {value:{sourceId:input.source.id,message:'Rejected stub',goals:[{text:'Goal',sourceQuote:'NOT IN SOURCE'}],question:'Question'}};}
@@ -219,7 +221,22 @@ try{
     await evaluate(`window.rejectPermission()`);await until(`!document.getElementById('start').disabled`);assert.equal(testBook.summary().attempts,before);
   });
   await check('native MediaRecorder + decode + original IndexedDB Blob + exactly one registration',async()=>{const before=testBook.summary().attempts;await evaluate(`window.testMic='tone'`);await click('start');await until(`!document.getElementById('finish').hidden`);assert.equal(testBook.summary().attempts,before);await shot('recording','recording');assert(await evaluate(`document.body.dataset.recording==='true' && document.querySelector('.learning').hidden`));await pause(1400);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,1);assert(t.attempts[0].audio.size>0);assert(t.attempts[0].raw.spans.length);assert.equal(t.attempts[0].corrections.length,0);assert.equal(testBook.summary().attempts,before+1);assert.equal(testBook.read().events.filter(e=>e.type==='attempt'&&e.attemptId===t.attempts[0].id).length,1);});
-  await check('diagnosis blocked before segment replay; correction keeps original identity and audio',async()=>{await shot('partial-review','attemptPanel');await click('confirm');await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);const before=(await evaluate(all))[0].attempts[0];await evaluate(`document.querySelector('#transcript textarea').value='只有土壤干燥才浇水，湿润时先不浇。'`);await click('confirm');await until(`document.querySelectorAll('.finding').length===1`);const after=(await evaluate(all))[0].attempts[0];assert.equal(after.id,before.id);assert.equal(after.audio.size,before.audio.size);assert.equal(after.raw.text,before.raw.text);assert.equal(after.corrections.length,1);assert.notEqual(after.raw.id,after.corrections[0].id);});
+  await check('C2 diagnosis replay gate and delayed double confirm preserve one visible current-version report',async()=>{
+    await shot('partial-review','attemptPanel');await click('confirm');await until(`document.getElementById('notice').textContent.includes('逐段完整回听')`);
+    await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
+    const before=(await evaluate(all))[0].attempts[0],count=calls.length;
+    await evaluate(`document.querySelector('#transcript textarea').value='只有土壤干燥才浇水，湿润时先不浇。'`);
+    let release;diagnosisGate=new Promise(r=>release=r);
+    try{
+      await click('confirm');for(let i=0;i<100&&calls.length===count;i++)await pause(50);assert.equal(calls.length,count+1);
+      const pending=(await evaluate(all))[0].attempts[0];assert.equal(pending.corrections.length,1);
+      await click('confirm');await until(`document.getElementById('notice').textContent.includes('上一个请求仍在完成')`);
+      const duplicate=(await evaluate(all))[0].attempts[0];assert.deepEqual(duplicate.corrections,pending.corrections);assert.equal(calls.length,count+1);
+    }finally{release();diagnosisGate=null;}
+    await until(`document.querySelectorAll('.finding').length===1`);const after=(await evaluate(all))[0].attempts[0];
+    assert.equal(after.id,before.id);assert.equal(after.audio.size,before.audio.size);assert.equal(after.raw.text,before.raw.text);
+    assert.equal(after.corrections.length,1);assert.notEqual(after.raw.id,after.corrections[0].id);assert.equal(after.reports.at(-1).transcriptVersion,after.corrections[0].id);
+  });
   await check('targeted repair routes feedback back into tutor',async()=>{await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);await until(`document.getElementById('phase').textContent.includes('再学这一点') && document.querySelectorAll('.message.assistant').length===2`);assert(calls.some(c=>c.kind==='repair'));});
   await check('partial re-record is a new attempt with parent and focus',async()=>{await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再讲这一点').click()`);await click('start');await until(`!document.getElementById('finish').hidden`);await pause(1200);await click('finish');await until(`document.getElementById('notice').textContent.includes('转写完成')`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,2);assert.equal(t.attempts[1].kind,'partial');assert.equal(t.attempts[1].parentId,t.attempts[0].id);assert.notEqual(t.attempts[1].id,t.attempts[0].id);});
   await check('new Apply task and answer stay separate from same-topic repair',async()=>{await click('apply');await until(`document.getElementById('phase').textContent.includes('换个情境') && document.getElementById('question').textContent.includes('现在')`);await evaluate(`document.getElementById('chat').value='不需要，因为还是湿的。';document.getElementById('chatForm').requestSubmit()`);await until(`document.querySelectorAll('.message.assistant').length===4`);assert((await evaluate(all))[0].apply.answer);});

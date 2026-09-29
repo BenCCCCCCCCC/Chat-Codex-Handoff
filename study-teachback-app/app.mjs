@@ -19,7 +19,7 @@ async function api(path,body,headers={}){
   try{const response=await fetch(path,{method:'POST',headers:{'X-Study-Request':'1',...headers,...(body instanceof ArrayBuffer?{}:{'Content-Type':'application/json'})},body:body instanceof ArrayBuffer?body:JSON.stringify(body),signal:controller.signal});const result=await response.json();if(!response.ok)throw new Error(result.error);return result;}
   finally{controller=null;$('send').disabled=false;$('explain').disabled=false;$('workspace').removeAttribute('aria-busy');updateBudget();}
 }
-async function updateBudget(){try{const s=await(await fetch('/api/status')).json();$('budget').textContent=`本次账本：${s.ledger.requests} 次请求；已知费用估算 $${s.ledger.knownCostUSD.toFixed(6)}；含未结算预留 $${s.ledger.exposureUSD.toFixed(6)} / $5。现金新增上限 $10，不自动充值。`; }catch{}}
+async function updateBudget(){try{const response=await fetch('/api/status');if(!response.ok)throw new Error('BUDGET_UNAVAILABLE');const s=await response.json();$('budget').textContent=`本次账本：${s.ledger.requests} 次请求；已知费用估算 $${s.ledger.knownCostUSD.toFixed(6)}；含未结算预留 $${s.ledger.exposureUSD.toFixed(6)} / $5。现金新增上限 $10，不自动充值。`; }catch{$('budget').textContent='预算状态暂不可用；无法确认可用额度。';}}
 function renderTopic(){
   reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.source.title;$('sourceText').textContent=topic.source.text;
   $('goals').replaceChildren(...(topic.goals??[]).map(g=>el('li',g.text)));
@@ -223,8 +223,13 @@ function renderProcess(a){
   }
 }
 $('confirm').onclick=()=>act(async()=>{
+  if(record||capturePending||controller||processing)throw new Error('REQUEST_IN_PROGRESS');
   const a=current; if(!a?.raw)return;if(a.raw.spans.some(s=>!heard.has(s.id)))throw new Error('NOT_HEARD');
-  const corrected=revisedTranscript(a,a.raw.spans.map(s=>({text:editors.get(s.id).value})));a.corrections.push(corrected);await save();await diagnose(a);
+  processing=true;
+  try{
+    notice('正在保存核对版本并核对内容，请稍候……');
+    const corrected=revisedTranscript(a,a.raw.spans.map(s=>({text:editors.get(s.id).value})));a.corrections.push(corrected);await save();await diagnose(a);
+  }finally{processing=false;}
 });
 async function diagnose(a){
   const channel='content',events=[],request=attemptRequest(a);notice('正在核对内容和逻辑……');

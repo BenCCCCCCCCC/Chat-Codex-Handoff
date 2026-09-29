@@ -1,4 +1,5 @@
 export const RETENTION_MS = 7 * 86400000;
+export const TUTOR_MESSAGE_LIMIT = 4000;
 export function requireValue(ok, code) { if (!ok) throw new Error(code); }
 export function text(value, max = 12000) { requireValue(typeof value === 'string' && value.trim().length > 0 && value.length <= max, 'INVALID_TEXT'); return value; }
 export function identifier(value) { requireValue(typeof value === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(value), 'INVALID_ID'); return value; }
@@ -45,7 +46,7 @@ function exactKeys(v, names) { requireValue(v && typeof v === 'object' && !Array
 export function validateTeaching(v, source) {
   exactKeys(v, ['sourceId','message','goals','question']);
   requireValue(v.sourceId === source.id && Array.isArray(v.goals) && v.goals.length >= 1 && v.goals.length <= 4, 'INVALID_SOURCE_OR_GOALS');
-  text(v.message,4000); text(v.question,1000); v.goals.forEach(g=>{ exactKeys(g,['text','sourceQuote']); text(g.text,200); text(g.sourceQuote,600); requireValue(source.text.includes(g.sourceQuote),'INVALID_SOURCE_QUOTE'); });
+  text(v.message,TUTOR_MESSAGE_LIMIT); text(v.question,1000); v.goals.forEach(g=>{ exactKeys(g,['text','sourceQuote']); text(g.text,200); text(g.sourceQuote,600); requireValue(source.text.includes(g.sourceQuote),'INVALID_SOURCE_QUOTE'); });
   return v;
 }
 export function validateFindings(v, source, attempt, channel, events = []) {

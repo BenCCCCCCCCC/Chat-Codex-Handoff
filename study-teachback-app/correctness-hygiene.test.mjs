@@ -43,9 +43,9 @@ for (const failure of ['invalid','lock','corrupt','cap']) test(`A3 HTTP ${failur
     const id=failure==='invalid'?'bad/id':'new';
     const headers={Origin:origin,'X-Study-Request':'1'};
     const reg=await fetch(origin+'/api/register',{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({attemptId:id})});
-    assert.equal(reg.status,422);
+    assert.equal(reg.status,failure==='corrupt'?503:422);
     const asr=await fetch(origin+'/api/asr',{method:'POST',headers:{...headers,'Content-Type':'audio/wav','X-Attempt-Id':id},body:waveBytes(new Float32Array(16000))});
-    assert.equal(asr.status,422);assert.equal(calls,0);
+    assert.equal(asr.status,failure==='corrupt'?503:422);assert.equal(calls,0);
   } finally { await new Promise(r=>server.close(r)); }
 });
 
