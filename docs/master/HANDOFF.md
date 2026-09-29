@@ -1,116 +1,145 @@
-# Active Handoff — SETUP-FLOW-01 FINALIZE
+# Active Handoff — PHASE3B-LIVE-01 OWNER CHECKPOINT v2
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: DISPATCHED THROUGH ACTIVE_EXCHANGE / ASTRA SELF-REVIEW + LOCAL COMMIT
+Status: **WAITING_OWNER / LIVE AUTHORIZATION ACTIVE / STOP BEFORE DIAGNOSIS**
 
 ## 1. Binding
 
 Repo:
-F:\Chat-Codex-Handoff\validation-repo
+`F:\Chat-Codex-Handoff\validation-repo`
 
 Branch:
-prototype/study-teachback-v0.1
+`prototype/study-teachback-v0.1`
 
-Base HEAD:
-ab5d2ea9ad23359fe6cc3dc8abc0e963511996b2
+Accepted HEAD:
+`89c23a155ac7c32e6357b33144edf93bd9850309`
 
-SETUP-FLOW-01 changes are currently uncommitted.
+Run real browser/microphone work outside Codex sandbox.
 
-## 2. Accepted evidence before finalization
+Authorization:
+- maximum 3 provider calls total;
+- zero retries;
+- incremental local exposure <= US$0.03432;
+- one recording maximum.
 
-Focused:
-9/9 PASS.
+At this checkpoint allow:
+- at most one Tutor/Learn semantic call;
+- exactly one ASR call;
+- zero content-diagnosis calls.
 
-Full Node/offline:
-123/123 PASS.
+## 2. Start product
 
-Host browser outside Codex sandbox:
-artifact:
-artifacts/study-teachback/setup-flow-01/browser-1790660416802-ZP4imb
+Normal owner PowerShell:
 
-Owner-observed:
-- setup source-only/context cases PASS;
-- existing browser regressions PASS;
-- isolation synthetic credential / loopback / test ledger;
-- wrapper exit 0;
-- production ledger unchanged.
+```powershell
+Set-Location F:\Chat-Codex-Handoff\validation-repo
+node .\study-teachback-app\server.mjs
+```
 
-Codex must inspect the receipt and confirm the exact total PASS count and source hash binding before final commit.
+Open the previously validated isolated Edge profile at:
+`http://127.0.0.1:4317`
 
-## 3. Final self-review
+## 3. Import material — no manual title
 
-Astra should independently review the full SETUP-FLOW-01 diff for:
-- source-only start;
-- direct-paste auto title;
-- file-import filename title;
-- fallback title;
-- optional focus/known metadata;
-- setupContext persistence/reload;
-- no setup context in role=user history;
-- known is self-report, not mastery evidence;
-- exactly one existing Tutor request, no extra call;
-- legacy records/defaults remain compatible;
-- existing provenance and Batch A/B/C behavior stay intact;
-- no hidden model/provider/budget/retention/schema/dependency change.
+Use the product's file picker.
 
-Astra may rerun deterministic zero-call tests if useful.
+Select:
+`OWNER_VALIDATION_01_测试材料_实验室访客规则.docx`
 
-## 4. Autonomy / correction rule
+Use the local extracted preview and select/use the intended full material.
 
-Astra may iterate freely inside SETUP-FLOW-01 scope.
+Do **not** manually type a title.
 
-If self-review finds no source/test change needed after the host run:
-- stage only the SETUP-FLOW-01 files;
-- run git diff --check;
-- create one focused local commit;
-- no product push/merge;
-- return receipt through ACTIVE_EXCHANGE.
+Expected:
+- title is derived locally from the filename;
+- source is ready for learning.
 
-If Astra changes any product/test source after the host run:
-- do not finalize using the old host evidence;
-- return NEEDS_HOST_REVERIFY with the exact post-host change/reason;
-- MASTER will arrange another host run.
+For this first live experiment leave both optional setup fields empty:
+- 这次重点想学什么？（可选）
+- 已经掌握了什么？（可选）
 
-Hard stop if the same failure signature survives three meaningful fix/test cycles or another scope/risk boundary is reached.
+Reason: keep the real ASR/diagnostic experiment focused; optional-context semantics already have deterministic coverage.
 
-## 5. Commit scope
+## 4. Start Learn
 
-Expected files:
-- study-teachback-app/app.mjs
-- study-teachback-app/browser-tests-r4.mjs
-- study-teachback-app/core.mjs
-- study-teachback-app/index.html
-- study-teachback-app/provenance.test.mjs
-- study-teachback-app/run-offline-tests.mjs
-- study-teachback-app/schemas.mjs
-- study-teachback-app/server.mjs
-- study-teachback-app/setup-flow.test.mjs
+Click Start/Learn once.
 
-No blanket git add.
+Do not double-click or retry.
 
-Suggested commit message:
-feat: make learning setup source-first
+Expected:
+- at most one Tutor semantic call;
+- Tutor should preserve:
+  - registration alone is not sufficient;
+  - same-day badge matters;
+  - lab open/closed state matters;
+  - no admission after 18:00.
 
-No push/merge/amend/reset/rebase.
+If Tutor contradicts the source or errors, STOP and return to MASTER.
 
-## 6. Exchange return
+Do not ask extra follow-up questions.
 
-Write only meta/master-state/docs/master/ACTIVE_EXCHANGE.md.
+## 5. Record
 
-Include:
-- canonical/exchange versions read;
-- host receipt exact case count/result and source-hash identity;
-- self-review findings;
-- whether any post-host code/test change occurred;
-- tests rerun, if any;
-- git diff --check;
-- exact committed files;
-- base/final HEAD;
-- final tracked status;
-- unrelated untracked preserved;
-- zero live provider/microphone/exposure;
-- no push/merge/Phase3B;
-- extra recommendations separately.
+Choose teach-back / recording.
 
-Do not modify CURRENT_STATE.md or HANDOFF.md.
+Assistance:
+`无提示`
+
+Prompt:
+`请用自己的话解释：为什么完成注册不等于一定可以进入实验室？`
+
+Speak naturally for about 20–45 seconds.
+
+Do not read source text or a prepared answer.
+
+Natural hesitation/self-correction is allowed.
+
+Preserve original audio.
+
+Submit exactly one ASR.
+
+No retry.
+
+## 6. Replay/transcript checkpoint
+
+After ASR:
+- do not start content diagnosis;
+- replay saved audio;
+- compare raw ASR to actual speech;
+- inspect negation, 18:00, same-day badge, open/closed condition, necessary vs sufficient meaning;
+- correct only ASR mishearing;
+- never correct an actual spoken mistake into a better answer;
+- preserve raw and corrected versions.
+
+## 7. Mandatory stop
+
+Do NOT click content diagnosis / confirm diagnosis yet.
+
+Return to MASTER with:
+- raw transcript;
+- corrected transcript or “no correction needed”;
+- original audio saved: yes/no;
+- replay completed: yes/no;
+- any critical ASR uncertainty;
+- screenshot if useful.
+
+Expected calls at this checkpoint:
+- Tutor: 0 or 1;
+- ASR: exactly 1;
+- diagnosis: 0.
+
+## 8. Stop rules
+
+Stop with no retry for:
+- Tutor/provider error;
+- ASR/provider error;
+- missing/corrupt original audio;
+- replay failure;
+- critical transcript uncertainty;
+- unexpected extra provider call;
+- ledger/budget error;
+- source/attempt/version identity issue.
+
+No Repair/Apply.
+No second recording.
