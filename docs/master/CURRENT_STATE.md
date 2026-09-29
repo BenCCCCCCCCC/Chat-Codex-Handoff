@@ -209,3 +209,12 @@ Not Done:
 
 Owner performs the first half of PHASE3B-LIVE-01 manually outside Codex sandbox:
 clean topic -> optional Tutor if required -> one natural recording -> one ASR -> replay/transcript checkpoint -> stop and return to MASTER.
+
+
+## Owner Phase 3B manual protocol — explicit steps
+
+Owner requested a concrete, self-contained procedure before beginning the live test.
+
+Protocol: start local server from normal owner PowerShell; open the validated isolated Edge outside Codex sandbox; create a new clean topic from the exact laboratory-visitor-rules source in HANDOFF; run the normal Learn entry once if required; record one natural 20–45 second Mandarin explanation with no prompt; allow exactly one ASR submission; replay and compare raw ASR against actual speech; correct only ASR mishearing; stop before content diagnosis and return the checkpoint to MASTER.
+
+Expected provider use by the replay checkpoint: at most one Tutor semantic call, exactly one ASR call, zero diagnosis calls. No retries. Any Tutor/ASR/audio/replay/ledger failure stops the experiment.
