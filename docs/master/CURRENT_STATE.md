@@ -242,3 +242,53 @@ Therefore the first Start/Learn click did not consume the authorized Tutor seman
 Owner may set title to `实验室访客入场规则` and click Start/Learn once. That click is the first authorized Tutor attempt if the normal flow dispatches Tutor.
 
 UX note retained: the required title field and validation feedback were not obvious enough to the owner. This is a usability observation, not a Phase3B blocker after the title is supplied.
+
+
+## Owner product decision — source-first setup, no required manual title
+
+Owner explicitly rejected the current requirement that the user must fill the Topic/Title field before Start/Learn.
+
+Decision:
+- the learning material is the required input;
+- the user should not be required to invent or type a topic/title;
+- title is generated automatically and is metadata, not a prerequisite;
+- the user may optionally provide learning context:
+  1. what they especially want to learn/focus on;
+  2. what they believe they already understand/master;
+- those optional fields are setup context, not chat-history user messages and not proof of mastery;
+- Tutor may use them to prioritize explanation while remaining bounded by the supplied source.
+
+Title behavior:
+- file upload/import: derive title locally from the filename without extension;
+- direct paste: derive title locally from the first meaningful non-empty line, bounded to a sensible display length;
+- if no meaningful line exists but source text is valid, use a neutral local fallback such as “学习材料”, without a provider call;
+- user may rename later only as optional metadata, but title is never required to start learning.
+
+The observed Start/Learn no-response was therefore both:
+- a correctly identified empty-title validation return in current code; and
+- a product UX/design defect relative to the owner’s intended flow.
+
+Because no Tutor/provider call was dispatched, PHASE3B-LIVE-01 has consumed 0 calls and 0 exposure. The live experiment is paused until this setup-flow correction is accepted.
+
+## SETUP-FLOW-01
+
+Status: READY / DISPATCHED THROUGH ACTIVE_EXCHANGE / ZERO LIVE API.
+
+Goal:
+remove required manual title entry, add optional learning-focus/already-known context, preserve provenance and source-grounding, and keep setup minimal.
+
+Acceptance:
+- valid source alone can start learning;
+- file import auto-title works;
+- direct-paste auto-title works;
+- empty/manual title is no longer a blocker;
+- optional focus/known context is persisted as setup metadata and reaches Tutor as explicit setup context;
+- it is not inserted into messages as a user utterance;
+- “already known” is treated as owner self-report, not validated mastery;
+- no extra provider call is introduced;
+- existing source limits, provenance, Batch A/B/C behavior and budget boundaries remain unchanged;
+- zero live provider calls in implementation/testing.
+
+Codex/Astra may analyze, recommend, self-review and make up to two in-scope correction passes under the proactive operating rule. It must not expand into broader onboarding redesign, retention, model/provider, schema migration, new dependency, or live Phase3B.
+
+Next step: Codex executes SETUP-FLOW-01 through ACTIVE_EXCHANGE and returns evidence to MASTER.
