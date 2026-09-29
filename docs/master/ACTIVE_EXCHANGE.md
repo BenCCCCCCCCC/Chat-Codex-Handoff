@@ -1,43 +1,38 @@
 # ACTIVE_EXCHANGE
 
 state: CHAT_TO_CODEX
-turn_id: SETUP-FLOW-01
-task: SETUP-FLOW-01
+turn_id: SETUP-FLOW-01-RELAY-RECOVERY
+task: SETUP-FLOW-01-RELAY-RECOVERY
 writer: CHAT_MASTER
 transport_only: true
+original_turn_id: SETUP-FLOW-01
+original_dispatch_commit: 24f462de06845d4069077b63539a759009489cc8
 accepted_base_head: ab5d2ea9ad23359fe6cc3dc8abc0e963511996b2
 
 ## Instruction
 
-Execute SETUP-FLOW-01 exactly as defined in the latest CURRENT_STATE.md and HANDOFF.md.
+Do NOT re-execute SETUP-FLOW-01.
 
-Owner decision:
-- user must not be required to type a Topic/Title;
-- source material alone is sufficient to start learning;
-- title must be derived locally;
-- optional setup context may include:
-  - what the user wants to focus on;
-  - what the user believes they already understand;
-- setup context is metadata/context, not role=user conversation history and not proof of mastery.
+The owner reports you already executed it locally, but the GitHub relay reply was not written.
 
-Use Astra/Codex proactively:
-- inspect current setup flow and request contracts;
-- choose the smallest coherent implementation;
-- reproduce the current empty-title blocker;
-- implement;
-- self-review;
-- run zero-call tests;
-- perform up to two in-scope correction passes if needed.
+Read latest CURRENT_STATE.md and HANDOFF.md, then inspect the existing local worktree and already-created SETUP-FLOW-01 artifacts/tests only.
 
-Do not:
-- make live provider calls;
-- resume Phase3B;
-- add AI title generation;
-- add dependencies;
-- broaden onboarding;
-- change model/provider/budget/retention;
-- push/merge.
+Recover the actual execution result and replace this file with CODEX_TO_CHAT.
 
-At completion write only this ACTIVE_EXCHANGE.md with CODEX_TO_CHAT.
+If existing local evidence shows SETUP-FLOW-01 completed, include:
+- exact changed files
+- base/final HEAD and commit status
+- implementation summary
+- focused/regression test results
+- provenance/setup-context evidence
+- zero-live-call evidence
+- browser validation status
+- self-review findings
+- Blocking / Unknown / User Decision Needed / Future Optional
 
-If UI changes require host browser validation that cannot be trusted inside Codex sandbox, return NEEDS_HOST_VERIFY and do not create a final commit based on stale browser evidence.
+If existing work is incomplete or absent, report that exactly.
+
+Do not make new product/test changes just to make the receipt look complete.
+Do not modify CURRENT_STATE.md or HANDOFF.md.
+Do not push/merge.
+Do not resume Phase3B.
