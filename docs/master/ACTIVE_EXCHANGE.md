@@ -1,57 +1,45 @@
 # ACTIVE_EXCHANGE
 
-state: WAITING_OWNER
-turn_id: CORRECTNESS-BOUNDARIES-01-HOST-BROWSER-VERIFY
-task: BATCH-C-HOST-BROWSER-VERIFY-01
+state: CHAT_TO_CODEX
+turn_id: BATCH-C-FINALIZE-01
+task: BATCH-C-FINALIZE-01
 writer: CHAT_MASTER
 transport_only: true
-accepted_product_base_head: dd8317b43100b8cbaad684cab7fc02957e32de62
+accepted_base_head: dd8317b43100b8cbaad684cab7fc02957e32de62
 
-## Status
+## Instruction
 
-Do not execute or repeat CORRECTNESS-BOUNDARIES-01.
+Execute the final Batch C self-review/version-finalization task defined in the latest CURRENT_STATE.md and HANDOFF.md.
 
-Batch C currently has:
-- focused correctness boundaries: 11/11 PASS
-- full isolated Node/offline: 114/114 PASS
-- git diff --check: PASS
-- live provider calls: 0
-- no Batch C commit yet
+Host browser validation is now PASS outside Codex sandbox for the current unchanged Batch C worktree.
 
-The remaining evidence is one browser regression outside the Codex Windows sandbox.
+Evidence:
+- focused correctness-boundaries 11/11 PASS
+- full Node/offline 114/114 PASS
+- git diff --check PASS
+- host browser artifact:
+  artifacts/study-teachback/correctness-boundaries-01/browser-1790650146813-0XtnC0
+- browser wrapper exit 0
+- MF-02 C2 delayed-diagnosis/double-confirm case PASS
+- production ledger hash unchanged
+- zero live provider/microphone
 
-Owner will run from a normal Windows PowerShell:
+Use Astra/Codex proactively:
+- independently review the full Batch C diff against MF-01/02/03 acceptance;
+- identify edge cases or mistakes;
+- rerun deterministic zero-call checks if useful;
+- keep extra recommendations separate.
 
-node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01
+Critical rule:
+If your self-review requires ANY product/test source change after the host browser PASS, do not finalize/commit using the old host result. Return NEEDS_HOST_REVERIFY with the exact reason/diff instead.
 
-After the owner reports PASS/FAIL to MASTER, MASTER will replace this file with a new CHAT_TO_CODEX turn.
+If no source/test change is needed:
+- stage only the seven Batch C files;
+- run git diff --check;
+- create one focused local commit;
+- no push/merge;
+- write the final receipt back to this same ACTIVE_EXCHANGE.md.
 
-## Operating rule
-
-In future authorized turns Codex may analyze, recommend, self-review, test and perform bounded in-scope self-correction as defined in the latest CURRENT_STATE/HANDOFF.
-
-WAITING_OWNER is not execution authorization.
-
-
-## Correction
-
-Previous owner attempt did not execute tests because MASTER supplied an invalid batch name.
-
-Use exactly:
-`node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01`
-
-Remain in WAITING_OWNER until MASTER receives the real PASS/FAIL result.
-
-
-## Owner host browser run started
-
-Owner executed the corrected command successfully from normal Windows PowerShell:
-
-node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01
-
-The runner accepted the batch and created output under:
-artifacts/study-teachback/correctness-boundaries-01/browser-1790650146813-0XtnC0
-
-No PASS/FAIL result has been reported yet.
-
-Remain in WAITING_OWNER. Do not execute Codex work until MASTER receives the final host-browser result.
+Do not modify CURRENT_STATE.md or HANDOFF.md.
+Do not resume Phase3B.
+Use optimistic concurrency and stop on conflict.
