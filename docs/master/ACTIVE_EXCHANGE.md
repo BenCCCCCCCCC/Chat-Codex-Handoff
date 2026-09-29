@@ -1,20 +1,26 @@
 # ACTIVE_EXCHANGE
 
-state: WAITING_MASTER_EVIDENCE
-turn_id: OWNER-AUDIO-LOCAL-REANALYSIS-01
-task: OWNER-AUDIO-LOCAL-REANALYSIS-01
+state: WAITING_OWNER
+turn_id: PHASE3B-LIVE-01-FINAL-CONTENT-DIAGNOSIS
+task: PHASE3B-LIVE-01
 writer: CHAT_MASTER
 transport_only: true
 accepted_product_head: bdd0635597006881d6f8f7213122ae53ccbc99a9
 
 PROCESS-EVIDENCE-FEASIBILITY-01 is MASTER-ACCEPTED.
 
-Before spending the remaining content-diagnosis call, the next smallest experiment is a zero-provider reanalysis of the already-preserved real owner audio using the newly accepted detector.
+MASTER zero-call reanalysis of the preserved owner audio found a qualifying short-pause cluster around 16.08–17.24s overlapping the owner-confirmed 16–18s hesitation.
 
-Do not execute a new live action.
-Do not make provider calls.
-Do not run another ASR or recording.
+The existing stored attempt is not migrated/recomputed.
 
-If Codex does not have the owner export/audio locally, wait for MASTER to provide derived evidence rather than requesting a new recording.
+Owner is now authorized to use the one remaining live call:
+exactly one content diagnosis on the existing attempt.
 
-Documentation stale-state cleanup remains a separate follow-up.
+No retry.
+No new recording.
+No new ASR.
+No Repair/Apply.
+
+After diagnosis, return the visible feedback to MASTER.
+
+Do not execute Codex work while state is WAITING_OWNER.
