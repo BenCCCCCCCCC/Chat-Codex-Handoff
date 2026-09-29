@@ -1,70 +1,46 @@
-# Active Handoff — PROCESS-EVIDENCE-FEASIBILITY-01 FINALIZE AFTER FRESH HOST PASS
+# Active Handoff — OWNER-AUDIO-LOCAL-REANALYSIS-01
 
 Updated: 2026-09-29
 Role: 00 MASTER
-Status: CHAT_TO_CODEX / FINAL SELF-REVIEW + LOCAL COMMIT
+Status: ZERO-PROVIDER EVIDENCE CHECK / DO NOT RESUME DIAGNOSIS
 
-## Binding
+Accepted product HEAD:
+bdd0635597006881d6f8f7213122ae53ccbc99a9
 
-Repo:
-F:\Chat-Codex-Handoff\validation-repo
+## Goal
 
-Branch:
-prototype/study-teachback-v0.1
+Re-evaluate the already-preserved real owner attempt with the newly accepted process detector before using the remaining content-diagnosis call.
 
-Base HEAD:
-ac875a100b159781037746ea0b8bd2188457d13a
+Known real attempt:
+- duration about 21.96s
+- owner-confirmed hesitation/filler around 16–18s
+- old saved observation had only near-silence 14.54–15.42s
+- raw ASR omitted the filler
 
-Current PROCESS-EVIDENCE-FEASIBILITY-01 changes remain uncommitted.
+## Required evidence
 
-## Fresh accepted evidence
+Use the preserved local export/audio only if available to MASTER/Codex locally and authorized.
 
-Focused:
-33/33 PASS.
+Do not:
+- call provider/API
+- run ASR
+- make a new recording
+- mutate or migrate the stored owner attempt
+- upload owner audio/export to GitHub
 
-Full Node/offline:
-150/150 PASS.
+Compute the current accepted detector on the original audio bytes and report only derived evidence:
+- detector config/version
+- near-silence events
+- short-pause-cluster events
+- whether any event overlaps 16–18s
+- exact event times/types
+- whether quality gates suppress the detector
+- whether this agrees/disagrees with owner replay observation
 
-Fresh host browser outside Codex sandbox after project-aware UI correction:
-PASS.
+If the original owner export is unavailable in Codex local workspace, do not fabricate. Return that limitation and let MASTER perform/route the zero-call evidence check.
 
-Owner screenshot confirms:
-- visible cases all PASS;
-- short-gap local replay/save/no-semantic-call case PASS;
-- wrapper exit 0;
-- error null;
-- isolated synthetic credential / loopback / test ledgers;
-- production ledger SHA unchanged.
+## Separate documentation follow-up
 
-## Finalization instructions
+Stale README/CURRENT_STATE historical status text is confirmed as a documentation Must Fix, but do not mix that cleanup into the audio evidence check.
 
-Astra must:
-1. read the fresh host artifact/receipt directly;
-2. confirm exact browser case count and 0 failures;
-3. confirm sourceSHA256 binding to the current worktree;
-4. confirm no source/test drift after the fresh host run;
-5. independently self-review the complete six-file task in project context;
-6. run git diff --check;
-7. if no further source/test edits are needed, stage only the six task files and create one focused local commit;
-8. no product push/merge;
-9. return full CODEX_TO_CHAT via remote ACTIVE_EXCHANGE.
-
-Expected files:
-- study-teachback-app/core.mjs
-- study-teachback-app/diagnostic-localization.mjs
-- study-teachback-app/app.mjs
-- study-teachback-app/browser-tests-r4.mjs
-- study-teachback-app/run-offline-tests.mjs
-- study-teachback-app/process-evidence.test.mjs
-
-Suggested commit:
-feat: add bounded short-pause process evidence
-
-Critical:
-if Astra changes any product/test source after the fresh host run, do not commit using stale evidence; return NEEDS_HOST_REVERIFY.
-
-Do not resume live owner diagnosis.
-Do not make live provider/API calls.
-Do not push/merge.
-
-Also return broader project observations separately without implementing out-of-scope items.
+Do not resume live diagnosis.
