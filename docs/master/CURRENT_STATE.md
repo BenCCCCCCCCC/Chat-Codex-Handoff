@@ -417,3 +417,30 @@ Current candidate finding:
 `PROCESS-EVIDENCE-LIVE-GAP-01`.
 
 No diagnosis call is authorized until MASTER classifies this live process-evidence behavior.
+
+
+## PROCESS-EVIDENCE-LIVE-GAP-01 — code-grounded interpretation
+
+MASTER checked the accepted architecture/data flow.
+
+Content diagnosis cannot secretly use fillers/pauses that are absent from the transcript:
+- content input is constructed from transcript spans/text;
+- duration, pauses, energy and delivery labels are deliberately omitted from the content channel;
+- CONTENT instructions explicitly forbid inferring knowledge from pauses/fillers/self-repair.
+
+Speech-process evidence is separate and comes from audio-derived observations/events rather than hidden transcript text.
+
+Current local detector architecture is conservative: it can produce near-silence candidates from decoded PCM and requires replay confirmation; the overall observation state can be PARTIAL / UNVALIDATED_ACTIVITY even when no candidate event is emitted.
+
+Owner screenshot shows the overall UNVALIDATED_ACTIVITY status but no visible process-candidate replay rows. This strongly suggests the real recording did not produce a usable process event for the observed hesitation/pause in the current UI path.
+
+Therefore:
+- proceeding with the remaining content-diagnosis call would mainly test content/logic, not whether real hesitation was successfully localized;
+- manually adding “额/嗯” to corrected transcript would contaminate the process-evidence validation;
+- diagnosis remains paused.
+
+Next evidence options:
+1. owner reports approximate hesitation/pause timestamps from replay; and/or
+2. export the current topic/attempt locally and provide the export to MASTER for zero-provider audio/process inspection.
+
+No second recording or diagnosis call is authorized yet.
