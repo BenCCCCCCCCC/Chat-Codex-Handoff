@@ -142,7 +142,7 @@ This is not evidence that MF-02 failed in the product browser.
 
 Run exactly one host-side browser regression outside Codex sandbox from a normal owner PowerShell:
 
-`node study-teachback-app/run-offline-tests.mjs browser correctness-boundaries-01-host`
+`node study-teachback-app/run-offline-tests.mjs browser correctness-boundaries-01`
 
 This uses the existing isolated stub/fake-provider browser suite and the current Batch C worktree.
 
@@ -306,7 +306,7 @@ MASTER status:
 
 Next manual command from a normal owner PowerShell, outside Codex:
 
-node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01-host
+node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01
 
 Do not run this browser step from Codex.
 
@@ -346,3 +346,17 @@ MASTER / GPT-5.6 remains responsible for:
 - final acceptance.
 
 This operating model intentionally uses model diversity: Codex/Astra can analyze and self-check independently, while MASTER/GPT-5.6 remains the acceptance and scope-control layer.
+
+
+## MASTER command correction — 2026-09-29
+
+Owner attempted the previously documented host-browser command and the wrapper immediately returned `INVALID_TEST_BATCH` before any browser/test execution.
+
+Cause: MASTER supplied the invalid batch name `correctness-boundaries-01-host`; the runner accepts `correctness-boundaries-01`.
+
+This was a MASTER instruction error, not a product/test failure.
+
+Correct host command:
+`node .\study-teachback-app\run-offline-tests.mjs browser correctness-boundaries-01`
+
+No Batch C acceptance status changed because the browser suite did not start.
