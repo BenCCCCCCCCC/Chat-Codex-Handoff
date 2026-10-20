@@ -9,42 +9,45 @@ Canonical state branch: meta/master-state
 
 定位 **个人学习＋作品展示**。用户授权公开仓库及现有 Git 历史、README、产品与设计研究、自主审核实现、commit/push/PR/merge，以及有意义的批次交接；无需每个小动作询问。旧 no push/merge 和每次字节变化全量重跑限制已被后续授权取代。
 
-本轮优先简繁一致性、时间定位、无效建议和含混解释，继续精简页面及冗余测试。用户明确批准固定 2 次合成 ASR＋6 条固定讲解各两配置，最多 14 次、US$0.15。十四次已完成，新增账本估算 US$0.0066592，新增未结算 0；授权不扩大到新样本／持续调用，不继续花剩余额度。上一批 US$0.10 固定实验与旧 Phase 3B 额度均不恢复。无个人麦克风授权。
+本轮优先真人语音、数字术语、时间定位、反馈模板表达及录音／文本分析。用户批准固定 3 条公开许可真人音频各一次 ASR＋4 条文本各两配置，共 11 次、最高 US$0.15。已全部执行，账本估算 US$0.0080848，新增未结算 0。不能继续花剩余额度，任何新真实调用仍先定方案和预算；旧批次授权不恢复。无个人麦克风授权。
 
 ## 最新交付
 
 - 仓库 public，默认分支 prototype/study-teachback-v0.1。
-- [Issue #16](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/16) / [PR #17](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/17) 已合并。
-- 分支 codex/transcript-timing-feedback；实现头 25ef54996834f17fb7d6c058ac3b1852b334e4c9。
-- 合并提交 673eca6b7a47369c71de032c7e6f66636c2930ae。
-- [CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39427275271) 第一次运行完整 Node／Edge PASS，独立提取器按范围跳过；job 118642889117。
+- [Issue #18](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/18) / [PR #19](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/19) 已合并。
+- 分支 codex/natural-speech-analysis；实现头 ef241317d1a71dd756125607a5774566cd24e171。
+- 合并提交 7ae3db08f2459eecca5ac700da9637c108c08ffa。
+- [CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39431845262) 最终提交完整 Node／Edge PASS；独立提取器按范围跳过，job 118658588345。
 
-Whisper-1 新增短简体风格提示，返回 styleHint=zh-Hans-v1；不传教材答案，不做自动简繁转换，原始响应保留。展开“原始转写与回听”可点词：正长度词用提供方边界，标为词级参考；零长度词用同段前后有效词组成的不超过三秒的邻近范围，明确非独立词时间；无法取得时用整段。顺序文字映射失败时保留纯文本和既有段落回听。不会把校对后的文字强行对应旧词时间，不自动确认或调用 API。
+反馈引文支持短范围回听：仅当确认段与原文、边界相同，引文唯一且词映射／时间有效，取相关词首尾并各留至多0.3秒上下文，不超出原段，标为“原话附近”；更正、重复、缺词或时间不可用时退回整段。不伪造对齐、改变原始时间或给缺失内容添加位置。
 
-GPT-5.6-Luna 内容新 schema 要求 supported.repair=null，其余状态保留具体建议。兼容旧报告字符串修正，不改写历史。提示明确必要条件方向及材料未支持的充分性；只评价自我修正后的最终立场。页面保持结论优先、证据折叠，删除重复版本状态文字，将补救提示改为“下一步”。
+内容提示增加相关数值／单位／范围、术语、机制和步骤检查，明确来源未给原因不等于该原因不成立；保留最终自我修正及 supported.repair=null。删除固定必要条件句式，改为具体短解释和单一下一步。模型／schema 不变。多条“已表达”默认折叠，错误／遗漏仍直显，原报告和引文完整保留。核对提示与回听按钮精简。
 
-[批次说明](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-21-transcript-refinement.md)、[方案](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/2026-10-20-transcript-refinement-plan.md)、[完整合成比较与人工复核](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/transcript-refinement-live.json)。使用 OpenAI Docs 技能核对 Whisper 提示、词段时间及嵌套 anyOf 结构化输出；模型不变，提示和输出合同已更新。
+[批次说明](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-21-natural-speech.md)、[获批方案](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/2026-10-21-natural-speech-plan.md)、[全部输入、响应与复核](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/natural-speech-live.json)。公开音频 CC BY 4.0 归因位于 fixtures/natural-speech/README.md，不是为整个仓库选择许可证。
 
-此前 PR #2／#5／#7／#9／#11／#13／#15 的公开整理、工作台／固定示例、独立情境练习、恢复与备份、聊天草稿／本地查找／分页、精确命中与手动上下文、转写草稿／请求追踪、已有音频上传均已完成。上传最长 3 分钟、25 MiB，选择文件只本机保存和试听，点击“开始转写”才调用；统一单声道 16 kHz 临时音频检查，存储／导出原字节不变。旧转写只读；contextNote 1000 字，最多六条整消息按 24k 输入预算移除最旧历史，没有自动摘要。原记录 createdAt 七天到期；恢复副本从 restoredAt 七天，128 MB v1 备份，无数据库升级。
+此前 PR #2／#5／#7／#9／#11／#13／#15／#17 的公开整理、工作台／示例、情境练习、恢复备份、聊天草稿／查找／分页、搜索精确命中／手动上下文、转写草稿／请求追踪、已有音频上传、简体提示及原词回听均已完成。上传最长3分钟／25MiB，选择文件只本机保存试听，显式开始转写才调用；单声道16kHz临时处理不改原字节。contextNote最多1000字，最近六条整消息按24k输入上界移除最旧历史，不自动摘要。原记录createdAt七天到期，恢复副本restoredAt七天，128MB v1备份，不升级数据库。
 
 ## 分离质量结果
 
-转写与内容独立，不把桩测试或引用有效视作学习效果。quality-history.mjs 离线复算历史；quality-eval.mjs 输出 CER、时间有效性、verdict、引用和无文字建议索引；新 supported null 是无须建议，不作为无效建议。
+语音仍是“本机原声 → Whisper ASR → 用户校对 → Luna分析确认文字”；声音过程独立，不当作理解／流利度评分。自然语音评估与固定文本内容比较分开，未把自动转写未经确认直接拿去做理解评估。
 
-- 本轮两次 Whisper 同条 7.31 秒 Huihui 合成普通话：旧配置严格 CER 9/24=37.5%，全部简繁差异；新提示 0/24，否定词和条件方向均保留。两臂 22 词中 w14 仍零长度，少数边界约差 0.02 秒。没有人工时间准确率测量，范围回听不代表修复对齐。
-- 六条固定讲解各跑旧／新提示+schema 配置。五条已有开发样本、一条新增备份升级条件案例，不是跨课程验证。两臂 verdict 与引用均 6/6；本次未重现历史标点建议，不声称发生率下降。
-- 候选正确改述和自我修正各一条 supported、repair=null；基线合计四条 supported 附多余提醒。两臂均接受最终立场，未处罚撤回句子。持票／备份解释方向清楚；候选仍有“要发生……”模板感，部分更长，不能声称全面更短或更准确。
-- 14 请求全部完成，实际保守预留 US$0.078774，账本新增估算 US$0.0066592，无新增未结算、自动重试或充值。不继续使用剩余额度。
-- 上批 9 请求 US$0.004224，7 条不同文本＋1 次自我修正重复，8/8 verdict／引用但有 ] 建议及含混开头。更早历史 6/7、自我修正误判、CHANNEL_LEAK 停止、7/7 与“. .”仍保留。历史配置不同，不混作同条件比较。
-- 一个合成声音与简单规则不能保证自然口语、噪声、数字／术语、课程泛化、总体准确率或学习收益；提示不保证全部返回简体。
+- FLEURS 两条真人朗读（12.12秒／13.86秒），相对朗读稿严格字符差异3/52、0/37。Eee PC→ePC、及→其；列出的华硕、IT、年份、15米与两组日期保留。未人工核实实际读法，不能把全部稿件差异归为识别错误。
+- MInDS-14中文17.152秒是情境引导口语，参考文字由Google ASR产生，不是人工标准答案；不报CER准确率。余额、APP、不能使用等列出词项存在，重复、主语及结尾与旧自动文字不同，未裁决哪份正确。
+- 三条词时间结构有效，45/30/44词中零长度分别0/1/4；没有人工时间边界，不能报告定位准确率，短范围回听不等于修复ASR对齐。
+- 四条固定文本（数值错误、缓存自我修正、无依据原因、必要条件误推），两臂各4/4符合预期、引用有效。只改变提示，schema和模型保持一致。
+- 候选仍会给复述式建议、一次问两个问题，正确缓存讲解拆为三条共87字，基线一条63字；产品折叠而不改写报告。采用更明确的检查范围与开放表达，不声称测到准确率提高或消除模板感。
+- 11次全部完成，实际保守预留US$0.084016，账本新增估算US$0.0080848，不是供应商账单。新增未结算0，无重试／充值，不继续调参。
+- 上批14次合成双配置估算US$0.0066592：严格字符差异9/24→0/24，22词中w14仍零长度，两臂六条内容各6/6；更早9次US$0.004224及 ]、. .、6/7、自我修正误判、CHANNEL_LEAK等历史保留，不混作同条件比较。
 
 ## 验证与精简原则
 
-本地定向 Node 25/25，聚焦 Edge 1/1：原文词和邻近范围真实回听、Enter、草稿刷新、原始记录不改、supported 无补救、390px 无横向溢出；桌面与手机截图已查看。首次 Edge 测试脚本未完整发送 Enter 字符，补全后只复验此条。新增两条 Node 行为用例及一条浏览器流程，复用旧备份／确认测试；完整回归留给本批 CI。
+本地定向Node 27/27，聚焦Edge 1/1：短引文真实媒体播放／Enter、既有词和邻近范围、草稿刷新、原文不改、正确项折叠、390px布局；桌面与手机截图已查看。新增两个行为用例，扩展既有一条浏览器流程。首次Node为旧提示字符串断言失败，更新已有断言后通过；加入折叠后仅复验浏览器。完整回归留给本批CI，文案、提交、交接不再重跑。
 
-离线测试 synthetic credential、loopback、独立账本与浏览器照旧，前后生产账本未变。单独批准的真实实验改变生产账本，最终 SHA256 bff0eb123b80b6283f05abb2fcee29f2860d20279bde1d5c53e615ca7bff512b，不得误报本批无 API。新增聚焦参数 --refinement-only，详见 docs/TESTING.md。文案／提交／合并不重跑。
+首轮 CI 39431332503 的 Node165/165通过，Edge被旧“词级定位部分不可用”文案断言挡住；移除冗余字面断言，保留真实播放、零长度原值、不可用标记及确认检查，由最终提交 CI 复验。本机未再全量重跑。
 
-强制终止前未完成写入、跨标签页协调、服务端持久请求去重仍未解决；未知结果显式重试可能再计费。未添加多分钟自动分段或自动纠正原文。
+离线测试采用合成凭据、loopback、独立账本和浏览器，生产账本未变。已批准真实实验后生产账本SHA256 b1c8d360f7849ef165239ae9faa975f1ad1514daeef5f2f3501404aa4a6983a7。原始收据ignored artifacts/study-teachback/natural-speech-01/live-quality.json，SHA256 cb7aaf601c70b3ec2edf3f6387b192c01b78103c75c60cd19e1c8a63dbfd5876；公开报告不含生产账本事件或私有录音。
+
+强制终止前未落盘、跨标签页协调、服务端持久请求去重仍未解决；未知结果显式重试可能再次计费。未加多分钟自动分段或自动纠正原文。
 
 ## 已有证据边界
 
@@ -71,8 +74,8 @@ Phase 3B 仅对有界可行性问题 **CLOSED / PASS**，不代表跨课程／�
 
 ## 下一步
 
-本批已完成，等待真实使用反馈。可优先考虑自愿自然语音、数字／术语和人工词时间标注，或降低解释的模板感；任何新增真实调用仍先定样本、比较对象及预算。不要继续消耗本次余额、扩大到个人录音、直接调停顿阈值，或把词段回听称为 ASR 对齐准确率提升。
+本批完成。优先为自愿自然讲解准备人工核对文字及少量人工词时间边界，增加领域术语、数字角色和概念关系样本，再考虑转写模型／用户词表提示比较；不得把教材答案塞进ASR提示制造准确性。内容反馈重点减少单次多重追问与重复解释。新真实调用另行方案预算，不重跑本批或继续消耗余量，不调停顿阈值。
 
-[Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3) 同输入多源研究仍保留。没有公共部署；4321 已刷新本聊天无 provider 预览，正常 npm start / 4317。
+[Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3) 同输入多源研究继续保留。4321 已刷新本聊天无 provider 预览，复用原服务（exec session 34023；本轮核对 PID 19584）并保留空白设置页。 正常 npm start / 4317，没有公共部署。
 
-前批详情见 [PR #15 后交接快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/60179ad4bf8e327e321f80cb783753466daa8c61/docs/master/CURRENT_STATE.md)。
+历史快照：[PR #17 后状态](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/6f666cad899ebf6ea80e27949abdec9cda4e0873/docs/master/CURRENT_STATE.md)。
