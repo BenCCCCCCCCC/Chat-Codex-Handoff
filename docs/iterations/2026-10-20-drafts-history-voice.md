@@ -27,6 +27,7 @@
 - 新增三条 Edge 实际流程 3/3：立即切换／刷新／草稿保存失败恢复；长对话加载与等待回复时继续输入；ASR 已返回后的写入失败、恢复及继续诊断，确认没有额外转写。
 - 页面查看发现移动端固定底栏遮挡发送区域，调整布局后只复核上述三条路径并更新截图；未本地重复完整回归。追加的删除取消待保存逻辑交由批次 CI 的 Node 用例验证。
 - 去掉旧 VM 测试中重复模拟聊天 DOM 的断言，消息来源保留由实际操作和浏览器覆盖。没有增加措辞、CSS 内部写法或逐字段矩阵测试。完整 Node／Edge 检查由本批 PR CI 执行。
+- 首次 CI Node 全部通过，浏览器通过新流程及录音／转写／诊断后，旧“删除全部”用例在记录页尚未加载完时点击删除，被忙锁拦下。记录页补充 `aria-busy`，测试等待列表加载完成后操作；不靠固定延时或放松产品锁解决。
 - 本地生产账本 hash 保持 `1d6a29631982daf6cd540622f2dabee3d2c48b24dbda8a8879dbb2ca7b215a21`，无真实 API 支出。
 
 本地收据：`artifacts/study-teachback/diagnosis-state-ux-01/node-1792495323700-rYmvlc`、`browser-1792495487586-fizqVj`（ignored）。公开截图在 `docs/images/study-record-search.png`、`study-chat-draft.png`、`study-chat-mobile.png`、`study-voice-review.png`，均为合成数据与模拟响应。

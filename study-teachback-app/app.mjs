@@ -362,13 +362,13 @@ async function continueTopic(id,point){
 let historyRecords=[],historyLimit=20;
 async function history(){
   if(!canNavigate())return;
-  processing=true;
+  processing=true;$('history').setAttribute('aria-busy','true');
   try{
     await flushDrafts();
     historyRecords=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));historyLimit=20;
     reveal('history');renderHistory();$('historyTitle').focus();
     $('history').scrollIntoView({behavior:'smooth'});
-  }finally{processing=false;}
+  }finally{processing=false;$('history').removeAttribute('aria-busy');}
 }
 function renderHistory(){
   const matches=searchRecords(historyRecords,$('historySearch').value,$('historyFilter').value);
