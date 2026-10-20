@@ -3,66 +3,51 @@
 Updated: 2026-10-21 (Australia/Sydney)
 Canonical branch: meta/master-state
 
-先读本分支CURRENT_STATE、产品README、docs/TESTING.md、
-docs/iterations/2026-10-21-task-split.md及对应research固定方案／完整JSON。
-旧ACTIVE_EXCHANGE不恢复旧限制或预算。
+先读本分支CURRENT_STATE、产品README、docs/TESTING.md及docs/iterations/2026-10-21-real-material-review.md。对应固定材料、离线输出、许可位于docs/research。产品checkout的docs/master仅指针，不是动态任务；旧ACTIVE_EXCHANGE不恢复限制或预算。
 
-## 本批交付
+## 本批完成
 
-[PR #26](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/26)已合并，
-[Issue #25](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/25)关闭。
-实现头b9a0bcace1da82ae78639221c71b27142f6c8193，合并3ae43ef3023ecbed2e54138373c355f611cca427。
-[CI39455216922](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39455216922)完整Node／Edge PASS，job118740183143，提取器按范围跳过。
-首轮CI39454682126：Node171/171、新检验浏览器流程通过；旧失败恢复断言仍查找“上次出题”，与精简文案不匹配，恢复该前缀后继续CI。没有跳过失败检查。
+PR #28已合并（Issue #27关闭）；实现535b873c7fd31c5c6fb9848a2539cd3b55bea74f，合并8634919019c95eefd4ca4d3bfb4a9a06109e7922。
+CI39458861900完整Node／Edge PASS，job118752743540；提取器按范围跳过。
+本批真实API 0次、费用US$0，无新额度。过去额度全部结束。
 
-- app.mjs反馈页保留f.message，repair只在折叠证据内；不直接用repair当题。当前有效报告的“检验理解”传入绑定来源／确认文字／报告的target，历史报告无操作入口。补学／重讲仍折叠。
-- understanding-task.mjs.taskContext创建绑定快照；bounded-understanding.mjs只对整段来源等于引文的有限规则生成一道选择题和参考判断：必要前提、两个不同原料正整数克数且明确按份数倍增、三个不同动作顺序。其他说明、不识别句式、unknown返回无题，不调用API兜底。它不是通用语义解析，也不验证上游诊断。
-- practice.mjs.fromFeedback在本机计算，保存task／taskTarget／origin，不复用旧repair题；新选择在本机核对，同题同选择复用结果。旧轮次继续可读。practice-ui先显示假设／题目，答后才展开依据；无题时还能选择唯一旧题。搜索打开旧题解除taskUnavailable，索引选择文字而不是c0等ID。
-- backup.mjs随v1导出，并重算规则核对task及assessment，旧练习备份仍可读。未增加数据库版本或独立持久化体系。
-- 只对本题选择给判断，不推导掌握分或理解能力。开放情境练习仍使用原API，和本机规则分开。规则覆盖率尚未验证；实验顺序全文有第二句说明，不能误称本机支持全部四个实验案例。
-- 没有新/api/understanding路由；server只新增两个本机模块静态路径。候选AI提示／schema仅研究保留，不得接回产品并声称已通过。CONTENT、TEACH、ASR、模型均未变。PR24零长度词邻近回听继续有效。
+1. docs/research/fixtures/real-material-corpus.json固定8段Python／MDN中文教程，未模板化改写。每例包含来源、许可、目标和作者编写的有效／无效题参照及局限；目标不是实际内容诊断，参照不是产品输出或独立评审。材料为编程自学便利样本，非盲测。
+2. evaluate-real-material.mjs只导入本机规则，逐例保存完整输入／输出、材料及引擎hash，不导入provider；结果docs/research/real-material-offline.json：覆盖0/8，生成题有效性N/A，学习效果未知。不得把拒绝记作有效题或把参照题数算入覆盖。
+3. practice.mjs保存round.review={status:'held',origin:'learner'|'local_check',createdAt}。flagQuestion先由UI flush草稿；answer在held时不创建答案或调用。withdrawFlag只允许用户标记；本机任务与来源／题面不匹配进入local_check，保留选择，不判错且不能撤回绕过。
+4. practice-ui保持草稿可改，held时隐藏提交和旧评分／依据，历史结果放在“此前反馈（未复核）”；回顾不改原结果。主动换AI题时从模型历史排除held问题。没有后台复核、自动补题或自动重试；用户撤回标记不代表系统确认题目有效。
+5. backup.mjs兼容v1并验证review，搜索标明待复核反馈且可展开定位。损坏本机任务仍不能导入，不因标记跳过原任务／assessment校验。无数据库迁移。
+6. 无题页面不归咎用户，返回对话与旧题选择仍可用。普通AI练习仍可能出现语义错题／反馈，未标记时并无自动识别。这是恢复流程改善，不是语义审题准确率提升。
+7. 本机source-rules-v1依旧三种窄句式、完整来源等于引文；没有改引擎、CONTENT、TEACH、ASR、模型或路由，未恢复上轮被拒绝的AI生成／评分候选。原词与零长度词回听保持。
 
-## 固定真实实验已完成，候选被拒绝
+## 证据与验证
 
-用户批准最高US$0.10：4条来源各生成一次＋4个人工固定题目各两答案评分，共12次。
-第二阶段评分的是人工题目，不是第一阶段生成题。新增估算US$0.00410625，
-累计预留US$0.042374，新增未结算0；历史4笔未结算保留。不是最终账单。
-无ASR、个人录音、重试、充值、追加调参。额度及余量不延续。
+本地相关Node41/41、既有Edge一条整合路径通过，截图已查看；自审发现held题仍会进入新题历史，修复后仅复验practice.test.mjs 8/8。最终完整回归见上述CI，不为文档或提交重跑本机全套。
+收据artifacts/study-teachback/correctness-hygiene-01/node-1792513874677-CBofZw、browser-1792513882984-5z71e9。
+材料读取字节SHA256 acbcd9074e06323229af4c144e4db7b88e428faa44b11ba622533b79b6b1c30d；
+工程与研究均未写生产账本，SHA256 9f23a117f27c0d279872885bdf074d48cbf369e0beec44480d2644c2b148c67e。历史4笔未结算不变。
+材料许可证：Python PSF2，MDN及作者参照CC BY-SA2.5，详见fixture README和PSF-LICENSE.txt；项目其他代码许可未选。
 
-生成：必要条件改变推理方向有效；配方换3份却扩成甲乙两个必答量；
-步骤与原因题仍重复已解释的错误。所有结构／引文校验通过仍不能保证任务有效。
-评分6/8；故意不成立的资金题两答案都应unanswerable，却判partial／incorrect。
-正确指出材料不足的用户被减分，显示评分器服从错误任务标准；不能按其他分数抵消此问题。
-按预先标准拒绝AI出题／评分投入产品；随后本机有限替代没有真实API或效果比较。
+本地F:\Chat-Codex-Handoff\validation-repo同步产品默认分支；canonical仅meta/master-state。
+4321现有无provider预览PID15608，本批核对命令和新页面，没有重启；刷新即可载入新客户端。
+模型／ASR禁用、无公共部署；下次停止进程前核对完整命令与监听PID。
 
-固定文件：task-split-fixtures.mjs、fixtures/task-split-config.json、
-understanding-task-prompts.mjs。task-split-live.mjs --approved-budget-usd=0.10已执行，
-不得重跑或更改目录／ID绕过。原收据ignored artifacts/study-teachback/task-split-01/live-quality.json，
-SHA256 4dd6fa677c043b361635af451e0e4fb2f88939a94403dea0cc667d3d89d1ec16。
-docs/research/task-split-live.json保留原全部输入／输出／配置／费用，并附编码代理逐例复核，
-无独立人类盲评、额外裁判或总体学习收益结论。
+## 下一步
 
-## 验证与环境
+先做明确的题目／标准审阅或编辑路径，再考虑扩展生成；不要添加大量规则来迎合这8例。
+如需模型比较，固定“题是否成立→答案判断”的顺序，包含正确指出缺少条件、猜测回答和错误标准，
+另留未参与调试的材料，先提交调用数和预算并获批。当前没有真实API批准，不复用过去额度。
+同一助手的参照题复核不是独立人类评价；需真实学习者数据才能评估区分理解、迁移或长期保持。
 
-本地相关Node39/39、原有Edge一条整合流程通过，手机／桌面截图已查看；
-后续唯一旧题选择修复由CI覆盖。不为文档或提交再跑本机全套。
-初次Node有沙箱回环限制及新fixture缺字段，浏览器旧断言误要求提交后空选择仍启用，均已修正。
-本地收据artifacts/study-teachback/correctness-hygiene-01/
-node-1792512106959-wC48bG、browser-1792512202597-AmejUG。
-虚构凭据、loopback、独立账本；生产账本未变。
-获批实验后SHA256 9f23a117f27c0d279872885bdf074d48cbf369e0beec44480d2644c2b148c67e。
+## 上一轮结果和不变约束
 
-本地F:\Chat-Codex-Handoff\validation-repo最终同步产品默认分支；canonical只看meta/master-state，
-不要读旧本地meta工作树当权威。本批核对PID24324命令／监听后重启4321无provider预览，
-现PID15608；模型和ASR禁用，用户刷新后载入新静态客户端。无公共部署。
-下次停止／重启先核对完整命令和监听PID；常规npm start／4317。
-
-## 下一轮建议与不变约束
-
-先用未见的实际学习材料测覆盖率、模板是否仍照抄纠正解释和误解析。
-可考虑可编辑人工题／标准，或将题目有效性先独立判定；不要直接恢复本轮AI评分，
-不要继续只靠加长repair提示。新真实实验先提交方案预算，不能沿用本轮余量。
-也可研究自愿自然讲解的人工文字／少量词边界、数字和领域术语；不调停顿阈值。
+PR26合并3ae43ef3023ecbed2e54138373c355f611cca427，固定12次task-split实验已结束：
+预留US$0.042374，估算US$0.00410625，新增未结算0。4次生成＋人工固定题8次评分，
+不是对生成题评分。评分6/8，故意无效资金题被判partial／incorrect而非unanswerable；
+另有复述和多要求，候选AI生成／评分被拒绝，无/api/understanding路由。
+task-split-live.mjs入口不得重跑或改目录绕过。原收据
+artifacts/study-teachback/task-split-01/live-quality.json SHA256
+4dd6fa677c043b361635af451e0e4fb2f88939a94403dea0cc667d3d89d1ec16。
+公开完整响应docs/research/task-split-live.json保持；不追加调用或挑选有利报告。
 
 旧实验均已结束：PR24理解检验12次估算US$0.0062383、预留US$0.0495065，
 来源外“其他升级要求”使CONTENT候选被拒绝，原收据SHA256
@@ -82,4 +67,5 @@ Issue #3多源研究：2–4份为受控样本非产品上限；影响当前诊�
 角色可改，优先级须有来源／目标依据，完整约束见CURRENT_STATE。
 无总体掌握分、不宣称课程收益。许可证未选；公开语音单独CC BY4.0。
 
-历史快照：[本轮之前交接](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a85897239c466fd446992211ef702c991a331b8e/docs/master/HANDOFF.md)。
+
+历史快照：[上一轮交接](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/63107f3a69ee75666fe8a2e4590c65e330a2bfa5/docs/master/HANDOFF.md)。
