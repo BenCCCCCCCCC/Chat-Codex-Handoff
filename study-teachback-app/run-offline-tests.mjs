@@ -9,7 +9,7 @@ const repo = fileURLToPath(new URL('../', import.meta.url));
 const mode = process.argv[2];
 if (!['review', 'process', 'import', 'setup', 'node', 'browser-env', 'replay', 'browser-replay', 'browser', 'focused', 'boundaries', 'diagnostic', 'provenance-baseline'].includes(mode)) throw Error('Use node, browser, focused, boundaries, diagnostic or provenance-baseline');
 const batch=process.argv[3]??'correctness-hygiene-01';
-if(!['replay-review-ux-01','process-evidence-feasibility-01','file-import-auto-use-01','setup-flow-01','correctness-hygiene-01','diagnostic-localization-01','correctness-boundaries-01'].includes(batch))throw Error('INVALID_TEST_BATCH');
+if(!['diagnosis-state-ux-01','replay-review-ux-01','process-evidence-feasibility-01','file-import-auto-use-01','setup-flow-01','correctness-hygiene-01','diagnostic-localization-01','correctness-boundaries-01'].includes(batch))throw Error('INVALID_TEST_BATCH');
 const parent = join(repo, 'artifacts/study-teachback', batch);
 mkdirSync(parent, { recursive: true });
 const output = mkdtempSync(join(parent, `${mode}-${Date.now()}-`));

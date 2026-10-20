@@ -4,6 +4,7 @@ import { confirmLocalProcess, localize, processEvidence } from './diagnostic-loc
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
 let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false,capturePending=false;
 const editors=new Map();
+const diagnosisStates=new WeakMap();
 // Transient playback copies only. Original stored/exported audio is untouched.
 const replayWaves=new WeakMap();let replayOriginal=null,replayRequest=0;
 const notice=message=>{$('notice').textContent=message;};
@@ -192,19 +193,36 @@ function playPrepared(start,end,onComplete){
   for(const [type,fn] of Object.entries(handlers))player.addEventListener(type,fn);
   observe('play-request');return player.play().then(()=>{observe('play-resolved');if(active()){if(player.currentTime>start+.05||player.seeking){state.cancel('invalid-start-position');return;}started=true;observe('started');}},error=>{state.cancel('play-rejected');throw error;});
 }
+function diagnosisView(a){
+  const versions=[a.raw,...a.corrections],draft=a.raw.spans.map(s=>editors.get(s.id)?.value??latest(a).spans.find(v=>v.id===s.id).text);
+  const same=v=>v&&v.spans.length===draft.length&&v.spans.every((s,i)=>s.text===draft[i]);
+  const reports=a.reports.filter(r=>r.channel==='content');
+  const matching=reports.slice().reverse().find(r=>same(versions.find(v=>v.id===r.transcriptVersion)));
+  const report=matching??reports.at(-1),version=report&&versions.find(v=>v.id===report.transcriptVersion);
+  return {draft,report,version,current:!!matching,changed:!same(latest(a)),...(diagnosisStates.get(a)??{})};
+}
+function focusDiagnosis(){const heading=$('contentHeading');heading.focus();heading.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
+function updateDiagnosisState(){
+  const a=current;if(!a?.raw)return;const v=diagnosisView(a);
+  $('confirm').disabled=!!v.pending||!!v.saveFailed;for(const e of editors.values())e.readOnly=!!v.pending;
+  $('confirm').textContent=v.pending?'诊断中…':v.current?'查看当前诊断结果':v.changed?'确认修改并重新诊断':v.error?'确认当前文字并再次诊断':'确认使用当前文字，开始诊断';
+  const binding=v.version?'版本 '+v.version.id.slice(0,8)+' · '+new Date(v.report.createdAt).toLocaleString():'';
+  $('diagnosisState').textContent=v.pending?'当前文字已确认，正在诊断…':v.error?v.error:v.current?'诊断完成 · '+binding:v.report?'文字已修改，先前结果已过时 · '+binding:'当前文字待确认；回听可选。';
+  $('resultBinding').textContent=v.report?(v.pending?'先前结果（新诊断进行中）':v.current?'当前结果':'先前结果，仅供查看，不适用于当前文字')+' · '+binding:'';
+  $('feedback').replaceChildren();if(v.report&&v.version)renderFeedback(v.report,{version:v.version,stale:!v.current||!!v.pending});
+}
 function renderAttempt(){
   if(!current)return;const a=current;editors.clear();reveal('attemptPanel');$('attemptKind').textContent=a.kind==='partial'?'局部新录音':'完整录音';
   replayRequest++;replayOriginal=null;if(blobURL)URL.revokeObjectURL(blobURL);blobURL=URL.createObjectURL(a.audio);$('player').src=blobURL;
   $('audioStatus').textContent=`${a.duration?`${a.duration.toFixed(1)} 秒 · `:''}${a.interrupted?'采集中断 · ':''}${a.observation?.reason??'尚未完成声音检查'}。仅候选观测，非流利度评分。`;
   $('rawText').textContent=a.raw?.text??'尚未取得转写';$('transcript').replaceChildren();$('feedback').replaceChildren();$('observations').replaceChildren();$('processFeedback').replaceChildren();
-  reveal('retryAsr',!a.raw&&!a.interrupted);reveal('confirm',!!a.raw);reveal('reviewHint',!!a.raw);
-  if(a.raw){$('reviewHint').textContent=(a.raw.wordTiming?.status==='PARTIAL'?'词级定位部分不可用。':'')+'诊断使用当前转写。ASR 可能误听否定词、数字、条件和术语；建议回听或修改后继续，逐段回听不是必需步骤。';const v=latest(a);v.spans.forEach(s=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=s.text;editor.rows=2;editor.maxLength=2000;editors.set(s.id,editor);const b=button(`可选回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{b.textContent='本次页面已播放 ✓';}));row.append(b,editor);$('transcript').append(row);});
+  reveal('retryAsr',!a.raw&&!a.interrupted);reveal('confirm',!!a.raw);reveal('reviewHint',!!a.raw);reveal('diagnosisState',!!a.raw);reveal('resultBinding',!!a.raw);
+  if(a.raw){$('reviewHint').textContent=(a.raw.wordTiming?.status==='PARTIAL'?'词级定位部分不可用。':'')+'诊断使用当前转写。ASR 可能误听否定词、数字、条件和术语；建议回听或修改后继续，逐段回听不是必需步骤。';const v=latest(a);v.spans.forEach(s=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=s.text;editor.rows=2;editor.maxLength=2000;editor.oninput=()=>{const state=diagnosisStates.get(a);if(state&&!state.pending&&!state.saveFailed)diagnosisStates.delete(a);updateDiagnosisState();};editors.set(s.id,editor);const b=button(`可选回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{b.textContent='本次页面已播放 ✓';}));row.append(b,editor);$('transcript').append(row);});
     if(v.reviewed)$('reviewHint').textContent+=' 已保存用于诊断的文字确认；这不表示音频已回听。修改后可再次确认，不会创建新口头表现。';
     for(const report of a.reports.filter(r=>r.transcriptVersion===v.id)){
-      if(report.channel==='content')renderFeedback(report);
-      else if(report.channel==='delivery')$('processFeedback').append(el('p','历史过程报告（旧格式，未作为定位证据）','muted'),...report.findings.map(f=>el('p',f.message)));
+      if(report.channel==='delivery')$('processFeedback').append(el('p','历史过程报告（旧格式，未作为定位证据）','muted'),...report.findings.map(f=>el('p',f.message)));
     }
-    renderProcess(a);
+    renderProcess(a);updateDiagnosisState();
   }
   const events=a.observation?.events??[];
   // Keep the eight-row limit without starving either detector type. Preserve IDs
@@ -238,12 +256,14 @@ function renderProcess(a){
 }
 $('confirm').onclick=()=>act(async()=>{
   if(record||capturePending||controller||processing)throw new Error('REQUEST_IN_PROGRESS');
-  const a=current; if(!a?.raw)return;
-  processing=true;
+  const a=current;if(!a?.raw)return;const view=diagnosisView(a);
+  if(view.saveFailed)throw new Error('STORAGE_FAILED');
+  if(view.current){updateDiagnosisState();focusDiagnosis();return;}
+  processing=true;diagnosisStates.set(a,{pending:true});updateDiagnosisState();let complete=false;
   try{
-    notice('正在保存当前文字确认并核对内容，请稍候……');
-    const corrected=revisedTranscript(a,a.raw.spans.map(s=>({text:editors.get(s.id).value})));a.corrections.push(corrected);await save();await diagnose(a);
-  }finally{processing=false;}
+    const corrected=revisedTranscript(a,view.draft.map(text=>({text})));a.corrections.push(corrected);await save();await diagnose(a);complete=true;
+  }catch(e){diagnosisStates.set(a,{saveFailed:e.message==='STORAGE_FAILED',error:e.message==='STORAGE_FAILED'?'本机保存失败；请重试保存或导出，不要重新提交诊断。':'本次诊断未完成或结果未知；先前结果已保留，不会自动重试。'});throw e;}
+  finally{processing=false;const state=diagnosisStates.get(a);if(state?.pending)diagnosisStates.delete(a);if(current===a){updateDiagnosisState();if(complete)focusDiagnosis();}}
 });
 async function diagnose(a){
   const channel='content',events=[],request=attemptRequest(a);notice('正在核对内容和逻辑……');
@@ -251,15 +271,15 @@ async function diagnose(a){
   if(deleted.has(a.id)||!topic||deleted.has(topic.id))return;
   validateFindings(result.value,a.source,request,channel,events);a.reports.push({...result.value,channel,createdAt:Date.now()});a.status='DIAGNOSED';await save();renderAttempt();notice('内容反馈已关联原声。过程候选需另行回听确认，确认后会在本机核对同段关联，不调用模型。');
 }
-function renderFeedback(report){
+function renderFeedback(report,{version=latest(current),stale=false}={}){
   if(report.channel!=='content')return;
-  if(!latest(current).reviewed||current.interrupted){$('feedback').append(el('p','先确认用于诊断的转写，再查看内容定位。','muted'));return;}
-  let targets=[];try{const {sourceId,attemptId,transcriptVersion,findings}=report;targets=localize({source:current.source,attempt:attemptRequest(current),report:{sourceId,attemptId,transcriptVersion,findings},evidence:processFor(current),events:current.observation?.events??[]}).diagnosticTargets;}catch{ $('feedback').append(el('p','该反馈尚未通过当前来源／转写校验，不生成定位建议。','muted')); }
+  if(!version.reviewed||current.interrupted){$('feedback').append(el('p','先确认用于诊断的转写，再查看内容定位。','muted'));return;}
+  let targets=[];try{const {sourceId,attemptId,transcriptVersion,findings}=report;targets=localize({source:current.source,attempt:{...attemptRequest(current),transcriptVersion:version.id,spans:version.spans,reviewed:version.reviewed===true},report:{sourceId,attemptId,transcriptVersion,findings},evidence:(current.reports??[]).filter(r=>r.channel==='process'&&r.transcriptVersion===version.id).flatMap(r=>r.processEvidence),events:current.observation?.events??[]}).diagnosticTargets;}catch{ $('feedback').append(el('p','该反馈尚未通过当前来源／转写校验，不生成定位建议。','muted')); }
   if(!report.findings.length)$('feedback').append(el('p','本次没有足够证据生成此类反馈。'));
   for(const [index,f] of report.findings.entries()){const card=el('article',undefined,'finding'),labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足'};card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message),el('blockquote',`材料：${f.sourceQuote}`));
-    if(f.spanId){const span=latest(current).spans.find(s=>s.id===f.spanId);card.append(el('blockquote',`本次原话：${f.quote}`),button('回听对应原声',()=>play(span.start,span.end)));}else card.append(el('p','未表达内容没有可对应的音频时间点。','muted'));
+    if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId);card.append(el('blockquote',`本次原话：${f.quote}`),button('回听对应原声',()=>play(span.start,span.end)));}else card.append(el('p','未表达内容没有可对应的音频时间点。','muted'));
     const target=targets.find(t=>t.contentFindingIds.includes(`content:${current.id}:${report.transcriptVersion}:${index}`));
-    if(target){card.dataset.targetId=target.id;card.append(el('p',`值得核对的关系：${target.focus}`,'diagnosticTarget'));
+    if(target&&!stale){card.dataset.targetId=target.id;card.append(el('p',`值得核对的关系：${target.focus}`,'diagnosticTarget'));
       if(target.processEvidenceIds.length)card.append(el('p',`另有 ${target.processEvidenceIds.length} 条同段过程观察，见“讲解过程”；时间相邻不证明理解有误。`,'muted'));
       card.append(button('再学这一点',async()=>{topic.focus=target.focus;await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',target.focus,{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',target.focus,current.id)));}
     $('feedback').append(card);
@@ -272,7 +292,7 @@ async function exportTopic(){
 }
 $('export').onclick=()=>act(exportTopic);
 $('recoveryExport').onclick=()=>act(exportTopic);
-$('retrySave').onclick=()=>act(async()=>{await save();if(current)renderAttempt();notice('已重新保存到本机。');});
+$('retrySave').onclick=()=>act(async()=>{await save();if(current){diagnosisStates.delete(current);renderAttempt();}notice('已重新保存到本机。');});
 function abortPending(){controller?.abort();}
 $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;abortPending();deleted.add(current.id);topic.attempts=topic.attempts.filter(a=>a.id!==current.id);await save();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);current=null;reveal('attemptPanel',false);notice('这次原声及其关联转写、纠正和反馈已从本地删除。已导出副本和已在途的云请求不受此操作控制。');});
 async function history(){if(memoryOnly)throw new Error('STORAGE_FAILED');if(processing)throw new Error('REQUEST_IN_PROGRESS');if(record)throw new Error('RECORDING_ACTIVE');if(controller)throw new Error('REQUEST_IN_PROGRESS');reveal('history');const list=$('historyList');list.replaceChildren();for(const t of await db.all()){const row=el('div');row.append(el('strong',t.source.title),el('p',`${new Date(t.createdAt).toLocaleString()} · ${t.attempts.length} 次讲解`,'muted'),button('继续学习',()=>{if(!canNavigate())return;topic=t;current=null;renderTopic();reveal('attemptPanel',false);reveal('history',false);}));for(const a of t.attempts)row.append(button(`${a.kind==='partial'?'局部':'完整'} · ${new Date(a.createdAt).toLocaleTimeString()}`,()=>{if(!canNavigate())return;topic=t;current=a;renderTopic();renderAttempt();reveal('history',false);}));row.append(button('删除主题',async()=>{abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');}await history();},'danger'));list.append(row);}if(!list.children.length)list.append(el('p','还没有保存的学习记录。'));$('history').scrollIntoView({behavior:'smooth'});}

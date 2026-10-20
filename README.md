@@ -1,36 +1,83 @@
-# 知而能讲 — Study-first + in-app teach-back
+# 知而能讲 · Study & Teach-back
 
-当前产品是 `study-teachback-app/`：先学习有限材料，再在应用内录音讲解、确认当前转写文字（可选回听）、查看反馈，并按需要补学、重讲或尝试新情境。当前阶段面向个人使用与作品展示；工程测试不代表学习效果或完整 owner 验收。
+**把材料学进去，再用自己的话讲出来。**
 
-## 产品入口
+面向个人学习与作品展示的学习原型：导入一小段材料，先理解，再录音讲解，核对转写后查看哪些内容已表达、哪些遗漏、哪些需要澄清。反馈关联材料、讲解原话和录音，方便回到具体问题继续学习。
 
-- [产品说明与现有安装前提](study-teachback-app/README.md)
-- Windows 启动：[Start-Study.cmd](Start-Study.cmd)；异常关闭后的身份校验恢复：[Stop-Study.cmd](Stop-Study.cmd)
-- 新服务需要已有 Node、产品 Python 环境与指定版本 pypdf，以及服务端进程凭据。启动器不会自动安装、充值或修改系统策略。真实模型调用需要单独授权；启动说明不是调用授权。
+当前是 Windows 本地应用。工程测试验证流程和数据边界；尚无跨课程、跨用户的学习效果验证。
 
-截至 2026-09-30，已接受的产品行为基线为 `aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`（可选转写回听）。Phase 3B 真实 owner 验证已完成：1 次 Tutor、1 次真实录音、1 次 ASR、1 次内容诊断，重试 0 次。原三次 live 调用授权已全部用完，没有后续真实调用授权；新实验须另行明确授权。动态状态以 canonical 文档为准。
+![学习工作区：左侧材料，右侧学习对话，下方录音入口](docs/images/study-workspace.png)
 
-内容诊断使用用户明确确认的当前文字，逐段或完整回听是建议而非硬门槛；过程候选仍须回听对应片段后确认保存。过程证据不能单独证明知识理解有误。单次真实验证不代表跨课程学习效果、完整产品验收或阶段正式关闭；阶段关闭由 MASTER 决定。
+*截图来自隔离浏览器测试，内容和模型响应为工程样例。*
 
-## 唯一动态状态与任务来源
+## 一轮学习
 
-仓库：`BenCCCCCCCCC/Chat-Codex-Handoff`；产品分支：`prototype/study-teachback-v0.1`。
+1. **放入材料**：粘贴文字或导入 MD、TXT、PDF、DOCX、PPTX。自动生成主题名，可选填写学习重点和已有理解。
+2. **先学习**：围绕材料提问、解释和核对，不必先准备一份标准讲稿。
+3. **我来讲讲**：在应用内录音，保留原声；核对自动转写，可选回听、修正识别错误。
+4. **查看反馈**：区分已表达、尚未表达、需要澄清和证据不足；文字修改后旧结果会标记过时。
+5. **继续练习**：针对某一点补学、局部重讲，或换一个情境应用。
 
-权威分支是 **`meta/master-state`**，路径分别为：
+重复查看相同文字的已有结果不会重新调用诊断。诊断进行时锁定提交和文字编辑，避免覆盖输入或并发重复请求。
 
-- [docs/master/CURRENT_STATE.md（canonical）](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/CURRENT_STATE.md)
-- [docs/master/HANDOFF.md（canonical）](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/HANDOFF.md)
+## 为什么做这个项目
 
-分支名不是目录前缀。产品 checkout 内的同名文件只是指针，不是第二份实时状态。执行前读取 canonical 分支并记录实际 commit；不要因旧本地副本而执行历史任务，也不要为了读文档切换产品分支。
+“听懂了”与“能清楚解释”之间存在距离。本项目探索如何把一次讲解变成可核对、可补学的具体反馈。原声、转写修订和诊断版本保持关联；停顿等过程观察单独呈现，不作为“不理解”的证据。
 
-## 开发交接工具（保留）
+同类产品已经广泛覆盖 AI 辅导、语音讲解和材料引用。接下来的研究重点是：**多份材料冲突时，如何避免凭空判错，并确定应先补哪一点**。这是待验证的方向，当前产品仍使用单份有限材料，不宣称已有竞争优势。
 
-`handoff-kit/` 是开发工作流工具，不是当前学习产品。历史证据保留原路径。
+详见[产品与机制调研](docs/research/2026-10-20-landscape.md)、[设计与技能资料](docs/research/design-and-skills.md)和[迭代路线](docs/ROADMAP.md)。
 
-- [Handoff CLI 说明](handoff-kit/README.md) 与 [实验窗口说明](handoff-kit/ui/README.md)
-- 窗口入口：[Start-Handoff.cmd](Start-Handoff.cmd)
-- 首次绑定：`.\handoff-kit\configure.ps1 -OriginChat 'https://chatgpt.com/g/PROJECT_ID/c/CONVERSATION_ID'`
-- 显式更换 MASTER：同一命令加 `-Rebind`；不会自动改绑。
-- Stop Hook 生成交付包后，运行 `.\handoff-kit\handoff.ps1 -CopyOnly` 仅复制，或 `.\handoff-kit\handoff.ps1` 复制并打开已绑定的网页对话。
+## 本地运行
 
-用户自行粘贴、发送，MASTER 审查 delta；工具不自动发送，不合并聊天历史，也不自动 push/merge。可不使用窗口，继续使用原 CLI 路径。
+已验证环境：Windows、Node.js 24、Python 3.14、Microsoft Edge。Node 运行时没有第三方 npm 依赖；文件提取使用固定版本 pypdf 6.18.0。
+
+```powershell
+git clone --branch prototype/study-teachback-v0.1 https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff.git
+cd Chat-Codex-Handoff
+py -3 -m venv study-teachback-app/.venv
+study-teachback-app/.venv/Scripts/python.exe -I -m pip --isolated install --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --disable-pip-version-check -r study-teachback-app/requirements-extractor.txt
+```
+
+界面预览可运行 `npm start`，打开 `http://127.0.0.1:4317/`。实际 Tutor、转写和诊断需要在服务进程环境中配置自己的 `OPENAI_API_KEY`，并承担对应 API 费用。没有 key 时不提供真实模型反馈，不会悄悄替换成模拟结果。
+
+已配置环境也可双击 [Start-Study.cmd](Start-Study.cmd)。停止与异常恢复见 [Stop-Study.cmd](Stop-Study.cmd)。[详细安装与数据说明](study-teachback-app/README.md)包含文件限制、启动器行为与现有模型配置。
+
+## 不花费 API 额度的验证
+
+完成 Python 提取环境安装后，在仓库根目录运行：
+
+```powershell
+npm test
+npm run test:extract
+npm run test:browser
+```
+
+测试包装器使用模拟凭据、模拟 provider、独立账本和独立 Edge profile，阻止测试 Node 进程访问外部网络。浏览器回归使用合成音频，不打开物理麦克风。日志写入 ignored `artifacts/`，不覆盖已有记录。
+
+[GitHub Actions](.github/workflows/offline-tests.yml)在代码 PR 上运行 Node 回归，按改动选择浏览器和提取器检查；纯文档修改不触发，不再对同一提交同时执行 push 与 PR 两轮检查。以上命令是可选验证范围，日常不要求全部重跑。遵循[按影响验证的约定](docs/TESTING.md)。[本轮验证与交接](docs/iterations/2026-10-20.md)记录实际结果；浏览器测试通过不代表模型准确率或教学效果。
+
+## 数据与能力边界
+
+- 原文件在本机提取；点击开始学习才发送选定材料。转写会发送音频，内容诊断会发送材料及确认的文字到模型服务。
+- 学习记录与原声保存在浏览器 IndexedDB，默认七天过期；可导出和删除。
+- 单轮材料最多 5,000 字；输入文件最多 10 MB；无 OCR。复杂版式请核对提取预览。
+- 现有成本账本使用历史固定费率估算并限制请求；不能代替服务商账单或账户消费限制。
+- 尚未实现多人账户、云同步、生产多文件工作区、跨标签页持久去重，以及经过验证的总体掌握度评分。
+
+## 项目结构与协作
+
+| 路径 | 用途 |
+| --- | --- |
+| `study-teachback-app/` | 原生 HTML/CSS/JavaScript 前端、Node 服务、Python 提取器与测试 |
+| `study-teachback-app/fixtures/` | 可分发合成音频，不含个人录音 |
+| `docs/research/` | 有来源的竞品、设计、机制和技能资料 |
+| `docs/iterations/` | 按批次记录的审核、验证与交接 |
+| `handoff-kit/`、`acceptance-p0/` | 保留的历史开发工具，不是学习产品入口 |
+
+仓库名称沿用早期开发工具名称；当前产品分支是 `prototype/study-teachback-v0.1`。动态交接仍在 **`meta/master-state`**：
+[CURRENT_STATE](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/CURRENT_STATE.md) · [HANDOFF](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/HANDOFF.md)。
+
+按有意义的改进批次提交，使用 Issue/PR 留下问题、决定和验证结果。代码公开与开源许可证是两件事；当前尚未选择项目许可证。
+
+*English: A local, source-grounded study and spoken teach-back prototype. Import learning material, explain it aloud, review the transcript, and follow evidence-linked feedback. Intended for personal learning and a product portfolio; learning efficacy is not yet established.*

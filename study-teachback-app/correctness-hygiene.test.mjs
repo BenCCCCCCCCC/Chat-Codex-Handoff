@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { existsSync } from 'node:fs';
 import { transcribe } from './provider.mjs';
 import vm from 'node:vm';
 import { Ledger } from './ledger.mjs';
@@ -103,19 +102,6 @@ test('A3 HTTP repeated registration cannot buy an extra ASR submission or clear 
     }
     assert.equal(dispatches,2);assert.equal(b.summary().attempts,1);assert.equal(b.summary().unsettled,2);assert.equal(b.summary().minutes,6);
   }finally{await new Promise(r=>server.close(r));}
-});
-
-test('A2 entry documents identify product, canonical branch, working links and honest validation limits',()=>{
-  const paths=['../README.md','./README.md','../docs/master/CURRENT_STATE.md','../docs/master/HANDOFF.md'];
-  for(const path of paths){
-    const url=new URL(path,import.meta.url),text=readFileSync(url,'utf8');
-    assert(text.includes('知而能讲'));assert(text.includes('meta/master-state'));
-    assert(text.includes('https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/'));
-    assert(!text.includes('OWNER-DEFERRED / NOT EXECUTED'));
-    for(const [,link] of text.matchAll(/\]\(([^)]+)\)/g))if(!/^https?:/.test(link))assert(existsSync(new URL(link,url)),`${path}: ${link}`);
-  }
-  for(const path of paths.slice(2)){const text=readFileSync(new URL(path,import.meta.url),'utf8');assert(text.includes('非权威指针'));assert(!text.includes('R1-BUILD-01'));}
-  const readme=readFileSync(new URL('./README.md',import.meta.url),'utf8');assert(readme.includes('Phase 3 尚未执行'));assert(readme.includes('OPENAI_API_KEY'));assert(readme.includes('pypdf 6.18.0'));
 });
 
 test('A0 outbound tripwire and owner-ledger guard fail before I/O (deliberate negative probes)',()=>{

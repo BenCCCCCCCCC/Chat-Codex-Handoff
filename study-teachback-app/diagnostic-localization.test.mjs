@@ -74,7 +74,7 @@ test('B1 existing content validation is reused, including source, version, quote
 });
 test('B4 sections have separate accessible names and process styling is not a content error',()=>{
   const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
-  assert.match(html,/<section aria-labelledby="contentHeading"><h3 id="contentHeading">内容理解<\/h3><div id="feedback"><\/div><\/section>/);
+  assert.match(html,/<section aria-labelledby="contentHeading"><h3 id="contentHeading" tabindex="-1">内容理解<\/h3><p id="resultBinding" class="muted"><\/p><div id="feedback"><\/div><\/section>/);
   assert.match(html,/<section aria-labelledby="processHeading"><h3 id="processHeading">讲解过程<\/h3>/);
   const app=readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
   const path=app.slice(app.indexOf('async function confirmProcess('),app.indexOf('function renderProcess('));

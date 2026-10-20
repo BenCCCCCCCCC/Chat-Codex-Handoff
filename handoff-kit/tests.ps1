@@ -4,7 +4,7 @@ param()
 $ErrorActionPreference = 'Stop'
 $script:Passed = 0
 $script:Failed = 0
-$validOrigin = 'https://chatgpt.com/g/g-p-6a9c78ab008481918661d71361ce5592/c/6a9f3c98-93cc-83ec-8e80-23e4de9e8839'
+$validOrigin = 'https://chatgpt.com/g/g-p-00000000000000000000000000000000/c/00000000-1111-2222-3333-444444444444'
 $alternateOrigin = 'https://chatgpt.com/c/11111111-2222-3333-4444-555555555555'
 $powerShell51 = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
 $sourceDirectory = $PSScriptRoot

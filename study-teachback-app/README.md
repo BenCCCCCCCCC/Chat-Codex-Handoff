@@ -11,9 +11,9 @@
 
 当前 checkout 的 `docs/master/` 仅指向上述权威文档。读取任务时记录文档 commit，不把分支名当目录，不执行旧副本中的历史 next steps。
 
-截至 2026-09-30，已接受的产品行为基线为 `aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`（可选转写回听）。Phase 3B 真实 owner 验证已完成：1 次 Tutor、1 次真实录音、1 次 ASR、1 次内容诊断，重试 0 次。原三次 live 调用授权已全部用完，没有后续真实调用授权；新实验须另行明确授权。动态状态以 canonical 文档为准。
+截至 2026-09-30，已接受的产品行为基线为 `aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`（可选转写回听）。Phase 3B 真实 owner 验证已完成其有限可行性检查：1 次 Tutor、1 次真实录音、1 次 ASR；记录恢复出两份相同文字的诊断结果，准确调用归因仍需核对，不能继续声称验证了单次诊断。原 live 调用额度已用完，没有后续真实调用授权。2026-10-20 用户已授权自主审核、GitHub 公开与按批次提交；离线结果见[审核交接](../docs/iterations/2026-10-20.md)。动态状态以 canonical 文档为准。
 
-真实样本的内容反馈识别了访客证、开放状态和当天有效条件，并指出未表达 18:00 截止条件。16–18 秒的过程迟疑与该遗漏不在同一目标上，不能据此推断迟疑证明知识缺口。该样本支持内容／过程证据分离，不证明跨课程、跨用户或重复学习收益。阶段正式关闭仍待 MASTER 决定；历史 Node/Edge 计数仅适用于各自交付包记录的版本。
+两份真实报告并不完全一致，其中一份指出未表达 18:00 截止条件；后续对比必须保留两份结果。16–18 秒的过程迟疑与该遗漏不在同一目标上，不能据此推断迟疑证明知识缺口。Phase 3B 已按有限可行性问题关闭，不证明跨课程、跨用户或重复学习收益；历史 Node/Edge 计数仅适用于各自记录版本。
 
 ## Windows 启动与停止
 
@@ -66,6 +66,6 @@ node study-teachback-app/run-offline-tests.mjs browser
 
 包装器调用已有 Node suite / `browser-tests-r4.mjs`，只给测试进程 synthetic credential，拦截非 loopback 网络，限制 ledger 到测试目录，使用独立 Edge profile 与 synthetic media/fake provider。新日志写入 `artifacts/study-teachback/correctness-hygiene-01/<run-id>/`，不覆盖历史证据。浏览器测试不是物理麦克风测试。测试不证明 ASR/模型准确性或学习收益。
 
-其他独立检查（本次未默认授权执行）：`study-teachback-app/.venv/Scripts/python.exe -B study-teachback-app/extract_source_test.py`；启动器测试 `powershell.exe -NoProfile -File study-teachback-app/launch-tests.ps1` 要求 4317 空闲并使用其专门隔离环境。不要通过真实 Start-Study 流程代替 Batch A 测试。
+其他独立检查：`npm run test:extract`；启动器测试 `powershell.exe -NoProfile -File study-teachback-app/launch-tests.ps1` 要求 4317 空闲并使用其专门隔离环境。不要通过真实 Start-Study 流程代替隔离测试。浏览器回归所需的既有合成音频现随 `fixtures/` 分发，新克隆不需要开发者 runtime 音频；来源与 SHA-256 见 [fixtures 说明](fixtures/README.md)。
 
-开发交接工具见 [handoff-kit](../handoff-kit/README.md)；[Start-Handoff.cmd](../Start-Handoff.cmd) 与 Study 启动入口用途不同。完成一个批次后交回 MASTER，后续批次、真实调用及发布需要相应授权。
+开发交接工具见 [handoff-kit](../handoff-kit/README.md)；[Start-Handoff.cmd](../Start-Handoff.cmd) 与 Study 启动入口用途不同。自主迭代按有意义的批次记录 Issue／PR 和交接，真实调用须先明确新的预算与实验范围。

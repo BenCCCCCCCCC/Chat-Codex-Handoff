@@ -15,7 +15,7 @@ const run=Date.now(), profile=process.env.STUDY_TEST_PROFILE??mkdtempSync(root+'
 const calls=[],cases=[],errors=[],network=[];let failASR=null,delaySemantic=0,rejectStarter=false,failTeach=false,failRegister=false;const provenanceRequests=[];
 let diagnosisGate=null;
 const savedASR=normalizeASR(JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r2/SYNTHETIC_ASR_FIELDS.json',import.meta.url))),7.31);
-const savedWave=[...readFileSync(new URL('./runtime/synthetic-mandarin-v2.wav',import.meta.url))];
+const savedWave=[...readFileSync(new URL('./fixtures/synthetic-mandarin-v2.wav',import.meta.url))];
 const testBook=new Ledger(root+`browser-test-ledger-${run}.json`),register=testBook.register.bind(testBook);
 testBook.register=id=>{if(failRegister)throw Error('LEDGER_LOCKED');return register(id);};
 const server=createServer({book:testBook,semanticCall:async(prompt,input)=>{
@@ -240,7 +240,7 @@ try{
     try{
       await click('confirm');for(let i=0;i<100&&calls.length===count;i++)await pause(50);assert.equal(calls.length,count+1);
       const pending=(await evaluate(all))[0].attempts[0];assert.equal(pending.corrections.length,1);
-      await click('confirm');await until(`document.getElementById('notice').textContent.includes('上一个请求仍在完成')`);
+      assert(await evaluate(`document.getElementById('confirm').disabled && [...document.querySelectorAll('#transcript textarea')].every(e=>e.readOnly) && document.getElementById('diagnosisState').textContent.includes('正在诊断')`));await click('confirm');
       const duplicate=(await evaluate(all))[0].attempts[0];assert.deepEqual(duplicate.corrections,pending.corrections);assert.equal(calls.length,count+1);
     }finally{release();diagnosisGate=null;}
     await until(`document.querySelectorAll('.finding').length===1`);const after=(await evaluate(all))[0].attempts[0];
@@ -249,6 +249,15 @@ try{
     assert.equal(after.corrections[0].origin,'USER_TRANSCRIPT_CONFIRMATION');assert.equal(after.corrections[0].spans[0].text,'只有土壤干燥才浇水，湿润时先不浇。');
     assert(await evaluate(`document.getElementById('reviewHint').textContent.includes('这不表示音频已回听')`));
     await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);assert.equal(calls.length,count+1);
+  });
+  await check('diagnosis complete, dirty/stale, revert and keyboard reuse do not dispatch',async()=>{
+    const before=calls.length;
+    assert(await evaluate(`document.getElementById('diagnosisState').textContent.includes('诊断完成') && !document.getElementById('confirm').disabled`));
+    await evaluate(`(()=>{window.confirmedText=document.querySelector('#transcript textarea').value;const e=document.querySelector('#transcript textarea');e.value+='修改';e.dispatchEvent(new Event('input'));})()`);
+    assert(await evaluate(`document.getElementById('diagnosisState').textContent.includes('过时') && document.getElementById('confirm').textContent.includes('确认修改并重新诊断') && ![...document.querySelectorAll('#feedback button')].some(b=>b.textContent.includes('再学')||b.textContent.includes('再讲'))`));
+    await evaluate(`(()=>{const e=document.querySelector('#transcript textarea');e.value=window.confirmedText;e.dispatchEvent(new Event('input'));document.getElementById('confirm').focus();})()`);
+    await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,text:'\r',unmodifiedText:'\r'});await cdp('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+    await until(`document.activeElement.id==='contentHeading'`);assert.equal(calls.length,before);assert.equal((await evaluate(all))[0].attempts[0].corrections.length,1);
   });
   await check('targeted repair routes feedback back into tutor',async()=>{await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);await until(`document.getElementById('phase').textContent.includes('再学这一点') && document.querySelectorAll('.message.assistant').length===2`);assert(calls.some(c=>c.kind==='repair'));});
   await check('partial re-record is a new attempt with parent and focus',async()=>{await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再讲这一点').click()`);await click('start');await until(`!document.getElementById('finish').hidden`);await pause(1200);await click('finish');await until(`document.getElementById('notice').textContent.includes('转写完成')`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,2);assert.equal(t.attempts[1].kind,'partial');assert.equal(t.attempts[1].parentId,t.attempts[0].id);assert.notEqual(t.attempts[1].id,t.attempts[0].id);});
