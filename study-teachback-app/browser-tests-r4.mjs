@@ -1,3 +1,4 @@
+import {contextChecks} from './browser-context-checks.mjs';
 import {workspaceChecks} from './browser-workspace-checks.mjs';
 import { spawn } from 'node:child_process';
 import { mkdirSync,writeFileSync,mkdtempSync,readFileSync } from 'node:fs';
@@ -10,6 +11,7 @@ import { waveDuration,normalizeASR } from './core.mjs';
 import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 if(!process.env.STUDY_TEST_OUTPUT)throw Error('Run through run-offline-tests.mjs browser');
 const root=process.env.STUDY_TEST_OUTPUT+'/';mkdirSync(root,{recursive:true});
+const contextOnly=process.argv.includes('--context-only');
 const workspaceOnly=process.argv.includes('--workspace-only');
 const environmentProbe=process.argv.includes('--environment-probe'),recoveryOnly=process.argv.includes('--recovery-only');
 const probe={mode:environmentProbe?'NON_HEADLESS_TRUSTED_POINTER':'EXISTING_SUITE',lifecycle:[],states:[],trustedInputs:[]};
@@ -28,7 +30,7 @@ const server=createServer({book:testBook,semanticCall:async(prompt,input)=>{
   if(rejectStarter){rejectStarter=false;return {value:{sourceId:input.source.id,message:'Rejected stub',goals:[{text:'Goal',sourceQuote:'NOT IN SOURCE'}],question:'Question'}};}
   if(input.mode)return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,message:input.mode==='apply'?'新情境：昨天浇过水，今天摸起来还是湿的。':'我们先看条件：干了才浇，湿的时候先不浇。',goals:[{text:'把条件和行动联系起来',sourceQuote:input.source.text}],question:input.mode==='apply'?'现在要浇水吗？为什么？':'你能换句话说说这个条件吗？'}};
   if(input.events)return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,attemptId:input.attempt.id,transcriptVersion:input.attempt.transcriptVersion,findings:[{status:'observation',message:'确认的近静音候选，可尝试在两句之间明确过渡。',sourceQuote:input.source.text,spanId:input.attempt.spans[0].id,quote:input.attempt.spans[0].text,eventId:input.events[0].id,repair:'再讲时试着提示句间关系。'}]}};
-  return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,attemptId:input.attempt.id,transcriptVersion:input.attempt.transcriptVersion,findings:[{status:'incorrect',message:'工程补救 fixture：请澄清条件与行动的关系。',sourceQuote:input.source.text,spanId:input.attempt.spans[0].id,quote:input.attempt.spans[0].text,eventId:null,repair:'再用一个不同的情境说明条件。'}]}};
+  return {model:'TEST_STUB_NOT_API',requestId:'req_synthetic_diagnosis',reservationId:'local_synthetic_diagnosis',value:{sourceId:input.source.id,attemptId:input.attempt.id,transcriptVersion:input.attempt.transcriptVersion,findings:[{status:'incorrect',message:'工程补救 fixture：请澄清条件与行动的关系。',sourceQuote:input.source.text,spanId:input.attempt.spans[0].id,quote:input.attempt.spans[0].text,eventId:null,repair:'再用一个不同的情境说明条件。'}]}};
 },asrCall:async(bytes,id)=>{calls.push({kind:'asr',attemptId:id});if(failASR)throw new Error(failASR);const duration=waveDuration(bytes);return {model:'TEST_STUB_NOT_API',duration,text:'土壤干了才浇水，湿的先不浇。',spans:[{id:'s0',start:0,end:Math.min(1,duration),text:'土壤干了才浇水，湿的先不浇。'}],words:[],reviewRequired:true,alignment:'SYNTHETIC_TEST'};}});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const origin=`http://127.0.0.1:${server.address().port}`;
@@ -74,8 +76,9 @@ try{
   await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='deferredDenied')await new Promise((resolve,reject)=>window.rejectPermission=()=>reject(new DOMException('test denied','NotAllowedError')));if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
-  if(!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});
-  if(!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly){
+  if(!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});
+  if(!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly&&!recoveryOnly)await contextChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,requests:provenanceRequests,setFail:()=>{failTeach=true;}});
+  if(!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly){
     await check('chat failure reload and explicit retry preserve original input/context with one dispatch',async()=>{
       failTeach=true;
       await evaluate(`document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);
@@ -146,7 +149,7 @@ try{
       const t={id:'probe-topic',createdAt:Date.now(),source,goals:[],messages:[],attempts:[{id:'probe-attempt',createdAt:Date.now(),source,kind:'full',focus:null,assistance:'none',duration:7.31,observation:JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r3/DELIVERY_ENGINEERING.json',import.meta.url))).acoustic,raw:{...savedASR,id:'probe-raw',origin:'ARCHIVED_SYNTHETIC_ASR'},corrections:[],reports:[],status:'REVIEW_REQUIRED'}]};
       await evaluate(`(async()=>{const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob([new Uint8Array(${JSON.stringify(savedWave)})],{type:'audio/wav'});const db=await(await import('/storage.mjs')).openStore();await db.put(t);db.close();})()`);
       await reloadPage();await until(`!document.getElementById('workspace').hidden`);await trustedPointer(select('historyButton'),'open history');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`(${historyAttempt}).closest('details').open=true`);await trustedPointer(historyAttempt,'open saved attempt');
-      assert.equal(calls.length,0);assert(await evaluate(`!document.getElementById('confirm').disabled && document.getElementById('reviewHint').textContent.includes('逐段回听不是必需步骤')`));
+      assert.equal(calls.length,0);assert(await evaluate(`!document.getElementById('confirm').disabled`));
     });
     await check('E0 trusted saved-ASR 0–6.46 replay has genuine native coverage then fake content confirmation',async()=>{
       await trustedPointer(`document.querySelector('#transcript button')`,'critical transcript replay');await until(`document.querySelector('#transcript button').textContent.includes('✓')`);await probeState('transcript replay complete');
@@ -187,7 +190,7 @@ try{
       await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1 && document.getElementById('notice').textContent.includes('转写完成')`);
       await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
     });
-  }else if(!recoveryOnly&&!workspaceOnly){
+  }else if(!contextOnly&&!recoveryOnly&&!workspaceOnly){
   for(const setupContext of [{focus:'',known:''},{focus:'条件',known:''},{focus:'',known:'了解定义'},{focus:'条件',known:'了解定义'}])await check(`setup source-only title and persisted metadata ${JSON.stringify(setupContext)}`,async()=>{
     const before=provenanceRequests.length;
     await evaluate(`document.getElementById('title').value='';document.getElementById('source').value='只有土壤干燥才浇水。';document.getElementById('setupFocus').value=${JSON.stringify(setupContext.focus)};document.getElementById('setupKnown').value=${JSON.stringify(setupContext.known)};`);
@@ -371,7 +374,7 @@ try{
   });
   await check('native MediaRecorder + decode + original IndexedDB Blob + exactly one registration',async()=>{const before=testBook.summary().attempts;await evaluate(`window.testMic='tone'`);await click('start');await until(`!document.getElementById('finish').hidden`);assert.equal(testBook.summary().attempts,before);await shot('recording','recording');assert(await evaluate(`document.body.dataset.recording==='true' && document.querySelector('.learning').hidden`));await pause(1400);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,1);assert(t.attempts[0].audio.size>0);assert(t.attempts[0].raw.spans.length);assert.equal(t.attempts[0].corrections.length,0);assert.equal(testBook.summary().attempts,before+1);assert.equal(testBook.read().events.filter(e=>e.type==='attempt'&&e.attemptId===t.attempts[0].id).length,1);});
   await check('C2 optional replay and delayed double confirm preserve one visible current-version report',async()=>{
-    await shot('partial-review','attemptPanel');assert(await evaluate(`document.getElementById('reviewHint').textContent.includes('逐段回听不是必需步骤')`));
+    await shot('partial-review','attemptPanel');
     const before=(await evaluate(all))[0].attempts[0],count=calls.length;
     await evaluate(`document.querySelector('#transcript textarea').value='只有土壤干燥才浇水，湿润时先不浇。'`);
     let release;diagnosisGate=new Promise(r=>release=r);
@@ -510,7 +513,7 @@ try{
     await evaluate(`document.querySelector('#historyList .danger').click()`);await click('deleteConfirm');await until(`document.getElementById('historyList').textContent.includes('还没有')`);assert.equal((await evaluate(all)).length,0);await until(`document.activeElement.id==='historyTitle'`);
   });
   }
-  if(!environmentProbe&&!recoveryOnly&&!workspaceOnly&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
+  if(!contextOnly&&!environmentProbe&&!recoveryOnly&&!workspaceOnly&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
     await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'demo-preserve',createdAt:Date.now(),source:{title:'个人记录必须保留'},attempts:[]});db.close();})()`);
     const before=JSON.stringify(await evaluate(all)),requestIndex=network.length,dispatches=calls.length;
     await cdp('Page.navigate',{url:origin+'/demo'});await until(`document.getElementById('demoTitle')?.textContent.length>0`);

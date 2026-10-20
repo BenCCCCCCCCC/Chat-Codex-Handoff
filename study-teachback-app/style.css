@@ -64,6 +64,21 @@ footer{font-size:.75rem;max-width:900px;color:var(--muted)}footer p{overflow-wra
 .context-note{position:relative;margin:0;text-align:right;max-width:240px}
 .context-note summary{font-size:.75rem;color:var(--muted)}
 .context-note p{font-size:.8125rem;text-align:left;margin:0 0 12px}
+.learning>.sectionHead:has(.context-note[open]){flex-wrap:wrap}
+.context-note[open]{max-width:none;width:100%;text-align:left}
+.context-editor{padding:16px;margin-top:12px;background:var(--canvas);border:1px solid var(--line);border-radius:8px}
+.context-editor label{font-size:.8125rem}
+.context-editor textarea{margin:8px 0}
+.context-editor #contextStatus{margin:0;font-size:.75rem}
+.history-hit{display:block;text-align:left;width:100%;padding:9px 12px;margin:4px 0;color:var(--ink);background:var(--canvas);border-left:2px solid var(--line)}
+.history-hit:hover{border-left-color:var(--accent);background:var(--accent-soft)}
+.search-hit{outline:2px solid var(--accent);outline-offset:3px;scroll-margin:90px 0}
+#messages .search-hit{outline-offset:-2px}
+.search-excerpt{padding:20px;margin-bottom:28px;background:var(--accent-soft);border-radius:8px}
+.search-excerpt h3{font-size:.875rem;margin:0}
+#analysisInfo{font-size:.75rem;overflow-wrap:anywhere}
+body[data-history=true] #searchReturn{display:none}
+.topbar #viewTitle{margin-right:auto}
 .learning .sectionHead{align-items:start}
 #messages{max-height:min(55vh,600px);scrollbar-gutter:stable;overflow-anchor:none}
 .chat-page{display:block;font-size:.75rem;margin:8px auto}

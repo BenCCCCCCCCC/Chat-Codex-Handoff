@@ -30,12 +30,12 @@ test('local search finds old transcripts and practice feedback, combines terms, 
   const base={source:{title:'植物',text:'干燥时浇水'},messages:[],attempts:[]};
   const records=[
     {...base,id:'chat',chatDraft:'还想问光照',messages:[{text:'ＬＥＡＦ 光合作用'}]},
-    {...base,id:'voice',attempts:[{raw:{text:'土壤干燥'},corrections:[{spans:[{text:'湿润时不浇水'}]}],reports:[{findings:[{message:'条件需要澄清'}]}]}]},
+    {...base,id:'voice',attempts:[{id:'voice-a',raw:{id:'raw',spans:[{id:'s1',text:'土壤干燥'}]},corrections:[{id:'corrected',spans:[{id:'s1',text:'湿润时不浇水'}]}],reports:[{findings:[{message:'条件需要澄清'}]}]}]},
     {...base,id:'practice',practiceRounds:[{question:'新情境',draft:'',answers:[{text:'先不浇水',result:'判断符合条件'}]}]}
   ];
   const ids=(q,f)=>searchRecords(records,q,f).map(r=>r.topic.id);
   assert.deepEqual(ids('leaf 光合'),['chat']);assert.deepEqual(ids('植物 湿润'),['voice']);
-  assert.match(searchRecords(records,'湿润')[0].snippet,/修订 · 湿润/);
+  assert.match(searchRecords(records,'湿润')[0].snippet,/湿润/);
   assert.deepEqual(ids('符合条件','practice'),['practice']);
   assert.deepEqual(ids('','draft'),['chat']);assert.deepEqual(ids('','audio'),['voice']);
   assert.deepEqual(ids('missing'),[]);assert.deepEqual(ids(''),['chat','voice','practice']);

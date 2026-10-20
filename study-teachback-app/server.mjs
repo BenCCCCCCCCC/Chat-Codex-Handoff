@@ -6,7 +6,7 @@ import { semantic, transcribe, ledger } from './provider.mjs';
 import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue, repairFocus, waveDuration, TUTOR_MESSAGE_LIMIT, setupContextValue } from './core.mjs';
 import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
 
-const files={'/chat-ui.mjs':'chat-ui.mjs','/draft-save.mjs':'draft-save.mjs','/record-search.mjs':'record-search.mjs','/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/workspace-ui.mjs':'workspace-ui.mjs','/practice.mjs':'practice.mjs','/practice-ui.mjs':'practice-ui.mjs','/backup.mjs':'backup.mjs','/backup-ui.mjs':'backup-ui.mjs','/demo':'demo.html','/demo.mjs':'demo.mjs','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
+const files={'/voice-review.mjs':'voice-review.mjs','/search-focus.mjs':'search-focus.mjs','/chat-ui.mjs':'chat-ui.mjs','/draft-save.mjs':'draft-save.mjs','/record-search.mjs':'record-search.mjs','/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/workspace-ui.mjs':'workspace-ui.mjs','/practice.mjs':'practice.mjs','/practice-ui.mjs':'practice-ui.mjs','/backup.mjs':'backup.mjs','/backup-ui.mjs':'backup-ui.mjs','/demo':'demo.html','/demo.mjs':'demo.mjs','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
 export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger,extractCall=extractSource}={}) {
   let busy=false;
   return http.createServer(async(req,res)=>{
@@ -31,7 +31,9 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       if(path!=='/api/extract'){
         try{book.summary();}catch{return json(503,{error:'BUDGET_UNAVAILABLE'});}
       }
-      const limit=path==='/api/extract'?10*1024*1024:path==='/api/asr'?5_760_044:80000;const parts=[];let length=0;
+      // Allow six valid Chinese history messages to reach the provider's budget
+      // selection; source, message and per-field limits still apply after parsing.
+      const limit=path==='/api/extract'?10*1024*1024:path==='/api/asr'?5_760_044:path==='/api/teach'?128000:80000;const parts=[];let length=0;
       for await(const part of req){length+=part.length;requireValue(length<=limit,'INPUT_TOO_LARGE');parts.push(part);}
       const bytes=Buffer.concat(parts);
       if(path==='/api/extract')return json(200,await extractCall(bytes,req.headers['x-source-format']));
@@ -43,6 +45,8 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       if(path==='/api/teach'){
         requireValue(['learn','repair','apply','apply_answer'].includes(b.mode),'INVALID_MODE');
         const input={source,setupContext:setupContextValue(b.setupContext),mode:b.mode,message:text(b.message,2000),focus:b.mode==='repair'?repairFocus(b.focus):b.focus?text(b.focus,1000):null,history:Array.isArray(b.history)?b.history.slice(-6).map(m=>({role:m.role==='assistant'?'assistant':'user',text:text(m.text,m.role==='assistant'?TUTOR_MESSAGE_LIMIT:2500)})):[]};
+        requireValue(b.contextNote==null||typeof b.contextNote==='string'&&b.contextNote.length<=1000,'INVALID_CONTEXT_NOTE');
+        input.contextNote=b.contextNote?.trim()??'';
         const result=await semanticCall(TEACH,input,teachingSchema,{signal:controller.signal});return json(200,{...result,value:validateTeaching(result.value,source)});
       }
       const attempt=attemptValue(b.attempt), input=contentInput(source,attempt);

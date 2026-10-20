@@ -6,7 +6,10 @@ import {mountPractice} from './practice-ui.mjs';
 import {encodeBackup} from './backup.mjs';
 import {mountBackup} from './backup-ui.mjs';
 import {mountChat} from './chat-ui.mjs';
-import {searchRecords,hasDraft} from './record-search.mjs';
+import {searchRecords,hasDraft,resolveRecordHit} from './record-search.mjs';
+import {createDraftSaver} from './draft-save.mjs';
+import {transcriptTexts,updateTranscriptDraft,analysisTrace} from './voice-review.mjs';
+import {focusHit,hitDestination,transcriptHit} from './search-focus.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
 let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false,capturePending=false;
 const editors=new Map();
@@ -50,7 +53,7 @@ async function teach(message,mode='learn',focus=null,{internalStarter=false,retr
   // Lock before persistence: a fast second click must not append or dispatch again.
   processing=true;
   const request=retry?target.chatRequest:{id:uid(),message,mode,focus,internalStarter,
-    history:target.messages.slice(-6),createdAt:Date.now()};
+    history:target.messages.slice(-6),contextNote:target.contextNote??'',createdAt:Date.now()};
   if(!retry&&!internalStarter){
     target.messages.push({role:'user',text:message});
     if(target.chatDraft?.trim()===message)target.chatDraft='';
@@ -58,11 +61,11 @@ async function teach(message,mode='learn',focus=null,{internalStarter=false,retr
   target.chatRequest=request;request.status='pending';target.mode=request.mode;target.resume={view:'learn'};
   try{
     await save(target);renderTopic();notice('');
-    const r=await api('/api/teach',{source:target.source,mode:request.mode,message:request.message,focus:request.focus,history:request.history,setupContext:target.setupContext});
+    const r=await api('/api/teach',{source:target.source,mode:request.mode,message:request.message,focus:request.focus,history:request.history,contextNote:request.contextNote??'',setupContext:target.setupContext});
     if(deleted.has(target.id)||topic!==target)return;
     target.messages.push({role:'assistant',text:r.value.message});target.question=r.value.question;
     if(!target.goals.length){target.goals=r.value.goals;target.anchorVersion=uid();target.source.anchors=structuredClone(target.goals);target.source.anchorVersion=target.anchorVersion;}
-    request.status='complete';request.completedAt=Date.now();
+    request.status='complete';request.completedAt=Date.now();request.contextUsage=r.contextUsage??null;
     await save(target);notice('');
   }catch(e){
     // Keep received answers even when the final local write fails.
@@ -160,7 +163,7 @@ $('start').onclick=()=>act(async()=>{
   }catch(e){clearInterval(record?.tick);record=null;stream?.getTracks().forEach(t=>{t.onended=null;t.onmute=null;t.stop();});try{if(context&&context.state!=='closed')await context.close();}finally{capturePending=false;resetRecordingUI();}notice(e.name==='NotAllowedError'?'麦克风权限未允许。学习内容已保留，请在浏览器中允许麦克风后重试。':friendly(e.message));}
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&record)stopRecording(true);if(document.hidden)act(flushDrafts);});
-window.addEventListener('beforeunload',e=>{if(record||capturePending||memoryOnly||controller||processing||chat.hasPendingDraft||practice.hasPendingDraft){e.preventDefault();e.returnValue='';}});
+window.addEventListener('beforeunload',e=>{if(record||capturePending||memoryOnly||controller||processing||chat.hasPendingDraft||practice.hasPendingDraft||voiceDrafts.pending){e.preventDefault();e.returnValue='';}});
 async function processAudio(a){
   if(processing)throw new Error('REQUEST_IN_PROGRESS');if(memoryOnly)throw new Error('STORAGE_FAILED');processing=true;
   notice('原声已保存，正在检查声音并转写……');let context;
@@ -247,17 +250,20 @@ function updateDiagnosisState(){
   const binding=v.version?'版本 '+v.version.id.slice(0,8)+' · '+new Date(v.report.createdAt).toLocaleString():'';
   $('diagnosisState').textContent=v.pending?'当前文字已确认，正在诊断…':v.error?v.error:v.current?'诊断完成 · '+binding:v.report?'文字已修改，先前结果已过时 · '+binding:'当前文字待确认；回听可选。';
   $('resultBinding').textContent=v.report?(v.pending?'先前结果（新诊断进行中）':v.current?'当前结果':'先前结果，仅供查看，不适用于当前文字')+' · '+binding:'';
+  reveal('analysisDetails',!!v.report);
+  const trace=v.report?.analysis;
+  $('analysisInfo').textContent=trace?`分析依据：已确认的转写文字\n模型：${trace.model??'未记录'}\nAPI 请求：${trace.requestId??'未取得'}\n本机请求：${trace.reservationId??'未记录'}`:'历史报告未记录分析模型与请求标识。';
   $('feedback').replaceChildren();if(v.report&&v.version)renderFeedback(v.report,{version:v.version,stale:!v.current||!!v.pending});
 }
 function renderAttempt(){
-  if(!current)return;const a=current;editors.clear();reveal('attemptPanel');$('attemptKind').textContent=a.kind==='partial'?'局部新录音':'完整录音';
+  if(!current)return;const a=current;editors.clear();reveal('attemptPanel');reveal('searchExcerpt',false);reveal('analysisDetails',false);$('voiceDraftStatus').textContent=a.transcriptDraft?'核对草稿已保存 · 尚未确认':'';$('attemptKind').textContent=a.kind==='partial'?'局部新录音':'完整录音';
   replayRequest++;replayOriginal=null;if(blobURL)URL.revokeObjectURL(blobURL);blobURL=URL.createObjectURL(a.audio);$('player').src=blobURL;
   const soundIssue=a.interrupted?'录音中断':a.observation?.reason==='NEAR_SILENT'?'音量过低':a.observation?.reason==='CLIPPING'?'录音失真':null;
   $('audioStatus').textContent=`${a.duration?`${a.duration.toFixed(1)} 秒 · `:''}${soundIssue??'原声已保留'}。声音检查不评定流利度。`;
   $('voiceState').textContent=a.raw?'':soundIssue?`${soundIssue}，请回听后重新录制。`:'转写未完成，原声已保留。';
   $('rawText').textContent=a.raw?.text??'尚未取得转写';$('transcript').replaceChildren();$('feedback').replaceChildren();$('observations').replaceChildren();$('processFeedback').replaceChildren();
   reveal('retryAsr',!a.raw&&!soundIssue);reveal('confirm',!!a.raw);reveal('reviewHelp',!!a.raw);reveal('reviewHint',!!a.raw);reveal('diagnosisState',!!a.raw);reveal('resultBinding',!!a.raw);
-  if(a.raw){$('reviewHint').textContent=(a.raw.wordTiming?.status==='PARTIAL'?'词级定位部分不可用。':'')+'诊断使用当前转写。ASR 可能误听否定词、数字、条件和术语；建议回听或修改后继续，逐段回听不是必需步骤。';const v=latest(a);v.spans.forEach(s=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=s.text;editor.rows=2;editor.maxLength=2000;editor.oninput=()=>{const state=diagnosisStates.get(a);if(state&&!state.pending&&!state.saveFailed)diagnosisStates.delete(a);updateDiagnosisState();};editors.set(s.id,editor);const b=button(`可选回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{b.textContent='本次页面已播放 ✓';}));row.append(b,editor);$('transcript').append(row);});
+  if(a.raw){$('reviewHint').textContent=(a.raw.wordTiming?.status==='PARTIAL'?'词级定位部分不可用。':'')+'诊断使用确认后的转写。建议核对否定词、数字、条件和术语，回听可选。';const v=latest(a),texts=transcriptTexts(a);v.spans.forEach((s,i)=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=texts[i];editor.rows=2;editor.maxLength=2000;editor.oninput=()=>{updateTranscriptDraft(a,v.spans.map(span=>({id:span.id,text:editors.get(span.id).value})));voiceDrafts.mark(topic);const state=diagnosisStates.get(a);if(state&&!state.pending&&!state.saveFailed)diagnosisStates.delete(a);updateDiagnosisState();};editor.onblur=()=>act(()=>voiceDrafts.flush());editors.set(s.id,editor);const b=button(`可选回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{b.textContent='本次页面已播放 ✓';}));row.append(b,editor);$('transcript').append(row);});
     if(v.reviewed)$('reviewHint').textContent+=' 已保存用于诊断的文字确认；这不表示音频已回听。修改后可再次确认，不会创建新口头表现。';
     for(const report of a.reports.filter(r=>r.transcriptVersion===v.id)){
       if(report.channel==='delivery')$('processFeedback').append(el('p','历史过程报告（旧格式，未作为定位证据）','muted'),...report.findings.map(f=>el('p',f.message)));
@@ -298,10 +304,11 @@ $('confirm').onclick=()=>act(async()=>{
   if(record||capturePending||controller||processing)throw new Error('REQUEST_IN_PROGRESS');
   const a=current;if(!a?.raw)return;const view=diagnosisView(a);
   if(view.saveFailed)throw new Error('STORAGE_FAILED');
-  if(view.current){updateDiagnosisState();focusDiagnosis();return;}
+  if(view.current){await voiceDrafts.flush();updateDiagnosisState();focusDiagnosis();return;}
   processing=true;diagnosisStates.set(a,{pending:true});updateDiagnosisState();let complete=false;
   try{
-    const corrected=revisedTranscript(a,view.draft.map(text=>({text})));a.corrections.push(corrected);await save();await diagnose(a);complete=true;
+    await voiceDrafts.flush();
+    const corrected=revisedTranscript(a,view.draft.map(text=>({text})));a.corrections.push(corrected);delete a.transcriptDraft;await save();await diagnose(a);complete=true;
   }catch(e){diagnosisStates.set(a,{saveFailed:e.message==='STORAGE_FAILED',error:e.message==='STORAGE_FAILED'?'本机保存失败；请重试保存或导出，不要重新提交诊断。':'本次诊断未完成或结果未知；先前结果已保留，不会自动重试。'});throw e;}
   finally{processing=false;const state=diagnosisStates.get(a);if(state?.pending)diagnosisStates.delete(a);if(current===a){updateDiagnosisState();if(complete)focusDiagnosis();}}
 });
@@ -309,7 +316,7 @@ async function diagnose(a){
   const channel='content',events=[],request=attemptRequest(a);notice('正在核对内容和逻辑……');
   const result=await api('/api/diagnose',{source:a.source,attempt:request,channel,events});
   if(deleted.has(a)||!topic||deleted.has(topic.id))return;
-  validateFindings(result.value,a.source,request,channel,events);a.reports.push({...result.value,channel,createdAt:Date.now()});a.status='DIAGNOSED';topic.resume={view:'attempt',attemptId:a.id};await save();renderAttempt();notice('内容反馈已关联原声。过程候选需另行回听确认，确认后会在本机核对同段关联，不调用模型。');
+  validateFindings(result.value,a.source,request,channel,events);a.reports.push({...result.value,channel,analysis:analysisTrace(result),createdAt:Date.now()});a.status='DIAGNOSED';topic.resume={view:'attempt',attemptId:a.id};await save();renderAttempt();notice('内容反馈已保存。');
 }
 function renderFeedback(report,{version=latest(current),stale=false}={}){
   if(report.channel!=='content')return;
@@ -332,8 +339,8 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
     $('feedback').append(card);
   }
 }
-$('apply').onclick=()=>act(()=>practice.start());
-$('startPractice').onclick=()=>act(async()=>{if(!canNavigate())return;await chat.flushDraft();await practice.open();});
+$('apply').onclick=()=>act(async()=>{if(!canNavigate())return;await flushDrafts();await practice.start();});
+$('startPractice').onclick=()=>act(async()=>{if(!canNavigate())return;await flushDrafts();await practice.open();});
 async function exportTopic(target=topic){
   if(!target)return;
   const url=URL.createObjectURL(new Blob([await encodeBackup(target)],{type:'application/json'}));const link=el('a');link.href=url;link.download=`study-${target.id}.json`;link.click();setTimeout(()=>URL.revokeObjectURL(url),30000);
@@ -341,22 +348,25 @@ async function exportTopic(target=topic){
 $('export').onclick=()=>act(exportTopic);
 $('recoveryExport').onclick=()=>act(exportTopic);
 $('topicExport').onclick=()=>act(async()=>{await flushDrafts();await exportTopic();});
-$('retrySave').onclick=()=>act(async()=>{if(chat.hasPendingDraft||practice.hasPendingDraft)await flushDrafts();else await save();chat.render();if(current){diagnosisStates.delete(current);renderAttempt();}renderPractice();renderChatRecovery();notice('已重新保存到本机。');});
+$('retrySave').onclick=()=>act(async()=>{if(chat.hasPendingDraft||practice.hasPendingDraft||voiceDrafts.pending)await flushDrafts();else await save();chat.render();if(current){diagnosisStates.delete(current);renderAttempt();}renderPractice();renderChatRecovery();notice('已重新保存到本机。');});
 function abortPending(){controller?.abort();}
-$('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;abortPending();deleted.add(current);topic.attempts=topic.attempts.filter(a=>a.id!==current.id);await save();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);current=null;reveal('attemptPanel',false);notice('这次原声及其关联转写、纠正和反馈已从本地删除。已导出副本和已在途的云请求不受此操作控制。');});
+$('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;await voiceDrafts.discard();abortPending();deleted.add(current);topic.attempts=topic.attempts.filter(a=>a.id!==current.id);await save();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);current=null;reveal('attemptPanel',false);notice('这次原声及其关联转写、纠正和反馈已从本地删除。已导出副本和已在途的云请求不受此操作控制。');});
 function resumeTopic(target,point=resumePoint(target)){
-  topic=target;current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);reveal('history',false);renderTopic();
+  topic=target;current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);reveal('history',false);reveal('searchReturn',false);renderTopic();
   if(point.view==='attempt'){current=target.attempts.find(a=>a.id===point.attemptId);if(current)renderAttempt();}
   if(point.view==='practice')practice.focusPanel();
 }
-async function continueTopic(id,point){
+async function continueTopic(id,point,hitKey){
   if(!canNavigate())return;
   processing=true;$('workspace').setAttribute('aria-busy','true');
   try{
     await flushDrafts();const target=await db.get(id);
     if(!target)return notice('这条学习记录已不存在，请重新打开学习记录。');
+    const hit=hitKey&&resolveRecordHit(target,hitKey);
+    if(hit){point=hitDestination(hit);if(hit.target.kind==='practice')target.activePracticeId=hit.target.roundId;}
     if(point)target.resume=point;
     resumeTopic(target);await save();
+    if(hit){await new Promise(requestAnimationFrame);locateHit(hit);reveal('searchReturn');}
   }finally{processing=false;$('workspace').removeAttribute('aria-busy');renderChatRecovery();}
 }
 let historyRecords=[],historyLimit=20;
@@ -376,13 +386,15 @@ function renderHistory(){
   $('historyCount').textContent=`${matches.length} 条记录`;
   $('historyClear').hidden=!$('historySearch').value&&$('historyFilter').value==='all';
   $('historyMore').hidden=matches.length<=historyLimit;
-  for(const {topic:t,snippet} of matches.slice(0,historyLimit)){
+  for(const {topic:t,hits} of matches.slice(0,historyLimit)){
     const point=resumePoint(t),rounds=practiceRounds(t),row=el('div');
     const next=point.view==='attempt'?'继续核对与反馈':point.view==='practice'?'继续情境练习':'继续学习';
     row.append(el('strong',t.source.title));
     if(hasDraft(t))row.append(el('span','有草稿','tag draft-tag'));
     row.append(el('p',`${new Date(activityTime(t)).toLocaleString()} · ${t.attempts.length} 次讲解 · ${rounds.length} 道情境题${t.restoredAt?' · 恢复副本':''}`,'muted'));
-    if(snippet)row.append(el('p',snippet,'history-snippet'));
+    const hitButton=hit=>button(hit.snippet,()=>continueTopic(t.id,null,hit.key),'quiet history-hit history-snippet');
+    row.append(...hits.slice(0,3).map(hitButton));
+    if(hits.length>3){const more=el('details');more.append(el('summary',`其余 ${hits.length-3} 处匹配`));more.ontoggle=()=>{if(more.open&&more.children.length===1)more.append(...hits.slice(3).map(hitButton));};row.append(more);}
     const actions=el('div',undefined,'compact-actions');
     actions.append(button(next,()=>continueTopic(t.id),'quiet history-continue'),button('导出备份',async()=>{if(!canNavigate())return;const saved=await db.get(t.id);if(saved)await exportTopic(saved);}));
     actions.append(button('删除主题',async()=>{if(topic?.id===t.id)await discardDrafts();else await flushDrafts();abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');renderPractice();}await history();},'danger'));row.append(actions);
@@ -395,13 +407,39 @@ $('historySearch').oninput=$('historyFilter').onchange=()=>{historyLimit=20;rend
 $('historyClear').onclick=()=>{$('historySearch').value='';$('historyFilter').value='all';historyLimit=20;renderHistory();$('historySearch').focus();};
 $('historyMore').onclick=()=>{historyLimit+=20;renderHistory();};
 $('historyButton').onclick=()=>act(history);
+$('searchReturn').onclick=()=>act(history);
+function locateHit(hit){
+  const t=hit.target;
+  if(t.kind==='message')return chat.locate(t.index);
+  if(t.kind==='source'){$('sourceDetails').open=true;return focusHit($('sourceText'));}
+  if(t.kind==='contextNote'){$('chatContext').open=true;return focusHit($('contextNote'));}
+  if(t.kind==='title')return focusHit($('topicTitle'));
+  if(t.kind==='chatDraft')return focusHit($('chat'));
+  if(t.kind==='practice')return practice.locate(t,focusHit);
+  if(t.kind==='transcriptDraft')return focusHit(editors.get(t.spanId));
+  let span=null,label=hit.label;
+  if(t.kind==='transcript'){
+    const match=transcriptHit(current,t);
+    if(match.current)return focusHit(editors.get(t.spanId));
+    span=match.span;label+=` · 版本 ${match.version.id.slice(0,8)} · 只读`;
+  }else if(t.kind==='report'){
+    const report=current.reports[t.reportIndex],finding=report.findings[t.index];
+    span=[current.raw,...current.corrections].find(v=>v.id===report.transcriptVersion)?.spans.find(s=>s.id===finding.spanId);
+    label+=` · 版本 ${report.transcriptVersion.slice(0,8)} · 只读`;
+  }
+  $('searchExcerptTitle').textContent=label;$('searchExcerptText').textContent=hit.text;
+  reveal('searchReplay',!!span);
+  $('searchReplay').onclick=()=>act(()=>play(span.start,span.end));
+  reveal('searchExcerpt');focusHit($('searchExcerpt'));
+}
+$('searchExcerptClose').onclick=()=>{reveal('searchExcerpt',false);focusHit(editors.values().next().value??$('contentHeading'));};
 function canNavigate(){if(memoryOnly){notice(friendly('STORAGE_FAILED'));return false;}if(record||capturePending||controller||processing||importPending){notice(friendly('REQUEST_IN_PROGRESS'));return false;}return true;}
 async function newTopic(){
   if(importPending||!canNavigate())return false;
   processing=true;
   try{
     await flushDrafts();abortPending();clearImport();topic=null;current=null;
-    reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('recording',false);reveal('attemptPanel',false);reveal('setup');
+    reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('recording',false);reveal('attemptPanel',false);reveal('searchReturn',false);reveal('setup');
     $('title').value='';$('source').value='';$('setupFocus').value='';$('setupKnown').value='';updateCounts();renderPractice();notice('');$('source').focus();return true;
   }finally{processing=false;}
 }
@@ -424,9 +462,12 @@ for(const [id,scope] of [['deleteAttempt','只删除当前这次讲解的原声�
 const narrow=matchMedia('(max-width:760px)');$('sourceDetails').open=!narrow.matches;
 narrow.addEventListener('change',()=>{if(!record)$('sourceDetails').open=!narrow.matches;});
 for(const link of document.querySelectorAll('a[href="/demo"]'))link.onclick=e=>{e.preventDefault();if(canNavigate())act(async()=>{await flushDrafts();location.assign('/demo');});};
-const chat=mountChat({getTopic:()=>topic,save,act});
-async function flushDrafts(){await chat.flushDraft();await practice.flushDraft();}
-async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();}
+const chat=mountChat({getTopic:()=>topic,save,act,focusHit});
+const voiceDrafts=createDraftSaver({save,onError:error=>act(()=>Promise.reject(error)),onStatus:status=>{
+  $('voiceDraftStatus').textContent=status==='error'?'核对草稿未保存':status==='saving'?'正在保存核对草稿…':current?.transcriptDraft?'核对草稿已保存 · 尚未确认':'';
+}});
+async function flushDrafts(){await chat.flushDraft();await practice.flushDraft();await voiceDrafts.flush();}
+async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();await voiceDrafts.discard();}
 const practice=mountPractice({getTopic:()=>topic,save,request:api,canStart:canNavigate,
   setBusy:value=>{processing=value;},act,onOpen:()=>{current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);}});
 mountBackup({getStore:()=>db,canStart:canNavigate,setBusy:value=>{processing=value;if(!value)renderChatRecovery();},
