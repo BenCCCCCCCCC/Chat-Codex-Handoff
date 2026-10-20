@@ -276,8 +276,15 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
   if(!version.reviewed||current.interrupted){$('feedback').append(el('p','先确认用于诊断的转写，再查看内容定位。','muted'));return;}
   let targets=[];try{const {sourceId,attemptId,transcriptVersion,findings}=report;targets=localize({source:current.source,attempt:{...attemptRequest(current),transcriptVersion:version.id,spans:version.spans,reviewed:version.reviewed===true},report:{sourceId,attemptId,transcriptVersion,findings},evidence:(current.reports??[]).filter(r=>r.channel==='process'&&r.transcriptVersion===version.id).flatMap(r=>r.processEvidence),events:current.observation?.events??[]}).diagnosticTargets;}catch{ $('feedback').append(el('p','该反馈尚未通过当前来源／转写校验，不生成定位建议。','muted')); }
   if(!report.findings.length)$('feedback').append(el('p','本次没有足够证据生成此类反馈。'));
-  for(const [index,f] of report.findings.entries()){const card=el('article',undefined,'finding'),labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足'};card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message),el('blockquote',`材料：${f.sourceQuote}`));
-    if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId);card.append(el('blockquote',`本次原话：${f.quote}`),button('回听对应原声',()=>play(span.start,span.end)));}else card.append(el('p','未表达内容没有可对应的音频时间点。','muted'));
+  const labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足'},order={incorrect:0,missing:1,unknown:2,supported:3};
+  const overview=el('div',undefined,'feedback-overview');
+  for(const status of ['incorrect','missing','unknown','supported']){const count=report.findings.filter(f=>f.status===status).length;if(count)overview.append(el('span',`${labels[status]} ${count}`));}
+  $('feedback').append(overview);
+  // Keep the original finding index for evidence IDs while grouping by status.
+  for(const [index,f] of [...report.findings.entries()].sort((a,b)=>order[a[1].status]-order[b[1].status])){const card=el('article',undefined,'finding');card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message));
+    const evidence=el('details');evidence.append(el('summary','查看材料与原话'),el('blockquote',`材料：${f.sourceQuote}`));
+    if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId);evidence.append(el('blockquote',`本次原话：${f.quote}`),button('回听对应原声',()=>play(span.start,span.end)));}else evidence.append(el('p','未表达内容没有可对应的音频时间点。','muted'));
+    card.append(evidence);
     const target=targets.find(t=>t.contentFindingIds.includes(`content:${current.id}:${report.transcriptVersion}:${index}`));
     if(target&&!stale){card.dataset.targetId=target.id;card.append(el('p',`值得核对的关系：${target.focus}`,'diagnosticTarget'));
       if(target.processEvidenceIds.length)card.append(el('p',`另有 ${target.processEvidenceIds.length} 条同段过程观察，见“讲解过程”；时间相邻不证明理解有误。`,'muted'));
@@ -298,7 +305,7 @@ $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;abortPending();d
 async function history(){if(memoryOnly)throw new Error('STORAGE_FAILED');if(processing)throw new Error('REQUEST_IN_PROGRESS');if(record)throw new Error('RECORDING_ACTIVE');if(controller)throw new Error('REQUEST_IN_PROGRESS');reveal('history');const list=$('historyList');list.replaceChildren();for(const t of await db.all()){const row=el('div');row.append(el('strong',t.source.title),el('p',`${new Date(t.createdAt).toLocaleString()} · ${t.attempts.length} 次讲解`,'muted'),button('继续学习',()=>{if(!canNavigate())return;topic=t;current=null;renderTopic();reveal('attemptPanel',false);reveal('history',false);}));for(const a of t.attempts)row.append(button(`${a.kind==='partial'?'局部':'完整'} · ${new Date(a.createdAt).toLocaleTimeString()}`,()=>{if(!canNavigate())return;topic=t;current=a;renderTopic();renderAttempt();reveal('history',false);}));row.append(button('删除主题',async()=>{abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');}await history();},'danger'));list.append(row);}if(!list.children.length)list.append(el('p','还没有保存的学习记录。'));$('history').scrollIntoView({behavior:'smooth'});}
 $('historyButton').onclick=()=>act(history);
 function canNavigate(){if(memoryOnly){notice(friendly('STORAGE_FAILED'));return false;}if(record||capturePending||controller||processing||importPending){notice(friendly('REQUEST_IN_PROGRESS'));return false;}return true;}
-function newTopic(){if(importPending)return false;if(!canNavigate())return false;abortPending();clearImport();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');$('title').value='';$('source').value='';$('setupFocus').value='';$('setupKnown').value='';updateCounts();return true;}
+function newTopic(){if(importPending)return false;if(!canNavigate())return false;abortPending();clearImport();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('recording',false);reveal('attemptPanel',false);reveal('setup');$('title').value='';$('source').value='';$('setupFocus').value='';$('setupKnown').value='';updateCounts();notice('');$('source').focus();return true;}
 $('newTopic').onclick=newTopic;$('revise').onclick=()=>{const s=topic.source,context=topic.setupContext;if(!newTopic())return;$('setupFocus').value=context?.focus??'';$('setupKnown').value=context?.known??'';$('title').value=s.title;$('source').value=s.text;updateCounts();notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');};
 $('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
 // Presentation-only confirmation: cancellation never reaches the original destructive handler.
@@ -306,7 +313,7 @@ function confirmDelete(scope,action,trigger){
   if(record||capturePending||processing){notice(friendly('REQUEST_IN_PROGRESS'));return;}
   const dialog=$('deleteDialog');if(dialog.open)return;
   $('deleteScope').textContent=scope;dialog.returnValue='';
-  const restore=()=>{const target=trigger?.isConnected&&trigger.getClientRects().length?trigger:!$('history').hidden?$('historyTitle'):$('title');target.focus();};
+  const restore=()=>{const target=trigger?.isConnected&&trigger.getClientRects().length?trigger:!$('history').hidden?$('historyTitle'):$('source');target.focus();};
   $('deleteCancel').onclick=()=>dialog.close('cancel');
   $('deleteConfirm').onclick=()=>{dialog.onclose=null;dialog.close('confirm');act(async()=>{await action.call(trigger);restore();});};
   dialog.onclose=()=>{dialog.onclose=null;restore();};
@@ -317,4 +324,5 @@ for(const [id,scope] of [['deleteAttempt','只删除当前这次讲解的原声�
 }
 const narrow=matchMedia('(max-width:760px)');$('sourceDetails').open=!narrow.matches;
 narrow.addEventListener('change',()=>{if(!record)$('sourceDetails').open=!narrow.matches;});
+for(const link of document.querySelectorAll('a[href="/demo"]'))link.onclick=e=>{if(!canNavigate())e.preventDefault();};
 await act(async()=>{db=await openStore();await updateBudget();const all=await db.all();if(all.length){topic=all.at(-1);renderTopic();}});

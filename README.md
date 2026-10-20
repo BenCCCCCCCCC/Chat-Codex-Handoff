@@ -6,9 +6,9 @@
 
 当前是 Windows 本地应用。工程测试验证流程和数据边界；尚无跨课程、跨用户的学习效果验证。
 
-![学习工作区：左侧材料，右侧学习对话，下方录音入口](docs/images/study-workspace.png)
+![从材料开始：新的学习工作台入口](docs/images/study-start.png)
 
-*截图来自隔离浏览器测试，内容和模型响应为工程样例。*
+*截图来自本地界面；下方学习工作区使用隔离测试中的材料和模拟响应。*
 
 ## 一轮学习
 
@@ -20,13 +20,23 @@
 
 重复查看相同文字的已有结果不会重新调用诊断。诊断进行时锁定提交和文字编辑，避免覆盖输入或并发重复请求。
 
+![学习工作区：左侧材料，右侧学习对话，下方录音入口](docs/images/study-workspace.png)
+
+## 先体验一个例子
+
+启动后打开 **`http://127.0.0.1:4317/demo`**，或点击首页“先看一个例子”。不需要 API key。
+
+示例包含“植物浇水的条件”和“持票与开放时间”两组材料：读材料、对比两种讲解、展开反馈证据，再做一道情境题。材料、讲解和反馈均为预先编写，不评价自由输入、不录音、不调用 AI，也不读取或写入个人学习记录。
+
+![独立示例：对照结论、材料与原话](docs/images/study-demo.png)
+
 ## 为什么做这个项目
 
 “听懂了”与“能清楚解释”之间存在距离。本项目探索如何把一次讲解变成可核对、可补学的具体反馈。原声、转写修订和诊断版本保持关联；停顿等过程观察单独呈现，不作为“不理解”的证据。
 
 同类产品已经广泛覆盖 AI 辅导、语音讲解和材料引用。接下来的研究重点是：**多份材料冲突时，如何避免凭空判错，并确定应先补哪一点**。这是待验证的方向，当前产品仍使用单份有限材料，不宣称已有竞争优势。
 
-详见[产品与机制调研](docs/research/2026-10-20-landscape.md)、[设计与技能资料](docs/research/design-and-skills.md)和[迭代路线](docs/ROADMAP.md)。
+详见[产品与机制调研](docs/research/2026-10-20-landscape.md)、[设计与技能资料](docs/research/design-and-skills.md)、[工作台设计依据](docs/research/2026-10-20-workspace-design.md)和[迭代路线](docs/ROADMAP.md)。
 
 ## 本地运行
 
@@ -39,7 +49,7 @@ py -3 -m venv study-teachback-app/.venv
 study-teachback-app/.venv/Scripts/python.exe -I -m pip --isolated install --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --disable-pip-version-check -r study-teachback-app/requirements-extractor.txt
 ```
 
-界面预览可运行 `npm start`，打开 `http://127.0.0.1:4317/`。实际 Tutor、转写和诊断需要在服务进程环境中配置自己的 `OPENAI_API_KEY`，并承担对应 API 费用。没有 key 时不提供真实模型反馈，不会悄悄替换成模拟结果。
+界面与独立示例可直接运行 `npm start`，打开 `http://127.0.0.1:4317/`；只体验示例无需 Python 提取环境。实际 Tutor、转写和诊断需要在服务进程环境中配置自己的 `OPENAI_API_KEY`，并承担对应 API 费用。没有 key 时不提供真实模型反馈，不会悄悄替换成模拟结果。
 
 已配置环境也可双击 [Start-Study.cmd](Start-Study.cmd)。停止与异常恢复见 [Stop-Study.cmd](Stop-Study.cmd)。[详细安装与数据说明](study-teachback-app/README.md)包含文件限制、启动器行为与现有模型配置。
 
@@ -55,7 +65,7 @@ npm run test:browser
 
 测试包装器使用模拟凭据、模拟 provider、独立账本和独立 Edge profile，阻止测试 Node 进程访问外部网络。浏览器回归使用合成音频，不打开物理麦克风。日志写入 ignored `artifacts/`，不覆盖已有记录。
 
-[GitHub Actions](.github/workflows/offline-tests.yml)在代码 PR 上运行 Node 回归，按改动选择浏览器和提取器检查；纯文档修改不触发，不再对同一提交同时执行 push 与 PR 两轮检查。以上命令是可选验证范围，日常不要求全部重跑。遵循[按影响验证的约定](docs/TESTING.md)。[本轮验证与交接](docs/iterations/2026-10-20.md)记录实际结果；浏览器测试通过不代表模型准确率或教学效果。
+[GitHub Actions](.github/workflows/offline-tests.yml)在代码 PR 上运行 Node 回归，按改动选择浏览器和提取器检查；纯文档修改不触发，不再对同一提交同时执行 push 与 PR 两轮检查。以上命令是可选验证范围，日常不要求全部重跑。遵循[按影响验证的约定](docs/TESTING.md)。[公开整理](docs/iterations/2026-10-20.md)与[工作台迭代记录](docs/iterations/2026-10-20-workspace-ux.md)记录实际结果；浏览器测试通过不代表模型准确率或教学效果。
 
 ## 数据与能力边界
 
