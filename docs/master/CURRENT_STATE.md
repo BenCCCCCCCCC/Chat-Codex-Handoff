@@ -1,417 +1,79 @@
-# CURRENT_STATE — Chat ↔ Codex Handoff / 知而能讲
+# CURRENT_STATE — 知而能讲
 
-Updated: 2026-09-30
-Authority: 00 MASTER
+Updated: 2026-10-20 (Australia/Sydney)
 Repository: BenCCCCCCCCC/Chat-Codex-Handoff
-Local checkout: F:\Chat-Codex-Handoff\validation-repo
-Product branch: prototype/study-teachback-v0.1
-Meta authority branch: meta/master-state
-
-## 1. Active product
-
-Active product: **知而能讲** — source-first learning + in-app teach-back.
-
-Primary product objective:
-- portfolio / AI Product Manager evidence first;
-- if the product proves useful, long-term personal use can follow;
-- primary user = students;
-- main scenarios include exam prep, learning complex concepts, interview/oral explanation prep, and technical/paper study.
-
-Current result priority:
-1. tell the learner what is wrong;
-2. tell the learner what is missing;
-3. tell the learner what to repair first;
-4. only then surface possible weak/uncertain areas;
-5. do not rush to a global "mastery" judgment.
-
-No overall mastery score is currently required.
-
-## 2. Accepted local baseline
-
-Accepted local HEAD:
-`20be403f7bb736ab0cde2758af7306a00c2290db`
-
-Accepted behavior baseline:
-`aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`
-
-No product push/merge has been authorized or performed.
-
-Phase 3B:
-**PASS / CLOSED for the bounded feasibility question.**
-
-Verified:
-- one real source-first owner flow completed;
-- Tutor 1 / real recording 1 / ASR 1; exact historical diagnosis-call count is under reconciliation because two preserved diagnosis submissions/results were recovered;
-- content/process evidence separation held on the sample;
-- optional transcript replay UX accepted;
-- current entry docs aligned;
-- original Phase 3B live allowance fully consumed.
-
-Not verified:
-- broad learning efficacy;
-- detector sensitivity/specificity at scale;
-- cross-user/course generalization;
-- process-only knowledge diagnosis.
-
-## 3. Phase 4 collision check — updated 2026-09-30
-
-Strong collision is confirmed for generic product features.
-
-OpenAI Study mode already supports uploaded study materials, guided/Socratic learning, understanding checks and personalized study guidance.
-
-Gemini Study Notebooks already support:
-- uploaded class materials;
-- learning goals;
-- diagnostic quizzes;
-- knowledge-gap identification;
-- automatic next-priority lesson ranking.
-
-Gemini Notebook already supports:
-- many sources in one notebook;
-- user source selection;
-- source-grounded citations;
-- automatic source categorization/labels for larger source sets;
-- manual label correction.
-
-Current open-source FeynmanAI also covers:
-- source-grounded learning;
-- learning goal / learning contract;
-- observable attempts;
-- source selection and source anchors;
-- evidence-backed next action.
-
-MASTER conclusion:
-Do not treat these as differentiation by themselves:
-- multiple file upload;
-- automatic source categorization;
-- user-correctable source labels;
-- learning goal;
-- teach-back;
-- generic gap finding;
-- next-best-action;
-- source citation.
-
-Public documentation checked so far does **not** establish an explicit product contract for:
-- conflicting learning sources;
-- explicit source authority;
-- conflict surfaced before diagnosis;
-- user arbitration of diagnosis-relevant source conflict;
-- using that resolved authority to drive error/omission/repair-priority judgments.
-
-This is a candidate gap only, not a claim that competitors cannot do it.
-
-## 4. Owner product decisions — Phase 4
-
-Accepted owner decisions:
-
-### Multi-source
-- the product should not be conceptually limited to one uploaded file;
-- final production file-count limit is NOT frozen yet;
-- Phase 4 benchmark should use multi-source cases rather than implement "unlimited upload".
+Product/default branch: prototype/study-teachback-v0.1
+Canonical state branch: meta/master-state
 
-### Source conflict
-- any detected source conflict should be surfaced to the learner in a lightweight way;
-- if the conflict can change the current diagnosis or remediation priority, the system must not silently choose and must ask the user to arbitrate the relevant authority/interpretation before finalizing the affected judgment;
-- if the conflict is not relevant to the current diagnosis/priority, it remains visible but non-blocking;
-- source roles may guide context but do not authorize silent conflict resolution.
-
-### Source roles
-Default:
-- infer roles automatically;
-- user can correct them;
-- do not require a blocking up-front confirmation step;
-- inferred roles may be shown compactly / behind a small expandable control;
-- ask for explicit confirmation when a role materially affects conflict handling or remediation priority.
-
-Possible roles include:
-- primary course material / textbook;
-- lecture;
-- tutorial;
-- supplementary reading;
-- past exam;
-- personal notes.
-
-Role UI/ontology is not yet an implementation requirement.
-
-### Learning goal
-A structured learning goal is useful and can constrain:
-- source scope;
-- diagnostic resolution;
-- prioritization;
-- remediation wording.
-
-Examples:
-- exam prep;
-- full conceptual understanding;
-- interview/oral explanation;
-- bounded week/topic review.
-
-### Diagnostic priority
-Primary ordering principle:
-1. prerequisite/dependency importance;
-2. severity of the learner's error;
-3. importance supported by the uploaded material + learning goal.
-
-Do not infer "exam importance" without evidence such as syllabus/rubric/past exam/teacher emphasis or explicit user instruction.
-
-### Diagnostic resolution
-Resolution may vary with source content and user goal.
-For future product design, a default "standard" diagnostic resolution is acceptable, with user-adjustable depth as an optional control.
-Do not confuse diagnostic resolution with answer length.
-
-### Output
-Default result should be conclusion-first:
-- wrong;
-- missing;
-- repair first.
-
-Source/user-answer evidence may be available on demand.
-Do not default to a dense evidence rail.
-
-### Process evidence
-Speech/process evidence (pause clusters, hesitation etc.) is not a Phase 4 core differentiator.
-Existing capability is retained but de-prioritized.
-It must never independently establish a knowledge gap.
-
-## 5. Phase 4A — FROZEN PRODUCT QUESTION, NOT YET DISPATCHED
-
-Name:
-**Multi-source Diagnostic Prioritization Benchmark**
-
-Core question:
-
-> Given multiple learning sources plus an explicit learner goal, can 知而能讲 diagnose what is wrong, what is missing, and what should be repaired first — while correctly surfacing source conflicts instead of silently resolving them?
-
-Primary hypotheses:
-
-H1 — Error/Omission Reliability
-The diagnostic contract can distinguish supported error vs omission vs no issue without fabricating unsupported gaps.
-
-H2 — Priority Reliability
-Repair priority follows prerequisite dependency + error severity + source/goal-supported importance.
-
-H3 — Source Conflict Safety
-When diagnosis-relevant sources conflict, the system surfaces the conflict and requests user arbitration instead of choosing silently.
-
-H4 — Goal Sensitivity
-The same source set can legitimately produce different diagnostic depth/priority under different explicit learning goals.
-
-H5 — Expression Robustness
-Verbose/hesitant wording alone does not become a knowledge error; fluent wording does not protect a genuine conceptual error.
-
-## 6. Phase 4A benchmark design
-
-No user recruitment is required for the first benchmark because the owner currently has no available participants.
-
-Use controlled, ground-truth cases first.
-
-Minimum case families:
-1. single-source correct explanation;
-2. single-source explicit factual error;
-3. single-source omission;
-4. multiple consistent sources;
-5. multiple complementary sources;
-6. diagnosis-relevant source conflict;
-7. irrelevant source conflict that should not interrupt the current diagnosis;
-8. prerequisite error versus several minor omissions;
-9. severe conceptual/relational error versus surface-detail omissions;
-10. same sources + different learning goals -> different valid priority;
-11. verbose/disfluent but correct explanation;
-12. fluent but conceptually wrong explanation;
-13. insufficient-source-support / abstention case;
-14. auto-inferred source role corrected by user.
-
-Initial benchmark source bundles should use a bounded 2–4 sources per case.
-This is a benchmark design choice, NOT the final product upload limit.
-
-Ground truth per case should define:
-- supported concepts/relations/conditions;
-- true errors;
-- true omissions;
-- prerequisite graph / dependency;
-- source conflicts;
-- expected conflict behavior;
-- expected top remediation priority;
-- acceptable abstention.
-
-## 7. Metrics — record first, freeze thresholds after calibration
-
-Do not invent attractive KPI thresholds before the benchmark baseline exists.
-
-Record:
-- error precision / recall;
-- omission precision / recall;
-- unsupported-diagnosis rate;
-- conflict-surfacing rate;
-- silent-conflict-resolution count;
-- top-1 remediation priority correctness;
-- learning-goal sensitivity correctness;
-- false knowledge inference from style/process;
-- evidence traceability;
-- abstention correctness.
-
-Hard failure categories:
-- fabricating a source-unsupported learner error;
-- silently selecting one of conflicting diagnosis-relevant sources;
-- treating process/hesitation alone as proof of misunderstanding;
-- labeling a correct explanation wrong because it is verbose/disfluent;
-- ignoring an explicit user source-authority decision.
-
-Comparative numeric pass thresholds will be frozen only after the first calibrated baseline run.
-
-## 8. Sequence before implementation
-
-Phase 4A must NOT start by implementing multi-file UI.
-
-First:
-**NATIVE-COLLISION-PROBE-01 — APPROVED**
-- reuse the existing Phase 3B source/transcript/result;
-- compare with a strong native/general baseline;
-- no new 知而能讲 live provider call;
-- determine whether the narrower diagnostic layer offers any value over generic current tools.
-
-Before the native comparison, run one read-only preparation step:
-**NATIVE-COLLISION-PROBE-01-PREP**
-- recover the exact preserved Phase 3B confirmed learner transcript/explanation and accepted diagnosis/result from local artifacts;
-- bind them to the exact source/receipt;
-- do not reconstruct wording from summaries;
-- do not modify product files;
-- do not run Tutor/ASR/diagnosis or any live provider call;
-- do not commit on the product branch.
-
-If that comparison shows no meaningful diagnostic advantage:
-- Pivot/Stop diagnostic productization;
-- do not build multi-source support merely because the feature sounds useful.
-
-If there is a meaningful diagnostic/safety gap:
-- proceed to build the controlled multi-source benchmark dataset/runner before product UI.
-
-## 9. In scope for Phase 4A planning
-
-- benchmark contract;
-- synthetic/controlled source bundles;
-- source role metadata in benchmark cases;
-- explicit user goal metadata;
-- prerequisite/severity/importance priority contract;
-- conflict/arbitration expected behavior;
-- evaluation metrics;
-- baseline comparison design.
-
-## 10. Out of scope until a later gate
-
-- production multi-file upload implementation;
-- arbitrary/unlimited source counts;
-- source-role UI;
-- conflict-resolution UI;
-- dashboards;
-- spaced repetition;
-- retention redesign;
-- further pause/filler/process-detector tuning;
-- overall mastery score;
-- new model/provider;
-- paid/live validation without fresh authorization;
-- external participant study;
-- push/merge/public release.
-
-## 11. Diagnosis UX audit — ACCEPTED
-
-Read-only audit result:
-- two preserved transcript versions contain identical final transcript content;
-- the versions were reconfirmed about 100 seconds apart;
-- two distinct diagnosis reports coexist;
-- report 1: 2 supported findings;
-- report 2: 2 supported + 1 missing finding;
-- two settled semantic requests are strongly time-associated with the two reports;
-- direct request-ID -> report binding is not stored;
-- exact owner intent remains unknown.
-
-MASTER interpretation:
-- do not describe the second event as a retry;
-- do not keep claiming a verified single diagnosis call;
-- same-input result variance is itself relevant evidence for Phase 4 evaluation;
-- future native comparison must not cherry-pick the more favorable preserved report.
-
-Verified current UX issues:
-- diagnosis button is not disabled or relabelled while processing;
-- transcript textareas remain editable while the submitted snapshot is pending;
-- pending edits can be overwritten on success rerender;
-- completed result is not visually/version-bound strongly enough;
-- editing transcript after a result does not mark that result stale;
-- unchanged text can be reconfirmed into a new version and spend another diagnosis call;
-- no explicit re-diagnosis state/label exists;
-- older report versions are persisted but hidden by latest-version filtering;
-- existing in-flight lock prevents simultaneous duplicate dispatch but is not durable idempotency.
-
-## 12. DIAGNOSIS-STATE-UX-01 — IMPLEMENTED / HOST VERIFY REQUIRED
-
-Codex/Astra implemented the bounded P1 diagnosis-state UX locally on top of accepted HEAD.
-
-Current product files are **uncommitted** pending host browser validation.
-
-Exact changed files:
-- study-teachback-app/app.mjs
-- study-teachback-app/index.html
-- study-teachback-app/style.css
-- study-teachback-app/correctness-boundaries.test.mjs
-- study-teachback-app/correctness-hygiene.test.mjs
-- study-teachback-app/diagnostic-localization.test.mjs
-- study-teachback-app/browser-tests-r4.mjs
-- study-teachback-app/run-offline-tests.mjs
-
-Diff:
-- 92 insertions / 25 deletions.
-
-Implemented bounded behavior:
-- local diagnosis state distinguishes awaiting confirmation / diagnosing / complete / edited-stale / failure;
-- diagnosis action is disabled synchronously while pending;
-- submitted transcript editors become readonly through request + final save;
-- result stays on the same page and exposes a strong current-result entry;
-- successful completion can focus/scroll to a focusable result heading;
-- reduced-motion uses instant scrolling;
-- current result shows transcript-version prefix and report time;
-- editing immediately marks prior result stale;
-- stale/pending result keeps findings/playback but does not present repair actions as current;
-- changed text exposes explicit re-diagnosis CTA;
-- exact revert to a saved transcript version restores current/reuse state;
-- unchanged completed text reuses the stored result and does not create a new correction/version/provider request;
-- prior result remains visible during new request / known failure;
-- no durable cross-tab/reload idempotency or persistence-contract expansion.
-
-Deterministic evidence:
-- focused review: 40/40 PASS;
-- full Node/offline: 155/155 PASS;
-- final receipts bind 53/53 source hashes to current worktree;
-- JavaScript syntax PASS;
-- git diff --check PASS;
-- production ledger unchanged;
-- live provider / recording / ASR / diagnosis / incremental paid exposure = 0.
-
-Browser evidence:
-- Codex sandbox browser attempt failed before application cases at CDP Runtime.enable because Edge GPU process was unusable;
-- therefore browser PASS is **not** claimed;
-- native keyboard/focus/visual behavior remains host-unverified.
-
-MASTER decision:
-**implementation is provisionally acceptable, but final acceptance/commit is blocked only on fresh host browser verification.**
-
-Host command from normal Windows PowerShell at repo root:
-
-`node .\study-teachback-app\run-offline-tests.mjs browser diagnosis-state-ux-01`
-
-Do not assume the expected case count; read the fresh receipt/result.
-
-If host verification passes and source hashes bind to the unchanged worktree:
-- no additional product edit is needed;
-- Codex may then perform final project-aware self-review and create one focused local commit;
-- no push/merge.
-
-If any source/test byte changes after host PASS:
-- host verification must be repeated.
-
-## 13. Native-collision probe status
-
-`NATIVE-COLLISION-PROBE-01` remains OWNER APPROVED but paused until DIAGNOSIS-STATE-UX-01 is reviewed.
-
-The native comparison will later treat same-input output stability as an evaluation dimension; the two preserved product reports must not be silently collapsed to whichever is more favorable.
-
-No new live product diagnosis is authorized.
+## 当前决定与授权
+
+产品定位由用户再次确认为 **个人学习＋作品展示**。用户授权公开仓库（包括现有 Git 历史）、完善 README、调研同类产品与设计/技能、自主审核迭代，以及按有意义的批次在 GitHub 留痕。用户进一步要求减少防御性、冗余与不必要的测试。
+
+此授权取代旧交接对本轮产品编辑、commit、push、merge、公开及每次字节变化必须全量复测的限制。常规可逆改进继续推进；原 Phase 3B 真实调用额度已耗尽，不沿用旧额度。
+
+## 最新交付
+
+- 仓库已设为 **public**，默认分支切换到学习产品分支。
+- 已同步此前 8 个已验收的本地产品提交至 20be403。
+- 本轮实现分支：codex/public-review-2026-10-20。
+- PR：[完善诊断状态体验、公开产品文档与按影响验证流程](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/2)。
+- 合并提交：0b0c9477023171da82440b0ebe13496906946efc。
+- CI：https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39398844763（PASS — Node 154、Python 6、Edge 53）。
+- 本轮问题记录：[Issue #1](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/1)。
+- 下一批：[Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3)。
+
+DIAGNOSIS-STATE-UX-01 已完成宿主浏览器验证并提交：
+- 诊断中同步禁用按钮、锁定文字至最终保存；
+- 结果关联版本前缀和时间，完成后可通过键盘查看并聚焦；
+- 编辑后立即标记旧结果过时，暂不提供当前补救操作；
+- 还原为已有已诊断文字时复用结果，不新增修订或诊断请求；
+- 请求失败保留已有结果，保存失败阻止重复诊断；
+- 仍未实现跨标签页持久请求去重。
+
+公开资料包括产品 README、样例截图、安装方式、6 类产品调研、设计／评测／技能资料、路线和按批次交接。将原 ignored runtime 的合成语音复制为可分发 fixture，修复 CDP 重复变量与 Enter 模拟问题。npm 提取命令已修正 Windows 路径。
+
+## 验证与精简原则
+
+本地最终 Edge **53/53**、Python 提取 **6/6**、历史 handoff 工具 **43/43** 通过。原有 Node 155/155 通过；删除 README 措辞断言后，PR CI 验证 154 条。
+
+本轮没有真实 Tutor、ASR、诊断请求或物理麦克风录音；本地生产账本 hash 未变。CI 从干净检出安装提取环境并运行模拟凭据与合成媒体。
+
+[测试约定](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/TESTING.md) 是后续默认：
+- 文档／文案／低风险样式审查差异和必要页面，不为文字增加自动测试；
+- 按变更影响运行现有回归，不因提交或写交接重复已通过的检查；
+- 保留记录保存、版本关联、真实调用去重等关键行为；
+- CI 仅相关代码 PR 触发，取消旧运行，按改动选择浏览器与提取器；
+- 删除文档固定措辞测试，撤去新增的逐字段 WAV 检查；不一刀切删除旧边界测试。
+
+详细失败原因与证据目录见 [本轮记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-20.md)。首次 CI 的 Node 通过，但 npm 提取命令正斜杠被 cmd 误解析，已修复；不把失败运行记为通过。
+
+## 已有证据边界
+
+Phase 3B 仅对有界可行性问题 **CLOSED / PASS**，不代表跨课程／用户学习效果。
+历史记录有两份相同确认文字的诊断报告，结果不同；两笔 settled 语义请求与时间强关联，但缺直接 request-ID → report 绑定。不得声称已核实只有一次诊断，不把第二次称为重试，不挑选较有利报告。
+
+语音过程与内容判断分开；停顿、犹豫等过程观察不能独立证明知识缺口。当前生产使用单份有限材料。无总体掌握度评分，不宣称已证明竞争优势。许可证尚未选择。
+
+## 保留的产品研究方向
+
+候选问题：多源材料在明确来源权威与冲突约束下，能否更可靠地判断错误、遗漏和优先补学项。
+
+先做同输入通用基线比较，再决定是否投入多源产品化。已有泛化能力如语音教回、材料上传、引用、缺口与下一步建议不足以单独构成差异化。公开文档不足以证明竞品没有冲突处理。
+
+保留用户既有决定：
+- 多来源在概念上受支持；初期受控样本 2–4 份材料，不是产品文件数量上限；
+- 每个检测到的冲突可见；影响当前诊断／优先级的冲突需用户裁决，其他冲突可见且不阻塞；
+- 来源角色自动推断、用户可改，紧凑展示；不要求所有角色先确认，重要裁决时明确确认；
+- 优先级按前置依赖、错误严重性、来源和学习目标支持的重要性排序；无材料依据不得猜考试重点；
+- 默认结论优先，证据按需；诊断深度可随目标与材料变化；
+- 讲话过程检测保持现状，暂不继续调参，不作为核心差异化；
+- 控制样本覆盖一致／互补／冲突来源、目标变化、啰嗦但正确、流畅但错误、证据不足与来源裁决；
+- 记录错误／遗漏精确率与召回率、无依据判断、静默裁决冲突、优先项、稳定性与可追溯性；阈值在基线校准后确定。
+
+## 下一步
+
+Issue #3：先冻结既有准确材料／确认文字／两份结果和比较协议，再准备受控多源样本。离线资料与协议可自主推进；实际模型比较需明确服务和新增预算。若无有意义优势，不为功能数量扩张多源 UI。
+
+后续候选：明确标注且不污染个人数据的免费模拟演示、持久账本／恢复能力。暂不做图谱大屏、教师后台、云同步或总体掌握度分数。
+
+旧状态及更细背景保留在 [2026-09-30 历史快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/cd696d76fcd1a3d8a04b60ee9631bc6e4f5c6628/docs/master/CURRENT_STATE.md)。旧限制不覆盖本页记录的后续用户授权。
