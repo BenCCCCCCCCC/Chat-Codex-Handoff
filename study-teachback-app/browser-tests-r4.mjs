@@ -1,3 +1,4 @@
+import {workspaceChecks} from './browser-workspace-checks.mjs';
 import { spawn } from 'node:child_process';
 import { mkdirSync,writeFileSync,mkdtempSync,readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -9,6 +10,7 @@ import { waveDuration,normalizeASR } from './core.mjs';
 import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 if(!process.env.STUDY_TEST_OUTPUT)throw Error('Run through run-offline-tests.mjs browser');
 const root=process.env.STUDY_TEST_OUTPUT+'/';mkdirSync(root,{recursive:true});
+const workspaceOnly=process.argv.includes('--workspace-only');
 const environmentProbe=process.argv.includes('--environment-probe'),recoveryOnly=process.argv.includes('--recovery-only');
 const probe={mode:environmentProbe?'NON_HEADLESS_TRUSTED_POINTER':'EXISTING_SUITE',lifecycle:[],states:[],trustedInputs:[]};
 const run=Date.now(), profile=process.env.STUDY_TEST_PROFILE??mkdtempSync(root+'edge-test-');
@@ -42,7 +44,7 @@ async function reloadPage(){
   await until(`document.documentElement.dataset.testReload!=='old' && document.getElementById('budget')?.textContent.length>0`);
 }
 async function openHistoryAttempt(){
-  await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+  await evaluate(`{const button=[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整'));button.closest('details').open=true;button.click();}`);
   await until(`document.getElementById('history').hidden && !document.getElementById('workspace').hasAttribute('aria-busy')`);
 }
 async function trustedPointer(expression,label){
@@ -56,7 +58,7 @@ async function trustedPointer(expression,label){
   const input=await evaluate('window.probeInputs.at(-1)');assert(input?.trusted,`Untrusted input: ${label}`);probe.trustedInputs.push({label,...input});
 }
 async function probeState(label){probe.states.push({label,...await evaluate(`({visibilityState:document.visibilityState,hasFocus:document.hasFocus(),currentTime:document.getElementById('player').currentTime,duration:document.getElementById('player').duration,paused:document.getElementById('player').paused,ended:document.getElementById('player').ended})`)});}
-const click=async id=>{await evaluate(`document.getElementById(${JSON.stringify(id)}).click()`);if(['deleteAttempt','deleteAll'].includes(id)){await until(`document.getElementById('deleteDialog').open`);await evaluate(`document.getElementById('deleteConfirm').click()`);}};
+const click=async id=>{await evaluate(`document.getElementById(${JSON.stringify(id)}).click()`);if(id==='historyButton')await until(`!document.getElementById('history').hidden && !document.getElementById('history').hasAttribute('aria-busy')`);if(['deleteAttempt','deleteAll'].includes(id)){await until(`document.getElementById('deleteDialog').open`);await evaluate(`document.getElementById('deleteConfirm').click()`);}};
 const all=`(async()=>{const s=await import('/storage.mjs');const db=await s.openStore();const t=await db.all();db.close();return t.map(t=>({...t,attempts:t.attempts.map(a=>({...a,audio:{size:a.audio.size,type:a.audio.type}}))}));})()`;
 const screenshots=[],replaySnapshots=[];
 async function shot(name,target){if(target)await evaluate(`document.getElementById(${JSON.stringify(target)}).scrollIntoView({behavior:'instant',block:'start'})`);await pause(120);const r=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});const file=`${run}-${name}.png`;writeFileSync(join(root,file),Buffer.from(r.data,'base64'));screenshots.push({file,state:name,viewport:await evaluate('({width:innerWidth,height:innerHeight})'),scope:'Actual product / synthetic fixtures / stub provider'});}
@@ -72,7 +74,8 @@ try{
   await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='deferredDenied')await new Promise((resolve,reject)=>window.rejectPermission=()=>reject(new DOMException('test denied','NotAllowedError')));if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
-  if(!environmentProbe&&!process.argv.includes('--replay-only')){
+  if(!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});
+  if(!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly){
     await check('chat failure reload and explicit retry preserve original input/context with one dispatch',async()=>{
       failTeach=true;
       await evaluate(`document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);
@@ -86,6 +89,9 @@ try{
       await until(`!document.getElementById('chatRetry').disabled && document.getElementById('notice').textContent.includes('API_RESULT_UNAVAILABLE')`);
       const request=structuredClone(provenanceRequests.at(-1)),count=calls.length;
       await reloadPage();assert.equal(calls.length,count);
+      await click('historyButton');await until(`document.querySelector('.history-continue')`);
+      await evaluate(`document.querySelector('.history-continue').click()`);
+      await until(`document.getElementById('history').hidden && !document.getElementById('chatRetry').disabled`);
       for(const width of [1440,390]){
         await cdp('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:false});
         assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));
@@ -139,7 +145,7 @@ try{
       const source={id:'probe-source',title:'隔离 synthetic ASR 环境探针',text:savedASR.text};
       const t={id:'probe-topic',createdAt:Date.now(),source,goals:[],messages:[],attempts:[{id:'probe-attempt',createdAt:Date.now(),source,kind:'full',focus:null,assistance:'none',duration:7.31,observation:JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r3/DELIVERY_ENGINEERING.json',import.meta.url))).acoustic,raw:{...savedASR,id:'probe-raw',origin:'ARCHIVED_SYNTHETIC_ASR'},corrections:[],reports:[],status:'REVIEW_REQUIRED'}]};
       await evaluate(`(async()=>{const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob([new Uint8Array(${JSON.stringify(savedWave)})],{type:'audio/wav'});const db=await(await import('/storage.mjs')).openStore();await db.put(t);db.close();})()`);
-      await reloadPage();await until(`!document.getElementById('workspace').hidden`);await trustedPointer(select('historyButton'),'open history');await until(`document.querySelectorAll('#historyList button').length>=3`);await trustedPointer(historyAttempt,'open saved attempt');
+      await reloadPage();await until(`!document.getElementById('workspace').hidden`);await trustedPointer(select('historyButton'),'open history');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`(${historyAttempt}).closest('details').open=true`);await trustedPointer(historyAttempt,'open saved attempt');
       assert.equal(calls.length,0);assert(await evaluate(`!document.getElementById('confirm').disabled && document.getElementById('reviewHint').textContent.includes('逐段回听不是必需步骤')`));
     });
     await check('E0 trusted saved-ASR 0–6.46 replay has genuine native coverage then fake content confirmation',async()=>{
@@ -158,7 +164,7 @@ try{
       assert.equal(await evaluate(`document.querySelectorAll('#feedback .finding').length`),1);assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding,#processFeedback .diagnosticTarget').length`),0);assert.equal(await evaluate(`document.getElementById('contentHeading').textContent`),'内容理解');assert.equal(await evaluate(`document.getElementById('processHeading').textContent`),'讲解过程');
       // Persist critical traces before the deliberate reload resets the document observer.
       writeFileSync(join(root,'probe-candidate-trace.json'),JSON.stringify({internal:trace,native:await evaluate('window.replayTrace')},null,2));
-      await reloadPage();await until(`!document.getElementById('workspace').hidden`);await trustedPointer(select('historyButton'),'history after reload');await until(`document.querySelectorAll('#historyList button').length>=3`);await trustedPointer(historyAttempt,'saved attempt after reload');assert.equal(await evaluate(`document.querySelectorAll('.processObservation').length`),1);
+      await reloadPage();await until(`!document.getElementById('workspace').hidden`);await trustedPointer(select('historyButton'),'history after reload');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`(${historyAttempt}).closest('details').open=true`);await trustedPointer(historyAttempt,'saved attempt after reload');assert.equal(await evaluate(`document.querySelectorAll('.processObservation').length`),1);
       reports=(await evaluate(all))[0].attempts[0].reports;assert.equal(reports.filter(r=>r.channel==='process').length,1);assert.equal(calls.length,before);assert.equal(JSON.stringify(testBook.read()),ledgerBefore);probe.processAfter={calls:calls.length,ledger:testBook.read(),processReports:reports.filter(r=>r.channel==='process'),persisted:true};await probeState('after reload');await shot('representative-probe','attemptPanel');
     });
   }else if(process.argv.includes('--replay-only')){
@@ -181,7 +187,7 @@ try{
       await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1 && document.getElementById('notice').textContent.includes('转写完成')`);
       await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
     });
-  }else if(!recoveryOnly){
+  }else if(!recoveryOnly&&!workspaceOnly){
   for(const setupContext of [{focus:'',known:''},{focus:'条件',known:''},{focus:'',known:'了解定义'},{focus:'条件',known:'了解定义'}])await check(`setup source-only title and persisted metadata ${JSON.stringify(setupContext)}`,async()=>{
     const before=provenanceRequests.length;
     await evaluate(`document.getElementById('title').value='';document.getElementById('source').value='只有土壤干燥才浇水。';document.getElementById('setupFocus').value=${JSON.stringify(setupContext.focus)};document.getElementById('setupKnown').value=${JSON.stringify(setupContext.known)};`);
@@ -504,7 +510,7 @@ try{
     await evaluate(`document.querySelector('#historyList .danger').click()`);await click('deleteConfirm');await until(`document.getElementById('historyList').textContent.includes('还没有')`);assert.equal((await evaluate(all)).length,0);await until(`document.activeElement.id==='historyTitle'`);
   });
   }
-  if(!environmentProbe&&!recoveryOnly&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
+  if(!environmentProbe&&!recoveryOnly&&!workspaceOnly&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
     await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'demo-preserve',createdAt:Date.now(),source:{title:'个人记录必须保留'},attempts:[]});db.close();})()`);
     const before=JSON.stringify(await evaluate(all)),requestIndex=network.length,dispatches=calls.length;
     await cdp('Page.navigate',{url:origin+'/demo'});await until(`document.getElementById('demoTitle')?.textContent.length>0`);

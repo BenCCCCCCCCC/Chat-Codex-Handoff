@@ -6,7 +6,7 @@ for(const control of document.querySelectorAll('[data-prompt]')){
   control.onclick=()=>{
     if($('send').disabled)return;
     const input=$('chat');
-    if(!input.value.trim())input.value=control.dataset.prompt;
+    if(!input.value.trim()){input.value=control.dataset.prompt;input.dispatchEvent(new Event('input',{bubbles:true}));}
     input.focus();
   };
 }

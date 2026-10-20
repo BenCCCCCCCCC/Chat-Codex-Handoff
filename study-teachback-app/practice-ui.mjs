@@ -1,4 +1,5 @@
 import {activePractice, practiceRounds, createPracticeFlow} from './practice.mjs';
+import {createDraftSaver} from './draft-save.mjs';
 
 export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen}) {
   const $ = id => document.getElementById(id);
@@ -7,14 +8,8 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     if (cls) e.className = cls;
     return e;
   };
-  let draftTimer = null, draftTopic = null, draftSaving = 0;
-  function flushDraft() {
-    clearTimeout(draftTimer); draftTimer = null;
-    if (draftTopic) {
-      const target = draftTopic; draftTopic = null; draftSaving++;
-      return save(target).finally(() => draftSaving--);
-    }
-  }
+  const drafts=createDraftSaver({save,onError:error=>act(()=>Promise.reject(error))});
+  const flushDraft=()=>drafts.flush();
   const flow = createPracticeFlow({getTopic, save, request, canStart, setBusy, changed:render});
   function render() {
     const topic = getTopic(), round = activePractice(topic), rounds = practiceRounds(topic);
@@ -81,8 +76,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     round.draft = $('practiceDraft').value;
     topic.resume = {view:'practice'};
     $('practicePanel').dataset.active = 'true';
-    draftTopic = topic; clearTimeout(draftTimer);
-    draftTimer = setTimeout(() => act(flushDraft), 350);
+    drafts.mark(topic);
   };
   $('practiceDraft').onblur = () => act(flushDraft);
   async function open() {
@@ -91,5 +85,5 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     const topic=getTopic();topic.resume={view:'practice'};
     await save(topic);render();focusPanel();
   }
-  return {render, start, open, flushDraft, focusPanel, get hasPendingDraft(){return !!draftTopic || draftSaving > 0;}};
+  return {render, start, open, flushDraft, focusPanel, discardDraft:()=>drafts.discard(), get hasPendingDraft(){return drafts.pending;}};
 }
