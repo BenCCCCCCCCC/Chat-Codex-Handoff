@@ -39,6 +39,6 @@ export function contentScore({source,fixture,expectation,result}){
   const findings=Array.isArray(result?.findings)?result.findings:[];
   return {expectation,verdictPass:verdictPass(expectation,findings),evidenceValid,error,
     statuses:findings.map(f=>f.status),
-    nonInformativeRepairIndices:findings.flatMap((f,i)=>/[\p{L}\p{N}]/u.test(f.repair??'')?[]:[i]),
+    nonInformativeRepairIndices:findings.flatMap((f,i)=>f.status==='supported'&&f.repair===null||/[\p{L}\p{N}]/u.test(f.repair??'')?[]:[i]),
     reasonAndRepairReview:'REQUIRED'};
 }

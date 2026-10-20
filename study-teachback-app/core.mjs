@@ -73,7 +73,7 @@ export function validateFindings(v, source, attempt, channel, events = []) {
   for (const f of v.findings) {
     exactKeys(f,['status','message','sourceQuote','spanId','quote','eventId','repair']);
     requireValue(['supported','missing','incorrect','unknown','observation'].includes(f.status),'INVALID_STATUS');
-    text(f.message,1000); text(f.repair,1000); text(f.sourceQuote,600);
+    text(f.message,1000); if(!(f.status==='supported'&&f.repair===null))text(f.repair,1000); text(f.sourceQuote,600);
     remediationFocus(f,channel);
     requireValue(source.text.includes(f.sourceQuote),'INVALID_SOURCE_QUOTE');
     if (channel === 'content') requireValue(f.eventId === null && f.status !== 'observation','CHANNEL_LEAK');
