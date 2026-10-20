@@ -9,38 +9,41 @@ Canonical state branch: meta/master-state
 
 定位 **个人学习＋作品展示**。用户授权公开仓库及现有 Git 历史、README、产品与设计研究、自主审核实现、commit/push/PR/merge，以及有意义的批次交接；无需每个小动作询问。旧 no push/merge 和每次字节变化全量重跑限制已被后续授权取代。
 
-本轮要求：搜索结果直接定位消息／转写、完善长对话上下文、继续精简页面、减少冗余测试，并解释和改进语音分析。已实现并按批次交付，不再列为未开始。原 Phase 3B 真实额度已耗尽，本批没有新付费实验或个人麦克风授权。
+本轮要求优先语音核心、上传已有音频、分别评估转写和内容质量、精简页面与测试。用户明确批准固定 1 次合成 ASR＋8 次固定文本内容调用，最多 US$0.10。本次九次已完成，新增账本估算 US$0.004224；授权不扩大到新样本／持续调用，不继续花剩余额度。无个人麦克风授权。旧 Phase 3B 额度仍已耗尽。
 
 ## 最新交付
 
 - 仓库 public，默认分支 prototype/study-teachback-v0.1。
-- 分支 codex/search-context-and-voice-review。
-- [Issue #12](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/12) / [PR #13](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/13) 已合并。
-- 实现头 5d27cd155cadb23d3e2a152891dc76722bc7f363。
-- 合并提交 be9dd41bea1bd704935d4f00d855ad5eda948db7。
-- [最终 CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39420914331)：完整 Node／Edge 回归 PASS，Python 独立提取按范围跳过。
+- [Issue #14](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/14) / [PR #15](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/15) 已合并。
+- 分支 codex/audio-upload-and-quality；实现头 330ab48adcdbfdad96a2f4e870efaf9b4805cfbd。
+- 合并提交 7c4ec2e02c5e80bf0892d296875d79eb1508ae04。
+- [CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39423978423) 一次完整 Node／Edge PASS，独立提取器按范围跳过；job 118631733723。
 
-搜索片段可直接定位消息、转写、草稿、反馈与练习。旧消息加载附近 24 条，前后可追加；当前文字直接聚焦，旧版本只读显示并可回听，不改写当前核对文本。前三处匹配展开，其余折叠；返回搜索保留筛选。消息下标与转写版本／片段等引用随记录解析，不建立云索引。
+“我来讲讲 → 上传音频”：选择文件只在本机解码、检查、保存原始字节并试听；点击“开始转写”才发送。支持浏览器可解码的 WAV/MP3/M4A/MP4/WebM/OGG/FLAC/AAC，最长 3 分钟、最大 25 MiB，不静默截断。无效／超长文件不创建尝试或调用 API。刷新不重试，失败复用原尝试与显式重试。captureOrigin、fileName 和 unknown 辅助条件随 v1 备份保留。
 
-对话“上下文”内新增最多 1,000 字的手动要点，随主题保存／备份。发送固定 contextNote 快照，失败重试沿用旧快照。普通请求参考材料、要点和最近最多六条消息；provider 在原 24,000 输入保守上界内优先移除最早整条历史，保留材料和当前问题。返回实际使用／省略条数；必需内容本身超限仍拒绝。合法长中文请求体上限调至 128,000 字节，使其能到达选择环节，字段／费用上界不变。不后台生成摘要，不宣称完整历史进入每次请求。
+浏览器统一对单声道 16 kHz 临时音频做检查和 ASR，修复只检查左声道造成的误判；存储／导出原字节不改。未转写时隐藏空白反馈、核对标题和过程区域，细节按需展开。内容模型仍只接收确认后的文字与材料，模型及生产提示不变。
 
-语音编辑新增 transcriptDraft，绑定当前版本，自动保存／刷新／导航／备份后继续核对。确认才创建修订版本并删除草稿；未确认草稿不是新表现或理解证据。新诊断报告保存 method、model、reservationId 和 provider requestId；ASR 也保留 requestId。“分析依据”按需展开，旧记录缺失的归因保持未知。
+[批次说明](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-20-audio-upload-quality.md)包含实现、验证、实验与限制。[方案](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/2026-10-20-voice-quality-plan.md)与[完整合成结果](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/voice-quality-live.json)已公开，无个人录音。使用 OpenAI Docs 技能核对官方 ASR／模型价格与接口。
 
-当前核心链路：应用内录音 → 本机保存／声音检查／16 kHz WAV → whisper-1 转写 API → 用户确认文字 → gpt-5.6-luna 文本模型对照材料分析 → 本机引用校验／版本绑定／原声定位。没有外部音频文件上传入口；内容判断不接收声学指标，过程观察保持独立。本批改善连续性和追踪，不宣称准确率提高。
+此前 PR #2／#5／#7／#9／#11／#13 的公开整理、工作台／固定示例、独立情境练习、恢复与备份、聊天草稿／本地查找／分页、命中消息及旧转写定位、手动上下文和转写草稿／请求追踪均已完成。旧转写只读，不覆盖当前；contextNote 1000 字，最近最多六条整消息按 24k 输入预算移除最旧历史；没有自动摘要。原记录 createdAt 七天到期；恢复副本从 restoredAt 七天，128 MB v1 备份，无数据库升级。
 
-[批次文档](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-20-search-context-voice.md)记录设计、机制、验证和下一步质量评估方向；README、路线与测试聚焦入口已更新。参考已有渐进展示设计资料，并使用 OpenAI Docs 技能核对官方请求 ID 文档。
+## 分离质量结果
 
-此前 PR #2／#5／#7／#9／#11 的公开整理、工作台／固定示例、情境练习、恢复、备份、聊天草稿／本地检索／长对话分页和 ASR 保存失败修复均已完成。原记录 createdAt 七天到期；恢复副本从 restoredAt 七天，128 MB v1 备份；新字段可选，无数据库升级。
+转写与内容独立，不把桩测试或引用有效视作学习效果。quality-history.mjs 离线复算公开历史；quality-eval.mjs 输出 CER、时间有效性、verdict、引用和无文字建议索引，理由／建议仍需阅读。
+
+- 新 Whisper 单条 7.31 秒合成普通话：严格 CER 9/24=37.5%，九处均为简繁书写差异，否定词和条件方向保留。22 词中 w14 时间长度为零；不能把 CER 当语义错率，也未评估人工时间对齐准确性。
+- 新内容七条不同固定文本＋一次自我修正重复：8/8 verdict 符合预期，8/8 引用／版本有效。一条 supported repair 只有 ]；另一条持票条件解释开头含混，后续方向与结论正确。产品不将 supported repair 生成补救操作。两次自我修正 verdict 相同，反馈条数 1 vs 3，不能据此推断稳定率。
+- 历史首轮 6/7，自我修正误判；第二轮 CHANNEL_LEAK 停止；修订 7/7 但一条建议只有“. .”。历史提示与校验不同，不构成受控 A/B。两类报告原样保留。
+- 新实验 9 请求，保守实际预留合计 US$0.0455655，新增已知估算 US$0.004224，新增未结算 0。首次仅本地 WAV 容器预检停止（0 请求），保存记录后标准化容器，PCM 未变，才执行原方案。没有自动 API 重试或充值。
+- 只覆盖一个合成声音和简单规则。自然口语、噪声、数字／术语、课程、总体准确率和学习收益仍未知。
 
 ## 验证与精简原则
 
-本地定向 Node 26/26、Edge 三条实际流程 3/3。覆盖旧消息邻近跳转、历史转写只读、对话要点保存／原快照重试、核对草稿刷新／备份与报告版本绑定。已查看桌面和手机截图。随后修正中文请求体入口限制，由批次 CI 覆盖最终代码。
+本地定向 Node 43/43、Edge 2/2：实际浏览器双声道解码、选择／刷新不调用、显式转写与重试、核对后诊断、原声备份和坏文件／超长边界。已查看桌面／手机截图。首次 Edge 第二条脚本缺 async 导致语法错误，只修复并复验两条；完整回归留给一次 PR CI。文案／提交／合并不重跑。
 
-首次 CI 157/158：新长中文用例改了来源，桩反馈仍引旧材料，现有引用校验正确拒绝。只修正测试桩，局部边界文件 16/16 通过，最终完整 CI PASS；未放松产品校验。去掉旧浏览器用例锁定长提示句的断言，保留实际行为。没有本地重复完整套件，不因文档、提交或合并重跑。
+离线测试的 synthetic credential、loopback 网络、独立账本与浏览器照旧，测试前后生产账本未变。另行获批的真实实验改变了生产账本，最终 SHA256 db2331acab4254609349d75ad99db1f368ca140fcc4f61160556ee8d7f22a220，不得误报本批完全无 API。常用新增聚焦参数 --audio-only。详见 docs/TESTING.md。
 
-仅合成数据、合成音频、桩 provider 和独立测试账本／浏览器；**无真实 ASR／模型调用、个人录音或准确率验证**。生产账本未变，无新增 API 支出。源码／截图说明不把工程测试当作学习收益证明。
-
-继续按 docs/TESTING.md 验证范围，新增 --context-only 聚焦入口。强制终止前未完成的写入、跨标签页协调和服务端持久请求去重尚未解决；未知结果显式重试可能再次计费。
+强制终止前未完成的写入、跨标签页协调、服务端持久请求去重仍未解决。未知结果显式重试可能再次计费。未添加多分钟自动分段或自动纠正原文。
 
 ## 已有证据边界
 
@@ -65,12 +68,10 @@ Phase 3B 仅对有界可行性问题 **CLOSED / PASS**，不代表跨课程／�
 - 控制样本覆盖一致／互补／冲突来源、目标变化、啰嗦但正确、流畅但错误、证据不足与来源裁决；
 - 记录错误／遗漏精确率与召回率、无依据判断、静默裁决冲突、优先项、稳定性与可追溯性；阈值在基线校准后确定。
 
-
-
 ## 下一步
 
-本轮需求已完成。从使用反馈选择下一批；语音质量建议先分开比较“转写错误”与“确认文字后的模型判断错误”，保留否定词／数字／条件／术语／自我修正样本及全部结果，再决定术语提示、分段或换模型。不要直接调停顿阈值或从一次结果宣称有效。
+本轮上传与分离小样本评估已完成。从真实使用反馈决定下一批。可优先比较简体偏好、领域词汇提示，或改进含混解释／无文字建议；每项只改一个变量，新真实调用须新定样本与预算。不要继续消耗本次余额、扩大到用户个人录音、直接调停顿阈值或宣称自然语音有效。
 
-[Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3) 同输入基线研究仍保留，真实比较须另定服务、样本和新增预算。没有公共部署；4321 为本聊天无 provider 预览，正常 npm start / 4317；预览更新不启用付费能力。
+[Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3) 同输入多源研究仍保留。没有公共部署；4321 为本聊天无 provider 预览，已刷新新版；正常 npm start / 4317，预览不启用付费能力。
 
-前批详情与历史链见[草稿／检索批次快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b392ee55e258d489cdb6a818e6d916bdf46eed69/docs/master/CURRENT_STATE.md)。
+前批详情见[PR #13 后交接快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/6c4ad447733e824986c94c0dd09db852bb4aa5f7/docs/master/CURRENT_STATE.md)。
