@@ -53,7 +53,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
       round?.task ? '查看判断' :
       round?.answers.some(a => a.text === round.draft?.trim() && a.status !== 'complete') ? '重试这次回答' : '提交回答';
     $('practiceStatus').textContent = flow.busy ? '正在处理…' :
-      topic?.practiceRequest ? '出题未完成或结果未知。重试会发起新的模型请求。' :
+      topic?.practiceRequest ? '上次出题未完成或结果未知。重试会发起新的模型请求。' :
       topic?.taskUnavailable ? `本次未出题：${topic.taskUnavailable.reason}` : '';
     $('practiceAnswers').replaceChildren(...(round?.answers ?? []).map((answer, i) => {
       const item = node('article', '', 'practice-answer');
