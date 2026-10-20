@@ -83,3 +83,5 @@ node study-teachback-app/run-offline-tests.mjs browser
 “我来讲讲 → 上传音频”接受最长 3 分钟、最大 25 MiB 的 WAV/MP3/M4A/MP4/WebM/OGG/FLAC/AAC；浏览器必须能够解码。选文件只做本地检查和保存，点击“开始转写”才调用 API。原始字节保留，单声道 16 kHz 临时副本用于声音检查、转写及定位回听；未知辅助条件不会记为脱稿。
 
 评估与产品流程测试分开：`node study-teachback-app/quality-history.mjs` 离线复算公开历史结果；真实实验必须按[样本与预算方案](../docs/research/2026-10-20-voice-quality-plan.md)取得明确批准。评分工具分别输出 CER、时间字段有效性、内容预期符合度、引用有效性，理由和建议另行阅读。[本批结果与限制](../docs/iterations/2026-10-20-audio-upload-quality.md)。
+
+最新[简体与反馈迭代](../docs/iterations/2026-10-21-transcript-refinement.md)：Whisper 增加简体风格提示，原始词可直接回听；无独立词时间时标明范围。新内容 schema 要求 supported 的 repair 为 null，旧字符串报告仍兼容。获批的 14 次固定比较已完成，费用估算 US$0.0066592；剩余额度不继续使用，新实验须另定方案。

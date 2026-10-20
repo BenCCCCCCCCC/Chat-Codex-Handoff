@@ -25,4 +25,6 @@ node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01 --cont
 node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01 --context-only
 node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01 --audio-only
 node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01 --audio-only
+node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01 --refinement-only
+node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01 --refinement-only
 ```

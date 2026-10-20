@@ -18,6 +18,8 @@ function fixture() {
 }
 test('v1 backup round trip preserves audio, corrections, report links and practice; restore is a separate copy',async()=>{
   const original=fixture();original.contextNote='Remember the condition.';
+  // New supported findings carry no advice; legacy string advice is tested separately.
+  original.attempts[0].reports[0].findings[0].repair=null;
   updateTranscriptDraft(original.attempts[0],[{id:'s0',text:'Unconfirmed edit'}]);
   original.attempts[0].reports[0].analysis=analysisTrace({model:'test',requestId:'req_test',reservationId:'local_test'});
   const text=await encodeBackup(original), decoded=decodeBackup(text);

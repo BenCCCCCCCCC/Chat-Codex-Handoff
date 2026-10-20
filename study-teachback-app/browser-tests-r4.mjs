@@ -1,3 +1,4 @@
+import {refinementChecks} from './browser-refinement-checks.mjs';
 import {audioChecks} from './browser-audio-checks.mjs';
 import {contextChecks} from './browser-context-checks.mjs';
 import {workspaceChecks} from './browser-workspace-checks.mjs';
@@ -12,6 +13,7 @@ import { waveDuration,normalizeASR } from './core.mjs';
 import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 if(!process.env.STUDY_TEST_OUTPUT)throw Error('Run through run-offline-tests.mjs browser');
 const root=process.env.STUDY_TEST_OUTPUT+'/';mkdirSync(root,{recursive:true});
+const refinementOnly=process.argv.includes('--refinement-only');
 const audioOnly=process.argv.includes('--audio-only');
 const contextOnly=process.argv.includes('--context-only');
 const workspaceOnly=process.argv.includes('--workspace-only');
@@ -78,10 +80,11 @@ try{
   await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='deferredDenied')await new Promise((resolve,reject)=>window.rejectPermission=()=>reject(new DOMException('test denied','NotAllowedError')));if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
-  if(!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await audioChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,setFailASR:value=>{failASR=value;}});
-  if(!audioOnly&&!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});
-  if(!audioOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly&&!recoveryOnly)await contextChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,requests:provenanceRequests,setFail:()=>{failTeach=true;}});
-  if(!audioOnly&&!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly){
+  if(!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await refinementChecks({check,evaluate,until,reloadPage,shot,cdp,all,calls});
+  if(!refinementOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await audioChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,setFailASR:value=>{failASR=value;}});
+  if(!refinementOnly&&!audioOnly&&!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});
+  if(!refinementOnly&&!audioOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly&&!recoveryOnly)await contextChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,requests:provenanceRequests,setFail:()=>{failTeach=true;}});
+  if(!refinementOnly&&!audioOnly&&!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly){
     await check('chat failure reload and explicit retry preserve original input/context with one dispatch',async()=>{
       failTeach=true;
       await evaluate(`document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);
@@ -193,7 +196,7 @@ try{
       await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1 && document.getElementById('notice').textContent.includes('转写完成')`);
       await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
     });
-  }else if(!audioOnly&&!contextOnly&&!recoveryOnly&&!workspaceOnly){
+  }else if(!refinementOnly&&!audioOnly&&!contextOnly&&!recoveryOnly&&!workspaceOnly){
   for(const setupContext of [{focus:'',known:''},{focus:'条件',known:''},{focus:'',known:'了解定义'},{focus:'条件',known:'了解定义'}])await check(`setup source-only title and persisted metadata ${JSON.stringify(setupContext)}`,async()=>{
     const before=provenanceRequests.length;
     await evaluate(`document.getElementById('title').value='';document.getElementById('source').value='只有土壤干燥才浇水。';document.getElementById('setupFocus').value=${JSON.stringify(setupContext.focus)};document.getElementById('setupKnown').value=${JSON.stringify(setupContext.known)};`);
@@ -516,7 +519,7 @@ try{
     await evaluate(`document.querySelector('#historyList .danger').click()`);await click('deleteConfirm');await until(`document.getElementById('historyList').textContent.includes('还没有')`);assert.equal((await evaluate(all)).length,0);await until(`document.activeElement.id==='historyTitle'`);
   });
   }
-  if(!audioOnly&&!contextOnly&&!environmentProbe&&!recoveryOnly&&!workspaceOnly&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
+  if(!refinementOnly&&!audioOnly&&!contextOnly&&!environmentProbe&&!recoveryOnly&&!workspaceOnly&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
     await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'demo-preserve',createdAt:Date.now(),source:{title:'个人记录必须保留'},attempts:[]});db.close();})()`);
     const before=JSON.stringify(await evaluate(all)),requestIndex=network.length,dispatches=calls.length;
     await cdp('Page.navigate',{url:origin+'/demo'});await until(`document.getElementById('demoTitle')?.textContent.length>0`);

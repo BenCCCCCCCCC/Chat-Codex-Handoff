@@ -2,17 +2,19 @@ import { Ledger } from './ledger.mjs';
 import { fileURLToPath } from 'node:url';
 import { waveDuration, normalizeASR, identifier } from './core.mjs';
 
+export const ASR_STYLE_PROMPT='以下是普通话的简体中文转写。';
 export const ledger = new Ledger(fileURLToPath(new URL('./runtime/usage.json', import.meta.url)));
-export async function transcribe(bytes, attemptId, { fetcher = fetch, book = ledger, signal } = {}) {
+export async function transcribe(bytes, attemptId, { fetcher = fetch, book = ledger, signal, prompt = ASR_STYLE_PROMPT } = {}) {
   if (!process.env.OPENAI_API_KEY) throw new Error('CREDENTIAL_MISSING');
   identifier(attemptId);const duration=waveDuration(bytes);
   const reservation=book.reserve({kind:'asr',attemptId,minutes:3});
   const form=new FormData();form.set('model','whisper-1');form.set('language','zh');form.set('response_format','verbose_json');form.append('timestamp_granularities[]','word');form.append('timestamp_granularities[]','segment');form.set('file',new Blob([bytes],{type:'audio/wav'}),'attempt.wav');
+  if(prompt)form.set('prompt',prompt);
   try {
     const r=await fetcher('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:`Bearer ${process.env.OPENAI_API_KEY}`},body:form,signal:signal?AbortSignal.any([signal,AbortSignal.timeout(60000)]):AbortSignal.timeout(60000)});
     if(!r.ok){book.failure(reservation.id,'HTTP_ERROR',r.status);throw new Error(`API_HTTP_${r.status}`);}
     const data=await r.json();book.settle(reservation.id,{seconds:duration},r.headers.get('x-request-id'));
-    return { ...normalizeASR(data,duration), duration, model:'whisper-1',reservationId:reservation.id,requestId:r.headers.get('x-request-id') };
+    return { ...normalizeASR(data,duration), duration, styleHint:prompt===ASR_STYLE_PROMPT?'zh-Hans-v1':'unspecified', model:'whisper-1',reservationId:reservation.id,requestId:r.headers.get('x-request-id') };
   } catch(e){ if(!String(e.message).startsWith('API_HTTP_'))book.failure(reservation.id,'ASR_RESULT_UNAVAILABLE');throw new Error(String(e.message).startsWith('API_HTTP_')?e.message:'ASR_RESULT_UNAVAILABLE'); }
 }
 export async function semantic(instructions, input, schema, { fetcher = fetch, book = ledger, signal } = {}) {
