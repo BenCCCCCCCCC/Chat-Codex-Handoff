@@ -219,11 +219,11 @@ try{
     await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await openHistoryAttempt();
     const start=provenanceRequests.length;rejectStarter=outcome==='quote';failTeach=outcome==='request';
     await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);
-    await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && ${outcome==='success'?"document.getElementById('chatRecovery').hidden":"document.getElementById('notice').textContent.includes('"+(outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE')+"')"}`);
+    await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && ${outcome==='success'?"document.querySelectorAll('.message.assistant').length===1 && document.getElementById('chatRecovery').hidden":"document.getElementById('notice').textContent.includes('"+(outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE')+"')"}`);
     assert.equal(provenanceRequests.length,start+1);assert.equal(provenanceRequests.at(-1).mode,mode);
     const internal=provenanceRequests.at(-1).message;
     assert.deepEqual((await evaluate(all))[0].messages.filter(m=>m.role==='user').map(m=>m.text),['Earlier actual question']);assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),1);
-    for(const text of ['First real answer','Next real question']){await evaluate(`document.getElementById('chat').value=${JSON.stringify(text)};document.getElementById('chatForm').requestSubmit()`);await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && document.getElementById('chatRecovery').hidden`);}
+    for(const text of ['First real answer','Next real question']){const count=await evaluate(`document.querySelectorAll('.message.assistant').length`);await evaluate(`document.getElementById('chat').value=${JSON.stringify(text)};document.getElementById('chatForm').requestSubmit()`);await until(`document.querySelectorAll('.message.assistant').length===${count+1} && document.getElementById('chatRecovery').hidden`);}
     const saved=(await evaluate(all))[0];assert.deepEqual(saved.messages.filter(m=>m.role==='user').map(m=>m.text),['Earlier actual question','First real answer','Next real question']);
     assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),3);assert(saved.messages.every(m=>m.text!==internal));assert(provenanceRequests.slice(start).every(r=>r.history.every(m=>m.text!==internal)));
     assert(provenanceRequests.at(-1).history.some(m=>m.text==='First real answer'));
@@ -433,7 +433,7 @@ try{
     await click('revise');assert(await evaluate(`!document.getElementById('workspace').hidden`));
     await evaluate('IDBObjectStore.prototype.put=window.originalPut');await click('retrySave');await until(`document.getElementById('storageRecovery').hidden`);assert.equal((await evaluate(all))[0].attempts.length,count+1);
   });
-  await check('pending semantic navigation cannot replace topic or misattach result',async()=>{delaySemantic=1200;const id=(await evaluate(all))[0].id;await evaluate(`document.getElementById('chat').value='还有问题';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('notice').textContent.includes('梳理')`);await click('revise');assert(await evaluate(`!document.getElementById('workspace').hidden`));await until(`document.getElementById('chatRecovery').hidden`);assert.equal((await evaluate(all))[0].id,id);delaySemantic=0;});
+  await check('pending semantic navigation cannot replace topic or misattach result',async()=>{delaySemantic=1200;const id=(await evaluate(all))[0].id;await evaluate(`document.getElementById('chat').value='还有问题';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('workspace').hasAttribute('aria-busy')`);await click('revise');assert(await evaluate(`!document.getElementById('workspace').hidden`));await until(`document.getElementById('chatRecovery').hidden`);assert.equal((await evaluate(all))[0].id,id);delaySemantic=0;});
   await check('seven-day expiry cleans linked objects but preserves live topic',async()=>{await evaluate(`(async()=>{const {openStore}=await import('/storage.mjs');const db=await openStore();await db.put({id:'expired-engineering',createdAt:Date.now()-8*86400000,source:{title:'expired'},attempts:[{audio:new Blob(['test'])}]});db.close();})()`);await reloadPage();await until(`!document.getElementById('workspace').hidden`);assert.equal((await evaluate(all)).length,1);});
   await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(join(root,'browser-learning.png'),Buffer.from(r.data,'base64')));
   await check('source revision creates distinct record, preserves prior source/attempts',async()=>{const before=(await evaluate(all))[0];await click('revise');await evaluate(`document.getElementById('source').value='新版规则：只有土壤干燥时才浇水。'`);await click('learn');await until(`document.querySelectorAll('.message.assistant').length===1`);const t=await evaluate(all);assert.equal(t.length,2);assert(t.some(x=>x.id===before.id&&x.source.text===before.source.text&&x.attempts.length===before.attempts.length));});
@@ -464,11 +464,17 @@ try{
     const a=(await evaluate(all))[0].attempts[0];assert(a.reports.some(r=>r.channel==='process'&&r.processEvidence.some(e=>e.type==='short_pause_cluster'&&e.confirmation==='human_confirmed')));
   });
   await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(join(root,'browser-real-asr.png'),Buffer.from(r.data,'base64')));
-  await check('stale history navigation blocked and pending delete-all prevents late restoration',async()=>{
+  await check('pending chat blocks stale navigation and deletion; explicit deletion after completion removes records',async()=>{
     await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'other-topic',createdAt:Date.now(),source:{id:'other-source',title:'不得切入',text:'工程材料'},goals:[],messages:[],attempts:[],mode:'learn'});db.close();})()`);
-    await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=5`);delaySemantic=1200;await evaluate(`document.getElementById('chat').value='慢请求';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('notice').textContent.includes('梳理')`);
+    await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=5`);delaySemantic=1200;await evaluate(`document.getElementById('chat').value='慢请求';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('workspace').hasAttribute('aria-busy')`);
     await evaluate(`[...document.querySelectorAll('#historyList .history-continue')].at(-1).click()`);assert.notEqual(await evaluate(`document.getElementById('topicTitle').textContent`),'不得切入');
-    await click('deleteAll');await until(`document.getElementById('workspace').hidden`);await pause(1500);assert.equal((await evaluate(all)).length,0);assert(await evaluate(`document.getElementById('workspace').hidden`));delaySemantic=0;
+    const count=(await evaluate(all)).length;
+    await evaluate(`document.getElementById('deleteAll').click()`);
+    assert(await evaluate(`!document.getElementById('deleteDialog').open && document.getElementById('notice').textContent.includes('稍后')`));
+    assert.equal((await evaluate(all)).length,count);
+    await until(`document.getElementById('chatRecovery').hidden`);delaySemantic=0;
+    await click('deleteAll');await until(`document.getElementById('workspace').hidden`);
+    assert.equal((await evaluate(all)).length,0);
   });
   await check('real supported punctuation repair renders no remediation; valid gaps retain focus actions',async()=>{
     const live=JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r3/LUNA_LOGIC_REV3.json',import.meta.url))).cases.find(c=>c.id==='self_repair');
