@@ -87,9 +87,12 @@ test('a questionable real-material prompt pauses grading, preserves drafts and h
   assert.equal(round.draft,'padding 没有给出，无法确定。');
   const hit=searchRecords([h.topic],'116px')[0].hits[0];
   assert.equal(hit.label,'待复核反馈');assert.equal(hit.target.answerId,'a');
+  await flow.start();
+  assert(!h.calls[0].history.some(m=>m.text===c.invalid.question),'a held question must not become model context for a replacement');
+  await flow.select(round.id);
   await flow.withdrawFlag();assert.equal(round.review,null);
-  assert.equal(h.calls.length,0,'withdrawal alone does not dispatch');
-  await flow.answer();assert.equal(h.calls.length,1,'an explicit later submission resumes the existing AI exercise');
+  assert.equal(h.calls.length,1,'withdrawal alone does not dispatch');
+  await flow.answer();assert.equal(h.calls.length,2,'an explicit later submission resumes the existing AI exercise');
 });
 
 test('local question binding failure pauses the task instead of blaming or discarding an answer',async()=>{

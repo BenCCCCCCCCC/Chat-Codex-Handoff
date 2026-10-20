@@ -98,7 +98,8 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       const operation = topic.practiceRequest = {status:'pending', createdAt:now()};
       try {
         await save(topic);
-        const history = [...topic.messages, ...rounds.slice(-3).map(r => ({role:'assistant', text:r.question}))].slice(-6);
+        const history = [...topic.messages, ...rounds.filter(r=>r.review?.status!=='held').slice(-3)
+          .map(r => ({role:'assistant', text:r.question}))].slice(-6);
         const result = await request('/api/teach', {source:topic.source, setupContext:topic.setupContext,
           mode:'apply', message:'给我一个新的、相关的应用情境，不要先公布答案。', focus:null, history});
         const round = {id:uid(), createdAt:now(), question:result.value.question,
