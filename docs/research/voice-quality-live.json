@@ -1,0 +1,928 @@
+{
+  "kind": "REVIEWED_LIVE_SYNTHETIC_BASELINE",
+  "at": "2026-10-20T12:35:31.230Z",
+  "approvedBudgetUSD": 0.1,
+  "requests": 9,
+  "reservedUSD": 0.04556550000000001,
+  "knownCostUSD": 0.004224,
+  "newUnsettled": 0,
+  "receiptSHA256": "921dbd393170f989fc483e03785c0252d55387f35a24a05cfcbc70ed4d31fb19",
+  "audioHash": "7e291bc01d614dfb34068ab3d2d9f4d1217f329ba14b6e4fdb7cea919aba6206",
+  "normalizedAudioHash": "e0fd4a9bf9857fb1446db6b82c8c36b3a4fc0f076f9e8eb7f196b37ee9cfbac5",
+  "contentFixtureHash": "b0e871dd7b07cb736a89f3ca2b7f7ebd3f8dc67edbd543111b6d24fb1f958adc",
+  "promptHash": "63e24f56e5463b4648bbc5a6f591115503709596c0846edea1eefe91e7a79746",
+  "asr": {
+    "result": {
+      "text": "只有土壤乾燥時才給這盆植物澆水,土壤濕潤時不要澆水。",
+      "spans": [
+        {
+          "id": "s0",
+          "start": 0,
+          "end": 6.460000038146973,
+          "text": "只有土壤乾燥時才給這盆植物澆水,土壤濕潤時不要澆水。"
+        }
+      ],
+      "words": [
+        {
+          "id": "w0",
+          "start": 0,
+          "end": 0.5,
+          "text": "只有",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w1",
+          "start": 0.5,
+          "end": 0.800000011920929,
+          "text": "土",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w2",
+          "start": 0.800000011920929,
+          "end": 0.9800000190734863,
+          "text": "壤",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w3",
+          "start": 0.9800000190734863,
+          "end": 1.2000000476837158,
+          "text": "乾",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w4",
+          "start": 1.2000000476837158,
+          "end": 1.3799999952316284,
+          "text": "燥",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w5",
+          "start": 1.3799999952316284,
+          "end": 1.6799999475479126,
+          "text": "時",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w6",
+          "start": 1.6799999475479126,
+          "end": 1.9600000381469727,
+          "text": "才",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w7",
+          "start": 1.9600000381469727,
+          "end": 2.140000104904175,
+          "text": "給",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w8",
+          "start": 2.140000104904175,
+          "end": 2.3399999141693115,
+          "text": "這",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w9",
+          "start": 2.3399999141693115,
+          "end": 2.5199999809265137,
+          "text": "盆",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w10",
+          "start": 2.5199999809265137,
+          "end": 2.7200000286102295,
+          "text": "植",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w11",
+          "start": 2.7200000286102295,
+          "end": 2.940000057220459,
+          "text": "物",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w12",
+          "start": 2.940000057220459,
+          "end": 3.140000104904175,
+          "text": "澆",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w13",
+          "start": 3.140000104904175,
+          "end": 3.5799999237060547,
+          "text": "水",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w14",
+          "start": 4.579999923706055,
+          "end": 4.579999923706055,
+          "text": "土",
+          "usable": false,
+          "timingQuality": "UNUSABLE_ZERO_DURATION"
+        },
+        {
+          "id": "w15",
+          "start": 4.579999923706055,
+          "end": 4.920000076293945,
+          "text": "壤",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w16",
+          "start": 4.920000076293945,
+          "end": 5.139999866485596,
+          "text": "濕",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w17",
+          "start": 5.139999866485596,
+          "end": 5.260000228881836,
+          "text": "潤",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w18",
+          "start": 5.260000228881836,
+          "end": 5.619999885559082,
+          "text": "時",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w19",
+          "start": 5.619999885559082,
+          "end": 5.960000038146973,
+          "text": "不要",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w20",
+          "start": 5.960000038146973,
+          "end": 6.239999771118164,
+          "text": "澆",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        },
+        {
+          "id": "w21",
+          "start": 6.239999771118164,
+          "end": 6.460000038146973,
+          "text": "水。",
+          "usable": true,
+          "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+        }
+      ],
+      "wordTiming": {
+        "status": "PARTIAL",
+        "count": 22,
+        "unusableWordIds": [
+          "w14"
+        ],
+        "missing": false
+      },
+      "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+      "reviewRequired": true,
+      "duration": 7.31,
+      "model": "whisper-1",
+      "reservationId": "f88bd027-01d0-45c0-a981-4a49d7ab64d2",
+      "requestId": "req_7e72cf21c01f4c289daac06ea0ac65b5"
+    },
+    "score": {
+      "reference": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。",
+      "text": "只有土壤乾燥時才給這盆植物澆水,土壤濕潤時不要澆水。",
+      "edits": 9,
+      "insertions": 0,
+      "deletions": 0,
+      "substitutions": 9,
+      "referenceCharacters": 24,
+      "hypothesisCharacters": 24,
+      "cer": 0.375,
+      "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged",
+      "timing": {
+        "valid": true,
+        "spans": 1,
+        "words": 22,
+        "wordTiming": {
+          "status": "PARTIAL",
+          "count": 22,
+          "unusableWordIds": [
+            "w14"
+          ],
+          "missing": false
+        }
+      },
+      "criticalTerms": [
+        {
+          "term": "只有",
+          "present": true
+        },
+        {
+          "term": "才",
+          "present": true
+        },
+        {
+          "term": "不要",
+          "present": true
+        }
+      ],
+      "timingAccuracy": "NOT_MEASURED",
+      "manualReview": "REQUIRED"
+    },
+    "review": {
+      "by": "Codex manual comparison",
+      "semanticContent": "All nine edits are simplified/traditional variants. Negation and condition direction preserved.",
+      "timing": "One zero-duration word, w14; timing accuracy against manually aligned audio not measured.",
+      "scope": "One 7.31-second synthetic Huihui sample only."
+    }
+  },
+  "cases": [
+    {
+      "id": "correct_with_pauses",
+      "source": {
+        "id": "engineering-source-1",
+        "title": "自编工程材料：植物浇水",
+        "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+      },
+      "fixture": {
+        "id": "correct_with_pauses",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "quality-confirmed-v1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "嗯，浇水的必要条件是土壤干燥。湿润时不要浇水。干燥是否一定要浇，材料没说。"
+          }
+        ],
+        "assistance": "unknown",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "result": {
+        "value": {
+          "sourceId": "engineering-source-1",
+          "attemptId": "correct_with_pauses",
+          "transcriptVersion": "quality-confirmed-v1",
+          "findings": [
+            {
+              "status": "supported",
+              "message": "你正确指出了“只有土壤干燥时才给这盆植物浇水”表达的必要条件：浇水必须以土壤干燥为前提。",
+              "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+              "spanId": "s0",
+              "quote": "浇水的必要条件是土壤干燥",
+              "eventId": null,
+              "repair": ":继续保持方向：材料没有说明土壤干燥时一定要浇水。"
+            },
+            {
+              "status": "supported",
+              "message": "你正确复述了土壤湿润时不要浇水。",
+              "sourceQuote": "土壤湿润时不要浇水。",
+              "spanId": "s0",
+              "quote": "湿润时不要浇水",
+              "eventId": null,
+              "repair": "可继续区分“不能在湿润时浇水”和“干燥时一定要浇水”：后者材料未说明。"
+            },
+            {
+              "status": "supported",
+              "message": "你明确说明材料没有给出“土壤干燥时一定要浇水”的结论，避免了把必要条件误读为充分条件。",
+              "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+              "spanId": "s0",
+              "quote": "干燥是否一定要浇，材料没说",
+              "eventId": null,
+              "repair": "无需修正；如需进一步作答，可说明材料只支持“浇水→土壤干燥”，不支持“土壤干燥→浇水”。"
+            }
+          ]
+        },
+        "usage": {
+          "input_tokens": 678,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 386,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1064
+        },
+        "model": "gpt-5.6-luna",
+        "reservationId": "afed5a45-401d-4954-8742-01f46d543632",
+        "requestId": "req_5216fd7cb3864b5f9e53e9ab0ec5bbcb"
+      },
+      "score": {
+        "expectation": "correct",
+        "verdictPass": true,
+        "evidenceValid": true,
+        "error": null,
+        "statuses": [
+          "supported",
+          "supported",
+          "supported"
+        ],
+        "nonInformativeRepairIndices": [],
+        "reasonAndRepairReview": "REQUIRED"
+      },
+      "review": {
+        "by": "Codex manual reading",
+        "notes": [
+          "No material contradiction found against the supplied rule; not a general accuracy guarantee."
+        ]
+      }
+    },
+    {
+      "id": "fluent_wrong",
+      "source": {
+        "id": "engineering-source-1",
+        "title": "自编工程材料：植物浇水",
+        "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+      },
+      "fixture": {
+        "id": "fluent_wrong",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "quality-confirmed-v1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "土壤越湿越要浇水，湿润时也要浇水。"
+          }
+        ],
+        "assistance": "unknown",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "result": {
+        "value": {
+          "sourceId": "engineering-source-1",
+          "attemptId": "fluent_wrong",
+          "transcriptVersion": "quality-confirmed-v1",
+          "findings": [
+            {
+              "status": "incorrect",
+              "message": "你的说法与材料相反：材料明确说土壤湿润时不要浇水；“只有土壤干燥时才给这盆植物浇水”至少支持浇水时土壤必须干燥。",
+              "sourceQuote": "土壤湿润时不要浇水。",
+              "spanId": "s0",
+              "quote": "土壤越湿越要浇水，湿润时也要浇水。",
+              "eventId": null,
+              "repair": "请改述为：土壤湿润时不要浇水；只有土壤干燥时才给植物浇水。"
+            }
+          ]
+        },
+        "usage": {
+          "input_tokens": 660,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 183,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 843
+        },
+        "model": "gpt-5.6-luna",
+        "reservationId": "768c6c92-e4af-48e4-b413-fd560d4fd75b",
+        "requestId": "req_2463fd43f7424b07bdfb69283274d3db"
+      },
+      "score": {
+        "expectation": "wrong",
+        "verdictPass": true,
+        "evidenceValid": true,
+        "error": null,
+        "statuses": [
+          "incorrect"
+        ],
+        "nonInformativeRepairIndices": [],
+        "reasonAndRepairReview": "REQUIRED"
+      },
+      "review": {
+        "by": "Codex manual reading",
+        "notes": [
+          "No material contradiction found against the supplied rule; not a general accuracy guarantee."
+        ]
+      }
+    },
+    {
+      "id": "omitted_condition",
+      "source": {
+        "id": "engineering-source-1",
+        "title": "自编工程材料：植物浇水",
+        "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+      },
+      "fixture": {
+        "id": "omitted_condition",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "quality-confirmed-v1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "给这盆植物浇水。"
+          }
+        ],
+        "assistance": "unknown",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "result": {
+        "value": {
+          "sourceId": "engineering-source-1",
+          "attemptId": "omitted_condition",
+          "transcriptVersion": "quality-confirmed-v1",
+          "findings": [
+            {
+              "status": "missing",
+              "message": "未表达“只有土壤干燥时才给这盆植物浇水”中的条件关系，无法判断你是否理解了浇水条件。",
+              "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+              "spanId": null,
+              "quote": null,
+              "eventId": null,
+              "repair": "请说明：什么情况下才可以给这盆植物浇水？"
+            }
+          ]
+        },
+        "usage": {
+          "input_tokens": 648,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 134,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 782
+        },
+        "model": "gpt-5.6-luna",
+        "reservationId": "775b19b7-f9eb-499d-b93d-672f9ba890ed",
+        "requestId": "req_a0a25f6ffc1a43088773ddc5b917fa74"
+      },
+      "score": {
+        "expectation": "missing",
+        "verdictPass": true,
+        "evidenceValid": true,
+        "error": null,
+        "statuses": [
+          "missing"
+        ],
+        "nonInformativeRepairIndices": [],
+        "reasonAndRepairReview": "REQUIRED"
+      },
+      "review": {
+        "by": "Codex manual reading",
+        "notes": [
+          "No material contradiction found against the supplied rule; not a general accuracy guarantee."
+        ]
+      }
+    },
+    {
+      "id": "valid_paraphrase",
+      "source": {
+        "id": "engineering-source-1",
+        "title": "自编工程材料：植物浇水",
+        "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+      },
+      "fixture": {
+        "id": "valid_paraphrase",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "quality-confirmed-v1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "还湿着就别加水。要浇水，至少得先满足土壤干燥；干燥本身不保证要浇。"
+          }
+        ],
+        "assistance": "unknown",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "result": {
+        "value": {
+          "sourceId": "engineering-source-1",
+          "attemptId": "valid_paraphrase",
+          "transcriptVersion": "quality-confirmed-v1",
+          "findings": [
+            {
+              "status": "supported",
+              "message": "你准确表达了“只有土壤干燥时才给植物浇水”的必要条件：要浇水，土壤必须干燥；同时也正确说明土壤干燥并不必然意味着一定要浇水。",
+              "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+              "spanId": "s0",
+              "quote": "要浇水，至少得先满足土壤干燥；干燥本身不保证要浇。",
+              "eventId": null,
+              "repair": "]"
+            }
+          ]
+        },
+        "usage": {
+          "input_tokens": 676,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 170,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 846
+        },
+        "model": "gpt-5.6-luna",
+        "reservationId": "96c2b1df-4487-4831-8de5-8917738e39f2",
+        "requestId": "req_2cbfd9135efb468a8d5b3133f449e66a"
+      },
+      "score": {
+        "expectation": "correct",
+        "verdictPass": true,
+        "evidenceValid": true,
+        "error": null,
+        "statuses": [
+          "supported"
+        ],
+        "nonInformativeRepairIndices": [
+          0
+        ],
+        "reasonAndRepairReview": "REQUIRED"
+      },
+      "review": {
+        "by": "Codex manual reading",
+        "notes": [
+          "repair is only ]; verdict and explanation are usable, but the advice field is not. Supported advice is not displayed as remediation by the product."
+        ]
+      }
+    },
+    {
+      "id": "self_repair",
+      "source": {
+        "id": "engineering-source-1",
+        "title": "自编工程材料：植物浇水",
+        "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+      },
+      "fixture": {
+        "id": "self_repair",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "quality-confirmed-v1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "干了就一定要浇，不对，我说过头了。浇水必须土壤干燥，但干燥不代表一定要浇；湿润时不要浇。"
+          }
+        ],
+        "assistance": "unknown",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "result": {
+        "value": {
+          "sourceId": "engineering-source-1",
+          "attemptId": "self_repair",
+          "transcriptVersion": "quality-confirmed-v1",
+          "findings": [
+            {
+              "status": "supported",
+              "message": "你最终的表述准确保留了必要条件：浇水必须以土壤干燥为前提；同时也正确说明土壤湿润时不要浇水。",
+              "sourceQuote": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。",
+              "spanId": "s0",
+              "quote": "浇水必须土壤干燥，但干燥不代表一定要浇；湿润时不要浇。",
+              "eventId": null,
+              "repair": "继续注意“只有……才……”只表达必要条件：土壤干燥是浇水的必要条件，但材料没有说明土壤干燥时是否一定要浇水。"
+            }
+          ]
+        },
+        "usage": {
+          "input_tokens": 683,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 209,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 892
+        },
+        "model": "gpt-5.6-luna",
+        "reservationId": "dda5e571-b392-43ac-a978-6dee17f56210",
+        "requestId": "req_de6ec43f0b7f403f99e6b744b97187a1"
+      },
+      "score": {
+        "expectation": "correct",
+        "verdictPass": true,
+        "evidenceValid": true,
+        "error": null,
+        "statuses": [
+          "supported"
+        ],
+        "nonInformativeRepairIndices": [],
+        "reasonAndRepairReview": "REQUIRED"
+      },
+      "review": {
+        "by": "Codex manual reading",
+        "notes": [
+          "No material contradiction found against the supplied rule; not a general accuracy guarantee."
+        ]
+      }
+    },
+    {
+      "id": "plant_sufficient_strengthening",
+      "source": {
+        "id": "engineering-source-1",
+        "title": "自编工程材料：植物浇水",
+        "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+      },
+      "fixture": {
+        "id": "plant_sufficient_strengthening",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "quality-confirmed-v1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "只要土壤干燥就一定要给这盆植物浇水。"
+          }
+        ],
+        "assistance": "unknown",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "result": {
+        "value": {
+          "sourceId": "engineering-source-1",
+          "attemptId": "plant_sufficient_strengthening",
+          "transcriptVersion": "quality-confirmed-v1",
+          "findings": [
+            {
+              "status": "incorrect",
+              "message": "材料只表达“土壤干燥”是浇水的必要条件，不能推出“只要土壤干燥就一定要浇水”。",
+              "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+              "spanId": "s0",
+              "quote": "只要土壤干燥就一定要给这盆植物浇水。",
+              "eventId": null,
+              "repair": "请改述为：只有在土壤干燥时才给这盆植物浇水；不要把必要条件改成充分条件。"
+            }
+          ]
+        },
+        "usage": {
+          "input_tokens": 661,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 174,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 835
+        },
+        "model": "gpt-5.6-luna",
+        "reservationId": "2c2c0f77-fa21-4c43-aabb-036ca65098a4",
+        "requestId": "req_523f8f7d74794bc5904b7b7dad27e5f2"
+      },
+      "score": {
+        "expectation": "unsupported_strengthening",
+        "verdictPass": true,
+        "evidenceValid": true,
+        "error": null,
+        "statuses": [
+          "incorrect"
+        ],
+        "nonInformativeRepairIndices": [],
+        "reasonAndRepairReview": "REQUIRED"
+      },
+      "review": {
+        "by": "Codex manual reading",
+        "notes": [
+          "No material contradiction found against the supplied rule; not a general accuracy guarantee."
+        ]
+      }
+    },
+    {
+      "id": "ticket_sufficient_strengthening",
+      "source": {
+        "id": "engineering-source-ticket",
+        "title": "自编工程材料：入场条件",
+        "text": "只有持票者才可以入场。"
+      },
+      "fixture": {
+        "id": "ticket_sufficient_strengthening",
+        "sourceId": "engineering-source-ticket",
+        "transcriptVersion": "quality-confirmed-v1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "只要持票就一定可以入场。"
+          }
+        ],
+        "assistance": "unknown",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "result": {
+        "value": {
+          "sourceId": "engineering-source-ticket",
+          "attemptId": "ticket_sufficient_strengthening",
+          "transcriptVersion": "quality-confirmed-v1",
+          "findings": [
+            {
+              "status": "incorrect",
+              "message": "来源只表达“持票者可以入场”是必要条件，即入场者必须持票；不能据此推出“只要持票就一定可以入场”。",
+              "sourceQuote": "只有持票者才可以入场。",
+              "spanId": "s0",
+              "quote": "只要持票就一定可以入场。",
+              "eventId": null,
+              "repair": "请改为：只有持票者才可以入场；或“可以入场的人都必须持票”。"
+            }
+          ]
+        },
+        "usage": {
+          "input_tokens": 630,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 148,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 778
+        },
+        "model": "gpt-5.6-luna",
+        "reservationId": "82085229-a373-4cae-9ff7-3296a1db20f8",
+        "requestId": "req_9ea175db58984dbeac62083a105b38e7"
+      },
+      "score": {
+        "expectation": "unsupported_strengthening",
+        "verdictPass": true,
+        "evidenceValid": true,
+        "error": null,
+        "statuses": [
+          "incorrect"
+        ],
+        "nonInformativeRepairIndices": [],
+        "reasonAndRepairReview": "REQUIRED"
+      },
+      "review": {
+        "by": "Codex manual reading",
+        "notes": [
+          "The opening phrase calls 持票者可以入场 a necessary condition; the following 入场者必须持票 and explicit rejection of sufficiency are correct, but wording should be clearer."
+        ]
+      }
+    },
+    {
+      "id": "self_repair_repeat",
+      "source": {
+        "id": "engineering-source-1",
+        "title": "自编工程材料：植物浇水",
+        "text": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。"
+      },
+      "fixture": {
+        "id": "self_repair_repeat",
+        "sourceId": "engineering-source-1",
+        "transcriptVersion": "quality-confirmed-v1",
+        "duration": 20,
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 20,
+            "text": "干了就一定要浇，不对，我说过头了。浇水必须土壤干燥，但干燥不代表一定要浇；湿润时不要浇。"
+          }
+        ],
+        "assistance": "unknown",
+        "kind": "full",
+        "focus": null,
+        "reviewed": true,
+        "interrupted": false
+      },
+      "result": {
+        "value": {
+          "sourceId": "engineering-source-1",
+          "attemptId": "self_repair_repeat",
+          "transcriptVersion": "quality-confirmed-v1",
+          "findings": [
+            {
+              "status": "supported",
+              "message": "你最终表达的条件方向正确：浇水必须以土壤干燥为前提；这对应“只有土壤干燥时才给这盆植物浇水”。",
+              "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+              "spanId": "s0",
+              "quote": "浇水必须土壤干燥",
+              "eventId": null,
+              "repair": "已正确修正，无需再次修改。"
+            },
+            {
+              "status": "supported",
+              "message": "你正确说明了“土壤干燥”并不意味着一定要浇水；材料只规定浇水时土壤必须干燥，并未说干燥时必然浇水。",
+              "sourceQuote": "只有土壤干燥时才给这盆植物浇水。",
+              "spanId": "s0",
+              "quote": "但干燥不代表一定要浇",
+              "eventId": null,
+              "repair": "继续注意“只有……才……”表达的是必要条件，不是充分条件。"
+            },
+            {
+              "status": "supported",
+              "message": "你正确保留了材料中的禁止条件：土壤湿润时不要浇水。",
+              "sourceQuote": "土壤湿润时不要浇水。",
+              "spanId": "s0",
+              "quote": "湿润时不要浇",
+              "eventId": null,
+              "repair": "已正确表达，无需再次修改。"
+            }
+          ]
+        },
+        "usage": {
+          "input_tokens": 684,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 341,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 1025
+        },
+        "model": "gpt-5.6-luna",
+        "reservationId": "48e063b3-aee0-4848-b26d-1a6a7061eccc",
+        "requestId": "req_f53dedde0a3f43289ed6b4763caf5830"
+      },
+      "score": {
+        "expectation": "correct",
+        "verdictPass": true,
+        "evidenceValid": true,
+        "error": null,
+        "statuses": [
+          "supported",
+          "supported",
+          "supported"
+        ],
+        "nonInformativeRepairIndices": [],
+        "reasonAndRepairReview": "REQUIRED"
+      },
+      "review": {
+        "by": "Codex manual reading",
+        "notes": [
+          "No material contradiction found against the supplied rule; not a general accuracy guarantee."
+        ]
+      }
+    }
+  ],
+  "repeatedSelfRepair": "Both verdicts accept the corrected final position; finding count differs (1 vs 3). One repeat does not establish stability.",
+  "limitations": "Synthetic single voice; no natural speech, noise, number/terminology coverage or learning efficacy validation. Content uses fixed reviewed text, independently of ASR."
+}

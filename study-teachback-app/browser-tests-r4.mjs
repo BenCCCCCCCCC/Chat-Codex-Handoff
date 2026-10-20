@@ -1,3 +1,4 @@
+import {audioChecks} from './browser-audio-checks.mjs';
 import {contextChecks} from './browser-context-checks.mjs';
 import {workspaceChecks} from './browser-workspace-checks.mjs';
 import { spawn } from 'node:child_process';
@@ -11,6 +12,7 @@ import { waveDuration,normalizeASR } from './core.mjs';
 import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 if(!process.env.STUDY_TEST_OUTPUT)throw Error('Run through run-offline-tests.mjs browser');
 const root=process.env.STUDY_TEST_OUTPUT+'/';mkdirSync(root,{recursive:true});
+const audioOnly=process.argv.includes('--audio-only');
 const contextOnly=process.argv.includes('--context-only');
 const workspaceOnly=process.argv.includes('--workspace-only');
 const environmentProbe=process.argv.includes('--environment-probe'),recoveryOnly=process.argv.includes('--recovery-only');
@@ -76,9 +78,10 @@ try{
   await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='deferredDenied')await new Promise((resolve,reject)=>window.rejectPermission=()=>reject(new DOMException('test denied','NotAllowedError')));if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
-  if(!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});
-  if(!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly&&!recoveryOnly)await contextChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,requests:provenanceRequests,setFail:()=>{failTeach=true;}});
-  if(!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly){
+  if(!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await audioChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,setFailASR:value=>{failASR=value;}});
+  if(!audioOnly&&!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});
+  if(!audioOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly&&!recoveryOnly)await contextChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,requests:provenanceRequests,setFail:()=>{failTeach=true;}});
+  if(!audioOnly&&!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!workspaceOnly){
     await check('chat failure reload and explicit retry preserve original input/context with one dispatch',async()=>{
       failTeach=true;
       await evaluate(`document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);
@@ -190,7 +193,7 @@ try{
       await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1 && document.getElementById('notice').textContent.includes('转写完成')`);
       await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
     });
-  }else if(!contextOnly&&!recoveryOnly&&!workspaceOnly){
+  }else if(!audioOnly&&!contextOnly&&!recoveryOnly&&!workspaceOnly){
   for(const setupContext of [{focus:'',known:''},{focus:'条件',known:''},{focus:'',known:'了解定义'},{focus:'条件',known:'了解定义'}])await check(`setup source-only title and persisted metadata ${JSON.stringify(setupContext)}`,async()=>{
     const before=provenanceRequests.length;
     await evaluate(`document.getElementById('title').value='';document.getElementById('source').value='只有土壤干燥才浇水。';document.getElementById('setupFocus').value=${JSON.stringify(setupContext.focus)};document.getElementById('setupKnown').value=${JSON.stringify(setupContext.known)};`);
@@ -417,7 +420,7 @@ try{
   await check('review confirmation survives history reload without implying playback',async()=>{assert(await evaluate(`document.getElementById('reviewHint').textContent.includes('这不表示音频已回听') && document.querySelector('#transcript button').textContent.includes('可选回听') && document.getElementById('player').controls`));});
   await check('API timeout then budget stop preserves one original attempt across explicit retry',async()=>{failASR='API_RESULT_UNAVAILABLE';await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(1100);await click('finish');await until(`document.getElementById('notice').textContent.includes('API_RESULT_UNAVAILABLE')`);let t=(await evaluate(all))[0],a=t.attempts.at(-1);assert.equal(t.attempts.length,3);const identity=a.id,size=a.audio.size;failASR='BUDGET_STOP';await click('retryAsr');await until(`document.getElementById('notice').textContent.includes('预算')`);await shot('budget-stop','notice');t=(await evaluate(all))[0];assert.equal(t.attempts.length,3);assert.equal(t.attempts.at(-1).id,identity);assert.equal(t.attempts.at(-1).audio.size,size);failASR=null;});
   await check('device interruption preserves original and skips semantic diagnosis',async()=>{await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await evaluate(`window.testTracks[0].dispatchEvent(new Event('ended'))`);await until(`document.getElementById('notice').textContent.includes('采集中断')`);assert((await evaluate(all))[0].attempts.at(-1).interrupted);});
-  await check('decode failure retains original, shows retry state',async()=>{await evaluate(`window.savedDecode=AudioContext.prototype.decodeAudioData;AudioContext.prototype.decodeAudioData=async()=>{throw new DOMException('test','EncodingError')}`);await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await click('finish');await until(`document.getElementById('notice').textContent.includes('LOCAL_ERROR')`);assert((await evaluate(all))[0].attempts.at(-1).audio.size>0);await evaluate(`AudioContext.prototype.decodeAudioData=window.savedDecode`);});
+  await check('decode failure retains original, shows retry state',async()=>{await evaluate(`window.savedDecode=AudioContext.prototype.decodeAudioData;AudioContext.prototype.decodeAudioData=async()=>{throw new DOMException('test','EncodingError')}`);await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await click('finish');await until(`document.getElementById('notice').textContent.includes('无法读取')`);assert((await evaluate(all))[0].attempts.at(-1).audio.size>0);await evaluate(`AudioContext.prototype.decodeAudioData=window.savedDecode`);});
   await check('export contains exact audio bytes, raw/corrected versions, reports and source',async()=>{
     await evaluate(`window.exportBlobs=new Map();window.originalCreate=URL.createObjectURL;URL.createObjectURL=b=>{const u=window.originalCreate(b);window.exportBlobs.set(u,b);return u;};window.anchorClick=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.download)window.exportBlob=window.exportBlobs.get(this.href);else window.anchorClick.call(this);};`);
     await click('export');await until('!!window.exportBlob');
@@ -513,7 +516,7 @@ try{
     await evaluate(`document.querySelector('#historyList .danger').click()`);await click('deleteConfirm');await until(`document.getElementById('historyList').textContent.includes('还没有')`);assert.equal((await evaluate(all)).length,0);await until(`document.activeElement.id==='historyTitle'`);
   });
   }
-  if(!contextOnly&&!environmentProbe&&!recoveryOnly&&!workspaceOnly&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
+  if(!audioOnly&&!contextOnly&&!environmentProbe&&!recoveryOnly&&!workspaceOnly&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
     await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'demo-preserve',createdAt:Date.now(),source:{title:'个人记录必须保留'},attempts:[]});db.close();})()`);
     const before=JSON.stringify(await evaluate(all)),requestIndex=network.length,dispatches=calls.length;
     await cdp('Page.navigate',{url:origin+'/demo'});await until(`document.getElementById('demoTitle')?.textContent.length>0`);

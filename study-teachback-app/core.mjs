@@ -47,7 +47,7 @@ export function attemptValue(a) {
   requireValue(a && Number.isFinite(a.duration) && a.duration > 0 && a.duration <= 180 && Array.isArray(a.spans) && a.spans.length > 0 && a.spans.length <= 150, 'INVALID_ATTEMPT');
   const spans = a.spans.map(s => spanValue(s, a.duration));
   requireValue(new Set(spans.map(s=>s.id)).size === spans.length && spans.every((s,i) => !i || s.start >= spans[i-1].start), 'INVALID_SPANS');
-  requireValue(['none','keywords','source'].includes(a.assistance), 'INVALID_ASSISTANCE');
+  requireValue(['none','keywords','source','unknown'].includes(a.assistance), 'INVALID_ASSISTANCE');
   requireValue(['full','partial'].includes(a.kind), 'INVALID_ATTEMPT_KIND');
   return { id: identifier(a.id), sourceId: identifier(a.sourceId), transcriptVersion: identifier(a.transcriptVersion), duration: a.duration, spans, assistance: a.assistance, kind: a.kind,
     focus: a.kind === 'partial' ? repairFocus(a.focus) : null, reviewed: a.reviewed === true, interrupted: a.interrupted === true };

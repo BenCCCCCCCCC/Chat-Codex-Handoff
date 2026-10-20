@@ -1,0 +1,273 @@
+{
+  "kind": "HISTORICAL_RESCORING_NO_NEW_API",
+  "sourceDate": "2026-09-10",
+  "newAPICalls": 0,
+  "asr": {
+    "path": "artifacts/study-teachback/build-01r2/SYNTHETIC_ASR_FIELDS.json",
+    "sha256": "746e5bc2d6061b5f0c438fe80ddb92949c4ffca877546ee73aa6c9656c957347",
+    "model": "whisper-1",
+    "sample": "Synthetic Huihui, 7.31 seconds",
+    "reference": "只有土壤干燥时才给这盆植物浇水。土壤湿润时不要浇水。",
+    "text": "只有土壤乾燥時才給這盆植物澆水,土壤濕潤時不要澆水。",
+    "edits": 9,
+    "insertions": 0,
+    "deletions": 0,
+    "substitutions": 9,
+    "referenceCharacters": 24,
+    "hypothesisCharacters": 24,
+    "cer": 0.375,
+    "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged",
+    "timing": {
+      "valid": true,
+      "spans": 1,
+      "words": 22,
+      "wordTiming": {
+        "status": "PARTIAL",
+        "count": 22,
+        "unusableWordIds": [
+          "w14"
+        ],
+        "missing": false
+      }
+    },
+    "criticalTerms": [
+      {
+        "term": "只有",
+        "present": true
+      },
+      {
+        "term": "才",
+        "present": true
+      },
+      {
+        "term": "不要",
+        "present": true
+      }
+    ],
+    "timingAccuracy": "NOT_MEASURED",
+    "manualReview": "REQUIRED",
+    "review": "Differences are traditional vs simplified characters; negation and condition direction preserved. One synthetic voice does not establish natural speech accuracy."
+  },
+  "content": [
+    {
+      "path": "artifacts/study-teachback/build-01r3/LUNA_LOGIC.json",
+      "sha256": "916871ea213e4fb4c975a3dbb1101fe3badb0a24e15b8feee0a920c3369d93d1",
+      "at": "2026-09-10T22:43:54.839Z",
+      "cases": [
+        {
+          "id": "correct_with_pauses",
+          "originalStatus": "PASS",
+          "expectation": "correct",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "supported",
+            "supported"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "fluent_wrong",
+          "originalStatus": "PASS",
+          "expectation": "wrong",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "incorrect"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "omitted_condition",
+          "originalStatus": "PASS",
+          "expectation": "missing",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "missing"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "valid_paraphrase",
+          "originalStatus": "PASS",
+          "expectation": "correct",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "supported",
+            "supported"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "self_repair",
+          "originalStatus": "FAIL",
+          "expectation": "correct",
+          "verdictPass": false,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "supported",
+            "incorrect"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "plant_sufficient_strengthening",
+          "originalStatus": "PASS",
+          "expectation": "unsupported_strengthening",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "incorrect"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "ticket_sufficient_strengthening",
+          "originalStatus": "PASS",
+          "expectation": "unsupported_strengthening",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "incorrect"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r3/LUNA_LOGIC_REV2.json",
+      "sha256": "c8c8cfe5138fad4e3aff7f70370e5f512462f41bf574e4130261bcf43a629e60",
+      "at": "2026-09-10T22:44:58.013Z",
+      "cases": [
+        {
+          "id": "correct_with_pauses",
+          "originalStatus": "BLOCKED",
+          "rescored": false,
+          "reason": "Historical record lacks fixed fixture/expectation; preserve original blocked result",
+          "category": "CHANNEL_LEAK"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/study-teachback/build-01r3/LUNA_LOGIC_REV3.json",
+      "sha256": "d8d8f4fb27eeb9f9e6b06839299996a6a86d4d9892fc7bea5c083000e0d2870a",
+      "at": "2026-09-10T22:45:39.472Z",
+      "cases": [
+        {
+          "id": "correct_with_pauses",
+          "originalStatus": "PASS",
+          "expectation": "correct",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "supported",
+            "supported"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "fluent_wrong",
+          "originalStatus": "PASS",
+          "expectation": "wrong",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "incorrect"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "omitted_condition",
+          "originalStatus": "PASS",
+          "expectation": "missing",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "missing"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "valid_paraphrase",
+          "originalStatus": "PASS",
+          "expectation": "correct",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "supported",
+            "supported"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "self_repair",
+          "originalStatus": "PASS",
+          "expectation": "correct",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "supported",
+            "supported",
+            "supported"
+          ],
+          "nonInformativeRepairIndices": [
+            0
+          ],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "plant_sufficient_strengthening",
+          "originalStatus": "PASS",
+          "expectation": "unsupported_strengthening",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "incorrect"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        },
+        {
+          "id": "ticket_sufficient_strengthening",
+          "originalStatus": "PASS",
+          "expectation": "unsupported_strengthening",
+          "verdictPass": true,
+          "evidenceValid": true,
+          "error": null,
+          "statuses": [
+            "incorrect"
+          ],
+          "nonInformativeRepairIndices": [],
+          "reasonAndRepairReview": "REQUIRED"
+        }
+      ]
+    }
+  ],
+  "limitations": "Historical revisions changed prompts/validation; not controlled model comparisons or current accuracy estimates. Verdict pass does not establish useful repair advice."
+}

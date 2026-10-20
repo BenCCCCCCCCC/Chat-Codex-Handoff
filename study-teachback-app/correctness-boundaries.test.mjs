@@ -40,7 +40,7 @@ for(const length of [2500,2501,4000])test(`C1 accepted Tutor ${length} character
 
 function confirmationHarness(){
   const nodes=new Map(),saved=[],visible=[],notices=[],pending=[];
-  const $=id=>{if(!nodes.has(id))nodes.set(id,{children:[],value:'',append(...x){this.children.push(...x);},replaceChildren(...x){this.children=x;if(id==='feedback')visible.length=0;},setAttribute(){},removeAttribute(){},focus(){this.focused=true;},scrollIntoView(){this.scrolled=true;}});return nodes.get(id);};
+  const $=id=>{if(!nodes.has(id))nodes.set(id,{classList:{toggle(){}},children:[],value:'',append(...x){this.children.push(...x);},replaceChildren(...x){this.children=x;if(id==='feedback')visible.length=0;},setAttribute(){},removeAttribute(){},focus(){this.focused=true;},scrollIntoView(){this.scrolled=true;}});return nodes.get(id);};
   const a={id:'attempt',source,duration:1,kind:'full',assistance:'none',audio:new Blob(['synthetic']),raw:{id:'raw',text:'Enter when open.',spans:[{id:'s0',start:0,end:1,text:'Enter when open.'}]},corrections:[],reports:[]};
   let saveGate=null;
   const context=vm.createContext({$,current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),

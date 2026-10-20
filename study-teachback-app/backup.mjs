@@ -58,7 +58,7 @@ export function decodeBackup(text) {
     }
     for (const a of t.attempts) {
       sourceValue(a.source); check(a.source.id===t.source.id && a.source.text===t.source.text);
-      date(a.createdAt); check(['full','partial'].includes(a.kind)); check(['none','keywords','source'].includes(a.assistance));
+      date(a.createdAt); check(['full','partial'].includes(a.kind)); check(['none','keywords','source','unknown'].includes(a.assistance));
       if (a.focus != null) string(a.focus,1000);
       // Failed/interrupted captures are still recoverable archives. Existing API
       // validation decides whether their duration permits further processing.
