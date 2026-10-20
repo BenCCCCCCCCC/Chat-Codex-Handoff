@@ -1,0 +1,10 @@
+# Local output only. Existing committed historical evidence remains tracked.
+/artifacts/
+/T09_LIVE_PACKET.txt
+/.codex/hooks.json
+/node_modules/
+.env
+.env.*
+!.env.example
+__pycache__/
+.venv/

@@ -1,0 +1,13 @@
+{
+  "name": "zhi-er-neng-jiang",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Source-grounded study and in-app teach-back for personal learning.",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "start": "node study-teachback-app/server.mjs",
+    "test": "node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01",
+    "test:browser": "node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01",
+    "test:extract": ".\\study-teachback-app\\.venv\\Scripts\\python.exe -B study-teachback-app/extract_source_test.py"
+  }
+}

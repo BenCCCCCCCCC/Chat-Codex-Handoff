@@ -8,6 +8,8 @@ import { createServer } from './server.mjs';
 import { Ledger } from './ledger.mjs';
 import { revisedTranscript, validateFindings, waveBytes } from './core.mjs';
 import { semantic } from './provider.mjs';
+import { localize } from './diagnostic-localization.mjs';
+import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 import { TEACH, teachingSchema } from './schemas.mjs';
 
 const app=readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
@@ -37,11 +39,11 @@ for(const length of [2500,2501,4000])test(`C1 accepted Tutor ${length} character
 
 function confirmationHarness(){
   const nodes=new Map(),saved=[],visible=[],notices=[],pending=[];
-  const $=id=>{if(!nodes.has(id))nodes.set(id,{children:[],value:'',append(...x){this.children.push(...x);},replaceChildren(...x){this.children=x;},setAttribute(){},removeAttribute(){}});return nodes.get(id);};
+  const $=id=>{if(!nodes.has(id))nodes.set(id,{children:[],value:'',append(...x){this.children.push(...x);},replaceChildren(...x){this.children=x;if(id==='feedback')visible.length=0;},setAttribute(){},removeAttribute(){},focus(){this.focused=true;},scrollIntoView(){this.scrolled=true;}});return nodes.get(id);};
   const a={id:'attempt',source,duration:1,kind:'full',assistance:'none',audio:new Blob(['synthetic']),raw:{id:'raw',text:'Enter when open.',spans:[{id:'s0',start:0,end:1,text:'Enter when open.'}]},corrections:[],reports:[]};
   let saveGate=null;
   const context=vm.createContext({$,current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),
-    editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
+    diagnosisStates:new WeakMap(),matchMedia:()=>({matches:true}),editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
     blobURL:null,replayRequest:0,replayOriginal:null,URL:{createObjectURL:()=> 'blob:synthetic',revokeObjectURL(){}},
     notice:x=>notices.push(x),friendly:x=>x,act:async fn=>{try{await fn();}catch(e){notices.push(e.message);}},
     reveal(){},el:()=>({setAttribute(){},append(){}}),button:()=>({}),renderProcess(){},renderFeedback:r=>visible.push(r),updateBudget(){},
@@ -49,7 +51,7 @@ function confirmationHarness(){
     fetch:async(_,options)=>{const request=JSON.parse(options.body);return new Promise((resolve,reject)=>pending.push({request,reject,resolve:()=>resolve({ok:true,json:async()=>({value:{sourceId:source.id,attemptId:a.id,transcriptVersion:request.attempt.transcriptVersion,findings:[]}})})}));}});
   vm.runInContext(app.slice(app.indexOf('async function api('),app.indexOf('async function updateBudget(')),context);
   vm.runInContext(app.slice(app.indexOf('function latest('),app.indexOf('async function play(')),context);
-  vm.runInContext(app.slice(app.indexOf('function renderAttempt('),app.indexOf('function processFor(')),context);
+  vm.runInContext(app.slice(app.indexOf('function diagnosisView('),app.indexOf('function processFor(')),context);
   vm.runInContext(app.slice(app.indexOf("$('confirm').onclick"),app.indexOf('function renderFeedback(')),context);
   vm.runInContext('renderAttempt()',context);
   return {a,context,pending,saved,visible,notices,node:$,render:()=>vm.runInContext('renderAttempt()',context),click:()=>$('confirm').onclick(),review(text='Enter when open.') {context.editors.set('s0',{value:text});},blockSave(){let release;saveGate=new Promise(r=>release=r);return ()=>{saveGate=null;release();};}};
@@ -71,7 +73,7 @@ test('C2 lock precedes asynchronous persistence and releases after save failure'
   const h=confirmationHarness();h.review();const release=h.blockSave(),first=h.click();await drain();const second=h.click();await drain();
   const during=h.a.corrections.length;release();await drain();for(const p of h.pending)p.resolve();await Promise.all([first,second]);
   assert.equal(during,1);assert.equal(h.pending.length,1);
-  h.review();h.context.save=async()=>{throw Error('STORAGE_FAILED');};await h.click();assert.equal(h.context.processing,false);assert.equal(h.pending.length,1);
+  h.review('Changed for save failure.');h.context.save=async()=>{throw Error('STORAGE_FAILED');};await h.click();assert.equal(h.context.processing,false);assert.equal(h.pending.length,1);
 });
 test('C2 no replay still allows diagnosis; failed provider releases operation for explicit later confirmation',async()=>{
   const h=confirmationHarness();const first=h.click();await drain();assert.equal(h.pending.length,1);assert.equal(h.a.corrections[0].origin,'USER_TRANSCRIPT_CONFIRMATION');assert(!h.notices.includes('NOT_HEARD'));h.pending[0].reject(Error('SYNTHETIC_FAILURE'));await first;
@@ -139,4 +141,38 @@ test('review UX confirms current edits without playback; reload keeps honest con
   assert.match(h.node('reviewHint').textContent,/这不表示音频已回听/);assert.match(h.node('reviewHint').textContent,/否定词、数字、条件和术语/);
   assert.equal(h.context.editors.get('s0').value,'Do not enter when closed.');assert.equal(JSON.stringify(h.a.raw),raw);assert.equal(h.a.audio,audio);
   assert.equal(h.pending.length,1);assert.equal(h.a.corrections[0].heard,undefined);
+});
+
+
+test('diagnosis state locks synchronously, completes with focus, and reuses unchanged result',async()=>{
+ const h=confirmationHarness(),release=h.blockSave(),first=h.click();
+ assert.equal(h.node('confirm').disabled,true);assert.equal(h.context.editors.get('s0').readOnly,true);assert.match(h.node('diagnosisState').textContent,/正在诊断/);
+ await h.click();assert.equal(h.a.corrections.length,1);release();await drain();h.pending[0].resolve();await first;
+ assert.equal(h.node('confirm').disabled,false);assert.equal(h.context.editors.get('s0').readOnly,false);assert.match(h.node('diagnosisState').textContent,/诊断完成/);
+ assert(h.node('contentHeading').focused&&h.node('contentHeading').scrolled);
+ await h.click();assert.equal(h.pending.length,1);assert.equal(h.a.corrections.length,1);
+});
+test('diagnosis state dirty, revert, and changed resubmit retain prior result through failure',async()=>{
+ const h=confirmationHarness();const first=h.click();await drain();h.pending[0].resolve();await first;const prior=h.a.reports[0];
+ h.context.editors.get('s0').value='Changed condition.';h.context.editors.get('s0').oninput();
+ assert.match(h.node('diagnosisState').textContent,/过时/);assert.match(h.node('confirm').textContent,/确认修改并重新诊断/);assert.equal(h.visible[0],prior);
+ h.context.editors.get('s0').value='Enter when open.';h.context.editors.get('s0').oninput();assert.match(h.node('diagnosisState').textContent,/诊断完成/);await h.click();assert.equal(h.pending.length,1);
+ h.context.editors.get('s0').value='Changed condition.';h.context.editors.get('s0').oninput();const next=h.click();await drain();assert.equal(h.visible[0],prior);assert.match(h.node('resultBinding').textContent,/新诊断进行中/);
+ h.pending[1].reject(Error('SYNTHETIC_FAILURE'));await next;assert.equal(h.visible[0],prior);assert.match(h.node('diagnosisState').textContent,/未完成/);assert.equal(h.a.reports.length,1);assert.equal(h.context.editors.get('s0').readOnly,false);
+ h.render();assert.equal(h.visible[0],prior);assert.match(h.node('resultBinding').textContent,/先前结果/);
+});
+test('result save failure cannot cause another diagnosis; result remains inspectable',async()=>{
+ const h=confirmationHarness();let saves=0;h.context.save=async()=>{if(++saves===2)throw Error('STORAGE_FAILED');};
+ const first=h.click();await drain();h.pending[0].resolve();await first;assert.equal(h.a.reports.length,1);assert.match(h.node('diagnosisState').textContent,/本机保存失败/);
+ await h.click();assert.equal(h.pending.length,1);assert.equal(h.a.corrections.length,1);
+});
+
+
+test('actual stale report retains findings but omits repair actions and uses bound version',()=>{
+ const f=structuredClone(diagnosticFixtures.find(f=>f.id==='fluent-wrong')),buttons=[];
+ const node=()=>({dataset:{},append(){}}),version={id:f.attempt.transcriptVersion,spans:f.attempt.spans,reviewed:true};
+ const c=vm.createContext({current:{...f.attempt,source:f.source,reports:[]},latest:()=>version,attemptRequest:()=>({...f.attempt,transcriptVersion:'new-draft'}),localize,$:node,el:node,button:(label,fn)=>{buttons.push(label);return node();}});
+ vm.runInContext(app.slice(app.indexOf('function renderFeedback('),app.indexOf("$('apply').onclick")),c);c.report={...f.report,channel:'content'};c.version=version;
+ vm.runInContext('renderFeedback(report,{version,stale:true})',c);assert(!buttons.includes('再学这一点'));assert(!buttons.includes('再讲这一点'));
+ buttons.length=0;vm.runInContext('renderFeedback(report,{version,stale:false})',c);assert(buttons.includes('再学这一点'));assert(buttons.includes('再讲这一点'));
 });

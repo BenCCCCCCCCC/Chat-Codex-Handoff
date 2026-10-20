@@ -1,0 +1,74 @@
+name: Offline regression
+
+on:
+  pull_request:
+    paths:
+      - 'study-teachback-app/**'
+      - '!study-teachback-app/**/*.md'
+      - 'package.json'
+      - '.github/workflows/offline-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: offline-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Select checks affected by this change
+        id: scope
+        shell: pwsh
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          $changed = if ($env:EVENT_NAME -eq 'pull_request') { @(git diff --name-only "$($env:BASE_SHA)...$($env:HEAD_SHA)") } else { @() }
+          $all = $env:EVENT_NAME -ne 'pull_request' -or [bool]($changed -match '^(\.github/workflows/offline-tests\.yml|package\.json)$')
+          $browser = $all -or [bool]($changed -match '^study-teachback-app/((?!.*\.test\.mjs$)[^/]+\.mjs$|index\.html$|style\.css$|fixtures/)')
+          $extract = $all -or [bool]($changed -match '^study-teachback-app/(extract|requirements-extractor)')
+          "browser=$($browser.ToString().ToLower())" >> $env:GITHUB_OUTPUT
+          "extract=$($extract.ToString().ToLower())" >> $env:GITHUB_OUTPUT
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Prepare local extractor
+        shell: pwsh
+        run: |
+          python -m venv study-teachback-app/.venv
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & study-teachback-app/.venv/Scripts/python.exe -I -m pip --isolated install --index-url https://pypi.org/simple --only-binary=:all: --no-deps --require-hashes --disable-pip-version-check -r study-teachback-app/requirements-extractor.txt
+          exit $LASTEXITCODE
+      - name: Node regression (synthetic credential, loopback only)
+        run: npm test
+      - name: Local file extraction
+        if: steps.scope.outputs.extract == 'true'
+        run: npm run test:extract
+      - name: Edge regression (synthetic media and provider)
+        if: steps.scope.outputs.browser == 'true'
+        run: npm run test:browser
+      - name: Keep test receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-regression
+          path: |
+            artifacts/study-teachback/diagnosis-state-ux-01/node-*/receipt.json
+            artifacts/study-teachback/diagnosis-state-ux-01/node-*/tests.log
+            artifacts/study-teachback/diagnosis-state-ux-01/browser-*/receipt.json
+            artifacts/study-teachback/diagnosis-state-ux-01/browser-*/tests.log
+            artifacts/study-teachback/diagnosis-state-ux-01/browser-*/browser-*.json
+            artifacts/study-teachback/diagnosis-state-ux-01/browser-*/*.png
+          retention-days: 7
