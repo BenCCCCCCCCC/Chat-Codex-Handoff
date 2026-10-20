@@ -66,6 +66,10 @@ SHA256 `cb7aaf601c70b3ec2edf3f6387b192c01b78103c75c60cd19e1c8a63dbfd5876`。
 多条已表达默认折叠、390px 无横向溢出。API 实验后新增折叠行为只复验该浏览器流程。
 完整 Node／Edge 留给 PR CI，提取器无变更不重跑。
 
+首轮 CI 完整 Node 165/165；浏览器在旧“词级定位部分不可用”字面断言处停止，
+此前新功能及既有播放流程通过。移除这条冗余文案断言，保留零长度原值、不可用标记、
+整段真实播放和确认结果检查；只由后续 CI 复验，不在本机再跑全套。最终 CI 状态见 canonical。
+
 本机收据：`node-1792502767575-CExS1K`、最终 `browser-1792503012016-j8MMNk`，
 均在 ignored `artifacts/study-teachback/diagnosis-state-ux-01/`。
 离线检查未改变生产账本；真实实验后账本 SHA256：
