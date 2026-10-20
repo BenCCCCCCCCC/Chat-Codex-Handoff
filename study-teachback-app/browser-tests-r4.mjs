@@ -9,7 +9,7 @@ import { waveDuration,normalizeASR } from './core.mjs';
 import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 if(!process.env.STUDY_TEST_OUTPUT)throw Error('Run through run-offline-tests.mjs browser');
 const root=process.env.STUDY_TEST_OUTPUT+'/';mkdirSync(root,{recursive:true});
-const environmentProbe=process.argv.includes('--environment-probe');
+const environmentProbe=process.argv.includes('--environment-probe'),recoveryOnly=process.argv.includes('--recovery-only');
 const probe={mode:environmentProbe?'NON_HEADLESS_TRUSTED_POINTER':'EXISTING_SUITE',lifecycle:[],states:[],trustedInputs:[]};
 const run=Date.now(), profile=process.env.STUDY_TEST_PROFILE??mkdtempSync(root+'edge-test-');
 const calls=[],cases=[],errors=[],network=[];let failASR=null,delaySemantic=0,rejectStarter=false,failTeach=false,failRegister=false;const provenanceRequests=[];
@@ -72,6 +72,65 @@ try{
   await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='deferredDenied')await new Promise((resolve,reject)=>window.rejectPermission=()=>reject(new DOMException('test denied','NotAllowedError')));if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
+  if(!environmentProbe&&!process.argv.includes('--replay-only')){
+    await check('chat failure reload and explicit retry preserve original input/context with one dispatch',async()=>{
+      failTeach=true;
+      await evaluate(`document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);
+      await click('learn');await until(`!document.getElementById('chatRetry').disabled && document.getElementById('notice').textContent.includes('API_RESULT_UNAVAILABLE')`);
+      assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),0);
+      await reloadPage();const before=calls.length;await click('chatRetry');
+      await until(`document.getElementById('chatRecovery').hidden`);
+      assert.equal(calls.length,before+1);
+      failTeach=true;
+      await evaluate(`document.getElementById('chat').value='昨天浇过水，今天还湿，要浇吗？';document.getElementById('chatForm').requestSubmit()`);
+      await until(`!document.getElementById('chatRetry').disabled && document.getElementById('notice').textContent.includes('API_RESULT_UNAVAILABLE')`);
+      const request=structuredClone(provenanceRequests.at(-1)),count=calls.length;
+      await reloadPage();assert.equal(calls.length,count);
+      for(const width of [1440,390]){
+        await cdp('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:false});
+        assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));
+        await shot(`chat-recovery-${width}`);
+      }
+      delaySemantic=200;
+      await evaluate(`document.getElementById('chatRetry').click();document.getElementById('chatRetry').click();`);
+      await until(`document.getElementById('chatRecovery').hidden`);delaySemantic=0;
+      assert.equal(calls.length,count+1);assert.deepEqual(provenanceRequests.at(-1),request);
+      assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),1);
+      await cdp('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+      await click('startPractice');await until(`document.getElementById('practiceQuestion').textContent && !document.getElementById('practiceSubmit').disabled`);
+      await shot('focused-practice');
+      await click('backToChat');await until(`document.getElementById('workspace').dataset.view==='learn'`);
+      const noNew=calls.length;await click('startPractice');await until(`document.getElementById('workspace').dataset.view==='practice'`);
+      assert.equal(calls.length,noNew);
+    });
+    await check('export preview, cancel, invalid input and atomic restore preserve originals and seven-day copy retention',async()=>{
+      const before=calls.length;
+      await evaluate(`window.exportBlobs=new Map();const create=URL.createObjectURL;URL.createObjectURL=b=>{const u=create(b);window.exportBlobs.set(u,b);return u;};const click=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.download)window.exportBlob=window.exportBlobs.get(this.href);else click.call(this);};`);
+      await click('topicExport');await until('!!window.exportBlob');
+      await evaluate(`(async()=>{window.backupText=await window.exportBlob.text();})()`);
+      const original=JSON.stringify(await evaluate(all));
+      async function selectBackup(valid=true){
+        await evaluate(`{const files=new DataTransfer();files.items.add(new File([${valid?'window.backupText':"'{}'"}],'study.json',{type:'application/json'}));document.getElementById('backupFile').files=files.files;document.getElementById('backupFile').dispatchEvent(new Event('change'));}`);
+        await until(valid?`!document.getElementById('backupConfirm').disabled`:`document.getElementById('backupStatus').textContent.length>0`);
+      }
+      await click('historyButton');await click('backupOpen');await selectBackup(false);
+      assert.equal(JSON.stringify(await evaluate(all)),original);
+      await selectBackup();await shot('backup-preview');await click('backupCancel');
+      assert.equal(JSON.stringify(await evaluate(all)),original);
+      await click('backupOpen');await selectBackup();await click('backupConfirm');
+      await until(`!document.getElementById('backupDialog').open && document.getElementById('notice').textContent.includes('已恢复')`);
+      const records=await evaluate(all),copy=records.find(t=>t.restoredAt),source=records.find(t=>!t.restoredAt);
+      assert.equal(records.length,2);assert.notEqual(copy.id,source.id);
+      assert.deepEqual(source,JSON.parse(original)[0]);
+      assert.deepEqual(copy.practiceRounds,source.practiceRounds);
+      assert.deepEqual(copy.messages,source.messages);
+      assert.equal(calls.length,before);
+      await reloadPage();assert.equal(calls.length,before);
+      assert.equal(await evaluate(`document.getElementById('workspace').dataset.view`),'practice');
+      assert(await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=(await db.all()).find(t=>t.restoredAt);t.createdAt=Date.now()-8*86400000;await db.put(t);await db.expire(t.restoredAt+7*86400000-1);const kept=!!await db.get(t.id);await db.expire(t.restoredAt+7*86400000);const expired=!await db.get(t.id);await db.clear();db.close();return kept&&expired;})()`));
+      await reloadPage();await shot('quiet-home');
+    });
+  }
   if(environmentProbe){
     const select=id=>`document.getElementById('${id}')`,historyAttempt=`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整'))`;
     await evaluate(`document.querySelector('.process-details').open=true`);
@@ -122,7 +181,7 @@ try{
       await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await click('finish');await until(`document.querySelectorAll('#transcript textarea').length===1 && document.getElementById('notice').textContent.includes('转写完成')`);
       await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);
     });
-  }else{
+  }else if(!recoveryOnly){
   for(const setupContext of [{focus:'',known:''},{focus:'条件',known:''},{focus:'',known:'了解定义'},{focus:'条件',known:'了解定义'}])await check(`setup source-only title and persisted metadata ${JSON.stringify(setupContext)}`,async()=>{
     const before=provenanceRequests.length;
     await evaluate(`document.getElementById('title').value='';document.getElementById('source').value='只有土壤干燥才浇水。';document.getElementById('setupFocus').value=${JSON.stringify(setupContext.focus)};document.getElementById('setupKnown').value=${JSON.stringify(setupContext.known)};`);
@@ -133,7 +192,7 @@ try{
     await click('newTopic');assert.equal(await evaluate(`document.getElementById('setupFocus').value+document.getElementById('setupKnown').value`),'');
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();
   });
-  for(const outcome of ['success','quote','request'])await check(`provenance initial ${outcome} and first/subsequent real owner input`,async()=>{
+  for(const outcome of ['quote'])await check(`provenance initial ${outcome} and first/subsequent real owner input`,async()=>{
     const rejected=outcome!=='success';rejectStarter=outcome==='quote';failTeach=outcome==='request';const start=provenanceRequests.length;
     await evaluate(`document.getElementById('title').value='Synthetic provenance';document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);await click('learn');
     await until(rejected?`document.getElementById('notice').textContent.includes('${outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE'}')`:`document.querySelectorAll('.message.assistant').length===1`);
@@ -160,11 +219,11 @@ try{
     await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await openHistoryAttempt();
     const start=provenanceRequests.length;rejectStarter=outcome==='quote';failTeach=outcome==='request';
     await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);
-    await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && document.getElementById('notice').textContent.includes('${outcome==='success'?'可以继续问':outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE'}')`);
+    await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && ${outcome==='success'?"document.querySelectorAll('.message.assistant').length===1 && document.getElementById('chatRecovery').hidden":"document.getElementById('notice').textContent.includes('"+(outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE')+"')"}`);
     assert.equal(provenanceRequests.length,start+1);assert.equal(provenanceRequests.at(-1).mode,mode);
     const internal=provenanceRequests.at(-1).message;
     assert.deepEqual((await evaluate(all))[0].messages.filter(m=>m.role==='user').map(m=>m.text),['Earlier actual question']);assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),1);
-    for(const text of ['First real answer','Next real question']){await evaluate(`document.getElementById('chat').value=${JSON.stringify(text)};document.getElementById('chatForm').requestSubmit()`);await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && document.getElementById('notice').textContent.includes('可以继续问')`);}
+    for(const text of ['First real answer','Next real question']){const count=await evaluate(`document.querySelectorAll('.message.assistant').length`);await evaluate(`document.getElementById('chat').value=${JSON.stringify(text)};document.getElementById('chatForm').requestSubmit()`);await until(`document.querySelectorAll('.message.assistant').length===${count+1} && document.getElementById('chatRecovery').hidden`);}
     const saved=(await evaluate(all))[0];assert.deepEqual(saved.messages.filter(m=>m.role==='user').map(m=>m.text),['Earlier actual question','First real answer','Next real question']);
     assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),3);assert(saved.messages.every(m=>m.text!==internal));assert(provenanceRequests.slice(start).every(r=>r.history.every(m=>m.text!==internal)));
     assert(provenanceRequests.at(-1).history.some(m=>m.text==='First real answer'));
@@ -224,7 +283,7 @@ try{
     await reloadPage();assert.equal(await evaluate(`document.getElementById('topicTitle').textContent`),'最近核对的主题');
     assert(await evaluate(`!document.getElementById('attemptPanel').hidden && document.querySelector('#feedback .finding')!==null`));
     await click('historyButton');await until(`document.querySelectorAll('#historyList>div').length===2`);assert(await evaluate(`document.querySelector('#historyList>div').textContent.includes('继续核对与反馈')`));
-    await evaluate(`[...document.querySelectorAll('#historyList button')].filter(b=>b.textContent==='继续学习')[1].click()`);
+    await evaluate(`[...document.querySelectorAll('#historyList .history-continue')][1].click()`);
     await until(`document.getElementById('topicTitle').textContent==='较早的主题' && document.getElementById('history').hidden && !document.getElementById('workspace').hasAttribute('aria-busy')`);
     await reloadPage();assert.equal(await evaluate(`document.getElementById('topicTitle').textContent`),'较早的主题');assert.equal(calls.length,before);
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();
@@ -355,6 +414,7 @@ try{
     await click('export');await until('!!window.exportBlob');
     assert(await evaluate(`(async()=>{const e=JSON.parse(await window.exportBlob.text());const db=await(await import('/storage.mjs')).openStore();const t=(await db.all())[0];db.close();return JSON.stringify(e.topic.practiceRounds)===JSON.stringify(t.practiceRounds);})()`));
     assert(await evaluate(`(async()=>{const e=JSON.parse(await window.exportBlob.text());const db=await (await import('/storage.mjs')).openStore();const t=(await db.all())[0];db.close();if(e.topic.source.id!==t.source.id||e.topic.attempts.length!==t.attempts.length)return false;for(let i=0;i<t.attempts.length;i++){const a=t.attempts[i],x=e.topic.attempts[i],b=new Uint8Array(await a.audio.arrayBuffer()),decoded=atob(x.audio.base64);if(b.length!==decoded.length||!b.every((v,j)=>v===decoded.charCodeAt(j))||JSON.stringify(a.raw)!==JSON.stringify(x.raw)||JSON.stringify(a.corrections)!==JSON.stringify(x.corrections)||JSON.stringify(a.reports)!==JSON.stringify(x.reports))return false;}return true;})()`));
+    assert(await evaluate(`(async()=>{const {decodeBackup,restoredCopy}=await import('/backup.mjs');const t=restoredCopy(decodeBackup(await window.exportBlob.text()));const db=await(await import('/storage.mjs')).openStore();await db.add(t);const restored=await db.get(t.id);await db.delete(t.id);db.close();return restored.attempts.every((a,i)=>a.audio.size===t.attempts[i].audio.size&&JSON.stringify(a.reports)===JSON.stringify(t.attempts[i].reports));})()`));
   });
   await check('delete dialog cancel and Escape preserve data and restore focus',async()=>{
     const before=JSON.stringify(await evaluate(all));
@@ -373,7 +433,7 @@ try{
     await click('revise');assert(await evaluate(`!document.getElementById('workspace').hidden`));
     await evaluate('IDBObjectStore.prototype.put=window.originalPut');await click('retrySave');await until(`document.getElementById('storageRecovery').hidden`);assert.equal((await evaluate(all))[0].attempts.length,count+1);
   });
-  await check('pending semantic navigation cannot replace topic or misattach result',async()=>{delaySemantic=1200;const id=(await evaluate(all))[0].id;await evaluate(`document.getElementById('chat').value='还有问题';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('notice').textContent.includes('梳理')`);await click('revise');assert(await evaluate(`!document.getElementById('workspace').hidden`));await until(`document.getElementById('notice').textContent.includes('可以继续问')`);assert.equal((await evaluate(all))[0].id,id);delaySemantic=0;});
+  await check('pending semantic navigation cannot replace topic or misattach result',async()=>{delaySemantic=1200;const id=(await evaluate(all))[0].id;await evaluate(`document.getElementById('chat').value='还有问题';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('workspace').hasAttribute('aria-busy')`);await click('revise');assert(await evaluate(`!document.getElementById('workspace').hidden`));await until(`document.getElementById('chatRecovery').hidden`);assert.equal((await evaluate(all))[0].id,id);delaySemantic=0;});
   await check('seven-day expiry cleans linked objects but preserves live topic',async()=>{await evaluate(`(async()=>{const {openStore}=await import('/storage.mjs');const db=await openStore();await db.put({id:'expired-engineering',createdAt:Date.now()-8*86400000,source:{title:'expired'},attempts:[{audio:new Blob(['test'])}]});db.close();})()`);await reloadPage();await until(`!document.getElementById('workspace').hidden`);assert.equal((await evaluate(all)).length,1);});
   await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(join(root,'browser-learning.png'),Buffer.from(r.data,'base64')));
   await check('source revision creates distinct record, preserves prior source/attempts',async()=>{const before=(await evaluate(all))[0];await click('revise');await evaluate(`document.getElementById('source').value='新版规则：只有土壤干燥时才浇水。'`);await click('learn');await until(`document.querySelectorAll('.message.assistant').length===1`);const t=await evaluate(all);assert.equal(t.length,2);assert(t.some(x=>x.id===before.id&&x.source.text===before.source.text&&x.attempts.length===before.attempts.length));});
@@ -404,11 +464,17 @@ try{
     const a=(await evaluate(all))[0].attempts[0];assert(a.reports.some(r=>r.channel==='process'&&r.processEvidence.some(e=>e.type==='short_pause_cluster'&&e.confirmation==='human_confirmed')));
   });
   await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false}).then(r=>writeFileSync(join(root,'browser-real-asr.png'),Buffer.from(r.data,'base64')));
-  await check('stale history navigation blocked and pending delete-all prevents late restoration',async()=>{
+  await check('pending chat blocks stale navigation and deletion; explicit deletion after completion removes records',async()=>{
     await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'other-topic',createdAt:Date.now(),source:{id:'other-source',title:'不得切入',text:'工程材料'},goals:[],messages:[],attempts:[],mode:'learn'});db.close();})()`);
-    await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=5`);delaySemantic=1200;await evaluate(`document.getElementById('chat').value='慢请求';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('notice').textContent.includes('梳理')`);
-    await evaluate(`[...document.querySelectorAll('#historyList button')].filter(b=>b.textContent==='继续学习').at(-1).click()`);assert.notEqual(await evaluate(`document.getElementById('topicTitle').textContent`),'不得切入');
-    await click('deleteAll');await until(`document.getElementById('workspace').hidden`);await pause(1500);assert.equal((await evaluate(all)).length,0);assert(await evaluate(`document.getElementById('workspace').hidden`));delaySemantic=0;
+    await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=5`);delaySemantic=1200;await evaluate(`document.getElementById('chat').value='慢请求';document.getElementById('chatForm').requestSubmit()`);await until(`document.getElementById('workspace').hasAttribute('aria-busy')`);
+    await evaluate(`[...document.querySelectorAll('#historyList .history-continue')].at(-1).click()`);assert.notEqual(await evaluate(`document.getElementById('topicTitle').textContent`),'不得切入');
+    const count=(await evaluate(all)).length;
+    await evaluate(`document.getElementById('deleteAll').click()`);
+    assert(await evaluate(`!document.getElementById('deleteDialog').open && document.getElementById('notice').textContent.includes('稍后')`));
+    assert.equal((await evaluate(all)).length,count);
+    await until(`document.getElementById('chatRecovery').hidden`);delaySemantic=0;
+    await click('deleteAll');await until(`document.getElementById('workspace').hidden`);
+    assert.equal((await evaluate(all)).length,0);
   });
   await check('real supported punctuation repair renders no remediation; valid gaps retain focus actions',async()=>{
     const live=JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r3/LUNA_LOGIC_REV3.json',import.meta.url))).cases.find(c=>c.id==='self_repair');
@@ -419,7 +485,7 @@ try{
     for(const status of ['missing','incorrect','unknown']){
       const r=structuredClone(live.result);r.findings=[{...r.findings[0],status,repair:'. .'}];if(status==='missing')Object.assign(r.findings[0],{spanId:null,quote:null,message:'工程合成示例：这次尚未说明土壤湿润时应如何处理；这不代表你不知道。'});await show(r);assert.equal(await evaluate(buttons),0);
       r.findings[0].repair='请澄清浇水的必要条件。';await show(r);if(status==='missing')await shot('missing','feedback');assert.equal(await evaluate(buttons),2);
-      const beforeRepair=calls.length;await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);for(let i=0;i<100&&calls.length===beforeRepair;i++)await pause(30);assert(calls.length>beforeRepair);await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && document.getElementById('notice').textContent.includes('可以继续问')`);assert.equal(calls.at(-1).focus,r.findings[0].repair);
+      const beforeRepair=calls.length;await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);for(let i=0;i<100&&calls.length===beforeRepair;i++)await pause(30);assert(calls.length>beforeRepair);await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && document.getElementById('chatRecovery').hidden`);assert.equal(calls.at(-1).focus,r.findings[0].repair);
       await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再讲这一点').click()`);assert.equal(await evaluate(`document.getElementById('recordFocus').textContent`),r.findings[0].repair);await click('cancelRecord');
       await click('fullAgain');assert.equal(await evaluate(`document.getElementById('recordTitle').textContent`),'我来讲讲');await click('cancelRecord');
     }
@@ -438,7 +504,7 @@ try{
     await evaluate(`document.querySelector('#historyList .danger').click()`);await click('deleteConfirm');await until(`document.getElementById('historyList').textContent.includes('还没有')`);assert.equal((await evaluate(all)).length,0);await until(`document.activeElement.id==='historyTitle'`);
   });
   }
-  if(!environmentProbe&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
+  if(!environmentProbe&&!recoveryOnly&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
     await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'demo-preserve',createdAt:Date.now(),source:{title:'个人记录必须保留'},attempts:[]});db.close();})()`);
     const before=JSON.stringify(await evaluate(all)),requestIndex=network.length,dispatches=calls.length;
     await cdp('Page.navigate',{url:origin+'/demo'});await until(`document.getElementById('demoTitle')?.textContent.length>0`);

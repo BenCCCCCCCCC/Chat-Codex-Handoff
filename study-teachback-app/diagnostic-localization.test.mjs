@@ -91,5 +91,5 @@ test('B3 actual local confirmation saves without semantic dispatch, deduplicates
   a.corrections.push({...a.raw,id:'new-version'});assert.equal(vm.runInContext('processFor(current).length',context),0);
   failSave=true;await assert.rejects(confirm(),/STORAGE_FAILED/);assert.equal(context.processing,false);
   failSave=false;await confirm();assert.equal(a.reports.length,2);assert.equal(saved.at(-1).attempts[0].reports[1].transcriptVersion,'new-version');assert.equal(dispatches,0);
-  context.deleted.add(a.id);await assert.rejects(confirm(),/INVALID_REFERENCE/);
+  context.deleted.add(a);await assert.rejects(confirm(),/INVALID_REFERENCE/);
 });

@@ -18,6 +18,9 @@ function reflectStage(){
     else item.removeAttribute('aria-current');
   }
   $('viewTitle').textContent=history?'学习记录':['开始一轮学习','理解与提问','用自己的话讲','核对与补学','情境练习'][step];
+  $('topicExport').hidden=!working||history;
+  $('workspace').dataset.view=step===4?'practice':'learn';
+  document.body.dataset.history=String(history);
   $('newStudy').classList.toggle('active',!history&&!working);
   $('historyButton').classList.toggle('active',history);
 }
