@@ -37,6 +37,8 @@
 
 目录位于 ignored `artifacts/study-teachback/diagnosis-state-ux-01/`。两次失败均为旧／新增测试的等待或入口预期，不作为完整套件通过记录。修正后交由 PR CI 完成剩余与完整检查，不第三次本地全量重复。Node 语法与差异检查通过；文件提取实现未改，不单独重跑 Python 套件。
 
+首次 [PR CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39408257635) 的 Node 全套通过，Python 按范围跳过。Edge 在后段反馈用例发现同 ID 主题重开会优先使用内存旧对象，遮蔽数据库里的更新。已改为单条读取最新保存记录，并在读取期间保持导航忙状态；现有打开历史记录的测试统一等待该异步操作完成。此项是实现缺陷修复，最终结果以修复后的 PR CI 为准。
+
 桌面 1440px 与手机 390px 的练习截图已人工查看；原有 320px 和 200% 文字放大检查通过。截图使用合成材料与模拟响应。
 
 无真实模型、物理麦克风或出站请求；本地生产账本 hash 前后相同：`1d6a29631982daf6cd540622f2dabee3d2c48b24dbda8a8879dbb2ca7b215a21`。

@@ -309,6 +309,16 @@ function resumeTopic(target,point=resumePoint(target)){
   if(point.view==='attempt'){current=target.attempts.find(a=>a.id===point.attemptId);if(current)renderAttempt();}
   if(point.view==='practice')practice.focusPanel();
 }
+async function continueTopic(id,point){
+  if(!canNavigate())return;
+  processing=true;$('workspace').setAttribute('aria-busy','true');
+  try{
+    await practice.flushDraft();const target=await db.get(id);
+    if(!target)return notice('这条学习记录已不存在，请重新打开学习记录。');
+    if(point)target.resume=point;
+    resumeTopic(target);await save();
+  }finally{processing=false;$('workspace').removeAttribute('aria-busy');}
+}
 async function history(){
   if(!canNavigate())return;
   await practice.flushDraft();
@@ -316,8 +326,8 @@ async function history(){
   for(const t of (await db.all()).sort((a,b)=>activityTime(b)-activityTime(a))){
     const point=resumePoint(t),rounds=practiceRounds(t),row=el('div');
     const next=point.view==='attempt'?'继续核对与反馈':point.view==='practice'?'继续情境练习':'继续理解与提问';
-    row.append(el('strong',t.source.title),el('p',`${new Date(activityTime(t)).toLocaleString()} · ${t.attempts.length} 次讲解 · ${rounds.length} 道情境题`,'muted'),el('p',`上次停在：${next}`,'history-next'),button('继续学习',async()=>{if(!canNavigate())return;await practice.flushDraft();resumeTopic(topic?.id===t.id?topic:t);await save();}));
-    for(const a of t.attempts)row.append(button(`${a.kind==='partial'?'局部':'完整'} · ${new Date(a.createdAt).toLocaleTimeString()}`,async()=>{if(!canNavigate())return;await practice.flushDraft();const target=topic?.id===t.id?topic:t;target.resume={view:'attempt',attemptId:a.id};resumeTopic(target);await save();}));
+    row.append(el('strong',t.source.title),el('p',`${new Date(activityTime(t)).toLocaleString()} · ${t.attempts.length} 次讲解 · ${rounds.length} 道情境题`,'muted'),el('p',`上次停在：${next}`,'history-next'),button('继续学习',()=>continueTopic(t.id)));
+    for(const a of t.attempts)row.append(button(`${a.kind==='partial'?'局部':'完整'} · ${new Date(a.createdAt).toLocaleTimeString()}`,()=>continueTopic(t.id,{view:'attempt',attemptId:a.id})));
     row.append(button('删除主题',async()=>{abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');renderPractice();}await history();},'danger'));list.append(row);
   }
   if(!list.children.length)list.append(el('p','还没有保存的学习记录。'));
@@ -325,7 +335,15 @@ async function history(){
 }
 $('historyButton').onclick=()=>act(history);
 function canNavigate(){if(memoryOnly){notice(friendly('STORAGE_FAILED'));return false;}if(record||capturePending||controller||processing||importPending){notice(friendly('REQUEST_IN_PROGRESS'));return false;}return true;}
-async function newTopic(){if(importPending)return false;if(!canNavigate())return false;await practice.flushDraft();abortPending();clearImport();topic=null;current=null;reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('recording',false);reveal('attemptPanel',false);reveal('setup');$('title').value='';$('source').value='';$('setupFocus').value='';$('setupKnown').value='';updateCounts();renderPractice();notice('');$('source').focus();return true;}
+async function newTopic(){
+  if(importPending||!canNavigate())return false;
+  processing=true;
+  try{
+    await practice.flushDraft();abortPending();clearImport();topic=null;current=null;
+    reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('recording',false);reveal('attemptPanel',false);reveal('setup');
+    $('title').value='';$('source').value='';$('setupFocus').value='';$('setupKnown').value='';updateCounts();renderPractice();notice('');$('source').focus();return true;
+  }finally{processing=false;}
+}
 $('newTopic').onclick=()=>act(newTopic);$('revise').onclick=()=>act(async()=>{const s=topic.source,context=topic.setupContext;if(!await newTopic())return;$('setupFocus').value=context?.focus??'';$('setupKnown').value=context?.known??'';$('title').value=s.title;$('source').value=s.text;updateCounts();notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');});
 $('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
 // Presentation-only confirmation: cancellation never reaches the original destructive handler.
