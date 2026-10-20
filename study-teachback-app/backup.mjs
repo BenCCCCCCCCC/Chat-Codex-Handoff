@@ -1,4 +1,5 @@
 import {sourceValue, identifier, setupContextValue, spanValue, validateFindings} from './core.mjs';
+import {termSnapshot} from './transcription-terms.mjs';
 
 export const BACKUP_LIMIT = 128 * 1024 * 1024;
 const FORMAT = 'study-teachback-export-v1';
@@ -41,6 +42,7 @@ export function decodeBackup(text) {
     for (const goal of list(t.goals)) { string(goal.text,200); string(goal.sourceQuote,600); check(t.source.text.includes(goal.sourceQuote)); }
     if(t.chatDraft!=null)string(t.chatDraft,2000);
     if(t.contextNote!=null)string(t.contextNote,1000);
+    if(t.transcriptionTerms!=null)string(t.transcriptionTerms,160);
     messages(t.messages); list(t.attempts); unique(t.attempts);
     if (t.question != null) string(t.question,1000);
     if (t.focus != null) string(t.focus,1000);
@@ -57,6 +59,7 @@ export function decodeBackup(text) {
       }
     }
     for (const a of t.attempts) {
+      if(a.transcriptionTerms!=null)termSnapshot(a.transcriptionTerms);
       sourceValue(a.source); check(a.source.id===t.source.id && a.source.text===t.source.text);
       date(a.createdAt); check(['full','partial'].includes(a.kind)); check(['none','keywords','source','unknown'].includes(a.assistance));
       if (a.focus != null) string(a.focus,1000);

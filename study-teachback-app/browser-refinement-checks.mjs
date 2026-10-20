@@ -16,7 +16,7 @@ export async function refinementChecks({check,evaluate,until,reloadPage,shot,cdp
       a.reports.push({channel:'content',createdAt:Date.now(),sourceId:source.id,attemptId:a.id,transcriptVersion:version.id,
         findings:[
           {status:'supported',message:'已表达浇水必须满足的条件。',sourceQuote:source.text,spanId:'s0',quote:raw.words.slice(1,5).map(w=>w.text).join(''),eventId:null,repair:null},
-          {status:'supported',message:'已表达湿润时不要浇水。',sourceQuote:source.text,spanId:'s0',quote:'不要澆水',eventId:null,repair:null}
+          {status:'supported',message:'已表达湿润时不要浇水。',sourceQuote:source.text,spanId:'s0',quote:'土壤濕潤時不要澆水',eventId:null,repair:null}
         ]});
       await db.put({id:'refinement-topic',createdAt:Date.now(),source,goals:[],messages:[],attempts:[a],mode:'learn',resume:{view:'attempt',attemptId:a.id}});db.close();
     })()`);
@@ -33,6 +33,13 @@ export async function refinementChecks({check,evaluate,until,reloadPage,shot,cdp
     await cdp('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
     const quoteStart=Math.max(raw.spans[0].start,raw.words[1].start-.3),quoteEnd=Math.min(raw.spans[0].end,raw.words[4].end+.3);
     await until(`window.replayInternal.some(x=>x.start===${quoteStart}&&x.end===${quoteEnd}&&x.completionReason==='genuine-coverage')`);
+    // The second quote includes w14's zero duration; its nearby valid words still
+    // provide a bounded, explicitly approximate replay range.
+    await evaluate(`{const b=document.querySelector('#feedback [data-replay="quote-context"]');b.closest('details').open=true;b.scrollIntoView({block:'center'});b.focus();}`);
+    await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',windowsVirtualKeyCode:13});
+    await cdp('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+    const contextEnd=Math.min(raw.spans[0].end,raw.words.at(-1).end+.3);
+    await until(`window.replayInternal.some(x=>x.start===${Math.max(raw.spans[0].start,raw.words[13].start-.3)}&&x.end===${contextEnd}&&x.completionReason==='genuine-coverage')`);
     for(const id of ['w0','w14']){
       await evaluate(`{const b=document.querySelector('#rawText [data-word-id="${id}"]');b.scrollIntoView({block:'center'});b.focus();}`);
       assert.equal(await evaluate(`document.activeElement.dataset.wordId`),id);

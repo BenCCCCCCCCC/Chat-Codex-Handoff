@@ -8,6 +8,7 @@ import vm from 'node:vm';
 import { Ledger } from './ledger.mjs';
 import { createServer } from './server.mjs';
 import { waveBytes } from './core.mjs';
+import {transcriptionTerms} from './transcription-terms.mjs';
 const app = readFileSync(new URL('./app.mjs', import.meta.url), 'utf8');
 const book = () => new Ledger(join(mkdtempSync(join(tmpdir(), 'batch-a-')), 'ledger.json'));
 
@@ -49,7 +50,7 @@ for (const failure of ['invalid','lock','corrupt','cap']) test(`A3 HTTP ${failur
 });
 
 function captureHarness(kind='valid') {
-  const nodes=new Map(), events=[], target={id:'topic',source:{id:'source'},goals:[],attempts:[]};
+  const nodes=new Map(), events=[], target={id:'topic',source:{id:'source'},goals:[],attempts:[],transcriptionTerms:'Eee PC，IT'};
   const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'none',hidden:false,disabled:false,textContent:'',focus(){},setAttribute(){},removeAttribute(){}});return nodes.get(id);};
   let completePermission;const permission=new Promise(r=>completePermission=r);
   const track={stop(){events.push('track stopped');}};
@@ -71,7 +72,7 @@ function captureHarness(kind='valid') {
     AudioContext:Audio,MediaRecorder:Recorder,Blob,Float32Array,structuredClone,replayWaves:new WeakMap(),performance:{now:()=>1000},setInterval:()=>1,clearInterval(){},
     OfflineAudioContext:class {createBufferSource(){return {connect(){},start(){}};}async startRendering(){return {getChannelData:()=>new Float32Array(16000)};}},
     prepareAudio:async()=>{if(kind==='decode')throw Error('AUDIO_DECODE_FAILED');return {duration:1,wav:new ArrayBuffer(8),observation:{reason:kind==='silent'?'NEAR_SILENT':kind==='clipping'?'CLIPPING':'UNVALIDATED_ACTIVITY'}};},waveBytes:()=>new ArrayBuffer(8),observations:()=>({reason:kind==='silent'?'NEAR_SILENT':kind==='clipping'?'CLIPPING':'UNVALIDATED_ACTIVITY'}),document:{body:{dataset:{}},querySelector:()=>({hidden:false})},
-    reveal:(id,show=true)=>{$(id).hidden=!show;},notice:message=>events.push(message),friendly:x=>x,renderAttempt(){},
+    transcriptionTerms,flushDrafts:async()=>{},reveal:(id,show=true)=>{$(id).hidden=!show;},notice:message=>events.push(message),friendly:x=>x,renderAttempt(){},
     act:async fn=>{try{await fn();}catch(e){events.push(e.message);}},save:async()=>{events.push('saved');if(kind==='storage'||kind==='asr-storage'&&target.attempts[0]?.raw)throw Error('STORAGE_FAILED');},
     api:async(path)=>{events.push(path);if(path==='/api/register'&&kind==='register')throw Error('LEDGER_LOCKED');return {};}});
   vm.runInContext(app.slice(app.indexOf('function stopRecording('),app.indexOf("document.addEventListener('visibilitychange'"))+app.slice(app.indexOf('async function processAudio('),app.indexOf("$('retryAsr').onclick")),context);
@@ -85,6 +86,7 @@ for(const kind of ['denied','unsupported','startup','empty','decode','silent','c
   assert.equal(registrations,['register','valid'].includes(kind)?1:0);
   assert.equal(h.events.filter(x=>x==='/api/asr').length,kind==='valid'?1:0);
   if(['decode','storage','register','valid'].includes(kind))assert(h.target.attempts[0].audio.size>0);
+  if(kind==='valid')assert.deepEqual(h.target.attempts[0].transcriptionTerms,['Eee PC','IT']);
   if(registrations)assert(h.events.indexOf('saved')<h.events.indexOf('/api/register'));
   assert.equal(h.context.record,null);assert.equal(h.context.capturePending,false);assert.equal(h.$('start').disabled,false);
 });
