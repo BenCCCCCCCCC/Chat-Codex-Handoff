@@ -9,31 +9,44 @@ Canonical state branch: meta/master-state
 
 定位 **个人学习＋作品展示**。用户授权公开仓库及现有 Git 历史、README、产品与设计研究、自主审核实现、commit/push/PR/merge，以及有意义的批次交接；无需每个小动作询问。减少冗余文字和重复测试。旧 no push/merge 和每次字节变化全量重跑限制已被后续授权取代。
 
-本批优先纠正解释与理解检验分开、避免复述及来源外条件。用户明确批准固定12次方案最高US$0.10，全部完成：预留US$0.042374，新增费用估算US$0.00410625，新增未结算0；历史4笔未结算不变。没有ASR、个人录音、重试、充值或追加调参。额度结束且余量不延续；新真实调用须另定方案和预算。
+本轮优先用真实学习材料评估理解检验覆盖与有效性，改善无效题处理。本批只做离线工作，API 0次、费用US$0，未申请或使用新真实调用额度。过去所有批准额度均已结束，新调用仍须先提方案和预算。
 
 ## 最新交付
 
-[Issue #25](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/25) / [PR #26](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/26)。
-实现头b9a0bcace1da82ae78639221c71b27142f6c8193，合并3ae43ef3023ecbed2e54138373c355f611cca427。
-[CI39455216922](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39455216922)完整Node／Edge PASS，提取器按范围跳过，job118740183143。PR已合并，Issue关闭。
+[Issue #27](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/27) / [PR #28](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/28)。
+实现头535b873c7fd31c5c6fb9848a2539cd3b55bea74f，合并8634919019c95eefd4ca4d3bfb4a9a06109e7922。
+[CI39458861900](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39458861900)完整Node／Edge PASS，job118752743540；提取器按范围跳过。PR已合并、Issue关闭。
 
-- 反馈默认展示纠正解释，旧repair收进证据折叠项；不再把repair直接当题目。“检验理解”单独显示假设和一道选择题，作答后显示本题判断，依据按需展开。补学／重讲仍在“其他方式”。旧建议练习和普通开放情境练习继续可读。
-- source-rules-v1在本机生成／核对有限句式：必要前提“只有完成／满足等…才…”、正整数克数且按份数倍增的两种不同原料、三个不同动作的“先…再…最后…”顺序。整个来源必须等于所用引文；含其他说明、不识别的表达、unknown原因不出题，不自动调用模型兜底。实验顺序材料含第二句说明，因此本机版本不会处理那条完整材料。
-- 这是狭窄句式规则，不是通用中文语义解析，也不验证上游诊断正确。成功作答只说明该选择与本题键一致，不代表自由解释能力、迁移或掌握。不得称通用任务质量已解决。
-- 来源／讲解／文字版本／反馈快照、题目、选择草稿、结果一起保存；重复打开复用，备份时验证可重算任务和判断，搜索显示选项文字。无题时仍能返回仅有的一道旧题，搜索打开旧题也解除无题视图。
-- 候选AI生成和评分未通过预先标准，未接入产品，无/api/understanding路由。实验提示和schema只是研究文件。CONTENT、TEACH、ASR、模型不变。底栏开放“情境练习”仍使用旧AI API，不能套用本机规则的边界保证。
-- 原词／零长度词回听及近似标签保持PR24行为，不插值、不改原时间。无声学理解或流利度总分。
+- 冻结8段中文教程（Python3.14／MDN各4段），保留边界、例外、类型与数值，未改写为规则句式。source-rules-v1实际生成0/8；生成题有效性N/A，学习效果未知。完整逐例输入／返回和hash入库，不把拒绝当成有效题。
+- 便利样本、非盲测、只有编程自学；目标和有效／无效参照题由本次编码助手编写并复核，没有独立教师或真实学习者。多数参照也只测单步应用，不能证明迁移或长期保持。
+- 所有练习增加“题目有疑问”：先flush草稿，再保存round.review held；暂停判答，不增加成绩或调用；草稿仍可编辑。历史反馈折叠为未复核，隐藏旧判断标签／依据，保留原始内容。标记随刷新和v1备份保持；搜索明确待复核反馈，命中可展开旧文本。
+- 用户标记可撤回，但这不是系统认定题目有效；撤回本身不判答或调用。主动换AI题会排除待核对旧题的历史上下文，不继续沿用可疑前提。本机任务与来源／题面快照不一致也暂停，origin local_check不能撤回绕过。
+- 本批不是自动语义审题器。普通开放AI题仍可能给错题／错反馈，未标记时不会自动识别；没有后台审核或自动重出题。损坏本机任务的备份仍拒绝，不靠review绕过原校验。
+- 无题页面只说未生成合适题目，保留返回对话和旧题选择；普通换题明确标AI。CONTENT、TEACH、ASR、模型、source-rules-v1均未改，没有恢复上轮失败的AI出题／评分候选。
+- 本机规则仍仅支持整段等于引文的三类有限句式：必要前提、正整数克数配比、三个不同动作的顺序；非通用中文语义解析，不验证上游诊断。只核对本题选项，不推导掌握度。
+- 原词／零长度词邻近回听保留，不插值或修改原时间；无声学理解或流利度总分。
 
-[本批记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-21-task-split.md)、[批准方案](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/2026-10-21-task-split-plan.md)、[完整响应](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/task-split-live.json)。
+[本批记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-21-real-material-review.md)、
+[固定方案](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/2026-10-21-real-material-plan.md)、
+[离线结果](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/real-material-offline.json)。
+材料docs/research/fixtures/real-material-corpus.json SHA256 acbcd9074e06323229af4c144e4db7b88e428faa44b11ba622533b79b6b1c30d（本次读取字节）；引擎hash在结果JSON。
+Python摘录PSF-2.0、MDN与作者参照CC BY-SA2.5，署名／许可单列；不改变项目源代码许可未选状态。
 
-## 真实实验的拒绝决定
+## 验证与环境
+
+本地定向Node41/41，既有Edge一条整合路径通过：立即标记时落盘、刷新保留选择、暂停判答、旧反馈折叠、撤回、390px布局；手机截图已查看。随后自审补充排除held题的模型历史，只复验practice.test.mjs 8/8，未重复本机浏览器。完整回归以最终CI为准，不为文档或提交重跑。
+本地收据artifacts/study-teachback/correctness-hygiene-01/node-1792513874677-CBofZw、browser-1792513882984-5z71e9。仅模拟provider，生产账本前后未变：
+SHA256 9f23a117f27c0d279872885bdf074d48cbf369e0beec44480d2644c2b148c67e。历史4笔未结算不变。
+当前4321无provider预览仍为PID15608；只读核对命令及新practiceFlag页面已提供，未重启。用户刷新后载入客户端；无公共部署。下次停进程先核对完整命令和监听PID。常规npm start／4317。
+
+## 上一轮真实实验的拒绝决定（PR #26）
 
 4份来源各生成一次；另用4个人工固定题目×两个答案测评分，共12次。第二阶段并非评分第一阶段生成的题。作者自编样本，编码代理逐例复核，非独立人类盲评。
 
 - 必要条件题有效改变推理方向；配方题换3份但把乙的缺口扩展成两个量都必须正确。
 - 顺序题仍问与原解释相同的错误序列，原因未知题也重问已解释的无依据因果。
 - 引用／结构校验全部通过，但人工题评分仅6/8：故意不成立的资金题两次都未返回unanswerable。正确质疑材料不足的答案被判partial，另一个猜数字答案被判incorrect；评分器应先拒绝题目，而不能要求学习者满足无依据标准。
-- 因解释复述和错误评分对象，拒绝AI候选，不追加调用，不以结构有效冒称语义有效。新本机引擎是实验后选定的有限替代，没有付费效果比较或跨材料覆盖率证据。
+- 因解释复述和错误评分对象，拒绝AI候选，不追加调用，不以结构有效冒称语义有效。本机引擎是上一轮实验后的有限替代；本轮新增真实教程覆盖证据0/8，仍没有付费效果比较。
 - 实际预留US$0.042374、估算US$0.00410625、新增未结算0；不是最终账单。
 - task-split-live.mjs --approved-budget-usd=0.10已执行，不得重跑或换输出目录绕过。配置fixtures/task-split-config.json冻结；公开报告保留原始全部字段，再附人工复核。
 
@@ -41,14 +54,6 @@ Canonical state branch: meta/master-state
 SHA256 4dd6fa677c043b361635af451e0e4fb2f88939a94403dea0cc667d3d89d1ec16。
 获批实验后的生产账本SHA256 9f23a117f27c0d279872885bdf074d48cbf369e0beec44480d2644c2b148c67e。
 
-## 验证与环境
-
-本地定向Node39/39、复用Edge一条整合流程通过：媒体回听、选择草稿刷新、作答前隐藏依据、零API生成／核对、390px布局，手机／桌面截图已检查。初次本地Node有沙箱回环限制和新fixture缺introduction；首次浏览器断言误要求答后无选项仍能提交，修正后通过。最后的无题后旧题选择修复在PR完整CI覆盖。首轮CI39454682126的Node171/171通过，Edge因旧断言查找“上次出题”而失败；恢复文案前缀后CI39455216922完整通过。完整回归只在CI，不因文档或提交重复本机全套。
-
-本地收据在artifacts/study-teachback/correctness-hygiene-01/：
-node-1792512106959-wC48bG、browser-1792512202597-AmejUG。合成凭据、loopback、独立账本，离线期间生产账本未变。
-
-4321本聊天无provider预览已核对原PID24324命令与监听后重启，当前PID15608，模型与ASR注入禁用；新增静态模块已可提供。用户页面需要刷新载入客户端。本批无公共部署。下次重启先核对完整命令和监听PID。常规npm start／4317。
 
 ## 历史结果与产品边界继续有效
 
@@ -89,7 +94,7 @@ Phase 3B 仅对有界可行性问题 **CLOSED / PASS**，不代表跨课程／�
 
 ## 下一步
 
-本批完成。先用未见的实际学习材料评价任务覆盖率、是否仍照抄解释和误解析，不把三种模板当成通用分析升级。可考虑可编辑的人工题目／标准，或将题目是否成立独立判定，再决定是否恢复AI自由出题与评分。新真实实验重新报方案预算，不重跑本批或历史入口，不延用额度。
-自然语音可研究自愿讲解的人工文本／少量词边界、数字角色与领域术语；不调停顿阈值。Issue #3同输入多源研究保留。
+本批完成。优先让题目与标准能够被明确审阅／编辑；若尝试AI，应先独立判断题目是否成立，再判断答案。利用冻结语料设计包含正确质疑、猜测答案和错误标准的比较，另留未参与调试的材料；不能只添加正则迎合8例。新真实实验重新报调用数和预算，不恢复旧失败候选或重跑旧入口，不延用额度。
+真实学习者与保持／迁移数据仍缺；不能凭参照题或工程测试称学习效果已证明。自然语音和Issue #3同输入多源研究继续保留，不调停顿阈值。
 
-历史快照：[本轮之前完整状态](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a85897239c466fd446992211ef702c991a331b8e/docs/master/CURRENT_STATE.md)。
+历史快照：[本轮之前完整状态](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/63107f3a69ee75666fe8a2e4590c65e330a2bfa5/docs/master/CURRENT_STATE.md)。
