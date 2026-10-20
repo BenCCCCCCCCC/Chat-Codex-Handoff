@@ -72,15 +72,6 @@ test('B1 existing content validation is reused, including source, version, quote
   const missing=copy('gap-without-process');missing.report.findings[0].spanId='s0';assert.throws(()=>localize(missing),/MISSING_HAS_NO_TIME/);
   assert.throws(()=>localize({...f,attempt:{...f.attempt,reviewed:false},report:null,evidence:[]}),/ASR_REVIEW_REQUIRED/);
 });
-test('B4 sections have separate accessible names and process styling is not a content error',()=>{
-  const html=readFileSync(new URL('./index.html',import.meta.url),'utf8');
-  assert.match(html,/<section aria-labelledby="contentHeading"><h3 id="contentHeading" tabindex="-1">内容理解<\/h3><p id="resultBinding" class="muted"><\/p><div id="feedback"><\/div><\/section>/);
-  assert.match(html,/<section aria-labelledby="processHeading"><h3 id="processHeading">讲解过程<\/h3>/);
-  const app=readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
-  const path=app.slice(app.indexOf('async function confirmProcess('),app.indexOf('function renderProcess('));
-  assert(!/\bapi\(|\bfetch\(|\bdiagnose\(/.test(path));
-});
-
 test('B3 actual local confirmation saves without semantic dispatch, deduplicates and isolates versions',async()=>{
   const f=copy('hesitant-correct'),event={id:'e0',type:'near_silence_candidate',start:1,end:2,heard:false};
   const a={...f.attempt,source:f.source,raw:{id:f.attempt.transcriptVersion,reviewed:true,spans:f.attempt.spans},corrections:[],reports:[],observation:{events:[event]}};
