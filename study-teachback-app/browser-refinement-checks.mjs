@@ -14,7 +14,10 @@ export async function refinementChecks({check,evaluate,until,reloadPage,shot,cdp
         audio:new Blob([new Uint8Array(${JSON.stringify(bytes)})],{type:'audio/wav'}),raw:{...raw,id:'refinement-raw'},corrections:[],reports:[],status:'REVIEW_REQUIRED'};
       const version=(await import('/core.mjs')).revisedTranscript(a,a.raw.spans.map(s=>({text:s.text})));a.corrections.push(version);
       a.reports.push({channel:'content',createdAt:Date.now(),sourceId:source.id,attemptId:a.id,transcriptVersion:version.id,
-        findings:[{status:'supported',message:'已表达浇水必须满足的条件。',sourceQuote:source.text,spanId:'s0',quote:a.raw.spans[0].text,eventId:null,repair:null}]});
+        findings:[
+          {status:'supported',message:'已表达浇水必须满足的条件。',sourceQuote:source.text,spanId:'s0',quote:raw.words.slice(1,5).map(w=>w.text).join(''),eventId:null,repair:null},
+          {status:'supported',message:'已表达湿润时不要浇水。',sourceQuote:source.text,spanId:'s0',quote:'不要澆水',eventId:null,repair:null}
+        ]});
       await db.put({id:'refinement-topic',createdAt:Date.now(),source,goals:[],messages:[],attempts:[a],mode:'learn',resume:{view:'attempt',attemptId:a.id}});db.close();
     })()`);
     await reloadPage();await until(`document.querySelector('#rawText .word-link')`);
@@ -22,7 +25,14 @@ export async function refinementChecks({check,evaluate,until,reloadPage,shot,cdp
     assert.equal(await evaluate(`document.getElementById('rawText').textContent`),raw.text);
     assert.equal(await evaluate(`document.querySelectorAll('#feedback .diagnosticTarget').length`),0);
     assert.equal(await evaluate(`document.querySelector('#feedback .finding').dataset.status`),'supported');
+    assert.equal(await evaluate(`document.querySelector('#feedback .supported-findings').open`),false);
+    await evaluate(`document.querySelector('#feedback .supported-findings').open=true`);
     await cdp('Page.bringToFront');
+    await evaluate(`{const b=document.querySelector('#feedback [data-replay="quote"]');b.closest('details').open=true;b.scrollIntoView({block:'center'});b.focus();}`);
+    await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',windowsVirtualKeyCode:13});
+    await cdp('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+    const quoteStart=Math.max(raw.spans[0].start,raw.words[1].start-.3),quoteEnd=Math.min(raw.spans[0].end,raw.words[4].end+.3);
+    await until(`window.replayInternal.some(x=>x.start===${quoteStart}&&x.end===${quoteEnd}&&x.completionReason==='genuine-coverage')`);
     for(const id of ['w0','w14']){
       await evaluate(`{const b=document.querySelector('#rawText [data-word-id="${id}"]');b.scrollIntoView({block:'center'});b.focus();}`);
       assert.equal(await evaluate(`document.activeElement.dataset.wordId`),id);

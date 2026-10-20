@@ -26,8 +26,33 @@ export function rawPlaybackParts(raw){
   if(cursor<raw.text.length)parts.push({text:raw.text.slice(cursor)});
   return parts;
 }
+// A corrected or ambiguous quote has no trustworthy word mapping. Keep its segment.
+export function quotePlayback(raw,confirmedSpan,quote){
+  if(!confirmedSpan)return null;
+  const fallback={level:'segment',start:confirmedSpan.start,end:confirmedSpan.end};
+  const span=raw?.spans?.find(s=>s.id===confirmedSpan.id);
+  if(!span||span.text!==confirmedSpan.text||span.start!==confirmedSpan.start||span.end!==confirmedSpan.end||!quote)return fallback;
+  const at=span.text.indexOf(quote),end=at+quote.length;
+  if(at<0||span.text.indexOf(quote,at+1)>=0)return fallback;
+  const words=(raw.words??[]).filter(w=>w.start>=span.start&&w.end<=span.end);
+  const selected=[];let cursor=0,covered=at;
+  for(const word of words){
+    if(!word.text)return fallback;
+    const from=span.text.indexOf(word.text,cursor),to=from+word.text.length;
+    if(from<0)return fallback;
+    cursor=to;
+    if(from>=end||to<=at)continue;
+    if(/[\p{L}\p{N}]/u.test(span.text.slice(covered,from)))return fallback;
+    if(!word.usable||!Number.isFinite(word.start)||!Number.isFinite(word.end)||word.end<=word.start)return fallback;
+    selected.push(word);covered=Math.min(to,end);
+  }
+  if(!selected.length||/[\p{L}\p{N}]/u.test(span.text.slice(covered,end)))return fallback;
+  const start=selected[0].start,stop=selected.at(-1).end;
+  if(stop<=start)return fallback;
+  return {level:'quote',start:Math.max(span.start,start-.3),end:Math.min(span.end,stop+.3)};
+}
 export function playbackLabel(anchor){
-  return `${anchor.level==='word'?'词级参考':anchor.level==='context'?'邻近范围，非独立词时间':'整段回听'} ${anchor.start.toFixed(1)}–${anchor.end.toFixed(1)} 秒`;
+  return `${anchor.level==='quote'?'原话附近':anchor.level==='word'?'词级参考':anchor.level==='context'?'邻近范围，非独立词时间':'整段回听'} ${anchor.start.toFixed(1)}–${anchor.end.toFixed(1)} 秒`;
 }
 export function renderRawPlayback(container,raw,onPlay,onStatus){
   container.replaceChildren();
