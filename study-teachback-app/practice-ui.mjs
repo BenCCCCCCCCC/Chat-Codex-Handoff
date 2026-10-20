@@ -35,6 +35,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
       topic?.practiceRequest ? '上次出题未完成或结果未知。可手动重新出题；这会发起新的模型请求。' : '';
     $('practiceAnswers').replaceChildren(...(round?.answers ?? []).map((answer, i) => {
       const item = node('article', '', 'practice-answer');
+      item.dataset.answerId=answer.id;
       item.append(node('h4', `第 ${i + 1} 次回答`), node('p', answer.text, 'prewrap'));
       if (answer.result) item.append(node('strong', '本次反馈'), node('p', answer.result, 'prewrap'));
       else item.append(node('p', flow.busy && answer.status === 'pending' ? '反馈生成中…' :
@@ -85,5 +86,9 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     const topic=getTopic();topic.resume={view:'practice'};
     await save(topic);render();focusPanel();
   }
-  return {render, start, open, flushDraft, focusPanel, discardDraft:()=>drafts.discard(), get hasPendingDraft(){return drafts.pending;}};
+  function locate(target,focusHit){
+    const answer=target.answerId&&[...$('practiceAnswers').children].find(n=>n.dataset.answerId===target.answerId);
+    focusHit(answer??$(target.part==='draft'?'practiceDraft':'practiceQuestion'));
+  }
+  return {render, start, open, flushDraft, focusPanel, locate, discardDraft:()=>drafts.discard(), get hasPendingDraft(){return drafts.pending;}};
 }

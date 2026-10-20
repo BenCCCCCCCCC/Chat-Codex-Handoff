@@ -12,16 +12,24 @@ export async function transcribe(bytes, attemptId, { fetcher = fetch, book = led
     const r=await fetcher('https://api.openai.com/v1/audio/transcriptions',{method:'POST',headers:{Authorization:`Bearer ${process.env.OPENAI_API_KEY}`},body:form,signal:signal?AbortSignal.any([signal,AbortSignal.timeout(60000)]):AbortSignal.timeout(60000)});
     if(!r.ok){book.failure(reservation.id,'HTTP_ERROR',r.status);throw new Error(`API_HTTP_${r.status}`);}
     const data=await r.json();book.settle(reservation.id,{seconds:duration},r.headers.get('x-request-id'));
-    return { ...normalizeASR(data,duration), duration, model:'whisper-1',reservationId:reservation.id };
+    return { ...normalizeASR(data,duration), duration, model:'whisper-1',reservationId:reservation.id,requestId:r.headers.get('x-request-id') };
   } catch(e){ if(!String(e.message).startsWith('API_HTTP_'))book.failure(reservation.id,'ASR_RESULT_UNAVAILABLE');throw new Error(String(e.message).startsWith('API_HTTP_')?e.message:'ASR_RESULT_UNAVAILABLE'); }
 }
 export async function semantic(instructions, input, schema, { fetcher = fetch, book = ledger, signal } = {}) {
   if (!process.env.OPENAI_API_KEY) throw new Error('CREDENTIAL_MISSING');
   const body = { model: 'gpt-5.6-luna', store: false, background: false, service_tier: 'default', reasoning: { effort: 'none' }, max_output_tokens: 1800,
     instructions, input: JSON.stringify(input), text: { format: { type: 'json_schema', name: 'learning_response', strict: true, schema } } };
-  const encoded = JSON.stringify(body);
+  let encoded = JSON.stringify(body);
   // UTF-8 bytes + schema/protocol margin bounds input tokens for these short text-only requests.
-  const tokenBound = Buffer.byteLength(encoded, 'utf8') + 2048;
+  let tokenBound = Buffer.byteLength(encoded, 'utf8') + 2048;
+  const originalHistory=Array.isArray(input.history)?input.history.length:null;
+  if(originalHistory!==null){
+    input={...input,history:input.history.slice()};
+    while(tokenBound>24000&&input.history.length){
+      input.history.shift();body.input=JSON.stringify(input);encoded=JSON.stringify(body);
+      tokenBound=Buffer.byteLength(encoded,'utf8')+2048;
+    }
+  }
   if (tokenBound > 24000) throw new Error('INPUT_TOO_LARGE');
   const reservation = book.reserve({ kind: 'semantic', input: tokenBound, output: body.max_output_tokens });
   let response;
@@ -34,7 +42,9 @@ export async function semantic(instructions, input, schema, { fetcher = fetch, b
     if (data.status !== 'completed') throw new Error('MODEL_INCOMPLETE');
     const output = data.output?.flatMap(x => x.content ?? []).filter(x => x.type === 'output_text').map(x => x.text).join('');
     if (!output) throw new Error('MODEL_NO_OUTPUT');
-    return { value: JSON.parse(output), usage: data.usage, model: data.model, reservationId: reservation.id };
+    return { value: JSON.parse(output), usage: data.usage, model: data.model, reservationId: reservation.id,
+      requestId:response.headers.get('x-request-id'),
+      ...(originalHistory===null?{}:{contextUsage:{historyUsed:input.history.length,historyOmitted:originalHistory-input.history.length}}) };
   } catch (error) {
     const safeNetworkCodes = ['ENOTFOUND', 'EAI_AGAIN', 'ECONNREFUSED', 'ECONNRESET', 'ETIMEDOUT', 'EPERM', 'EACCES', 'UND_ERR_CONNECT_TIMEOUT'];
     const code = safeNetworkCodes.includes(error.cause?.code) ? error.cause.code : null;

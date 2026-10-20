@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {encodeBackup,decodeBackup,restoredCopy} from './backup.mjs';
 import {revisedTranscript} from './core.mjs';
+import {transcriptTexts,updateTranscriptDraft,analysisTrace} from './voice-review.mjs';
 function fixture() {
   const source={id:'source',title:'Condition',text:'Enter only when open.'};
   const a={id:'attempt',createdAt:1000,source,kind:'full',assistance:'none',duration:1,
@@ -16,13 +17,19 @@ function fixture() {
     resume:{view:'attempt',attemptId:a.id}};
 }
 test('v1 backup round trip preserves audio, corrections, report links and practice; restore is a separate copy',async()=>{
-  const original=fixture(), text=await encodeBackup(original), decoded=decodeBackup(text);
+  const original=fixture();original.contextNote='Remember the condition.';
+  updateTranscriptDraft(original.attempts[0],[{id:'s0',text:'Unconfirmed edit'}]);
+  original.attempts[0].reports[0].analysis=analysisTrace({model:'test',requestId:'req_test',reservationId:'local_test'});
+  const text=await encodeBackup(original), decoded=decodeBackup(text);
   const copy=restoredCopy(decoded,{id:'copy',now:900000000});
   assert.equal(copy.createdAt,original.createdAt);assert.equal(copy.restoredAt,900000000);
   assert.equal(copy.restoredFrom,original.id);assert.notEqual(copy.id,original.id);
   assert.deepEqual(copy.attempts[0].raw,original.attempts[0].raw);
   assert.deepEqual(copy.attempts[0].corrections,original.attempts[0].corrections);
   assert.deepEqual(copy.attempts[0].reports,original.attempts[0].reports);
+  assert.equal(copy.contextNote,original.contextNote);
+  assert.deepEqual(transcriptTexts(copy.attempts[0]),['Unconfirmed edit']);
+  assert.equal(copy.attempts[0].corrections.length,1,'saving a draft creates no confirmed version');
   assert.deepEqual(await copy.attempts[0].audio.arrayBuffer(),await original.attempts[0].audio.arrayBuffer());
   assert.deepEqual(copy.resume,original.resume);
   assert.equal(copy.practiceRounds[0].draft,'Stay outside');

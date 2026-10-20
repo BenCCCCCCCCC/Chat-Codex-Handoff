@@ -40,6 +40,7 @@ export function decodeBackup(text) {
     setupContextValue(t.setupContext);
     for (const goal of list(t.goals)) { string(goal.text,200); string(goal.sourceQuote,600); check(t.source.text.includes(goal.sourceQuote)); }
     if(t.chatDraft!=null)string(t.chatDraft,2000);
+    if(t.contextNote!=null)string(t.contextNote,1000);
     messages(t.messages); list(t.attempts); unique(t.attempts);
     if (t.question != null) string(t.question,1000);
     if (t.focus != null) string(t.focus,1000);
@@ -49,6 +50,11 @@ export function decodeBackup(text) {
       check(['learn','repair'].includes(r.mode)); check(['pending','unknown','complete'].includes(r.status));
       check(typeof r.internalStarter === 'boolean');
       if (r.focus != null) string(r.focus,1000);
+      if (r.contextNote != null) string(r.contextNote,1000);
+      if (r.contextUsage != null) {
+        for(const key of ['historyUsed','historyOmitted'])check(Number.isInteger(r.contextUsage[key])&&r.contextUsage[key]>=0);
+        check(r.contextUsage.historyUsed+r.contextUsage.historyOmitted<=6);
+      }
     }
     for (const a of t.attempts) {
       sourceValue(a.source); check(a.source.id===t.source.id && a.source.text===t.source.text);
@@ -68,6 +74,11 @@ export function decodeBackup(text) {
       }
       if (a.corrections.length) check(a.raw && a.corrections.every(v=>
         v.spans.length===a.raw.spans.length && v.spans.every(s=>a.raw.spans.some(raw=>raw.id===s.id))));
+      if(a.transcriptDraft){
+        const d=a.transcriptDraft,v=versions.at(-1);object(d);check(v&&d.baseVersionId===v.id);date(d.updatedAt);
+        unique(list(d.edits));check(d.edits.length===v.spans.length);
+        for(const edit of d.edits){check(v.spans.some(s=>s.id===edit.id));string(edit.text,2000);}
+      }
       const events=a.observation?.events ?? [];
       for (const event of list(events)) {
         identifier(event.id); check(Number.isFinite(event.start)&&Number.isFinite(event.end)&&event.end>event.start);
@@ -75,6 +86,10 @@ export function decodeBackup(text) {
       for (const report of list(a.reports)) {
         object(report); check(report.attemptId===a.id);
         const version=versions.find(v=>v.id===report.transcriptVersion); check(version);
+        if(report.analysis){
+          object(report.analysis);check(report.analysis.method==='confirmed_transcript');
+          for(const key of ['model','reservationId','requestId'])if(report.analysis[key]!=null)string(report.analysis[key],200);
+        }
         if (['content','delivery'].includes(report.channel)) {
           const {sourceId,attemptId,transcriptVersion,findings}=report;
           validateFindings({sourceId,attemptId,transcriptVersion,findings},a.source,

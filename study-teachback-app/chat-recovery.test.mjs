@@ -15,14 +15,16 @@ function harness(topic=empty()) {
   return {topic,sent,saved,context,run:code=>vm.runInContext(code,context)};
 }
 test('failed chat survives reload and explicit retry sends original context once without another user entry',async()=>{
-  const h=harness();h.topic.messages.push({role:'assistant',text:'Earlier explanation'});
+  const h=harness();h.topic.contextNote='The original point';h.topic.messages.push({role:'assistant',text:'Earlier explanation'});
   h.context.api=async(path,body)=>{h.sent.push(structuredClone(body));throw Error('API_RESULT_UNAVAILABLE');};
   await assert.rejects(h.run("teach('My question')"),/API_RESULT_UNAVAILABLE/);
   assert.equal(h.saved.at(-1).chatRequest.status,'unknown');
   const reopened=harness(structuredClone(h.saved.at(-1)));
+  reopened.topic.contextNote='A later point';
   assert.equal(reopened.sent.length,0);
   await reopened.run("teach('', 'learn', null, {retry:true})");
   assert.deepEqual(reopened.sent,h.sent);
+  assert.equal(reopened.sent[0].contextNote,'The original point');
   assert.deepEqual(reopened.topic.messages.filter(m=>m.role==='user').map(m=>m.text),['My question']);
   await reopened.run("teach('', 'learn', null, {retry:true})");
   assert.equal(reopened.sent.length,1);

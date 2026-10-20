@@ -8,6 +8,7 @@ import { createServer } from './server.mjs';
 import { Ledger } from './ledger.mjs';
 import { revisedTranscript, validateFindings, waveBytes } from './core.mjs';
 import { semantic } from './provider.mjs';
+import {transcriptTexts,updateTranscriptDraft,analysisTrace} from './voice-review.mjs';
 import { localize } from './diagnostic-localization.mjs';
 import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 import { TEACH, teachingSchema } from './schemas.mjs';
@@ -44,6 +45,7 @@ function confirmationHarness(){
   let saveGate=null;
   const context=vm.createContext({$,current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),
     diagnosisStates:new WeakMap(),matchMedia:()=>({matches:true}),editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
+    transcriptTexts,updateTranscriptDraft,analysisTrace,voiceDrafts:{flush:async()=>{},mark(){}},
     blobURL:null,replayRequest:0,replayOriginal:null,URL:{createObjectURL:()=> 'blob:synthetic',revokeObjectURL(){}},
     notice:x=>notices.push(x),friendly:x=>x,act:async fn=>{try{await fn();}catch(e){notices.push(e.message);}},
     reveal(){},el:()=>({setAttribute(){},append(){}}),button:()=>({}),renderProcess(){},renderFeedback:r=>visible.push(r),updateBudget(){},
@@ -108,18 +110,20 @@ test('C3 healthy status retains ledger summary and read does not write',async()=
   finally{await new Promise(r=>server.close(r));}
 });
 
-test('C1 history stays at six whole messages; output/history ceiling and provider input budget still reject overflow',async()=>{
+test('C1 history stays at six whole messages; oversized required input still fails before dispatch',async()=>{
   const b=book(),requests=[];let output='Short reply';
-  const server=createServer({book:b,semanticCall:async(_,input)=>{requests.push(input);return {value:{sourceId:source.id,message:output,goals:[{text:'Condition',sourceQuote:source.text}],question:'Why?'}};}});
+  const server=createServer({book:b,semanticCall:async(_,input)=>{requests.push(input);return {value:{sourceId:input.source.id,message:output,goals:[{text:'Condition',sourceQuote:input.source.text.slice(0,600)}],question:'Why?'}};}});
   const origin=await listen(server),history=Array.from({length:8},(_,i)=>({role:'assistant',text:i<2?'Old message '+i:String(i)+'讲'.repeat(3999)}));
   try{
     const payload={source,mode:'learn',message:'Why?',history};assert.equal((await post(origin,'/api/teach',payload)).status,200);
     assert.deepEqual(requests[0].history,history.slice(-6));
-    assert.equal((await post(origin,'/api/teach',{...payload,history:Array.from({length:8},()=>({role:'assistant',text:'讲'.repeat(4000)}))})).status,422);assert.equal(requests.length,1);
-    assert.equal((await post(origin,'/api/teach',{...payload,history:[{role:'assistant',text:'x'.repeat(4001)}]})).status,422);assert.equal(requests.length,1);
+    const longPayload={...payload,source:{...source,text:'材'.repeat(5000)},contextNote:'要点',history:Array.from({length:6},()=>({role:'assistant',text:'讲'.repeat(4000)}))};
+    assert.equal((await post(origin,'/api/teach',longPayload)).status,200);assert.equal(requests.length,2);
+    assert.equal(requests[1].contextNote,'要点');
+    assert.equal((await post(origin,'/api/teach',{...payload,history:[{role:'assistant',text:'x'.repeat(4001)}]})).status,422);assert.equal(requests.length,2);
     output='x'.repeat(4001);assert.equal((await post(origin,'/api/teach',{...payload,history:[]})).status,422);
     let dispatches=0;const before=b.summary();
-    await assert.rejects(semantic(TEACH,requests[0],teachingSchema,{book:b,fetcher:async()=>{dispatches++;throw Error('UNEXPECTED');}}),/INPUT_TOO_LARGE/);
+    await assert.rejects(semantic(TEACH,{...requests[0],history:[],message:'讲'.repeat(10000)},teachingSchema,{book:b,fetcher:async()=>{dispatches++;throw Error('UNEXPECTED');}}),/INPUT_TOO_LARGE/);
     assert.equal(dispatches,0);assert.deepEqual(b.summary(),before);
   }finally{await new Promise(r=>server.close(r));}
 });
@@ -133,7 +137,7 @@ test('C3 unavailable status replaces stale budget display without showing zero u
 
 test('review UX confirms current edits without playback; reload keeps honest confirmation and raw audio',async()=>{
   const h=confirmationHarness(),raw=JSON.stringify(h.a.raw),audio=h.a.audio;
-  assert.match(h.node('reviewHint').textContent,/逐段回听不是必需步骤/);
+  assert.match(h.node('reviewHint').textContent,/回听可选/);
   h.review('Do not enter when closed.');const first=h.click();await drain();
   assert.equal(h.pending.length,1);assert.equal(h.pending[0].request.attempt.spans[0].text,'Do not enter when closed.');
   assert.equal(h.pending[0].request.attempt.reviewed,true);assert.equal(h.a.corrections[0].origin,'USER_TRANSCRIPT_CONFIRMATION');
@@ -147,7 +151,7 @@ test('review UX confirms current edits without playback; reload keeps honest con
 test('diagnosis state locks synchronously, completes with focus, and reuses unchanged result',async()=>{
  const h=confirmationHarness(),release=h.blockSave(),first=h.click();
  assert.equal(h.node('confirm').disabled,true);assert.equal(h.context.editors.get('s0').readOnly,true);assert.match(h.node('diagnosisState').textContent,/正在诊断/);
- await h.click();assert.equal(h.a.corrections.length,1);release();await drain();h.pending[0].resolve();await first;
+ await h.click();await drain();assert.equal(h.a.corrections.length,1);release();await drain();h.pending[0].resolve();await first;
  assert.equal(h.node('confirm').disabled,false);assert.equal(h.context.editors.get('s0').readOnly,false);assert.match(h.node('diagnosisState').textContent,/诊断完成/);
  assert(h.node('contentHeading').focused&&h.node('contentHeading').scrolled);
  await h.click();assert.equal(h.pending.length,1);assert.equal(h.a.corrections.length,1);
