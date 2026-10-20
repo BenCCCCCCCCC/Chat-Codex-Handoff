@@ -7,43 +7,42 @@ Canonical state branch: meta/master-state
 
 ## 当前决定与授权
 
-产品定位为 **个人学习＋作品展示**。用户授权公开仓库及已有 Git 历史、README、产品与设计研究、自主审核实现、commit/push/PR/merge，以及有意义的批次交接；无需每个小动作再询问。
+产品定位 **个人学习＋作品展示**。用户授权公开仓库及已有 Git 历史、README、产品与设计研究、自主审核实现、commit/push/PR/merge，以及有意义的批次交接；无需每个小动作再询问。
 
-最新指示：继续自主推进，**优先完善实际学习流程与核心功能**，自主决定优先级并减少冗余测试。本批据代码发现优先完成情境练习与学习续接，Issue #3 基线研究保留。
+本轮明确要求：优先普通聊天失败恢复、学习记录导出恢复，继续考虑页面布局与设计，参考相关资料并减少冗余文字与测试。已完成这一批，不再把它列作待办。
 
 旧交接的 no push/merge、每次字节变化全量重跑等限制已被后续授权取代。原 Phase 3B 真实调用额度已耗尽，本批没有新增付费模型实验额度。
 
 ## 最新交付
 
 - 仓库 public，默认分支 prototype/study-teachback-v0.1。
-- 本批分支：codex/practice-and-resume。
-- [Issue #6](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/6) / [PR #7](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/7)。
-- 实现头：2f080135a675e323ad2bc75e50c0cbfc99a4f197。
-- 合并提交：8312df0f51ba2ccbac3ba311a3ea9e46b32aa34a。
-- [最终 CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39408854296)：PASS — Node 154、Edge 55；Python 独立提取按范围跳过。
+- 分支：codex/chat-recovery-and-restore。
+- [Issue #8](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/8) / [PR #9](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/9)。
+- 实现头：9b1f6ade07a83c56a725097da8b5fcf473930438。
+- 合并提交：ac1540837ffc329364677786292cd7407225a036。
+- [最终 CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39412499703)：PASS — Node 152、Edge 55；Python 独立提取按范围跳过。
 
-原先单个 topic.apply 会被新题覆盖，且再次回答会退回普通聊天。现在：
-- 独立出题、作答、反馈和再答；每题与每次回答分别保存，旧题可切回。
-- 原题明确作为评价 focus，不依赖普通聊天的短历史；练习与聊天／录音分离。
-- 草稿自动保存；失败保留原回答，刷新不自动重试；相同已有反馈的回答复用结果。
-- 收到响应但本机保存失败时保留内存结果，通过既有保存恢复／导出入口继续。
-- 按最近活动排序学习记录，恢复最近主题和学习／核对／练习位置。打开记录单条读取最新保存数据，避免旧内存遮蔽更新。
-- 旧 topic.apply 兼容读入，原字段保留；导出包含练习记录。没有改变七天保留期，仍按原 createdAt 到期。
-- 录音时隐藏练习与答案，保持既有提示条件。
+聊天发送前保存请求状态与当时上下文，失败／刷新后显式重试原问题，不重复追加用户消息，不自动发送。首次讲解和补学指令仍是内部指令。收到回复但保存失败时保留结果，用保存恢复／导出处理，不重新调用模型。忙状态从异步保存前锁定，进行中不切换或删除。
 
-[批次记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-20-practice-resume.md)包含发现、数据兼容、失败与验证；README 已增加实际练习说明与截图。
+任意主题可从顶栏／记录列表导出 v1 JSON；记录页可本地导入、预览、确认恢复为新副本。单次 IndexedDB add 不覆盖或合并已有主题；取消、无效文件、保存失败不写入半份记录。录音字节、来源／讲解／转写／报告 ID、修订与练习草稿保留，只新建主题 ID。删除尝试的内存标记按对象身份，避免误伤共享原始 ID 的恢复副本。
 
-之前 PR #2 完成公开整理、诊断状态 UX、合成音频和 CI；PR #5 完成工作台与独立固定示例 /demo。不要重复当作待实现任务。原诊断版本关联、过期提示、重复文字复用保持；跨标签页持久请求去重仍未实现。
+原主题仍按 createdAt 七天到期。恢复副本保留原学习日期，另记 restoredAt，从确认恢复起保留七天；界面明确说明。导入上限 128 MB；支持旧 v1 与 topic.apply。恢复不调用模型或重置费用账本。文件损坏／引用不完整会拒绝，不自动“修复”证据。
+
+页面减少重复口号与解释，阶段标签缩短；材料侧栏保留，普通对话／情境练习分别展示，记录列表独立。底栏集中下一步动作，数据说明折叠；失败与恢复确认处保留必要提示。
+
+[批次记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-20-chat-backup.md)与[设计研究](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/2026-10-20-recovery-and-density.md)已提交，README 和界面截图已更新。参考 NN/g、RemNote、Obsidian 官方资料；未安装第三方技能代码。
+
+之前 PR #2 完成公开整理、诊断状态、合成音频和 CI；PR #5 完成工作台与独立固定示例 /demo；PR #7 完成多题练习、回答修订与学习续接。不要重复当作待实现任务。
 
 ## 验证与精简原则
 
-局部 Node 13/13 通过。用四个练习实际行为用例替换三个旧 apply 聊天用例；浏览器用三条练习／续接流程替换三条旧 apply 路径，总数仍 55，已有导出验证扩展练习记录。
+局部 Node 7/7、聚焦 Edge 2/2。七条旧重复／结构用例替换为五条恢复实际结果用例，Node 总数 154 → 152。两条浏览器恢复路径替换两条重复来源路径，总数仍 55；已有录音导出验证扩展为导回数据库。
 
-本地两次浏览器运行分别在异步历史等待、旧 Apply 入口预期处中断；新练习、恢复与前 33 条流程通过。修正后交给 CI，没有第三次本地全量重复。首次 CI Node 全套通过，浏览器后段发现同 ID 重开使用旧内存对象，已修复。完整最终结果以上述 CI 为准。提取器实现未改，CI 按范围跳过独立 Python 检查。
+首次 CI Node 全套通过，旧补学等待在保存前提前结束；改为等待新增回复。后续本地浏览器前 50 条通过，末段旧用例期望请求中删除；调整为验证新增忙锁阻止删除、完成后明确删除。最终完整结果以上述 CI 为准；修正后未再本地全量重复。
 
-已人工检查桌面／手机练习截图，语法／差异检查通过。无真实模型、物理麦克风或出站请求；本地生产账本 hash 未变。模拟响应验证工程流程，未验证模型反馈质量或学习效果。
+已查看桌面／手机截图。没有真实模型、物理麦克风或出站请求；生产账本未变。模拟响应验证工程流程，不证明模型质量或学习效果。跨标签页持久请求去重仍未实现；未知结果重试可能产生新的模型费用。
 
-继续遵循 docs/TESTING.md：按影响验证；文档不全量；不为措辞或内部结构增加测试；通过后不因提交／交接重复；保留记录保存、版本与调用费用相关行为。
+继续遵循 docs/TESTING.md：按影响验证；文档不全量；不为措辞增加测试；通过后不因提交／交接重复；保留记录保存、版本与调用费用相关行为。
 
 ## 已有证据边界
 
@@ -68,12 +67,13 @@ Phase 3B 仅对有界可行性问题 **CLOSED / PASS**，不代表跨课程／�
 - 控制样本覆盖一致／互补／冲突来源、目标变化、啰嗦但正确、流畅但错误、证据不足与来源裁决；
 - 记录错误／遗漏精确率与召回率、无依据判断、静默裁决冲突、优先项、稳定性与可追溯性；阈值在基线校准后确定。
 
+
 ## 下一步
 
-依用户当前“实际学习流程与核心功能”优先顺序，从真实使用断点选下个完整批次。候选：普通学习对话失败恢复、导出后的恢复能力。不要扩张为无依据总体评分、知识图谱大屏或多源产品化。
+从实际使用反馈选下一个完整批次。候选：普通对话未发送草稿保存、学习记录检索、长对话阅读与上下文管理。不要重复恢复功能，也不要扩张为无依据总体评分或知识图谱大屏。
 
-[Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3) 仍待办：离线冻结准确材料、确认文字、两份历史结果和比较协议；实际模型比较须明确服务与新增预算。
+[Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3) 仍待办：离线冻结准确材料、确认文字、两份历史结果和同输入比较协议；实际模型比较须明确服务与新增预算。
 
-当前未部署公共网站。/demo 随本地服务运行；聊天中 4321 是禁用真实 provider 的预览，正常产品入口为 npm start / 4317。更新预览不代表启用付费能力。
+未部署公共网站。/demo 随本地服务运行；本聊天 4321 是已更新的无 provider 预览，正常产品入口 npm start / 4317。预览更新不代表启用付费能力。
 
-前一批状态见 [工作台交付快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/5288d44c55d6945244269923b90eed6ac007575d/docs/master/CURRENT_STATE.md)。更早历史与用户决定沿该快照链接保留。
+前批状态见[练习与续接快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/f97545b7f4f6828070b1e227694cfb45d63b556a/docs/master/CURRENT_STATE.md)。更早历史与用户决定沿该快照链接保留。
