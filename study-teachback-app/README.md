@@ -61,6 +61,19 @@ node study-teachback-app/server.mjs
 
 真人语音小样本及归因见 `fixtures/natural-speech/README.md`；评估入口 `natural-speech-live.mjs` 不属于离线测试，每一新批都须重新取得方案／预算批准。已执行的批次拒绝重跑，保留全部结果与局限，见[本轮记录](../docs/iterations/2026-10-21-natural-speech.md)。
 
+## 纠正解释与小检验
+
+当前反馈的“检验理解”不再把repair当题目。`taskContext`绑定当前确认文字、报告和来源；
+`bounded-understanding.mjs`仅接受整段材料完全等于引文的三类有限句式：
+“只有…才…”的必要前提（特定动作前缀）、两种原料的正整数克数配比与明确按份倍增、
+“先…再…最后…”的三步顺序。其他说明或规则、原因未知、未识别的表达均返回无题，不自动调用AI补题。
+新情境与原解释分开，选择后在本机核对；材料／目标／题目／选择／判断随v1备份恢复，恢复时重算规则核验。
+该引擎不是通用语义解析，不验证讲解是否被诊断正确，也不证明迁移或掌握。通用开放情境练习仍使用原API。
+
+实验模块`understanding-task-prompts.mjs`、`task-split-live.mjs`和冻结配置仅供研究留痕，
+不由server导入或提供新API路由。获批12次已完成，生成重复解释、错误题评分失败，故未启用。
+[方案与结果](../docs/iterations/2026-10-21-task-split.md)保留失败证据；新真实实验须重新报方案预算。
+
 ## 隔离工程验证
 
 Phase 3A 将内容判断 `contentFindings` 与讲解过程 `processEvidence` 分开呈现。`diagnosticTargets` 仅从已核对内容中的可处理关系生成；同段过程观察只是独立上下文，不证明“不理解”。缺失内容没有音频时间点。过程证据不要求教材引用，也不包含知识状态、修复建议或人格评分。

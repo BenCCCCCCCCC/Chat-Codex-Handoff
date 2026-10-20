@@ -16,7 +16,7 @@ function fields(topic) {
     ]),
     ...(topic.practiceRounds??[]).flatMap(r=>[
       field('练习',r.question,{kind:'practice',roundId:r.id}),
-      field('草稿',r.draft,{kind:'practice',roundId:r.id,part:'draft'}),
+      field('草稿',r.task?r.task.exercise.choices.find(c=>c.id===r.draft)?.label:r.draft,{kind:'practice',roundId:r.id,part:'draft'}),
       ...r.answers.flatMap(a=>[
         field('回答',a.text,{kind:'practice',roundId:r.id,answerId:a.id}),
         field('反馈',a.result,{kind:'practice',roundId:r.id,answerId:a.id,part:'result'})

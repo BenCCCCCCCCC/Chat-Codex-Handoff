@@ -357,9 +357,12 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
     if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId),anchor=quotePlayback(current.raw,span,f.quote);evidence.append(el('blockquote',`本次原话：${f.quote}`));if(anchor){const replay=button(playbackLabel(anchor),()=>play(anchor.start,anchor.end));replay.dataset.replay=anchor.level;evidence.append(replay);}}else evidence.append(el('p','未表达的内容没有音频位置。','muted'));
     card.append(evidence);
     const target=targets.find(t=>t.contentFindingIds.includes(`content:${current.id}:${report.transcriptVersion}:${index}`));
-    if(target&&!stale){card.dataset.targetId=target.id;card.append(el('p',target.focus,'diagnosticTarget'));
+    if(target&&!stale){card.dataset.targetId=target.id;
+      evidence.append(el('p',`原补学建议：${target.focus}`,'muted'));
       if(target.processEvidenceIds.length)card.append(el('p',`另有 ${target.processEvidenceIds.length} 条同段过程观察，见“讲解过程”；时间相邻不证明理解有误。`,'muted'));
-      const answer=button('试着回答',async()=>{if(!canNavigate())return;await flushDrafts();await practice.fromFeedback(target);});answer.dataset.answerTarget=target.id;
+      const taskTarget={attempt:{...attemptRequest(current),transcriptVersion:version.id,spans:version.spans,reviewed:version.reviewed===true},
+        report:{sourceId:report.sourceId,attemptId:report.attemptId,transcriptVersion:report.transcriptVersion,findings:report.findings},findingIndex:index};
+      const answer=button('检验理解',async()=>{if(!canNavigate())return;await flushDrafts();await practice.fromFeedback(taskTarget);},'quiet diagnosticTarget');answer.dataset.answerTarget=target.id;
       const alternatives=el('details',undefined,'feedback-alternatives');alternatives.append(el('summary','其他方式'));
       alternatives.append(button('再学这一点',async()=>{topic.focus=target.focus;await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',target.focus,{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',target.focus,current.id)));
       card.append(answer,alternatives);}
@@ -393,7 +396,7 @@ async function continueTopic(id,point,hitKey){
     await flushDrafts();const target=await db.get(id);
     if(!target)return notice('这条学习记录已不存在，请重新打开学习记录。');
     const hit=hitKey&&resolveRecordHit(target,hitKey);
-    if(hit){point=hitDestination(hit);if(hit.target.kind==='practice')target.activePracticeId=hit.target.roundId;}
+    if(hit){point=hitDestination(hit);if(hit.target.kind==='practice'){target.activePracticeId=hit.target.roundId;target.taskUnavailable=null;}}
     if(point)target.resume=point;
     resumeTopic(target);await save();
     if(hit){await new Promise(requestAnimationFrame);locateHit(hit);reveal('searchReturn');}

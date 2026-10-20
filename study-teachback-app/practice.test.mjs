@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {taskSplitCases} from './task-split-fixtures.mjs';
 import {createPracticeFlow, activePractice, practiceRounds, activityTime, resumePoint} from './practice.mjs';
 
 function setup(initial) {
@@ -42,19 +43,32 @@ test('failed answers survive reload, never auto-retry, and an explicit retry kee
   assert.equal(round.answers[0].status,'complete');assert.equal(round.draft,'');
 });
 
-test('feedback opens its exact task without a call, resumes drafts and keeps changed tasks/version separate',async()=>{
-  const h=setup(),target={id:'target:a:v1:0',focus:'假设条件不满足，现在能行动吗？',sourceId:'source',attemptId:'a',transcriptVersion:'v1'};
-  await h.flow.fromFeedback(target);assert.equal(h.calls.length,0);
-  const round=activePractice(h.topic);round.draft='不能直接行动';await h.options.save(h.topic);
-  const flow=h.reload();await flow.fromFeedback(target);
-  assert.equal(practiceRounds(h.topic).length,1);assert.equal(activePractice(h.topic).draft,'不能直接行动');
-  assert.equal(activePractice(h.topic).origin.transcriptVersion,'v1');
-  await flow.answer();assert.equal(h.calls.length,1);
-  assert.equal(h.calls[0].focus,target.focus);assert.equal(h.calls[0].mode,'apply_answer');
-  await flow.fromFeedback({...target,focus:'假设条件刚被撤销，现在能行动吗？'});
-  assert.equal(practiceRounds(h.topic).length,2);
-  await flow.fromFeedback({...target,id:'target:a:v2:0',transcriptVersion:'v2'});
-  assert.equal(practiceRounds(h.topic).length,3);assert.equal(h.calls.length,1);
+test('a separate local task preserves its draft, caches answers and makes no provider calls',async()=>{
+  const c=taskSplitCases[0],h=setup({id:'topic',createdAt:1,source:c.source,messages:[],attempts:[]});
+  const target={attempt:c.attempt,report:c.report,findingIndex:0};
+  await h.flow.fromFeedback(target);
+  const first=activePractice(h.topic);
+  assert.notEqual(first.question,c.report.findings[0].repair);
+  assert.notEqual(first.question,c.report.findings[0].message);
+  first.draft=first.task.exercise.correctChoice;await h.options.save(h.topic);
+  const resumed=h.reload();await resumed.fromFeedback(target);
+  const round=activePractice(h.topic);
+  assert.equal(round.draft,first.draft);assert.equal(practiceRounds(h.topic).length,1);
+  await resumed.answer();assert.equal(round.answers[0].assessment.verdict,'correct');
+  round.draft=first.draft;await resumed.answer();assert.equal(round.answers.length,1);
+  round.draft=round.task.exercise.choices.find(c=>c.id!==first.draft).id;await resumed.answer();
+  assert.equal(round.answers[1].assessment.verdict,'incorrect');
+  assert.equal(h.calls.length,0);
+});
+
+test('unsupported material keeps an explicit no-task result across reload without API fallback',async()=>{
+  const c=taskSplitCases[3],h=setup({id:'topic',createdAt:1,source:c.source,messages:[],attempts:[]});
+  const target={attempt:c.attempt,report:c.report,findingIndex:0};
+  await h.flow.fromFeedback(target);
+  const reason=h.topic.taskUnavailable.reason,flow=h.reload();
+  assert.equal(activePractice(h.topic),null);assert.equal(resumePoint(h.topic).view,'practice');
+  await flow.fromFeedback(target);assert.equal(h.calls.length,0);
+  assert.equal(h.topic.taskUnavailable.reason,reason);assert.equal(practiceRounds(h.topic).length,0);
 });
 
 test('a received answer remains available when result persistence fails, without another dispatch',async()=>{
