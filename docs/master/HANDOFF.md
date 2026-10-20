@@ -1,169 +1,34 @@
-# HANDOFF — NEW MASTER CHAT START
+# HANDOFF — 知而能讲
 
-Updated: 2026-09-30
-Purpose: current authoritative product handoff.
+Updated: 2026-10-20 (Australia/Sydney)
+Canonical branch: meta/master-state
 
-Repository:
-`BenCCCCCCCCC/Chat-Codex-Handoff`
+先读本分支 CURRENT_STATE，再读产品分支 README、docs/TESTING.md 和 docs/iterations/2026-10-20.md。旧 ACTIVE_EXCHANGE 仅作历史背景，不能恢复旧任务或限制。
 
-Canonical branch:
-`meta/master-state`
+## 已完成
 
-Read in order:
-1. `docs/master/CURRENT_STATE.md`
-2. `docs/master/HANDOFF.md`
-3. `docs/master/ACTIVE_EXCHANGE.md`
+仓库已公开，默认分支 prototype/study-teachback-v0.1。用户明确允许现有历史公开；当前历史工具测试链接已换成虚构地址。
+本轮 [PR #2](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/2) 已合并，合并提交 0b0c9477023171da82440b0ebe13496906946efc；实现头 8f0989462aac3f198c122a66e53eaab17a9911a2。
+[CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39398844763)：PASS — Node 154、Python 6、Edge 53。
+诊断状态 UX 验证完成；README、截图、竞品/机制/设计/技能调研、路线、合成媒体、轻量 CI 已落库。
 
-## Accepted baseline
+本地 Edge 53、提取器 6、历史工具 43 项通过；Node 删除 1 条文档措辞测试后由 CI 验证 154 项。本轮没有真实模型调用或个人录音，生产账本未变。
 
-Active product:
-**知而能讲**
+## 下一位接手者
 
-Local repo:
-`F:\Chat-Codex-Handoff\validation-repo`
+本地仓库 F:\Chat-Codex-Handoff\validation-repo；先查看 git status、当前分支和远端状态，避免覆盖他人改动。当前产品以最新合并提交为准，不要继续使用旧本地 meta 分支快照。
 
-Product branch:
-`prototype/study-teachback-v0.1`
+下一批 [Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3)：冻结同输入通用基线比较协议和受控多源案例。先读取既有准确源材料、确认文字与两份诊断结果，绑定证据；不重构原话、不挑选有利结果。初期 2–4 份材料，覆盖冲突、前置依赖、目标变化与弃权。
 
-Accepted local HEAD:
-`20be403f7bb736ab0cde2758af7306a00c2290db`
+用户已授权常规自主审核、实现、push/PR/merge 和批次交接，无需每个小动作询问。没有新增付费模型实验额度；原 Phase 3B 配额已耗尽。
 
-Behavior baseline:
-`aa240f8df5da2cf249b5cd6e9d09308a5ecd1947`
+用户要求减少冗余测试：按影响选择验证；文档改动不跑产品全量；通过且代码未变不因提交／交接重跑；保留保存、版本及调用费用相关回归。沿用 docs/TESTING.md。
 
-Phase 3B:
-**CLOSED / PASS for bounded feasibility.**
+## 不能丢失的判断
 
-No product push/merge authorized.
-Original Phase 3B live allowance is fully consumed.
+定位：个人学习＋作品展示。结果先讲错在哪里、漏在哪里、先补哪里；不要无依据总体打分。
+Phase 3B 是有界可行性 PASS，不是普遍学习效果证明。两份历史相同输入报告均保留；确切历史调用归因仍待核对。
+多源冲突是研究假设；相关冲突需用户裁决，无关冲突可见且不阻塞。说话停顿不能独立判知识错误。
+先比较实际价值，再决定多源 UI；来源角色推断可纠正，不能替代权威裁决。许可证尚未选择。
 
-## Current product objective
-
-Portfolio / AI Product Manager evidence first.
-
-Primary user:
-students.
-
-Desired feedback order:
-1. what is wrong;
-2. what is missing;
-3. what to repair first;
-4. possible weak/uncertain areas;
-5. avoid unsupported global mastery claims.
-
-No overall mastery score is currently required.
-
-## Phase 4 collision result
-
-Generic AI tutoring / teach-back / multi-source learning is heavily collided.
-
-Current products already cover combinations of:
-- uploaded materials;
-- multiple sources;
-- source-grounded citations;
-- learning goals;
-- diagnostic quizzes;
-- knowledge-gap identification;
-- next-priority recommendations;
-- teach-back;
-- voice;
-- source selection;
-- automatic source categorization.
-
-Do not build generic multi-file or teach-back features as differentiation.
-
-## Frozen Phase 4 product direction
-
-Candidate narrow differentiator:
-
-**multi-source diagnostic reliability under explicit source authority and conflict.**
-
-Owner decisions:
-- support multiple sources conceptually;
-- typical scope can be topic/week or several weeks/module depending on the learner; whole-course/semester is not the default target;
-- source roles auto-inferred, user-correctable, shown compactly/expandably rather than requiring blocking up-front confirmation;
-- every detected source conflict is surfaced;
-- diagnosis-relevant conflicts require user arbitration before the affected diagnosis/priority is finalized;
-- irrelevant conflicts remain visible but non-blocking;
-- structured learning goal is allowed;
-- repair priority = prerequisite dependency + severity + source/goal-supported importance;
-- no guessed exam importance without evidence;
-- diagnostic resolution can vary by source/goal; default standard depth is acceptable later;
-- conclusion-first result;
-- process evidence is de-prioritized and cannot independently prove a knowledge gap.
-
-## Phase 4A
-
-Name:
-`Multi-source Diagnostic Prioritization Benchmark`
-
-This is currently a **frozen product question, not an implementation task**.
-
-Hypotheses:
-- distinguish error / omission / no issue;
-- choose repair priority correctly;
-- surface diagnosis-relevant source conflicts instead of silently resolving;
-- adapt valid priority/depth to learning goal;
-- do not convert speaking style/hesitation into knowledge judgment.
-
-Initial benchmark:
-- controlled ground-truth cases;
-- 2–4 sources per case;
-- multi-source consistency/complementarity/conflict;
-- prerequisite/severity priority;
-- same source set with different goals;
-- verbose-correct vs fluent-wrong;
-- insufficient evidence / abstention;
-- user correction of inferred source role.
-
-Metrics:
-error/omission precision-recall, unsupported diagnosis, conflict surfacing, silent conflict resolution, top remediation priority, goal sensitivity, false process inference, traceability, abstention.
-
-Do not freeze numerical KPI thresholds until a calibration run exists.
-
-## Diagnosis UX audit
-
-The read-only audit is complete.
-
-Verified:
-- the two preserved transcript versions have identical final transcript content;
-- they were reconfirmed about 100 seconds apart;
-- two distinct diagnosis reports coexist and differ;
-- current UX allows completed same-text resubmission after the in-flight lock releases;
-- diagnosis CTA/loading/completion/stale-version states are not explicit enough;
-- transcript remains editable while request is pending and unsaved typing can be overwritten;
-- current result is not marked stale after transcript edits.
-
-Do not call the second historical submission a retry.
-Do not claim a verified single diagnosis call.
-
-## DIAGNOSIS-STATE-UX-01 status
-
-Implementation is complete locally but remains uncommitted.
-
-Evidence:
-- 8 changed files;
-- 92 insertions / 25 deletions;
-- focused 40/40 PASS;
-- full Node/offline 155/155 PASS;
-- 53/53 final sourceSHA256 binding;
-- syntax + diff checks PASS;
-- production ledger unchanged;
-- live calls / recording / ASR / diagnosis = 0.
-
-Codex sandbox browser did **not** reach application cases because Edge CDP/GPU startup failed.
-
-Therefore current gate is owner host browser verification, not more implementation.
-
-Run from normal Windows PowerShell at:
-`F:\Chat-Codex-Handoff\validation-repo`
-
-Command:
-`node .\study-teachback-app\run-offline-tests.mjs browser diagnosis-state-ux-01`
-
-Do not ask Codex to edit anything before this host run.
-
-If host PASSes with current source hashes, MASTER will dispatch only final self-review + focused local commit.
-
-NATIVE-COLLISION-PROBE-01 remains paused until this UX fix is accepted.
-
+历史详细交接见 [旧快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/cd696d76fcd1a3d8a04b60ee9631bc6e4f5c6628/docs/master/HANDOFF.md)。其 HOST VERIFY REQUIRED、未提交、no push/merge 与全量重跑限制已被本轮结果和用户指示取代。
