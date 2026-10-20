@@ -9,40 +9,40 @@ Canonical state branch: meta/master-state
 
 产品定位 **个人学习＋作品展示**。用户授权公开仓库及已有 Git 历史、README、产品与设计研究、自主审核实现、commit/push/PR/merge，以及有意义的批次交接；无需每个小动作再询问。
 
-本轮明确要求：优先普通聊天失败恢复、学习记录导出恢复，继续考虑页面布局与设计，参考相关资料并减少冗余文字与测试。已完成这一批，不再把它列作待办。
+本轮要求：优先聊天草稿保存、学习记录查找、长对话体验，继续精简页面并检查语音分析，减少冗余测试。已完成本批，不再列为未开始任务。
 
-旧交接的 no push/merge、每次字节变化全量重跑等限制已被后续授权取代。原 Phase 3B 真实调用额度已耗尽，本批没有新增付费模型实验额度。
+旧交接的 no push/merge、每次字节变化全量重跑等限制已被后续授权取代。原 Phase 3B 真实调用额度已耗尽，本轮没有新增付费模型实验额度。
 
 ## 最新交付
 
 - 仓库 public，默认分支 prototype/study-teachback-v0.1。
-- 分支：codex/chat-recovery-and-restore。
-- [Issue #8](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/8) / [PR #9](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/9)。
-- 实现头：9b1f6ade07a83c56a725097da8b5fcf473930438。
-- 合并提交：ac1540837ffc329364677786292cd7407225a036。
-- [最终 CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39412499703)：PASS — Node 152、Edge 55；Python 独立提取按范围跳过。
+- 分支 codex/drafts-history-and-voice。
+- [Issue #10](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/10) / [PR #11](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/11) 已合并。
+- 实现头 b14b72a167a1c2913211cc243f2fa13448d5007c。
+- 合并提交 1472487d2b04f57c5721f9747e43b7a10592ac51。
+- [最终 CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39415611782)：PASS — 完整 Node 与 Edge 回归；Python 独立提取按范围跳过。
 
-聊天发送前保存请求状态与当时上下文，失败／刷新后显式重试原问题，不重复追加用户消息，不自动发送。首次讲解和补学指令仍是内部指令。收到回复但保存失败时保留结果，用保存恢复／导出处理，不重新调用模型。忙状态从异步保存前锁定，进行中不切换或删除。
+普通聊天用 topic.chatDraft 保存未发送文字，350 ms 合并写入。离开主题／记录／导出／示例／恢复前等待正在进行的保存；页面隐藏时尝试写入，有未保存内容时提示离开。刷新、主题切换和备份恢复均保留草稿。发送不覆盖等待回复时输入的下一句。聊天与练习共用 draft-save.mjs，修正原练习保存器没有等待已有写入完成的问题。失败保留待保存状态；明确删除时丢弃队列，避免晚到写入重建记录。
 
-任意主题可从顶栏／记录列表导出 v1 JSON；记录页可本地导入、预览、确认恢复为新副本。单次 IndexedDB add 不覆盖或合并已有主题；取消、无效文件、保存失败不写入半份记录。录音字节、来源／讲解／转写／报告 ID、修订与练习草稿保留，只新建主题 ID。删除尝试的内存标记按对象身份，避免误伤共享原始 ID 的恢复副本。
+record-search.mjs 在本机查找主题、材料、聊天、草稿、原始／修订转写、内容反馈和练习内容，支持多词、全角与大小写归一化。筛选有草稿／有讲解／有练习，显示片段，按最近活动排序，每页 20 条。搜索不调用模型、不写云索引；目前命中进入主题，尚未直接跳到具体消息。
 
-原主题仍按 createdAt 七天到期。恢复副本保留原学习日期，另记 restoredAt，从确认恢复起保留七天；界面明确说明。导入上限 128 MB；支持旧 v1 与 topic.apply。恢复不调用模型或重置费用账本。文件损坏／引用不完整会拒绝，不自动“修复”证据。
+长对话先显示最近 24 条，分批加载更早内容；同一主题只追加新节点，保留阅读位置，提供“最新消息”。模型仍参考当前材料与最近 6 条消息，界面按需说明；没有新增摘要调用或扩大记忆承诺。讲解列表、转写提示折叠；已有用户消息后隐藏提问示例。移动端发送区并排，下一步栏不再固定遮挡输入。
 
-页面减少重复口号与解释，阶段标签缩短；材料侧栏保留，普通对话／情境练习分别展示，记录列表独立。底栏集中下一步动作，数据说明折叠；失败与恢复确认处保留必要提示。
+语音检查发现并修复：ASR 已返回但最后写入失败时，旧逻辑误标 PARTIAL 并重复尝试同样的写入。现在保留收到的 raw／REVIEW_REQUIRED，保存恢复后直接确认文字与继续诊断，不再转写。过轻／失真／中断给出可读原因，保留原声并引导回听重录。返回未完成聊天或恢复副本后，忙锁释放时重新启用重试入口。
 
-[批次记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-20-chat-backup.md)与[设计研究](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/research/2026-10-20-recovery-and-density.md)已提交，README 和界面截图已更新。参考 NN/g、RemNote、Obsidian 官方资料；未安装第三方技能代码。
+[批次记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/prototype/study-teachback-v0.1/docs/iterations/2026-10-20-drafts-history-voice.md)包含方案、语音检查与验证证据。README、路线、测试入口和桌面／手机／语音截图已更新；设计延续上批 NN/g、RemNote、Obsidian 的渐进展示与恢复机制资料。
 
-之前 PR #2 完成公开整理、诊断状态、合成音频和 CI；PR #5 完成工作台与独立固定示例 /demo；PR #7 完成多题练习、回答修订与学习续接。不要重复当作待实现任务。
+此前 PR #2 公开整理、诊断状态与 CI；PR #5 工作台及固定示例 /demo；PR #7 多题练习与续接；PR #9 聊天失败恢复和 v1 备份原子恢复均已完成。原主题 createdAt 七天到期；恢复副本保留原日期，从 restoredAt 起保留七天。备份 128 MB，保留录音字节、来源／讲解／转写／报告引用，只新建主题 ID；不调用模型、不重置账本。
 
 ## 验证与精简原则
 
-局部 Node 7/7、聚焦 Edge 2/2。七条旧重复／结构用例替换为五条恢复实际结果用例，Node 总数 154 → 152。两条浏览器恢复路径替换两条重复来源路径，总数仍 55；已有录音导出验证扩展为导回数据库。
+定向 Node 30/30、聚焦 Edge 三条实际路径 3/3。浏览器验证立即切换／刷新／保存失败的草稿恢复、长对话分页与下一句草稿、ASR 返回后的保存恢复和继续诊断。使用真实 MediaRecorder、解码、IndexedDB、合成音频和模拟 provider。已有来源用例去掉重复假 DOM 渲染断言；没有新增措辞或逐字段矩阵测试。
 
-首次 CI Node 全套通过，旧补学等待在保存前提前结束；改为等待新增回复。后续本地浏览器前 50 条通过，末段旧用例期望请求中删除；调整为验证新增忙锁阻止删除、完成后明确删除。最终完整结果以上述 CI 为准；修正后未再本地全量重复。
+首次沙箱 HTTP 回环检查遭 EACCES，在允许回环的隔离环境通过。首次 CI Node 全套通过，浏览器新功能及语音流程通过后，旧删除用例在记录加载未完时点击，被忙锁阻止。补充记录页 aria-busy 并等待加载完成；最终 CI 全通过。没有本地重复完整套件，文档／合并后不重跑。
 
-已查看桌面／手机截图。没有真实模型、物理麦克风或出站请求；生产账本未变。模拟响应验证工程流程，不证明模型质量或学习效果。跨标签页持久请求去重仍未实现；未知结果重试可能产生新的模型费用。
+已查看桌面／手机截图并修正手机底栏遮挡。**没有真实 ASR／模型调用或个人麦克风测试；自然语音准确率、过程检测误报率和学习收益没有在本批验证。** 生产账本未变，没有新增 API 支出。保留当前检测参数，不把停顿当作知识缺口。
 
-继续遵循 docs/TESTING.md：按影响验证；文档不全量；不为措辞增加测试；通过后不因提交／交接重复；保留记录保存、版本与调用费用相关行为。
+继续遵循 docs/TESTING.md：按影响验证；文档不全量；不为措辞增加测试；保留记录保存、版本和调用费用相关行为。浏览器强制终止前尚未完成的写入无法保证保存；跨标签页编辑／持久请求去重仍未实现，未知结果重试可能产生新费用。
 
 ## 已有证据边界
 
@@ -70,10 +70,10 @@ Phase 3B 仅对有界可行性问题 **CLOSED / PASS**，不代表跨课程／�
 
 ## 下一步
 
-从实际使用反馈选下一个完整批次。候选：普通对话未发送草稿保存、学习记录检索、长对话阅读与上下文管理。不要重复恢复功能，也不要扩张为无依据总体评分或知识图谱大屏。
+从实际使用反馈选择下一批。可候选：搜索命中直接定位到对应消息／转写；明确触发的长对话上下文整理。不要重复实现本批草稿、基本检索或分页，不自动增加摘要调用。
 
-[Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3) 仍待办：离线冻结准确材料、确认文字、两份历史结果和同输入比较协议；实际模型比较须明确服务与新增预算。
+[Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3) 仍待办：离线冻结准确材料、确认文字、两份历史结果和同输入比较协议；真实模型／语音质量比较须明确服务、样本与新增预算。
 
-未部署公共网站。/demo 随本地服务运行；本聊天 4321 是已更新的无 provider 预览，正常产品入口 npm start / 4317。预览更新不代表启用付费能力。
+未部署公共网站。/demo 随本地服务运行；本聊天 4321 已更新为最新无 provider 预览，正常产品入口 npm start / 4317。预览更新不代表启用付费能力。
 
-前批状态见[练习与续接快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/f97545b7f4f6828070b1e227694cfb45d63b556a/docs/master/CURRENT_STATE.md)。更早历史与用户决定沿该快照链接保留。
+前批完整状态与历史链见[聊天与备份恢复快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/255d40fcec1e1ab65b0739c93a7b46fe7ee99e05/docs/master/CURRENT_STATE.md)。
