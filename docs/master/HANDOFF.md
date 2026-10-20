@@ -4,80 +4,68 @@ Updated: 2026-10-21 (Australia/Sydney)
 Canonical branch: meta/master-state
 
 先读本分支CURRENT_STATE、产品README、docs/TESTING.md、
-docs/iterations/2026-10-21-terminology-feedback.md和docs/research/2026-10-21-terminology-plan.md。
-旧ACTIVE_EXCHANGE不恢复限制或额度。
+docs/iterations/2026-10-21-understanding-probes.md和对应research方案／完整JSON。
+旧ACTIVE_EXCHANGE不恢复限制或预算。
 
-## 本批功能与真实比较已交付
+## 本批已交付
 
-[PR #22](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/22) 已合并本次获批实测结果；报告头c6536ebbf7649898096d4f8cf6b64430b1f54346，合并8dc6ded7eeaa4b49d7e3a08e525a143e647a9762。仅5个结果／文档文件，0产品代码变更；输入／配置hash、12份完整响应、收据和预算核对通过，按路径规则无CI，无重复回归。
+[PR #24](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/24)已合并，[Issue #23](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/23)关闭。
+实现头9a681061730cb7a1dee0123be90bebfd216c436d，合并afdabb5a48cb7466bc0eead0cb065e3cd21e3e94。
+[CI39448586476](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39448586476)完整Node／Edge PASS，提取器按范围跳过，job118717011775。
 
-[PR #21](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/21) 已合并，Issue #20关闭。
-实现头 28f5f8cfe19ce44acd74110766af42d7418d2e58，合并 0e01420c161d89bbba5b7e8c4f9407fcc66ca736。
-[CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/39442372344) 完整Node／Edge PASS，提取器按范围跳过，job118695278615。
+- practice.mjs.fromFeedback直接复用repair为题目，不生成新题请求；显式答题走已有apply_answer。origin保存targetId／sourceId／attemptId／transcriptVersion，同目标同题复用，题目或版本变化另建。沿用草稿、失败重试、完成同答复用；backup保留origin且校验source。
+- app.mjs只从localize有效的当前报告生成“试着回答”；历史报告不生成。补学／重讲收在“其他方式”，删重复前缀。practice-ui在新题打开后聚焦答题框，空introduction隐藏。新入口可用不代表旧repair都成为好题。
+- transcript-playback.mjs将连续零长度词作为片段取有效邻词。段首／尾缺一侧邻词可用对应段边界，至少另一侧有效、跨度≤3秒；共享边界先按原文顺序映射到段，不能确定就不猜。不插值、不改时间；引用原有唯一／未编辑／映射规则、组合6秒和0.3秒padding保持。
+- 历史MInDS-28段首“我”9.62–16.04整段变9.62–10.00邻近范围，其余既有内部零长度词范围相同；无人工对齐，不称准确率提升。
+- 新CONTENT候选已撤回，当前schemas.mjs与本轮之前完全相同。冻结candidate仅供研究留痕，**不要误恢复成生产配置**。TEACH／schema／模型未变。
 
-- transcription-terms.mjs：用户短名称按分隔符去重，最多8项／每项24字／总80字；超限明确提示，不截断。录音准备中的输入默认折叠，按主题通过已有draft saver保存。
-- app.mjs：开始录音或选择上传前快照词表到attempt.transcriptionTerms。旧录音显式重试仍使用原快照，新主题词表不改它。录音信息详情展示使用的词表。开始录音前flushDrafts；输入在捕获中禁用。v1备份保留草稿和快照，旧缺省数据兼容。
-- server/provider：X-Transcription-Terms百分号编码短字符串，服务端解码校验后交给ASR；provider再次验证规范化数组，空列表沿用原简体提示，原始响应带termHints。没有把教材答案自动塞进提示；contentInput仍仅来源与确认文字，词表不充当内容事实。
-- transcript-playback.mjs：含零长度词引文可复用wordPlayback的同段邻近有效边界（邻近跨距≤3秒），组合≤6秒，再加≤0.3秒两端上下文。明确label为quote-context／“原话邻近范围，非精确词时间”。确认文字或边界改动、重复引文、缺映射、无邻近边界仍回退整段，不改原始时间、不编造定位。
-- CONTENT：合并同一缺口及相关正确表达；一条建议只安排一个动作，避免复述已给解释；不同领域例子不是评估文本答案。候选已完成四例比较，判断无退化、正确项合并和一处多任务改善，因此保留；重复已有结论仍存在。schema／模型不变，原报告不截断／改写。
-- 页面：词表默认折叠，录音准备时隐藏重复底部下一步栏，删除重复时长文案。
+## 本轮真实调用已全部完成
 
-此前功能无需重复实现：上传3分钟／25MiB，选文件先本地保存，显式开始转写；原始字节保留，临时16kHz单声道。contextNote1000字、六条最近完整历史按24k上界裁剪；七天原记录／恢复副本、128MB v1备份。内容与声音过程分开。
+用户明确批准“最高US$0.10”，6固定文本×两臂=12次内容分析；无ASR、个人录音、重试、充值或追加调参。
+预留US$0.0495065；账本新增估算US$0.0062383；新增未结算0（历史4笔未结算仍在），不是最终账单。
+额度不延续，任何新真实实验须另提方案预算。
 
-## 本轮真实比较已完成，额度不延续
+入口understanding-live.mjs --approved-budget-usd=0.10已执行，不得重跑或换目录／ID绕过。
+原收据ignored artifacts/study-teachback/understanding-probes-01/live-quality.json，SHA256
+4f0ee76950be02ca554f93faf378a4838ec9def3f00d53b7dbd7ab4ecb4b59a7。
+公开docs/research/understanding-probes-live.json保留所有输入、两臂完整提示、响应／用量、
+原自动分数、编码代理逐例复核和撤回理由；未公开凭据或生产账本事件。
+固定两臂为fixtures/understanding-baseline.json／understanding-candidate.json。
 
-用户明确回复“批准，最高US$0.15”，按已冻结方案执行12次：FLEURS-32／276各两次ASR，共51.96秒；四固定文本各原提示／候选一次。无重试、充值、追加样本或剩余额度调参。
-实际预留US$0.103472，账本新增费用估算US$0.0093652，新增未结算0；不是供应商最终账单。剩余预算不延续，任何新真实实验另提方案和预算。
+结果：
+- 引用版本两臂均6/6。主要问题两臂人工复核均识别；自动5/6→6/6来自通用oracle对错误例含supported的限制，不证明候选多找出一处错误。
+- 五条可行动建议复述4/5→2/5，单任务均5/5；候选1/5预设来源未给出的“其他升级要求”，且用“不满足”暗示结论，不接受这种交换。
+- 原因候选仍问message刚给出的结论；步骤下一步仍照抄解释，双方把移到末尾称量说成全部倒置，解释过度。配方两组都需计算但同一情境，未改善；抽样候选的反例相容判断有效；撤回错误两组正确接受且无repair。
+- 撤回候选恢复baseline，保留新作答及回听功能。不宣称解决反馈复述、总体质量或学习收益；2旧＋4新作者自编例不是盲测，无独立人类评分。
 
-原脚本入口terminology-live.mjs --approved-budget-usd=0.15已经执行，**不得重跑或换目录／ID绕过已有输出**。
-原收据ignored artifacts/study-teachback/terminology-01/live-quality.json，
-SHA256 a1c0718fa6be2cc5486d468abae2c7d3cc4bac5ac99a4ac757ece97107d56292。
-公开docs/research/terminology-live.json保留输入、配置、原响应、requestId／reservationId／用量、自动检查、编码代理逐例文本复核和派生邻近回听范围；未公开生产账本事件或凭据。基线／候选配置文件和产品提示未再修改。
+## 验证与环境
 
-结果与保留决定：
-- FLEURS-32：ePC→Eee PC，严格字符差异3/52→1/52；及→其仍在，华硕／2007／IT保留。45→46词，均无零长度。仅这一条观察到术语恢复，不代表总体准确率。
-- FLEURS-276无关词表负对照：均0/37，净空数字／日期保留，华硕／Eee PC／IT未插入。零长度“项”1个→“项、但”2个，不能宣称时间质量改善，也不能由一例证明无关词表安全。
-- 两臂四文本各4/4判断符合预期、引用／版本有效。数值错误均2卡、解释60→62字；缓存自我修正正确项3→1、103→67字；无依据原因从时间＋原因未知两项变一个改写；必要条件解释48→56字。
-- 可行动建议单一动作2/3→3/3，直接复述已有结论仍2/3→2/3。报告明确复核口径：要求练习但不直接提供答案的数值改写不计答案重复；不同正确方面的三张卡称碎片化，不算同一错误重复。不是独立人类评分或盲测。
-- 保留可选术语和当前CONTENT：有名称恢复、正确项合并及一处多任务减少，四例判断无退化。不宣称消除重复、定位准确率提高或学习效果，不追加提示调参。
-- 对零长度词，派生邻近引用“项”约4.66–5.70秒、“但”约7.02–9.14秒，保留明确近似标签；不是人工测得的精确时间。
+本地只跑Node34/34及原有Edge一条整合流程：真实媒体／键盘、直接答题零出题调用、
+草稿刷新、显式提交一次、390px布局。桌面反馈／手机答题截图已查看。完整回归只由PR CI执行。
+本轮本地收据：artifacts/study-teachback/diagnosis-state-ux-01/node-1792509711360-c4NEnm、
+browser-1792509711022-OAl1pm。合成凭据、loopback、独立账本；离线期间生产账本未变。
+获批实验后账本SHA256为595884707633855620ddb3c320b9c0ab1403f78c2104a39bb70690dc303eeb7c。
+文档／提交不触发本机全套重跑。
 
-本轮是两个朗读片段与四条已知文本，各臂仅一次；未独立核对实际发音，未标注人工词边界。原文／时间不改，转写与内容判断分开。
-当前批次已完成，无待执行请求或待批准额度。
+本地F:\Chat-Codex-Handoff\validation-repo最终同步产品默认分支；canonical只读meta/master-state，旧本地meta工作树非权威。
+4321无provider预览保留（前轮核对PID24324），本批只刷新IAB静态客户端，无服务端模块变化，无重启或公共部署。下次停止／重启先核对完整命令和监听PID。正常npm start／4317。
 
-## 已完成的历史实验不重跑
+## 历史实验与约束继续有效
 
-PR19固定11次已全部执行，预留US$0.084016，账本估算US$0.0080848，新增未结算0，不是最终账单。无个人麦克风、充值或重试。docs/research/natural-speech-live.json保留所有输入、输出和复核。
-FLEURS严格字符差异3/52、0/37；Eee PC→ePC，及→其。MInDS参考本身为ASR，不报准确率。45/30/44词零长度0/1/4；无人工时间标注。四文本两臂各4/4预期及有效引用，但仍有双追问、复述建议和碎片正确项。
-收据ignored artifacts/study-teachback/natural-speech-01/live-quality.json，
-SHA256 cb7aaf601c70b3ec2edf3f6387b192c01b78103c75c60cd19e1c8a63dbfd5876。
-更早14次、9次及自我修正误判等全部保留，不重写旧结论。
+术语PR21/22：12调用已完成，预留US$0.103472、估算US$0.0093652，docs/research/terminology-live.json。
+原收据SHA256 a1c0718fa6be2cc5486d468abae2c7d3cc4bac5ac99a4ac757ece97107d56292。
+Eee PC名称恢复但另一音频零长度增加；四例单动作2/3→3/3、答案复述仍2/3→2/3。当时接受的CONTENT即本轮恢复的baseline。
+自然语音PR19：11调用US$0.0080848，原收据SHA256 cb7aaf601c70b3ec2edf3f6387b192c01b78103c75c60cd19e1c8a63dbfd5876。
+更早14次US$0.0066592、9次US$0.004224及所有失败证据继续保留；全部额度结束，不重跑。
 
-## 验证和本地环境
-
-本地定向Node28/28、Edge3/3；复用已有案例，新增一个历史真人零长度词引用行为。
-首轮CI39442041152 Node159/166，7项因旧录音VM harness缺新依赖提前退出；补齐transcriptionTerms和flushDrafts，原有效录音案例增加快照断言，本地针对性22/22通过；最终完整CI已通过。本机未另跑全套，不因文档／提交变化重复检查。
-浏览器测试初次未展开第二个引用详情，修正操作后仅复验回听。桌面术语入口截图已查看；390px由原有流程覆盖。
-
-ignored artifacts/study-teachback/diagnosis-state-ux-01/：
-node-1792507226183-v1h8aH、
-browser-1792507225270-m6LsXx、
-browser-1792507305517-uzKivV、
-focused-1792507586060-IA2QH3。
-合成凭据／loopback／独立账本；离线测试期间生产账本相同；本次已批准真实实验后账本SHA256
-0fa9d40b6e5cbf9582760c1a1f81e517cabadd6f0cae04d40fa036045731a83b。
-
-本地F:\Chat-Codex-Handoff\validation-repo在结束时同步产品合并分支。canonical只读最新meta/master-state，旧本地meta worktree不作权威。
-4321本聊天无provider预览已重启以加载新模块，PID24324（启动时核对），IAB空白设置页刷新并保留。下次重启先核对完整命令和监听PID。正常npm start／4317，无公共部署。
-
-## 后续约束
+此前功能：可选术语最多8项／24字每项／总80字，attempt快照不随主题编辑改变；不自动收集教材答案。
+上传3分钟／25MiB、原声本地保存再显式转写；contextNote1000字、最近六条整消息24k输入上界；七天原记录／恢复副本和128MB v1备份，无数据库迁移。
+强制关闭未落盘、跨标签页协调、服务端持久请求去重未解决，结果未知的显式重试可能再计费。
 
 用户授权自主实现／自审／push／PR／merge，按批次交接，减少冗余测试。
-本轮固定比较已完成。下一步先针对仍直接给答案让用户复述的建议，用独立任务区分纠正原话与检验理解；不要统一换成另一句模板。更广质量研究需自愿自然语音的人工文本和少量时间标注、数字角色和领域术语。每一新真实实验另报预算；暂不调停顿检测。
+下一步先把纠正解释与独立可评分任务分开，人工写少量题目／评分依据，明确来源不足和假设的规则边界；不要继续单靠加长repair提示。新真实实验另报方案预算。可研究自愿自然语音人工文本／少量边界，不调停顿阈值。
+Phase3B仅有界可行性PASS；两份相同文字却不同结果历史报告均保留，直接请求归因未知，不把第二份叫重试。
+Issue #3同输入多源研究继续：影响当前诊断的冲突需裁决，其余可见不阻塞；2–4份为受控样本非产品上限；角色可改，优先级有来源／目标依据，完整约束见CURRENT_STATE。
+不加总体掌握分，不宣称课程收益。仓库许可证未选；公开语音单独CC BY4.0。
 
-强制关闭未落盘、跨标签页协调、服务端持久请求去重未解决。
-Phase3B仅有界可行性PASS，两份相同文字但不同结果历史报告都保留，直接请求归因未知；不得把第二份叫重试或挑较好结果。
-Issue #3同输入多源研究保留；影响当前诊断的冲突需裁决，其余可见不阻塞；2–4份为受控样本非产品上限；来源角色可改，优先级有来源／目标依据。完整研究约束见CURRENT_STATE。
-不加总体掌握分，不宣称课程收益。仓库许可证未选，公开语音仅有单独CC BY4.0许可。
-
-历史链：[PR #21 后、实测批准前交接](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/5678be6c8385b6ee657c698e0fca26d6dac7cc2e/docs/master/HANDOFF.md)。
+历史快照：[本批之前完整交接](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/c2c5b1d3d5c9662c714723c183bb23eb5ff76df9/docs/master/HANDOFF.md)。
