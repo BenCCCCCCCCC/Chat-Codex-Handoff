@@ -112,7 +112,7 @@ test('C3 healthy status retains ledger summary and read does not write',async()=
 
 test('C1 history stays at six whole messages; oversized required input still fails before dispatch',async()=>{
   const b=book(),requests=[];let output='Short reply';
-  const server=createServer({book:b,semanticCall:async(_,input)=>{requests.push(input);return {value:{sourceId:source.id,message:output,goals:[{text:'Condition',sourceQuote:source.text}],question:'Why?'}};}});
+  const server=createServer({book:b,semanticCall:async(_,input)=>{requests.push(input);return {value:{sourceId:input.source.id,message:output,goals:[{text:'Condition',sourceQuote:input.source.text.slice(0,600)}],question:'Why?'}};}});
   const origin=await listen(server),history=Array.from({length:8},(_,i)=>({role:'assistant',text:i<2?'Old message '+i:String(i)+'讲'.repeat(3999)}));
   try{
     const payload={source,mode:'learn',message:'Why?',history};assert.equal((await post(origin,'/api/teach',payload)).status,200);
