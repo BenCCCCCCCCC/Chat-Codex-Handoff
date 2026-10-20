@@ -313,7 +313,7 @@ try{
     assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .processObservation').length`),f.expected.process??0);
     assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding, #processFeedback .diagnosticTarget, #feedback .processObservation').length`),0);
     if(f.expected.blocked)assert.equal(await evaluate(`document.querySelectorAll('#feedback .finding').length`),0);
-    if(f.id==='gap-without-process')assert.equal(await evaluate(`[...document.querySelectorAll('#feedback button')].filter(b=>!['再学这一点','再讲这一点'].includes(b.textContent)).length`),0);
+    if(f.id==='gap-without-process')assert.equal(await evaluate(`[...document.querySelectorAll('#feedback button')].filter(b=>!['试着回答','再学这一点','再讲这一点'].includes(b.textContent)).length`),0);
     if(f.expected.targets){await evaluate(`[...document.querySelectorAll('#feedback button')].find(b=>b.textContent==='再讲这一点').click()`);assert.equal(await evaluate(`document.getElementById('recordFocus').textContent`),f.report.findings[0].repair);await click('cancelRecord');}
     assert.equal(calls.length,before);assert.equal(JSON.stringify(testBook.read()),ledgerBefore);
     await shot(`diagnostic-${f.id}`,'attemptPanel');

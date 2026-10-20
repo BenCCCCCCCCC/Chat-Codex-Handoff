@@ -357,9 +357,12 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
     if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId),anchor=quotePlayback(current.raw,span,f.quote);evidence.append(el('blockquote',`本次原话：${f.quote}`));if(anchor){const replay=button(playbackLabel(anchor),()=>play(anchor.start,anchor.end));replay.dataset.replay=anchor.level;evidence.append(replay);}}else evidence.append(el('p','未表达的内容没有音频位置。','muted'));
     card.append(evidence);
     const target=targets.find(t=>t.contentFindingIds.includes(`content:${current.id}:${report.transcriptVersion}:${index}`));
-    if(target&&!stale){card.dataset.targetId=target.id;card.append(el('p',`下一步：${target.focus}`,'diagnosticTarget'));
+    if(target&&!stale){card.dataset.targetId=target.id;card.append(el('p',target.focus,'diagnosticTarget'));
       if(target.processEvidenceIds.length)card.append(el('p',`另有 ${target.processEvidenceIds.length} 条同段过程观察，见“讲解过程”；时间相邻不证明理解有误。`,'muted'));
-      card.append(button('再学这一点',async()=>{topic.focus=target.focus;await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',target.focus,{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',target.focus,current.id)));}
+      const answer=button('试着回答',async()=>{if(!canNavigate())return;await flushDrafts();await practice.fromFeedback(target);});answer.dataset.answerTarget=target.id;
+      const alternatives=el('details',undefined,'feedback-alternatives');alternatives.append(el('summary','其他方式'));
+      alternatives.append(button('再学这一点',async()=>{topic.focus=target.focus;await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',target.focus,{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',target.focus,current.id)));
+      card.append(answer,alternatives);}
     if(f.status==='supported'&&supportedCount>1){
       if(!supportedGroup){supportedGroup=el('details',undefined,'supported-findings');supportedGroup.append(el('summary',`已表达 ${supportedCount} 项`));$('feedback').append(supportedGroup);}
       supportedGroup.append(card);

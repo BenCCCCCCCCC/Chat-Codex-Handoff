@@ -112,6 +112,11 @@ export function decodeBackup(text) {
       unique(list(t.practiceRounds));
       for (const round of t.practiceRounds) {
         date(round.createdAt); string(round.question,1000); string(round.introduction); string(round.draft,2000);
+        if(round.origin!=null){
+          object(round.origin);
+          for(const key of ['targetId','sourceId','attemptId','transcriptVersion'])string(round.origin[key],1000);
+          check(round.origin.sourceId===t.source.id);
+        }
         unique(list(round.answers));
         for (const answer of round.answers) {
           string(answer.text,2000); check(['pending','unknown','complete'].includes(answer.status));

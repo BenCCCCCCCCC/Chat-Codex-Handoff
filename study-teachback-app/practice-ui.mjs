@@ -28,6 +28,8 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     $('practiceBody').hidden = !round;
     $('practiceQuestion').textContent = round?.question ?? '';
     $('practiceIntroduction').textContent = round?.introduction ?? '';
+    $('practiceIntroduction').hidden = !round?.introduction;
+    $('practiceHeading').textContent = round?.origin ? '检验这一点' : '情境练习';
     $('practiceDraft').value = round?.draft ?? '';
     $('practiceSubmit').textContent = flow.busy ? '处理中…' :
       round?.answers.some(a => a.text === round.draft?.trim() && a.status !== 'complete') ? '重试这次回答' : '提交回答';
@@ -90,5 +92,11 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     const answer=target.answerId&&[...$('practiceAnswers').children].find(n=>n.dataset.answerId===target.answerId);
     focusHit(answer??$(target.part==='draft'?'practiceDraft':'practiceQuestion'));
   }
-  return {render, start, open, flushDraft, focusPanel, locate, discardDraft:()=>drafts.discard(), get hasPendingDraft(){return drafts.pending;}};
+  async function fromFeedback(target){
+    if(!canStart())return;
+    await flushDraft();
+    await flow.fromFeedback(target);
+    focusPanel();
+  }
+  return {render, start, open, fromFeedback, flushDraft, focusPanel, locate, discardDraft:()=>drafts.discard(), get hasPendingDraft(){return drafts.pending;}};
 }

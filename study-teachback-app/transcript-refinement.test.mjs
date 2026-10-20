@@ -42,6 +42,23 @@ test('ASR sends a script style hint by default, explicit baseline omits it, raw 
     assert.deepEqual(result.termHints,options.terms??[]);
   }
 });
+
+test('zero runs at segment edges use existing segment/word bounds; shared boundaries follow text',()=>{
+  const raw={text:'甲乙丙丁戊己',spans:[{id:'s0',start:0,end:4,text:'甲乙丙'},{id:'s1',start:4,end:8,text:'丁戊己'}],words:[
+    {id:'w0',text:'甲',start:0,end:0,usable:false},{id:'w1',text:'乙',start:0,end:0,usable:false},
+    {id:'w2',text:'丙',start:1,end:2,usable:true},{id:'w3',text:'丁',start:4,end:4,usable:false},
+    {id:'w4',text:'戊',start:5,end:6,usable:true},{id:'w5',text:'己',start:8,end:8,usable:false}
+  ]},snapshot=JSON.stringify(raw);
+  for(const id of ['w0','w1'])assert.deepEqual(wordPlayback(raw,id),{level:'context',start:0,end:2});
+  assert.deepEqual(wordPlayback(raw,'w3'),{level:'context',start:4,end:6});
+  assert.deepEqual(wordPlayback(raw,'w5'),{level:'context',start:5,end:8});
+  assert.deepEqual(quotePlayback(raw,raw.spans[1],'丁'),{level:'quote-context',start:4,end:6.3});
+  // No reliable text assignment at a shared boundary: do not silently pick either segment.
+  assert.equal(wordPlayback({...raw,text:'changed'},'w3'),null);
+  const wide=structuredClone(raw);wide.words[2].end=3.5;
+  assert.equal(wordPlayback(wide,'w0').level,'segment');
+  assert.equal(JSON.stringify(raw),snapshot);
+});
 test('real zero-length word in a short quote replays neighbouring provider boundaries without editing raw timing',()=>{
   const speech=JSON.parse(readFileSync(new URL('../docs/research/natural-speech-live.json',import.meta.url))).asr.find(x=>x.id==='fleurs-276').result;
   const snapshot=JSON.stringify(speech),word=speech.words.find(w=>w.text==='项'),span=speech.spans.find(s=>word.start>=s.start&&word.end<=s.end);

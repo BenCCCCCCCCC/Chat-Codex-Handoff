@@ -1,14 +1,50 @@
 // Playback ranges use provider boundaries, never reconstructed word timestamps.
+function textSpan(raw,index){
+  if(!raw.text)return null;
+  let cursor=0,position;
+  for(const word of raw.words.slice(0,index+1)){
+    if(!word.text)return null;
+    const at=raw.text.indexOf(word.text,cursor);
+    if(at<0)return null;
+    position={start:at,end:at+word.text.length};cursor=position.end;
+  }
+  cursor=0;
+  for(const span of raw.spans){
+    if(!span.text)return null;
+    const at=raw.text.indexOf(span.text,cursor);
+    if(at<0)return null;
+    cursor=at+span.text.length;
+    if(position.start>=at&&position.end<=cursor)return span;
+  }
+  return null;
+}
 export function wordPlayback(raw,wordId){
   const words=Array.isArray(raw.words)?raw.words:[],index=words.findIndex(w=>w?.id===wordId),word=words[index];
   if(!word)return null;
-  const spans=raw.spans.filter(s=>word.start>=s.start&&word.end<=s.end);
+  let spans=raw.spans.filter(s=>word.start>=s.start&&word.end<=s.end);
+  // At a shared segment boundary, time alone cannot assign a zero-length token.
+  if(spans.length>1){const mapped=textSpan(raw,index);spans=spans.filter(s=>s===mapped);}
   if(spans.length!==1)return null;
   const span=spans[0],valid=w=>w?.usable===true&&Number.isFinite(w.start)&&Number.isFinite(w.end)&&w.end>w.start&&w.start>=span.start&&w.end<=span.end;
   if(valid(word))return {level:'word',start:word.start,end:word.end};
-  const before=words.slice(0,index).reverse().find(valid),after=words.slice(index+1).find(valid);
-  if(before&&after&&before.end<=word.start&&after.start>=word.end&&after.end-before.start<=3)
-    return {level:'context',start:before.start,end:after.end};
+  const zero=(w,i)=>w&&Number.isFinite(w.start)&&w.start===w.end&&w.start>=span.start&&w.end<=span.end&&
+    (raw.spans.filter(s=>w.start>=s.start&&w.end<=s.end).length===1||textSpan(raw,i)===span);
+  if(zero(word,index)){
+    let first=index,last=index;
+    while(first>0&&zero(words[first-1],first-1)&&words[first-1].start<=words[first].start)first--;
+    while(last+1<words.length&&zero(words[last+1],last+1)&&words[last+1].start>=words[last].start)last++;
+    const before=words[first-1],after=words[last+1];
+    const startsHere=!before||before.end<=span.start;
+    const endsHere=!after||after.start>=span.end;
+    const left=valid(before)&&before.end<=words[first].start;
+    const right=valid(after)&&after.start>=words[last].end;
+    // One missing neighbour may use a real segment edge, never an invented duration.
+    if((left||startsHere)&&(right||endsHere)&&(left||right)){
+      const start=left?before.start:span.start,end=right?after.end:span.end;
+      if(end>start&&end-start<=3&&(start>span.start||end<span.end))
+        return {level:'context',start,end};
+    }
+  }
   return {level:'segment',start:span.start,end:span.end};
 }
 export function rawPlaybackParts(raw){

@@ -1,3 +1,4 @@
+import {repairFocus} from './core.mjs';
 // Practice records are separate from tutoring messages and recorded attempts.
 export function practiceRounds(topic) {
   if (!topic) return [];
@@ -53,6 +54,18 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
   }
   return {
     get busy() { return busy; },
+    fromFeedback: target => run(async topic => {
+      const question=repairFocus(target.focus),rounds=practiceRounds(topic);
+      // Regenerating a report can change the task without changing its target ID.
+      let round=rounds.find(r=>r.origin?.targetId===target.id&&r.question===question);
+      if(!round){
+        round={id:uid(),createdAt:now(),question,introduction:'',assistance:'source_visible',draft:'',answers:[],
+          origin:{targetId:target.id,sourceId:target.sourceId,attemptId:target.attemptId,transcriptVersion:target.transcriptVersion}};
+        rounds.push(round);
+      }
+      topic.activePracticeId=round.id;topic.resume={view:'practice'};
+      await save(topic);
+    }),
     start: () => run(async topic => {
       const rounds = practiceRounds(topic);
       topic.resume = {view:'practice'};

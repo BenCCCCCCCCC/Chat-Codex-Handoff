@@ -19,6 +19,7 @@ function fixture() {
 test('v1 backup round trip preserves audio, corrections, report links and practice; restore is a separate copy',async()=>{
   const original=fixture();original.contextNote='Remember the condition.';
   original.transcriptionTerms='新一轮的术语';
+  original.practiceRounds[0].origin={targetId:'target:attempt:v1:0',sourceId:'source',attemptId:'attempt',transcriptVersion:'v1'};
   original.attempts[0].transcriptionTerms=['华硕','Eee PC'];
   // New supported findings carry no advice; legacy string advice is tested separately.
   original.attempts[0].reports[0].findings[0].repair=null;
@@ -39,6 +40,7 @@ test('v1 backup round trip preserves audio, corrections, report links and practi
   assert.deepEqual(await copy.attempts[0].audio.arrayBuffer(),await original.attempts[0].audio.arrayBuffer());
   assert.deepEqual(copy.resume,original.resume);
   assert.equal(copy.practiceRounds[0].draft,'Stay outside');
+  assert.deepEqual(copy.practiceRounds[0].origin,original.practiceRounds[0].origin);
   assert.equal(copy.practiceRounds[0].answers[0].status,'unknown');
   assert.equal(original.practiceRounds[0].answers[0].status,'pending');
 });

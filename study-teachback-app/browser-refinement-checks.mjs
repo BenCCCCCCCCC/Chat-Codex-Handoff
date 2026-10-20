@@ -61,6 +61,33 @@ export async function refinementChecks({check,evaluate,until,reloadPage,shot,cdp
     await shot('transcript-refinement-mobile','rawTranscriptDetails');
     await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
     assert.equal(calls.length,before);
+    // Reuse this saved attempt to exercise the new route; this synthetic finding
+    // tests state and billing behaviour, not model judgement.
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=(await db.all())[0],a=t.attempts[0];
+      delete a.transcriptDraft;
+      a.reports[0].findings.push({status:'missing',message:'检验干燥这一条件的含义。',sourceQuote:t.source.text,spanId:null,quote:null,eventId:null,repair:'假设土壤仍湿润，现在能浇水吗？'});
+      await db.put(t);db.close();})()`);
+    await reloadPage();await until(`document.querySelector('[data-answer-target]')`);
+    assert.equal(await evaluate(`document.querySelector('.feedback-alternatives').open`),false);
+    await shot('feedback-probe','contentHeading');
+    await evaluate(`{const b=document.querySelector('[data-answer-target]');b.scrollIntoView({block:'center'});b.focus();}`);
+    await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',windowsVirtualKeyCode:13});
+    await cdp('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+    await until(`document.activeElement.id==='practiceDraft'`);
+    assert.equal(calls.length,before,'opening an existing task makes no provider call');
+    assert.equal(await evaluate(`document.getElementById('practiceQuestion').textContent`),'假设土壤仍湿润，现在能浇水吗？');
+    await evaluate(`{const e=document.getElementById('practiceDraft');e.value='现在不能浇水。';e.dispatchEvent(new Event('input'));e.dispatchEvent(new Event('blur'));}`);
+    await until(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=(await db.all())[0];db.close();return t.practiceRounds?.[0].draft==='现在不能浇水。';})()`);
+    await reloadPage();await until(`document.getElementById('practiceDraft').value==='现在不能浇水。'`);
+    const round=(await evaluate(all))[0].practiceRounds[0];
+    assert.equal(round.origin.attemptId,'refinement-attempt');
+    await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:1000,deviceScaleFactor:1,mobile:false});
+    assert(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'));await shot('feedback-probe-mobile','practicePanel');
+    await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
+    await evaluate(`document.getElementById('practiceForm').requestSubmit()`);
+    await until(`document.querySelector('#practiceAnswers strong') && !document.getElementById('practiceSubmit').disabled`);
+    assert.equal(calls.length,before+1,'only submitting the answer calls the provider');
+    assert.equal((await evaluate(all))[0].practiceRounds[0].answers.length,1);
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();
   });
 }
