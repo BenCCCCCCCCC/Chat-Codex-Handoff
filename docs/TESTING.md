@@ -19,4 +19,6 @@ node study-teachback-app/run-offline-tests.mjs diagnostic diagnosis-state-ux-01
 node study-teachback-app/run-offline-tests.mjs browser-replay diagnosis-state-ux-01
 node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01 --recovery-only
 node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01 --recovery-only
+node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01 --workspace-only
+node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01 --workspace-only
 ```

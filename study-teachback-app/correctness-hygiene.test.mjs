@@ -72,7 +72,7 @@ function captureHarness(kind='valid') {
     OfflineAudioContext:class {createBufferSource(){return {connect(){},start(){}};}async startRendering(){return {getChannelData:()=>new Float32Array(16000)};}},
     waveBytes:()=>new ArrayBuffer(8),observations:()=>({reason:kind==='silent'?'NEAR_SILENT':kind==='clipping'?'CLIPPING':'UNVALIDATED_ACTIVITY'}),document:{body:{dataset:{}},querySelector:()=>({hidden:false})},
     reveal:(id,show=true)=>{$(id).hidden=!show;},notice:message=>events.push(message),friendly:x=>x,renderAttempt(){},
-    act:async fn=>{try{await fn();}catch(e){events.push(e.message);}},save:async()=>{events.push('saved');if(kind==='storage')throw Error('STORAGE_FAILED');},
+    act:async fn=>{try{await fn();}catch(e){events.push(e.message);}},save:async()=>{events.push('saved');if(kind==='storage'||kind==='asr-storage'&&target.attempts[0]?.raw)throw Error('STORAGE_FAILED');},
     api:async(path)=>{events.push(path);if(path==='/api/register'&&kind==='register')throw Error('LEDGER_LOCKED');return {};}});
   vm.runInContext(app.slice(app.indexOf('function stopRecording('),app.indexOf("document.addEventListener('visibilitychange'"))+app.slice(app.indexOf('async function processAudio('),app.indexOf("$('retryAsr').onclick")),context);
   return {context,target,events,$,release:completePermission,async start(){await $('start').onclick();},async stop(){const recorder=context.record.recorder;recorder.stop();await recorder.done;}};
@@ -87,6 +87,15 @@ for(const kind of ['denied','unsupported','startup','empty','decode','silent','c
   if(['decode','storage','register','valid'].includes(kind))assert(h.target.attempts[0].audio.size>0);
   if(registrations)assert(h.events.indexOf('saved')<h.events.indexOf('/api/register'));
   assert.equal(h.context.record,null);assert.equal(h.context.capturePending,false);assert.equal(h.$('start').disabled,false);
+});
+
+test('received ASR survives final local save failure without a second write or transcription',async()=>{
+  const h=captureHarness('asr-storage');await h.start();await h.stop();
+  const attempt=h.target.attempts[0];
+  assert.equal(attempt.status,'REVIEW_REQUIRED');assert.equal(attempt.raw.origin,'ASR');
+  assert.equal(h.events.filter(e=>e==='/api/asr').length,1);
+  assert.equal(h.events.filter(e=>e==='saved').length,3);
+  assert.equal(h.events.filter(e=>e==='STORAGE_FAILED').length,1);
 });
 
 test('A3 HTTP repeated registration cannot buy an extra ASR submission or clear reserves',async()=>{

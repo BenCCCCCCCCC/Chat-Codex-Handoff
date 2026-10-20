@@ -39,6 +39,7 @@ export function decodeBackup(text) {
     if (t.restoredAt != null) date(t.restoredAt);
     setupContextValue(t.setupContext);
     for (const goal of list(t.goals)) { string(goal.text,200); string(goal.sourceQuote,600); check(t.source.text.includes(goal.sourceQuote)); }
+    if(t.chatDraft!=null)string(t.chatDraft,2000);
     messages(t.messages); list(t.attempts); unique(t.attempts);
     if (t.question != null) string(t.question,1000);
     if (t.focus != null) string(t.focus,1000);
