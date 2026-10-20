@@ -41,6 +41,10 @@ async function reloadPage(){
   await evaluate(`document.documentElement.dataset.testReload='old'`);await cdp('Page.reload');
   await until(`document.documentElement.dataset.testReload!=='old' && document.getElementById('budget')?.textContent.length>0`);
 }
+async function openHistoryAttempt(){
+  await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+  await until(`document.getElementById('history').hidden && !document.getElementById('workspace').hasAttribute('aria-busy')`);
+}
 async function trustedPointer(expression,label){
   await cdp('Page.bringToFront');
   await evaluate(`(${expression}).scrollIntoView({behavior:'instant',block:'center'})`);await pause(120);
@@ -102,7 +106,7 @@ try{
     await check('C0 saved synthetic audio genuinely replays requested first second',async()=>{
       const f=diagnosticFixtures[0],t={id:'replay-probe',createdAt:Date.now(),source:f.source,messages:[],goals:[],attempts:[{...f.attempt,source:f.source,duration:7.31,createdAt:Date.now(),raw:{id:'probe-raw',reviewed:false,text:'synthetic',spans:[{id:'s0',start:0,end:1,text:'synthetic'}]},corrections:[],reports:[]}]};
       await evaluate(`(async()=>{const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob([new Uint8Array(${JSON.stringify(savedWave)})],{type:'audio/wav'});const db=await(await import('/storage.mjs')).openStore();await db.put(t);db.close();})()`);
-      await reloadPage();await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+      await reloadPage();await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await openHistoryAttempt();
       await evaluate(`document.querySelector('#transcript button').click()`);
       await until(`!document.getElementById('player').paused && document.getElementById('player').currentTime>0`);
       // Deterministic legitimate event-cadence stress: media continues on its own thread.
@@ -148,14 +152,14 @@ try{
     await evaluate(`(async()=>{const {openStore}=await import('/storage.mjs');const s=await openStore();await s.clear();s.close();})()`);
     await reloadPage();await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
   });
-  for(const mode of ['repair','apply'])for(const outcome of ['success','quote','request'])await check(`A1 browser ${mode}/${outcome} provenance, persistence and later real input`,async()=>{
+  for(const mode of ['repair'])for(const outcome of ['success','quote','request'])await check(`A1 browser ${mode}/${outcome} provenance, persistence and later real input`,async()=>{
     const t={id:'action-provenance',createdAt:Date.now(),source:{id:'source',title:'Synthetic actions',text:'只有土壤干燥才浇水。'},goals:[],messages:[{role:'user',text:'Earlier actual question'}],attempts:[],mode:'learn'};
     t.attempts=[{id:'synthetic-attempt',createdAt:Date.now(),source:t.source,kind:'full',assistance:'none',duration:1,raw:{id:'raw',text:'test',spans:[{id:'s0',start:0,end:1,text:'test'}],reviewed:true},corrections:[],reports:[{channel:'content',sourceId:t.source.id,attemptId:'synthetic-attempt',transcriptVersion:'raw',findings:[{status:'missing',message:'Synthetic gap',sourceQuote:t.source.text,spanId:null,quote:null,eventId:null,repair:'请说明条件。'}]}]}];
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob(['synthetic placeholder']);await db.put(t);db.close();})()`);
     await reloadPage();await until(`!document.getElementById('workspace').hidden`);
-    await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+    await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await openHistoryAttempt();
     const start=provenanceRequests.length;rejectStarter=outcome==='quote';failTeach=outcome==='request';
-    if(mode==='apply')await click('apply');else await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);
+    await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);
     await until(`!document.getElementById('workspace').hasAttribute('aria-busy') && document.getElementById('notice').textContent.includes('${outcome==='success'?'可以继续问':outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE'}')`);
     assert.equal(provenanceRequests.length,start+1);assert.equal(provenanceRequests.at(-1).mode,mode);
     const internal=provenanceRequests.at(-1).message;
@@ -164,15 +168,73 @@ try{
     const saved=(await evaluate(all))[0];assert.deepEqual(saved.messages.filter(m=>m.role==='user').map(m=>m.text),['Earlier actual question','First real answer','Next real question']);
     assert.equal(await evaluate(`document.querySelectorAll('.message.user').length`),3);assert(saved.messages.every(m=>m.text!==internal));assert(provenanceRequests.slice(start).every(r=>r.history.every(m=>m.text!==internal)));
     assert(provenanceRequests.at(-1).history.some(m=>m.text==='First real answer'));
-    if(mode==='apply'&&outcome==='success'){assert.equal(saved.apply.answer,'First real answer');assert.equal(provenanceRequests[start+1].mode,'apply_answer');}
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
+  });
+  async function practiceTopic(){
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();await db.put({id:'practice-topic',createdAt:Date.now(),source:{id:'practice-source',title:'条件与行动',text:'只有土壤干燥才浇水。'},goals:[],messages:[{role:'user',text:'请解释条件。'}],attempts:[],mode:'learn'});db.close();})()`);
+    await reloadPage();
+  }
+  async function practiceInput(text){await evaluate(`document.getElementById('practiceDraft').value=${JSON.stringify(text)};document.getElementById('practiceDraft').dispatchEvent(new Event('input'))`);}
+  await check('practice keeps two questions and answer revisions; double submit and repeat answer do not duplicate calls',async()=>{
+    await practiceTopic();const before=provenanceRequests.length;
+    await click('startPractice');await until(`document.getElementById('practiceQuestion').textContent && !document.getElementById('practiceSubmit').disabled`);
+    const question=await evaluate(`document.getElementById('practiceQuestion').textContent`);
+    await practiceInput('土壤还湿，所以现在先不浇。');
+    await until(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=(await db.all())[0];db.close();return t.practiceRounds[0].draft==='土壤还湿，所以现在先不浇。';})()`);
+    delaySemantic=300;
+    await evaluate(`document.getElementById('practiceForm').requestSubmit();document.getElementById('practiceForm').requestSubmit()`);
+    await until(`document.querySelector('#practiceAnswers strong') && !document.getElementById('practiceSubmit').disabled`);delaySemantic=0;
+    assert.equal(provenanceRequests.length,before+2);
+    assert.equal(provenanceRequests.at(-1).focus,question);
+    assert.equal(await evaluate(`document.querySelector('.journey [aria-current]').dataset.step`),'4');
+    for(const width of [1440,390]){
+      await cdp('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:false});
+      assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));await shot(`practice-${width}`,'practicePanel');
+    }
+    await cdp('Emulation.setDeviceMetricsOverride',{width:1440,height:1000,deviceScaleFactor:1,mobile:false});
+    await practiceInput('我先检查土壤，只有干了才浇水。');await evaluate(`document.getElementById('practiceForm').requestSubmit()`);
+    await until(`document.querySelectorAll('#practiceAnswers strong').length===2 && !document.getElementById('practiceSubmit').disabled`);
+    const first=(await evaluate(all))[0].practiceRounds[0];
+    await click('practiceNew');await until(`document.querySelectorAll('#practiceQuestionSelect option').length===2 && !document.getElementById('practiceSubmit').disabled`);
+    await evaluate(`document.getElementById('practiceQuestionSelect').value=${JSON.stringify(first.id)};document.getElementById('practiceQuestionSelect').dispatchEvent(new Event('change'))`);
+    await until(`document.querySelectorAll('#practiceAnswers strong').length===2`);
+    const beforeReuse=calls.length;await practiceInput(first.answers[0].text);await evaluate(`document.getElementById('practiceForm').requestSubmit()`);
+    await until(`document.getElementById('practiceDraft').value==='' && !document.getElementById('practiceSubmit').disabled`);
+    assert.equal(calls.length,beforeReuse);
+    const saved=(await evaluate(all))[0];assert.equal(saved.practiceRounds.length,2);assert.equal(saved.practiceRounds[0].answers.length,2);
+    assert.deepEqual(saved.messages,[{role:'user',text:'请解释条件。'}]);
+  });
+  await check('practice failure preserves the answer and question across reload; retry is explicit',async()=>{
+    await practiceTopic();await click('startPractice');await until(`document.getElementById('practiceQuestion').textContent && !document.getElementById('practiceSubmit').disabled`);
+    await practiceInput('不浇，因为土壤仍湿。');failTeach=true;await evaluate(`document.getElementById('practiceForm').requestSubmit()`);
+    await until(`document.getElementById('notice').textContent.includes('API_RESULT_UNAVAILABLE') && !document.getElementById('practiceSubmit').disabled`);
+    const before=calls.length;await reloadPage();assert.equal(calls.length,before);
+    assert.equal(await evaluate(`document.getElementById('practiceDraft').value`),'不浇，因为土壤仍湿。');
+    assert.equal(await evaluate(`document.getElementById('practiceSubmit').textContent`),'重试这次回答');
+    await evaluate(`document.getElementById('practiceForm').requestSubmit()`);await until(`document.querySelector('#practiceAnswers strong') && !document.getElementById('practiceSubmit').disabled`);
+    assert.equal(calls.length,before+1);assert.equal((await evaluate(all))[0].practiceRounds[0].answers.length,1);
+    failTeach=true;await click('practiceNew');await until(`document.getElementById('practiceStatus').textContent.includes('上次出题')`);
+    const after=calls.length;await reloadPage();assert.equal(calls.length,after);assert.equal((await evaluate(all))[0].practiceRounds.length,1);
+    assert(await evaluate(`document.querySelector('#practiceAnswers strong')!==null`));
+  });
+  await check('reopening and history continue the latest active topic and its review position without model calls',async()=>{
+    const before=calls.length,f=diagnosticFixtures.find(f=>f.id==='fluent-wrong'),stamp=Date.now();
+    const recent={id:'a-recent',createdAt:stamp-20000,updatedAt:stamp-1000,source:{...f.source,title:'最近核对的主题'},goals:[],messages:[],mode:'learn',resume:{view:'attempt',attemptId:f.attempt.id},attempts:[{...f.attempt,source:f.source,createdAt:stamp-15000,raw:{id:f.attempt.transcriptVersion,spans:f.attempt.spans,reviewed:true},corrections:[],reports:[{...f.report,channel:'content'}]}]};
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();const t=${JSON.stringify(recent)};t.attempts[0].audio=new Blob(['synthetic placeholder']);await db.put(t);await db.put({id:'z-older',createdAt:${stamp-10000},source:{id:'old-source',title:'较早的主题',text:'旧材料'},goals:[],messages:[],attempts:[],mode:'learn'});db.close();})()`);
+    await reloadPage();assert.equal(await evaluate(`document.getElementById('topicTitle').textContent`),'最近核对的主题');
+    assert(await evaluate(`!document.getElementById('attemptPanel').hidden && document.querySelector('#feedback .finding')!==null`));
+    await click('historyButton');await until(`document.querySelectorAll('#historyList>div').length===2`);assert(await evaluate(`document.querySelector('#historyList>div').textContent.includes('继续核对与反馈')`));
+    await evaluate(`[...document.querySelectorAll('#historyList button')].filter(b=>b.textContent==='继续学习')[1].click()`);
+    await until(`document.getElementById('topicTitle').textContent==='较早的主题' && document.getElementById('history').hidden && !document.getElementById('workspace').hasAttribute('aria-busy')`);
+    await reloadPage();assert.equal(await evaluate(`document.getElementById('topicTitle').textContent`),'较早的主题');assert.equal(calls.length,before);
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();
   });
   for(const f of diagnosticFixtures)await check(`B4 zero-call UI fixture ${f.id}`,async()=>{
     const before=calls.length,ledgerBefore=JSON.stringify(testBook.read());
     const a={...f.attempt,source:f.source,createdAt:Date.now(),raw:{id:f.attempt.transcriptVersion,text:f.attempt.spans.map(s=>s.text).join(''),spans:f.attempt.spans,reviewed:f.attempt.reviewed},corrections:[],reports:[{...f.report,channel:'content'},...(f.evidence.length?[{channel:'process',attemptId:f.attempt.id,transcriptVersion:f.attempt.transcriptVersion,processEvidence:f.evidence}]:[])]};
     const t={id:'diagnostic-ui',source:f.source,createdAt:Date.now(),goals:[],messages:[],attempts:[a],mode:'learn'};
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob(['synthetic placeholder']);await db.put(t);db.close();})()`);
-    await reloadPage();await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+    await reloadPage();await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await openHistoryAttempt();
     assert.equal(await evaluate(`document.querySelectorAll('#feedback .diagnosticTarget').length`),f.expected.targets??0);
     assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .processObservation').length`),f.expected.process??0);
     assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding, #processFeedback .diagnosticTarget, #feedback .processObservation').length`),0);
@@ -275,8 +337,15 @@ try{
   });
   await check('targeted repair routes feedback back into tutor',async()=>{await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再学这一点').click()`);await until(`document.getElementById('phase').textContent.includes('再学这一点') && document.querySelectorAll('.message.assistant').length===2`);assert(calls.some(c=>c.kind==='repair'));});
   await check('partial re-record is a new attempt with parent and focus',async()=>{await evaluate(`[...document.querySelectorAll('.finding button')].find(b=>b.textContent==='再讲这一点').click()`);await click('start');await until(`!document.getElementById('finish').hidden`);await pause(1200);await click('finish');await until(`document.getElementById('notice').textContent.includes('转写完成')`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,2);assert.equal(t.attempts[1].kind,'partial');assert.equal(t.attempts[1].parentId,t.attempts[0].id);assert.notEqual(t.attempts[1].id,t.attempts[0].id);});
-  await check('new Apply task and answer stay separate from same-topic repair',async()=>{await click('apply');await until(`document.getElementById('phase').textContent.includes('换个情境') && document.getElementById('question').textContent.includes('现在')`);await evaluate(`document.getElementById('chat').value='不需要，因为还是湿的。';document.getElementById('chatForm').requestSubmit()`);await until(`document.querySelectorAll('.message.assistant').length===4`);assert((await evaluate(all))[0].apply.answer);});
-  await check('history reload preserves raw audio and corrected versions',async()=>{await reloadPage();await until(`!document.getElementById('workspace').hidden`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,2);assert.equal(t.attempts[0].corrections.length,1);assert(t.attempts[0].audio.size>0);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=4`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);});
+  await check('recorded teach-back leads into a separate application question and answer',async()=>{
+    const before=(await evaluate(all))[0];await click('apply');
+    await until(`document.getElementById('practiceQuestion').textContent.includes('现在') && !document.getElementById('practiceSubmit').disabled`);
+    await practiceInput('不需要，因为还是湿的。');await evaluate(`document.getElementById('practiceForm').requestSubmit()`);
+    await until(`document.querySelector('#practiceAnswers strong') && !document.getElementById('practiceSubmit').disabled`);
+    const after=(await evaluate(all))[0];assert.equal(after.practiceRounds[0].answers[0].text,'不需要，因为还是湿的。');
+    assert.deepEqual(after.messages,before.messages);assert.equal(after.attempts.length,before.attempts.length);
+  });
+  await check('history reload preserves raw audio and corrected versions',async()=>{await reloadPage();await until(`!document.getElementById('workspace').hidden`);const t=(await evaluate(all))[0];assert.equal(t.attempts.length,2);assert.equal(t.attempts[0].corrections.length,1);assert(t.attempts[0].audio.size>0);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=4`);await openHistoryAttempt();});
   await check('review confirmation survives history reload without implying playback',async()=>{assert(await evaluate(`document.getElementById('reviewHint').textContent.includes('这不表示音频已回听') && document.querySelector('#transcript button').textContent.includes('可选回听') && document.getElementById('player').controls`));});
   await check('API timeout then budget stop preserves one original attempt across explicit retry',async()=>{failASR='API_RESULT_UNAVAILABLE';await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(1100);await click('finish');await until(`document.getElementById('notice').textContent.includes('API_RESULT_UNAVAILABLE')`);let t=(await evaluate(all))[0],a=t.attempts.at(-1);assert.equal(t.attempts.length,3);const identity=a.id,size=a.audio.size;failASR='BUDGET_STOP';await click('retryAsr');await until(`document.getElementById('notice').textContent.includes('预算')`);await shot('budget-stop','notice');t=(await evaluate(all))[0];assert.equal(t.attempts.length,3);assert.equal(t.attempts.at(-1).id,identity);assert.equal(t.attempts.at(-1).audio.size,size);failASR=null;});
   await check('device interruption preserves original and skips semantic diagnosis',async()=>{await click('fullAgain');await click('start');await until(`!document.getElementById('finish').hidden`);await pause(800);await evaluate(`window.testTracks[0].dispatchEvent(new Event('ended'))`);await until(`document.getElementById('notice').textContent.includes('采集中断')`);assert((await evaluate(all))[0].attempts.at(-1).interrupted);});
@@ -284,6 +353,7 @@ try{
   await check('export contains exact audio bytes, raw/corrected versions, reports and source',async()=>{
     await evaluate(`window.exportBlobs=new Map();window.originalCreate=URL.createObjectURL;URL.createObjectURL=b=>{const u=window.originalCreate(b);window.exportBlobs.set(u,b);return u;};window.anchorClick=HTMLAnchorElement.prototype.click;HTMLAnchorElement.prototype.click=function(){if(this.download)window.exportBlob=window.exportBlobs.get(this.href);else window.anchorClick.call(this);};`);
     await click('export');await until('!!window.exportBlob');
+    assert(await evaluate(`(async()=>{const e=JSON.parse(await window.exportBlob.text());const db=await(await import('/storage.mjs')).openStore();const t=(await db.all())[0];db.close();return JSON.stringify(e.topic.practiceRounds)===JSON.stringify(t.practiceRounds);})()`));
     assert(await evaluate(`(async()=>{const e=JSON.parse(await window.exportBlob.text());const db=await (await import('/storage.mjs')).openStore();const t=(await db.all())[0];db.close();if(e.topic.source.id!==t.source.id||e.topic.attempts.length!==t.attempts.length)return false;for(let i=0;i<t.attempts.length;i++){const a=t.attempts[i],x=e.topic.attempts[i],b=new Uint8Array(await a.audio.arrayBuffer()),decoded=atob(x.audio.base64);if(b.length!==decoded.length||!b.every((v,j)=>v===decoded.charCodeAt(j))||JSON.stringify(a.raw)!==JSON.stringify(x.raw)||JSON.stringify(a.corrections)!==JSON.stringify(x.corrections)||JSON.stringify(a.reports)!==JSON.stringify(x.reports))return false;}return true;})()`));
   });
   await check('delete dialog cancel and Escape preserve data and restore focus',async()=>{
@@ -311,7 +381,7 @@ try{
   await check('saved real ASR PARTIAL words replay through validated segment before diagnosis',async()=>{
     const raw={...savedASR,id:'real-raw',origin:'ASR',createdAt:Date.now()};const t={id:'real-shape',createdAt:Date.now(),source:{id:'real-source',title:'保存的真实 ASR 回放',text:savedASR.text},goals:[],messages:[],attempts:[{id:'real-attempt',createdAt:Date.now(),source:{id:'real-source',title:'保存的真实 ASR 回放',text:savedASR.text},kind:'full',focus:null,assistance:'none',duration:7.31,observation:JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r3/DELIVERY_ENGINEERING.json',import.meta.url))).acoustic,raw,corrections:[],reports:[],status:'REVIEW_REQUIRED'}]};
     await evaluate(`(async()=>{const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob([new Uint8Array(${JSON.stringify(savedWave)})],{type:'audio/wav'});const db=await (await import('/storage.mjs')).openStore();await db.put(t);db.close();})()`);
-    await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);assert(await evaluate(`document.getElementById('reviewHint').textContent.includes('词级定位部分不可用')`));await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);await click('confirm');await until(`document.querySelectorAll('.finding').length===1`);const a=(await evaluate(all))[0].attempts[0];assert.equal(a.raw.words[14].start,a.raw.words[14].end);assert.equal(a.raw.words[14].usable,false);assert.equal(a.corrections.length,1);
+    await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await openHistoryAttempt();assert(await evaluate(`document.getElementById('reviewHint').textContent.includes('词级定位部分不可用')`));await evaluate(`document.querySelector('#transcript button').click()`);await until(`document.querySelector('#transcript button').textContent.includes('✓')`);await click('confirm');await until(`document.querySelectorAll('.finding').length===1`);const a=(await evaluate(all))[0].attempts[0];assert.equal(a.raw.words[14].start,a.raw.words[14].end);assert.equal(a.raw.words[14].usable,false);assert.equal(a.corrections.length,1);
   });
   await check('B3 local process confirmation requires replay, stores separate evidence and makes zero provider dispatches',async()=>{
     const before=calls.length,ledgerBefore=JSON.stringify(testBook.read());
@@ -322,12 +392,12 @@ try{
     assert.equal(await evaluate(`document.querySelectorAll('#feedback .finding').length`),1);assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding, #processFeedback .diagnosticTarget').length`),0);
     assert.equal(await evaluate(`document.getElementById('contentHeading').textContent`),'内容理解');assert.equal(await evaluate(`document.getElementById('processHeading').textContent`),'讲解过程');
     await evaluate(`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认并保存过程证据').click()`);await until(`document.getElementById('notice').textContent.includes('本机保存')`);assert.equal((await evaluate(all))[0].attempts[0].reports.length,2);assert.equal(calls.length,before);
-    await reloadPage();await until(`!document.getElementById('workspace').hidden`);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);assert.equal(await evaluate(`document.querySelectorAll('.processObservation').length`),1);assert.equal(calls.length,before);
+    await reloadPage();await until(`!document.getElementById('workspace').hidden`);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await openHistoryAttempt();assert.equal(await evaluate(`document.querySelectorAll('.processObservation').length`),1);assert.equal(calls.length,before);
   });
   await check('short-gap candidate replays and saves locally without a semantic call',async()=>{
     const before=calls.length;
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=(await db.all())[0];t.attempts[0].observation.events.push({id:'cluster-test',type:'short_pause_cluster_candidate',start:1,end:2.2});await db.put(t);db.close();})()`);
-    await reloadPage();await until(`!document.getElementById('workspace').hidden`);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);
+    await reloadPage();await until(`!document.getElementById('workspace').hidden`);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await openHistoryAttempt();
     await evaluate(`window.testClusterRow=[...document.querySelectorAll('#observations button')].find(b=>b.textContent.includes('短间隔聚集')).parentElement;window.testClusterRow.querySelector('button').click()`);await until(`window.testClusterRow.querySelector('button').textContent.includes('✓')`);
     await evaluate(`window.testClusterRow.querySelector('button:last-child').click()`);await until(`document.getElementById('processFeedback').textContent.includes('短低能量间隔聚集')`);
     assert.equal(calls.length,before);assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding').length`),0);
@@ -343,7 +413,7 @@ try{
   await check('real supported punctuation repair renders no remediation; valid gaps retain focus actions',async()=>{
     const live=JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r3/LUNA_LOGIC_REV3.json',import.meta.url))).cases.find(c=>c.id==='self_repair');
     assert(live.result.findings.some(f=>f.status==='supported'&&f.repair==='. .'));
-    async function show(report){const t={id:'feedback-gate',createdAt:Date.now(),source:live.source,goals:[],messages:[],attempts:[{...live.fixture,source:live.source,createdAt:Date.now(),raw:{id:live.fixture.transcriptVersion,text:live.fixture.spans[0].text,spans:live.fixture.spans,reviewed:true},corrections:[],reports:[{...report,channel:'content'}]}]};await evaluate(`(async()=>{const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob(['synthetic placeholder']);const db=await (await import('/storage.mjs')).openStore();await db.put(t);db.close();})()`);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await evaluate(`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整')).click()`);}
+    async function show(report){const t={id:'feedback-gate',createdAt:Date.now(),source:live.source,goals:[],messages:[],attempts:[{...live.fixture,source:live.source,createdAt:Date.now(),raw:{id:live.fixture.transcriptVersion,text:live.fixture.spans[0].text,spans:live.fixture.spans,reviewed:true},corrections:[],reports:[{...report,channel:'content'}]}]};await evaluate(`(async()=>{const t=${JSON.stringify(t)};t.attempts[0].audio=new Blob(['synthetic placeholder']);const db=await (await import('/storage.mjs')).openStore();await db.put(t);db.close();})()`);await click('historyButton');await until(`document.querySelectorAll('#historyList button').length>=3`);await openHistoryAttempt();}
     const buttons=`[...document.querySelectorAll('.finding button')].filter(b=>['再学这一点','再讲这一点'].includes(b.textContent)).length`;
     await show(live.result);await shot('supported','feedback');assert.equal(await evaluate(buttons),0);assert(await evaluate(`document.getElementById('feedback').textContent.includes('已表达')`));
     for(const status of ['missing','incorrect','unknown']){

@@ -24,6 +24,7 @@
     <li data-step="1"><span>2</span>理解与提问</li>
     <li data-step="2"><span>3</span>用自己的话讲</li>
     <li data-step="3"><span>4</span>核对与补学</li>
+    <li data-step="4"><span>5</span>换个情境</li>
   </ol>
   <div id="notice" role="status" aria-live="polite"></div>
   <section id="storageRecovery" class="card" hidden><p>存储未完成。请重试保存或立即导出；关闭页面可能丢失尚未保存的内容。</p><button id="retrySave">重试保存</button><button id="recoveryExport">导出当前记录</button></section>
@@ -60,6 +61,18 @@
       <aside class="card" id="materialPanel"><p class="panel-label">本轮学习材料</p><h2 id="topicTitle"></h2><details id="sourceDetails" open><summary>原材料与学习重点</summary><p id="sourceText" class="prewrap"></p><h3>学习重点</h3><ul id="goals"></ul><button id="revise" class="quiet">以新版材料开始</button></details></aside>
       <section class="card learning"><div class="sectionHead"><h2 id="phase">一起学</h2><span class="tag neutral">围绕你的材料</span></div><div id="messages" aria-live="polite"></div><div id="question"></div><form id="chatForm"><label class="sr-only" for="chat">你的问题或想法</label><textarea id="chat" rows="2" maxlength="2000" placeholder="说说你的理解，或问一个不明白的地方……"></textarea><button type="submit" id="send">发送</button></form><div class="prompt-starters" aria-label="提问思路"><button type="button" class="chip" data-prompt="能用一个具体例子解释这段材料吗？">举一个例子</button><button type="button" class="chip" data-prompt="这段材料中，哪些条件最容易混淆？">找出关键条件</button><span>选择后可编辑，再发送</span></div></section>
     </div>
+    <div class="practice-entry"><div><strong>把理解用到一个新情境</strong><p class="muted">先自己回答，再看反馈。每道题与每次回答都会保留。</p></div><button id="startPractice" class="quiet">练一个新情境</button></div>
+    <section class="card practice-panel" id="practicePanel" aria-labelledby="practiceHeading" hidden>
+      <div class="sectionHead"><div><p class="panel-label">从理解到应用</p><h2 id="practiceHeading" tabindex="-1">情境练习</h2></div><button id="practiceNew" class="quiet">换一道题</button></div>
+      <label class="sr-only" for="practiceQuestionSelect">查看以前的情境题</label><select id="practiceQuestionSelect" hidden></select>
+      <p id="practiceStatus" role="status" class="muted"></p>
+      <div id="practiceBody">
+        <div class="practice-prompt"><p id="practiceIntroduction" class="prewrap"></p><h3 id="practiceQuestion"></h3></div>
+        <div id="practiceAnswers" aria-live="polite"></div>
+        <form id="practiceForm"><label id="practiceDraftLabel" for="practiceDraft">你的回答</label><textarea id="practiceDraft" maxlength="2000" rows="4" placeholder="先写出你的判断，再解释材料中的哪条条件支持它。"></textarea><div class="practice-submit"><span class="muted">草稿自动保存在本机；提交时发送给 AI。</span><button id="practiceSubmit" type="submit">提交回答</button></div></form>
+        <p class="muted">这次练习可参考材料。反馈只针对当前回答，不代表长期掌握程度。</p>
+      </div>
+    </section>
     <section class="card" id="recording" hidden><div class="sectionHead"><div><p class="panel-label">轮到你来解释</p><h2 id="recordTitle">我来讲讲</h2></div><span class="tag record-tag">最长 3 分钟</span></div><p id="recordFocus"></p><label>讲解时可以参考<select id="assistance"><option value="none">无提示</option><option value="keywords">只看关键词</option><option value="source">查看材料</option></select></label><p id="promptView" class="prewrap"></p><div class="recordDisplay"><span id="timer">00:00</span><meter id="level" min="0" max="1" value="0" aria-label="麦克风音量"></meter></div><div class="actions"><button id="start">开始录音</button><button id="finish" hidden>结束讲解</button><button id="cancelRecord" class="quiet">继续学习</button></div><p class="muted">不用追求流畅，先讲出你的理解。结束后保存原声，再核对转写。</p></section>
     <section class="card" id="attemptPanel" hidden>
       <div class="sectionHead"><div><p class="panel-label">把表达变成下一步</p><h2>回听与反馈</h2></div><span id="attemptKind" class="tag"></span></div>

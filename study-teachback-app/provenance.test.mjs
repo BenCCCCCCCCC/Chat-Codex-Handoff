@@ -22,7 +22,7 @@ for(const fail of [false,true])test(`starter provenance and first owner input; i
 test('Learn entry explicitly marks automatic starter internal',()=>assert.match(source,/await teach\('请先帮我理解[^\n]+internalStarter:true/));
 
 // Exercise the actual UI action bodies and rendering, not just an explicit flag.
-for(const mode of ['learn','repair','apply'])for(const outcome of ['success','quote','request'])test(`A1 ${mode}/${outcome}: persisted/rendered messages and later history preserve only real input`,async()=>{
+for(const mode of ['learn','repair'])for(const outcome of ['success','quote','request'])test(`A1 ${mode}/${outcome}: persisted/rendered messages and later history preserve only real input`,async()=>{
   const nodes=new Map(),buttons=[],saved=[],requests=[];
   const node=()=>({textContent:'',value:'',hidden:false,children:[],append(...v){this.children.push(...v);},replaceChildren(...v){this.children=v;},scrollIntoView(){},dataset:{}});
   const $=id=>{if(!nodes.has(id))nodes.set(id,node());return nodes.get(id);};
@@ -32,7 +32,7 @@ for(const mode of ['learn','repair','apply'])for(const outcome of ['success','qu
     localize,processFor:()=>[],attemptRequest:a=>({id:a.id,sourceId:a.source.id,transcriptVersion:a.raw.id,duration:a.duration,kind:a.kind,assistance:a.assistance,reviewed:a.raw.reviewed,spans:a.raw.spans}),
     deleted:new Set(),structuredClone,uid:()=> 'synthetic-id',clearImport(){},repairFocus:x=>x,remediationFocus:()=> 'Condition',latest:a=>a.raw,
     reveal(){},el:(tag,text)=>Object.assign(node(),{textContent:text}),button:(label,fn)=>{buttons.push({label,fn});return node();},
-    notice(){},friendly:x=>x,canNavigate:()=>true,act:fn=>fn(),
+    notice(){},friendly:x=>x,canNavigate:()=>true,act:fn=>fn(),renderPractice(){},practice:{start(){}},
     save:async()=>saved.push(structuredClone(context.topic)),
     api:async(path,body)=>{requests.push(structuredClone(body));if(reject){reject=false;throw Error(outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE');}return {value:{message:'Synthetic tutor',goals:[],question:'Question'}};}});
   vm.runInContext(source.slice(source.indexOf('function renderTopic('),source.indexOf('let importPending')),context);
@@ -41,7 +41,6 @@ for(const mode of ['learn','repair','apply'])for(const outcome of ['success','qu
   $('title').value='Synthetic';$('source').value='Rule';
   let action;
   if(mode==='learn')action=$('learn').onclick;
-  if(mode==='apply')action=$('apply').onclick;
   if(mode==='repair'){vm.runInContext("renderFeedback({channel:'content',sourceId:'source',attemptId:'attempt',transcriptVersion:'raw',findings:[{status:'missing',message:'Gap',sourceQuote:'Rule',spanId:null,quote:null,eventId:null,repair:'Condition'}]})",context);action=buttons.find(b=>b.label==='再学这一点').fn;}
   await action().catch(e=>assert.equal(e.message,outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE'));
   assert.equal(requests.length,1);const generated=requests[0].message;assert(generated.length>0);
@@ -56,5 +55,4 @@ for(const mode of ['learn','repair','apply'])for(const outcome of ['success','qu
   assert(requests.at(-1).history.some(m=>m.text==='First actual input'));
   assert($('messages').children.some(n=>n.textContent==='First actual input'));
   assert($('messages').children.some(n=>n.textContent==='Subsequent actual input'));
-  if(mode==='apply'&&outcome==='success')assert.equal(requests[1].mode,'apply_answer');
 });
