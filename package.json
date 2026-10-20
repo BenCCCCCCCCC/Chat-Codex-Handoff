@@ -8,6 +8,6 @@
     "start": "node study-teachback-app/server.mjs",
     "test": "node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01",
     "test:browser": "node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01",
-    "test:extract": "study-teachback-app/.venv/Scripts/python.exe -B study-teachback-app/extract_source_test.py"
+    "test:extract": ".\\study-teachback-app\\.venv\\Scripts\\python.exe -B study-teachback-app/extract_source_test.py"
   }
 }
