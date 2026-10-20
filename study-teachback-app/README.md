@@ -77,3 +77,9 @@ node study-teachback-app/run-offline-tests.mjs browser
 其他独立检查：`npm run test:extract`；启动器测试 `powershell.exe -NoProfile -File study-teachback-app/launch-tests.ps1` 要求 4317 空闲并使用其专门隔离环境。不要通过真实 Start-Study 流程代替隔离测试。浏览器回归所需的既有合成音频现随 `fixtures/` 分发，新克隆不需要开发者 runtime 音频；来源与 SHA-256 见 [fixtures 说明](fixtures/README.md)。
 
 开发交接工具见 [handoff-kit](../handoff-kit/README.md)；[Start-Handoff.cmd](../Start-Handoff.cmd) 与 Study 启动入口用途不同。自主迭代按有意义的批次记录 Issue／PR 和交接，真实调用须先明确新的预算与实验范围。
+
+## 已有音频与质量评估
+
+“我来讲讲 → 上传音频”接受最长 3 分钟、最大 25 MiB 的 WAV/MP3/M4A/MP4/WebM/OGG/FLAC/AAC；浏览器必须能够解码。选文件只做本地检查和保存，点击“开始转写”才调用 API。原始字节保留，单声道 16 kHz 临时副本用于声音检查、转写及定位回听；未知辅助条件不会记为脱稿。
+
+评估与产品流程测试分开：`node study-teachback-app/quality-history.mjs` 离线复算公开历史结果；真实实验必须按[样本与预算方案](../docs/research/2026-10-20-voice-quality-plan.md)取得明确批准。评分工具分别输出 CER、时间字段有效性、内容预期符合度、引用有效性，理由和建议另行阅读。[本批结果与限制](../docs/iterations/2026-10-20-audio-upload-quality.md)。

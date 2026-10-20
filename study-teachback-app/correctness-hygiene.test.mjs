@@ -70,7 +70,7 @@ function captureHarness(kind='valid') {
     deleted:new Set(),db:{all:async()=>[target]},uid:()=> 'capture-id',navigator:{mediaDevices:{getUserMedia:async()=>{events.push('permission');if(kind==='denied')throw new DOMException('denied','NotAllowedError');if(kind==='late')await permission;return stream;}}},
     AudioContext:Audio,MediaRecorder:Recorder,Blob,Float32Array,structuredClone,replayWaves:new WeakMap(),performance:{now:()=>1000},setInterval:()=>1,clearInterval(){},
     OfflineAudioContext:class {createBufferSource(){return {connect(){},start(){}};}async startRendering(){return {getChannelData:()=>new Float32Array(16000)};}},
-    waveBytes:()=>new ArrayBuffer(8),observations:()=>({reason:kind==='silent'?'NEAR_SILENT':kind==='clipping'?'CLIPPING':'UNVALIDATED_ACTIVITY'}),document:{body:{dataset:{}},querySelector:()=>({hidden:false})},
+    prepareAudio:async()=>{if(kind==='decode')throw Error('AUDIO_DECODE_FAILED');return {duration:1,wav:new ArrayBuffer(8),observation:{reason:kind==='silent'?'NEAR_SILENT':kind==='clipping'?'CLIPPING':'UNVALIDATED_ACTIVITY'}};},waveBytes:()=>new ArrayBuffer(8),observations:()=>({reason:kind==='silent'?'NEAR_SILENT':kind==='clipping'?'CLIPPING':'UNVALIDATED_ACTIVITY'}),document:{body:{dataset:{}},querySelector:()=>({hidden:false})},
     reveal:(id,show=true)=>{$(id).hidden=!show;},notice:message=>events.push(message),friendly:x=>x,renderAttempt(){},
     act:async fn=>{try{await fn();}catch(e){events.push(e.message);}},save:async()=>{events.push('saved');if(kind==='storage'||kind==='asr-storage'&&target.attempts[0]?.raw)throw Error('STORAGE_FAILED');},
     api:async(path)=>{events.push(path);if(path==='/api/register'&&kind==='register')throw Error('LEDGER_LOCKED');return {};}});

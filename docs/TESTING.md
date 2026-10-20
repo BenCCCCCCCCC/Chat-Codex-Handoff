@@ -23,4 +23,6 @@ node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01 --work
 node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01 --workspace-only
 node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01 --context-only
 node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01 --context-only
+node study-teachback-app/run-offline-tests.mjs node diagnosis-state-ux-01 --audio-only
+node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01 --audio-only
 ```
