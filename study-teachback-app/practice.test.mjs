@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {taskSplitCases} from './task-split-fixtures.mjs';
 import {createPracticeFlow, activePractice, practiceRounds, activityTime, resumePoint} from './practice.mjs';
+import {readFileSync} from 'node:fs';
+import {searchRecords} from './record-search.mjs';
 
 function setup(initial) {
   let topic = initial ?? {id:'topic',createdAt:1,source:{id:'source',text:'检查条件后再行动。'},messages:[],attempts:[]};
@@ -69,6 +71,37 @@ test('unsupported material keeps an explicit no-task result across reload withou
   assert.equal(activePractice(h.topic),null);assert.equal(resumePoint(h.topic).view,'practice');
   await flow.fromFeedback(target);assert.equal(h.calls.length,0);
   assert.equal(h.topic.taskUnavailable.reason,reason);assert.equal(practiceRounds(h.topic).length,0);
+});
+
+test('a questionable real-material prompt pauses grading, preserves drafts and history, and only resumes after withdrawal',async()=>{
+  const c=JSON.parse(readFileSync(new URL('../docs/research/fixtures/real-material-corpus.json',import.meta.url))).cases.find(c=>c.id==='mdn-border-box');
+  const h=setup({id:'topic',createdAt:1,source:{id:c.id,title:c.title,text:c.text},messages:[],attempts:[],
+    practiceRounds:[{id:'r',createdAt:1,question:c.invalid.question,introduction:'',draft:'padding 没有给出，无法确定。',
+      answers:[{id:'a',text:'无法确定',result:'你没有算出 116px。',status:'complete'}]}]});
+  const prior=structuredClone(activePractice(h.topic).answers);
+  await h.flow.flagQuestion();
+  const flow=h.reload(),round=activePractice(h.topic);
+  assert.equal(round.review.origin,'learner');
+  await flow.answer();
+  assert.equal(h.calls.length,0);assert.deepEqual(round.answers,prior);
+  assert.equal(round.draft,'padding 没有给出，无法确定。');
+  const hit=searchRecords([h.topic],'116px')[0].hits[0];
+  assert.equal(hit.label,'待复核反馈');assert.equal(hit.target.answerId,'a');
+  await flow.withdrawFlag();assert.equal(round.review,null);
+  assert.equal(h.calls.length,0,'withdrawal alone does not dispatch');
+  await flow.answer();assert.equal(h.calls.length,1,'an explicit later submission resumes the existing AI exercise');
+});
+
+test('local question binding failure pauses the task instead of blaming or discarding an answer',async()=>{
+  const c=taskSplitCases[0],h=setup({id:'topic',createdAt:1,source:c.source,messages:[],attempts:[]});
+  await h.flow.fromFeedback({attempt:c.attempt,report:c.report,findingIndex:0});
+  const round=activePractice(h.topic);
+  round.question='题面已经改变';round.draft='c1';
+  await h.flow.answer();
+  assert.equal(round.review.origin,'local_check');assert.equal(round.draft,'c1');
+  assert.deepEqual(round.answers,[]);assert.equal(h.calls.length,0);
+  await h.flow.withdrawFlag();assert.equal(round.review.origin,'local_check');
+  await h.flow.answer();assert.deepEqual(round.answers,[]);
 });
 
 test('a received answer remains available when result persistence fails, without another dispatch',async()=>{

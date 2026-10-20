@@ -61,9 +61,9 @@
     <section class="card practice-panel" id="practicePanel" aria-labelledby="practiceHeading" hidden>
       <div class="sectionHead"><h2 id="practiceHeading" tabindex="-1">情境练习</h2><div class="compact-actions"><button id="backToChat" class="quiet">返回对话</button><button id="practiceNew" class="quiet">换一道题</button></div></div>
       <label class="sr-only" for="practiceQuestionSelect">查看以前的情境题</label><select id="practiceQuestionSelect" hidden></select>
-      <p id="practiceStatus" role="status" class="muted"></p>
+      <p id="practiceStatus" role="status" tabindex="-1" class="muted"></p>
       <div id="practiceBody">
-        <div class="practice-prompt"><p id="practiceIntroduction" class="prewrap"></p><p id="practiceAssumptions" class="prewrap" hidden></p><h3 id="practiceQuestion"></h3></div>
+        <div class="practice-prompt"><p id="practiceIntroduction" class="prewrap"></p><p id="practiceAssumptions" class="prewrap" hidden></p><h3 id="practiceQuestion"></h3><button id="practiceFlag" class="quiet" type="button">题目有疑问</button><button id="practiceUndoFlag" class="quiet" type="button" hidden>撤回标记</button></div>
         <div id="practiceAnswers" aria-live="polite"></div>
         <details id="practiceRubric" hidden><summary>判断依据</summary><div id="practiceRubricBody"></div></details>
         <form id="practiceForm"><fieldset id="practiceChoices" class="answer-choices" hidden><legend>你的判断</legend></fieldset><label id="practiceDraftLabel" for="practiceDraft">你的回答</label><textarea id="practiceDraft" maxlength="2000" rows="4" placeholder="写下你的判断…"></textarea><div class="practice-submit"><span id="practiceGuidance" class="muted">草稿自动保存 · 提交后发送给 AI</span><button id="practiceSubmit" type="submit">提交回答</button></div></form>
