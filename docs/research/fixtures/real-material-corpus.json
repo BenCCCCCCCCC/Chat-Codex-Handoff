@@ -1,0 +1,191 @@
+{
+  "version": "real-material-v1",
+  "frozenOn": "2026-10-21",
+  "scope": "8 段中文编程自学教程；便利样本；非盲测。目标和参照题由编码助手编写，无真实学习者数据。",
+  "cases": [
+    {
+      "id": "python-range",
+      "title": "range 的终止边界",
+      "url": "https://docs.python.org/zh-cn/3.14/tutorial/controlflow.html#the-range-function",
+      "section": "4.3. range() 函数",
+      "license": "PSF-2.0",
+      "text": "生成的序列绝不会包括给定的终止值；range(10) 生成 10 个值——长度为 10 的序列的所有合法索引。range 可以不从 0 开始，且可以按给定的步长递增（即使是负数步长）：",
+      "goal": "识别终止边界，而不是记住 range(10) 的例子。",
+      "target": {"status": "incorrect", "explanation": "终止值不属于生成的序列，步长可以为负数。"},
+      "reference": {
+        "question": "某个 range 的终止值设为 -6，步长为负数。这个序列会包含终止值 -6 吗？",
+        "answer": "不会。",
+        "basis": "生成的序列绝不会包括给定的终止值",
+        "depth": "单步规则应用",
+        "review": "变更数值和步长方向，结论仍来自明确的终止值规则；不是计算全部项。只提供弱理解证据，可能靠复述或猜测答对。"
+      },
+      "invalid": {
+        "question": "生成终止值为 -6 的 range 需要多少毫秒？",
+        "answerDisposition": "不判断学习者答案",
+        "reason": "材料没有运行环境、规模或耗时规则，无法给出确定时间。",
+        "repair": "移除耗时要求，改问终止值是否包含在序列中。"
+      }
+    },
+    {
+      "id": "python-remove",
+      "title": "列表 remove 的首项与异常",
+      "url": "https://docs.python.org/zh-cn/3.14/tutorial/datastructures.html#more-on-lists",
+      "section": "5.1. 列表详解 / list.remove",
+      "license": "PSF-2.0",
+      "text": "list.remove(value, /)\n从列表中移除第一个值为 value 的条目。 如果无此条目则会引发 ValueError。",
+      "goal": "将“第一个匹配项”应用到有重复值的列表。",
+      "target": {"status": "incorrect", "explanation": "remove 只移除第一个匹配项；没有匹配项会引发 ValueError。"},
+      "reference": {
+        "question": "列表 a 为 [2, 5, 2]，执行 a.remove(2) 后，a 的内容是什么？",
+        "answer": "[5, 2]",
+        "basis": "从列表中移除第一个值为 value 的条目。",
+        "depth": "单步规则应用",
+        "review": "输入列表和操作在题面给出；需找首个匹配项，不能移除所有 2。未评估异常分支。"
+      },
+      "invalid": {
+        "question": "列表中没有 9，为什么 remove(9) 会返回 -1？",
+        "answerDisposition": "不判断学习者答案",
+        "reason": "把应当引发 ValueError 的情况写成返回 -1，题目前提与材料冲突。",
+        "repair": "先纠正题目前提，再问没有匹配值时发生什么。"
+      }
+    },
+    {
+      "id": "python-finally",
+      "title": "finally 后的异常传播与例外",
+      "url": "https://docs.python.org/zh-cn/3.14/tutorial/errors.html#defining-clean-up-actions",
+      "section": "8.7. 定义清理操作",
+      "license": "PSF-2.0",
+      "text": "如果执行 try 子句期间触发了某个异常，则某个 except 子句应处理该异常。如果该异常没有 except 子句处理，在 finally 子句执行后会被重新触发。\n如果 finally 子句执行 break、continue 或 return 语句，异常不重新引发。这可能会引起混淆，因此不鼓励使用。从 3.14 版开始，编译器会为它发出一个 SyntaxWarning (参见 PEP 765)。",
+      "goal": "保留 finally 中控制流改变异常传播的例外。",
+      "target": {"status": "missing", "explanation": "不能把 finally 后异常重新触发当成无条件规律；其中的控制流语句可能改变结果。"},
+      "reference": {
+        "question": "try 中的异常没有被 except 处理；finally 仅做普通清理，没有 break、continue 或 return，也不产生新异常。清理结束后，原异常会重新引发吗？",
+        "answer": "会。",
+        "basis": "如果该异常没有 except 子句处理，在 finally 子句执行后会被重新触发。",
+        "depth": "分支判断",
+        "review": "题面显式给出分支条件，排除材料中的控制流例外与额外异常，不把假设伪装成原文事实。仍不能代表能自行编写 try/finally。"
+      },
+      "invalid": {
+        "question": "finally 中执行 return 后，原异常为什么一定会重新引发？",
+        "answerDisposition": "不判断学习者答案",
+        "reason": "题面遗漏并反转了材料明确列出的 return 例外。",
+        "repair": "撤销“一定重新引发”的前提，让学习者判断 return 对传播的影响。"
+      }
+    },
+    {
+      "id": "python-with",
+      "title": "with 与文件关闭",
+      "url": "https://docs.python.org/zh-cn/3.14/tutorial/inputoutput.html#reading-and-writing-files",
+      "section": "7.2. 读写文件",
+      "license": "PSF-2.0",
+      "text": "在处理文件对象时，最好使用 with 关键字。优点是，子句体结束后，文件会正确关闭，即便触发异常也可以。",
+      "goal": "把文件关闭保证应用到异常路径。",
+      "target": {"status": "incorrect", "explanation": "with 的文件关闭保证也适用于子句体触发异常的路径。"},
+      "reference": {
+        "question": "用 with 打开文件后，读取过程中触发异常并离开子句体。这个文件会被关闭吗？",
+        "answer": "会。",
+        "basis": "子句体结束后，文件会正确关闭，即便触发异常也可以。",
+        "depth": "单步规则应用",
+        "review": "场景与适用对象明确，但与解释高度接近，检验强度弱；不能当成迁移能力证据。"
+      },
+      "invalid": {
+        "question": "with 自动修复损坏的文件需要几秒？",
+        "answerDisposition": "不判断学习者答案",
+        "reason": "材料只说明关闭文件，没有自动修复功能和耗时依据。",
+        "repair": "去掉修复和计时要求，聚焦文件关闭这一行为。"
+      }
+    },
+    {
+      "id": "mdn-equality",
+      "title": "严格相等与类型",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Equality_comparisons_and_sameness",
+      "section": "使用 === 进行严格相等比较",
+      "license": "CC-BY-SA-2.5",
+      "text": "严格相等比较两个值是否相等。两个被比较的值在比较前都不进行隐式转换。如果两个被比较的值具有不同的类型，则认为这两个值不相等。",
+      "goal": "对不同类型的相似值进行严格相等判断。",
+      "target": {"status": "incorrect", "explanation": "严格相等不会先转换两个值的类型。"},
+      "reference": {
+        "question": "已知数字 8 与字符串 \"8\" 是不同类型，8 === \"8\" 的结果是什么？",
+        "answer": "false（不相等）。",
+        "basis": "如果两个被比较的值具有不同的类型，则认为这两个值不相等。",
+        "depth": "单步规则应用",
+        "review": "显式提供类型差异，不要求学习者从摘录外推断类型系统。未覆盖同类型、NaN 或对象比较。"
+      },
+      "invalid": {
+        "question": "既然 === 会转换类型，数字 8 与字符串 \"8\" 为什么相等？",
+        "answerDisposition": "不判断学习者答案",
+        "reason": "题目同时预设类型转换和相等结论，与材料直接冲突。",
+        "repair": "移除错误前提，单独询问给定两值的比较结果。"
+      }
+    },
+    {
+      "id": "mdn-disabled",
+      "title": "禁用控件与表单提交",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/HTML/Reference/Attributes/disabled",
+      "section": "开头定义",
+      "license": "CC-BY-SA-2.5",
+      "text": "当布尔属性 disabled 存在时，元素将不可变、不能聚焦或与表单一同提交。用户将不能在表单控件本身或其子控件进行编辑或聚焦操作。",
+      "goal": "区分控件已有值与能否随表单提交。",
+      "target": {"status": "missing", "explanation": "disabled 的作用还包括不随表单提交，不能只看是否可编辑。"},
+      "reference": {
+        "question": "一个支持 disabled 的输入控件已经填入值，提交表单时仍处于 disabled 状态。它的值会随这次表单提交吗？",
+        "answer": "不会。",
+        "basis": "当布尔属性 disabled 存在时，元素将不可变、不能聚焦或与表单一同提交。",
+        "depth": "单步规则应用",
+        "review": "明确限定支持该属性的控件及提交时状态，没有假定任意元素或额外脚本行为。只测提交这一后果。"
+      },
+      "invalid": {
+        "question": "将输入控件设为 disabled 后，数据库中会自动删除几条记录？",
+        "answerDisposition": "不判断学习者答案",
+        "reason": "材料没有数据库行为，前端控件状态不能推出删除规则或数量。",
+        "repair": "返回材料所述的表单行为，不根据题目虚构后端操作。"
+      }
+    },
+    {
+      "id": "mdn-private-storage",
+      "title": "隐私浏览中的存储生命周期",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Storage_API",
+      "section": "隐私浏览 / 隐身模式",
+      "license": "CC-BY-SA-2.5",
+      "text": "隐私窗口、隐身模式和类似名称的隐私浏览选项不会存储历史记录和 cookie 等数据。在隐身模式下，localStorage 被视为 sessionStorage。存储 API 仍然可用且功能齐全，但是当浏览器或浏览器选项卡关闭时，所有存储在隐私窗口中的数据都会被删除。",
+      "goal": "避免将正常模式的持久化预期套在隐身窗口。",
+      "target": {"status": "incorrect", "explanation": "隐身模式下能使用存储 API，并不保证窗口关闭后仍保留数据。"},
+      "reference": {
+        "question": "在隐私窗口中写入 localStorage 的笔记，按这段材料，在浏览器关闭后还会保留吗？",
+        "answer": "不会。",
+        "basis": "当浏览器或浏览器选项卡关闭时，所有存储在隐私窗口中的数据都会被删除。",
+        "depth": "单步规则应用",
+        "review": "明确按摘录判断，范围限定隐私窗口；不把它当成所有浏览器版本或普通模式的保留政策测试。"
+      },
+      "invalid": {
+        "question": "普通窗口中的 localStorage 恰好几天后自动删除？请给一个固定天数。",
+        "answerDisposition": "不判断学习者答案",
+        "reason": "摘录限定隐私浏览，不能据此推出普通模式的固定保留天数。",
+        "repair": "限定隐私窗口和关闭事件，或补充普通模式的有效材料后另出题。"
+      }
+    },
+    {
+      "id": "mdn-border-box",
+      "title": "border-box 的内容宽度",
+      "url": "https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Properties/box-sizing",
+      "section": "尝试一下后的 border-box 说明",
+      "license": "CC-BY-SA-2.5",
+      "text": "border-box 告诉浏览器：你想要设置的边框和内边距的值是包含在 width 内的。也就是说，如果你将一个元素的 width 设为 100px，那么这 100px 会包含它的 border 和 padding，内容区的实际宽度是 width 减去 (border + padding) 的值。大多数情况下，这使得我们更容易地设定一个元素的宽高。",
+      "goal": "使用盒模型关系计算新尺寸，不混淆内容宽与设置宽。",
+      "target": {"status": "incorrect", "explanation": "border-box 的设置宽度包括边框和内边距，计算内容宽须扣除左右两侧。"},
+      "reference": {
+        "question": "一个 border-box 元素的实际 width 为 120px，左右 border 各 2px，左右 padding 各 8px。按材料公式，内容区宽度是多少？",
+        "answer": "100px（120 - 2×2 - 8×2）。",
+        "basis": "内容区的实际宽度是 width 减去 (border + padding) 的值。",
+        "depth": "关系应用与计算",
+        "review": "输入数值完整且结果为正，只问一个量。需应用左右两侧与减法；未验证真实布局中的尺寸约束。"
+      },
+      "invalid": {
+        "question": "border-box 元素实际 width 为 120px，左右 border 各 2px。内容区宽度一定是多少像素？",
+        "answerDisposition": "不判断学习者答案",
+        "reason": "未给 padding，不能擅自假设为 0 并判其他答案错误。",
+        "repair": "补充左右 padding 或明确设为 0，再让学习者作答。"
+      }
+    }
+  ]
+}

@@ -20,6 +20,7 @@ test('v1 backup round trip preserves audio, corrections, report links and practi
   const original=fixture();original.contextNote='Remember the condition.';
   original.transcriptionTerms='新一轮的术语';
   original.practiceRounds[0].origin={targetId:'target:attempt:v1:0',sourceId:'source',attemptId:'attempt',transcriptVersion:'v1'};
+  original.practiceRounds[0].review={status:'held',origin:'learner',createdAt:1001};
   original.attempts[0].transcriptionTerms=['华硕','Eee PC'];
   // New supported findings carry no advice; legacy string advice is tested separately.
   original.attempts[0].reports[0].findings[0].repair=null;
@@ -41,6 +42,7 @@ test('v1 backup round trip preserves audio, corrections, report links and practi
   assert.deepEqual(copy.resume,original.resume);
   assert.equal(copy.practiceRounds[0].draft,'Stay outside');
   assert.deepEqual(copy.practiceRounds[0].origin,original.practiceRounds[0].origin);
+  assert.deepEqual(copy.practiceRounds[0].review,original.practiceRounds[0].review);
   assert.equal(copy.practiceRounds[0].answers[0].status,'unknown');
   assert.equal(original.practiceRounds[0].answers[0].status,'pending');
 });

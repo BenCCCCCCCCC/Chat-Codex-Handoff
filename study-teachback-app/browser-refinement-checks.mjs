@@ -94,11 +94,33 @@ export async function refinementChecks({check,evaluate,until,reloadPage,shot,cdp
     assert.equal(await evaluate(`document.getElementById('practiceRubric').open`),false);
     await shot('understanding-result','practicePanel');
     assert.equal((await evaluate(all))[0].practiceRounds[0].answers.length,1);
+    // Question review is independent of answer correctness. Flag immediately
+    // after editing to verify that the pending draft is flushed before the hold.
+    await evaluate(`document.querySelector('#practiceChoices input[value="c0"]').click();document.getElementById('practiceFlag').click()`);
+    await until(`document.getElementById('practiceStatus').textContent.includes('题目待核对')`);
+    await reloadPage();await until(`document.getElementById('practiceStatus').textContent.includes('题目待核对')`);
+    assert.equal(await evaluate(`document.querySelector('#practiceChoices input[value="c0"]').checked`),true);
+    assert.equal(await evaluate(`document.getElementById('practiceSubmit').hidden`),true);
+    assert.equal(await evaluate(`document.querySelector('#practiceAnswers strong')`),null);
+    assert.equal(await evaluate(`document.querySelector('#practiceAnswers details').open`),false);
+    assert.equal(await evaluate(`document.getElementById('practiceRubric').hidden`),true);
+    await evaluate(`document.getElementById('practiceForm').requestSubmit()`);
+    await evaluate(`document.querySelector('#practiceAnswers details').open=true`);
+    assert.equal((await evaluate(all))[0].practiceRounds[0].answers.length,1);
+    assert.equal(calls.length,before);
+    await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:1000,deviceScaleFactor:1,mobile:false});
+    assert(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'));
+    await shot('question-review-mobile','practicePanel');
+    await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
+    await evaluate(`document.getElementById('practiceUndoFlag').click()`);
+    await until(`!document.getElementById('practiceSubmit').hidden`);
+    assert.equal(await evaluate(`document.querySelector('#practiceChoices input[value="c0"]').checked`),true);
+    assert.equal(await evaluate(`document.querySelector('#practiceAnswers strong').textContent`),'本题回答成立');
     // A later unsupported target must not hide the only saved question forever.
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const t=(await db.all())[0];
       t.taskUnavailable={target:{id:'unavailable'},reason:'材料不足以出题。'};t.activePracticeId=null;
       await db.put(t);db.close();})()`);
-    await reloadPage();await until(`document.getElementById('practiceStatus').textContent.includes('本次未出题')`);
+    await reloadPage();await until(`document.getElementById('practiceStatus').textContent.includes('暂未生成合适的检验题')`);
     assert.equal(await evaluate(`document.getElementById('practiceQuestionSelect').hidden`),false);
     await evaluate(`{const s=document.getElementById('practiceQuestionSelect');s.value=${JSON.stringify(round.id)};s.dispatchEvent(new Event('change'));}`);
     await until(`!document.getElementById('practiceBody').hidden`);

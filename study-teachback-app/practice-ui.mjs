@@ -13,17 +13,22 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
   const flow = createPracticeFlow({getTopic, save, request, canStart, setBusy, changed:render});
   function render() {
     const topic = getTopic(), round = activePractice(topic), rounds = practiceRounds(topic);
+    const held=round?.review?.status==='held';
     $('practicePanel').hidden = !topic || !(round || topic.practiceRequest || topic.taskUnavailable);
     $('practicePanel').dataset.active = String(topic?.resume?.view === 'practice');
     $('practiceNew').disabled = flow.busy;
     $('practiceNew').hidden = !!round?.task;
-    $('practiceNew').textContent = topic?.taskUnavailable ? '另开情境练习 · AI' : '换一道题';
+    $('practiceNew').textContent = topic?.taskUnavailable ? '另开情境练习 · AI' : '换一道题 · AI';
     $('startPractice').disabled = flow.busy;
     $('practiceQuestionSelect').disabled = flow.busy;
     $('practiceDraft').disabled = flow.busy;
-    $('practiceSubmit').disabled = flow.busy || !round || !!round.task&&!round.draft;
+    $('practiceSubmit').disabled = flow.busy || !round || held || !!round.task&&!round.draft;
+    $('practiceSubmit').hidden = held;
+    $('practiceFlag').hidden = !round || held;
+    $('practiceUndoFlag').hidden = !held || round.review.origin!=='learner';
+    $('practiceFlag').disabled = $('practiceUndoFlag').disabled = flow.busy;
     $('practiceQuestionSelect').replaceChildren(...rounds.map((r, i) => {
-      const option = node('option', `第 ${i + 1} 题 · ${r.question}`);
+      const option = node('option', `第 ${i + 1} 题${r.review?.status==='held'?' · 待核对':''} · ${r.question}`);
       option.value = r.id; option.selected = r === round; return option;
     }));
     if(!round&&rounds.length){
@@ -45,27 +50,33 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
       const label=node('label',''),input=node('input','');
       input.type='radio';input.name='understanding-choice';input.value=choice.id;
       input.checked=round.draft===choice.id;input.disabled=flow.busy;
-      input.onchange=()=>{round.draft=choice.id;topic.resume={view:'practice'};$('practiceSubmit').disabled=false;drafts.mark(topic);};
+      input.onchange=()=>{round.draft=choice.id;topic.resume={view:'practice'};$('practiceSubmit').disabled=held;drafts.mark(topic);};
       label.append(input,node('span',choice.label));return label;
     }));
-    $('practiceGuidance').textContent = round?.task ? '本机核对 · 仅判断这一题' : '草稿自动保存 · 提交后发送给 AI';
+    $('practiceGuidance').textContent = held ? '草稿自动保存 · 判断已暂停' : round?.task ? '本机核对 · 仅判断这一题' : '草稿自动保存 · 提交后发送给 AI';
     $('practiceSubmit').textContent = flow.busy ? '处理中…' :
       round?.task ? '查看判断' :
       round?.answers.some(a => a.text === round.draft?.trim() && a.status !== 'complete') ? '重试这次回答' : '提交回答';
     $('practiceStatus').textContent = flow.busy ? '正在处理…' :
+      held ? (round.review.origin==='local_check' ? '题目与材料记录不一致，已暂停判断。' : '题目待核对，暂不判断你的回答。') :
       topic?.practiceRequest ? '上次出题未完成或结果未知。重试会发起新的模型请求。' :
-      topic?.taskUnavailable ? `本次未出题：${topic.taskUnavailable.reason}` : '';
+      topic?.taskUnavailable ? '暂未生成合适的检验题。可以返回对话继续学习。' : '';
     $('practiceAnswers').replaceChildren(...(round?.answers ?? []).map((answer, i) => {
       const item = node('article', '', 'practice-answer');
       item.dataset.answerId=answer.id;
       item.append(node('h4', `第 ${i + 1} 次回答`), node('p', answer.text, 'prewrap'));
-      if (answer.result) item.append(node('strong', answer.assessment ? ({correct:'本题回答成立',partial:'还缺一点依据',incorrect:'本题需要澄清',unanswerable:'题目需调整'}[answer.assessment.verdict]) : '本次反馈'), node('p', answer.result, 'prewrap'));
+      if (answer.result && held) {
+        const history=node('details','');
+        history.append(node('summary','此前反馈（未复核）'),node('p',answer.result,'prewrap'));
+        item.append(history);
+      }
+      else if (answer.result) item.append(node('strong', answer.assessment ? ({correct:'本题回答成立',partial:'还缺一点依据',incorrect:'本题需要澄清',unanswerable:'题目需调整'}[answer.assessment.verdict]) : '本次反馈'), node('p', answer.result, 'prewrap'));
       else item.append(node('p', flow.busy && answer.status === 'pending' ? '反馈生成中…' :
-        '这次反馈未完成或结果未知，回答已保留。重新提交会发起新的模型请求。', 'muted'));
+        held ? '此前反馈未完成，回答已保留。' : '这次反馈未完成或结果未知，回答已保留。重新提交会发起新的模型请求。', 'muted'));
       return item;
     }));
     const scored=round?.answers.some(a=>a.status==='complete');
-    $('practiceRubric').hidden = !round?.task || !scored;
+    $('practiceRubric').hidden = !round?.task || !scored || held;
     $('practiceRubric').open=false;
     $('practiceRubricBody').replaceChildren();
     if(round?.task&&scored){
@@ -89,6 +100,14 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     try { await flow.start(); } finally { focusPanel(); }
   }
   $('practiceNew').onclick = () => act(start);
+  $('practiceFlag').onclick = () => act(async () => {
+    await flushDraft(); await flow.flagQuestion();
+    $('practiceStatus').focus();
+  });
+  $('practiceUndoFlag').onclick = () => act(async () => {
+    await flushDraft(); await flow.withdrawFlag();
+    $('practiceStatus').focus();
+  });
   $('backToChat').onclick = () => act(async () => {
     if (!canStart()) return;
     await flushDraft();
@@ -120,6 +139,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
   }
   function locate(target,focusHit){
     const answer=target.answerId&&[...$('practiceAnswers').children].find(n=>n.dataset.answerId===target.answerId);
+    if(target.part==='result'&&answer?.querySelector('details'))answer.querySelector('details').open=true;
     focusHit(answer??$(target.part==='draft'?(activePractice(getTopic())?.task?'practiceChoices':'practiceDraft'):'practiceQuestion'));
   }
   async function fromFeedback(target){

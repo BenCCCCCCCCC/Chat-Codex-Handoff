@@ -1,0 +1,242 @@
+{
+  "version": "real-material-v1",
+  "method": "offline-source-rules-coverage",
+  "apiCalls": 0,
+  "costUSD": 0,
+  "corpusSHA256": "acbcd9074e06323229af4c144e4db7b88e428faa44b11ba622533b79b6b1c30d",
+  "engineSHA256": "533ed9bf792cdf3aa2aa2ff700678bb456f1bbd72dcfb077c347205462fa2503",
+  "sampleSize": 8,
+  "generated": 0,
+  "coverage": 0,
+  "generatedValidity": {
+    "reviewed": 0,
+    "valid": null,
+    "rate": null,
+    "reason": "没有生成题，分母为零，记 N/A。"
+  },
+  "learningEffectiveness": null,
+  "limitations": [
+    "编程教程便利样本，非盲测或代表性样本",
+    "目标和参照题为助手编写；非独立评审",
+    "只评估本机生成入口；未测试内容诊断或 AI 情境练习",
+    "无真实学习者或学习保持结果"
+  ],
+  "cases": [
+    {
+      "id": "python-range",
+      "input": {
+        "source": {
+          "id": "python-range",
+          "title": "range 的终止边界",
+          "text": "生成的序列绝不会包括给定的终止值；range(10) 生成 10 个值——长度为 10 的序列的所有合法索引。range 可以不从 0 开始，且可以按给定的步长递增（即使是负数步长）："
+        },
+        "target": {
+          "id": "target:python-range",
+          "sourceQuote": "生成的序列绝不会包括给定的终止值；range(10) 生成 10 个值——长度为 10 的序列的所有合法索引。range 可以不从 0 开始，且可以按给定的步长递增（即使是负数步长）：",
+          "status": "incorrect",
+          "explanation": "终止值不属于生成的序列，步长可以为负数。",
+          "quote": null
+        }
+      },
+      "output": {
+        "sourceId": "python-range",
+        "targetId": "target:python-range",
+        "engine": "source-rules-v1",
+        "exercise": null,
+        "unavailableReason": "这段材料暂不支持本机检验。可继续补学或重新讲解。"
+      },
+      "generatedValidity": null,
+      "referenceReview": "变更数值和步长方向，结论仍来自明确的终止值规则；不是计算全部项。只提供弱理解证据，可能靠复述或猜测答对。",
+      "invalidReason": "材料没有运行环境、规模或耗时规则，无法给出确定时间。"
+    },
+    {
+      "id": "python-remove",
+      "input": {
+        "source": {
+          "id": "python-remove",
+          "title": "列表 remove 的首项与异常",
+          "text": "list.remove(value, /)\n从列表中移除第一个值为 value 的条目。 如果无此条目则会引发 ValueError。"
+        },
+        "target": {
+          "id": "target:python-remove",
+          "sourceQuote": "list.remove(value, /)\n从列表中移除第一个值为 value 的条目。 如果无此条目则会引发 ValueError。",
+          "status": "incorrect",
+          "explanation": "remove 只移除第一个匹配项；没有匹配项会引发 ValueError。",
+          "quote": null
+        }
+      },
+      "output": {
+        "sourceId": "python-remove",
+        "targetId": "target:python-remove",
+        "engine": "source-rules-v1",
+        "exercise": null,
+        "unavailableReason": "这段材料暂不支持本机检验。可继续补学或重新讲解。"
+      },
+      "generatedValidity": null,
+      "referenceReview": "输入列表和操作在题面给出；需找首个匹配项，不能移除所有 2。未评估异常分支。",
+      "invalidReason": "把应当引发 ValueError 的情况写成返回 -1，题目前提与材料冲突。"
+    },
+    {
+      "id": "python-finally",
+      "input": {
+        "source": {
+          "id": "python-finally",
+          "title": "finally 后的异常传播与例外",
+          "text": "如果执行 try 子句期间触发了某个异常，则某个 except 子句应处理该异常。如果该异常没有 except 子句处理，在 finally 子句执行后会被重新触发。\n如果 finally 子句执行 break、continue 或 return 语句，异常不重新引发。这可能会引起混淆，因此不鼓励使用。从 3.14 版开始，编译器会为它发出一个 SyntaxWarning (参见 PEP 765)。"
+        },
+        "target": {
+          "id": "target:python-finally",
+          "sourceQuote": "如果执行 try 子句期间触发了某个异常，则某个 except 子句应处理该异常。如果该异常没有 except 子句处理，在 finally 子句执行后会被重新触发。\n如果 finally 子句执行 break、continue 或 return 语句，异常不重新引发。这可能会引起混淆，因此不鼓励使用。从 3.14 版开始，编译器会为它发出一个 SyntaxWarning (参见 PEP 765)。",
+          "status": "missing",
+          "explanation": "不能把 finally 后异常重新触发当成无条件规律；其中的控制流语句可能改变结果。",
+          "quote": null
+        }
+      },
+      "output": {
+        "sourceId": "python-finally",
+        "targetId": "target:python-finally",
+        "engine": "source-rules-v1",
+        "exercise": null,
+        "unavailableReason": "这段材料暂不支持本机检验。可继续补学或重新讲解。"
+      },
+      "generatedValidity": null,
+      "referenceReview": "题面显式给出分支条件，排除材料中的控制流例外与额外异常，不把假设伪装成原文事实。仍不能代表能自行编写 try/finally。",
+      "invalidReason": "题面遗漏并反转了材料明确列出的 return 例外。"
+    },
+    {
+      "id": "python-with",
+      "input": {
+        "source": {
+          "id": "python-with",
+          "title": "with 与文件关闭",
+          "text": "在处理文件对象时，最好使用 with 关键字。优点是，子句体结束后，文件会正确关闭，即便触发异常也可以。"
+        },
+        "target": {
+          "id": "target:python-with",
+          "sourceQuote": "在处理文件对象时，最好使用 with 关键字。优点是，子句体结束后，文件会正确关闭，即便触发异常也可以。",
+          "status": "incorrect",
+          "explanation": "with 的文件关闭保证也适用于子句体触发异常的路径。",
+          "quote": null
+        }
+      },
+      "output": {
+        "sourceId": "python-with",
+        "targetId": "target:python-with",
+        "engine": "source-rules-v1",
+        "exercise": null,
+        "unavailableReason": "这段材料暂不支持本机检验。可继续补学或重新讲解。"
+      },
+      "generatedValidity": null,
+      "referenceReview": "场景与适用对象明确，但与解释高度接近，检验强度弱；不能当成迁移能力证据。",
+      "invalidReason": "材料只说明关闭文件，没有自动修复功能和耗时依据。"
+    },
+    {
+      "id": "mdn-equality",
+      "input": {
+        "source": {
+          "id": "mdn-equality",
+          "title": "严格相等与类型",
+          "text": "严格相等比较两个值是否相等。两个被比较的值在比较前都不进行隐式转换。如果两个被比较的值具有不同的类型，则认为这两个值不相等。"
+        },
+        "target": {
+          "id": "target:mdn-equality",
+          "sourceQuote": "严格相等比较两个值是否相等。两个被比较的值在比较前都不进行隐式转换。如果两个被比较的值具有不同的类型，则认为这两个值不相等。",
+          "status": "incorrect",
+          "explanation": "严格相等不会先转换两个值的类型。",
+          "quote": null
+        }
+      },
+      "output": {
+        "sourceId": "mdn-equality",
+        "targetId": "target:mdn-equality",
+        "engine": "source-rules-v1",
+        "exercise": null,
+        "unavailableReason": "这段材料暂不支持本机检验。可继续补学或重新讲解。"
+      },
+      "generatedValidity": null,
+      "referenceReview": "显式提供类型差异，不要求学习者从摘录外推断类型系统。未覆盖同类型、NaN 或对象比较。",
+      "invalidReason": "题目同时预设类型转换和相等结论，与材料直接冲突。"
+    },
+    {
+      "id": "mdn-disabled",
+      "input": {
+        "source": {
+          "id": "mdn-disabled",
+          "title": "禁用控件与表单提交",
+          "text": "当布尔属性 disabled 存在时，元素将不可变、不能聚焦或与表单一同提交。用户将不能在表单控件本身或其子控件进行编辑或聚焦操作。"
+        },
+        "target": {
+          "id": "target:mdn-disabled",
+          "sourceQuote": "当布尔属性 disabled 存在时，元素将不可变、不能聚焦或与表单一同提交。用户将不能在表单控件本身或其子控件进行编辑或聚焦操作。",
+          "status": "missing",
+          "explanation": "disabled 的作用还包括不随表单提交，不能只看是否可编辑。",
+          "quote": null
+        }
+      },
+      "output": {
+        "sourceId": "mdn-disabled",
+        "targetId": "target:mdn-disabled",
+        "engine": "source-rules-v1",
+        "exercise": null,
+        "unavailableReason": "这段材料暂不支持本机检验。可继续补学或重新讲解。"
+      },
+      "generatedValidity": null,
+      "referenceReview": "明确限定支持该属性的控件及提交时状态，没有假定任意元素或额外脚本行为。只测提交这一后果。",
+      "invalidReason": "材料没有数据库行为，前端控件状态不能推出删除规则或数量。"
+    },
+    {
+      "id": "mdn-private-storage",
+      "input": {
+        "source": {
+          "id": "mdn-private-storage",
+          "title": "隐私浏览中的存储生命周期",
+          "text": "隐私窗口、隐身模式和类似名称的隐私浏览选项不会存储历史记录和 cookie 等数据。在隐身模式下，localStorage 被视为 sessionStorage。存储 API 仍然可用且功能齐全，但是当浏览器或浏览器选项卡关闭时，所有存储在隐私窗口中的数据都会被删除。"
+        },
+        "target": {
+          "id": "target:mdn-private-storage",
+          "sourceQuote": "隐私窗口、隐身模式和类似名称的隐私浏览选项不会存储历史记录和 cookie 等数据。在隐身模式下，localStorage 被视为 sessionStorage。存储 API 仍然可用且功能齐全，但是当浏览器或浏览器选项卡关闭时，所有存储在隐私窗口中的数据都会被删除。",
+          "status": "incorrect",
+          "explanation": "隐身模式下能使用存储 API，并不保证窗口关闭后仍保留数据。",
+          "quote": null
+        }
+      },
+      "output": {
+        "sourceId": "mdn-private-storage",
+        "targetId": "target:mdn-private-storage",
+        "engine": "source-rules-v1",
+        "exercise": null,
+        "unavailableReason": "这段材料暂不支持本机检验。可继续补学或重新讲解。"
+      },
+      "generatedValidity": null,
+      "referenceReview": "明确按摘录判断，范围限定隐私窗口；不把它当成所有浏览器版本或普通模式的保留政策测试。",
+      "invalidReason": "摘录限定隐私浏览，不能据此推出普通模式的固定保留天数。"
+    },
+    {
+      "id": "mdn-border-box",
+      "input": {
+        "source": {
+          "id": "mdn-border-box",
+          "title": "border-box 的内容宽度",
+          "text": "border-box 告诉浏览器：你想要设置的边框和内边距的值是包含在 width 内的。也就是说，如果你将一个元素的 width 设为 100px，那么这 100px 会包含它的 border 和 padding，内容区的实际宽度是 width 减去 (border + padding) 的值。大多数情况下，这使得我们更容易地设定一个元素的宽高。"
+        },
+        "target": {
+          "id": "target:mdn-border-box",
+          "sourceQuote": "border-box 告诉浏览器：你想要设置的边框和内边距的值是包含在 width 内的。也就是说，如果你将一个元素的 width 设为 100px，那么这 100px 会包含它的 border 和 padding，内容区的实际宽度是 width 减去 (border + padding) 的值。大多数情况下，这使得我们更容易地设定一个元素的宽高。",
+          "status": "incorrect",
+          "explanation": "border-box 的设置宽度包括边框和内边距，计算内容宽须扣除左右两侧。",
+          "quote": null
+        }
+      },
+      "output": {
+        "sourceId": "mdn-border-box",
+        "targetId": "target:mdn-border-box",
+        "engine": "source-rules-v1",
+        "exercise": null,
+        "unavailableReason": "这段材料暂不支持本机检验。可继续补学或重新讲解。"
+      },
+      "generatedValidity": null,
+      "referenceReview": "输入数值完整且结果为正，只问一个量。需应用左右两侧与减法；未验证真实布局中的尺寸约束。",
+      "invalidReason": "未给 padding，不能擅自假设为 0 并判其他答案错误。"
+    }
+  ]
+}
