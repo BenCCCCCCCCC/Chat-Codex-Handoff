@@ -42,6 +42,21 @@ test('failed answers survive reload, never auto-retry, and an explicit retry kee
   assert.equal(round.answers[0].status,'complete');assert.equal(round.draft,'');
 });
 
+test('feedback opens its exact task without a call, resumes drafts and keeps changed tasks/version separate',async()=>{
+  const h=setup(),target={id:'target:a:v1:0',focus:'假设条件不满足，现在能行动吗？',sourceId:'source',attemptId:'a',transcriptVersion:'v1'};
+  await h.flow.fromFeedback(target);assert.equal(h.calls.length,0);
+  const round=activePractice(h.topic);round.draft='不能直接行动';await h.options.save(h.topic);
+  const flow=h.reload();await flow.fromFeedback(target);
+  assert.equal(practiceRounds(h.topic).length,1);assert.equal(activePractice(h.topic).draft,'不能直接行动');
+  assert.equal(activePractice(h.topic).origin.transcriptVersion,'v1');
+  await flow.answer();assert.equal(h.calls.length,1);
+  assert.equal(h.calls[0].focus,target.focus);assert.equal(h.calls[0].mode,'apply_answer');
+  await flow.fromFeedback({...target,focus:'假设条件刚被撤销，现在能行动吗？'});
+  assert.equal(practiceRounds(h.topic).length,2);
+  await flow.fromFeedback({...target,id:'target:a:v2:0',transcriptVersion:'v2'});
+  assert.equal(practiceRounds(h.topic).length,3);assert.equal(h.calls.length,1);
+});
+
 test('a received answer remains available when result persistence fails, without another dispatch',async()=>{
   const h=setup();await h.flow.start();const round=activePractice(h.topic);round.draft='保留这次回答';
   const request=h.options.request;
