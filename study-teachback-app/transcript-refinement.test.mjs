@@ -9,6 +9,7 @@ import {speechCases} from './natural-speech-fixtures.mjs';
 import {waveBytes} from './core.mjs';
 import {transcribe,ASR_STYLE_PROMPT} from './provider.mjs';
 import {Ledger} from './ledger.mjs';
+import {transcriptionTerms} from './transcription-terms.mjs';
 
 const raw=JSON.parse(readFileSync(new URL('../docs/research/voice-quality-live.json',import.meta.url))).asr.result;
 test('raw words retain exact text and times; zero duration offers labelled context or whole segment',()=>{
@@ -25,8 +26,11 @@ test('raw words retain exact text and times; zero duration offers labelled conte
 test('ASR sends a script style hint by default, explicit baseline omits it, raw output is unchanged',async()=>{
   const data={text:'原文',segments:[{start:0,end:1,text:'原文'}],words:[{word:'原文',start:0,end:1}]};
   const book=new Ledger(join(mkdtempSync(join(tmpdir(),'asr-style-')),'usage.json'));
-  for(const [options,expected] of [[{},ASR_STYLE_PROMPT],[{prompt:null},null]]){
-    const result=await transcribe(new Uint8Array(waveBytes(new Float32Array(16000))),'synthetic',{book,...options,
+  const terms=transcriptionTerms(' 华硕，Eee PC,IT，Eee PC ');
+  assert.deepEqual(terms,['华硕','Eee PC','IT']);
+  assert.throws(()=>transcriptionTerms('很长'.repeat(50)),/TRANSCRIPTION_TERMS_LIMIT/);
+  for(const [options,expected] of [[{},ASR_STYLE_PROMPT],[{prompt:null},null],[{terms},`${ASR_STYLE_PROMPT} 相关名称：华硕、Eee PC、IT。`]]){
+    const result=await transcribe(new Uint8Array(waveBytes(new Float32Array(16000))),options.terms?'synthetic-terms':'synthetic',{book,...options,
       fetcher:async(_,request)=>{
         assert.equal(request.body.get('prompt'),expected);
         assert.equal(request.body.get('language'),'zh');
@@ -35,7 +39,19 @@ test('ASR sends a script style hint by default, explicit baseline omits it, raw 
       }});
     assert.equal(result.text,data.text);
     assert.equal(result.styleHint,expected?'zh-Hans-v1':'unspecified');
+    assert.deepEqual(result.termHints,options.terms??[]);
   }
+});
+test('real zero-length word in a short quote replays neighbouring provider boundaries without editing raw timing',()=>{
+  const speech=JSON.parse(readFileSync(new URL('../docs/research/natural-speech-live.json',import.meta.url))).asr.find(x=>x.id==='fleurs-276').result;
+  const snapshot=JSON.stringify(speech),word=speech.words.find(w=>w.text==='项'),span=speech.spans.find(s=>word.start>=s.start&&word.end<=s.end);
+  assert.equal(word.start,word.end);
+  const context=wordPlayback(speech,word.id),anchor=quotePlayback(speech,span,'项');
+  assert.equal(anchor.level,'quote-context');
+  assert.equal(anchor.start,Math.max(span.start,context.start-.3));
+  assert.equal(anchor.end,Math.min(span.end,context.end+.3));
+  assert(anchor.end-anchor.start<span.end-span.start);
+  assert.equal(JSON.stringify(speech),snapshot);
 });
 test('quoted feedback narrows only an unchanged unique mapped quote, with context and safe segment fallbacks',()=>{
   const span={id:'s0',start:0,end:8,text:'净空十五米，八月通车。'};

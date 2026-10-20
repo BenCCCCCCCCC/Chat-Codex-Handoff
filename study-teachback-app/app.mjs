@@ -1,5 +1,6 @@
 import { waveBytes, revisedTranscript, validateFindings, repairFocus, autoTitle, setupContextValue } from './core.mjs';
 import {renderRawPlayback,quotePlayback,playbackLabel} from './transcript-playback.mjs';
+import {transcriptionTerms} from './transcription-terms.mjs';
 import {audioFile,prepareAudio} from './audio-input.mjs';
 import { openStore } from './storage.mjs';
 import { confirmLocalProcess, localize, processEvidence } from './diagnostic-localization.mjs';
@@ -23,7 +24,7 @@ const reveal=(id,show=true)=>{$(id).hidden=!show;};
 function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
 function button(label,fn,cls='quiet'){const b=el('button',label,cls);b.onclick=()=>label==='删除主题'?confirmDelete('删除这个主题及其全部讲解、原声、转写和反馈。',fn,b):act(fn);return b;}
 async function act(fn){try{await fn();}catch(e){notice(friendly(e.message));}}
-function friendly(code){const messages={AUDIO_TOO_LARGE:'音频超过 25 MB，请压缩或裁剪后重新选择。',AUDIO_FORMAT_UNSUPPORTED:'请选择 WAV、MP3、M4A、MP4、WebM、OGG、FLAC 或 AAC 音频。',AUDIO_DECODE_FAILED:'浏览器无法读取这段音频，请转为 WAV 或 MP3 后重试。',DURATION_LIMIT:'每次讲解最长 3 分钟，请先裁剪音频。',EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先确认用于诊断的转写；建议回听检查否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请先完整回听这个过程候选，再保存过程证据。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
+function friendly(code){const messages={TRANSCRIPTION_TERMS_LIMIT:'术语最多 8 项，每项 24 字、合计 80 字；请用逗号分隔简短名称。',AUDIO_TOO_LARGE:'音频超过 25 MB，请压缩或裁剪后重新选择。',AUDIO_FORMAT_UNSUPPORTED:'请选择 WAV、MP3、M4A、MP4、WebM、OGG、FLAC 或 AAC 音频。',AUDIO_DECODE_FAILED:'浏览器无法读取这段音频，请转为 WAV 或 MP3 后重试。',DURATION_LIMIT:'每次讲解最长 3 分钟，请先裁剪音频。',EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先确认用于诊断的转写；建议回听检查否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请先完整回听这个过程候选，再保存过程证据。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
 async function save(target=topic){if(!target||deleted.has(target.id))return;try{target.updatedAt=Date.now();await db.put(target);memoryOnly=false;reveal('storageRecovery',false);}catch{memoryOnly=true;reveal('storageRecovery');throw new Error('STORAGE_FAILED');}}
 async function api(path,body,headers={}){
   if(controller||record)throw new Error('REQUEST_IN_PROGRESS');
@@ -119,7 +120,7 @@ $('learn').onclick=()=>act(async()=>{
 $('chatForm').onsubmit=e=>{e.preventDefault();if(!canNavigate())return;act(async()=>{const message=$('chat').value.trim();if(!message)return;await chat.flushDraft();const retry=topic.chatRequest?.status!=='complete'&&!topic.chatRequest?.internalStarter&&topic.chatRequest?.message===message;await teach(message,topic.mode==='repair'?'repair':'learn',topic.focus??null,{retry});});};
 $('chatRetry').onclick=()=>act(async()=>{if(canNavigate())await teach('', 'learn',null,{retry:true});});
 function prepare(kind='full',focus=null,parentId=null){
-  if(!canNavigate())return;if(!topic)return;if(kind==='partial')focus=repairFocus(focus);pending={kind,focus,parentId};reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'用自己的话说明这个概念、条件或过程。';$('recording').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});$('start').focus();$('timer').textContent='00:00';
+  if(!canNavigate())return;if(!topic)return;if(kind==='partial')focus=repairFocus(focus);pending={kind,focus,parentId};$('transcriptionTerms').value=topic.transcriptionTerms??'';$('termDraftStatus').textContent='';reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'用自己的话说明这个概念、条件或过程。';$('recording').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});$('start').focus();$('timer').textContent='00:00';
 }
 $('explain').onclick=()=>prepare();$('fullAgain').onclick=()=>prepare('full',null,current?.id);
 $('cancelRecord').onclick=()=>{if(!record&&!capturePending)reveal('recording',false);};
@@ -127,13 +128,13 @@ $('uploadAudio').onclick=()=>{if(canNavigate())$('audioFile').click();};
 $('audioFile').onchange=()=>act(async()=>{
   const file=$('audioFile').files[0];$('audioFile').value='';
   if(!file||!canNavigate()||!topic||!pending)return;
-  const target=topic,plan={...pending};capturePending=true;$('uploadAudio').disabled=true;$('start').disabled=true;
+  const target=topic,plan={...pending},terms=transcriptionTerms(target.transcriptionTerms??'');capturePending=true;$('uploadAudio').disabled=true;$('start').disabled=true;$('transcriptionTerms').disabled=true;
   notice('正在本机检查音频…');
   try{
     await flushDrafts();
     const audio=audioFile(file),prepared=await prepareAudio(audio);
     if(topic!==target||deleted.has(target.id))throw Error('CAPTURE_CANCELLED');
-    const a={id:uid(),createdAt:Date.now(),...plan,assistance:'unknown',captureOrigin:'upload',fileName:file.name,
+    const a={id:uid(),createdAt:Date.now(),...plan,transcriptionTerms:terms,assistance:'unknown',captureOrigin:'upload',fileName:file.name,
       source:structuredClone(target.source),anchors:structuredClone(target.goals),anchorVersion:target.anchorVersion??null,
       audio,duration:prepared.duration,observation:prepared.observation,interrupted:false,raw:null,corrections:[],reports:[],status:'SAVED'};
     target.attempts.push(a);target.resume={view:'attempt',attemptId:a.id};current=a;
@@ -142,23 +143,24 @@ $('audioFile').onchange=()=>act(async()=>{
     try{await save(target);}finally{renderAttempt();}
     $('attemptPanel').scrollIntoView({behavior:'instant',block:'start'});$('retryAsr').focus();
     notice(['NEAR_SILENT','CLIPPING'].includes(a.observation.reason)?'原声已保存，但声音过轻或失真，请试听后换一段音频。':'原声已保存。点击“开始转写”才会发送音频。');
-  }finally{capturePending=false;$('uploadAudio').disabled=false;$('start').disabled=false;}
+  }finally{capturePending=false;$('uploadAudio').disabled=false;$('start').disabled=false;$('transcriptionTerms').disabled=false;}
 });
 function stopRecording(interrupted=false){if(!record)return;record.interrupted ||= interrupted;if(record.recorder.state!=='inactive')record.recorder.stop();}
 function resetRecordingUI(){
-  delete document.body.dataset.recording;$('uploadAudio').disabled=false;$('start').disabled=false;reveal('start');reveal('finish',false);$('assistance').disabled=false;reveal('materialPanel');reveal('chatForm');document.querySelector('.learning').hidden=false;$('promptView').textContent='';
+  delete document.body.dataset.recording;$('transcriptionTerms').disabled=false;$('uploadAudio').disabled=false;$('start').disabled=false;reveal('start');reveal('finish',false);$('assistance').disabled=false;reveal('materialPanel');reveal('chatForm');document.querySelector('.learning').hidden=false;$('promptView').textContent='';
 }
 $('finish').onclick=()=>stopRecording();
 $('start').onclick=()=>act(async()=>{
   if(record||capturePending||controller||processing||memoryOnly)return notice('请先等当前处理完成。');
   if(!topic||!pending)return;
-  const target=topic,plan={...pending},assistance=$('assistance').value;
+  const target=topic,plan={...pending},assistance=$('assistance').value,terms=transcriptionTerms(target.transcriptionTerms??'');
   const active=()=>topic===target&&!deleted.has(target.id);
-  capturePending=true;$('start').disabled=true;$('uploadAudio').disabled=true;let stream,context;
+  capturePending=true;$('start').disabled=true;$('uploadAudio').disabled=true;$('transcriptionTerms').disabled=true;let stream,context;
   try{
     // The ledger's unchanged 60-attempt cap applies after valid audio is saved;
     // retained invalid captures are not valid-attempt registrations.
     if(!active())throw new Error('CAPTURE_CANCELLED');
+    await flushDrafts();
     const attemptId=uid();
     stream=await navigator.mediaDevices.getUserMedia({audio:{channelCount:1},video:false});
     if(!active())throw new Error('CAPTURE_CANCELLED');
@@ -166,7 +168,7 @@ $('start').onclick=()=>act(async()=>{
     context=new AudioContext();await context.resume();const analyser=context.createAnalyser();context.createMediaStreamSource(stream).connect(analyser);
     if(!active())throw new Error('CAPTURE_CANCELLED');
     const recorder=new MediaRecorder(stream,{mimeType:type}),chunks=[];const started=performance.now();
-    record={id:attemptId,recorder,stream,context,started,interrupted:false,target,kind:plan.kind,focus:plan.focus,parentId:plan.parentId,assistance};
+    record={id:attemptId,recorder,stream,context,started,interrupted:false,target,kind:plan.kind,focus:plan.focus,parentId:plan.parentId,assistance,terms};
     const own=record;recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
     recorder.onerror=()=>stopRecording(true);stream.getAudioTracks().forEach(track=>{track.onended=()=>stopRecording(true);track.onmute=()=>stopRecording(true);});
     recorder.onstop=()=>act(async()=>{
@@ -174,7 +176,7 @@ $('start').onclick=()=>act(async()=>{
       clearInterval(own.tick);stream.getTracks().forEach(t=>{t.onended=null;t.onmute=null;t.stop();});await context.close();record=null;delete document.body.dataset.recording;
       resetRecordingUI();if(!active())throw new Error('CAPTURE_CANCELLED');
       const audio=new Blob(chunks,{type:recorder.mimeType});if(!audio.size)throw new Error('NO_AUDIO');
-      const a={id:own.id,createdAt:Date.now(),kind:own.kind,focus:own.focus,parentId:own.parentId,assistance:own.assistance,source:structuredClone(own.target.source),anchors:structuredClone(own.target.goals),anchorVersion:own.target.anchorVersion??null,audio,captureDuration:Math.min(180,(performance.now()-started)/1000),interrupted:own.interrupted,raw:null,corrections:[],reports:[],status:'SAVED'};
+      const a={id:own.id,createdAt:Date.now(),kind:own.kind,focus:own.focus,parentId:own.parentId,assistance:own.assistance,transcriptionTerms:own.terms,source:structuredClone(own.target.source),anchors:structuredClone(own.target.goals),anchorVersion:own.target.anchorVersion??null,audio,captureDuration:Math.min(180,(performance.now()-started)/1000),interrupted:own.interrupted,raw:null,corrections:[],reports:[],status:'SAVED'};
       own.target.attempts.push(a);own.target.resume={view:'attempt',attemptId:a.id};current=a;
       try{await save();}catch(e){renderAttempt();throw e;}
       reveal('recording',false);renderAttempt();await processAudio(a);
@@ -197,7 +199,7 @@ async function processAudio(a){
     const wav=prepared.wav;
     replayWaves.set(a.audio,new Blob([wav],{type:'audio/wav'}));
     await api('/api/register',{attemptId:a.id});
-    const result=await api('/api/asr',wav,{'Content-Type':'audio/wav','X-Attempt-Id':a.id});
+    const result=await api('/api/asr',wav,{'Content-Type':'audio/wav','X-Attempt-Id':a.id,'X-Transcription-Terms':encodeURIComponent((a.transcriptionTerms??[]).join(','))});
     if(deleted.has(a)||!topic||deleted.has(topic.id))return;
     a.raw={...result,id:uid(),origin:'ASR',createdAt:Date.now()};a.status='REVIEW_REQUIRED';await save();renderAttempt();notice('转写完成。诊断将使用当前文字；建议回听检查关键字，也可直接确认文字并继续。');
   }catch(e){
@@ -279,7 +281,7 @@ function renderAttempt(){
   if(!current)return;const a=current;editors.clear();reveal('attemptPanel');reveal('searchExcerpt',false);reveal('analysisDetails',false);$('voiceDraftStatus').textContent=a.transcriptDraft?'核对草稿已保存 · 尚未确认':'';$('attemptKind').textContent=(a.kind==='partial'?'局部':'完整')+(a.captureOrigin==='upload'?'上传音频':'录音');
   replayRequest++;replayOriginal=null;if(blobURL)URL.revokeObjectURL(blobURL);blobURL=URL.createObjectURL(a.audio);$('player').src=blobURL;
   const soundIssue=a.interrupted?'录音中断':a.observation?.reason==='NEAR_SILENT'?'音量过低':a.observation?.reason==='CLIPPING'?'录音失真':null;
-  $('audioStatus').textContent=`${a.duration?`${a.duration.toFixed(1)} 秒 · `:''}${soundIssue??'原声已保留'}${a.captureOrigin==='upload'?` · ${a.fileName} · 录制时的提示条件未知`:''}。`;
+  $('audioStatus').textContent=`${a.duration?`${a.duration.toFixed(1)} 秒 · `:''}${soundIssue??'原声已保留'}${a.captureOrigin==='upload'?` · ${a.fileName} · 录制时的提示条件未知`:''}。${a.transcriptionTerms?.length?` 转写术语：${a.transcriptionTerms.join('、')}。`:''}`;
   $('voiceState').textContent=a.raw?'':soundIssue?`${soundIssue}，请回听后重新录制。`:a.status==='SAVED'?'试听后开始转写。':'转写未完成，原声已保留。';
   $('retryAsr').textContent=a.status==='SAVED'?'开始转写':'重试转写';$('voiceHeading').textContent=a.raw?'核对转写':'试听原声';
   reveal('transcriptHeading',!!a.raw);reveal('rawTranscriptDetails',!!a.raw);reveal('contentPane',!!a.raw);reveal('processDetails',!!a.raw);$('attemptPanel').classList.toggle('awaiting-transcript',!a.raw);
@@ -489,8 +491,11 @@ narrow.addEventListener('change',()=>{if(!record)$('sourceDetails').open=!narrow
 for(const link of document.querySelectorAll('a[href="/demo"]'))link.onclick=e=>{e.preventDefault();if(canNavigate())act(async()=>{await flushDrafts();location.assign('/demo');});};
 const chat=mountChat({getTopic:()=>topic,save,act,focusHit});
 const voiceDrafts=createDraftSaver({save,onError:error=>act(()=>Promise.reject(error)),onStatus:status=>{
+  $('termDraftStatus').textContent=status==='error'?'术语未保存':status==='saving'?'正在保存…':status==='saved'?'已保存':'';
   $('voiceDraftStatus').textContent=status==='error'?'核对草稿未保存':status==='saving'?'正在保存核对草稿…':current?.transcriptDraft?'核对草稿已保存 · 尚未确认':'';
 }});
+$('transcriptionTerms').oninput=()=>{if(!topic||capturePending||record)return;topic.transcriptionTerms=$('transcriptionTerms').value;voiceDrafts.mark(topic);};
+$('transcriptionTerms').onblur=()=>act(()=>voiceDrafts.flush());
 async function flushDrafts(){await chat.flushDraft();await practice.flushDraft();await voiceDrafts.flush();}
 async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();await voiceDrafts.discard();}
 const practice=mountPractice({getTopic:()=>topic,save,request:api,canStart:canNavigate,

@@ -131,3 +131,6 @@ body[data-history=true] #workspace,body[data-history=true] #setup,body[data-hist
 .awaiting-transcript .transcript-pane{padding:0;border:0}
 
 .word-link{display:inline;min-height:0;padding:2px 1px;border:0;border-radius:3px;background:transparent;color:var(--accent);font:inherit;text-decoration:underline;text-underline-offset:4px}.word-link[data-timing=context],.word-link[data-timing=segment]{text-decoration-style:dotted}.word-link:hover{background:var(--accent-soft)}#rawPlaybackStatus:empty{display:none}
+
+.transcription-options{margin:16px 0}.transcription-options summary{font-size:.875rem}.transcription-options input{margin-top:12px}.transcription-options p{margin:6px 0}
+body:has(#workspace:not([hidden]) #recording:not([hidden])) .dock{display:none}

@@ -10,7 +10,12 @@ export async function audioChecks({check,evaluate,until,click,reloadPage,shot,cd
       const db=await(await import('/storage.mjs')).openStore();await db.clear();
       await db.put({id:'audio-topic',createdAt:Date.now(),source:{id:'audio-source',title:'浇水的条件',text:'只有土壤干燥时才浇水，湿润时不要浇水。'},goals:[],messages:[],attempts:[],mode:'learn',resume:{view:'learn'}});db.close();
     })()`);await reloadPage();const before=calls.length;
-    await click('explain');await shot('audio-entry');
+    await click('explain');
+    await evaluate(`{document.querySelector('.transcription-options').open=true;const e=document.getElementById('transcriptionTerms');e.value='华硕，Eee PC,IT';e.dispatchEvent(new Event('input'));}`);
+    await until(`document.getElementById('termDraftStatus').textContent==='已保存'`);
+    await reloadPage();await click('explain');
+    assert.equal(await evaluate(`document.getElementById('transcriptionTerms').value`),'华硕，Eee PC,IT');
+    await evaluate(`document.querySelector('.transcription-options').open=true`);await shot('audio-entry','recordTitle');
     await evaluate(`{
       const rate=16000,n=rate*2,buffer=new ArrayBuffer(44+n*4),v=new DataView(buffer);
       const str=(o,s)=>Array.from(s).forEach((c,i)=>v.setUint8(o+i,c.charCodeAt(0)));
@@ -21,17 +26,23 @@ export async function audioChecks({check,evaluate,until,click,reloadPage,shot,cd
     await select('window.uploadBytes');await until(`!document.getElementById('attemptPanel').hidden`);
     const stored=(await evaluate(all))[0].attempts[0];
     assert.equal(stored.assistance,'unknown');assert.equal(stored.captureOrigin,'upload');
+    assert.deepEqual(stored.transcriptionTerms,['华硕','Eee PC','IT']);
     assert.equal(stored.status,'SAVED');assert.notEqual(stored.observation.reason,'NEAR_SILENT');
     assert.equal(calls.length,before);assert.equal(await evaluate(`document.getElementById('retryAsr').textContent`),'开始转写');
     assert.equal(await evaluate(`document.getElementById('contentPane').hidden`),true);
     assert(await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore(),t=(await db.all())[0];db.close();const a=new Uint8Array(await t.attempts[0].audio.arrayBuffer()),b=new Uint8Array(window.uploadBytes);return a.length===b.length&&a.every((x,i)=>x===b[i]);})()`));
     await shot('audio-saved');
+    // Changing the next recording's terms must not affect a saved attempt's retry.
+    await click('fullAgain');
+    await evaluate(`{const e=document.getElementById('transcriptionTerms');e.value='缓存';e.dispatchEvent(new Event('input'));}`);
+    await until(`document.getElementById('termDraftStatus').textContent==='已保存'`);
     await reloadPage();assert.equal(calls.length,before);
     setFailASR('ASR_RESULT_UNAVAILABLE');await click('retryAsr');
     await until(`document.getElementById('notice').textContent.includes('ASR_RESULT_UNAVAILABLE')`);
     assert.equal(calls.length,before+1);setFailASR(null);
     await click('retryAsr');await until(`document.querySelector('#transcript textarea')`);
     assert.equal(calls.length,before+2);assert.equal((await evaluate(all))[0].attempts.length,1);
+    assert.deepEqual(calls.slice(before,before+2).map(c=>c.terms),[['华硕','Eee PC','IT'],['华硕','Eee PC','IT']]);
     await click('confirm');await until(`document.getElementById('confirm').textContent.includes('查看')`);
     assert.equal(calls.length,before+3);
     assert.equal((await evaluate(all))[0].attempts[0].reports[0].analysis.method,'confirmed_transcript');

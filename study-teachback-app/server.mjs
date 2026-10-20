@@ -5,8 +5,9 @@ import { fileURLToPath } from 'node:url';
 import { semantic, transcribe, ledger } from './provider.mjs';
 import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue, repairFocus, waveDuration, TUTOR_MESSAGE_LIMIT, setupContextValue } from './core.mjs';
 import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
+import {transcriptionTerms} from './transcription-terms.mjs';
 
-const files={'/transcript-playback.mjs':'transcript-playback.mjs','/audio-input.mjs':'audio-input.mjs','/voice-review.mjs':'voice-review.mjs','/search-focus.mjs':'search-focus.mjs','/chat-ui.mjs':'chat-ui.mjs','/draft-save.mjs':'draft-save.mjs','/record-search.mjs':'record-search.mjs','/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/workspace-ui.mjs':'workspace-ui.mjs','/practice.mjs':'practice.mjs','/practice-ui.mjs':'practice-ui.mjs','/backup.mjs':'backup.mjs','/backup-ui.mjs':'backup-ui.mjs','/demo':'demo.html','/demo.mjs':'demo.mjs','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
+const files={'/transcription-terms.mjs':'transcription-terms.mjs','/transcript-playback.mjs':'transcript-playback.mjs','/audio-input.mjs':'audio-input.mjs','/voice-review.mjs':'voice-review.mjs','/search-focus.mjs':'search-focus.mjs','/chat-ui.mjs':'chat-ui.mjs','/draft-save.mjs':'draft-save.mjs','/record-search.mjs':'record-search.mjs','/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/workspace-ui.mjs':'workspace-ui.mjs','/practice.mjs':'practice.mjs','/practice-ui.mjs':'practice-ui.mjs','/backup.mjs':'backup.mjs','/backup-ui.mjs':'backup-ui.mjs','/demo':'demo.html','/demo.mjs':'demo.mjs','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
 export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger,extractCall=extractSource}={}) {
   let busy=false;
   return http.createServer(async(req,res)=>{
@@ -37,7 +38,11 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       for await(const part of req){length+=part.length;requireValue(length<=limit,'INPUT_TOO_LARGE');parts.push(part);}
       const bytes=Buffer.concat(parts);
       if(path==='/api/extract')return json(200,await extractCall(bytes,req.headers['x-source-format']));
-      if(path==='/api/asr'){waveDuration(bytes);book.register(req.headers['x-attempt-id']);return json(200,await asrCall(bytes,req.headers['x-attempt-id'],{book,signal:controller.signal}));}
+      if(path==='/api/asr'){
+        let terms;try{terms=transcriptionTerms(decodeURIComponent(req.headers['x-transcription-terms']??''));}catch{throw Error('TRANSCRIPTION_TERMS_LIMIT');}
+        waveDuration(bytes);book.register(req.headers['x-attempt-id']);
+        return json(200,await asrCall(bytes,req.headers['x-attempt-id'],{book,signal:controller.signal,terms}));
+      }
       requireValue(req.headers['content-type']==='application/json','CONTENT_TYPE');
       const b=JSON.parse(bytes.toString('utf8'));
       if(path==='/api/register'){book.register(b.attemptId);return json(200,{registered:true});}

@@ -35,7 +35,7 @@ export function quotePlayback(raw,confirmedSpan,quote){
   const at=span.text.indexOf(quote),end=at+quote.length;
   if(at<0||span.text.indexOf(quote,at+1)>=0)return fallback;
   const words=(raw.words??[]).filter(w=>w.start>=span.start&&w.end<=span.end);
-  const selected=[];let cursor=0,covered=at;
+  const selected=[];let cursor=0,covered=at,contextual=false;
   for(const word of words){
     if(!word.text)return fallback;
     const from=span.text.indexOf(word.text,cursor),to=from+word.text.length;
@@ -43,16 +43,18 @@ export function quotePlayback(raw,confirmedSpan,quote){
     cursor=to;
     if(from>=end||to<=at)continue;
     if(/[\p{L}\p{N}]/u.test(span.text.slice(covered,from)))return fallback;
-    if(!word.usable||!Number.isFinite(word.start)||!Number.isFinite(word.end)||word.end<=word.start)return fallback;
-    selected.push(word);covered=Math.min(to,end);
+    const anchor=wordPlayback(raw,word.id);
+    if(!anchor||anchor.level==='segment')return fallback;
+    contextual ||= anchor.level==='context';
+    selected.push(anchor);covered=Math.min(to,end);
   }
   if(!selected.length||/[\p{L}\p{N}]/u.test(span.text.slice(covered,end)))return fallback;
-  const start=selected[0].start,stop=selected.at(-1).end;
-  if(stop<=start)return fallback;
-  return {level:'quote',start:Math.max(span.start,start-.3),end:Math.min(span.end,stop+.3)};
+  const start=Math.min(...selected.map(w=>w.start)),stop=Math.max(...selected.map(w=>w.end));
+  if(stop<=start||(contextual&&stop-start>6))return fallback;
+  return {level:contextual?'quote-context':'quote',start:Math.max(span.start,start-.3),end:Math.min(span.end,stop+.3)};
 }
 export function playbackLabel(anchor){
-  return `${anchor.level==='quote'?'原话附近':anchor.level==='word'?'词级参考':anchor.level==='context'?'邻近范围，非独立词时间':'整段回听'} ${anchor.start.toFixed(1)}–${anchor.end.toFixed(1)} 秒`;
+  return `${anchor.level==='quote-context'?'原话邻近范围，非精确词时间':anchor.level==='quote'?'原话附近':anchor.level==='word'?'词级参考':anchor.level==='context'?'邻近范围，非独立词时间':'整段回听'} ${anchor.start.toFixed(1)}–${anchor.end.toFixed(1)} 秒`;
 }
 export function renderRawPlayback(container,raw,onPlay,onStatus){
   container.replaceChildren();

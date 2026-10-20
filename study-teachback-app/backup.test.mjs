@@ -18,6 +18,8 @@ function fixture() {
 }
 test('v1 backup round trip preserves audio, corrections, report links and practice; restore is a separate copy',async()=>{
   const original=fixture();original.contextNote='Remember the condition.';
+  original.transcriptionTerms='新一轮的术语';
+  original.attempts[0].transcriptionTerms=['华硕','Eee PC'];
   // New supported findings carry no advice; legacy string advice is tested separately.
   original.attempts[0].reports[0].findings[0].repair=null;
   updateTranscriptDraft(original.attempts[0],[{id:'s0',text:'Unconfirmed edit'}]);
@@ -30,6 +32,8 @@ test('v1 backup round trip preserves audio, corrections, report links and practi
   assert.deepEqual(copy.attempts[0].corrections,original.attempts[0].corrections);
   assert.deepEqual(copy.attempts[0].reports,original.attempts[0].reports);
   assert.equal(copy.contextNote,original.contextNote);
+  assert.equal(copy.transcriptionTerms,original.transcriptionTerms);
+  assert.deepEqual(copy.attempts[0].transcriptionTerms,['华硕','Eee PC']);
   assert.deepEqual(transcriptTexts(copy.attempts[0]),['Unconfirmed edit']);
   assert.equal(copy.attempts[0].corrections.length,1,'saving a draft creates no confirmed version');
   assert.deepEqual(await copy.attempts[0].audio.arrayBuffer(),await original.attempts[0].audio.arrayBuffer());
