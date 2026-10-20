@@ -33,6 +33,10 @@ Edge 只跑相关 **3/3** 流程：上传词表草稿刷新、讲解快照与显
 `node-1792507226183-v1h8aH`、
 `browser-1792507225270-m6LsXx`、
 `browser-1792507305517-uzKivV`。
+首轮 CI（39442041152）完整 Node 为 159/166，旧录音 VM harness 未注入新增的
+`transcriptionTerms` 和 `flushDrafts`，导致 7 项提前退出，Edge 未运行。
+补齐这两个依赖并在既有有效录音案例核对词表快照，定向复验 **22/22**；
+收据 `focused-1792507586060-IA2QH3`。随后仅由 CI 完成全套回归。
 离线前后生产账本 SHA256 均为
 `b1c8d360f7849ef165239ae9faa975f1ad1514daeef5f2f3501404aa4a6983a7`。
 
