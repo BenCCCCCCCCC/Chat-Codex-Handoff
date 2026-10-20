@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>体验示例 · 知而能讲</title><link rel="stylesheet" href="/style.css"></head>
+<body class="demo-page">
+<a class="skip" href="#main">跳到示例内容</a>
+<aside class="sidebar" aria-label="工作区导航"><div class="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1.5 6-1.3 9 .5v14c-3-1.8-6-2-9-.5z M12 6c3-1.8 6-2 9-.5v14c-3-1.5-6-1.3-9 .5"/></svg><span>知而能讲<small>学习，直到讲得清楚</small></span></div><nav><a class="nav-item" href="/">返回学习工作台</a><a class="nav-item active" href="/demo" aria-current="page">体验示例</a></nav><div class="sidebar-note"><span class="local-dot"></span>独立示例<p>不使用 API，不写入个人学习记录。</p></div></aside>
+<div class="app-shell">
+<header class="topbar"><span>示例体验</span><a class="text-link" href="/">使用自己的材料</a></header>
+<main id="main" tabindex="-1">
+  <div class="demo-banner"><strong>交互示例</strong><span>材料、讲解与反馈均为预先编写。这里不录音、不评估你的输入，也不调用 AI。</span></div>
+  <div class="demo-intro"><div><h1>一次学习，如何继续？</h1><p class="muted">读一段材料，对比两种讲解，再看看反馈如何回到具体证据。</p></div><button id="demoReset" class="quiet">重新体验</button></div>
+  <div class="demo-topics" aria-label="选择示例"><button data-sample="0" class="chip" aria-pressed="true">植物浇水的条件</button><button data-sample="1" class="chip" aria-pressed="false">持票与开放时间</button></div>
+  <ol class="journey demo-journey" aria-label="示例阶段"><li data-demo-step="0" aria-current="step"><span>1</span>读材料</li><li data-demo-step="1"><span>2</span>看讲解</li><li data-demo-step="2"><span>3</span>查反馈</li><li data-demo-step="3"><span>4</span>换个情境</li></ol>
+  <div class="demo-layout">
+    <aside class="card demo-source"><p class="panel-label">本轮示例材料</p><h2 id="demoTitle"></h2><p id="demoSource" class="prewrap"></p><h3>这次学习重点</h3><p id="demoGoal" class="muted"></p><div class="demo-note">每条反馈都应能回到这段材料，而不是只看讲解是否流畅。</div></aside>
+    <section class="card demo-stage">
+      <h2 id="demoHeading" tabindex="-1"></h2>
+      <div id="demoRead"><p id="demoExplanation" class="demo-reading"></p><div class="demo-question"><strong>先想一想</strong><p id="demoThinking"></p></div></div>
+      <div id="demoExplain" hidden><p class="muted">选择一段预设讲解，比较它们表达了哪些条件。</p><fieldset class="answer-choices"><legend class="sr-only">选择预设讲解</legend><label><input type="radio" name="exampleAnswer" value="0" checked><span><strong>讲解 A</strong><span id="answerA"></span></span></label><label><input type="radio" name="exampleAnswer" value="1"><span><strong>讲解 B</strong><span id="answerB"></span></span></label></fieldset></div>
+      <div id="demoResult" hidden><p class="muted">以下是所选讲解的固定示例反馈，不是模型现场生成。</p><div id="demoFindings"></div></div>
+      <div id="demoPractice" hidden><p id="demoScenario" class="demo-reading"></p><div class="practice-choices"><button id="practiceA" class="quiet"></button><button id="practiceB" class="quiet"></button></div><p id="practiceFeedback" role="status"></p><a class="button-link" href="/">开始自己的学习</a></div>
+      <div class="demo-controls"><button id="demoBack" class="quiet" hidden>上一步</button><button id="demoNext">看看怎么讲</button></div>
+    </section>
+  </div>
+  <p class="demo-footnote">真实工作区支持导入文件、AI 辅导、录音、核对转写和反馈；模型功能需要配置自己的 API。示例不代表模型准确率或学习效果。</p>
+</main>
+</div>
+<script type="module" src="/demo.mjs"></script>
+</body></html>

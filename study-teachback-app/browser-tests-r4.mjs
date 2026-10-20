@@ -70,6 +70,7 @@ try{
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
   if(environmentProbe){
     const select=id=>`document.getElementById('${id}')`,historyAttempt=`[...document.querySelectorAll('#historyList button')].find(b=>b.textContent.startsWith('完整'))`;
+    await evaluate(`document.querySelector('.process-details').open=true`);
     const confirmProcess=`[...document.querySelectorAll('#observations button')].find(b=>b.textContent==='确认并保存过程证据')`;
     await check('E0 archived synthetic ASR offers optional replay before explicit confirmation',async()=>{
       const source={id:'probe-source',title:'隔离 synthetic ASR 环境探针',text:savedASR.text};
@@ -204,6 +205,16 @@ try{
     await click('clearImport');assert(await evaluate(`document.getElementById('extractedText').value==='' && document.getElementById('source').value.length>0`));
   });
   await check('study-first source and tutor, persistent teach-back without rubric/upload',async()=>{await evaluate(`document.getElementById('title').value='工程测试 · 植物浇水';document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。';`);await click('learn');await until(`document.querySelectorAll('.message.assistant').length===1`);assert(await evaluate(`!document.getElementById('dock').hidden && document.getElementById('sourceFile').accept==='.md,.txt,.pdf,.docx,.pptx'`));});
+  await check('workspace stage and prompt starters preserve drafts without dispatch',async()=>{
+    const before=calls.length;
+    await until(`document.querySelector('.journey [aria-current]').dataset.step==='1'`);
+    assert(await evaluate(`!document.getElementById('learningOptions').open`));
+    await evaluate(`document.querySelector('[data-prompt]').click()`);
+    assert(await evaluate(`document.getElementById('chat').value.includes('例子') && document.activeElement.id==='chat'`));
+    await evaluate(`document.getElementById('chat').value='自己的问题';document.querySelectorAll('[data-prompt]')[1].click()`);
+    assert.equal(await evaluate(`document.getElementById('chat').value`),'自己的问题');
+    assert.equal(calls.length,before);await evaluate(`document.getElementById('chat').value=''`);
+  });
   await check('A responsive layout, readable focus, reduced motion and text zoom',async()=>{
     for(const width of [1440,1024,768,390,320]){
       await cdp('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:false});
@@ -252,6 +263,9 @@ try{
   });
   await check('diagnosis complete, dirty/stale, revert and keyboard reuse do not dispatch',async()=>{
     const before=calls.length;
+    assert(await evaluate(`!!document.querySelector('#feedback .finding details') && !document.querySelector('#feedback .finding details').open`));
+    await evaluate(`document.querySelector('#feedback .finding summary').click()`);
+    assert(await evaluate(`document.querySelector('#feedback .finding details').open && document.querySelector('#feedback .finding blockquote').getClientRects().length>0`));
     assert(await evaluate(`document.getElementById('diagnosisState').textContent.includes('诊断完成') && !document.getElementById('confirm').disabled`));
     await evaluate(`(()=>{window.confirmedText=document.querySelector('#transcript textarea').value;const e=document.querySelector('#transcript textarea');e.value+='修改';e.dispatchEvent(new Event('input'));})()`);
     assert(await evaluate(`document.getElementById('diagnosisState').textContent.includes('过时') && document.getElementById('confirm').textContent.includes('确认修改并重新诊断') && ![...document.querySelectorAll('#feedback button')].some(b=>b.textContent.includes('再学')||b.textContent.includes('再讲'))`));
@@ -354,6 +368,29 @@ try{
     await evaluate(`document.querySelector('#historyList .danger').click()`);await click('deleteConfirm');await until(`document.getElementById('historyList').textContent.includes('还没有')`);assert.equal((await evaluate(all)).length,0);await until(`document.activeElement.id==='historyTitle'`);
   });
   }
+  if(!environmentProbe&&!process.argv.includes('--replay-only'))await check('independent demo completes both examples without API requests or personal-record changes',async()=>{
+    await evaluate(`(async()=>{const db=await (await import('/storage.mjs')).openStore();await db.put({id:'demo-preserve',createdAt:Date.now(),source:{title:'个人记录必须保留'},attempts:[]});db.close();})()`);
+    const before=JSON.stringify(await evaluate(all)),requestIndex=network.length,dispatches=calls.length;
+    await cdp('Page.navigate',{url:origin+'/demo'});await until(`document.getElementById('demoTitle')?.textContent.length>0`);
+    for(const sample of [0,1]){
+      await evaluate(`document.querySelector('[data-sample="${sample}"]').click()`);
+      await click('demoNext');await click('demoNext');
+      assert.equal(await evaluate(`document.querySelector('#demoFindings .finding').dataset.status`),'incorrect');
+      await evaluate(`document.querySelector('#demoFindings summary').click()`);assert(await evaluate(`document.querySelector('#demoFindings details').open`));
+      if(sample===0)await shot('demo-feedback');
+      await click('demoBack');await evaluate(`document.querySelector('[name=exampleAnswer][value="1"]').click()`);await click('demoNext');
+      assert.equal(await evaluate(`document.querySelector('#demoFindings .finding').dataset.status`),'supported');
+      await click('demoNext');await click('practiceB');assert(await evaluate(`document.getElementById('practiceFeedback').textContent.length>10`));
+      await click('practiceA');assert(await evaluate(`document.getElementById('practiceFeedback').textContent.startsWith('对。')`));
+    }
+    await click('demoReset');assert(await evaluate(`document.querySelector('[data-demo-step="0"]').getAttribute('aria-current')==='step' && document.getElementById('practiceFeedback').textContent===''`));
+    for(const width of [1440,390]){
+      await cdp('Emulation.setDeviceMetricsOverride',{width,height:1000,deviceScaleFactor:1,mobile:false});await evaluate(`window.scrollTo(0,0)`);
+      assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));await shot(`demo-${width}`);
+    }
+    assert.equal(JSON.stringify(await evaluate(all)),before);assert.equal(calls.length,dispatches);
+    assert(!network.slice(requestIndex).some(url=>url.includes('/api/')));
+  });
   assert.deepEqual(errors,[]);assert(network.every(url=>url.startsWith(origin+'/')||url.startsWith('blob:'+origin+'/')||url.startsWith('data:')),'unexpected browser network');
 }catch(e){cases.push({name:'suite completion',status:'FAIL',error:e.message});console.log('BROWSER FAILURE: '+e.message);}
 finally{try{writeFileSync(join(root,'replay-trace.json'),JSON.stringify(await evaluate('window.replayTrace'),null,2));}catch{}

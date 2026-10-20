@@ -34,7 +34,7 @@ jobs:
         run: |
           $changed = if ($env:EVENT_NAME -eq 'pull_request') { @(git diff --name-only "$($env:BASE_SHA)...$($env:HEAD_SHA)") } else { @() }
           $all = $env:EVENT_NAME -ne 'pull_request' -or [bool]($changed -match '^(\.github/workflows/offline-tests\.yml|package\.json)$')
-          $browser = $all -or [bool]($changed -match '^study-teachback-app/((?!.*\.test\.mjs$)[^/]+\.mjs$|index\.html$|style\.css$|fixtures/)')
+          $browser = $all -or [bool]($changed -match '^study-teachback-app/((?!.*\.test\.mjs$)[^/]+\.mjs$|[^/]+\.html$|style\.css$|fixtures/)')
           $extract = $all -or [bool]($changed -match '^study-teachback-app/(extract|requirements-extractor)')
           "browser=$($browser.ToString().ToLower())" >> $env:GITHUB_OUTPUT
           "extract=$($extract.ToString().ToLower())" >> $env:GITHUB_OUTPUT
