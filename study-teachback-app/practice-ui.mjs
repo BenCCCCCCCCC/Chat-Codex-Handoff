@@ -49,8 +49,11 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     $('practiceDraftLabel').textContent = round?.answers.length ? '再答一次，或补充你的解释' : '你的回答';
   }
   function focusPanel() {
-    onOpen(); $('practicePanel').scrollIntoView({behavior:'instant',block:'start'});
-    (activePractice(getTopic()) ? $('practiceDraft') : $('practiceHeading')).focus();
+    onOpen();
+    queueMicrotask(()=>{
+      $('practicePanel').scrollIntoView({behavior:'instant',block:'start'});
+      (activePractice(getTopic()) ? $('practiceDraft') : $('practiceHeading')).focus();
+    });
   }
   async function start() {
     if (!canStart()) return;
@@ -58,6 +61,12 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     try { await flow.start(); } finally { focusPanel(); }
   }
   $('practiceNew').onclick = () => act(start);
+  $('backToChat').onclick = () => act(async () => {
+    if (!canStart()) return;
+    await flushDraft();
+    const topic=getTopic(); topic.resume={view:'learn'};
+    await save(topic); render(); queueMicrotask(()=>$('chat').focus());
+  });
   $('practiceForm').onsubmit = event => {
     event.preventDefault();
     act(async () => { await flushDraft(); await flow.answer(); });
@@ -76,5 +85,11 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     draftTimer = setTimeout(() => act(flushDraft), 350);
   };
   $('practiceDraft').onblur = () => act(flushDraft);
-  return {render, start, flushDraft, focusPanel, get hasPendingDraft(){return !!draftTopic || draftSaving > 0;}};
+  async function open() {
+    if(!canStart())return;
+    if(!activePractice(getTopic())&&!getTopic()?.practiceRequest)return start();
+    const topic=getTopic();topic.resume={view:'practice'};
+    await save(topic);render();focusPanel();
+  }
+  return {render, start, open, flushDraft, focusPanel, get hasPendingDraft(){return !!draftTopic || draftSaving > 0;}};
 }
