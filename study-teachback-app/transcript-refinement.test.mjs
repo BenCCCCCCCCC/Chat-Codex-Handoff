@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import {readFileSync,mkdtempSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {wordPlayback,rawPlaybackParts} from './transcript-playback.mjs';
+import {wordPlayback,rawPlaybackParts,quotePlayback} from './transcript-playback.mjs';
+import {criticalPresence,speechScore} from './natural-speech-eval.mjs';
+import {speechCases} from './natural-speech-fixtures.mjs';
 import {waveBytes} from './core.mjs';
 import {transcribe,ASR_STYLE_PROMPT} from './provider.mjs';
 import {Ledger} from './ledger.mjs';
@@ -34,4 +36,26 @@ test('ASR sends a script style hint by default, explicit baseline omits it, raw 
     assert.equal(result.text,data.text);
     assert.equal(result.styleHint,expected?'zh-Hans-v1':'unspecified');
   }
+});
+test('quoted feedback narrows only an unchanged unique mapped quote, with context and safe segment fallbacks',()=>{
+  const span={id:'s0',start:0,end:8,text:'净空十五米，八月通车。'};
+  const original={spans:[span],words:[
+    {id:'w0',text:'净空',start:1,end:2,usable:true},{id:'w1',text:'十五米',start:2,end:3,usable:true},
+    {id:'w2',text:'八月',start:4,end:5,usable:true},{id:'w3',text:'通车',start:5,end:6,usable:true}
+  ]},snapshot=JSON.stringify(original),fallback={level:'segment',start:0,end:8};
+  assert.deepEqual(quotePlayback(original,span,'十五米'),{level:'quote',start:1.7,end:3.3});
+  assert.deepEqual(quotePlayback(original,{...span,text:'净空15米，八月通车。'},'15米'),fallback);
+  const repeated={...span,text:'十五米，十五米。'};
+  assert.deepEqual(quotePlayback({...original,spans:[repeated]},repeated,'十五米'),fallback);
+  assert.deepEqual(quotePlayback({...original,words:original.words.filter(w=>w.id!=='w1')},span,'十五米'),fallback);
+  assert.deepEqual(quotePlayback({...original,words:original.words.map(w=>w.id==='w1'?{...w,end:2,usable:false}:w)},span,'十五米'),fallback);
+  assert.equal(JSON.stringify(original),snapshot);
+});
+test('speech evaluation keeps number boundaries and reference provenance separate from character differences',()=>{
+  const height=speechCases[1].critical.find(x=>x.label==='15 米'),it=speechCases[0].critical.find(x=>x.label==='IT');
+  for(const text of ['15 米','十五米'])assert(criticalPresence(text,height));
+  for(const text of ['115米','一百十五米','50米'])assert(!criticalPresence(text,height));
+  assert(criticalPresence('台北 IT 资讯月',it));assert(!criticalPresence('台北 with',it));
+  const score=speechScore(speechCases[2],raw,7.31);
+  assert.equal(score.characterDifference,null);assert.equal(score.timingAccuracy,'NOT_MEASURED_NO_HUMAN_ALIGNMENT');
 });

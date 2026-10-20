@@ -1,5 +1,5 @@
 import { waveBytes, revisedTranscript, validateFindings, repairFocus, autoTitle, setupContextValue } from './core.mjs';
-import {renderRawPlayback} from './transcript-playback.mjs';
+import {renderRawPlayback,quotePlayback,playbackLabel} from './transcript-playback.mjs';
 import {audioFile,prepareAudio} from './audio-input.mjs';
 import { openStore } from './storage.mjs';
 import { confirmLocalProcess, localize, processEvidence } from './diagnostic-localization.mjs';
@@ -285,8 +285,7 @@ function renderAttempt(){
   reveal('transcriptHeading',!!a.raw);reveal('rawTranscriptDetails',!!a.raw);reveal('contentPane',!!a.raw);reveal('processDetails',!!a.raw);$('attemptPanel').classList.toggle('awaiting-transcript',!a.raw);
   $('rawPlaybackStatus').textContent='';renderRawPlayback($('rawText'),a.raw,anchor=>act(()=>play(anchor.start,anchor.end)),label=>{$('rawPlaybackStatus').textContent=label;});$('transcript').replaceChildren();$('feedback').replaceChildren();$('observations').replaceChildren();$('processFeedback').replaceChildren();
   reveal('retryAsr',!a.raw&&!soundIssue);reveal('confirm',!!a.raw);reveal('reviewHelp',!!a.raw);reveal('reviewHint',!!a.raw);reveal('diagnosisState',!!a.raw);reveal('resultBinding',!!a.raw);
-  if(a.raw){$('reviewHint').textContent=(a.raw.wordTiming?.status==='PARTIAL'?'词级定位部分不可用。':'')+'诊断使用确认后的转写。建议核对否定词、数字、条件和术语，回听可选。';const v=latest(a),texts=transcriptTexts(a);v.spans.forEach((s,i)=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=texts[i];editor.rows=2;editor.maxLength=2000;editor.oninput=()=>{updateTranscriptDraft(a,v.spans.map(span=>({id:span.id,text:editors.get(span.id).value})));voiceDrafts.mark(topic);const state=diagnosisStates.get(a);if(state&&!state.pending&&!state.saveFailed)diagnosisStates.delete(a);updateDiagnosisState();};editor.onblur=()=>act(()=>voiceDrafts.flush());editors.set(s.id,editor);const b=button(`可选回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{b.textContent='本次页面已播放 ✓';}));row.append(b,editor);$('transcript').append(row);});
-    if(v.reviewed)$('reviewHint').textContent+=' 已保存用于诊断的文字确认；这不表示音频已回听。修改后可再次确认，不会创建新口头表现。';
+  if(a.raw){$('reviewHint').textContent=(a.raw.wordTiming?.status==='PARTIAL'?'部分词时间不可用，回听会扩大范围。':'')+'重点核对数字、术语、否定与条件。诊断只使用确认后的文字，回听可选。';const v=latest(a),texts=transcriptTexts(a);v.spans.forEach((s,i)=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=texts[i];editor.rows=2;editor.maxLength=2000;editor.oninput=()=>{updateTranscriptDraft(a,v.spans.map(span=>({id:span.id,text:editors.get(span.id).value})));voiceDrafts.mark(topic);const state=diagnosisStates.get(a);if(state&&!state.pending&&!state.saveFailed)diagnosisStates.delete(a);updateDiagnosisState();};editor.onblur=()=>act(()=>voiceDrafts.flush());editors.set(s.id,editor);const b=button(`回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{b.textContent='已回听 ✓';}));row.append(b,editor);$('transcript').append(row);});
     for(const report of a.reports.filter(r=>r.transcriptVersion===v.id)){
       if(report.channel==='delivery')$('processFeedback').append(el('p','历史过程报告（旧格式，未作为定位证据）','muted'),...report.findings.map(f=>el('p',f.message)));
     }
@@ -347,18 +346,22 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
   if(!report.findings.length)$('feedback').append(el('p','本次没有足够证据生成此类反馈。'));
   const labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足'},order={incorrect:0,missing:1,unknown:2,supported:3};
   const overview=el('div',undefined,'feedback-overview');
-  for(const status of ['incorrect','missing','unknown','supported']){const count=report.findings.filter(f=>f.status===status).length;if(count)overview.append(el('span',`${labels[status]} ${count}`));}
+  const supportedCount=report.findings.filter(f=>f.status==='supported').length;let supportedGroup;
+  for(const status of ['incorrect','missing','unknown','supported']){const count=report.findings.filter(f=>f.status===status).length;if(count&&!(status==='supported'&&supportedCount>1))overview.append(el('span',`${labels[status]} ${count}`));}
   $('feedback').append(overview);
   // Keep the original finding index for evidence IDs while grouping by status.
   for(const [index,f] of [...report.findings.entries()].sort((a,b)=>order[a[1].status]-order[b[1].status])){const card=el('article',undefined,'finding');card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message));
     const evidence=el('details');evidence.append(el('summary','查看材料与原话'),el('blockquote',`材料：${f.sourceQuote}`));
-    if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId);evidence.append(el('blockquote',`本次原话：${f.quote}`),button('回听对应原声',()=>play(span.start,span.end)));}else evidence.append(el('p','未表达内容没有可对应的音频时间点。','muted'));
+    if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId),anchor=quotePlayback(current.raw,span,f.quote);evidence.append(el('blockquote',`本次原话：${f.quote}`));if(anchor){const replay=button(playbackLabel(anchor),()=>play(anchor.start,anchor.end));replay.dataset.replay=anchor.level;evidence.append(replay);}}else evidence.append(el('p','未表达的内容没有音频位置。','muted'));
     card.append(evidence);
     const target=targets.find(t=>t.contentFindingIds.includes(`content:${current.id}:${report.transcriptVersion}:${index}`));
     if(target&&!stale){card.dataset.targetId=target.id;card.append(el('p',`下一步：${target.focus}`,'diagnosticTarget'));
       if(target.processEvidenceIds.length)card.append(el('p',`另有 ${target.processEvidenceIds.length} 条同段过程观察，见“讲解过程”；时间相邻不证明理解有误。`,'muted'));
       card.append(button('再学这一点',async()=>{topic.focus=target.focus;await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',target.focus,{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',target.focus,current.id)));}
-    $('feedback').append(card);
+    if(f.status==='supported'&&supportedCount>1){
+      if(!supportedGroup){supportedGroup=el('details',undefined,'supported-findings');supportedGroup.append(el('summary',`已表达 ${supportedCount} 项`));$('feedback').append(supportedGroup);}
+      supportedGroup.append(card);
+    }else $('feedback').append(card);
   }
 }
 $('apply').onclick=()=>act(async()=>{if(!canNavigate())return;await flushDrafts();await practice.start();});

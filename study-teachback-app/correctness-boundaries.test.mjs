@@ -9,6 +9,7 @@ import { Ledger } from './ledger.mjs';
 import { revisedTranscript, validateFindings, waveBytes } from './core.mjs';
 import { semantic } from './provider.mjs';
 import {transcriptTexts,updateTranscriptDraft,analysisTrace} from './voice-review.mjs';
+import {quotePlayback,playbackLabel} from './transcript-playback.mjs';
 import { localize } from './diagnostic-localization.mjs';
 import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 import { TEACH, teachingSchema } from './schemas.mjs';
@@ -142,7 +143,7 @@ test('review UX confirms current edits without playback; reload keeps honest con
   assert.equal(h.pending.length,1);assert.equal(h.pending[0].request.attempt.spans[0].text,'Do not enter when closed.');
   assert.equal(h.pending[0].request.attempt.reviewed,true);assert.equal(h.a.corrections[0].origin,'USER_TRANSCRIPT_CONFIRMATION');
   h.pending[0].resolve();await first;h.render();
-  assert.match(h.node('reviewHint').textContent,/这不表示音频已回听/);assert.match(h.node('reviewHint').textContent,/否定词、数字、条件和术语/);
+  assert.match(h.node('reviewHint').textContent,/回听可选/);assert.match(h.node('reviewHint').textContent,/数字、术语、否定与条件/);
   assert.equal(h.context.editors.get('s0').value,'Do not enter when closed.');assert.equal(JSON.stringify(h.a.raw),raw);assert.equal(h.a.audio,audio);
   assert.equal(h.pending.length,1);assert.equal(h.a.corrections[0].heard,undefined);
 });
@@ -175,7 +176,7 @@ test('result save failure cannot cause another diagnosis; result remains inspect
 test('actual stale report retains findings but omits repair actions and uses bound version',()=>{
  const f=structuredClone(diagnosticFixtures.find(f=>f.id==='fluent-wrong')),buttons=[];
  const node=()=>({dataset:{},append(){}}),version={id:f.attempt.transcriptVersion,spans:f.attempt.spans,reviewed:true};
- const c=vm.createContext({current:{...f.attempt,source:f.source,reports:[]},latest:()=>version,attemptRequest:()=>({...f.attempt,transcriptVersion:'new-draft'}),localize,$:node,el:node,button:(label,fn)=>{buttons.push(label);return node();}});
+ const c=vm.createContext({current:{...f.attempt,source:f.source,reports:[]},latest:()=>version,attemptRequest:()=>({...f.attempt,transcriptVersion:'new-draft'}),localize,quotePlayback,playbackLabel,$:node,el:node,button:(label,fn)=>{buttons.push(label);return node();}});
  vm.runInContext(app.slice(app.indexOf('function renderFeedback('),app.indexOf("$('apply').onclick")),c);c.report={...f.report,channel:'content'};c.version=version;
  vm.runInContext('renderFeedback(report,{version,stale:true})',c);assert(!buttons.includes('再学这一点'));assert(!buttons.includes('再讲这一点'));
  buttons.length=0;vm.runInContext('renderFeedback(report,{version,stale:false})',c);assert(buttons.includes('再学这一点'));assert(buttons.includes('再讲这一点'));
