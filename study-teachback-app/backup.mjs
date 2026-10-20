@@ -1,5 +1,6 @@
 import {sourceValue, identifier, setupContextValue, spanValue, validateFindings} from './core.mjs';
 import {termSnapshot} from './transcription-terms.mjs';
+import {validateBoundedTask,assessBoundedTask} from './bounded-understanding.mjs';
 
 export const BACKUP_LIMIT = 128 * 1024 * 1024;
 const FORMAT = 'study-teachback-export-v1';
@@ -117,10 +118,18 @@ export function decodeBackup(text) {
           for(const key of ['targetId','sourceId','attemptId','transcriptVersion'])string(round.origin[key],1000);
           check(round.origin.sourceId===t.source.id);
         }
+        if(round.task){
+          validateBoundedTask(round.task,t.source,round.taskTarget);check(round.task.exercise);
+          check(round.task.targetId===round.origin?.targetId&&round.question===round.task.exercise.question);
+        }
         unique(list(round.answers));
         for (const answer of round.answers) {
           string(answer.text,2000); check(['pending','unknown','complete'].includes(answer.status));
           if (answer.result != null) string(answer.result);
+          if(answer.assessment){
+            check(round.task);
+            check(JSON.stringify(answer.assessment)===JSON.stringify(assessBoundedTask(round.task,t.source,round.taskTarget,answer.choiceId)));
+          }
         }
       }
     }
@@ -129,6 +138,7 @@ export function decodeBackup(text) {
       for (const key of ['answer','result']) if(t.apply[key]!=null)string(t.apply[key]);
     }
     if (t.practiceRequest) { object(t.practiceRequest); check(['pending','unknown'].includes(t.practiceRequest.status)); }
+    if(t.taskUnavailable){object(t.taskUnavailable);object(t.taskUnavailable.target);string(t.taskUnavailable.target.id,200);string(t.taskUnavailable.reason,300);}
     return t;
   } catch (error) {
     throw Error(error.message==='BACKUP_FORMAT' ? 'BACKUP_FORMAT' : 'BACKUP_INVALID');
