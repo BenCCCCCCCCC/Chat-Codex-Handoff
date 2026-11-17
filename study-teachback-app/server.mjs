@@ -11,6 +11,7 @@ const files={'/bounded-understanding.mjs':'bounded-understanding.mjs','/understa
 export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger,extractCall=extractSource,capabilityCall=extractionCapabilities,keyConfigured=()=>!!process.env.OPENAI_API_KEY}={}) {
   files['/setup-draft.mjs']='setup-draft.mjs';
   files['/source-provenance.mjs']='source-provenance.mjs';
+  files['/feedback-reference.mjs']='feedback-reference.mjs';
   let busy=false,extracting=false;
   return http.createServer(async(req,res)=>{
     const expected=`127.0.0.1:${req.socket.localPort}`, origin=`http://${expected}`;

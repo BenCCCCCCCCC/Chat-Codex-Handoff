@@ -6,6 +6,7 @@ import { openStore } from './storage.mjs';
 import { confirmLocalProcess, localize, processEvidence } from './diagnostic-localization.mjs';
 import {activityTime, resumePoint, practiceRounds} from './practice.mjs';
 import {mountPractice} from './practice-ui.mjs';
+import {feedbackReference,resolveFeedback} from './feedback-reference.mjs';
 import {encodeBackup} from './backup.mjs';
 import {mountBackup} from './backup-ui.mjs';
 import {mountChat} from './chat-ui.mjs';
@@ -370,7 +371,7 @@ async function diagnose(a){
   const channel='content',events=[],request=attemptRequest(a);notice('正在核对内容和逻辑……');
   const result=await api('/api/diagnose',{source:a.source,attempt:request,channel,events});
   if(deleted.has(a)||!topic||deleted.has(topic.id))return;
-  validateFindings(result.value,a.source,request,channel,events);a.reports.push({...result.value,channel,analysis:analysisTrace(result),createdAt:Date.now()});a.status='DIAGNOSED';topic.resume={view:'attempt',attemptId:a.id};await save();renderAttempt();notice('内容反馈已保存。');
+  validateFindings(result.value,a.source,request,channel,events);a.reports.push({...result.value,id:uid(),channel,analysis:analysisTrace(result),createdAt:Date.now()});a.status='DIAGNOSED';topic.resume={view:'attempt',attemptId:a.id};await save();renderAttempt();notice('内容反馈已保存。');
 }
 function renderFeedback(report,{version=latest(current),stale=false}={}){
   if(report.channel!=='content')return;
@@ -399,7 +400,7 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
       if(target.processEvidenceIds.length)card.append(el('p',`另有 ${target.processEvidenceIds.length} 条同段过程观察，见“讲解过程”；时间相邻不证明理解有误。`,'muted'));
       const taskTarget={attempt:{...attemptRequest(current),transcriptVersion:version.id,spans:version.spans,reviewed:version.reviewed===true},
         report:{sourceId:report.sourceId,attemptId:report.attemptId,transcriptVersion:report.transcriptVersion,findings:report.findings},findingIndex:index};
-      const answer=button('检验理解',async()=>{if(!canNavigate())return;await flushDrafts();await practice.fromFeedback(taskTarget);},'quiet diagnosticTarget');answer.dataset.answerTarget=target.id;
+      const answer=button('检验理解',async()=>{if(!canNavigate())return;await flushDrafts();await practice.fromFeedback({...taskTarget,feedbackRef:feedbackReference(current,report,index)});},'quiet diagnosticTarget');answer.dataset.answerTarget=target.id;
       const alternatives=el('details',undefined,'feedback-alternatives');alternatives.append(el('summary','其他方式'));
       alternatives.append(button('再学这一点',async()=>{topic.focus=target.focus;await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',target.focus,{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',target.focus,current.id)));
       card.append(answer,alternatives);}
@@ -423,7 +424,7 @@ function abortPending(){controller?.abort();}
 $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;await voiceDrafts.discard();abortPending();deleted.add(current);topic.attempts=topic.attempts.filter(a=>a.id!==current.id);await save();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);current=null;reveal('attemptPanel',false);notice('这次原声及其关联转写、纠正和反馈已从本地删除。已导出副本和已在途的云请求不受此操作控制。');});
 function resumeTopic(target,point=resumePoint(target)){
   topic=target;current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);reveal('history',false);reveal('searchReturn',false);renderTopic();
-  if(point.view==='attempt'){current=target.attempts.find(a=>a.id===point.attemptId);if(current)renderAttempt();}
+  if(point.view==='attempt'){current=target.attempts.find(a=>a.id===point.attemptId);if(current)renderAttempt();if(point.feedbackOrigin)showFeedbackOrigin(point.feedbackOrigin.origin,point.feedbackOrigin.target);}
   if(point.view==='practice')practice.focusPanel();
 }
 async function continueTopic(id,point,hitKey){
@@ -478,7 +479,29 @@ $('historyClear').onclick=()=>{$('historySearch').value='';$('historyFilter').va
 $('historyMore').onclick=()=>{historyLimit+=20;renderHistory();};
 $('historyButton').onclick=()=>act(history);
 $('searchReturn').onclick=()=>act(history);
+function showFeedbackOrigin(origin,target){
+  const match=resolveFeedback(topic,origin,target);
+  if(!match.report){notice(match.reason);return false;}
+  const {report,version,finding}=match;
+  $('searchExcerptTitle').textContent='练习原反馈 · 只读 · 版本 '+version.id.slice(0,8);
+  $('searchExcerptText').textContent=[finding.message,'材料：'+finding.sourceQuote,'当时原话：'+(finding.quote??'本次尚未表达'), '当时建议：'+(finding.repair??'无'), '该版本完整文字：'+version.spans.map(s=>s.text).join('\n')].join('\n\n');
+  const span=version.spans.find(s=>s.id===finding.spanId);
+  reveal('searchReplay',!!span&&match.attempt.inputMode!=='text');
+  $('searchReplay').onclick=()=>act(()=>play(span.start,span.end));
+  reveal('searchExcerpt');reveal('returnToPractice');focusHit($('searchExcerpt'));
+  return true;
+}
+async function openFeedbackOrigin(origin,target){
+  if(!canNavigate())return;
+  await flushDrafts();const match=resolveFeedback(topic,origin,target);
+  if(!match.report)return notice(match.reason);
+  origin.feedbackRef??=feedbackReference(match.attempt,match.report,match.index);
+  topic.resume={view:'attempt',attemptId:match.attempt.id,feedbackOrigin:{origin,target}};
+  await save();resumeTopic(topic);
+}
+$('returnToPractice').onclick=()=>act(()=>practice.open());
 function locateHit(hit){
+  reveal('returnToPractice',false);
   const t=hit.target;
   if(t.kind==='message')return chat.locate(t.index);
   if(t.kind==='source'){$('sourceDetails').open=true;return focusHit($('sourceText'));}
@@ -553,7 +576,7 @@ $('transcriptionTerms').onblur=()=>act(()=>voiceDrafts.flush());
 async function flushDrafts(){setupDraft.flush();await chat.flushDraft();await practice.flushDraft();await voiceDrafts.flush();}
 async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();await voiceDrafts.discard();}
 const practice=mountPractice({getTopic:()=>topic,save,request:api,canStart:canNavigate,
-  setBusy:value=>{processing=value;},act,onOpen:()=>{current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);}});
+  setBusy:value=>{processing=value;},act,onFeedback:openFeedbackOrigin,onOpen:()=>{current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);}});
 mountBackup({getStore:()=>db,canStart:canNavigate,setBusy:value=>{processing=value;if(!value)renderChatRecovery();},
   beforeRestore:flushDrafts,onRestore:target=>{resumeTopic(target);notice('备份已恢复为新副本。');}});
 function renderPractice(){practice.render();}
