@@ -4,6 +4,7 @@ import {makeTextAttempt,comparisonFor} from './text-teachback.mjs';
 import { waveBytes, revisedTranscript, validateFindings, repairFocus, autoTitle, setupContextValue } from './core.mjs';
 import {judgementIssues,sameJudgement,validateJudgementReport} from './judgement.mjs';
 import {renderJudgementChoices,appendJudgementSummary} from './judgement-ui.mjs';
+import {resolveConditionFeedback} from './conditional-practice.mjs';
 import {renderRawPlayback,quotePlayback,playbackLabel} from './transcript-playback.mjs';
 import {transcriptionTerms} from './transcription-terms.mjs';
 import {audioFile,prepareAudio} from './audio-input.mjs';
@@ -33,7 +34,7 @@ const reveal=(id,show=true)=>{$(id).hidden=!show;};
 function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
 function button(label,fn,cls='quiet'){const b=el('button',label,cls);b.onclick=()=>label==='删除主题'?confirmDelete('删除这个主题及其全部讲解、原声、转写和反馈。',fn,b):act(fn);return b;}
 async function act(fn){try{await fn();}catch(e){notice(friendly(e.message));}}
-function friendly(code){const messages={JUDGEMENT_LIMIT:'每次反馈最多选择 3 个相关疑点，请取消无关或重复的记录。',INVALID_JUDGEMENT:'条件与结果的关联无法核对，未保存为有效反馈。',DEFERRED_JUDGEMENT:'返回结果试图判断已暂缓的项目，已拒绝保存；原始讲解和先前反馈仍保留。',MATERIAL_SELECTION_REQUIRED:'请至少选择一份材料。',MATERIAL_SELECTION_TOO_LARGE:'本次材料组合最多 5,000 字、100 个位置区块，请缩小所选材料；不会自动截断。',MATERIAL_LIMIT:'一个主题目前最多保存 12 份材料。',ISSUE_EVIDENCE_REQUIRED:'请至少引用一段材料中实际存在的原句。',SELECT_MATERIAL_QUOTE:'请先在材料原文中选取最多 1,500 字。',STUDY_WORK_MISSING:'这张疑点卡关联的讲解或题目已删除，已返回当时的材料；疑点与引文仍保留。',STUDY_CONTEXT_MISSING:'原学习位置已不存在，当前记录仍保留。',INVALID_TEXT:'请填写完整的文字，并遵守输入框字数限制。',REVIEW_BASIS_REQUIRED:'请填写复核说明，并粘贴材料中确实存在的原文作为依据；材料不足时可继续暂停。',QUESTION_UNCHANGED:'请修改题目，或选择保留原题后重新作答。',REVIEW_CHANGED:'题目或复核内容已改变，请重新预览后确认。',TRANSCRIPTION_TERMS_LIMIT:'术语最多 8 项，每项 24 字、合计 80 字；请用逗号分隔简短名称。',AUDIO_TOO_LARGE:'音频超过 25 MB，请压缩或裁剪后重新选择。',AUDIO_FORMAT_UNSUPPORTED:'请选择 WAV、MP3、M4A、MP4、WebM、OGG、FLAC 或 AAC 音频。',AUDIO_DECODE_FAILED:'浏览器无法读取这段音频，请转为 WAV 或 MP3 后重试。',DURATION_LIMIT:'每次讲解最长 3 分钟，请先裁剪音频。',EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先确认用于诊断的转写；建议回听检查否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请先完整回听这个过程候选，再保存过程证据。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
+function friendly(code){const messages={INVALID_PRACTICE_CONDITIONS:'本题的条件或来源无法核对，已保留原记录；请返回条件反馈重新选择。',ANSWER_SESSION_LOCKED:'这次回答已经保存；请原样重试，或另起一次作答保留新回答。',JUDGEMENT_LIMIT:'每次反馈最多选择 3 个相关疑点，请取消无关或重复的记录。',INVALID_JUDGEMENT:'条件与结果的关联无法核对，未保存为有效反馈。',DEFERRED_JUDGEMENT:'返回结果试图判断已暂缓的项目，已拒绝保存；原始讲解和先前反馈仍保留。',MATERIAL_SELECTION_REQUIRED:'请至少选择一份材料。',MATERIAL_SELECTION_TOO_LARGE:'本次材料组合最多 5,000 字、100 个位置区块，请缩小所选材料；不会自动截断。',MATERIAL_LIMIT:'一个主题目前最多保存 12 份材料。',ISSUE_EVIDENCE_REQUIRED:'请至少引用一段材料中实际存在的原句。',SELECT_MATERIAL_QUOTE:'请先在材料原文中选取最多 1,500 字。',STUDY_WORK_MISSING:'这张疑点卡关联的讲解或题目已删除，已返回当时的材料；疑点与引文仍保留。',STUDY_CONTEXT_MISSING:'原学习位置已不存在，当前记录仍保留。',INVALID_TEXT:'请填写完整的文字，并遵守输入框字数限制。',REVIEW_BASIS_REQUIRED:'请填写复核说明，并粘贴材料中确实存在的原文作为依据；材料不足时可继续暂停。',QUESTION_UNCHANGED:'请修改题目，或选择保留原题后重新作答。',REVIEW_CHANGED:'题目或复核内容已改变，请重新预览后确认。',TRANSCRIPTION_TERMS_LIMIT:'术语最多 8 项，每项 24 字、合计 80 字；请用逗号分隔简短名称。',AUDIO_TOO_LARGE:'音频超过 25 MB，请压缩或裁剪后重新选择。',AUDIO_FORMAT_UNSUPPORTED:'请选择 WAV、MP3、M4A、MP4、WebM、OGG、FLAC 或 AAC 音频。',AUDIO_DECODE_FAILED:'浏览器无法读取这段音频，请转为 WAV 或 MP3 后重试。',DURATION_LIMIT:'每次讲解最长 3 分钟，请先裁剪音频。',EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先确认用于诊断的转写；建议回听检查否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请先完整回听这个过程候选，再保存过程证据。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
 async function save(target=topic){if(!target||deleted.has(target.id))return;try{target.updatedAt=Date.now();await db.put(target);memoryOnly=false;reveal('storageRecovery',false);}catch{memoryOnly=true;reveal('storageRecovery');throw new Error('STORAGE_FAILED');}}
 async function api(path,body,headers={}){
   if(controller||record)throw new Error('REQUEST_IN_PROGRESS');
@@ -447,7 +448,10 @@ async function diagnose(a){
 function renderFeedback(report,{version=latest(current),stale=false}={}){
   if(report.channel!=='content')return;
   if(!version.reviewed||current.interrupted){$('feedback').append(el('p','先确认用于诊断的转写，再查看内容定位。','muted'));return;}
-  appendJudgementSummary($('feedback'),report);
+  appendJudgementSummary($('feedback'),report,!report.judgement||stale?{}:{canPractice:serviceCapabilities?.ai===true,onPractice:issueId=>act(async()=>{
+    if(!canNavigate())return;await flushDrafts();
+    await practice.fromConditions({sourceId:report.sourceId,attemptId:report.attemptId,transcriptVersion:report.transcriptVersion,reportId:report.id,issueIds:[issueId]});
+  })});
   let targets=[];try{const {sourceId,attemptId,transcriptVersion,findings}=report;targets=localize({source:current.source,attempt:{...attemptRequest(current),transcriptVersion:version.id,spans:version.spans,reviewed:version.reviewed===true},report:{sourceId,attemptId,transcriptVersion,findings},evidence:(current.reports??[]).filter(r=>r.channel==='process'&&r.transcriptVersion===version.id).flatMap(r=>r.processEvidence),events:current.observation?.events??[]}).diagnosticTargets;}catch{ $('feedback').append(el('p','该反馈尚未通过当前来源／转写校验，不生成定位建议。','muted')); }
   if(!report.findings.length&&!report.judgement)$('feedback').append(el('p','本次没有足够证据生成此类反馈。'));
   const labels={supported:'已表达',missing:'本次尚未表达',incorrect:'需要澄清',unknown:'证据不足'},order={incorrect:0,missing:1,unknown:2,supported:3};
@@ -468,7 +472,7 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
     card.append(evidence);
     const target=targets.find(t=>t.contentFindingIds.includes(`content:${current.id}:${report.transcriptVersion}:${index}`));
     const condition=report.judgement?.assessments.find(a=>a.findingIndexes.includes(index));
-    if(condition)card.append(el('p',`本项按“${report.judgement.issues.find(i=>i.id===condition.issueId).question}”的所选条件核对。可修改上方讲解再次分析；旧题目不会自动采用新条件。`,'muted'));
+    if(condition)card.append(el('p',`本项按“${report.judgement.issues.find(i=>i.id===condition.issueId).question}”的所选条件核对。可修改讲解再次分析，或从上方条件卡进入新练习。`,'muted'));
     if(target&&!stale&&!condition){card.dataset.targetId=target.id;
       evidence.append(el('p',`原补学建议：${target.focus}`,'muted'));
       if(target.processEvidenceIds.length)card.append(el('p',`另有 ${target.processEvidenceIds.length} 条同段过程观察，见“讲解过程”；时间相邻不证明理解有误。`,'muted'));
@@ -556,10 +560,14 @@ $('historyMore').onclick=()=>{historyLimit+=20;renderHistory();};
 $('historyButton').onclick=()=>act(history);
 $('searchReturn').onclick=()=>act(history);
 function showFeedbackOrigin(origin,target){
-  const match=resolveFeedback(topic,origin,target);
+  const match=origin?.conditionRef?resolveConditionFeedback(topic,origin.conditionRef):resolveFeedback(topic,origin,target);
   if(!match.report){notice(match.reason);return false;}
   const {report,version,finding}=match;
   $('searchExcerptTitle').textContent='练习原反馈 · 只读 · 版本 '+version.id.slice(0,8);
+  if(origin.conditionRef){
+    $('searchExcerptText').textContent=[...match.context.issues.flatMap(i=>['当时采用的条件：'+i.condition,...i.evidence.map(e=>e.title+'：'+e.quote)]),...report.judgement.assessments.filter(a=>origin.conditionRef.issueIds.includes(a.issueId)).map(a=>a.reason),...report.findings.map(f=>f.message),'该版本完整文字：'+version.spans.map(s=>s.text).join('\n')].join('\n\n');
+    reveal('searchReplay',false);reveal('searchExcerpt');reveal('returnToPractice');focusHit($('searchExcerpt'));return true;
+  }
   $('searchExcerptText').textContent=[finding.message,'材料：'+finding.sourceQuote,'当时原话：'+(finding.quote??'本次尚未表达'), '当时建议：'+(finding.repair??'无'), '该版本完整文字：'+version.spans.map(s=>s.text).join('\n')].join('\n\n');
   const span=version.spans.find(s=>s.id===finding.spanId);
   reveal('searchReplay',!!span&&match.attempt.inputMode!=='text');
@@ -569,9 +577,9 @@ function showFeedbackOrigin(origin,target){
 }
 async function openFeedbackOrigin(origin,target){
   if(!canNavigate())return;
-  await flushDrafts();const match=resolveFeedback(topic,origin,target);
+  await flushDrafts();const match=origin?.conditionRef?resolveConditionFeedback(topic,origin.conditionRef):resolveFeedback(topic,origin,target);
   if(!match.report)return notice(match.reason);
-  origin.feedbackRef??=feedbackReference(match.attempt,match.report,match.index);
+  if(!origin.conditionRef)origin.feedbackRef??=feedbackReference(match.attempt,match.report,match.index);
   topic.resume={view:'attempt',attemptId:match.attempt.id,feedbackOrigin:{origin,target}};
   await save();resumeTopic(topic);
 }
@@ -655,7 +663,7 @@ $('transcriptionTerms').oninput=()=>{if(!topic||capturePending||record)return;to
 $('transcriptionTerms').onblur=()=>act(()=>voiceDrafts.flush());
 async function flushDrafts(){setupDraft.flush();await chat.flushDraft();await practice.flushDraft();await voiceDrafts.flush();await materials.flushDraft();}
 async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();await voiceDrafts.discard();await materials.discardDraft();}
-const materials=mountMaterialSet({getTopic:()=>topic,save,request:api,canStart:canNavigate,setBusy:value=>{processing=value;if(current?.raw)updateDiagnosisState();},beforeChange:flushDrafts,onSwitch:()=>resumeTopic(topic),act});
+const materials=mountMaterialSet({getTopic:()=>topic,save,request:api,canStart:canNavigate,setBusy:value=>{processing=value;if(current?.raw)updateDiagnosisState();},beforeChange:flushDrafts,onSwitch:()=>resumeTopic(topic),onReference:()=>practice.noteReference('material'),act});
 const practice=mountPractice({getTopic:()=>topic,save,request:api,canStart:canNavigate,aiReady:()=>serviceCapabilities?.ai===true,requireAI:()=>{if(serviceCapabilities?.ai!==true)throw new Error('CREDENTIAL_MISSING');},
   setBusy:value=>{processing=value;},act,onFeedback:openFeedbackOrigin,onOpen:()=>{current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);}});
 mountBackup({getStore:()=>db,canStart:canNavigate,setBusy:value=>{processing=value;if(!value)renderChatRecovery();},

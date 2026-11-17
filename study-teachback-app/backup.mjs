@@ -1,4 +1,5 @@
 import {validateQuestionReviews} from './question-review.mjs';
+import {validatePracticeEvidence,validatePracticeContextLinks,practiceConditions,validateConditionRef,validateConditionalResult} from './conditional-practice.mjs';
 import {judgementIssues,validateJudgementReport} from './judgement.mjs';
 import {learningContexts,validateMaterialSet} from './material-set.mjs';
 import {validateTextDraft} from './text-teachback.mjs';
@@ -10,6 +11,7 @@ import {validateBoundedTask,assessBoundedTask} from './bounded-understanding.mjs
 export const BACKUP_LIMIT = 128 * 1024 * 1024;
 const FORMAT = 'study-teachback-export-v1';
 const MATERIAL_FORMAT = 'study-teachback-export-v2';
+const CONDITIONS_FORMAT = 'study-teachback-export-v3';
 const check = value => { if (!value) throw Error('BACKUP_INVALID'); };
 const object = value => check(value && typeof value === 'object' && !Array.isArray(value));
 const string = (value, max=16000) => check(typeof value === 'string' && value.length <= max);
@@ -32,7 +34,8 @@ export async function encodeBackup(topic) {
     for (let i=0; i<bytes.length; i+=8192) binary += String.fromCharCode(...bytes.subarray(i,i+8192));
     attempt.audio = {mime:attempt.audio.type, base64:btoa(binary)};
   }
-  return JSON.stringify({format:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
+  const conditional=learningContexts(topic).some(c=>c.practiceRequest?.conditionContext||c.practiceRounds?.some(r=>r.conditionContext));
+  return JSON.stringify({format:conditional?CONDITIONS_FORMAT:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
     notice:'导出副本不受应用内删除控制', topic:data}, null, 2);
 }
 
@@ -42,7 +45,7 @@ export function decodeBackup(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > BACKUP_LIMIT) throw Error('BACKUP_TOO_LARGE');
   try {
     const envelope = JSON.parse(text);
-    if (![FORMAT,MATERIAL_FORMAT].includes(envelope?.format)) throw Error('BACKUP_FORMAT');
+    if (![FORMAT,MATERIAL_FORMAT,CONDITIONS_FORMAT].includes(envelope?.format)) throw Error('BACKUP_FORMAT');
     const t = envelope.topic; object(t); identifier(t.id); date(t.createdAt); sourceValue(t.source);
     if (t.updatedAt != null) date(t.updatedAt);
     if (t.restoredAt != null) date(t.restoredAt);
@@ -129,6 +132,8 @@ export function decodeBackup(text) {
       unique(list(t.practiceRounds));
       for (const round of t.practiceRounds) {
         date(round.createdAt); string(round.question,1000); string(round.introduction); string(round.draft,2000);
+        validatePracticeEvidence(round,t.source);
+        if(round.generation){const result=validateConditionalResult(round.generation,t.source,'apply');check(round.conditionContext&&result.decision==='judgeable'&&result.question===round.question);}
         if(round.origin!=null){
           object(round.origin);
           for(const key of ['targetId','sourceId','attemptId','transcriptVersion'])string(round.origin[key],1000);
@@ -151,12 +156,17 @@ export function decodeBackup(text) {
       }
     }
     validateQuestionReviews(t);
+    validatePracticeContextLinks(t);
     if (t.apply) {
       object(t.apply); string(t.apply.question,1000);
       for (const key of ['answer','result']) if(t.apply[key]!=null)string(t.apply[key]);
     }
-    if (t.practiceRequest) { object(t.practiceRequest); check(['pending','unknown'].includes(t.practiceRequest.status)); }
-    if(t.resume?.feedbackOrigin)validateFeedbackReference(t.resume.feedbackOrigin.origin.feedbackRef);
+    if (t.practiceRequest) {
+      const r=t.practiceRequest;object(r);check(['pending','unknown','deferred'].includes(r.status));
+      if(r.conditionContext){practiceConditions(r.conditionContext,t.source);check(list(r.previousQuestions).length<=3);r.previousQuestions.forEach(q=>string(q,1000));}
+      if(r.status==='deferred'){check(r.conditionContext&&r.result?.decision==='deferred');validateConditionalResult(r.result,t.source,'apply');check(r.reason===r.result.message);}
+    }
+    if(t.resume?.feedbackOrigin){const origin=t.resume.feedbackOrigin.origin;if(origin.conditionRef)validateConditionRef(origin.conditionRef);else validateFeedbackReference(origin.feedbackRef);}
     if(t.taskUnavailable?.origin?.feedbackRef)validateFeedbackReference(t.taskUnavailable.origin.feedbackRef);
     if(t.taskUnavailable){object(t.taskUnavailable);object(t.taskUnavailable.target);string(t.taskUnavailable.target.id,200);string(t.taskUnavailable.reason,300);}
     validateMaterialSet(t);

@@ -1,3 +1,4 @@
+import {conditionalPracticeChecks} from './browser-conditional-practice-checks.mjs';
 import {questionReviewChecks} from './browser-question-review-checks.mjs';
 import {materialChecks} from './browser-material-checks.mjs';
 import {textChecks} from './browser-text-checks.mjs';
@@ -19,7 +20,8 @@ import { waveDuration,normalizeASR } from './core.mjs';
 import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 if(!process.env.STUDY_TEST_OUTPUT)throw Error('Run through run-offline-tests.mjs browser');
 const root=process.env.STUDY_TEST_OUTPUT+'/';mkdirSync(root,{recursive:true});
-const setupOnly=process.argv.includes('--setup-only');
+const conditionsOnly=process.argv.includes('--conditions-only');
+const setupOnly=process.argv.includes('--setup-only')||conditionsOnly;
 const refinementOnly=process.argv.includes('--refinement-only');
 const audioOnly=process.argv.includes('--audio-only');
 const contextOnly=process.argv.includes('--context-only');
@@ -40,6 +42,7 @@ const server=createServer({book:testBook,keyConfigured:()=>aiConfigured,semantic
   if(input.mode)provenanceRequests.push(structuredClone(input));
   if(failTeach){failTeach=false;throw Error('API_RESULT_UNAVAILABLE');}
   if(rejectStarter){rejectStarter=false;return {value:{sourceId:input.source.id,message:'Rejected stub',goals:[{text:'Goal',sourceQuote:'NOT IN SOURCE'}],question:'Question'}};}
+  if(input.mode&&input.practiceConditions)return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,decision:'judgeable',message:input.mode==='apply'?'请按本题约定判断。':'工程样本：按本题条件，这次回答成立。',question:input.mode==='apply'?'采用另记count，不预留空位，长度10的循环队列最多放几个？':null,sourceQuotes:[input.practiceConditions.issues[0].evidence[0].quote]}};
   if(input.mode)return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,message:input.mode==='apply'?'新情境：昨天浇过水，今天摸起来还是湿的。':'我们先看条件：干了才浇，湿的时候先不浇。',goals:[{text:'把条件和行动联系起来',sourceQuote:input.source.text}],question:input.mode==='apply'?'现在要浇水吗？为什么？':'你能换句话说说这个条件吗？'}};
   if(input.events)return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,attemptId:input.attempt.id,transcriptVersion:input.attempt.transcriptVersion,findings:[{status:'observation',message:'确认的近静音候选，可尝试在两句之间明确过渡。',sourceQuote:input.source.text,spanId:input.attempt.spans[0].id,quote:input.attempt.spans[0].text,eventId:input.events[0].id,repair:'再讲时试着提示句间关系。'}]}};
   if(input.judgementIssues)return {model:'TEST_STUB_NOT_API',value:{sourceId:input.source.id,attemptId:input.attempt.id,transcriptVersion:input.attempt.transcriptVersion,findings:[],assessments:input.judgementIssues.map(i=>({issueId:i.id,decision:i.status==='deferred'?'deferred':'judgeable',reason:i.status==='deferred'?'工程样本：须先确定实现约定，本项暂缓。':'工程样本：按学习者明确选择的实现核对。',findings:i.status==='deferred'?[]:[{status:'supported',message:'工程样本：按计数实现，本次容量表达成立。',sourceQuote:i.evidence[0].quote,spanId:input.attempt.spans[0].id,quote:input.attempt.spans[0].text,eventId:null,repair:null}]}))}};
@@ -89,11 +92,12 @@ try{
   await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='deferredDenied')await new Promise((resolve,reject)=>window.rejectPermission=()=>reject(new DOMException('test denied','NotAllowedError')));if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
-  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await setupChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
-  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await sourceChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
-  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await textChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
-  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await materialChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
-  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await feedbackReturnChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
+  if(!conditionsOnly&&(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))))await setupChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
+  if(!conditionsOnly&&(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))))await sourceChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
+  if(!conditionsOnly&&(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))))await textChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
+  if(!conditionsOnly&&(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))))await materialChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
+  if(!conditionsOnly&&(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))))await feedbackReturnChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
+  if(conditionsOnly||(!setupOnly&&!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await conditionalPracticeChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,requests:provenanceRequests,setAIConfigured:value=>{aiConfigured=value;}});
   if(!setupOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await refinementChecks({check,evaluate,until,reloadPage,shot,cdp,all,calls});
   if(!setupOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await questionReviewChecks({check,evaluate,until,reloadPage,click,shot,cdp,calls,requests:provenanceRequests});
   if(!setupOnly&&!refinementOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await audioChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,setFailASR:value=>{failASR=value;}});

@@ -48,8 +48,9 @@ export function mountQuestionReview({getTopic,flow,drafts,canStart,act}){
     const value=kind==='revise'?revisedQuestion(round,topic.source):{question:round.question,...reviewBasis(round.review,topic.source)};
     preview={kind,topicId:topic.id,roundId:round.id,review:JSON.stringify(round.review)};
     $('reviewPreviewTitle').textContent=kind==='revise'?'确认修订题目':'确认保留原题并重新作答';
-    $('reviewPreviewOriginal').textContent=[round.introduction,...(round.task?.exercise.assumptions??[]),round.question].filter(Boolean).join('\n');
-    $('reviewPreviewQuestion').textContent=value.question;$('reviewPreviewBasis').textContent=value.basisQuote;$('reviewPreviewNote').textContent=value.note;
+    const conditions=(round.conditionContext?.issues??[]).map(i=>i.condition);
+    $('reviewPreviewOriginal').textContent=[...conditions,round.introduction,...(round.task?.exercise.assumptions??[]),round.question].filter(Boolean).join('\n');
+    $('reviewPreviewQuestion').textContent=[...(conditions.length?['沿用本题固定条件：',...conditions]:[]),value.question].join('\n');$('reviewPreviewBasis').textContent=value.basisQuote;$('reviewPreviewNote').textContent=value.note;
     $('reviewConfirm').textContent=kind==='revise'?'保存修订题，重新作答':'保留原题，重新作答';
     dialog.showModal();$('reviewCancel').focus();
   }

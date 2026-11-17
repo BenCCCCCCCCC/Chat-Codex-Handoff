@@ -2,6 +2,7 @@ import {taskContext} from './understanding-task.mjs';
 import {resolveFeedback} from './feedback-reference.mjs';
 import {practicePaused,answerDisposition,beginReview,resolveQuestionReview,revisedQuestion,latestQuestion} from './question-review.mjs';
 import {boundedTask,validateBoundedTask,assessBoundedTask} from './bounded-understanding.mjs';
+import {practiceConditions,resolveConditionFeedback,validateConditionalResult,beginAnswerWork,answerEvidence} from './conditional-practice.mjs';
 // Practice records are separate from tutoring messages and recorded attempts.
 export function practiceRounds(topic) {
   if (!topic) return [];
@@ -32,7 +33,7 @@ export function activityTime(topic) {
 export function resumePoint(topic) {
   const saved = topic.resume;
   if (saved?.view === 'learn') return saved;
-  if (saved?.view === 'practice' && (activePractice(topic) || topic.taskUnavailable)) return {view:'practice'};
+  if (saved?.view === 'practice' && (activePractice(topic) || topic.taskUnavailable || topic.practiceRequest?.conditionContext)) return {view:'practice'};
   const attempt = (topic.attempts ?? []).find(a => a.id === saved?.attemptId);
   if (attempt) return {view:'attempt', attemptId:attempt.id,...(saved.feedbackOrigin?{feedbackOrigin:saved.feedbackOrigin}:{})};
   if (['apply','apply_answer'].includes(topic.mode) && activePractice(topic)) return {view:'practice'};
@@ -69,8 +70,59 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       return false;
     }
   }
+  async function generateConditional(topic,rawContext){
+    requireAI();const context=practiceConditions(rawContext,topic.source),rounds=practiceRounds(topic);
+    const previous={practiceRequest:topic.practiceRequest,resume:topic.resume,taskUnavailable:topic.taskUnavailable};
+    const retry=topic.practiceRequest?.conditionContext&&JSON.stringify(topic.practiceRequest.conditionContext)===JSON.stringify(context);
+    const previousQuestions=retry?topic.practiceRequest.previousQuestions:rounds.filter(r=>r.conditionContext&&!practicePaused(r)).slice(-3).map(r=>r.question);
+    const operation=topic.practiceRequest={status:'pending',createdAt:now(),conditionContext:context,previousQuestions};
+    topic.taskUnavailable=null;topic.resume={view:'practice'};let dispatched=false;
+    try{
+      await save(topic);dispatched=true;
+      const result=await request('/api/teach',{source:topic.source,mode:'apply',message:'按已采用的条件出一道新题，不先公布答案。',practiceConditions:context,previousQuestions});
+      const value=validateConditionalResult(result.value,topic.source,'apply');
+      if(value.decision==='deferred'){operation.status='deferred';operation.reason=value.message;operation.result=value;await save(topic);return;}
+      const round={id:uid(),createdAt:now(),question:value.question,introduction:value.message,draft:'',answers:[],assistance:'conditions_provided',conditionContext:context,generation:value};
+      beginAnswerWork(round,{uid,now});rounds.push(round);topic.activePracticeId=round.id;topic.practiceRequest=null;await save(topic);
+    }catch(error){
+      if(!dispatched||error.notSent){Object.assign(topic,previous);if(error.message!=='STORAGE_FAILED')await save(topic);throw error;}
+      await failed(topic,operation,error);
+    }
+  }
+  async function answerConditional(topic,round,value){
+    if(!round.work)return;
+    try{practiceConditions(round.conditionContext,topic.source);}catch{beginReview(round,'local_check',{uid,now});await save(topic);return;}
+    requireAI();const previousResume=topic.resume,previousWork=structuredClone(round.work);
+    let answer=round.work.answerId&&round.answers.find(a=>a.id===round.work.answerId);
+    if(answer?.status==='complete')return;
+    if(answer&&answer.text!==value)throw Error('ANSWER_SESSION_LOCKED');
+    const existed=!!answer,previousStatus=answer?.status;
+    if(!answer){answer={id:uid(),text:value,createdAt:now(),result:null,status:'pending',evidence:answerEvidence(round)};round.answers.push(answer);round.work.answerId=answer.id;}
+    answer.status='pending';topic.resume={view:'practice'};let dispatched=false;
+    try{
+      await save(topic);dispatched=true;
+      const result=await request('/api/teach',{source:topic.source,mode:'apply_answer',message:answer.text,focus:round.question,practiceConditions:round.conditionContext});
+      const response=validateConditionalResult(result.value,topic.source,'apply_answer');
+      Object.assign(answer,{status:'complete',completedAt:now(),result:response.message,conditionResult:response});round.draft='';round.work=null;
+      if(response.decision==='deferred'){beginReview(round,'condition_check',{uid,now});round.review.basisQuote=response.sourceQuotes[0];}
+      await save(topic);
+    }catch(error){
+      if(!dispatched||error.notSent){if(existed)answer.status=previousStatus;else round.answers=round.answers.filter(a=>a!==answer);round.work=previousWork;topic.resume=previousResume;if(error.message!=='STORAGE_FAILED')await save(topic);throw error;}
+      await failed(topic,answer,error);
+    }
+  }
   return {
     get busy() { return busy; },
+    fromConditions: ref=>run(async topic=>{
+      const match=resolveConditionFeedback(topic,ref);if(!match.context)throw Error('INVALID_PRACTICE_CONDITIONS');
+      const rounds=topic.practiceRounds??[],existing=latestQuestion(rounds,rounds.findLast(r=>JSON.stringify(r.conditionContext?.ref)===JSON.stringify(ref)));
+      if(existing){topic.activePracticeId=existing.id;topic.taskUnavailable=null;topic.resume={view:'practice'};await save(topic);return;}
+      await generateConditional(topic,match.context);
+    }),
+    again: ()=>run(async topic=>{
+      const round=activePractice(topic);if(!round?.conditionContext||practicePaused(round)||round.work&&!round.work.answerId)return;
+      beginAnswerWork(round,{uid,now});topic.resume={view:'practice'};await save(topic);
+    }),
     fromFeedback: target => run(async topic => {
       const context=taskContext(topic.source,target.attempt,target.report,target.findingIndex),rounds=practiceRounds(topic);
       const same=r=>JSON.stringify(r.taskTarget)===JSON.stringify(context.target)&&(!target.feedbackRef||
@@ -96,6 +148,9 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       await save(topic);
     }),
     start: () => run(async topic => {
+      const previousRound=topic.taskUnavailable?null:topic.practiceRounds?.find(r=>r.id===topic.activePracticeId)??topic.practiceRounds?.at(-1);
+      const conditions=topic.resume?.view==='practice'?(topic.practiceRequest?.conditionContext??previousRound?.conditionContext):null;
+      if(conditions)return generateConditional(topic,conditions);
       requireAI();
       const previous={practiceRequest:topic.practiceRequest,resume:topic.resume,taskUnavailable:topic.taskUnavailable};
       const rounds = practiceRounds(topic);
@@ -124,6 +179,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       const round = activePractice(topic), text = round?.draft?.trim();
       if (!round || practicePaused(round) || !text) return;
       if (text.length > 2000) throw new Error('INPUT_TOO_LARGE');
+      if(round.conditionContext)return answerConditional(topic,round,text);
       if(round.task){
         topic.resume = {view:'practice'};
         if (!await checkLocalTask(topic,round)) return;
@@ -185,6 +241,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       const round=activePractice(topic);if(round?.review?.status!=='held')return;
       if(!await checkLocalTask(topic,round))return;
       resolveQuestionReview(round,'retained',topic.source,{uid,now});
+      if(round.conditionContext){const draft=round.draft;beginAnswerWork(round,{uid,now});round.draft=draft;}
       topic.resume={view:'practice'};await save(topic);
     }),
     reviseQuestion: () => run(async topic => {
@@ -194,6 +251,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       const next={id,createdAt:now(),question:revision.question,introduction:'',draft:'',assistance:'source_visible',answers:[],
         revision:{parentRoundId:round.id,reviewId:event.id,sourceId:topic.source.id,method:'learner_review',note:revision.note,basisQuote:revision.basisQuote},
         ...(round.origin?{origin:structuredClone(round.origin)}:{}),...(round.taskTarget?{taskTarget:structuredClone(round.taskTarget)}:{})};
+      if(round.conditionContext){next.conditionContext=structuredClone(round.conditionContext);next.assistance='conditions_provided';next.referenceLog=structuredClone(round.referenceLog??[]);beginAnswerWork(next,{uid,now});}
       practiceRounds(topic).push(next);topic.activePracticeId=id;topic.resume={view:'practice'};await save(topic);
     }),
     async select(id) {
