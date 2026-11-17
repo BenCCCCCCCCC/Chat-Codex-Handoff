@@ -19,15 +19,15 @@
 
 从仓库根目录运行 [Start-Study.cmd](../Start-Study.cmd)，或通过完整路径调用。启动器使用 Windows PowerShell 5.1，按脚本位置解析路径，只在就绪后打开 `http://127.0.0.1:4317/`。已有且身份可验证的服务会被复用；该次调用不会停止被复用的服务。
 
-新服务要求启动进程 PATH 中已有 `node.exe`，产品 `.venv`/pypdf 6.18.0（或绝对路径 `STUDY_PYTHON`）有效，且已继承服务端 `OPENAI_API_KEY`。Explorer 与已配置终端可能有不同环境。不会自动安装或持久化 key、.env、PATH、注册表或执行策略。真实产品调用仍需当前授权，预算上限不是花费许可。
+新服务只要求启动进程 PATH 中已有 `node.exe`。未配置 AI 时仍可保存材料、导入 TXT/MD、查看示例和既有记录；配置状态在界面提前说明。AI 需要服务端继承 `OPENAI_API_KEY`；DOCX/PPTX 需要产品 Python 环境，PDF 另需 pypdf 6.18.0。Explorer 与已配置终端可能有不同环境。不会自动安装或持久化 key、.env、PATH、注册表或执行策略。真实产品调用仍需当前授权，预算上限不是花费许可。
 
 保持控制窗口打开；正常停止设计为 Enter。Explorer 鼠标双击、可见控制台 Enter/Ctrl+C 的实际体验仍未验证。突然关窗后用 [Stop-Study.cmd](../Stop-Study.cmd) 做身份校验恢复。先完成学习请求再停止；停止不能撤回已发送的请求。
 
-服务身份由安全状态/UI 检查、Node 和精确绝对 `server.mjs` 命令行路径共同确认。未知端口占用者不会被终止；相对路径或不可验证进程会被拒绝。恢复校验 ignored `runtime/launcher.json` 中的 PID、启动时间和应用身份；陈旧状态需要人工检查。没有 service/daemon/autostart。
+服务身份由固定的应用标识／接口版本、UI 检查、Node 和精确绝对 `server.mjs` 命令行路径共同确认。未知端口占用者不会被终止；相对路径或不可验证进程会被拒绝。恢复校验 ignored `runtime/launcher.json` 中的 PID、启动时间和应用身份；陈旧状态需要人工检查。没有 service/daemon/autostart。
 
 ## 已有显式安装前提（Windows，仓库根目录）
 
-需要普通 Python 3.14.6（`py -3`）、Node 和 Edge。已有环境可直接使用；以下是新机器的显式安装说明，不是本次任务的安装操作：
+基本使用需要 Node 和浏览器；Office 提取另需 Python，PDF 提取另需 pypdf。完整环境已验证普通 Python 3.14.6（`py -3`）、Node 和 Edge。已有环境可直接使用；以下是新机器的显式安装说明，不是本次任务的安装操作：
 
 ```powershell
 py -3 -m venv study-teachback-app/.venv
@@ -37,11 +37,11 @@ node study-teachback-app/server.mjs
 
 `.venv` 被忽略，不随仓库分发。pypdf 6.18.0 与 wheel SHA256 固定在 `requirements-extractor.txt`。运行中的应用不会下载安装依赖，不需要全局安装。
 
-默认解释器为 `.venv/Scripts/python.exe`；非 Windows 的 `.venv/bin/python` 路径未在这里验证。可选 `STUDY_PYTHON` 必须是已有 Python/pypdf 的绝对路径。提取子进程只收到 SystemRoot，使用 `-I`，超时 15 秒；缺少环境或版本不符就返回错误，不回退至 provider。API key 不传给提取器。
+默认解释器为 `.venv/Scripts/python.exe`；非 Windows 的 `.venv/bin/python` 路径未在这里验证。可选 `STUDY_PYTHON` 必须是已有 Python 的绝对路径。TXT/MD 由 Node 直接解码，不创建提取子进程；Python/PDF 配置仅影响对应格式。提取子进程只收到 SystemRoot，使用 `-I`，超时 15 秒；缺少环境或版本不符就返回错误，不回退至 provider。API key 不传给提取器。
 
 ## 材料、录音与保留边界
 
-初始页面“选择学习文件”支持 MD/TXT/PDF/DOCX/PPTX。本机提取后，规范化全文在 1–5,000 字内会自动填入学习材料，并保留预览和手动选段覆盖；超过 5,000 字须明确选择子段，不静默截断。点击“开始学习”才把学习材料发送给 Tutor。原文件不上传 provider、不持久化。录音在应用内进行。
+初始页面“选择学习文件”支持 MD/TXT/PDF/DOCX/PPTX。本机提取后，正文为空时，规范化全文在 1–5,000 字内会自动填入学习材料；已有正文时保留草稿并先展示预览，明确替换后可撤销，自定标题保留；超过 5,000 字须明确选择子段，不静默截断。AI 已配置时点击“开始学习”才把学习材料发送给 Tutor；未配置时“保存材料，进入学习”仅在本机保存，不产生失败请求。原文件不上传 provider、不持久化。录音在应用内进行。
 
 输入上限 10 MB；Office ZIP 总展开 30 MB；100 个 PDF 页面/幻灯片；提取 200,000 字符；单轮学习 5,000 字。TXT/MD 支持 UTF-8 或带 BOM 的 UTF-16。加密、非法、超限文件会被拒绝。不做 OCR；复杂版式需在预览中核对。DOCX 主体/表格段落与 PPTX 幻灯片文字受支持；页眉、备注、批注、图表和图片文字不在范围内。
 

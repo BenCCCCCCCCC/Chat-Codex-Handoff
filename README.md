@@ -107,7 +107,7 @@ study-teachback-app/.venv/Scripts/python.exe -I -m pip --isolated install --inde
 
 界面与独立示例可直接运行 `npm start`，打开 `http://127.0.0.1:4317/`；只体验示例无需 Python 提取环境。实际 Tutor、转写和诊断需要在服务进程环境中配置自己的 `OPENAI_API_KEY`，并承担对应 API 费用。没有 key 时不提供真实模型反馈，不会悄悄替换成模拟结果。
 
-已配置环境也可双击 [Start-Study.cmd](Start-Study.cmd)。停止与异常恢复见 [Stop-Study.cmd](Stop-Study.cmd)。[详细安装与数据说明](study-teachback-app/README.md)包含文件限制、启动器行为与现有模型配置。
+已有 Node 即可双击 [Start-Study.cmd](Start-Study.cmd)。未配置 AI 时可在本机保存材料、编辑问题草稿并查看历史，配置完成后再发送；TXT/MD 导入不需要 Python。停止与异常恢复见 [Stop-Study.cmd](Stop-Study.cmd)。[详细安装与数据说明](study-teachback-app/README.md)包含文件限制、启动器行为与现有模型配置。
 
 ## 不花费 API 额度的验证
 

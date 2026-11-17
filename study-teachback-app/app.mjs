@@ -16,6 +16,7 @@ import {focusHit,hitDestination,transcriptHit} from './search-focus.mjs';
 import {mountSetupDraft} from './setup-draft.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
 let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false,capturePending=false;
+let serviceCapabilities=null;
 const editors=new Map();
 const diagnosisStates=new WeakMap();
 // Transient playback copies only. Original stored/exported audio is untouched.
@@ -29,9 +30,28 @@ function friendly(code){const messages={TRANSCRIPTION_TERMS_LIMIT:'术语最多 
 async function save(target=topic){if(!target||deleted.has(target.id))return;try{target.updatedAt=Date.now();await db.put(target);memoryOnly=false;reveal('storageRecovery',false);}catch{memoryOnly=true;reveal('storageRecovery');throw new Error('STORAGE_FAILED');}}
 async function api(path,body,headers={}){
   if(controller||record)throw new Error('REQUEST_IN_PROGRESS');
+  if(path!=='/api/extract'&&serviceCapabilities?.ai!==true)throw new Error('CREDENTIAL_MISSING');
   controller=new AbortController();$('send').disabled=true;$('explain').disabled=true;$('workspace').setAttribute('aria-busy','true');
   try{const response=await fetch(path,{method:'POST',headers:{'X-Study-Request':'1',...headers,...(body instanceof ArrayBuffer?{}:{'Content-Type':'application/json'})},body:body instanceof ArrayBuffer?body:JSON.stringify(body),signal:controller.signal});const result=await response.json();if(!response.ok)throw new Error(result.error);return result;}
-  finally{controller=null;$('send').disabled=false;$('explain').disabled=false;$('workspace').removeAttribute('aria-busy');updateBudget();}
+  finally{controller=null;$('send').disabled=false;$('explain').disabled=false;$('workspace').removeAttribute('aria-busy');renderService();updateBudget();}
+}
+function renderService(){
+  const ai=serviceCapabilities?.ai===true;
+  $('serviceHelp').hidden=ai&&serviceCapabilities.imports.office&&serviceCapabilities.imports.pdf;
+  $('serviceStatus').textContent=serviceCapabilities?(ai?'AI 已配置。':'AI 尚未配置；可以先保存材料、查看示例和已有记录。'):'正在检查可用功能；本机材料仍可保存。';
+  $('importCapabilities').textContent=serviceCapabilities?'TXT / MD 可直接导入。'+(!serviceCapabilities.imports.office?' DOCX / PPTX 需要本机 Python 环境。':'')+(!serviceCapabilities.imports.pdf?' PDF 需要本机 Python 和指定版本 pypdf。':''):'';
+  $('learn').textContent=ai?'开始学习 ↗':'保存材料，进入学习';
+  $('startHint').textContent=ai?'开始后，将所选文字发送给 AI。':'仅保存在本机；配置 AI 后可继续提问和分析。';
+  $('send').disabled=!ai||!!controller;
+}
+async function refreshCapabilities(){
+  try{
+    const response=await fetch('/api/capabilities');if(!response.ok)throw Error('UNAVAILABLE');
+    const value=await response.json();if(value.app!=='zhi-er-neng-jiang'||value.apiVersion!==1||typeof value.ai!=='boolean')throw Error('UNAVAILABLE');
+    serviceCapabilities=value;renderService();
+  }catch{
+    serviceCapabilities=null;renderService();$('serviceStatus').textContent='暂时无法检查 AI 配置。可以先保存材料，稍后重新检查。';
+  }
 }
 async function updateBudget(){try{const response=await fetch('/api/status');if(!response.ok)throw new Error('BUDGET_UNAVAILABLE');const s=await response.json();$('budget').textContent=`本次账本：${s.ledger.requests} 次请求；已知费用估算 $${s.ledger.knownCostUSD.toFixed(6)}；含未结算预留 $${s.ledger.exposureUSD.toFixed(6)} / $5。现金新增上限 $10，不自动充值。`; }catch{$('budget').textContent='预算状态暂不可用；无法确认可用额度。';}}
 function renderTopic(){
@@ -118,6 +138,7 @@ $('learn').onclick=()=>act(async()=>{
   topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim()||autoTitle($('source').value),text:$('source').value.trim()},setupContext,goals:[],messages:[],attempts:[],mode:'learn'};
   processing=true;
   try{await save(topic);setupDraft.clear();clearImport();}finally{processing=false;}
+  if(serviceCapabilities?.ai!==true){renderTopic();notice('材料已保存在本机。可查看和整理，配置 AI 后再发送问题。');return;}
   await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。','learn',null,{internalStarter:true});
 });
 $('chatForm').onsubmit=e=>{e.preventDefault();if(!canNavigate())return;act(async()=>{const message=$('chat').value.trim();if(!message)return;await chat.flushDraft();const retry=topic.chatRequest?.status!=='complete'&&!topic.chatRequest?.internalStarter&&topic.chatRequest?.message===message;await teach(message,topic.mode==='repair'?'repair':'learn',topic.focus??null,{retry});});};
@@ -527,4 +548,6 @@ $('setupDraftRetry').onclick=()=>act(()=>setupDraft.flush());
 $('undoImport').onclick=()=>act(()=>{setupDraft.undo();updateCounts();notice('已恢复替换前的正文和标题。');});
 $('clearSetupDraft').onclick=()=>confirmDelete('清空尚未开始的新建草稿（正文、标题和学习偏好）。已有学习记录不受影响。',()=>{setupDraft.clear();clearImport();updateCounts();},$('clearSetupDraft'));
 updateCounts();
-await act(async()=>{db=await openStore();await updateBudget();const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));if(all.length&&!setupDraft.hasContent())resumeTopic(all[0]);});
+$('refreshCapabilities').onclick=()=>act(refreshCapabilities);
+renderService();
+await act(async()=>{db=await openStore();await refreshCapabilities();await updateBudget();const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));if(all.length&&!setupDraft.hasContent())resumeTopic(all[0]);});

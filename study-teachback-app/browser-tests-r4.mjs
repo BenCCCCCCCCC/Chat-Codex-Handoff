@@ -24,11 +24,12 @@ const probe={mode:environmentProbe?'NON_HEADLESS_TRUSTED_POINTER':'EXISTING_SUIT
 const run=Date.now(), profile=process.env.STUDY_TEST_PROFILE??mkdtempSync(root+'edge-test-');
 const calls=[],cases=[],errors=[],network=[];let failASR=null,delaySemantic=0,rejectStarter=false,failTeach=false,failRegister=false;const provenanceRequests=[];
 let diagnosisGate=null;
+let aiConfigured=true;
 const savedASR=normalizeASR(JSON.parse(readFileSync(new URL('../artifacts/study-teachback/build-01r2/SYNTHETIC_ASR_FIELDS.json',import.meta.url))),7.31);
 const savedWave=[...readFileSync(new URL('./fixtures/synthetic-mandarin-v2.wav',import.meta.url))];
 const testBook=new Ledger(root+`browser-test-ledger-${run}.json`),register=testBook.register.bind(testBook);
 testBook.register=id=>{if(failRegister)throw Error('LEDGER_LOCKED');return register(id);};
-const server=createServer({book:testBook,semanticCall:async(prompt,input)=>{
+const server=createServer({book:testBook,keyConfigured:()=>aiConfigured,semanticCall:async(prompt,input)=>{
   calls.push({kind:input.mode??(input.events?'delivery':'content'),sourceId:input.source.id,focus:input.focus??null});if(delaySemantic)await new Promise(r=>setTimeout(r,delaySemantic));
   if(!input.mode&&!input.events&&diagnosisGate)await diagnosisGate;
   if(input.mode)provenanceRequests.push(structuredClone(input));
@@ -82,7 +83,7 @@ try{
   await cdp('Page.addScriptToEvaluateOnNewDocument',{source:`window.testMic='tone';window.testTracks=[];Object.defineProperty(navigator.mediaDevices,'getUserMedia',{value:async()=>{if(window.testMic==='deferredDenied')await new Promise((resolve,reject)=>window.rejectPermission=()=>reject(new DOMException('test denied','NotAllowedError')));if(window.testMic==='denied')throw new DOMException('test denied','NotAllowedError');const ctx=new AudioContext();window.testContext=ctx;await ctx.resume();const out=ctx.createMediaStreamDestination(),osc=ctx.createOscillator(),gain=ctx.createGain();osc.frequency.value=220;gain.gain.value=window.testMic==='silent'?0:0.2;osc.connect(gain);gain.connect(out);osc.start();window.testTracks=out.stream.getTracks();return out.stream;}});`});
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
-  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await setupChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls});
+  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await setupChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
   if(!setupOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await refinementChecks({check,evaluate,until,reloadPage,shot,cdp,all,calls});
   if(!setupOnly&&!refinementOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await audioChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,setFailASR:value=>{failASR=value;}});
   if(!setupOnly&&!refinementOnly&&!audioOnly&&!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, mkdtempSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { extractSource } from './ingestion.mjs';
+import { extractSource,extractionCapabilities } from './ingestion.mjs';
 import { createServer } from './server.mjs';
 import { Ledger } from './ledger.mjs';
 import { tmpdir } from 'node:os';
@@ -17,7 +17,7 @@ test('active extractor and setup have no private runtime coupling or automatic i
   }
 });
 
-test('real missing interpreter and empty venv fail closed over HTTP; ledger unchanged; providers never called',async()=>{
+test('missing Python or PDF dependency only blocks dependent formats; text stays usable without provider or ledger changes',async()=>{
   const root=mkdtempSync(join(tmpdir(),'portability-'));
   const python=fileURLToPath(new URL('./.venv/Scripts/python.exe',import.meta.url));
   const creation=spawnSync(python,['-I','-m','venv','--without-pip',root+'/empty'],{windowsHide:true,env:{SystemRoot:process.env.SystemRoot}});
@@ -26,7 +26,13 @@ test('real missing interpreter and empty venv fail closed over HTTP; ledger unch
   for(const [runtime,error] of [[root+'/absent/python.exe','EXTRACTOR_SETUP_REQUIRED'],[root+'/empty/Scripts/python.exe','EXTRACTOR_DEPENDENCY_REQUIRED']]){
     const server=createServer({book,semanticCall:async()=>{providerCalls++;},asrCall:async()=>{providerCalls++;},extractCall:(bytes,kind)=>extractSource(bytes,kind,{python:runtime})});
     await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin=`http://127.0.0.1:${server.address().port}`;
-    try{for(const kind of ['txt','pdf']){const r=await fetch(origin+'/api/extract',{method:'POST',headers:{Origin:origin,'X-Study-Request':'1','X-Source-Format':kind},body:'local fixture'});assert.equal(r.status,422);assert.deepEqual(await r.json(),{error});}}
+    try{
+      for(const kind of ['txt','md','pdf']){
+        const r=await fetch(origin+'/api/extract',{method:'POST',headers:{Origin:origin,'X-Study-Request':'1','X-Source-Format':kind},body:'local fixture'});
+        assert.equal(r.status,kind==='pdf'?422:200);assert.deepEqual(await r.json(),kind==='pdf'?{error}:{blocks:[{label:'全文',text:'local fixture'}]});
+      }
+      assert.deepEqual(await extractionCapabilities({python:runtime}),{text:true,office:error==='EXTRACTOR_DEPENDENCY_REQUIRED',pdf:false});
+    }
     finally{await new Promise(r=>server.close(r));}
   }
   assert.equal(providerCalls,0);assert.equal(JSON.stringify(book.read()),before);

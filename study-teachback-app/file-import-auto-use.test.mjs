@@ -9,7 +9,7 @@ function harness(text){
   const nodes=new Map(),calls=[],notices=[];
   const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',selectionStart:0,selectionEnd:0,hidden:true,addEventListener(){}});return nodes.get(id);};
   const setupDraft=mountSetupDraft({$,storage:{getItem(){return null;},setItem(){},removeItem(){}}});
-  const context=vm.createContext({$,setupDraft,autoTitle,setupContextValue,controller:null,capturePending:false,record:null,processing:false,topic:null,uid:()=> 'id',act:fn=>fn(),notice:x=>notices.push(x),reveal:(id,show=true)=>{$(id).hidden=!show;},save:async()=>{},renderTopic(){},teach:async()=>calls.push('teach'),api:async path=>{calls.push(path);return {blocks:[{text}]};}});
+  const context=vm.createContext({$,setupDraft,serviceCapabilities:{ai:true},autoTitle,setupContextValue,controller:null,capturePending:false,record:null,processing:false,topic:null,uid:()=> 'id',act:fn=>fn(),notice:x=>notices.push(x),reveal:(id,show=true)=>{$(id).hidden=!show;},save:async()=>{},renderTopic(){},teach:async()=>calls.push('teach'),api:async path=>{calls.push(path);return {blocks:[{text}]};}});
   vm.runInContext(app.slice(app.indexOf('let importPending'),app.indexOf("$('chatForm').onsubmit")),context);
   return {$,context,calls,notices,async upload(){ $('sourceFile').files=[{name:'规则.v2.docx',size:10,arrayBuffer:async()=>new ArrayBuffer(0)}];await $('sourceFile').onchange();},start:()=>$('learn').onclick()};
 }

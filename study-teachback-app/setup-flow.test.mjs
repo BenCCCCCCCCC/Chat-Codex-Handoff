@@ -11,7 +11,7 @@ function harness(){
   const nodes=new Map(),requests=[],saved=[],notices=[];
   const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',addEventListener(){}});return nodes.get(id);};
   const setupDraft=mountSetupDraft({$,storage:{getItem(){return null;},setItem(){},removeItem(){}}});
-  const context=vm.createContext({...core,$,setupDraft,topic:null,importPending:false,controller:null,capturePending:false,record:null,processing:false,
+  const context=vm.createContext({...core,$,setupDraft,serviceCapabilities:{ai:true},topic:null,importPending:false,controller:null,capturePending:false,record:null,processing:false,
     uid:()=> 'synthetic',structuredClone,deleted:new Set(),clearImport(){},renderTopic(){},notice:x=>notices.push(x),friendly:x=>x,act:fn=>fn(),
     save:async()=>saved.push(structuredClone(context.topic)),api:async(path,body)=>{requests.push(structuredClone(body));return {value:{message:'Tutor',question:'Why?',goals:[]}};}});
   vm.runInContext(app.slice(app.indexOf('async function teach('),app.indexOf('let importPending')),context);
@@ -42,6 +42,12 @@ for(const [focus,known] of [['',''],['条件',''],['','已了解定义'],['条�
 });
 test('empty and oversized sources do not dispatch',async()=>{
   for(const value of ['', '  ', '字'.repeat(5001)]){const h=harness();h.$('source').value=value;await h.start();assert.equal(h.requests.length,0);assert.equal(h.saved.length,0);assert(h.notices.length);}
+});
+test('unconfigured AI saves a local topic without failed requests and keeps the old setup on a save failure',async()=>{
+  const h=harness();h.context.serviceCapabilities={ai:false};h.$('source').value='My material';h.$('title').value='Course';
+  await h.start();assert.equal(h.requests.length,0);assert.equal(h.saved.length,1);assert.equal(h.context.topic.chatRequest,undefined);
+  const broken=harness();broken.$('source').value='Keep this';broken.context.save=async()=>{throw Error('STORAGE_FAILED');};
+  await assert.rejects(broken.start(),/STORAGE_FAILED/);assert.equal(broken.$('source').value,'Keep this');assert.equal(broken.requests.length,0);
 });
 test('accepted file selection sets filename title and preserves selected source',async()=>{
   const h=harness();h.context.updateCounts=()=>{};h.$('selectedFile').textContent='访客规则.v2.txt';h.$('extractedText').value='Only enter when open.';
