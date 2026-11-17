@@ -26,7 +26,7 @@ for(const length of [2500,2501,4000])test(`C1 accepted Tutor ${length} character
     requests.push(structuredClone(input));return {value:{sourceId:source.id,message:reply,goals:[{text:'Condition',sourceQuote:source.text}],question:'Why?'}};
   }});
   const origin=await listen(server),topic={id:'topic',source:structuredClone(source),messages:[],goals:[]};
-  const context=vm.createContext({topic,record:null,capturePending:false,controller:null,processing:false,deleted:new Set(),structuredClone,uid:()=> 'anchor',repairFocus:x=>x,
+  const context=vm.createContext({serviceCapabilities:{ai:true},topic,record:null,capturePending:false,controller:null,processing:false,deleted:new Set(),structuredClone,uid:()=> 'anchor',repairFocus:x=>x,
     save:async()=>saved.push(structuredClone(topic)),renderTopic(){},notice(){},friendly:x=>x,
     api:async(path,body)=>{const response=await post(origin,path,body),result=await response.json();assert.equal(response.status,200,JSON.stringify(result));return result;}});
   vm.runInContext(app.slice(app.indexOf('async function teach('),app.indexOf('let importPending')),context);
@@ -46,7 +46,7 @@ function confirmationHarness(){
   let saveGate=null;
   const context=vm.createContext({$,serviceCapabilities:{ai:true,imports:{office:true,pdf:true}},current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),
     uid:()=>crypto.randomUUID(),diagnosisStates:new WeakMap(),matchMedia:()=>({matches:true}),editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
-    transcriptTexts,updateTranscriptDraft,analysisTrace,renderComparison(){},renderRawPlayback(){},voiceDrafts:{flush:async()=>{},mark(){}},
+    transcriptTexts,updateTranscriptDraft,analysisTrace,renderComparison(){},renderPractice(){},renderRawPlayback(){},voiceDrafts:{flush:async()=>{},mark(){}},
     blobURL:null,replayRequest:0,replayOriginal:null,URL:{createObjectURL:()=> 'blob:synthetic',revokeObjectURL(){}},
     notice:x=>notices.push(x),friendly:x=>x,act:async fn=>{try{await fn();}catch(e){notices.push(e.message);}},
     reveal(){},el:()=>({setAttribute(){},append(){}}),button:()=>({}),renderProcess(){},renderFeedback:r=>visible.push(r),updateBudget(){},

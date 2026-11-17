@@ -332,10 +332,10 @@ try{
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();db.close();})()`);await reloadPage();
   });
   calls.length=0;
-  await check('R2 prominent native file entry at desktop and mobile before any provider call',async()=>{
+  await check('material text entry is visible and native file import remains reachable before provider calls',async()=>{
     for(const width of [1440,390]){
       await cdp('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});await evaluate(`window.scrollTo(0,0)`);
-      assert(await evaluate(`(()=>{const f=document.getElementById('sourceFile'),r=f.getBoundingClientRect();return r.width>180 && r.top>0 && r.bottom<innerHeight && getComputedStyle(f).display!=='none' && document.documentElement.scrollWidth<=innerWidth+1;})()`));
+      assert(await evaluate(`(()=>{const f=document.getElementById('sourceFile'),r=f.getBoundingClientRect(),t=document.getElementById('source').getBoundingClientRect();return r.width>180 && t.top>0 && t.bottom<innerHeight && getComputedStyle(f).display!=='none' && document.documentElement.scrollWidth<=innerWidth+1;})()`));
       assert(await evaluate(`document.querySelector('.file-title').textContent==='选择学习文件' && document.getElementById('fileTypes').textContent.includes('10 MB')`));
       await shot(`initial-file-entry-${width}`);
     }

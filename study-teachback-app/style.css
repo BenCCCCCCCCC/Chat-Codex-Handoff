@@ -136,5 +136,6 @@ body[data-history=true] #workspace,body[data-history=true] #setup,body[data-hist
 body:has(#workspace:not([hidden]) #recording:not([hidden])) .dock{display:none}
 
 .comparison-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}.comparison-columns section{min-width:0;overflow-wrap:anywhere}#textComposer{margin-top:1rem}#attemptComparison{margin-top:1.5rem}#comparisonColumns h3{font-size:1rem}@media(max-width:720px){.comparison-columns{grid-template-columns:1fr}}
+.service-help{padding:10px 14px;background:var(--accent-soft);border-radius:8px;font-size:.8125rem}.service-help>summary{color:var(--ink)}.input-modes{margin:16px 0}.input-modes [aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent)}
 
 .question-review{border:1px solid var(--border,#d8e1f0);border-radius:12px;padding:1rem;margin:1rem 0}.question-review textarea{width:100%}#reviewConfirmDialog{max-width:680px;max-height:85vh;overflow:auto}#reviewConfirmDialog p,#reviewConfirmDialog blockquote{overflow-wrap:anywhere}#questionReviewEvents article{border-top:1px solid var(--border,#d8e1f0);padding:.75rem 0}

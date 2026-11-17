@@ -129,3 +129,26 @@ test('resume follows recent activity and stored position; legacy practice and re
   assert.equal(recent.createdAt,5);
   old.resume={view:'learn'};assert.deepEqual(resumePoint(old),{view:'learn'});
 });
+
+test('known unavailable AI leaves resume and requests untouched while local exercises still work',async()=>{
+  const h=setup();h.topic.attempts=[{id:'written',createdAt:1}];h.topic.resume={view:'attempt',attemptId:'written'};
+  const prior=structuredClone(h.topic),flow=createPracticeFlow({...h.options,requireAI(){throw Error('CREDENTIAL_MISSING');}});
+  await assert.rejects(flow.start(),/CREDENTIAL_MISSING/);assert.deepEqual(h.topic,prior);assert.equal(h.calls.length,0);
+  const c=taskSplitCases[0];h.topic.source=c.source;await flow.fromFeedback({attempt:c.attempt,report:c.report,findingIndex:0});
+  const r=activePractice(h.topic);r.draft=r.task.exercise.correctChoice;await flow.answer();assert.equal(r.answers[0].assessment.verdict,'correct');assert.equal(h.calls.length,0);
+});
+
+test('pre-dispatch failures roll back practice state without erasing an earlier unknown request',async()=>{
+  const h=setup();h.topic.resume={view:'learn'};h.topic.practiceRequest={status:'unknown',createdAt:2};
+  const previous=structuredClone(h.topic);
+  const flow=createPracticeFlow({...h.options,request:async()=>{throw Object.assign(Error('CREDENTIAL_MISSING'),{notSent:true});}});
+  await assert.rejects(flow.start(),/CREDENTIAL_MISSING/);assert.deepEqual(h.topic.resume,previous.resume);assert.deepEqual(h.topic.practiceRequest,previous.practiceRequest);
+  h.failSaving(true);await assert.rejects(flow.start(),/STORAGE_FAILED/);assert.deepEqual(h.topic.practiceRequest,previous.practiceRequest);
+  h.failSaving(false);await h.flow.start();const r=activePractice(h.topic);r.draft='新的草稿';await assert.rejects(flow.answer(),/CREDENTIAL_MISSING/);assert.deepEqual(r.answers,[]);assert.equal(r.draft,'新的草稿');
+});
+
+test('legacy empty practice resumes useful work without classifying or discarding an unknown request',()=>{
+  const topic={attempts:[{id:'written'}],practiceRounds:[],resume:{view:'practice'},practiceRequest:{status:'unknown',createdAt:2}};
+  assert.deepEqual(resumePoint(topic),{view:'attempt',attemptId:'written'});assert.equal(topic.practiceRequest.status,'unknown');
+  topic.attempts=[];assert.deepEqual(resumePoint(topic),{view:'learn'});
+});

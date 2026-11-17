@@ -29,6 +29,9 @@ export async function setupChecks({check,evaluate,until,reloadPage,shot,cdp,clic
   });
   await check('unconfigured AI supports local study, history and drafts without creating a failed model request',async()=>{
     const before=calls.length;setAIConfigured(false);await reloadPage();
+    await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await evaluate('window.scrollTo(0,0)');
+    assert(await evaluate(`document.getElementById('source').getBoundingClientRect().bottom<innerHeight`));await shot('local-start-first-screen');
+    await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
     assert.equal(await evaluate(`document.getElementById('learn').textContent`),'保存材料，进入学习');
     await input('source','没有密钥也能保存的课程。');await input('title','本机课程');await click('learn');
     await until(`!document.getElementById('workspace').hidden`);
