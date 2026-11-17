@@ -44,7 +44,7 @@ function confirmationHarness(){
   const $=id=>{if(!nodes.has(id))nodes.set(id,{classList:{toggle(){}},children:[],value:'',append(...x){this.children.push(...x);},replaceChildren(...x){this.children=x;if(id==='feedback')visible.length=0;},setAttribute(){},removeAttribute(){},focus(){this.focused=true;},scrollIntoView(){this.scrolled=true;}});return nodes.get(id);};
   const a={id:'attempt',source,duration:1,kind:'full',assistance:'none',audio:new Blob(['synthetic']),raw:{id:'raw',text:'Enter when open.',spans:[{id:'s0',start:0,end:1,text:'Enter when open.'}]},corrections:[],reports:[]};
   let saveGate=null;
-  const context=vm.createContext({$,current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),
+  const context=vm.createContext({$,serviceCapabilities:{ai:true,imports:{office:true,pdf:true}},current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),
     diagnosisStates:new WeakMap(),matchMedia:()=>({matches:true}),editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
     transcriptTexts,updateTranscriptDraft,analysisTrace,renderRawPlayback(){},voiceDrafts:{flush:async()=>{},mark(){}},
     blobURL:null,replayRequest:0,replayOriginal:null,URL:{createObjectURL:()=> 'blob:synthetic',revokeObjectURL(){}},

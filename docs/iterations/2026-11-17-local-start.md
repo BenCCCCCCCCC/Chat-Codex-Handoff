@@ -11,3 +11,5 @@ TXT/MD 由 Node 解码 UTF-8／带 BOM 的 UTF-16，保持大小、空白、非�
 收据：ignored `artifacts/study-teachback/setup-flow-01/node-1794915725147-4ypScT`、`browser-1794915726241-AsOzfh`、`launcher-2026-11-17.json`。启动测试以后写独立运行目录；本次产生的收据已另存，历史固定收据已恢复。全程真实 API 0 次，生产账本 SHA256 未变：`9f23a117f27c0d279872885bdf074d48cbf369e0beec44480d2644c2b148c67e`。
 
 下一步沿材料版本和返回目标推进讲解／反馈闭环；模型质量、付费比较和真实学习效果不在本次工程验证结论中。
+
+首轮 PR CI 发现旧诊断 VM harness 未提供新增的 AI 能力状态，7 项检查因此在发起模拟请求前失败。补齐 harness 后，原有诊断边界 16/16 通过（`boundaries-1794915981255-Sx3XMK`）；未放松判据，未重复其他已通过本机检查。最终完整回归以 PR 最新提交的 CI 为准。
