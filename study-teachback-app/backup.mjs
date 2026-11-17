@@ -1,4 +1,5 @@
 import {validateQuestionReviews} from './question-review.mjs';
+import {judgementIssues,validateJudgementReport} from './judgement.mjs';
 import {learningContexts,validateMaterialSet} from './material-set.mjs';
 import {validateTextDraft} from './text-teachback.mjs';
 import {validateFeedbackReference} from './feedback-reference.mjs';
@@ -73,6 +74,7 @@ export function decodeBackup(text) {
       if(typed)check(a.audio==null&&a.duration==null&&!a.observation&&a.raw&&a.raw.origin==='USER_TEXT');
       if(a.transcriptionTerms!=null)termSnapshot(a.transcriptionTerms);
       sourceValue(a.source); check(a.source.id===t.source.id && a.source.text===t.source.text);
+      judgementIssues(a.judgementIssues,a.source);
       date(a.createdAt); check(['full','partial'].includes(a.kind)); check(['none','keywords','source','unknown'].includes(a.assistance));
       if (a.focus != null) string(a.focus,1000);
       // Failed/interrupted captures are still recoverable archives. Existing API
@@ -110,6 +112,7 @@ export function decodeBackup(text) {
           const {sourceId,attemptId,transcriptVersion,findings}=report;
           validateFindings({sourceId,attemptId,transcriptVersion,findings},a.source,
             {id:a.id,transcriptVersion,spans:version.spans},report.channel,events);
+          if(report.channel==='content')validateJudgementReport(report,a.source,{id:a.id,transcriptVersion,spans:version.spans});
         } else {
           check(report.channel==='process');
           for (const evidence of list(report.processEvidence)) object(evidence);

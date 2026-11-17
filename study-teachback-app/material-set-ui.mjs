@@ -45,7 +45,10 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
         const missing=point.view==='attempt'&&!t.attempts.some(a=>a.id===point.attemptId)||point.view==='practice'&&point.roundId&&!t.practiceRounds?.some(r=>r.id===point.roundId);
         t.resume=missing?{view:'learn'}:point;if(point.roundId&&!missing){t.activePracticeId=point.roundId;t.taskUnavailable=null;}
         try{await save(t);}finally{onSwitch();}if(missing)throw Error('STUDY_WORK_MISSING');
-      }));card.append(open);return card;
+      }));
+      const revise=node('button','另存新的处理');revise.className='quiet';revise.onclick=()=>act(()=>change(async t=>{
+        t.issueDraft={question:item.question,condition:item.condition,status:item.status,evidence:structuredClone(item.evidence)};await save(t);$('issueEditor').open=true;
+      }));card.append(open,revise);return card;
     }));
     $('contextHistory').replaceChildren(...(topic.studyContexts??[]).map(c=>{
       const button=node('button',`${c.materialIds.map(id=>materials.find(m=>m.id===id)?.title).join(' + ')} · ${c.attempts.length} 次讲解 · ${c.practiceRounds?.length??0} 道题`);
@@ -66,7 +69,7 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
   for(const id of ['issueQuestion','issueCondition','issueStatus']){$(id).oninput=captureIssue;$(id).onblur=()=>act(()=>drafts.flush());}
   $('addMaterial').onclick=()=>act(()=>change(async t=>{addMaterial(t,t.materialDraft??{title:'',text:''});await save(t);$('addMaterialDetails').open=false;}));
   $('useMaterials').onclick=()=>{const ids=[...$('materialChoices').querySelectorAll('input:checked')].map(e=>e.value);act(()=>change(async t=>{selectMaterials(t,ids);try{await save(t);}finally{onSwitch();}}));};
-  $('saveStudyIssue').onclick=()=>act(()=>change(async t=>{const d=t.issueDraft??{};saveStudyIssue(t,{...d,evidence:(d.evidence??[]).filter(e=>e.quote.trim())});await save(t);$('issueEditor').open=false;}));
+  $('saveStudyIssue').onclick=()=>act(()=>change(async t=>{const d=t.issueDraft??{};saveStudyIssue(t,{...d,evidence:(d.evidence??[]).filter(e=>e.quote.trim())});try{await save(t);}finally{onSwitch();}$('issueEditor').open=false;}));
   $('quoteMaterial').onclick=()=>act(()=>{
     if(busy||!canStart())return;
     const selection=getSelection(),p=$('materialPreviewText');let quote='';

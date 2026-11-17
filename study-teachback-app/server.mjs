@@ -6,6 +6,7 @@ import { semantic, transcribe, ledger } from './provider.mjs';
 import { sourceValue, attemptValue, contentInput, validateTeaching, validateFindings, text, requireValue, repairFocus, waveDuration, TUTOR_MESSAGE_LIMIT, setupContextValue } from './core.mjs';
 import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
 import {transcriptionTerms} from './transcription-terms.mjs';
+import {judgementIssues,judgementSchema,JUDGEMENT,scopedReport} from './judgement.mjs';
 
 const files={'/bounded-understanding.mjs':'bounded-understanding.mjs','/understanding-task.mjs':'understanding-task.mjs','/transcription-terms.mjs':'transcription-terms.mjs','/transcript-playback.mjs':'transcript-playback.mjs','/audio-input.mjs':'audio-input.mjs','/voice-review.mjs':'voice-review.mjs','/search-focus.mjs':'search-focus.mjs','/chat-ui.mjs':'chat-ui.mjs','/draft-save.mjs':'draft-save.mjs','/record-search.mjs':'record-search.mjs','/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/workspace-ui.mjs':'workspace-ui.mjs','/practice.mjs':'practice.mjs','/practice-ui.mjs':'practice-ui.mjs','/backup.mjs':'backup.mjs','/backup-ui.mjs':'backup-ui.mjs','/demo':'demo.html','/demo.mjs':'demo.mjs','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
 export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger,extractCall=extractSource,capabilityCall=extractionCapabilities,keyConfigured=()=>!!process.env.OPENAI_API_KEY}={}) {
@@ -17,6 +18,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
   files['/question-review-ui.mjs']='question-review-ui.mjs';
   files['/material-set.mjs']='material-set.mjs';
   files['/material-set-ui.mjs']='material-set-ui.mjs';
+  files['/judgement.mjs']='judgement.mjs';files['/judgement-ui.mjs']='judgement-ui.mjs';files['/schemas.mjs']='schemas.mjs';
   let busy=false,extracting=false;
   return http.createServer(async(req,res)=>{
     const expected=`127.0.0.1:${req.socket.localPort}`, origin=`http://${expected}`;
@@ -72,6 +74,11 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       }
       const attempt=attemptValue(b.attempt), input=contentInput(source,attempt);
       if(b.channel==='content'){
+        const issues=judgementIssues(b.judgementIssues,source);
+        if(issues.length){
+          const result=await semanticCall(CONTENT+JUDGEMENT,{...input,judgementIssues:issues},judgementSchema,{signal:controller.signal});
+          return json(200,{...result,value:scopedReport(result.value,source,attempt,issues)});
+        }
         const result=await semanticCall(CONTENT,input,findingsSchema,{signal:controller.signal});return json(200,{...result,value:validateFindings(result.value,source,attempt,'content')});
       }
       requireValue(attempt.inputMode!=='text'&&b.channel==='delivery'&&Array.isArray(b.events)&&b.events.length>0&&b.events.length<=8,'SOUND_EVIDENCE_INSUFFICIENT');

@@ -1,0 +1,623 @@
+{
+  "version": "condition-quality-v1",
+  "kind": "AUTHOR_WRITTEN_SYNTHETIC_CASES_NOT_MODEL_RESULTS",
+  "authorReview": "同一开发代理编写并逐项核对；尚无独立教师盲评，也没有真实学习效果数据。",
+  "rendering": "按 materialIds 顺序拼接：【材料 i：title】换行 text；材料之间两个换行。i 从 1 开始。所有材料均提供给两端；goal、question、answer 和 condition 原样提供。expected 仅供评审，不能发送给被评系统。",
+  "materials": [
+    {
+      "id": "reserve",
+      "title": "课件：预留空位实现",
+      "text": "本材料只讨论预留一个空位的循环队列。数组长度为 n，n 至少为 2；最多存放 n−1 个元素。front 指向队头元素，rear 指向下一次入队的空位置。队空时 front=rear；队满时 (rear+1) mod n=front。队列遵循先入先出。"
+    },
+    {
+      "id": "count",
+      "title": "笔记：另记元素个数实现",
+      "text": "本材料改用 count 记录元素个数，不预留空位。数组长度为 n，最多存放 n 个元素。队空时 count=0，队满时 count=n。front=rear 单独不能区分队空与队满。队列仍遵循先入先出。这里没有给出多线程并发控制方案。"
+    },
+    {
+      "id": "tasks",
+      "title": "练习单与范围",
+      "text": "题 A：长度为 8 的循环队列最多能放几个元素？本题没有约定采用哪种实现。题 B：长度为 10、预留一个空位的循环队列最多能放几个元素？解释容量时，应说明是否预留空位。评价范围由本次明确的学习目标决定；本材料不提供考试权重。"
+    },
+    {
+      "id": "operations",
+      "title": "操作说明：下标回绕",
+      "text": "在本组两种实现中，入队成功后 rear 更新为 (rear+1) mod n。下标到 n−1 后，下一位置回到 0；不能直接访问下标 n。先入先出表示先进入队列的元素先离开。容量、空满判定与下标回绕是不同的问题，应先明确实现约定，再解释对应操作。"
+    }
+  ],
+  "evidence": {
+    "reserve_capacity": {
+      "materialId": "reserve",
+      "quote": "数组长度为 n，n 至少为 2；最多存放 n−1 个元素。"
+    },
+    "reserve_empty_full": {
+      "materialId": "reserve",
+      "quote": "队空时 front=rear；队满时 (rear+1) mod n=front。"
+    },
+    "count_capacity": {
+      "materialId": "count",
+      "quote": "本材料改用 count 记录元素个数，不预留空位。数组长度为 n，最多存放 n 个元素。"
+    },
+    "count_empty_full": {
+      "materialId": "count",
+      "quote": "队空时 count=0，队满时 count=n。front=rear 单独不能区分队空与队满。"
+    },
+    "ambiguous_task": {
+      "materialId": "tasks",
+      "quote": "题 A：长度为 8 的循环队列最多能放几个元素？本题没有约定采用哪种实现。"
+    },
+    "fixed_task": {
+      "materialId": "tasks",
+      "quote": "题 B：长度为 10、预留一个空位的循环队列最多能放几个元素？"
+    },
+    "explain_condition": {
+      "materialId": "tasks",
+      "quote": "解释容量时，应说明是否预留空位。"
+    },
+    "fifo": {
+      "materialId": "operations",
+      "quote": "先入先出表示先进入队列的元素先离开。"
+    },
+    "wrap": {
+      "materialId": "operations",
+      "quote": "下标到 n−1 后，下一位置回到 0；不能直接访问下标 n。"
+    },
+    "scope": {
+      "materialId": "tasks",
+      "quote": "评价范围由本次明确的学习目标决定；本材料不提供考试权重。"
+    },
+    "concurrency_unknown": {
+      "materialId": "count",
+      "quote": "这里没有给出多线程并发控制方案。"
+    }
+  },
+  "cases": [
+    {
+      "id": "relevant-unresolved",
+      "axes": [
+        "相关冲突",
+        "条件缺失"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks"
+      ],
+      "goal": "核对题 A 的容量判断",
+      "question": "题 A 能放几个？",
+      "answer": "能放 8 个。",
+      "condition": {
+        "status": "deferred",
+        "text": "题面未定实现，暂缓唯一容量结论。"
+      },
+      "expected": {
+        "judgeable": false,
+        "correctClaims": [],
+        "errors": [],
+        "omissions": [],
+        "deferredClaims": [
+          "题 A 的唯一容量"
+        ],
+        "priority": "确认采用哪种实现",
+        "evidence": [
+          "ambiguous_task",
+          "reserve_capacity",
+          "count_capacity"
+        ],
+        "forbidden": [
+          "直接将 8 判错",
+          "将题面缺条件计作学生遗漏",
+          "静默以课件覆盖笔记"
+        ]
+      }
+    },
+    {
+      "id": "reserve-adopted",
+      "axes": [
+        "用户裁决",
+        "流畅错误"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks"
+      ],
+      "goal": "按预留空位核对题 A",
+      "question": "本次明确采用预留空位，长度 8 能放几个？",
+      "answer": "当然能放 8 个，长度就是容量。",
+      "condition": {
+        "status": "condition",
+        "text": "本次采用预留一个空位。"
+      },
+      "expected": {
+        "judgeable": true,
+        "correctClaims": [],
+        "errors": [
+          "预留空位时把长度 8 当成容量 8"
+        ],
+        "omissions": [],
+        "deferredClaims": [],
+        "priority": "区分数组长度与预留空位后的容量",
+        "evidence": [
+          "reserve_capacity"
+        ],
+        "forbidden": [
+          "因流畅而判对",
+          "以计数实现支持这个已限定的回答",
+          "同一容量错误重复列为遗漏"
+        ]
+      }
+    },
+    {
+      "id": "count-adopted",
+      "axes": [
+        "用户裁决",
+        "等义回答"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks"
+      ],
+      "goal": "按计数实现核对题 A",
+      "question": "本次明确采用另记元素个数，长度 8 能放几个？",
+      "answer": "不用留空格，八个位置都能装元素，所以最多八个。",
+      "condition": {
+        "status": "condition",
+        "text": "本次采用 count 记录元素个数，不预留空位。"
+      },
+      "expected": {
+        "judgeable": true,
+        "correctClaims": [
+          "计数实现容量为 8"
+        ],
+        "errors": [],
+        "omissions": [],
+        "deferredClaims": [],
+        "priority": null,
+        "evidence": [
+          "count_capacity"
+        ],
+        "forbidden": [
+          "要求回答 n−1",
+          "要求背诵术语 count 才算正确"
+        ]
+      }
+    },
+    {
+      "id": "legitimate-challenge",
+      "axes": [
+        "合理质疑",
+        "条件化正确"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks"
+      ],
+      "goal": "检查题 A 是否有唯一答案",
+      "question": "题 A 的答案一定是 7 吗？",
+      "answer": "题目没有说用哪种实现。留一个空位就是 7，另记个数就能放 8，所以不能现在就说唯一是 7。",
+      "condition": {
+        "status": "deferred",
+        "text": "暂缓题 A 唯一容量；可以评价条件区分是否准确。"
+      },
+      "expected": {
+        "judgeable": "partial",
+        "correctClaims": [
+          "两种实现对应 7 与 8",
+          "题 A 未给唯一实现"
+        ],
+        "errors": [],
+        "omissions": [],
+        "deferredClaims": [
+          "题 A 的唯一容量"
+        ],
+        "priority": "确认题 A 的实现约定",
+        "evidence": [
+          "ambiguous_task",
+          "reserve_capacity",
+          "count_capacity"
+        ],
+        "forbidden": [
+          "把合理质疑当作不会",
+          "把条件式回答当作自相矛盾"
+        ]
+      }
+    },
+    {
+      "id": "irrelevant-conflict",
+      "axes": [
+        "无关冲突",
+        "一致来源"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "operations"
+      ],
+      "goal": "只核对先入先出的含义",
+      "question": "队列中谁先离开？",
+      "answer": "先进去的那个先出来。",
+      "condition": null,
+      "expected": {
+        "judgeable": true,
+        "correctClaims": [
+          "先进先出"
+        ],
+        "errors": [],
+        "omissions": [],
+        "deferredClaims": [],
+        "priority": null,
+        "evidence": [
+          "fifo"
+        ],
+        "forbidden": [
+          "因容量约定不同而暂停整个判断",
+          "要求先裁决 7 或 8",
+          "把未说明容量计作遗漏"
+        ]
+      }
+    },
+    {
+      "id": "defer-one-continue-other",
+      "axes": [
+        "部分暂缓",
+        "独立错误"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks",
+        "operations"
+      ],
+      "goal": "核对题 A 容量和队列顺序",
+      "question": "题 A 能放几个？队列按什么顺序取出？",
+      "answer": "能放 8 个；最后进去的先出来。",
+      "condition": {
+        "status": "deferred",
+        "text": "题 A 的容量暂缓；顺序不受实现差异影响。"
+      },
+      "expected": {
+        "judgeable": "partial",
+        "correctClaims": [],
+        "errors": [
+          "将先入先出说成后入先出"
+        ],
+        "omissions": [],
+        "deferredClaims": [
+          "题 A 的唯一容量"
+        ],
+        "priority": "先纠正队列顺序；容量等实现确认后再判断",
+        "evidence": [
+          "ambiguous_task",
+          "fifo"
+        ],
+        "forbidden": [
+          "把 8 判错",
+          "暂缓与冲突无关的先入先出错误"
+        ]
+      }
+    },
+    {
+      "id": "prerequisite-before-detail",
+      "axes": [
+        "前置错误",
+        "补学优先级"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "operations"
+      ],
+      "goal": "解释计数实现的容量及空满判定",
+      "question": "计数实现长度 8，容量和空满条件是什么？",
+      "answer": "计数实现也必须留一个空位，因此最多 7 个。front=rear 就说明满了。",
+      "condition": {
+        "status": "condition",
+        "text": "本次采用 count 实现。"
+      },
+      "expected": {
+        "judgeable": true,
+        "correctClaims": [],
+        "errors": [
+          "把预留空位前提套到计数实现",
+          "仅凭 front=rear 断言队满"
+        ],
+        "omissions": [],
+        "deferredClaims": [],
+        "priority": "先区分 count 实现与预留空位实现，再解释容量及空满",
+        "evidence": [
+          "count_capacity",
+          "count_empty_full"
+        ],
+        "forbidden": [
+          "只纠正数字而隐去前提混用",
+          "把这两个错误再重复列为多条遗漏",
+          "臆测考试权重"
+        ]
+      }
+    },
+    {
+      "id": "goal-capacity-only",
+      "pair": "goal-pair",
+      "axes": [
+        "目标变化"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks",
+        "operations"
+      ],
+      "goal": "本次只核对容量；其他操作另学",
+      "question": "请核对这段关于预留空位循环队列的讲解。",
+      "answer": "留一个位置，所以最多 7 个。入队下标直接加一不用回绕，队列后进先出。",
+      "condition": {
+        "status": "condition",
+        "text": "预留空位实现。"
+      },
+      "expected": {
+        "judgeable": true,
+        "correctClaims": [
+          "容量为 7 及预留空位理由"
+        ],
+        "errors": [],
+        "omissions": [],
+        "deferredClaims": [],
+        "priority": null,
+        "evidence": [
+          "reserve_capacity",
+          "scope"
+        ],
+        "forbidden": [
+          "将本次容量判错",
+          "称整段讲解全部正确",
+          "因另有错误声称容量未掌握"
+        ],
+        "outOfScopeErrors": [
+          "下标不回绕",
+          "后进先出"
+        ]
+      }
+    },
+    {
+      "id": "goal-mechanism",
+      "pair": "goal-pair",
+      "axes": [
+        "目标变化",
+        "前置依赖"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks",
+        "operations"
+      ],
+      "goal": "解释循环队列的容量、先入先出与回绕机制",
+      "question": "请核对这段关于预留空位循环队列的讲解。",
+      "answer": "留一个位置，所以最多 7 个。入队下标直接加一不用回绕，队列后进先出。",
+      "condition": {
+        "status": "condition",
+        "text": "预留空位实现。"
+      },
+      "expected": {
+        "judgeable": true,
+        "correctClaims": [
+          "容量为 7 及预留空位理由"
+        ],
+        "errors": [
+          "将先入先出说成后入先出",
+          "下标不取模回绕"
+        ],
+        "omissions": [],
+        "deferredClaims": [],
+        "priority": "先明确队列取出顺序，再修正回绕操作",
+        "acceptablePriority": [
+          "先用边界例子修正回绕，再核对取出顺序"
+        ],
+        "evidence": [
+          "fifo",
+          "wrap",
+          "reserve_capacity"
+        ],
+        "forbidden": [
+          "将正确的容量也判错",
+          "仅按答案长短确定优先级"
+        ]
+      }
+    },
+    {
+      "id": "verbose-correct",
+      "axes": [
+        "啰嗦正确",
+        "自我修正",
+        "等义回答"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks"
+      ],
+      "goal": "解释题 B 的容量",
+      "question": "题 B 能放几个，为什么？",
+      "answer": "嗯，我先说十个——不，这句我收回。题 B 用的是留一个空位的做法，数组虽然十格，但有一格不放元素。所以最终是九个；我说的就是最多放九个。",
+      "condition": {
+        "status": "condition",
+        "text": "采用题 B 明确的预留空位。"
+      },
+      "expected": {
+        "judgeable": true,
+        "correctClaims": [
+          "最终立场为容量 9",
+          "预留空位理由"
+        ],
+        "errors": [],
+        "omissions": [],
+        "deferredClaims": [],
+        "priority": null,
+        "evidence": [
+          "fixed_task",
+          "reserve_capacity"
+        ],
+        "forbidden": [
+          "把已明确撤回的十个另判错",
+          "将口头填充词或重复推断为不会",
+          "生成停顿时间或长期掌握评分"
+        ]
+      }
+    },
+    {
+      "id": "fluent-wrong",
+      "axes": [
+        "流畅错误",
+        "与正确啰嗦样本配对"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks"
+      ],
+      "goal": "解释题 B 的容量",
+      "question": "题 B 能放几个，为什么？",
+      "answer": "题 B 数组长度十，所以容量就是十。预留空位不影响最多存放的元素个数。",
+      "condition": {
+        "status": "condition",
+        "text": "采用题 B 明确的预留空位。"
+      },
+      "expected": {
+        "judgeable": true,
+        "correctClaims": [],
+        "errors": [
+          "预留空位时容量仍说为 10"
+        ],
+        "omissions": [],
+        "deferredClaims": [],
+        "priority": "解释预留空位为何减少一个可用位置",
+        "evidence": [
+          "fixed_task",
+          "reserve_capacity"
+        ],
+        "forbidden": [
+          "因表达流畅而判对",
+          "将同一个错误拆成数值错和条件遗漏两条"
+        ]
+      }
+    },
+    {
+      "id": "required-omission",
+      "axes": [
+        "目标内遗漏",
+        "非穷尽背诵"
+      ],
+      "materialIds": [
+        "reserve",
+        "tasks"
+      ],
+      "goal": "解释题 B 容量及理由",
+      "question": "题 B 能放几个，为什么？",
+      "answer": "最多放九个。",
+      "condition": {
+        "status": "condition",
+        "text": "采用题 B 明确的预留空位。"
+      },
+      "expected": {
+        "judgeable": true,
+        "correctClaims": [
+          "容量为 9"
+        ],
+        "errors": [],
+        "omissions": [
+          "本次明确要求的预留空位理由"
+        ],
+        "deferredClaims": [],
+        "priority": "补充为何只能放 9 个",
+        "evidence": [
+          "fixed_task",
+          "reserve_capacity",
+          "explain_condition"
+        ],
+        "forbidden": [
+          "将正确数字判错",
+          "要求补齐 FIFO 或所有空满公式",
+          "将遗漏标到不存在的原话"
+        ]
+      }
+    },
+    {
+      "id": "insufficient-evidence",
+      "axes": [
+        "证据不足",
+        "合理拒绝推断"
+      ],
+      "materialIds": [
+        "count",
+        "operations"
+      ],
+      "goal": "核对并发安全能否由材料推出",
+      "question": "另记 count 是否就保证多线程同时入队安全？",
+      "answer": "这些材料没有说锁或其他并发机制，我不能从有 count 就推出线程安全。",
+      "condition": {
+        "status": "deferred",
+        "text": "暂缓线程安全结论，等待并发控制资料。"
+      },
+      "expected": {
+        "judgeable": "partial",
+        "correctClaims": [
+          "现有材料不支持线程安全保证"
+        ],
+        "errors": [],
+        "omissions": [],
+        "deferredClaims": [
+          "具体实现的线程安全性"
+        ],
+        "priority": "取得并发控制前提",
+        "evidence": [
+          "concurrency_unknown"
+        ],
+        "forbidden": [
+          "凭常识补全未提供的实现后判学生错",
+          "称其缺少材料外锁知识",
+          "将暂缓改成不安全的确定结论"
+        ]
+      }
+    },
+    {
+      "id": "unsupported-choice",
+      "axes": [
+        "用户选择不是事实",
+        "相关条件仍不足"
+      ],
+      "materialIds": [
+        "reserve",
+        "count",
+        "tasks"
+      ],
+      "goal": "核对题 A 的容量",
+      "question": "长度 8 的队列能放 9 个吗？",
+      "answer": "我觉得能放 9 个。",
+      "condition": {
+        "status": "condition",
+        "text": "我选择另记个数时可存 n+1 个作为前提。"
+      },
+      "expected": {
+        "judgeable": false,
+        "correctClaims": [],
+        "errors": [],
+        "omissions": [],
+        "deferredClaims": [
+          "依据用户不受材料支持的前提判断作答"
+        ],
+        "priority": "说明所选 n+1 前提不受材料支持，重新确认适用条件",
+        "evidence": [
+          "count_capacity",
+          "reserve_capacity"
+        ],
+        "forbidden": [
+          "因为用户选择就支持 n+1",
+          "不说明前提问题而输出学生知识错误"
+        ]
+      }
+    }
+  ]
+}
