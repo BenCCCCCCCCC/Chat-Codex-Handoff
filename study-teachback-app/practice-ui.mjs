@@ -4,7 +4,7 @@ import {activePractice, practiceRounds, createPracticeFlow} from './practice.mjs
 import {createDraftSaver} from './draft-save.mjs';
 import {resolveFeedback} from './feedback-reference.mjs';
 
-export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen, onFeedback}) {
+export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen, onFeedback,requireAI,aiReady=()=>true}) {
   const $ = id => document.getElementById(id);
   const node = (tag, text, cls) => {
     const e = document.createElement(tag); e.textContent = text;
@@ -13,7 +13,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
   };
   const drafts=createDraftSaver({save,onStatus:status=>{$('reviewSaveStatus').textContent=status==='error'?'复核草稿未保存，请重试保存。':status==='saving'?'正在保存复核草稿…':status==='saved'?'复核草稿已保存在本机':'';},onError:error=>act(()=>Promise.reject(error))});
   const flushDraft=()=>drafts.flush();
-  const flow = createPracticeFlow({getTopic, save, request, canStart, setBusy, changed:render});
+  const flow = createPracticeFlow({getTopic, save, request, canStart, setBusy, requireAI, changed:render});
   const reviewUI=mountQuestionReview({getTopic,flow,drafts,canStart,act});
   function render() {
     const topic = getTopic(), round = activePractice(topic), rounds = practiceRounds(topic);
@@ -26,12 +26,16 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     $('practicePanel').hidden = !topic || !(round || topic.practiceRequest || topic.taskUnavailable);
     $('practicePanel').dataset.active = String(topic?.resume?.view === 'practice');
     $('practiceNew').disabled = flow.busy;
+    $('practiceNew').disabled ||= !aiReady();
     $('practiceNew').hidden = !!round?.task;
     $('practiceNew').textContent = topic?.taskUnavailable ? '另开情境练习 · AI' : '换一道题 · AI';
-    $('startPractice').disabled = flow.busy;
+    $('startPractice').disabled = flow.busy||!round&&!topic?.practiceRequest&&!topic?.taskUnavailable&&!aiReady();
+    $('startPractice').textContent=round?'继续已有练习':topic?.practiceRequest?'查看出题状态':aiReady()?'情境练习':'新情境需配置 AI';
+    $('apply').disabled=flow.busy||!aiReady();$('apply').textContent=aiReady()?'试一个新情境 · AI':'新情境需配置 AI';
     $('practiceQuestionSelect').disabled = flow.busy;
     $('practiceDraft').disabled = flow.busy||replaced;
     $('practiceSubmit').disabled = flow.busy || !round || paused || !!round.task&&!round.draft;
+    $('practiceSubmit').disabled ||= !round?.task&&!aiReady();
     $('practiceSubmit').hidden = paused;
     $('practiceFlag').hidden = !round || paused;
     $('practiceUndoFlag').hidden = !held || round.review.origin!=='learner';
@@ -62,14 +66,14 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
       input.onchange=()=>{round.draft=choice.id;topic.resume={view:'practice'};$('practiceSubmit').disabled=paused;drafts.mark(topic);};
       label.append(input,node('span',choice.label));return label;
     }));
-    $('practiceGuidance').textContent = replaced?'原题只读 · 请到修订题重新作答':held ? '草稿自动保存 · 判断已暂停' : round?.task ? '本机核对 · 仅判断这一题' : '草稿自动保存 · 提交后发送给 AI';
+    $('practiceGuidance').textContent = replaced?'原题只读 · 请到修订题重新作答':held ? '草稿自动保存 · 判断已暂停' : round?.task ? '本机核对 · 仅判断这一题' : !aiReady()?'草稿可在本机继续 · 配置 AI 后提交':'草稿自动保存 · 提交后发送给 AI';
     $('practiceSubmit').textContent = flow.busy ? '处理中…' :
       round?.task ? '查看判断' :
       round?.answers.some(a => a.text === round.draft?.trim() && a.status !== 'complete' && answerDisposition(round,a)==='current') ? '重试这次回答' : '提交回答';
     $('practiceStatus').textContent = flow.busy ? '正在处理…' :
       replaced ? '题目已修订，原回答和先前反馈保留为历史，不作为答错记录。' :
       held ? (round.review.origin==='local_check' ? '题目与材料记录不一致，已暂停判断。' : '题目待核对，暂不判断你的回答。') :
-      topic?.practiceRequest ? '上次出题未完成或结果未知。重试会发起新的模型请求。' :
+      topic?.practiceRequest ? '上次出题未完成或结果未知，记录仍保留。可先继续讲解或已有练习；配置 AI 后可明确选择重试。' :
       topic?.taskUnavailable ? '暂未生成合适的检验题。可以返回对话继续学习。' : '';
     $('practiceAnswers').replaceChildren(...(round?.answers ?? []).map((answer, i) => {
       const item = node('article', '', 'practice-answer');
@@ -109,7 +113,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
   async function start() {
     if (!canStart()) return;
     await flushDraft();
-    try { await flow.start(); } finally { focusPanel(); }
+    try { await flow.start(); } finally { if(getTopic()?.resume?.view==='practice')focusPanel(); }
   }
   $('practiceNew').onclick = () => act(start);
   $('practiceFlag').onclick = () => act(async () => {

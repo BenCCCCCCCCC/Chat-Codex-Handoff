@@ -32,7 +32,7 @@ export function activityTime(topic) {
 export function resumePoint(topic) {
   const saved = topic.resume;
   if (saved?.view === 'learn') return saved;
-  if (saved?.view === 'practice' && (activePractice(topic) || topic.practiceRequest || topic.taskUnavailable)) return {view:'practice'};
+  if (saved?.view === 'practice' && (activePractice(topic) || topic.taskUnavailable)) return {view:'practice'};
   const attempt = (topic.attempts ?? []).find(a => a.id === saved?.attemptId);
   if (attempt) return {view:'attempt', attemptId:attempt.id,...(saved.feedbackOrigin?{feedbackOrigin:saved.feedbackOrigin}:{})};
   if (['apply','apply_answer'].includes(topic.mode) && activePractice(topic)) return {view:'practice'};
@@ -41,7 +41,7 @@ export function resumePoint(topic) {
 }
 
 export function createPracticeFlow({getTopic, canStart, setBusy, save, request, changed,
-  uid = () => crypto.randomUUID(), now = () => Date.now()}) {
+  requireAI=()=>{}, uid = () => crypto.randomUUID(), now = () => Date.now()}) {
   let busy = false;
   async function run(work) {
     if (busy || !canStart()) return;
@@ -96,14 +96,18 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       await save(topic);
     }),
     start: () => run(async topic => {
+      requireAI();
+      const previous={practiceRequest:topic.practiceRequest,resume:topic.resume,taskUnavailable:topic.taskUnavailable};
       const rounds = practiceRounds(topic);
       topic.taskUnavailable=null;
       topic.resume = {view:'practice'};
       const operation = topic.practiceRequest = {status:'pending', createdAt:now()};
+      let dispatched=false;
       try {
         await save(topic);
         const history = [...topic.messages, ...rounds.filter(r=>!practicePaused(r)).slice(-3)
           .map(r => ({role:'assistant', text:r.question}))].slice(-6);
+        dispatched=true;
         const result = await request('/api/teach', {source:topic.source, setupContext:topic.setupContext,
           mode:'apply', message:'给我一个新的、相关的应用情境，不要先公布答案。', focus:null, history});
         const round = {id:uid(), createdAt:now(), question:result.value.question,
@@ -111,14 +115,17 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
         rounds.push(round); topic.activePracticeId = round.id;
         topic.practiceRequest = null;
         await save(topic);
-      } catch (error) { await failed(topic, operation, error); }
+      } catch (error) {
+        if(!dispatched||error.notSent){Object.assign(topic,previous);if(error.message!=='STORAGE_FAILED')await save(topic);throw error;}
+        await failed(topic, operation, error);
+      }
     }),
     answer: () => run(async topic => {
       const round = activePractice(topic), text = round?.draft?.trim();
       if (!round || practicePaused(round) || !text) return;
       if (text.length > 2000) throw new Error('INPUT_TOO_LARGE');
-      topic.resume = {view:'practice'};
       if(round.task){
+        topic.resume = {view:'practice'};
         if (!await checkLocalTask(topic,round)) return;
         const assessment=assessBoundedTask(round.task,topic.source,round.taskTarget,text);
         if(!round.answers.some(a=>a.choiceId===text&&a.status==='complete'&&answerDisposition(round,a)==='current')){
@@ -131,22 +138,34 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       if (round.answers.some(a => a.text === text && a.status === 'complete' && answerDisposition(round,a)==='current')) {
         round.draft = ''; await save(topic); return;
       }
+      requireAI();
+      const previousResume=topic.resume;
+      topic.resume = {view:'practice'};
       let answer = round.answers.findLast(a => a.text === text && a.status !== 'complete' && answerDisposition(round,a)==='current');
+      const existed=!!answer,previousStatus=answer?.status;
       if (!answer) {
         answer = {id:uid(), text, createdAt:now(), result:null, status:'pending'};
         round.answers.push(answer);
       }
       answer.status = 'pending';
+      let dispatched=false;
       try {
         await save(topic);
         const prior = round.answers.filter(a => a !== answer && a.status === 'complete' && answerDisposition(round,a)==='current')
           .flatMap(a => [{role:'user',text:a.text},{role:'assistant',text:a.result}]);
+        dispatched=true;
         const result = await request('/api/teach', {source:topic.source, setupContext:topic.setupContext,
           mode:'apply_answer', message:text, focus:round.question,
           history:[{role:'assistant',text:round.introduction || round.question}, ...prior].slice(-6)});
         answer.result = result.value.message; answer.status = 'complete'; answer.completedAt = now();
         round.draft = ''; await save(topic);
-      } catch (error) { await failed(topic, answer, error); }
+      } catch (error) {
+        if(!dispatched||error.notSent){
+          if(existed)answer.status=previousStatus;else round.answers=round.answers.filter(a=>a!==answer);
+          topic.resume=previousResume;if(error.message!=='STORAGE_FAILED')await save(topic);throw error;
+        }
+        await failed(topic, answer, error);
+      }
     }),
     flagQuestion: () => run(async topic => {
       const round=activePractice(topic);

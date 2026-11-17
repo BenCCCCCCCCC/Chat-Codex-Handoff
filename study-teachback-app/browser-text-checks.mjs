@@ -3,7 +3,7 @@ export async function textChecks({check,evaluate,until,reloadPage,click,calls,sh
   await check('typed teach-back preserves drafts, saves locally, diagnoses explicitly and compares pinned versions through backup',async()=>{
     const before=calls.length;setAIConfigured(false);await reloadPage();
     await evaluate(`document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。'`);await click('learn');await until(`!document.getElementById('workspace').hidden`);
-    await click('explain');await evaluate(`document.getElementById('textComposer').open=true`);
+    await click('explain');assert(await evaluate(`document.getElementById('textComposer').open&&document.activeElement.id==='textExplanation'`));
     await evaluate(`{const e=document.getElementById('textExplanation');e.value='土壤湿润时也要浇水。';e.dispatchEvent(new Event('input'));}`);
     await click('cancelRecord');await click('historyButton');await reloadPage();await click('historyButton');
     await evaluate(`{const s=document.getElementById('historySearch');s.value='土壤湿润时也要浇水';s.dispatchEvent(new Event('input'));}`);
@@ -16,6 +16,17 @@ export async function textChecks({check,evaluate,until,reloadPage,click,calls,sh
     await until(`!document.getElementById('attemptPanel').hidden`);assert.equal(calls.length,before);
     assert(await evaluate(`document.getElementById('confirm').disabled&&document.getElementById('confirm').textContent.includes('配置 AI')`));
     assert(await evaluate(`document.getElementById('player').hidden&&document.getElementById('processDetails').hidden&&!document.querySelector('#transcript button')`));
+    assert(!await evaluate(`document.getElementById('diagnosisState').textContent.includes('回听')`));
+    assert(await evaluate(`document.getElementById('apply').disabled&&document.getElementById('apply').textContent.includes('配置 AI')`));
+    await click('apply');await click('historyButton');await reloadPage();
+    assert(await evaluate(`!document.getElementById('attemptPanel').hidden`));
+    assert(await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore(),t=(await db.all())[0];db.close();return !t.practiceRequest&&t.resume.view==='attempt'&&(t.practiceRounds??[]).length===0;})()`));
+    // Old unknown records cannot be identified as unsent: keep them, recover useful work.
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore(),t=(await db.all())[0];t.practiceRequest={status:'unknown',createdAt:Date.now()};t.resume={view:'practice'};await db.put(t);db.close();})()`);
+    await reloadPage();assert(await evaluate(`!document.getElementById('attemptPanel').hidden&&document.getElementById('startPractice').textContent==='查看出题状态'`));
+    await click('historyButton');assert.equal(await evaluate(`document.querySelector('.history-continue').textContent`),'继续核对与反馈');
+    await evaluate(`document.querySelector('.history-continue').click()`);await until(`document.getElementById('history').hidden`);
+    assert.equal(calls.length,before);await shot('local-text-resumed','attemptPanel');
     setAIConfigured(true);await reloadPage();await click('confirm');await until(`document.querySelector('#feedback .finding')`);
     assert.deepEqual(calls.slice(before).map(c=>c.kind),['content']);
     await evaluate(`[...document.querySelectorAll('#feedback button')].find(b=>b.textContent==='再讲这一点').click()`);

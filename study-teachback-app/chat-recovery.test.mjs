@@ -7,7 +7,7 @@ const implementation=app.slice(app.indexOf('async function teach('),app.indexOf(
 const empty=()=>({id:'topic',source:{id:'source',text:'Rule'},goals:[],messages:[],attempts:[]});
 function harness(topic=empty()) {
   const sent=[],saved=[];
-  const context=vm.createContext({topic,record:null,capturePending:false,controller:null,processing:false,
+  const context=vm.createContext({topic,record:null,capturePending:false,controller:null,processing:false,serviceCapabilities:{ai:true},
     deleted:new Set(),structuredClone,uid:()=>crypto.randomUUID(),repairFocus:x=>x,
     save:async()=>saved.push(structuredClone(topic)),renderTopic(){},notice(){},
     api:async(path,body)=>{sent.push(structuredClone(body));return {value:{message:'Reply',question:'Why?',goals:[]}};}});
