@@ -18,13 +18,17 @@ export function renderJudgementChoices({root,topic,attempt,disabled,change,creat
   if(!choices.length)root.append(node('p','还没有适用于本次材料组合的条件记录。'));
   const add=node('button','记录或修订适用条件');add.type='button';add.className='quiet';add.disabled=disabled;add.onclick=create;root.append(add);
 }
-export function appendJudgementSummary(root,report){
+export function appendJudgementSummary(root,report,{onPractice,canPractice=true}={}){
   const node=(tag,value)=>{const e=document.createElement(tag);e.textContent=value;return e;};
   for(const a of report.judgement?.assessments??[]){
     const issue=report.judgement.issues.find(i=>i.id===a.issueId),card=node('article','');card.className='finding judgement';card.dataset.judgement=a.decision;
     card.append(node('strong',a.decision==='deferred'?'暂缓本项 · 不计作答错':'按条件可判'),node('h4',issue.question),node('p',a.reason));
     const evidence=node('details','');evidence.append(node('summary','当时采用的条件与材料'));evidence.append(node('p',issue.status==='deferred'?'学习者选择暂缓':'学习者采用的条件：'+issue.condition));
     if(issue.status==='deferred'&&issue.condition)evidence.append(node('p',issue.condition));
-    for(const e of issue.evidence)evidence.append(node('p',e.title),node('blockquote',e.quote));card.append(evidence);root.append(card);
+    for(const e of issue.evidence)evidence.append(node('p',e.title),node('blockquote',e.quote));card.append(evidence);
+    if(onPractice&&a.decision==='judgeable'&&issue.status==='condition'){
+      const practice=node('button',canPractice?'按此条件练一题 · AI':'配置 AI 后按此条件练习');practice.className='quiet';practice.dataset.conditionPractice=issue.id;practice.disabled=!canPractice;practice.onclick=()=>onPractice(issue.id);card.append(practice);
+    }
+    root.append(card);
   }
 }

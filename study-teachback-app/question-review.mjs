@@ -51,7 +51,7 @@ export function validateQuestionReviews(topic){
     if(round.review)requireValue(['held','replaced'].includes(round.review.status),'INVALID_REVIEW');
     const seen=new Set();
     for(const r of [...history,...(round.review?[round.review]:[])]){
-      requireValue(r&&['held','replaced','resolved'].includes(r.status)&&['learner','local_check'].includes(r.origin),'INVALID_REVIEW');
+      requireValue(r&&['held','replaced','resolved'].includes(r.status)&&['learner','local_check','condition_check'].includes(r.origin),'INVALID_REVIEW');
       requireValue(Number.isFinite(r.createdAt)&&r.createdAt>0,'INVALID_REVIEW');
       if(r.id!=null)identifier(r.id);
       for(const [key,max] of [['note',1000],['basisQuote',1500],['proposedQuestion',1000]])if(r[key]!=null)requireValue(typeof r[key]==='string'&&r[key].length<=max,'INVALID_REVIEW');

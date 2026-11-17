@@ -1,5 +1,6 @@
 import {answerDisposition} from './question-review.mjs';
 import {learningContexts} from './material-set.mjs';
+import {evidenceSummary} from './conditional-practice.mjs';
 const normalize=value=>String(value??'').normalize('NFKC').toLocaleLowerCase();
 const field=(label,text,target)=>({label,text,target,key:JSON.stringify(target)});
 function contextFields(topic) {
@@ -21,9 +22,11 @@ function contextFields(topic) {
       field('题目疑问',r.review?.status==='held'?r.review.note:null,{kind:'practice',roundId:r.id,part:'review'}),
       ...(r.reviewHistory??[]).map(e=>field('题目复核',e.note,{kind:'practice',roundId:r.id,part:'review',reviewId:e.id})),
       field('练习',r.question,{kind:'practice',roundId:r.id}),
+      field('练习适用条件',r.conditionContext?.issues.map(i=>i.condition).join('\n'),{kind:'practice',roundId:r.id,part:'conditions'}),
       field('草稿',r.task?r.task.exercise.choices.find(c=>c.id===r.draft)?.label:r.draft,{kind:'practice',roundId:r.id,part:'draft'}),
       ...r.answers.flatMap(a=>[
         field('回答',a.text,{kind:'practice',roundId:r.id,answerId:a.id}),
+        field('作答证据',a.evidence?evidenceSummary(a.evidence):null,{kind:'practice',roundId:r.id,answerId:a.id,part:'evidence'}),
         field(answerDisposition(r,a)==='excluded'?'历史反馈（不作答错依据）':answerDisposition(r,a)==='pending'?'待复核反馈':'反馈',a.result,{kind:'practice',roundId:r.id,answerId:a.id,part:'result'})
       ])
     ]),

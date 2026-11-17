@@ -7,6 +7,7 @@ import { sourceValue, attemptValue, contentInput, validateTeaching, validateFind
 import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVERY } from './schemas.mjs';
 import {transcriptionTerms} from './transcription-terms.mjs';
 import {judgementIssues,judgementSchema,JUDGEMENT,scopedReport} from './judgement.mjs';
+import {practiceConditions,conditionalPracticeSchema,CONDITIONAL_PRACTICE,validateConditionalResult} from './conditional-practice.mjs';
 
 const files={'/bounded-understanding.mjs':'bounded-understanding.mjs','/understanding-task.mjs':'understanding-task.mjs','/transcription-terms.mjs':'transcription-terms.mjs','/transcript-playback.mjs':'transcript-playback.mjs','/audio-input.mjs':'audio-input.mjs','/voice-review.mjs':'voice-review.mjs','/search-focus.mjs':'search-focus.mjs','/chat-ui.mjs':'chat-ui.mjs','/draft-save.mjs':'draft-save.mjs','/record-search.mjs':'record-search.mjs','/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/workspace-ui.mjs':'workspace-ui.mjs','/practice.mjs':'practice.mjs','/practice-ui.mjs':'practice-ui.mjs','/backup.mjs':'backup.mjs','/backup-ui.mjs':'backup-ui.mjs','/demo':'demo.html','/demo.mjs':'demo.mjs','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
 export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger,extractCall=extractSource,capabilityCall=extractionCapabilities,keyConfigured=()=>!!process.env.OPENAI_API_KEY}={}) {
@@ -19,6 +20,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
   files['/material-set.mjs']='material-set.mjs';
   files['/material-set-ui.mjs']='material-set-ui.mjs';
   files['/judgement.mjs']='judgement.mjs';files['/judgement-ui.mjs']='judgement-ui.mjs';files['/schemas.mjs']='schemas.mjs';
+  files['/conditional-practice.mjs']='conditional-practice.mjs';files['/practice-evidence-ui.mjs']='practice-evidence-ui.mjs';
   let busy=false,extracting=false;
   return http.createServer(async(req,res)=>{
     const expected=`127.0.0.1:${req.socket.localPort}`, origin=`http://${expected}`;
@@ -67,6 +69,15 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       const source=sourceValue(b.source);
       if(path==='/api/teach'){
         requireValue(['learn','repair','apply','apply_answer'].includes(b.mode),'INVALID_MODE');
+        if(b.practiceConditions){
+          requireValue(['apply','apply_answer'].includes(b.mode),'INVALID_MODE');
+          const context=practiceConditions(b.practiceConditions,source);
+          const previousQuestions=b.previousQuestions??[];requireValue(Array.isArray(previousQuestions)&&previousQuestions.length<=3,'INVALID_PRACTICE_CONDITIONS');
+          const input={source,mode:b.mode,practiceConditions:{issues:context.issues},
+            ...(b.mode==='apply'?{previousQuestions:previousQuestions.map(q=>text(q,1000))}:{question:text(b.focus,1000),answer:text(b.message,2000)})};
+          const result=await semanticCall(CONDITIONAL_PRACTICE,input,conditionalPracticeSchema,{signal:controller.signal});
+          return json(200,{...result,value:validateConditionalResult(result.value,source,b.mode)});
+        }
         const input={source,setupContext:setupContextValue(b.setupContext),mode:b.mode,message:text(b.message,2000),focus:b.mode==='repair'?repairFocus(b.focus):b.focus?text(b.focus,1000):null,history:Array.isArray(b.history)?b.history.slice(-6).map(m=>({role:m.role==='assistant'?'assistant':'user',text:text(m.text,m.role==='assistant'?TUTOR_MESSAGE_LIMIT:2500)})):[]};
         requireValue(b.contextNote==null||typeof b.contextNote==='string'&&b.contextNote.length<=1000,'INVALID_CONTEXT_NOTE');
         input.contextNote=b.contextNote?.trim()??'';

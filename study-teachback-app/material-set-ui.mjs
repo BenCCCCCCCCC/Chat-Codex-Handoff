@@ -3,7 +3,7 @@ import {materialList,initializeMaterials,addMaterial,selectMaterials,selectConte
 import {importedDocument,selectedProvenance,renderMaterial} from './source-provenance.mjs';
 import {createDraftSaver} from './draft-save.mjs';
 
-export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeChange,onSwitch,act}){
+export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeChange,onSwitch,onReference=()=>{},act}){
   const $=id=>document.getElementById(id),node=(tag,value)=>{const e=document.createElement(tag);e.textContent=value;return e;};
   let busy=false,previewId=null,documentPreview=null;
   const drafts=createDraftSaver({save,onStatus:s=>{$('materialDraftStatus').textContent=s==='saved'?'草稿已保存在本机':s==='saving'?'正在保存…':s==='error'?'草稿保存失败，请重试保存。':'';},onError:e=>act(()=>Promise.reject(e))});
@@ -17,6 +17,7 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
     const material=materialList(getTopic()).find(m=>m.id===id);if(!material)return;
     previewId=id;$('materialPreview').hidden=false;$('materialPreviewTitle').textContent=material.title;
     renderMaterial({textNode:$('materialPreviewText'),locationNode:$('materialPreviewLocation'),source:material});
+    onReference();
   }
   function render(){
     const topic=getTopic();if(!topic)return;

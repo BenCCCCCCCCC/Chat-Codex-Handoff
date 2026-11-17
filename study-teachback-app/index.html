@@ -71,7 +71,8 @@
       <div class="sectionHead"><h2 id="practiceHeading" tabindex="-1">情境练习</h2><div class="compact-actions"><button id="backToChat" class="quiet">返回对话</button><button id="practiceNew" class="quiet">换一道题</button></div></div>
       <label class="sr-only" for="practiceQuestionSelect">查看以前的情境题</label><select id="practiceQuestionSelect" hidden></select>
       <button id="practiceReturn" class="quiet" hidden>返回原反馈</button><p id="practiceOriginStatus" class="muted" role="status"></p><p id="practiceStatus" role="status" tabindex="-1" class="muted"></p>
-      <div id="practiceBody">
+      <p id="practicePendingConditions" class="muted" hidden></p><div id="practiceBody">
+        <section id="practiceConditions" class="practice-conditions" hidden><h3>本题固定的适用条件</h3><p id="practiceConditionsText" class="prewrap"></p><p class="muted">这些条件随本题保存；修改其他笔记不会改写本题。带前提作答不等于无提示测验。</p><details id="practiceConditionEvidence"><summary>查看条件所据材料</summary><div id="practiceConditionQuotes"></div></details></section>
         <div class="practice-prompt"><p id="practiceIntroduction" class="prewrap"></p><p id="practiceAssumptions" class="prewrap" hidden></p><h3 id="practiceQuestion"></h3><button id="practiceFlag" class="quiet" type="button">题目有疑问</button><button id="practiceUndoFlag" class="quiet" type="button" hidden>撤回标记</button></div>
         <div id="questionVersions" class="actions"></div>
         <details id="revisionBasis" hidden><summary>修订依据</summary><p id="revisionBasisText" class="prewrap"></p></details>
@@ -89,6 +90,8 @@
         <div id="practiceAnswers" aria-live="polite"></div>
         <details id="questionReviewHistory" hidden><summary>题目复核记录</summary><div id="questionReviewEvents"></div></details>
         <details id="practiceRubric" hidden><summary>判断依据</summary><div id="practiceRubricBody"></div></details>
+        <button id="practiceAgain" class="quiet" type="button" hidden>再答一次（新增记录）</button>
+        <section id="practiceEvidence" hidden><label for="answerAssistance">这次还参考了什么？</label><select id="answerAssistance"><option value="unknown">未填写</option><option value="none">未额外参考（自报）</option><option value="used">参考了材料、他人或工具（自报）</option></select><p id="answerEvidenceStatus" class="muted prewrap"></p></section>
         <form id="practiceForm"><fieldset id="practiceChoices" class="answer-choices" hidden><legend>你的判断</legend></fieldset><label id="practiceDraftLabel" for="practiceDraft">你的回答</label><textarea id="practiceDraft" maxlength="2000" rows="4" placeholder="写下你的判断…"></textarea><div class="practice-submit"><span id="practiceGuidance" class="muted">草稿自动保存 · 提交后发送给 AI</span><button id="practiceSubmit" type="submit">提交回答</button></div></form>
       </div>
     </section>
