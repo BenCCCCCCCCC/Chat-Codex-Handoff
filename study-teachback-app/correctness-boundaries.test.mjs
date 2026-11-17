@@ -45,7 +45,7 @@ function confirmationHarness(){
   const a={id:'attempt',source,duration:1,kind:'full',assistance:'none',audio:new Blob(['synthetic']),raw:{id:'raw',text:'Enter when open.',spans:[{id:'s0',start:0,end:1,text:'Enter when open.'}]},corrections:[],reports:[]};
   let saveGate=null;
   const context=vm.createContext({$,serviceCapabilities:{ai:true,imports:{office:true,pdf:true}},current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),
-    diagnosisStates:new WeakMap(),matchMedia:()=>({matches:true}),editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
+    uid:()=>crypto.randomUUID(),diagnosisStates:new WeakMap(),matchMedia:()=>({matches:true}),editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
     transcriptTexts,updateTranscriptDraft,analysisTrace,renderRawPlayback(){},voiceDrafts:{flush:async()=>{},mark(){}},
     blobURL:null,replayRequest:0,replayOriginal:null,URL:{createObjectURL:()=> 'blob:synthetic',revokeObjectURL(){}},
     notice:x=>notices.push(x),friendly:x=>x,act:async fn=>{try{await fn();}catch(e){notices.push(e.message);}},
