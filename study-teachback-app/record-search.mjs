@@ -1,7 +1,8 @@
 import {answerDisposition} from './question-review.mjs';
+import {learningContexts} from './material-set.mjs';
 const normalize=value=>String(value??'').normalize('NFKC').toLocaleLowerCase();
 const field=(label,text,target)=>({label,text,target,key:JSON.stringify(target)});
-function fields(topic) {
+function contextFields(topic) {
   return [
     field('主题',topic.source.title,{kind:'title'}),
     field('材料',topic.source.text,{kind:'source'}),
@@ -33,16 +34,24 @@ function fields(topic) {
     ]:[])
   ].filter(({text})=>typeof text==='string'&&text.length);
 }
-export function hasDraft(topic) {
+function contextHasDraft(topic) {
   return !!topic.textDraft?.text?.trim() || !!topic.chatDraft?.trim() || !!topic.practiceRounds?.some(r=>r.review?.status!=='replaced'&&(r.draft?.trim()||r.review?.status==='held')) ||
     !!topic.attempts?.some(a=>a.transcriptDraft);
 }
+function fields(topic){
+  if(!topic.materials)return contextFields(topic);
+  return [field('主题',topic.studyTitle,{kind:'title'}),
+    ...topic.materials.map(m=>field('材料 · '+m.title,m.text,{kind:'material',materialId:m.id})),
+    ...(topic.studyIssues??[]).map(item=>field('学习疑点',item.question+'\n'+item.condition,{kind:'studyIssue',issueId:item.id})),
+    ...learningContexts(topic).flatMap(c=>contextFields(c).map(f=>field(f.label,f.text,{...f.target,contextId:c.source.id})))];
+}
+export function hasDraft(topic){return !!topic.materialDraft?.text?.trim()||!!topic.issueDraft?.question?.trim()||learningContexts(topic).some(contextHasDraft);}
 export function resolveRecordHit(topic,key) {return fields(topic).find(f=>f.key===key)??null;}
 export function searchRecords(records, query='', filter='all') {
   const terms=normalize(query).trim().split(/\s+/).filter(Boolean);
   return records.flatMap(topic=>{
-    if(filter==='draft'&&!hasDraft(topic) || filter==='audio'&&!topic.attempts.length ||
-      filter==='practice'&&!topic.practiceRounds?.length&&!topic.apply)return [];
+    if(filter==='draft'&&!hasDraft(topic) || filter==='audio'&&!learningContexts(topic).some(c=>c.attempts.length) ||
+      filter==='practice'&&!learningContexts(topic).some(c=>c.practiceRounds?.length||c.apply))return [];
     const content=fields(topic);
     if(!terms.every(term=>content.some(({text})=>normalize(text).includes(term))))return [];
     const hits=terms.length?content.filter(({text})=>terms.some(term=>normalize(text).includes(term))).map(f=>{

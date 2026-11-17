@@ -1,4 +1,5 @@
 import {BACKUP_LIMIT, decodeBackup, restoredCopy} from './backup.mjs';
+import {learningContexts} from './material-set.mjs';
 
 export function mountBackup({getStore, canStart, setBusy, beforeRestore, onRestore}) {
   const $=id=>document.getElementById(id), dialog=$('backupDialog');
@@ -27,7 +28,8 @@ export function mountBackup({getStore, canStart, setBusy, beforeRestore, onResto
     try {
       if(file.size>BACKUP_LIMIT)throw Error('BACKUP_TOO_LARGE');
       candidate=decodeBackup(await file.text());
-      $('backupSummary').textContent=`${candidate.source.title}\n${candidate.messages.length} 条消息 · ${candidate.attempts.length} 次讲解 · ${candidate.practiceRounds?.length??(candidate.apply?1:0)} 道练习\n学习于 ${new Date(candidate.createdAt).toLocaleDateString()}`;
+      const contexts=learningContexts(candidate),sum=field=>contexts.reduce((n,c)=>n+(c[field]?.length??0),0);
+      $('backupSummary').textContent=`${candidate.studyTitle??candidate.source.title}\n${sum('messages')} 条消息 · ${sum('attempts')} 次讲解 · ${sum('practiceRounds')||(candidate.apply?1:0)} 道练习${candidate.materials?` · ${candidate.materials.length} 份材料 · ${contexts.length} 个组合`:''}\n学习于 ${new Date(candidate.createdAt).toLocaleDateString()}`;
       $('backupConfirm').disabled=false;
     } catch(error) { $('backupStatus').textContent=errorText(error); }
     finally {busy=false;setBusy(false);$('backupFile').disabled=false;$('backupCancel').disabled=false;}

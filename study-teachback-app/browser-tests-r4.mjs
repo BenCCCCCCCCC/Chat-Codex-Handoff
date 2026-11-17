@@ -1,4 +1,5 @@
 import {questionReviewChecks} from './browser-question-review-checks.mjs';
+import {materialChecks} from './browser-material-checks.mjs';
 import {textChecks} from './browser-text-checks.mjs';
 import {feedbackReturnChecks} from './browser-feedback-return-checks.mjs';
 import {sourceChecks} from './browser-source-checks.mjs';
@@ -90,6 +91,7 @@ try{
   if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await setupChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
   if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await sourceChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
   if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await textChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
+  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await materialChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
   if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await feedbackReturnChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
   if(!setupOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await refinementChecks({check,evaluate,until,reloadPage,shot,cdp,all,calls});
   if(!setupOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await questionReviewChecks({check,evaluate,until,reloadPage,click,shot,cdp,calls,requests:provenanceRequests});

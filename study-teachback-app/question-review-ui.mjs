@@ -35,6 +35,13 @@ export function mountQuestionReview({getTopic,flow,drafts,canStart,act}){
     $(id).onblur=()=>act(()=>drafts.flush());
   }
   $('reviewKeep').onclick=()=>act(async()=>{if(!canStart())return;await drafts.flush();$('reviewSaveStatus').textContent='疑问已保存，仍暂停判断。';});
+  $('reviewUseQuote').onclick=()=>act(()=>{
+    const source=$('reviewSource'),selection=getSelection();let quote='';
+    if(selection&&!selection.isCollapsed&&source.contains(selection.anchorNode)&&source.contains(selection.focusNode))quote=selection.toString().trim();
+    else if(source.textContent.length<=1500)quote=source.textContent;
+    if(!quote||quote.length>1500)throw Error('SELECT_MATERIAL_QUOTE');
+    $('reviewBasis').value=quote;$('reviewBasis').dispatchEvent(new Event('input'));$('reviewBasis').focus();
+  });
   async function showPreview(kind){
     if(!canStart())return;await drafts.flush();const topic=getTopic(),round=activePractice(topic);
     if(round?.review?.status!=='held')return;
