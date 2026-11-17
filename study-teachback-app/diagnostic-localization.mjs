@@ -15,6 +15,7 @@ const processTypes = ['near_silence','short_pause_cluster','restart','self_repai
 export function processEvidence(values, attempt, events = []) {
   const a = attemptValue(attempt);
   requireValue(Array.isArray(values) && values.length <= 150, 'INVALID_PROCESS_EVIDENCE');
+  requireValue(a.inputMode!=='text'||values.length===0,'SOUND_EVIDENCE_INSUFFICIENT');
   const ids = new Set();
   return values.map(e => {
     requireValue(e && Object.keys(e).length === processKeys.length && processKeys.every(k => Object.hasOwn(e,k)), 'PROCESS_FIELD_LEAK');
@@ -61,7 +62,7 @@ export function localize({ source, attempt, report, evidence = [], events = [] }
     const related = span ? process.filter(e => e.confirmation !== 'candidate' && (e.spanId === span.id || e.start !== null && e.start < span.end && e.end > span.start)) : [];
     return [{id:`target:${f.id}`,kind:'worth_verifying',focus,sourceId:source.id,attemptId:attempt.id,transcriptVersion:attempt.transcriptVersion,
       contentFindingIds:[f.id],processEvidenceIds:related.map(e=>e.id),
-      contentLocation:span ? {spanId:span.id,start:span.start,end:span.end,precision:'segment'} : null,
+      contentLocation:span ? (attempt.inputMode==='text'?{spanId:span.id,precision:'paragraph'}:{spanId:span.id,start:span.start,end:span.end,precision:'segment'}) : null,
       processContext:related.map(e=>({evidenceId:e.id,relationship:'co_located_observation_not_knowledge_proof'}))}];
   });
   return {contentFindings:content,processEvidence:process,diagnosticTargets:targets};

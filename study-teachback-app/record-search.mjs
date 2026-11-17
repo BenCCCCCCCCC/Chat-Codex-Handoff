@@ -4,12 +4,13 @@ function fields(topic) {
   return [
     field('主题',topic.source.title,{kind:'title'}),
     field('材料',topic.source.text,{kind:'source'}),
+    field('文字讲解草稿',topic.textDraft?.text,{kind:'textDraft'}),
     field('草稿',topic.chatDraft,{kind:'chatDraft'}),
     field('对话要点',topic.contextNote,{kind:'contextNote'}),
     ...(topic.messages??[]).map((m,index)=>field('对话',m.text,{kind:'message',index})),
     ...(topic.attempts??[]).flatMap(a=>[
       ...[a.raw,...(a.corrections??[])].filter(Boolean).flatMap(v=>
-        v.spans.map(s=>field(v===a.raw?'原始转写':'修订文字',s.text,{kind:'transcript',attemptId:a.id,versionId:v.id,spanId:s.id}))),
+        v.spans.map(s=>field(v===a.raw?(a.inputMode==='text'?'文字讲解':'原始转写'):'修订文字',s.text,{kind:'transcript',attemptId:a.id,versionId:v.id,spanId:s.id}))),
       ...(a.transcriptDraft?.edits??[]).map(s=>field('核对草稿',s.text,{kind:'transcriptDraft',attemptId:a.id,spanId:s.id})),
       ...(a.reports??[]).flatMap((r,reportIndex)=>(r.findings??[]).map((f,index)=>
         field('反馈',f.message,{kind:'report',attemptId:a.id,reportIndex,index})))
@@ -30,7 +31,7 @@ function fields(topic) {
   ].filter(({text})=>typeof text==='string'&&text.length);
 }
 export function hasDraft(topic) {
-  return !!topic.chatDraft?.trim() || !!topic.practiceRounds?.some(r=>r.draft?.trim()) ||
+  return !!topic.textDraft?.text?.trim() || !!topic.chatDraft?.trim() || !!topic.practiceRounds?.some(r=>r.draft?.trim()) ||
     !!topic.attempts?.some(a=>a.transcriptDraft);
 }
 export function resolveRecordHit(topic,key) {return fields(topic).find(f=>f.key===key)??null;}

@@ -46,20 +46,27 @@ export function spanValue(s, duration) {
   return { id: identifier(s.id), start: s.start, end: s.end, text: text(s.text, 2000) };
 }
 export function attemptValue(a) {
-  requireValue(a && Number.isFinite(a.duration) && a.duration > 0 && a.duration <= 180 && Array.isArray(a.spans) && a.spans.length > 0 && a.spans.length <= 150, 'INVALID_ATTEMPT');
-  const spans = a.spans.map(s => spanValue(s, a.duration));
-  requireValue(new Set(spans.map(s=>s.id)).size === spans.length && spans.every((s,i) => !i || s.start >= spans[i-1].start), 'INVALID_SPANS');
+  requireValue(a && [undefined,'audio','text'].includes(a.inputMode),'INVALID_ATTEMPT');
+  const typed=a.inputMode==='text';
+  requireValue(typed?a.duration==null:Number.isFinite(a.duration)&&a.duration>0&&a.duration<=180,'INVALID_ATTEMPT');
+  requireValue(Array.isArray(a.spans)&&a.spans.length>0&&a.spans.length<=(typed?1:150),'INVALID_ATTEMPT');
+  const spans = a.spans.map(s => typed?textSpanValue(s):spanValue(s, a.duration));
+  requireValue(new Set(spans.map(s=>s.id)).size === spans.length && (typed||spans.every((s,i) => !i || s.start >= spans[i-1].start)), 'INVALID_SPANS');
   requireValue(['none','keywords','source','unknown'].includes(a.assistance), 'INVALID_ASSISTANCE');
   requireValue(['full','partial'].includes(a.kind), 'INVALID_ATTEMPT_KIND');
-  return { id: identifier(a.id), sourceId: identifier(a.sourceId), transcriptVersion: identifier(a.transcriptVersion), duration: a.duration, spans, assistance: a.assistance, kind: a.kind,
+  return { id: identifier(a.id), sourceId: identifier(a.sourceId), transcriptVersion: identifier(a.transcriptVersion), ...(typed?{inputMode:'text'}:{duration:a.duration}), spans, assistance: a.assistance, kind: a.kind,
     focus: a.kind === 'partial' ? repairFocus(a.focus) : null, reviewed: a.reviewed === true, interrupted: a.interrupted === true };
+}
+export function textSpanValue(s){
+  requireValue(s&&s.start==null&&s.end==null,'INVALID_TEXT_SPAN');
+  return {id:identifier(s.id),text:text(s.text,2000)};
 }
 export function contentInput(source, attempt) {
   const s = sourceValue(source), a = attemptValue(attempt);
   requireValue(a.sourceId === s.id, 'SOURCE_MISMATCH');
   requireValue(a.reviewed && !a.interrupted, 'ASR_REVIEW_REQUIRED');
   // Deliberately omit duration, pauses, energy and all delivery labels.
-  return { source: s, attempt: { id:a.id, sourceId:a.sourceId, transcriptVersion:a.transcriptVersion, assistance:a.assistance, kind:a.kind, focus:a.focus, spans:a.spans.map(({id,text})=>({id,text})) } };
+  return { source: s, attempt: { id:a.id, sourceId:a.sourceId, transcriptVersion:a.transcriptVersion, ...(a.inputMode==='text'?{inputMode:'text'}:{}), assistance:a.assistance, kind:a.kind, focus:a.focus, spans:a.spans.map(({id,text})=>({id,text})) } };
 }
 function exactKeys(v, names) { requireValue(v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === names.length && names.every(k=>Object.hasOwn(v,k)), 'INVALID_SCHEMA'); }
 export function validateTeaching(v, source) {
@@ -164,6 +171,6 @@ export function waveDuration(bytes) {
 // The separate version retains explicit edits; raw ASR stays unchanged.
 export function revisedTranscript(attempt, spans) {
   requireValue(spans.length===attempt.raw.spans.length,'INVALID_SPANS');
-  return { id:crypto.randomUUID(), at:Date.now(), origin:'USER_TRANSCRIPT_CONFIRMATION', spans: spans.map((s,i)=>({...attempt.raw.spans[i],text:text(s.text,2000)})), reviewed:true };
+  return { id:crypto.randomUUID(), at:Date.now(), origin:attempt.inputMode==='text'?'USER_TEXT_CONFIRMATION':'USER_TRANSCRIPT_CONFIRMATION', spans: spans.map((s,i)=>({...attempt.raw.spans[i],text:text(s.text,2000)})), reviewed:true };
 }
 export function prune(records, now=Date.now()) { return records.filter(r=>Number.isFinite(r.createdAt)&&r.createdAt+RETENTION_MS>now); }

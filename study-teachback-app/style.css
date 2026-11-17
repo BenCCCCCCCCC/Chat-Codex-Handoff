@@ -134,3 +134,5 @@ body[data-history=true] #workspace,body[data-history=true] #setup,body[data-hist
 
 .transcription-options{margin:16px 0}.transcription-options summary{font-size:.875rem}.transcription-options input{margin-top:12px}.transcription-options p{margin:6px 0}
 body:has(#workspace:not([hidden]) #recording:not([hidden])) .dock{display:none}
+
+.comparison-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem}.comparison-columns section{min-width:0;overflow-wrap:anywhere}#textComposer{margin-top:1rem}#attemptComparison{margin-top:1.5rem}#comparisonColumns h3{font-size:1rem}@media(max-width:720px){.comparison-columns{grid-template-columns:1fr}}
