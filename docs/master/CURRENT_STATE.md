@@ -10,7 +10,7 @@
 | Completed | [#37](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/37)：每次讲解显式选择最多 3 项相关适用条件；反馈显示“按条件可判”或“暂缓本项 · 不计作答错”。新结果绑定来源、文字版本和条件快照，改条件保留旧结果，恢复相同条件可复用原结果。刷新、备份、跨组合历史与前后对照保留关联。 |
 | Completed | [#38](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/38)：新题固定保存可判条件和精确来源反馈，同文再次作答新增记录；未知结果明确原样重试。每次回答保存本应用参考入口与额外参考自报，不推断独立完成。题面／前提问题暂缓并接入既有核对修订，原题／原答／历史反馈均保留；刷新、搜索、组合归档与 v3 备份保持关联。 |
 | Completed | [Issue #3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/3) 离线范围：冻结同输入比较协议、4 份合成材料／14 个受控案例、评审模板；恢复 Phase 3B 完整来源、原始转写、两个确认版本与两份完整报告。原始学习者文本及报告留本机，公开包只含哈希、恢复结论和合成材料。 |
-| Verified | [#38 Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/44142007284)：205/205 Node、72/72 Edge，实现头 `5207ee1`。本机定向 Node 24/24、Edge 1/1；390px 无横向溢出。完整回归只运行于最终 CI，覆盖未知重试、同文重答、修订历史、准确原反馈及备份恢复。 |
+| Verified | [#38 Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/44142007284)：205/205 Node、72/72 Edge，实现头 `5207ee1`。本机定向 Node 24/24、Edge 1/1；390px 无横向溢出。最终版本完整回归复用 CI，覆盖未知重试、同文重答、修订历史、准确原反馈及备份恢复。 |
 | Verified | 原应用 IndexedDB 仅复制本应用来源到隔离环境，读取不加载七天清理代码，原数据库前后逐文件哈希相同。两确认版本 spans 相同，所有原报告保留；没有重新调用模型。生产账本哈希未变，真实 API 0 次。 |
 | Likely | 明确条件及历史绑定有助于减少无依据判错和回访时的混淆；尚未测得真实学习收益。 |
 | Not Done | 自动识别相关分歧、模型对范围与引文解释的准确性、完整长材料／媒体拆分、转写迁移、Windows 发行完善。 |
