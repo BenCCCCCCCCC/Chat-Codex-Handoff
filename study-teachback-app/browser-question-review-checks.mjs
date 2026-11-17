@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+export async function questionReviewChecks({check,evaluate,until,reloadPage,click,shot,cdp,calls,requests}){
+  await check('question revision keeps original evidence, excludes old judgments, survives failed save and backup, and accepts a fresh answer',async()=>{
+    const before=calls.length;
+    const topic={id:'question-review-topic',createdAt:Date.now(),source:{id:'question-source',title:'必要条件',text:'只有完成备份才升级系统。'},goals:[],messages:[],attempts:[],resume:{view:'practice'},activePracticeId:'question-original',practiceRounds:[{id:'question-original',createdAt:Date.now(),question:'已经完成备份，是否一定可以升级？',introduction:'请只根据材料判断。',assistance:'source_visible',draft:'原回答草稿',answers:[{id:'old-question-answer',text:'材料不足以判断。',result:'旧错误反馈：你答错了。',status:'complete'}]}]};
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.put(${JSON.stringify(topic)});db.close();})()`);
+    await reloadPage();await click('practiceFlag');await until(`!document.getElementById('questionReview').hidden`);
+    const fill=(id,value)=>evaluate(`{const e=document.getElementById(${JSON.stringify(id)});e.value=${JSON.stringify(value)};e.dispatchEvent(new Event('input'));}`);
+    await fill('reviewNote','旧题混淆了必要和充分条件，应只问必要前提。');await fill('reviewBasis','引用不在材料中');await fill('reviewQuestion','没有完成备份，可以升级系统吗？');
+    await click('reviewRevise');await until(`document.getElementById('notice').textContent.includes('材料中确实存在')`);assert(!await evaluate(`document.getElementById('reviewConfirmDialog').open`));
+    await fill('reviewBasis',topic.source.text);await click('reviewKeep');await reloadPage();
+    assert.equal(await evaluate(`document.getElementById('reviewQuestion').value`),'没有完成备份，可以升级系统吗？');
+    assert.equal(calls.length,before);assert.equal(await evaluate(`document.querySelector('#practiceAnswers strong')`),null);
+    await click('reviewRevise');await until(`document.getElementById('reviewConfirmDialog').open`);
+    await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+    assert(await evaluate(`document.getElementById('reviewConfirmDialog').scrollWidth<=document.getElementById('reviewConfirmDialog').clientWidth+1`));
+    await shot('question-revision-preview-mobile');
+    await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await cdp('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+    await until(`!document.getElementById('reviewConfirmDialog').open`);assert.equal(await evaluate(`document.getElementById('practiceQuestion').textContent`),topic.practiceRounds[0].question);
+    await click('reviewRevise');await until(`document.getElementById('reviewConfirmDialog').open`);
+    await evaluate(`window.reviewNativePut=IDBObjectStore.prototype.put;IDBObjectStore.prototype.put=function(){throw new DOMException('test quota','QuotaExceededError');};document.getElementById('reviewConfirm').click();document.getElementById('reviewConfirm').click();`);
+    await until(`!document.getElementById('storageRecovery').hidden&&!document.getElementById('reviewConfirmDialog').open`);
+    await evaluate(`IDBObjectStore.prototype.put=window.reviewNativePut`);await click('retrySave');await until(`document.getElementById('storageRecovery').hidden`);
+    assert.equal(calls.length,before);assert.equal(await evaluate(`document.getElementById('practiceDraft').value`),'');
+    await fill('practiceDraft','不可以，因为没有满足必要前提。');await evaluate(`document.getElementById('practiceForm').requestSubmit()`);await until(`document.querySelector('#practiceAnswers strong')`);
+    assert.equal(calls.length,before+1);assert.equal(requests.at(-1).mode,'apply_answer');assert(!JSON.stringify(requests.at(-1)).includes('旧错误反馈'));
+    await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore(),t=await db.get('question-review-topic'),b=await import('/backup.mjs');window.reviewOriginal=structuredClone(t.practiceRounds[0]);window.reviewRoundCount=t.practiceRounds.length;await db.put(b.restoredCopy(b.decodeBackup(await b.encodeBackup(t)),{id:'restored-question-review'}));await db.delete(t.id);db.close();})()`);
+    assert.equal(await evaluate('window.reviewRoundCount'),2);const original=await evaluate('window.reviewOriginal');
+    assert.equal(original.question,topic.practiceRounds[0].question);assert.deepEqual(original.answers,topic.practiceRounds[0].answers);assert.equal(original.draft,'原回答草稿');
+    await reloadPage();await evaluate(`[...document.querySelectorAll('#questionVersions button')].find(b=>b.textContent==='查看原题与原回答').click()`);
+    await until(`document.getElementById('practiceStatus').textContent.includes('原回答和先前反馈')`);
+    assert(await evaluate(`document.getElementById('practiceSubmit').hidden&&document.getElementById('practiceDraft').disabled`));
+    assert.match(await evaluate(`document.querySelector('#practiceAnswers summary').textContent`),/已排除/);
+    await evaluate(`document.querySelector('#practiceAnswers details').open=true;document.getElementById('questionReviewHistory').open=true;`);await shot('question-original-history-mobile','practiceAnswers');
+    assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));
+    await evaluate(`[...document.querySelectorAll('#questionVersions button')].find(b=>b.textContent==='继续修订后的题目').click()`);await until(`!document.getElementById('practiceSubmit').hidden`);
+    await click('practiceFlag');await fill('reviewNote','重新对照原文，题目必要前提明确，重新回答。');await fill('reviewBasis',topic.source.text);await click('reviewRetain');await until(`document.getElementById('reviewConfirmDialog').open`);await click('reviewConfirm');
+    await until(`!document.getElementById('reviewConfirmDialog').open&&!document.getElementById('practiceSubmit').hidden`);
+    assert.equal(await evaluate(`document.querySelector('#practiceAnswers strong')`),null);
+    await fill('practiceDraft','不可以，因为没有满足必要前提。');await evaluate(`document.getElementById('practiceForm').requestSubmit()`);await until(`document.querySelectorAll('#practiceAnswers article').length===2&&document.querySelector('#practiceAnswers strong')`);
+    assert.equal(calls.length,before+2);assert(!JSON.stringify(requests.at(-1).history).includes('我们先看条件'));
+    await click('historyButton');await click('deleteAll');await reloadPage();
+    await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
+  });
+}

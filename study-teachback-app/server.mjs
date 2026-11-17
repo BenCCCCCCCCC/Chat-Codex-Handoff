@@ -13,6 +13,8 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
   files['/source-provenance.mjs']='source-provenance.mjs';
   files['/feedback-reference.mjs']='feedback-reference.mjs';
   files['/text-teachback.mjs']='text-teachback.mjs';
+  files['/question-review.mjs']='question-review.mjs';
+  files['/question-review-ui.mjs']='question-review-ui.mjs';
   let busy=false,extracting=false;
   return http.createServer(async(req,res)=>{
     const expected=`127.0.0.1:${req.socket.localPort}`, origin=`http://${expected}`;
