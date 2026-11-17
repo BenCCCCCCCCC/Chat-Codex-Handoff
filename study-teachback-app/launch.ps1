@@ -7,9 +7,9 @@ $script:StatePath = Join-Path $script:AppRoot 'runtime\launcher.json'
 
 function Read-ProductStatus {
     try {
-        $r = Invoke-WebRequest -UseBasicParsing -Uri ($script:Url + 'api/status') -TimeoutSec 2 -MaximumRedirection 0
+        $r = Invoke-WebRequest -UseBasicParsing -Uri ($script:Url + 'api/health') -TimeoutSec 2 -MaximumRedirection 0
         $v = $r.Content | ConvertFrom-Json
-        if ($r.StatusCode -ne 200 -or ($v.models -join ',') -ne 'whisper-1,gpt-5.6-luna' -or $v.keyConfigured -isnot [bool] -or $null -eq $v.ledger.exposureUSD -or $null -eq $v.ledger.requests) { return $null }
+        if ($r.StatusCode -ne 200 -or $v.app -ne 'zhi-er-neng-jiang' -or $v.apiVersion -ne 1) { return $null }
         $page = Invoke-WebRequest -UseBasicParsing -Uri $script:Url -TimeoutSec 2 -MaximumRedirection 0
         if (-not $page.Content.Contains('id="sourceFile"') -or -not $page.Content.Contains('id="explain"') -or -not $page.Content.Contains('src="/app.mjs"')) { return $null }
         return $v
@@ -31,22 +31,6 @@ function Test-ServerProcess($ProcessId, $ExpectedStart = $null) {
 function Assert-LaunchPrerequisites {
     $node = Get-Command node.exe -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
     if (-not $node) { throw 'NODE_REQUIRED: Configure existing Node separately; launcher installs nothing.' }
-    $python = Join-Path $script:AppRoot '.venv\Scripts\python.exe'
-    if ($env:STUDY_PYTHON) { $python = $env:STUDY_PYTHON }
-    if (-not [IO.Path]::IsPathRooted($python) -or -not (Test-Path -LiteralPath $python -PathType Leaf)) { throw 'EXTRACTOR_SETUP_REQUIRED: See README for local venv setup.' }
-    $psi = New-Object System.Diagnostics.ProcessStartInfo
-    $psi.FileName = $python
-    $psi.Arguments = '-I -c "import pypdf; assert pypdf.__version__ == ''6.18.0''"'
-    $psi.UseShellExecute = $false; $psi.CreateNoWindow = $true
-    $psi.RedirectStandardOutput = $true; $psi.RedirectStandardError = $true
-    $psi.EnvironmentVariables.Clear(); $psi.EnvironmentVariables['SystemRoot'] = $env:SystemRoot
-    $probe = New-Object System.Diagnostics.Process; $probe.StartInfo = $psi
-    try {
-        if (-not $probe.Start()) { throw 'EXTRACTOR_SETUP_REQUIRED' }
-        if (-not $probe.WaitForExit(15000)) { $probe.Kill(); throw 'EXTRACTOR_CHECK_TIMEOUT' }
-        if ($probe.ExitCode -ne 0) { throw 'EXTRACTOR_DEPENDENCY_REQUIRED: pypdf 6.18.0 must already be installed.' }
-    } finally { $probe.Dispose() }
-    if ([string]::IsNullOrWhiteSpace($env:OPENAI_API_KEY)) { throw 'CREDENTIAL_REQUIRED: Supply OPENAI_API_KEY through the existing launch environment; never save it here.' }
     return $node.Source
 }
 function Stop-OwnedServer {
@@ -65,7 +49,6 @@ function Start-StudySession {
     if ($owners.Count -gt 0) {
         $status = Read-ProductStatus
         if ($owners.Count -ne 1 -or -not (Test-ServerProcess $owners[0]) -or $null -eq $status) { throw 'PORT_OCCUPIED_UNKNOWN: Nothing stopped.' }
-        if (-not $status.keyConfigured) { throw 'SERVER_CREDENTIAL_REQUIRED: Existing server operator must restart it.' }
         Write-Host 'REUSED_EXISTING_SERVER: This launcher will NOT stop it.'
         if (-not $SkipBrowser) { & $OpenUrl $script:Url }
         return 'REUSED'
@@ -76,7 +59,7 @@ function Start-StudySession {
     $psi.FileName = $node; $psi.Arguments = '"' + (Join-Path $script:AppRoot 'server.mjs') + '"'
     $psi.WorkingDirectory = $script:AppRoot; $psi.UseShellExecute = $false; $psi.CreateNoWindow = $true
     $psi.EnvironmentVariables.Clear(); $psi.EnvironmentVariables['SystemRoot'] = $env:SystemRoot
-    $psi.EnvironmentVariables['OPENAI_API_KEY'] = $env:OPENAI_API_KEY
+    if ($env:OPENAI_API_KEY) { $psi.EnvironmentVariables['OPENAI_API_KEY'] = $env:OPENAI_API_KEY }
     if ($env:STUDY_PYTHON) { $psi.EnvironmentVariables['STUDY_PYTHON'] = $env:STUDY_PYTHON }
     $child = New-Object System.Diagnostics.Process; $child.StartInfo = $psi
     $started = $false; $stamp = ''

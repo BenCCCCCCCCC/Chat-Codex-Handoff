@@ -13,8 +13,10 @@ import {searchRecords,hasDraft,resolveRecordHit} from './record-search.mjs';
 import {createDraftSaver} from './draft-save.mjs';
 import {transcriptTexts,updateTranscriptDraft,analysisTrace} from './voice-review.mjs';
 import {focusHit,hitDestination,transcriptHit} from './search-focus.mjs';
+import {mountSetupDraft} from './setup-draft.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
 let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false,capturePending=false;
+let serviceCapabilities=null;
 const editors=new Map();
 const diagnosisStates=new WeakMap();
 // Transient playback copies only. Original stored/exported audio is untouched.
@@ -28,9 +30,28 @@ function friendly(code){const messages={TRANSCRIPTION_TERMS_LIMIT:'术语最多 
 async function save(target=topic){if(!target||deleted.has(target.id))return;try{target.updatedAt=Date.now();await db.put(target);memoryOnly=false;reveal('storageRecovery',false);}catch{memoryOnly=true;reveal('storageRecovery');throw new Error('STORAGE_FAILED');}}
 async function api(path,body,headers={}){
   if(controller||record)throw new Error('REQUEST_IN_PROGRESS');
+  if(path!=='/api/extract'&&serviceCapabilities?.ai!==true)throw new Error('CREDENTIAL_MISSING');
   controller=new AbortController();$('send').disabled=true;$('explain').disabled=true;$('workspace').setAttribute('aria-busy','true');
   try{const response=await fetch(path,{method:'POST',headers:{'X-Study-Request':'1',...headers,...(body instanceof ArrayBuffer?{}:{'Content-Type':'application/json'})},body:body instanceof ArrayBuffer?body:JSON.stringify(body),signal:controller.signal});const result=await response.json();if(!response.ok)throw new Error(result.error);return result;}
-  finally{controller=null;$('send').disabled=false;$('explain').disabled=false;$('workspace').removeAttribute('aria-busy');updateBudget();}
+  finally{controller=null;$('send').disabled=false;$('explain').disabled=false;$('workspace').removeAttribute('aria-busy');renderService();updateBudget();}
+}
+function renderService(){
+  const ai=serviceCapabilities?.ai===true;
+  $('serviceHelp').hidden=ai&&serviceCapabilities.imports.office&&serviceCapabilities.imports.pdf;
+  $('serviceStatus').textContent=serviceCapabilities?(ai?'AI 已配置。':'AI 尚未配置；可以先保存材料、查看示例和已有记录。'):'正在检查可用功能；本机材料仍可保存。';
+  $('importCapabilities').textContent=serviceCapabilities?'TXT / MD 可直接导入。'+(!serviceCapabilities.imports.office?' DOCX / PPTX 需要本机 Python 环境。':'')+(!serviceCapabilities.imports.pdf?' PDF 需要本机 Python 和指定版本 pypdf。':''):'';
+  $('learn').textContent=ai?'开始学习 ↗':'保存材料，进入学习';
+  $('startHint').textContent=ai?'开始后，将所选文字发送给 AI。':'仅保存在本机；配置 AI 后可继续提问和分析。';
+  $('send').disabled=!ai||!!controller;
+}
+async function refreshCapabilities(){
+  try{
+    const response=await fetch('/api/capabilities');if(!response.ok)throw Error('UNAVAILABLE');
+    const value=await response.json();if(value.app!=='zhi-er-neng-jiang'||value.apiVersion!==1||typeof value.ai!=='boolean')throw Error('UNAVAILABLE');
+    serviceCapabilities=value;renderService();
+  }catch{
+    serviceCapabilities=null;renderService();$('serviceStatus').textContent='暂时无法检查 AI 配置。可以先保存材料，稍后重新检查。';
+  }
 }
 async function updateBudget(){try{const response=await fetch('/api/status');if(!response.ok)throw new Error('BUDGET_UNAVAILABLE');const s=await response.json();$('budget').textContent=`本次账本：${s.ledger.requests} 次请求；已知费用估算 $${s.ledger.knownCostUSD.toFixed(6)}；含未结算预留 $${s.ledger.exposureUSD.toFixed(6)} / $5。现金新增上限 $10，不自动充值。`; }catch{$('budget').textContent='预算状态暂不可用；无法确认可用额度。';}}
 function renderTopic(){
@@ -93,11 +114,11 @@ $('sourceFile').onchange=()=>act(async()=>{
     $('extractedText').value=result.blocks.map(b=>b.text).join('\n\n');
     $('extractionState').textContent='解析完成';$('importStatus').textContent=`${result.blocks.length} 个正文/页面/幻灯片区块。核对文字后，选取最多 5,000 字。`;
     reveal('importPreview');
-    if($('extractedText').value.trim().length<=5000){
+    if($('extractedText').value.trim().length<=5000&&!$('source').value.trim()){
       useImported(true);
       notice('全文已放入学习材料，可以直接开始学习；也可从预览中重新选取片段。');
     }else{
-      notice('文件超过 5,000 字，请在预览中选取最多 5,000 字，再点击“使用选中文字”。未自动替换现有学习材料。');
+      notice($('extractedText').value.trim().length>5000?'文件超过 5,000 字，请选取本次学习的片段。现有草稿已保留。':'解析完成，现有正文和标题已保留。核对预览后，可点击“替换为全部文本”或选择片段。');
       updateCounts();
     }
   }catch(e){$('extractionState').textContent='解析未完成，可重新选择文件或粘贴文字。';throw e;}finally{importPending=false;$('learn').disabled=false;$('sourceFile').disabled=false;}
@@ -106,16 +127,19 @@ function useImported(all){
   const preview=$('extractedText');const selected=(all?preview.value:preview.value.slice(preview.selectionStart,preview.selectionEnd)).trim();
   if(!selected)return notice('请先在预览中选中文字。');
   if(selected.length>5000)return notice('这一轮最多 5,000 字，请缩小选段；不会自动截断材料。');
-  $('source').value=selected;$('title').value=autoTitle(selected,$('selectedFile').textContent);updateCounts();notice('选段已放入学习材料。可继续编辑，点击“开始学习”才会发送给模型。');
+  setupDraft.replaceMaterial(selected,autoTitle(selected,$('selectedFile').textContent));updateCounts();notice('材料已替换，可以撤销。点击“开始学习”才会发送给模型。');
 }
-$('useSelection').onclick=()=>useImported(false);$('useAll').onclick=()=>useImported(true);
+$('useSelection').onclick=()=>act(()=>useImported(false));$('useAll').onclick=()=>act(()=>useImported(true));
 $('learn').onclick=()=>act(async()=>{
   if(importPending||controller||capturePending||record||processing)return;
   if(!$('source').value.trim())return notice('请先放入这一轮的学习材料。');
   if($('source').value.length>5000)return notice('这一轮最多 5,000 字，请缩小材料。');
   const setupContext=setupContextValue({focus:$('setupFocus').value,known:$('setupKnown').value});
-  clearImport();
-  topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim()||autoTitle($('source').value),text:$('source').value.trim()},setupContext,goals:[],messages:[],attempts:[],mode:'learn'};await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。','learn',null,{internalStarter:true});
+  topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim()||autoTitle($('source').value),text:$('source').value.trim()},setupContext,goals:[],messages:[],attempts:[],mode:'learn'};
+  processing=true;
+  try{await save(topic);setupDraft.clear();clearImport();}finally{processing=false;}
+  if(serviceCapabilities?.ai!==true){renderTopic();notice('材料已保存在本机。可查看和整理，配置 AI 后再发送问题。');return;}
+  await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。','learn',null,{internalStarter:true});
 });
 $('chatForm').onsubmit=e=>{e.preventDefault();if(!canNavigate())return;act(async()=>{const message=$('chat').value.trim();if(!message)return;await chat.flushDraft();const retry=topic.chatRequest?.status!=='complete'&&!topic.chatRequest?.internalStarter&&topic.chatRequest?.message===message;await teach(message,topic.mode==='repair'?'repair':'learn',topic.focus??null,{retry});});};
 $('chatRetry').onclick=()=>act(async()=>{if(canNavigate())await teach('', 'learn',null,{retry:true});});
@@ -188,7 +212,7 @@ $('start').onclick=()=>act(async()=>{
   }catch(e){clearInterval(record?.tick);record=null;stream?.getTracks().forEach(t=>{t.onended=null;t.onmute=null;t.stop();});try{if(context&&context.state!=='closed')await context.close();}finally{capturePending=false;resetRecordingUI();}notice(e.name==='NotAllowedError'?'麦克风权限未允许。学习内容已保留，请在浏览器中允许麦克风后重试。':friendly(e.message));}
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&record)stopRecording(true);if(document.hidden)act(flushDrafts);});
-window.addEventListener('beforeunload',e=>{if(record||capturePending||memoryOnly||controller||processing||chat.hasPendingDraft||practice.hasPendingDraft||voiceDrafts.pending){e.preventDefault();e.returnValue='';}});
+window.addEventListener('beforeunload',e=>{if(record||capturePending||memoryOnly||controller||processing||setupDraft.dirty||chat.hasPendingDraft||practice.hasPendingDraft||voiceDrafts.pending){e.preventDefault();e.returnValue='';}});
 async function processAudio(a){
   if(processing)throw new Error('REQUEST_IN_PROGRESS');if(memoryOnly)throw new Error('STORAGE_FAILED');processing=true;
   notice('原声已保存，正在检查声音并转写……');
@@ -473,11 +497,21 @@ async function newTopic(){
   try{
     await flushDrafts();abortPending();clearImport();topic=null;current=null;
     reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('recording',false);reveal('attemptPanel',false);reveal('searchReturn',false);reveal('setup');
-    $('title').value='';$('source').value='';$('setupFocus').value='';$('setupKnown').value='';updateCounts();renderPractice();notice('');$('source').focus();return true;
+    setupDraft.restore();updateCounts();renderPractice();notice('');$('source').focus();return true;
   }finally{processing=false;}
 }
-$('newTopic').onclick=()=>act(newTopic);$('revise').onclick=()=>act(async()=>{const s=topic.source,context=topic.setupContext;if(!await newTopic())return;$('setupFocus').value=context?.focus??'';$('setupKnown').value=context?.known??'';$('title').value=s.title;$('source').value=s.text;updateCounts();notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');});
-$('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');await discardDrafts();abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
+$('newTopic').onclick=()=>act(newTopic);$('revise').onclick=()=>act(async()=>{
+  const s=topic.source,context=topic.setupContext;if(!await newTopic())return;
+  if(setupDraft.hasContent()){
+    $('extractedText').value=s.text;$('selectedFile').textContent=s.title;reveal('importPreview');
+    notice('已有新建草稿已保留。当前主题材料放在预览中，可选择替换后编辑。');
+  }else{
+    $('setupFocus').value=context?.focus??'';$('setupKnown').value=context?.known??'';$('title').value=s.title;$('source').value=s.text;setupDraft.capture();
+    notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');
+  }
+  updateCounts();
+});
+$('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');await discardDrafts();abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();setupDraft.clear();clearImport();updateCounts();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
 // Presentation-only confirmation: cancellation never reaches the original destructive handler.
 function confirmDelete(scope,action,trigger){
   if(record||capturePending||processing){notice(friendly('REQUEST_IN_PROGRESS'));return;}
@@ -502,11 +536,18 @@ const voiceDrafts=createDraftSaver({save,onError:error=>act(()=>Promise.reject(e
 }});
 $('transcriptionTerms').oninput=()=>{if(!topic||capturePending||record)return;topic.transcriptionTerms=$('transcriptionTerms').value;voiceDrafts.mark(topic);};
 $('transcriptionTerms').onblur=()=>act(()=>voiceDrafts.flush());
-async function flushDrafts(){await chat.flushDraft();await practice.flushDraft();await voiceDrafts.flush();}
+async function flushDrafts(){setupDraft.flush();await chat.flushDraft();await practice.flushDraft();await voiceDrafts.flush();}
 async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();await voiceDrafts.discard();}
 const practice=mountPractice({getTopic:()=>topic,save,request:api,canStart:canNavigate,
   setBusy:value=>{processing=value;},act,onOpen:()=>{current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);}});
 mountBackup({getStore:()=>db,canStart:canNavigate,setBusy:value=>{processing=value;if(!value)renderChatRecovery();},
   beforeRestore:flushDrafts,onRestore:target=>{resumeTopic(target);notice('备份已恢复为新副本。');}});
 function renderPractice(){practice.render();}
-await act(async()=>{db=await openStore();await updateBudget();const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));if(all.length)resumeTopic(all[0]);});
+const setupDraft=mountSetupDraft({$,storage:{getItem:key=>localStorage.getItem(key),setItem:(key,value)=>localStorage.setItem(key,value),removeItem:key=>localStorage.removeItem(key)}});
+$('setupDraftRetry').onclick=()=>act(()=>setupDraft.flush());
+$('undoImport').onclick=()=>act(()=>{setupDraft.undo();updateCounts();notice('已恢复替换前的正文和标题。');});
+$('clearSetupDraft').onclick=()=>confirmDelete('清空尚未开始的新建草稿（正文、标题和学习偏好）。已有学习记录不受影响。',()=>{setupDraft.clear();clearImport();updateCounts();},$('clearSetupDraft'));
+updateCounts();
+$('refreshCapabilities').onclick=()=>act(refreshCapabilities);
+renderService();
+await act(async()=>{db=await openStore();await refreshCapabilities();await updateBudget();const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));if(all.length&&!setupDraft.hasContent())resumeTopic(all[0]);});

@@ -3,11 +3,13 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {autoTitle,setupContextValue} from './core.mjs';
+import {mountSetupDraft} from './setup-draft.mjs';
 const app=readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
 function harness(text){
   const nodes=new Map(),calls=[],notices=[];
   const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',selectionStart:0,selectionEnd:0,hidden:true,addEventListener(){}});return nodes.get(id);};
-  const context=vm.createContext({$,autoTitle,setupContextValue,controller:null,capturePending:false,record:null,processing:false,topic:null,uid:()=> 'id',act:fn=>fn(),notice:x=>notices.push(x),reveal:(id,show=true)=>{$(id).hidden=!show;},save:async()=>{},renderTopic(){},teach:async()=>calls.push('teach'),api:async path=>{calls.push(path);return {blocks:[{text}]};}});
+  const setupDraft=mountSetupDraft({$,storage:{getItem(){return null;},setItem(){},removeItem(){}}});
+  const context=vm.createContext({$,setupDraft,serviceCapabilities:{ai:true},autoTitle,setupContextValue,controller:null,capturePending:false,record:null,processing:false,topic:null,uid:()=> 'id',act:fn=>fn(),notice:x=>notices.push(x),reveal:(id,show=true)=>{$(id).hidden=!show;},save:async()=>{},renderTopic(){},teach:async()=>calls.push('teach'),api:async path=>{calls.push(path);return {blocks:[{text}]};}});
   vm.runInContext(app.slice(app.indexOf('let importPending'),app.indexOf("$('chatForm').onsubmit")),context);
   return {$,context,calls,notices,async upload(){ $('sourceFile').files=[{name:'规则.v2.docx',size:10,arrayBuffer:async()=>new ArrayBuffer(0)}];await $('sourceFile').onchange();},start:()=>$('learn').onclick()};
 }
@@ -20,7 +22,7 @@ for(const length of [1,4999,5000])test(`normalized ${length} characters auto-use
   await h.start();assert.deepEqual({...h.context.topic.setupContext},{focus:'条件',known:'定义'});assert.equal(h.context.topic.messages.length,0);
 });
 for(const previous of ['', 'Earlier source'])test(`5001 characters require selection; preserve prior source=${!!previous}`,async()=>{
-  const h=harness('字'.repeat(5001));h.$('source').value=previous;await h.upload();assert.equal(h.$('source').value,previous);assert.equal(h.$('extractedText').value.length,5001);assert.match(h.notices.at(-1),/选取最多 5,000 字/);assert.deepEqual(h.calls,['/api/extract']);
+  const h=harness('字'.repeat(5001));h.$('source').value=previous;await h.upload();assert.equal(h.$('source').value,previous);assert.equal(h.$('extractedText').value.length,5001);assert.match(h.notices.at(-1),/5,000 字/);assert.deepEqual(h.calls,['/api/extract']);
   h.$('extractedText').selectionStart=10;h.$('extractedText').selectionEnd=30;h.$('useSelection').onclick();assert.equal(h.$('source').value,'字'.repeat(20));assert.equal(h.$('title').value,'规则.v2');
 });
 test('manual subset replaces auto-use; clearing preview retains source; explicit source clear fails closed',async()=>{
@@ -30,4 +32,10 @@ test('manual subset replaces auto-use; clearing preview retains source; explicit
 });
 test('direct paste needs no import and derives title locally',async()=>{
   const h=harness('unused');h.$('source').value='Pasted rule';await h.start();assert.deepEqual(h.calls,['teach']);assert.equal(h.context.topic.source.title,'Pasted rule');
+});
+test('short import preserves existing source and custom title until explicit replacement; undo restores source',async()=>{
+  const h=harness('Replacement');h.$('source').value='Original';h.$('title').value='My course';
+  await h.upload();assert.equal(h.$('source').value,'Original');assert.equal(h.$('title').value,'My course');
+  await h.$('useAll').onclick();assert.equal(h.$('source').value,'Replacement');assert.equal(h.$('title').value,'My course');
+  h.context.setupDraft.undo();assert.equal(h.$('source').value,'Original');assert.equal(h.$('title').value,'My course');
 });

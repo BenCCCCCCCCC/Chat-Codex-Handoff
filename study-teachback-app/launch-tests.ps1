@@ -1,7 +1,7 @@
-Set-StrictMode -Version 2
+﻿Set-StrictMode -Version 2
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'launch.ps1') -LoadOnly
-$evidence = Join-Path (Split-Path $PSScriptRoot) 'artifacts\study-teachback\local-launch-01'
+$evidence = Join-Path (Split-Path $PSScriptRoot) ('artifacts\study-teachback\local-launch-01\run-' + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force $evidence | Out-Null
 $results = New-Object System.Collections.Generic.List[object]
 function Check($Name, [scriptblock]$Body) {
@@ -29,7 +29,7 @@ try {
         [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $app 'launch.ps1'), [ref]$tokens, [ref]$parseErrors) | Out-Null
         Assert ($parseErrors.Count -eq 0) 'PS51_PARSE_FAILED'
         $source = Get-Content (Join-Path $app 'launch.ps1') -Raw
-        foreach ($literal in @("'http://127.0.0.1:4317/'",'pypdf.__version__','$_.Exception','Win32_Process','OPENAI_API_KEY')) { Assert ($source.Contains($literal)) ('SOURCE_LITERAL_MISSING: ' + $literal) }
+        foreach ($literal in @("'http://127.0.0.1:4317/'",'api/health','$_.Exception','Win32_Process','OPENAI_API_KEY')) { Assert ($source.Contains($literal)) ('SOURCE_LITERAL_MISSING: ' + $literal) }
         foreach ($file in @((Join-Path $app 'launch.ps1'),(Join-Path (Split-Path $app) 'Start-Study.cmd'),(Join-Path (Split-Path $app) 'Stop-Study.cmd'))) {
             $text = Get-Content -LiteralPath $file -Raw
             Assert ($text -notmatch '\[[^\]]+\]\(https?://|\*\*|\\_|%\\~dp0|\\#|(?m)^#{2,}') 'MARKDOWN_POLLUTION'
@@ -37,12 +37,17 @@ try {
         }
     }
     Check 'missing Node fails closed' { try { $env:PATH = $env:SystemRoot; Reject { Assert-LaunchPrerequisites } 'NODE_REQUIRED' } finally { $env:PATH = $originalPath } }
-    Check 'missing extractor fails closed' { try { $env:STUDY_PYTHON = Join-Path $app 'runtime\does-not-exist.exe'; Reject { Assert-LaunchPrerequisites } 'EXTRACTOR_SETUP_REQUIRED' } finally { $env:STUDY_PYTHON = $null } }
-    Check 'invalid extractor dependency fails closed' {
-        $basePython = & (Join-Path $app '.venv\Scripts\python.exe') -I -c 'import sys; print(sys._base_executable)'
-        try { $env:STUDY_PYTHON = $basePython; Reject { Assert-LaunchPrerequisites } 'EXTRACTOR_DEPENDENCY_REQUIRED' } finally { $env:STUDY_PYTHON = $null }
+    Check 'local launch does not require Python PDF dependencies or an API key' {
+        $temporary = $env:OPENAI_API_KEY
+        try {
+            $env:STUDY_PYTHON = Join-Path $app 'runtime\does-not-exist.exe'; $env:OPENAI_API_KEY = $null
+            Assert ((Assert-LaunchPrerequisites) -eq $node) 'LOCAL_LAUNCH_BLOCKED'
+            Start-StudySession -SkipBrowser -WaitForStop {
+                $caps = (Invoke-WebRequest -UseBasicParsing -Uri ($script:Url + 'api/capabilities')).Content | ConvertFrom-Json
+                Assert (-not $caps.ai -and $caps.imports.text -and -not $caps.imports.office) 'CAPABILITIES_INCORRECT'
+            } | Out-Null
+        } finally { $env:STUDY_PYTHON = $null; $env:OPENAI_API_KEY = $temporary }
     }
-    Check 'missing runtime key fails closed without outputting it' { $temporary = $env:OPENAI_API_KEY; try { $env:OPENAI_API_KEY = $null; Reject { Assert-LaunchPrerequisites } 'CREDENTIAL_REQUIRED' } finally { $env:OPENAI_API_KEY = $temporary } }
     Check 'repo-root start readiness exact URL and owned shutdown' {
         Set-Location (Split-Path $app)
         $r = Start-StudySession -OpenUrl $open -WaitForStop { Assert ($null -ne (Read-ProductStatus)) 'NOT_READY' }

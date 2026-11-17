@@ -12,7 +12,7 @@ for(const [mode,outcome] of [['learn','success'],['repair','request']])test(`A1 
   const node=()=>({textContent:'',value:'',hidden:false,children:[],append(...v){this.children.push(...v);},replaceChildren(...v){this.children=v;},scrollIntoView(){},dataset:{}});
   const $=id=>{if(!nodes.has(id))nodes.set(id,node());return nodes.get(id);};
   let reject=outcome!=='success';
-  const context=vm.createContext({autoTitle,setupContextValue,$,topic:{id:'topic',source:{id:'source',title:'Synthetic',text:'Rule'},messages:[],goals:[],attempts:[]},
+  const context=vm.createContext({autoTitle,setupContextValue,$,setupDraft:{clear(){}},serviceCapabilities:{ai:true},topic:{id:'topic',source:{id:'source',title:'Synthetic',text:'Rule'},messages:[],goals:[],attempts:[]},
     current:{id:'attempt',source:{id:'source',title:'Synthetic',text:'Rule'},duration:1,kind:'full',assistance:'none',raw:{id:'raw',reviewed:true,spans:[{id:'s0',start:0,end:1,text:'Rule'}]}},record:null,capturePending:false,controller:null,processing:false,importPending:false,
     localize,processFor:()=>[],attemptRequest:a=>({id:a.id,sourceId:a.source.id,transcriptVersion:a.raw.id,duration:a.duration,kind:a.kind,assistance:a.assistance,reviewed:a.raw.reviewed,spans:a.raw.spans}),
     deleted:new Set(),structuredClone,uid:()=> 'synthetic-id',clearImport(){},repairFocus:x=>x,remediationFocus:()=> 'Condition',latest:a=>a.raw,

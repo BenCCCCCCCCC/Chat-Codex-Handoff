@@ -23,8 +23,13 @@ def extract(data, kind):
             raise ValueError('INVALID_DOCUMENT')
         blocks = [{'label': '全文', 'text': value}]
     elif kind == 'pdf':
-        from pypdf import PdfReader
-        pdf = PdfReader(io.BytesIO(data), strict=True)
+        try:
+            import pypdf
+            if pypdf.__version__ != '6.18.0':
+                raise ImportError()
+        except ImportError:
+            raise ValueError('EXTRACTOR_DEPENDENCY_REQUIRED')
+        pdf = pypdf.PdfReader(io.BytesIO(data), strict=True)
         if pdf.is_encrypted:
             raise ValueError('ENCRYPTED_DOCUMENT')
         if len(pdf.pages) > 100:
@@ -72,13 +77,15 @@ def extract(data, kind):
 
 if __name__ == '__main__':
     try:
-        try:
-            import pypdf
-            if pypdf.__version__ != '6.18.0':
-                raise ImportError()
-        except ImportError:
-            raise ValueError('EXTRACTOR_DEPENDENCY_REQUIRED')
-        result = extract(sys.stdin.buffer.read(10 * 1024 * 1024 + 1), sys.argv[1])
+        if sys.argv[1] == '--capabilities':
+            try:
+                import pypdf
+                pdf_ready = pypdf.__version__ == '6.18.0'
+            except ImportError:
+                pdf_ready = False
+            result = {'text': True, 'office': True, 'pdf': pdf_ready}
+        else:
+            result = extract(sys.stdin.buffer.read(10 * 1024 * 1024 + 1), sys.argv[1])
     except Exception as error:
         code = str(error)
         result = {'error': code if code in ('EXTRACTOR_DEPENDENCY_REQUIRED', 'FILE_TOO_LARGE', 'TEXT_ENCODING_UNSUPPORTED', 'INVALID_DOCUMENT', 'ENCRYPTED_DOCUMENT', 'DOCUMENT_LIMIT', 'FORMAT_UNSUPPORTED', 'NO_EXTRACTABLE_TEXT') else 'INVALID_DOCUMENT'}

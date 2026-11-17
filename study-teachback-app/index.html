@@ -27,6 +27,7 @@
     <li data-step="4"><span>5</span>练习</li>
   </ol>
   <div id="notice" role="status" aria-live="polite"></div>
+  <section id="serviceHelp" class="card"><p id="serviceStatus" role="status"></p><p id="importCapabilities" class="muted"></p><details><summary>配置 AI 与文档导入</summary><p>AI 功能需要在启动服务的终端中设置 OPENAI_API_KEY，然后重新启动本应用。密钥只交给本机服务，请勿填入学习材料。DOCX／PPTX 需要产品 Python 环境，PDF 另需 pypdf 6.18.0，安装步骤见项目 README。未配置的功能不影响本机草稿、文字导入、示例和历史记录。</p></details><button id="refreshCapabilities" class="quiet">重新检查配置</button></section>
   <section id="storageRecovery" class="card" hidden><p>存储未完成。请重试保存或立即导出；关闭页面可能丢失尚未保存的内容。</p><button id="retrySave">重试保存</button><button id="recoveryExport">导出当前记录</button></section>
   <section id="setup">
     <div class="welcome"><div class="intro"><h1>从一段材料开始。</h1></div><a class="text-link" href="/demo">试用示例 ↗</a></div>
@@ -43,13 +44,15 @@
         </div>
         <div class="paste-area"><label for="source" class="paste-entry">或直接粘贴文字</label><textarea id="source" maxlength="5000" rows="6" placeholder="一段课本、课堂笔记，或一个你想真正理解的概念……"></textarea><p id="sourceCount" class="counter">0 / 5,000 字</p></div>
       </div>
-      <section id="importPreview" hidden><label for="extractedText">核对提取结果并选段</label><textarea id="extractedText" rows="8" readonly></textarea><p id="selectionCount" class="counter">已选 0 字</p><p id="importStatus" role="status"></p><button id="useSelection" class="quiet">使用选中文字</button><button id="useAll" class="quiet">使用全部文本</button><button id="clearImport" class="quiet">清除预览</button></section>
+      <section id="importPreview" hidden><label for="extractedText">核对提取结果并选段</label><textarea id="extractedText" rows="8" readonly></textarea><p id="selectionCount" class="counter">已选 0 字</p><p id="importStatus" role="status"></p><button id="useSelection" class="quiet">替换为选中文字</button><button id="useAll" class="quiet">替换为全部文本</button><button id="clearImport" class="quiet">清除预览</button></section>
+      <div class="compact-actions"><button id="undoImport" class="quiet" hidden>撤销材料替换</button><button id="clearSetupDraft" class="quiet">清空新建草稿</button></div>
+      <p id="setupDraftStatus" class="muted" role="status"></p><button id="setupDraftRetry" class="quiet" hidden>重试保存草稿</button>
       <details id="learningOptions" class="learning-options"><summary>学习偏好 <span>可选</span></summary>
         <label>主题<input id="title" maxlength="120" placeholder="留空即可从材料生成"></label>
         <div class="option-grid"><label>这次重点想学什么？<textarea id="setupFocus" maxlength="500" rows="2" placeholder="例如：能解释原理，而不只是记住定义"></textarea></label><label>已经掌握了什么？<textarea id="setupKnown" maxlength="500" rows="2" aria-describedby="setupHint" placeholder="例如：了解基本概念，条件还容易混淆"></textarea></label></div>
         <p id="setupHint" class="muted">帮助安排讲解重点。你的自述不会作为已经掌握的证据。</p>
       </details>
-      <div class="setup-bottom"><p class="muted">开始后，将所选文字发送给 AI。</p><button id="learn">开始学习 <span aria-hidden="true">↗</span></button></div>
+      <div class="setup-bottom"><p id="startHint" class="muted">开始后，将所选文字发送给 AI。</p><button id="learn">开始学习 <span aria-hidden="true">↗</span></button></div>
       <details class="fine-print"><summary>材料限制与数据处理</summary><p>只使用自愿提供的低风险材料和自己的声音。原文件不保存；所选文字与录音由 OpenAI 全球服务处理。最多 100 页或幻灯片、20 万提取字符、5,000 字选段。不支持扫描图片、图表、批注和讲者备注；复杂排版请核对提取结果。</p></details>
     </div>
   </section>

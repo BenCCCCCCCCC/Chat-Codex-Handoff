@@ -1,5 +1,5 @@
 import http from 'node:http';
-import { extractSource } from './ingestion.mjs';
+import { extractSource,extractionCapabilities } from './ingestion.mjs';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { semantic, transcribe, ledger } from './provider.mjs';
@@ -8,8 +8,9 @@ import { teachingSchema, findingsSchema, deliverySchema, TEACH, CONTENT, DELIVER
 import {transcriptionTerms} from './transcription-terms.mjs';
 
 const files={'/bounded-understanding.mjs':'bounded-understanding.mjs','/understanding-task.mjs':'understanding-task.mjs','/transcription-terms.mjs':'transcription-terms.mjs','/transcript-playback.mjs':'transcript-playback.mjs','/audio-input.mjs':'audio-input.mjs','/voice-review.mjs':'voice-review.mjs','/search-focus.mjs':'search-focus.mjs','/chat-ui.mjs':'chat-ui.mjs','/draft-save.mjs':'draft-save.mjs','/record-search.mjs':'record-search.mjs','/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/workspace-ui.mjs':'workspace-ui.mjs','/practice.mjs':'practice.mjs','/practice-ui.mjs':'practice-ui.mjs','/backup.mjs':'backup.mjs','/backup-ui.mjs':'backup-ui.mjs','/demo':'demo.html','/demo.mjs':'demo.mjs','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
-export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger,extractCall=extractSource}={}) {
-  let busy=false;
+export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger,extractCall=extractSource,capabilityCall=extractionCapabilities,keyConfigured=()=>!!process.env.OPENAI_API_KEY}={}) {
+  files['/setup-draft.mjs']='setup-draft.mjs';
+  let busy=false,extracting=false;
   return http.createServer(async(req,res)=>{
     const expected=`127.0.0.1:${req.socket.localPort}`, origin=`http://${expected}`;
     const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; media-src 'self' blob:; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",'Permissions-Policy':'microphone=(self), camera=()'};
@@ -23,10 +24,18 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       try{return json(200,{keyConfigured:!!process.env.OPENAI_API_KEY,ledger:book.summary(),models:['whisper-1','gpt-5.6-luna']});}
       catch{return json(503,{error:'BUDGET_UNAVAILABLE'});}
     }
+    if(req.method==='GET' && path==='/api/health')return json(200,{app:'zhi-er-neng-jiang',apiVersion:1});
+    if(req.method==='GET' && path==='/api/capabilities'){
+      let imports;try{imports=await capabilityCall();}catch{imports={text:true,office:false,pdf:false};}
+      return json(200,{app:'zhi-er-neng-jiang',apiVersion:1,ai:keyConfigured(),imports});
+    }
     if(req.method!=='POST'||req.headers.origin!==origin||req.headers['x-study-request']!=='1')return json(403,{error:'ORIGIN_REJECTED'});
     if(!['/api/teach','/api/diagnose','/api/asr','/api/register','/api/extract'].includes(path))return json(404,{error:'NOT_FOUND'});
-    if(busy)return json(409,{error:'REQUEST_IN_PROGRESS'});
-    busy=true; const controller=new AbortController();res.on('close',()=>{if(!res.writableEnded)controller.abort();});
+    const local=path==='/api/extract';
+    if(!local&&!keyConfigured())return json(422,{error:'CREDENTIAL_MISSING'});
+    if(local?extracting:busy)return json(409,{error:'REQUEST_IN_PROGRESS'});
+    if(local)extracting=true;else busy=true;
+    const controller=new AbortController();res.on('close',()=>{if(!res.writableEnded)controller.abort();});
     try {
       // Unknown budget state must fail before any paid-work dispatch or registration.
       if(path!=='/api/extract'){
@@ -62,7 +71,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       const events=b.events.map(e=>{requireValue(e.confirmed===true&&e.type==='near_silence_candidate'&&typeof e.id==='string'&&Number.isFinite(e.start)&&Number.isFinite(e.end)&&e.start>=0&&e.end>e.start&&e.end<=attempt.duration,'INVALID_EVENT');return {id:e.id,type:e.type,start:e.start,end:e.end};});
       const result=await semanticCall(DELIVERY,{...input,attempt,events},deliverySchema,{signal:controller.signal});return json(200,{...result,value:validateFindings(result.value,source,attempt,'delivery',events)});
     }catch(e){const safe=/^[A-Z][A-Z0-9_]+$/.test(e.message)?e.message:'REQUEST_FAILED';json(422,{error:safe});}
-    finally{busy=false;}
+    finally{if(local)extracting=false;else busy=false;}
   });
 }
 if(process.argv[1]===fileURLToPath(import.meta.url)){
