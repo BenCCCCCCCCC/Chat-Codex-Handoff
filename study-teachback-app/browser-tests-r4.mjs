@@ -1,3 +1,4 @@
+import {sourceChecks} from './browser-source-checks.mjs';
 import {setupChecks} from './browser-setup-checks.mjs';
 import {refinementChecks} from './browser-refinement-checks.mjs';
 import {audioChecks} from './browser-audio-checks.mjs';
@@ -84,6 +85,7 @@ try{
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
   if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await setupChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
+  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await sourceChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
   if(!setupOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await refinementChecks({check,evaluate,until,reloadPage,shot,cdp,all,calls});
   if(!setupOnly&&!refinementOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await audioChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,setFailASR:value=>{failASR=value;}});
   if(!setupOnly&&!refinementOnly&&!audioOnly&&!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});
@@ -317,7 +319,7 @@ try{
     assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .processObservation').length`),f.expected.process??0);
     assert.equal(await evaluate(`document.querySelectorAll('#processFeedback .finding, #processFeedback .diagnosticTarget, #feedback .processObservation').length`),0);
     if(f.expected.blocked)assert.equal(await evaluate(`document.querySelectorAll('#feedback .finding').length`),0);
-    if(f.id==='gap-without-process')assert.equal(await evaluate(`[...document.querySelectorAll('#feedback button')].filter(b=>!['检验理解','再学这一点','再讲这一点'].includes(b.textContent)).length`),0);
+    if(f.id==='gap-without-process')assert.equal(await evaluate(`[...document.querySelectorAll('#feedback button')].filter(b=>!['查看材料位置','检验理解','再学这一点','再讲这一点'].includes(b.textContent)).length`),0);
     if(f.expected.targets){await evaluate(`[...document.querySelectorAll('#feedback button')].find(b=>b.textContent==='再讲这一点').click()`);assert.equal(await evaluate(`document.getElementById('recordFocus').textContent`),f.report.findings[0].repair);await click('cancelRecord');}
     assert.equal(calls.length,before);assert.equal(JSON.stringify(testBook.read()),ledgerBefore);
     await shot(`diagnostic-${f.id}`,'attemptPanel');

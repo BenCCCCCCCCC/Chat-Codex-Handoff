@@ -6,12 +6,13 @@ import * as core from './core.mjs';
 import {createServer} from './server.mjs';
 import {TEACH} from './schemas.mjs';
 import {mountSetupDraft} from './setup-draft.mjs';
+import {selectedProvenance} from './source-provenance.mjs';
 const app=readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
 function harness(){
   const nodes=new Map(),requests=[],saved=[],notices=[];
   const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',addEventListener(){}});return nodes.get(id);};
   const setupDraft=mountSetupDraft({$,storage:{getItem(){return null;},setItem(){},removeItem(){}}});
-  const context=vm.createContext({...core,$,setupDraft,serviceCapabilities:{ai:true},topic:null,importPending:false,controller:null,capturePending:false,record:null,processing:false,
+  const context=vm.createContext({...core,$,setupDraft,selectedProvenance,importDocument:null,serviceCapabilities:{ai:true},topic:null,importPending:false,controller:null,capturePending:false,record:null,processing:false,
     uid:()=> 'synthetic',structuredClone,deleted:new Set(),clearImport(){},renderTopic(){},notice:x=>notices.push(x),friendly:x=>x,act:fn=>fn(),
     save:async()=>saved.push(structuredClone(context.topic)),api:async(path,body)=>{requests.push(structuredClone(body));return {value:{message:'Tutor',question:'Why?',goals:[]}};}});
   vm.runInContext(app.slice(app.indexOf('async function teach('),app.indexOf('let importPending')),context);

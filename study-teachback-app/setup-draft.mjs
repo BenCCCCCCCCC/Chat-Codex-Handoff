@@ -27,10 +27,13 @@ export function mountSetupDraft({$,storage,now=Date.now}){
       throw Error('SETUP_DRAFT_SAVE_FAILED');
     }
   }
-  function capture(){
+  function metadata(value=state?.sourceMeta??{}){
+    return {...(value.revisionOf?{revisionOf:value.revisionOf}:{}),...(value.provenance?.text===values().source.trim()?{provenance:value.provenance}:{})};
+  }
+  function capture(sourceMeta=state?.sourceMeta??{}){
     const current=values();
     if(!state&&!filled(current))return;
-    state={version:1,createdAt:state?.createdAt??now(),fields:current,undo:state?.undo??null};
+    state={version:1,createdAt:state?.createdAt??now(),fields:current,undo:state?.undo??null,undoMeta:state?.undoMeta??{},sourceMeta:metadata(sourceMeta)};
     dirty=true;flush();
   }
   function restore(){
@@ -50,12 +53,12 @@ export function mountSetupDraft({$,storage,now=Date.now}){
   }catch{status('无法读取新建草稿。请保留此页文字，检查浏览器存储后重试。');}
   for(const key of fields)$(key).addEventListener('input',()=>{try{capture();}catch{}});
   return {
-    capture,flush,restore,
+    capture,flush,restore,sourceMetadata:()=>structuredClone(metadata()),
     get dirty(){return dirty;},
     hasContent:()=>filled(values()),
-    replaceMaterial(text,filename){
+    replaceMaterial(text,filename,sourceMeta={}){
       const before=values();
-      state={version:1,createdAt:state?.createdAt??now(),fields:before,undo:before};
+      state={version:1,createdAt:state?.createdAt??now(),fields:before,undo:before,undoMeta:metadata(),sourceMeta};
       $('source').value=text;
       // A title entered by the learner is never a side effect of file import.
       if(!$('title').value.trim())$('title').value=filename;
@@ -65,7 +68,7 @@ export function mountSetupDraft({$,storage,now=Date.now}){
       if(!state?.undo)return;
       // Preserve learning preferences edited after the material was replaced.
       const current=values();
-      state.fields={...current,source:state.undo.source,title:state.undo.title};state.undo=null;
+      state.fields={...current,source:state.undo.source,title:state.undo.title};state.undo=null;state.sourceMeta=state.undoMeta??{};state.undoMeta={};
       restore();dirty=true;flush();
     },
     clear(){state=null;dirty=true;flush();restore();}
