@@ -10,8 +10,8 @@ export function updateTranscriptDraft(attempt,edits) {
   if(version.spans.every((span,i)=>span.text===edits[i].text))delete attempt.transcriptDraft;
   else attempt.transcriptDraft={baseVersionId:version.id,edits:edits.map(e=>({...e})),updatedAt:Date.now()};
 }
-export function analysisTrace(result) {
+export function analysisTrace(result,inputMode) {
   // Missing metadata in historical reports stays unknown, never inferred.
-  return {method:'confirmed_transcript',model:result.model??null,
+  return {method:inputMode==='text'?'confirmed_text':'confirmed_transcript',model:result.model??null,
     reservationId:result.reservationId??null,requestId:result.requestId??null};
 }

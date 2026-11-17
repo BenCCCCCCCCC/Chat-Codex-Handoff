@@ -1,5 +1,6 @@
+import {validateTextDraft} from './text-teachback.mjs';
 import {validateFeedbackReference} from './feedback-reference.mjs';
-import {sourceValue, identifier, setupContextValue, spanValue, validateFindings} from './core.mjs';
+import {sourceValue, identifier, setupContextValue, spanValue, textSpanValue, validateFindings} from './core.mjs';
 import {termSnapshot} from './transcription-terms.mjs';
 import {validateBoundedTask,assessBoundedTask} from './bounded-understanding.mjs';
 
@@ -21,6 +22,7 @@ function messages(items) {
 export async function encodeBackup(topic) {
   const data = structuredClone(topic);
   for (const attempt of data.attempts) {
+    if(attempt.inputMode==='text')continue;
     const bytes = new Uint8Array(await attempt.audio.arrayBuffer());
     let binary = '';
     for (let i=0; i<bytes.length; i+=8192) binary += String.fromCharCode(...bytes.subarray(i,i+8192));
@@ -41,6 +43,7 @@ export function decodeBackup(text) {
     if (t.updatedAt != null) date(t.updatedAt);
     if (t.restoredAt != null) date(t.restoredAt);
     setupContextValue(t.setupContext);
+    if(t.textDraft)validateTextDraft(t.textDraft);
     for (const goal of list(t.goals)) { string(goal.text,200); string(goal.sourceQuote,600); check(t.source.text.includes(goal.sourceQuote)); }
     if(t.chatDraft!=null)string(t.chatDraft,2000);
     if(t.contextNote!=null)string(t.contextNote,1000);
@@ -61,6 +64,10 @@ export function decodeBackup(text) {
       }
     }
     for (const a of t.attempts) {
+      check([undefined,'audio','text'].includes(a.inputMode));const typed=a.inputMode==='text';
+      if(a.parentVersionId!=null)identifier(a.parentVersionId);
+      if(a.feedbackRef)validateFeedbackReference(a.feedbackRef);
+      if(typed)check(a.audio==null&&a.duration==null&&!a.observation&&a.raw&&a.raw.origin==='USER_TEXT');
       if(a.transcriptionTerms!=null)termSnapshot(a.transcriptionTerms);
       sourceValue(a.source); check(a.source.id===t.source.id && a.source.text===t.source.text);
       date(a.createdAt); check(['full','partial'].includes(a.kind)); check(['none','keywords','source','unknown'].includes(a.assistance));
@@ -73,8 +80,8 @@ export function decodeBackup(text) {
       unique(versions);
       for (const v of versions) {
         if (v.text != null) string(v.text);
-        check(Number.isFinite(a.duration));
-        for (const span of list(v.spans)) spanValue(span,a.duration);
+        if(typed){check(v.spans?.length===1);for(const span of list(v.spans))textSpanValue(span);}
+        else {check(Number.isFinite(a.duration));for (const span of list(v.spans)) spanValue(span,a.duration);}
         unique(v.spans);
       }
       if (a.corrections.length) check(a.raw && a.corrections.every(v=>
@@ -93,7 +100,7 @@ export function decodeBackup(text) {
         object(report); check(report.attemptId===a.id);
         const version=versions.find(v=>v.id===report.transcriptVersion); check(version);
         if(report.analysis){
-          object(report.analysis);check(report.analysis.method==='confirmed_transcript');
+          object(report.analysis);check(report.analysis.method===(typed?'confirmed_text':'confirmed_transcript'));
           for(const key of ['model','reservationId','requestId'])if(report.analysis[key]!=null)string(report.analysis[key],200);
         }
         if (['content','delivery'].includes(report.channel)) {
@@ -105,6 +112,7 @@ export function decodeBackup(text) {
           for (const evidence of list(report.processEvidence)) object(evidence);
         }
       }
+      if(typed)continue;
       object(a.audio); string(a.audio.mime,100); string(a.audio.base64,BACKUP_LIMIT);
       check(a.audio.mime==='' || /^audio\/[a-z0-9.+-]+(?:;[a-z0-9= .+-]+)?$/i.test(a.audio.mime));
       check(a.audio.base64.length%4===0 && /^[A-Za-z0-9+/]*={0,2}$/.test(a.audio.base64));

@@ -12,6 +12,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
   files['/setup-draft.mjs']='setup-draft.mjs';
   files['/source-provenance.mjs']='source-provenance.mjs';
   files['/feedback-reference.mjs']='feedback-reference.mjs';
+  files['/text-teachback.mjs']='text-teachback.mjs';
   let busy=false,extracting=false;
   return http.createServer(async(req,res)=>{
     const expected=`127.0.0.1:${req.socket.localPort}`, origin=`http://${expected}`;
@@ -69,7 +70,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
       if(b.channel==='content'){
         const result=await semanticCall(CONTENT,input,findingsSchema,{signal:controller.signal});return json(200,{...result,value:validateFindings(result.value,source,attempt,'content')});
       }
-      requireValue(b.channel==='delivery'&&Array.isArray(b.events)&&b.events.length>0&&b.events.length<=8,'SOUND_EVIDENCE_INSUFFICIENT');
+      requireValue(attempt.inputMode!=='text'&&b.channel==='delivery'&&Array.isArray(b.events)&&b.events.length>0&&b.events.length<=8,'SOUND_EVIDENCE_INSUFFICIENT');
       const events=b.events.map(e=>{requireValue(e.confirmed===true&&e.type==='near_silence_candidate'&&typeof e.id==='string'&&Number.isFinite(e.start)&&Number.isFinite(e.end)&&e.start>=0&&e.end>e.start&&e.end<=attempt.duration,'INVALID_EVENT');return {id:e.id,type:e.type,start:e.start,end:e.end};});
       const result=await semanticCall(DELIVERY,{...input,attempt,events},deliverySchema,{signal:controller.signal});return json(200,{...result,value:validateFindings(result.value,source,attempt,'delivery',events)});
     }catch(e){const safe=/^[A-Z][A-Z0-9_]+$/.test(e.message)?e.message:'REQUEST_FAILED';json(422,{error:safe});}

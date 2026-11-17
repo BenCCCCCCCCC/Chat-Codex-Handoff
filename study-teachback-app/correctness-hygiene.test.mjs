@@ -75,6 +75,7 @@ function captureHarness(kind='valid') {
     transcriptionTerms,flushDrafts:async()=>{},reveal:(id,show=true)=>{$(id).hidden=!show;},notice:message=>events.push(message),friendly:x=>x,renderAttempt(){},
     act:async fn=>{try{await fn();}catch(e){events.push(e.message);}},save:async()=>{events.push('saved');if(kind==='storage'||kind==='asr-storage'&&target.attempts[0]?.raw)throw Error('STORAGE_FAILED');},
     api:async(path)=>{events.push(path);if(path==='/api/register'&&kind==='register')throw Error('LEDGER_LOCKED');return {};}});
+  vm.runInContext(app.slice(app.indexOf('function setTextBusy('),app.indexOf('function renderTextComposer(')),context);
   vm.runInContext(app.slice(app.indexOf('function stopRecording('),app.indexOf("document.addEventListener('visibilitychange'"))+app.slice(app.indexOf('async function processAudio('),app.indexOf("$('retryAsr').onclick")),context);
   return {context,target,events,$,release:completePermission,async start(){await $('start').onclick();},async stop(){const recorder=context.record.recorder;recorder.stop();await recorder.done;}};
 }
