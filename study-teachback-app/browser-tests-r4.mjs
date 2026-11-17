@@ -1,3 +1,4 @@
+import {sourceChecks} from './browser-source-checks.mjs';
 import {setupChecks} from './browser-setup-checks.mjs';
 import {refinementChecks} from './browser-refinement-checks.mjs';
 import {audioChecks} from './browser-audio-checks.mjs';
@@ -84,6 +85,7 @@ try{
   await cdp('Network.enable');await cdp('Network.setBlockedURLs',{urls:['https://*','http://api.*']});
   await cdp('Page.navigate',{url:origin+'/'});await until(`document.getElementById('learn') && document.getElementById('budget').textContent.length>0`);
   if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await setupChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
+  if(setupOnly||(!refinementOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only')))await sourceChecks({check,evaluate,until,reloadPage,shot,cdp,click,calls,setAIConfigured:value=>{aiConfigured=value;}});
   if(!setupOnly&&!audioOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await refinementChecks({check,evaluate,until,reloadPage,shot,cdp,all,calls});
   if(!setupOnly&&!refinementOnly&&!contextOnly&&!workspaceOnly&&!recoveryOnly&&!environmentProbe&&!process.argv.includes('--replay-only'))await audioChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,setFailASR:value=>{failASR=value;}});
   if(!setupOnly&&!refinementOnly&&!audioOnly&&!contextOnly&&!environmentProbe&&!process.argv.includes('--replay-only')&&!recoveryOnly)await workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay:value=>{delaySemantic=value;}});

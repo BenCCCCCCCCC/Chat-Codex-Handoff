@@ -14,6 +14,7 @@ import {createDraftSaver} from './draft-save.mjs';
 import {transcriptTexts,updateTranscriptDraft,analysisTrace} from './voice-review.mjs';
 import {focusHit,hitDestination,transcriptHit} from './search-focus.mjs';
 import {mountSetupDraft} from './setup-draft.mjs';
+import {importedDocument,selectedProvenance,renderMaterial} from './source-provenance.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
 let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false,capturePending=false;
 let serviceCapabilities=null;
@@ -55,7 +56,8 @@ async function refreshCapabilities(){
 }
 async function updateBudget(){try{const response=await fetch('/api/status');if(!response.ok)throw new Error('BUDGET_UNAVAILABLE');const s=await response.json();$('budget').textContent=`本次账本：${s.ledger.requests} 次请求；已知费用估算 $${s.ledger.knownCostUSD.toFixed(6)}；含未结算预留 $${s.ledger.exposureUSD.toFixed(6)} / $5。现金新增上限 $10，不自动充值。`; }catch{$('budget').textContent='预算状态暂不可用；无法确认可用额度。';}}
 function renderTopic(){
-  reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.source.title;$('sourceText').textContent=topic.source.text;
+  reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.source.title;
+  renderMaterial({textNode:$('sourceText'),locationNode:$('sourceLocation'),source:topic.source});reveal('sourceReturn',false);
   $('goals').replaceChildren(...(topic.goals??[]).map(g=>el('li',g.text)));
   chat.render();
   $('question').textContent=topic.question??'';$('phase').textContent=topic.mode==='repair'?'再学这一点':'一起学';
@@ -98,10 +100,10 @@ async function teach(message,mode='learn',focus=null,{internalStarter=false,retr
     throw e;
   }finally{processing=false;if(topic===target&&!deleted.has(target.id))renderTopic();}
 }
-let importPending=false;
+let importPending=false,importDocument=null;
 function updateCounts(){ $('sourceCount').textContent=`${$('source').value.length.toLocaleString()} / 5,000 字`;$('selectionCount').textContent=`已选 ${$('extractedText').value.slice($('extractedText').selectionStart,$('extractedText').selectionEnd).trim().length.toLocaleString()} 字`; }
 $('source').addEventListener('input',updateCounts);$('extractedText').addEventListener('select',updateCounts);
-function clearImport(){ $('selectedFile').textContent='';$('extractionState').textContent='';reveal('fileProgress',false); $('selectionCount').textContent='已选 0 字';$('sourceFile').value='';$('extractedText').value='';$('importStatus').textContent='';reveal('importPreview',false); }
+function clearImport(){importDocument=null; $('selectedFile').textContent='';$('extractionState').textContent='';reveal('fileProgress',false); $('selectionCount').textContent='已选 0 字';$('sourceFile').value='';$('extractedText').value='';$('importStatus').textContent='';reveal('importPreview',false); }
 $('clearImport').onclick=clearImport;
 $('sourceFile').onchange=()=>act(async()=>{
   const file=$('sourceFile').files[0];if(!file)return;
@@ -111,8 +113,10 @@ $('sourceFile').onchange=()=>act(async()=>{
     if(file.size>10*1024*1024)throw new Error('FILE_TOO_LARGE');
     notice('');
     const result=await api('/api/extract',await file.arrayBuffer(),{'X-Source-Format':file.name.split('.').pop().toLowerCase()});
-    $('extractedText').value=result.blocks.map(b=>b.text).join('\n\n');
+    importDocument=importedDocument(result.blocks,file.name);$('extractedText').value=importDocument.text;
     $('extractionState').textContent='解析完成';$('importStatus').textContent=`${result.blocks.length} 个正文/页面/幻灯片区块。核对文字后，选取最多 5,000 字。`;
+    const empty=result.blocks.filter(b=>!b.text.trim()).map(b=>b.label);
+    if(empty.length)$('importStatus').textContent+=` ${empty.join('、')}未提取到文字，请核对原文件中的图片或扫描内容。`;
     reveal('importPreview');
     if($('extractedText').value.trim().length<=5000&&!$('source').value.trim()){
       useImported(true);
@@ -127,7 +131,9 @@ function useImported(all){
   const preview=$('extractedText');const selected=(all?preview.value:preview.value.slice(preview.selectionStart,preview.selectionEnd)).trim();
   if(!selected)return notice('请先在预览中选中文字。');
   if(selected.length>5000)return notice('这一轮最多 5,000 字，请缩小选段；不会自动截断材料。');
-  setupDraft.replaceMaterial(selected,autoTitle(selected,$('selectedFile').textContent));updateCounts();notice('材料已替换，可以撤销。点击“开始学习”才会发送给模型。');
+  const provenance=importDocument?.text===preview.value?selectedProvenance(importDocument,all?0:preview.selectionStart,all?preview.value.length:preview.selectionEnd):null;
+  const sourceMeta={...(provenance?{provenance}:{}),...(importDocument?.revisionOf?{revisionOf:importDocument.revisionOf}:{})};
+  setupDraft.replaceMaterial(selected,autoTitle(selected,$('selectedFile').textContent),sourceMeta);updateCounts();notice('材料已替换，可以撤销。点击“开始学习”才会发送给模型。');
 }
 $('useSelection').onclick=()=>act(()=>useImported(false));$('useAll').onclick=()=>act(()=>useImported(true));
 $('learn').onclick=()=>act(async()=>{
@@ -135,7 +141,7 @@ $('learn').onclick=()=>act(async()=>{
   if(!$('source').value.trim())return notice('请先放入这一轮的学习材料。');
   if($('source').value.length>5000)return notice('这一轮最多 5,000 字，请缩小材料。');
   const setupContext=setupContextValue({focus:$('setupFocus').value,known:$('setupKnown').value});
-  topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim()||autoTitle($('source').value),text:$('source').value.trim()},setupContext,goals:[],messages:[],attempts:[],mode:'learn'};
+  topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim()||autoTitle($('source').value),text:$('source').value.trim(),...setupDraft.sourceMetadata()},setupContext,goals:[],messages:[],attempts:[],mode:'learn'};
   processing=true;
   try{await save(topic);setupDraft.clear();clearImport();}finally{processing=false;}
   if(serviceCapabilities?.ai!==true){renderTopic();notice('材料已保存在本机。可查看和整理，配置 AI 后再发送问题。');return;}
@@ -291,6 +297,7 @@ function diagnosisView(a){
 function focusDiagnosis(){const heading=$('contentHeading');heading.focus();heading.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
 function updateDiagnosisState(){
   const a=current;if(!a?.raw)return;const v=diagnosisView(a);
+  reveal('sourceReturn',false);
   $('confirm').disabled=!!v.pending||!!v.saveFailed;for(const e of editors.values())e.readOnly=!!v.pending;
   $('confirm').textContent=v.pending?'诊断中…':v.current?'查看当前诊断结果':v.changed?'确认修改并重新诊断':v.error?'确认当前文字并再次诊断':'确认使用当前文字，开始诊断';
   const binding=v.version?'版本 '+v.version.id.slice(0,8)+' · '+new Date(v.report.createdAt).toLocaleString():'';
@@ -378,6 +385,12 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
   // Keep the original finding index for evidence IDs while grouping by status.
   for(const [index,f] of [...report.findings.entries()].sort((a,b)=>order[a[1].status]-order[b[1].status])){const card=el('article',undefined,'finding');card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message));
     const evidence=el('details');evidence.append(el('summary','查看材料与原话'),el('blockquote',`材料：${f.sourceQuote}`));
+    const material=current.source;
+    evidence.append(button('查看材料位置',()=>{
+      $('sourceDetails').open=true;
+      const node=renderMaterial({textNode:$('sourceText'),locationNode:$('sourceLocation'),source:material,quote:f.sourceQuote});
+      $('sourceReturn').onclick=()=>focusHit(card);reveal('sourceReturn');focusHit(node);
+    }));
     if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId),anchor=quotePlayback(current.raw,span,f.quote);evidence.append(el('blockquote',`本次原话：${f.quote}`));if(anchor){const replay=button(playbackLabel(anchor),()=>play(anchor.start,anchor.end));replay.dataset.replay=anchor.level;evidence.append(replay);}}else evidence.append(el('p','未表达的内容没有音频位置。','muted'));
     card.append(evidence);
     const target=targets.find(t=>t.contentFindingIds.includes(`content:${current.id}:${report.transcriptVersion}:${index}`));
@@ -504,9 +517,10 @@ $('newTopic').onclick=()=>act(newTopic);$('revise').onclick=()=>act(async()=>{
   const s=topic.source,context=topic.setupContext;if(!await newTopic())return;
   if(setupDraft.hasContent()){
     $('extractedText').value=s.text;$('selectedFile').textContent=s.title;reveal('importPreview');
+    importDocument={...(s.provenance??{fileName:s.title,text:s.text,regions:[]}),revisionOf:s.id};
     notice('已有新建草稿已保留。当前主题材料放在预览中，可选择替换后编辑。');
   }else{
-    $('setupFocus').value=context?.focus??'';$('setupKnown').value=context?.known??'';$('title').value=s.title;$('source').value=s.text;setupDraft.capture();
+    $('setupFocus').value=context?.focus??'';$('setupKnown').value=context?.known??'';$('title').value=s.title;$('source').value=s.text;setupDraft.capture({provenance:s.provenance,revisionOf:s.id});
     notice('新版材料将建立新的学习记录；旧来源、标准和讲解保留。');
   }
   updateCounts();

@@ -1,3 +1,4 @@
+import {validateSourceProvenance} from './source-provenance.mjs';
 export const RETENTION_MS = 7 * 86400000;
 export const TUTOR_MESSAGE_LIMIT = 4000;
 export function autoTitle(source, filename='') {
@@ -36,6 +37,7 @@ export function remediationFocus(f,channel) {
 export function sourceValue(s) {
   requireValue(s && typeof s === 'object', 'SOURCE_REQUIRED');
   const result={ id: identifier(s.id), text: text(s.text, 5000), title: text(s.title, 120) };
+  validateSourceProvenance(s);if(s.revisionOf!=null)identifier(s.revisionOf);
   if(s.anchors){requireValue(Array.isArray(s.anchors)&&s.anchors.length<=4,'INVALID_ANCHORS');result.anchors=s.anchors.map(g=>{text(g.text,200);text(g.sourceQuote,600);requireValue(result.text.includes(g.sourceQuote),'INVALID_SOURCE_QUOTE');return {text:g.text,sourceQuote:g.sourceQuote};});result.anchorVersion=identifier(s.anchorVersion);}
   return result;
 }
