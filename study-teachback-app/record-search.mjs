@@ -1,3 +1,4 @@
+import {answerDisposition} from './question-review.mjs';
 const normalize=value=>String(value??'').normalize('NFKC').toLocaleLowerCase();
 const field=(label,text,target)=>({label,text,target,key:JSON.stringify(target)});
 function fields(topic) {
@@ -16,11 +17,13 @@ function fields(topic) {
         field('反馈',f.message,{kind:'report',attemptId:a.id,reportIndex,index})))
     ]),
     ...(topic.practiceRounds??[]).flatMap(r=>[
+      field('题目疑问',r.review?.status==='held'?r.review.note:null,{kind:'practice',roundId:r.id,part:'review'}),
+      ...(r.reviewHistory??[]).map(e=>field('题目复核',e.note,{kind:'practice',roundId:r.id,part:'review',reviewId:e.id})),
       field('练习',r.question,{kind:'practice',roundId:r.id}),
       field('草稿',r.task?r.task.exercise.choices.find(c=>c.id===r.draft)?.label:r.draft,{kind:'practice',roundId:r.id,part:'draft'}),
       ...r.answers.flatMap(a=>[
         field('回答',a.text,{kind:'practice',roundId:r.id,answerId:a.id}),
-        field(r.review?.status==='held'?'待复核反馈':'反馈',a.result,{kind:'practice',roundId:r.id,answerId:a.id,part:'result'})
+        field(answerDisposition(r,a)==='excluded'?'历史反馈（不作答错依据）':answerDisposition(r,a)==='pending'?'待复核反馈':'反馈',a.result,{kind:'practice',roundId:r.id,answerId:a.id,part:'result'})
       ])
     ]),
     ...(!topic.practiceRounds?.length&&topic.apply?[
@@ -31,7 +34,7 @@ function fields(topic) {
   ].filter(({text})=>typeof text==='string'&&text.length);
 }
 export function hasDraft(topic) {
-  return !!topic.textDraft?.text?.trim() || !!topic.chatDraft?.trim() || !!topic.practiceRounds?.some(r=>r.draft?.trim()) ||
+  return !!topic.textDraft?.text?.trim() || !!topic.chatDraft?.trim() || !!topic.practiceRounds?.some(r=>r.review?.status!=='replaced'&&(r.draft?.trim()||r.review?.status==='held')) ||
     !!topic.attempts?.some(a=>a.transcriptDraft);
 }
 export function resolveRecordHit(topic,key) {return fields(topic).find(f=>f.key===key)??null;}

@@ -1,5 +1,6 @@
 import {taskContext} from './understanding-task.mjs';
 import {resolveFeedback} from './feedback-reference.mjs';
+import {practicePaused,answerDisposition,beginReview,resolveQuestionReview,revisedQuestion,latestQuestion} from './question-review.mjs';
 import {boundedTask,validateBoundedTask,assessBoundedTask} from './bounded-understanding.mjs';
 // Practice records are separate from tutoring messages and recorded attempts.
 export function practiceRounds(topic) {
@@ -63,7 +64,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       return true;
     } catch {
       // A broken question/source binding is a task problem, never an answer grade.
-      round.review={status:'held',origin:'local_check',createdAt:now()};
+      beginReview(round,'local_check',{uid,now});
       await save(topic);
       return false;
     }
@@ -74,7 +75,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       const context=taskContext(topic.source,target.attempt,target.report,target.findingIndex),rounds=practiceRounds(topic);
       const same=r=>JSON.stringify(r.taskTarget)===JSON.stringify(context.target)&&(!target.feedbackRef||
         (r.origin?.feedbackRef?JSON.stringify(r.origin.feedbackRef)===JSON.stringify(target.feedbackRef):resolveFeedback(topic,r.origin,r.taskTarget).report?.id===target.feedbackRef.reportId));
-      const existing=rounds.find(same);
+      const existing=latestQuestion(rounds,rounds.find(same));
       topic.resume={view:'practice'};
       if(existing){topic.taskUnavailable=null;topic.practiceRequest=null;topic.activePracticeId=existing.id;await save(topic);return;}
       // Keep an unavailable result visible when the same feedback is reopened.
@@ -101,7 +102,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       const operation = topic.practiceRequest = {status:'pending', createdAt:now()};
       try {
         await save(topic);
-        const history = [...topic.messages, ...rounds.filter(r=>r.review?.status!=='held').slice(-3)
+        const history = [...topic.messages, ...rounds.filter(r=>!practicePaused(r)).slice(-3)
           .map(r => ({role:'assistant', text:r.question}))].slice(-6);
         const result = await request('/api/teach', {source:topic.source, setupContext:topic.setupContext,
           mode:'apply', message:'给我一个新的、相关的应用情境，不要先公布答案。', focus:null, history});
@@ -114,23 +115,23 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
     }),
     answer: () => run(async topic => {
       const round = activePractice(topic), text = round?.draft?.trim();
-      if (!round || round.review?.status==='held' || !text) return;
+      if (!round || practicePaused(round) || !text) return;
       if (text.length > 2000) throw new Error('INPUT_TOO_LARGE');
       topic.resume = {view:'practice'};
       if(round.task){
         if (!await checkLocalTask(topic,round)) return;
         const assessment=assessBoundedTask(round.task,topic.source,round.taskTarget,text);
-        if(!round.answers.some(a=>a.choiceId===text&&a.status==='complete')){
+        if(!round.answers.some(a=>a.choiceId===text&&a.status==='complete'&&answerDisposition(round,a)==='current')){
           round.answers.push({id:uid(),text:round.task.exercise.choices.find(c=>c.id===text).label,
             choiceId:text,createdAt:now(),completedAt:now(),status:'complete',result:assessment.message,assessment});
         }
         round.draft='';await save(topic);return;
       }
       // Looking at the same answer again does not buy another model response.
-      if (round.answers.some(a => a.text === text && a.status === 'complete')) {
+      if (round.answers.some(a => a.text === text && a.status === 'complete' && answerDisposition(round,a)==='current')) {
         round.draft = ''; await save(topic); return;
       }
-      let answer = round.answers.findLast(a => a.text === text && a.status !== 'complete');
+      let answer = round.answers.findLast(a => a.text === text && a.status !== 'complete' && answerDisposition(round,a)==='current');
       if (!answer) {
         answer = {id:uid(), text, createdAt:now(), result:null, status:'pending'};
         round.answers.push(answer);
@@ -138,7 +139,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       answer.status = 'pending';
       try {
         await save(topic);
-        const prior = round.answers.filter(a => a !== answer && a.status === 'complete')
+        const prior = round.answers.filter(a => a !== answer && a.status === 'complete' && answerDisposition(round,a)==='current')
           .flatMap(a => [{role:'user',text:a.text},{role:'assistant',text:a.result}]);
         const result = await request('/api/teach', {source:topic.source, setupContext:topic.setupContext,
           mode:'apply_answer', message:text, focus:round.question,
@@ -149,17 +150,32 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
     }),
     flagQuestion: () => run(async topic => {
       const round=activePractice(topic);
-      if (!round || round.review?.status==='held') return;
-      round.review={status:'held',origin:'learner',createdAt:now()};
+      if (!round || practicePaused(round)) return;
+      beginReview(round,'learner',{uid,now});
       topic.resume={view:'practice'};
       await save(topic);
     }),
     withdrawFlag: () => run(async topic => {
       const round=activePractice(topic);
-      if (round?.review?.origin!=='learner') return;
+      if (round?.review?.origin!=='learner'||round.review.status!=='held') return;
       if (!await checkLocalTask(topic,round)) return;
-      round.review=null;
+      resolveQuestionReview(round,'withdrawn',topic.source,{uid,now});
       await save(topic);
+    }),
+    retainQuestion: () => run(async topic => {
+      const round=activePractice(topic);if(round?.review?.status!=='held')return;
+      if(!await checkLocalTask(topic,round))return;
+      resolveQuestionReview(round,'retained',topic.source,{uid,now});
+      topic.resume={view:'practice'};await save(topic);
+    }),
+    reviseQuestion: () => run(async topic => {
+      const round=activePractice(topic);if(round?.review?.status!=='held')return;
+      const revision=revisedQuestion(round,topic.source),id=uid();
+      const event=resolveQuestionReview(round,'replaced',topic.source,{uid,now,replacementId:id});
+      const next={id,createdAt:now(),question:revision.question,introduction:'',draft:'',assistance:'source_visible',answers:[],
+        revision:{parentRoundId:round.id,reviewId:event.id,sourceId:topic.source.id,method:'learner_review',note:revision.note,basisQuote:revision.basisQuote},
+        ...(round.origin?{origin:structuredClone(round.origin)}:{}),...(round.taskTarget?{taskTarget:structuredClone(round.taskTarget)}:{})};
+      practiceRounds(topic).push(next);topic.activePracticeId=id;topic.resume={view:'practice'};await save(topic);
     }),
     async select(id) {
       if (busy || !canStart()) return;
