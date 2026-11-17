@@ -43,7 +43,9 @@
         </div>
         <div class="paste-area"><label for="source" class="paste-entry">或直接粘贴文字</label><textarea id="source" maxlength="5000" rows="6" placeholder="一段课本、课堂笔记，或一个你想真正理解的概念……"></textarea><p id="sourceCount" class="counter">0 / 5,000 字</p></div>
       </div>
-      <section id="importPreview" hidden><label for="extractedText">核对提取结果并选段</label><textarea id="extractedText" rows="8" readonly></textarea><p id="selectionCount" class="counter">已选 0 字</p><p id="importStatus" role="status"></p><button id="useSelection" class="quiet">使用选中文字</button><button id="useAll" class="quiet">使用全部文本</button><button id="clearImport" class="quiet">清除预览</button></section>
+      <section id="importPreview" hidden><label for="extractedText">核对提取结果并选段</label><textarea id="extractedText" rows="8" readonly></textarea><p id="selectionCount" class="counter">已选 0 字</p><p id="importStatus" role="status"></p><button id="useSelection" class="quiet">替换为选中文字</button><button id="useAll" class="quiet">替换为全部文本</button><button id="clearImport" class="quiet">清除预览</button></section>
+      <div class="compact-actions"><button id="undoImport" class="quiet" hidden>撤销材料替换</button><button id="clearSetupDraft" class="quiet">清空新建草稿</button></div>
+      <p id="setupDraftStatus" class="muted" role="status"></p><button id="setupDraftRetry" class="quiet" hidden>重试保存草稿</button>
       <details id="learningOptions" class="learning-options"><summary>学习偏好 <span>可选</span></summary>
         <label>主题<input id="title" maxlength="120" placeholder="留空即可从材料生成"></label>
         <div class="option-grid"><label>这次重点想学什么？<textarea id="setupFocus" maxlength="500" rows="2" placeholder="例如：能解释原理，而不只是记住定义"></textarea></label><label>已经掌握了什么？<textarea id="setupKnown" maxlength="500" rows="2" aria-describedby="setupHint" placeholder="例如：了解基本概念，条件还容易混淆"></textarea></label></div>
