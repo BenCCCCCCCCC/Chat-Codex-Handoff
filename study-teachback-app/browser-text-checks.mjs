@@ -5,7 +5,10 @@ export async function textChecks({check,evaluate,until,reloadPage,click,calls,sh
     await evaluate(`document.getElementById('source').value='只有土壤干燥时才浇水，湿润时不要浇水。'`);await click('learn');await until(`!document.getElementById('workspace').hidden`);
     await click('explain');await evaluate(`document.getElementById('textComposer').open=true`);
     await evaluate(`{const e=document.getElementById('textExplanation');e.value='土壤湿润时也要浇水。';e.dispatchEvent(new Event('input'));}`);
-    await click('cancelRecord');await click('historyButton');await reloadPage();await click('explain');
+    await click('cancelRecord');await click('historyButton');await reloadPage();await click('historyButton');
+    await evaluate(`{const s=document.getElementById('historySearch');s.value='土壤湿润时也要浇水';s.dispatchEvent(new Event('input'));}`);
+    await until(`document.querySelector('.history-hit')`);await evaluate(`document.querySelector('.history-hit').click()`);
+    await until(`!document.getElementById('recording').hidden&&document.activeElement.id==='textExplanation'`);
     assert.equal(await evaluate(`document.getElementById('textExplanation').value`),'土壤湿润时也要浇水。');
     await evaluate(`window.textNativePut=IDBObjectStore.prototype.put;IDBObjectStore.prototype.put=function(){throw new DOMException('test quota','QuotaExceededError');}`);
     await evaluate(`document.getElementById('saveTextExplanation').click();document.getElementById('saveTextExplanation').click()`);

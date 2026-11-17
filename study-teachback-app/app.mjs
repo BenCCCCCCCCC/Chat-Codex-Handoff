@@ -153,7 +153,10 @@ $('learn').onclick=()=>act(async()=>{
 $('chatForm').onsubmit=e=>{e.preventDefault();if(!canNavigate())return;act(async()=>{const message=$('chat').value.trim();if(!message)return;await chat.flushDraft();const retry=topic.chatRequest?.status!=='complete'&&!topic.chatRequest?.internalStarter&&topic.chatRequest?.message===message;await teach(message,topic.mode==='repair'?'repair':'learn',topic.focus??null,{retry});});};
 $('chatRetry').onclick=()=>act(async()=>{if(canNavigate())await teach('', 'learn',null,{retry:true});});
 function prepare(kind='full',focus=null,parentId=null,feedbackRef=null){
-  if(!canNavigate())return;if(!topic)return;if(kind==='partial')focus=repairFocus(focus);pending={kind,focus,parentId,parentVersionId:feedbackRef?.transcriptVersion??topic.attempts.find(a=>a.id===parentId)?.corrections.at(-1)?.id??topic.attempts.find(a=>a.id===parentId)?.raw?.id??null,...(feedbackRef?{feedbackRef}:{})};renderTextComposer();$('transcriptionTerms').value=topic.transcriptionTerms??'';$('termDraftStatus').textContent='';reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'用自己的话说明这个概念、条件或过程。';$('recording').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});$('start').focus();$('timer').textContent='00:00';
+  if(!canNavigate())return;showPreparation(kind,focus,parentId,feedbackRef);
+}
+function showPreparation(kind='full',focus=null,parentId=null,feedbackRef=null){
+  if(!topic)return;if(kind==='partial')focus=repairFocus(focus);pending={kind,focus,parentId,parentVersionId:feedbackRef?.transcriptVersion??topic.attempts.find(a=>a.id===parentId)?.corrections.at(-1)?.id??topic.attempts.find(a=>a.id===parentId)?.raw?.id??null,...(feedbackRef?{feedbackRef}:{})};renderTextComposer();$('transcriptionTerms').value=topic.transcriptionTerms??'';$('termDraftStatus').textContent='';reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'用自己的话说明这个概念、条件或过程。';$('recording').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});$('start').focus();$('timer').textContent='00:00';
 }
 function setTextBusy(busy){
   for(const id of ['textExplanation','textAssistance','discardTextDraft'])$(id).disabled=busy;
@@ -230,7 +233,7 @@ $('audioFile').onchange=()=>act(async()=>{
 });
 function stopRecording(interrupted=false){if(!record)return;record.interrupted ||= interrupted;if(record.recorder.state!=='inactive')record.recorder.stop();}
 function resetRecordingUI(){
-  setTextBusy(false);
+  setTextBusy(!!record||capturePending||processing);
   delete document.body.dataset.recording;$('transcriptionTerms').disabled=false;$('uploadAudio').disabled=false;$('start').disabled=false;reveal('start');reveal('finish',false);$('assistance').disabled=false;reveal('materialPanel');reveal('chatForm');document.querySelector('.learning').hidden=false;$('promptView').textContent='';
 }
 $('finish').onclick=()=>stopRecording();
@@ -561,7 +564,7 @@ function locateHit(hit){
   if(t.kind==='source'){$('sourceDetails').open=true;return focusHit($('sourceText'));}
   if(t.kind==='contextNote'){$('chatContext').open=true;return focusHit($('contextNote'));}
   if(t.kind==='title')return focusHit($('topicTitle'));
-  if(t.kind==='textDraft'){prepare();$('textComposer').open=true;return focusHit($('textExplanation'));}
+  if(t.kind==='textDraft'){showPreparation();$('textComposer').open=true;return focusHit($('textExplanation'));}
   if(t.kind==='chatDraft')return focusHit($('chat'));
   if(t.kind==='practice')return practice.locate(t,focusHit);
   if(t.kind==='transcriptDraft')return focusHit(editors.get(t.spanId));
