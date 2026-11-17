@@ -1,7 +1,8 @@
 import {activePractice, practiceRounds, createPracticeFlow} from './practice.mjs';
 import {createDraftSaver} from './draft-save.mjs';
+import {resolveFeedback} from './feedback-reference.mjs';
 
-export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen}) {
+export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen, onFeedback}) {
   const $ = id => document.getElementById(id);
   const node = (tag, text, cls) => {
     const e = document.createElement(tag); e.textContent = text;
@@ -14,6 +15,11 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
   function render() {
     const topic = getTopic(), round = activePractice(topic), rounds = practiceRounds(topic);
     const held=round?.review?.status==='held';
+    const origin=round?.origin??topic?.taskUnavailable?.origin,target=round?.taskTarget??topic?.taskUnavailable?.target;
+    const destination=topic&&resolveFeedback(topic,origin,target);
+    $('practiceReturn').hidden=!origin;
+    $('practiceReturn').disabled=flow.busy||!destination?.report;
+    $('practiceOriginStatus').textContent=origin?(destination.report?'来自一次历史反馈；返回不会修改当前讲解。':destination.reason):'';
     $('practicePanel').hidden = !topic || !(round || topic.practiceRequest || topic.taskUnavailable);
     $('practicePanel').dataset.active = String(topic?.resume?.view === 'practice');
     $('practiceNew').disabled = flow.busy;
@@ -113,6 +119,12 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     await flushDraft();
     const topic=getTopic(); topic.resume={view:'learn'};
     await save(topic); render(); queueMicrotask(()=>$('chat').focus());
+  });
+  $('practiceReturn').onclick=()=>act(async()=>{
+    if(!canStart())return;
+    await flushDraft();
+    const t=getTopic(),r=activePractice(t),saved=r??t.taskUnavailable;
+    await onFeedback(saved?.origin,r?.taskTarget??saved?.target);
   });
   $('practiceForm').onsubmit = event => {
     event.preventDefault();

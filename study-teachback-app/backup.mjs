@@ -1,3 +1,4 @@
+import {validateFeedbackReference} from './feedback-reference.mjs';
 import {sourceValue, identifier, setupContextValue, spanValue, validateFindings} from './core.mjs';
 import {termSnapshot} from './transcription-terms.mjs';
 import {validateBoundedTask,assessBoundedTask} from './bounded-understanding.mjs';
@@ -87,7 +88,8 @@ export function decodeBackup(text) {
       for (const event of list(events)) {
         identifier(event.id); check(Number.isFinite(event.start)&&Number.isFinite(event.end)&&event.end>event.start);
       }
-      for (const report of list(a.reports)) {
+      unique(list(a.reports).filter(r=>r.id!=null));
+      for (const report of a.reports) {
         object(report); check(report.attemptId===a.id);
         const version=versions.find(v=>v.id===report.transcriptVersion); check(version);
         if(report.analysis){
@@ -121,6 +123,7 @@ export function decodeBackup(text) {
           object(round.origin);
           for(const key of ['targetId','sourceId','attemptId','transcriptVersion'])string(round.origin[key],1000);
           check(round.origin.sourceId===t.source.id);
+          if(round.origin.feedbackRef)validateFeedbackReference(round.origin.feedbackRef);
         }
         if(round.task){
           validateBoundedTask(round.task,t.source,round.taskTarget);check(round.task.exercise);
@@ -142,6 +145,8 @@ export function decodeBackup(text) {
       for (const key of ['answer','result']) if(t.apply[key]!=null)string(t.apply[key]);
     }
     if (t.practiceRequest) { object(t.practiceRequest); check(['pending','unknown'].includes(t.practiceRequest.status)); }
+    if(t.resume?.feedbackOrigin)validateFeedbackReference(t.resume.feedbackOrigin.origin.feedbackRef);
+    if(t.taskUnavailable?.origin?.feedbackRef)validateFeedbackReference(t.taskUnavailable.origin.feedbackRef);
     if(t.taskUnavailable){object(t.taskUnavailable);object(t.taskUnavailable.target);string(t.taskUnavailable.target.id,200);string(t.taskUnavailable.reason,300);}
     return t;
   } catch (error) {

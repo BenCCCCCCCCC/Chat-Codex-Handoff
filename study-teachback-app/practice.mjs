@@ -1,4 +1,5 @@
 import {taskContext} from './understanding-task.mjs';
+import {resolveFeedback} from './feedback-reference.mjs';
 import {boundedTask,validateBoundedTask,assessBoundedTask} from './bounded-understanding.mjs';
 // Practice records are separate from tutoring messages and recorded attempts.
 export function practiceRounds(topic) {
@@ -32,7 +33,7 @@ export function resumePoint(topic) {
   if (saved?.view === 'learn') return saved;
   if (saved?.view === 'practice' && (activePractice(topic) || topic.practiceRequest || topic.taskUnavailable)) return {view:'practice'};
   const attempt = (topic.attempts ?? []).find(a => a.id === saved?.attemptId);
-  if (attempt) return {view:'attempt', attemptId:attempt.id};
+  if (attempt) return {view:'attempt', attemptId:attempt.id,...(saved.feedbackOrigin?{feedbackOrigin:saved.feedbackOrigin}:{})};
   if (['apply','apply_answer'].includes(topic.mode) && activePractice(topic)) return {view:'practice'};
   const last = (topic.attempts ?? []).at(-1);
   return last ? {view:'attempt', attemptId:last.id} : {view:'learn'};
@@ -71,23 +72,25 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
     get busy() { return busy; },
     fromFeedback: target => run(async topic => {
       const context=taskContext(topic.source,target.attempt,target.report,target.findingIndex),rounds=practiceRounds(topic);
-      const same=r=>JSON.stringify(r.taskTarget)===JSON.stringify(context.target);
+      const same=r=>JSON.stringify(r.taskTarget)===JSON.stringify(context.target)&&(!target.feedbackRef||
+        (r.origin?.feedbackRef?JSON.stringify(r.origin.feedbackRef)===JSON.stringify(target.feedbackRef):resolveFeedback(topic,r.origin,r.taskTarget).report?.id===target.feedbackRef.reportId));
       const existing=rounds.find(same);
       topic.resume={view:'practice'};
       if(existing){topic.taskUnavailable=null;topic.practiceRequest=null;topic.activePracticeId=existing.id;await save(topic);return;}
       // Keep an unavailable result visible when the same feedback is reopened.
-      if(topic.taskUnavailable&&JSON.stringify(topic.taskUnavailable.target)===JSON.stringify(context.target)){
+      if(topic.taskUnavailable&&JSON.stringify(topic.taskUnavailable.target)===JSON.stringify(context.target)&&JSON.stringify(topic.taskUnavailable.origin?.feedbackRef)===JSON.stringify(target.feedbackRef)){
         topic.activePracticeId=null;await save(topic);return;
       }
       const task=boundedTask(context);
+      const origin={targetId:context.target.id,sourceId:topic.source.id,attemptId:context.target.attemptId,transcriptVersion:context.target.transcriptVersion,...(target.feedbackRef?{feedbackRef:target.feedbackRef}:{})};
       topic.taskUnavailable=null;topic.practiceRequest=null;
       if(task.exercise){
         const round={id:uid(),createdAt:now(),question:task.exercise.question,introduction:'',assistance:'source_visible',
           draft:'',answers:[],task,taskTarget:context.target,
-          origin:{targetId:context.target.id,sourceId:topic.source.id,attemptId:context.target.attemptId,transcriptVersion:context.target.transcriptVersion}};
+          origin};
         rounds.push(round);topic.activePracticeId=round.id;
       }else{
-        topic.taskUnavailable={target:context.target,reason:task.unavailableReason};topic.activePracticeId=null;
+        topic.taskUnavailable={target:context.target,origin,reason:task.unavailableReason};topic.activePracticeId=null;
       }
       await save(topic);
     }),
