@@ -1,5 +1,32 @@
 # CURRENT_STATE — 知而能讲
 
+更新于 2026-11-17（Australia/Sydney）。产品默认分支 `prototype/study-teachback-v0.1`，MASTER 状态分支 `meta/master-state`。
+
+## 当前阶段与决定
+
+从单次可行性入手的原型进入完整个人学习产品的规划与实施队列。用户要求同时完善功能、界面、系统可用性、易用性与底层设计，增加 Codex 连续执行，减少重复验证。本轮完成产品审查与完整任务规划；应用实现仍以 10 月 21 日合并的 [PR #28](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/28)（8634919）为基线。Phase 3B 的历史 PASS 仅指有界技术可行性。
+
+执行 [完整任务规划与 Codex 交接](HANDOFF.md)。A 启动、草稿与导航以及 B 来源与版本为首批；C 语音／文字与服务迁移、D 诊断与判题为完整学习版；E 多来源与复习、F 交付工程及作品展示形成持续使用版。F 中按影响选择 CI 的调整可随首批执行。按依赖连续实施，无需为每个小步骤等待 MASTER。状态留在这里，详细验收和文件定位留在 HANDOFF。
+
+| 项目 | 当前事实 |
+|---|---|
+| Completed | 基线代码、界面、数据和运行方式审查；桌面／窄屏浏览器走查；最近一个月技术复核；三版六批完整任务与验收规划。 |
+| Verified | 合并基线 8634919。Chromium 实际复现新建导航清空、短文件覆盖正文与自定标题、无 key 先建主题后提示重试。免 key 示例可完成，390px 无横向溢出。未装指定 PDF 依赖时纯文本导入也会被阻拦。 |
+| Likely | 将材料/原话/修订和前后讲解关联、提供语音和文字入口、让练习返回同一缺口，可降低阅读与返工成本；收益在候选版实测。 |
+| Not Done | A–F 产品实现、Windows 原生复验、新转写适配与真实模型对照、真人学习可用性与效果研究。此次审查没有调用付费模型或发布新版应用。 |
+| Unknown | 真实学习者首次有效反馈的耗时、独立新情境与保持效果；多源相对通用助手的增益；后继转写的实际中文质量与可得到的时间定位精度。 |
+
+**当下动作**：Codex 从产品分支执行 A，B 的来源／版本设计可同时推进。先把「打开→保全材料→导入/撤销→继续原学习」整条旅程交付，再按依赖进入后续批次。例行验证沿用仓库按影响策略，修正 CI 路由与该策略的偏差。
+
+**授权和需决定事项**：沿用原有个人学习＋作品展示定位、仓库内按批次 commit/push/PR/merge 和自审权限。新真实 API 费用、个人录音研究、数据保留策略变更、大规模数据迁移或对外部署按已有约定另作决定。迁移适配可先在隔离副本和旧备份上完成；默认仍按七天政策办。费用审批仅暂停需要支出的操作。旧实验额度已结束。
+
+## 10 月产品基线与研究证据
+
+以下是 10 月 21 日的历史记录，用于复用已有能力、收据与已知失败。当时的下一步排序已由上方 11 月路线接替。可打开[当时完整原文](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/3410de4fc40e8504bfeb9046cacbedc23eff3b34/docs/master/CURRENT_STATE.md)。
+
+<details>
+<summary>展开 2026-10-21 历史记录</summary>
+
 Updated: 2026-10-21 (Australia/Sydney)
 Repository: BenCCCCCCCCC/Chat-Codex-Handoff
 Product/default branch: prototype/study-teachback-v0.1
@@ -98,3 +125,5 @@ Phase 3B 仅对有界可行性问题 **CLOSED / PASS**，不代表跨课程／�
 真实学习者与保持／迁移数据仍缺；不能凭参照题或工程测试称学习效果已证明。自然语音和Issue #3同输入多源研究继续保留，不调停顿阈值。
 
 历史快照：[本轮之前完整状态](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/63107f3a69ee75666fe8a2e4590c65e330a2bfa5/docs/master/CURRENT_STATE.md)。
+
+</details>
