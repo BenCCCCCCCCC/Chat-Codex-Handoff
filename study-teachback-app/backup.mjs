@@ -1,4 +1,5 @@
 import {validateQuestionReviews} from './question-review.mjs';
+import {learningContexts,validateMaterialSet} from './material-set.mjs';
 import {validateTextDraft} from './text-teachback.mjs';
 import {validateFeedbackReference} from './feedback-reference.mjs';
 import {sourceValue, identifier, setupContextValue, spanValue, textSpanValue, validateFindings} from './core.mjs';
@@ -7,6 +8,7 @@ import {validateBoundedTask,assessBoundedTask} from './bounded-understanding.mjs
 
 export const BACKUP_LIMIT = 128 * 1024 * 1024;
 const FORMAT = 'study-teachback-export-v1';
+const MATERIAL_FORMAT = 'study-teachback-export-v2';
 const check = value => { if (!value) throw Error('BACKUP_INVALID'); };
 const object = value => check(value && typeof value === 'object' && !Array.isArray(value));
 const string = (value, max=16000) => check(typeof value === 'string' && value.length <= max);
@@ -22,14 +24,14 @@ function messages(items) {
 
 export async function encodeBackup(topic) {
   const data = structuredClone(topic);
-  for (const attempt of data.attempts) {
+  for (const context of learningContexts(data)) for (const attempt of context.attempts) {
     if(attempt.inputMode==='text')continue;
     const bytes = new Uint8Array(await attempt.audio.arrayBuffer());
     let binary = '';
     for (let i=0; i<bytes.length; i+=8192) binary += String.fromCharCode(...bytes.subarray(i,i+8192));
     attempt.audio = {mime:attempt.audio.type, base64:btoa(binary)};
   }
-  return JSON.stringify({format:FORMAT, exportedAt:new Date().toISOString(),
+  return JSON.stringify({format:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
     notice:'导出副本不受应用内删除控制', topic:data}, null, 2);
 }
 
@@ -39,7 +41,7 @@ export function decodeBackup(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > BACKUP_LIMIT) throw Error('BACKUP_TOO_LARGE');
   try {
     const envelope = JSON.parse(text);
-    if (envelope?.format !== FORMAT) throw Error('BACKUP_FORMAT');
+    if (![FORMAT,MATERIAL_FORMAT].includes(envelope?.format)) throw Error('BACKUP_FORMAT');
     const t = envelope.topic; object(t); identifier(t.id); date(t.createdAt); sourceValue(t.source);
     if (t.updatedAt != null) date(t.updatedAt);
     if (t.restoredAt != null) date(t.restoredAt);
@@ -154,6 +156,13 @@ export function decodeBackup(text) {
     if(t.resume?.feedbackOrigin)validateFeedbackReference(t.resume.feedbackOrigin.origin.feedbackRef);
     if(t.taskUnavailable?.origin?.feedbackRef)validateFeedbackReference(t.taskUnavailable.origin.feedbackRef);
     if(t.taskUnavailable){object(t.taskUnavailable);object(t.taskUnavailable.target);string(t.taskUnavailable.target.id,200);string(t.taskUnavailable.reason,300);}
+    validateMaterialSet(t);
+    if(t.studyContexts)for(let i=0;i<t.studyContexts.length;i++){
+      const context=t.studyContexts[i];
+      // Archived contexts use the same bounded validator, including audio and feedback.
+      const decoded=decodeBackup(JSON.stringify({format:FORMAT,topic:{...context,createdAt:t.createdAt}}));
+      delete decoded.createdAt;t.studyContexts[i]=decoded;
+    }
     return t;
   } catch (error) {
     throw Error(error.message==='BACKUP_FORMAT' ? 'BACKUP_FORMAT' : 'BACKUP_INVALID');
@@ -164,10 +173,12 @@ export function restoredCopy(topic, {now=Date.now(), id=crypto.randomUUID()}={})
   const copy=structuredClone(topic);
   copy.id=id; copy.restoredFrom=topic.id; copy.restoredAt=now; copy.updatedAt=now;
   // Pending records are historical outcomes, never a reason to auto-dispatch.
-  if (copy.chatRequest?.status==='pending') copy.chatRequest.status='unknown';
-  if (copy.practiceRequest?.status==='pending') copy.practiceRequest.status='unknown';
-  for (const round of copy.practiceRounds??[]) for (const answer of round.answers) {
+  for(const context of learningContexts(copy)){
+  if (context.chatRequest?.status==='pending') context.chatRequest.status='unknown';
+  if (context.practiceRequest?.status==='pending') context.practiceRequest.status='unknown';
+  for (const round of context.practiceRounds??[]) for (const answer of round.answers) {
     if (answer.status==='pending') answer.status='unknown';
+  }
   }
   return copy;
 }

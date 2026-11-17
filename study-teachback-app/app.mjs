@@ -1,3 +1,5 @@
+import {learningContexts,selectContext} from './material-set.mjs';
+import {mountMaterialSet} from './material-set-ui.mjs';
 import {makeTextAttempt,comparisonFor} from './text-teachback.mjs';
 import { waveBytes, revisedTranscript, validateFindings, repairFocus, autoTitle, setupContextValue } from './core.mjs';
 import {renderRawPlayback,quotePlayback,playbackLabel} from './transcript-playback.mjs';
@@ -29,7 +31,7 @@ const reveal=(id,show=true)=>{$(id).hidden=!show;};
 function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
 function button(label,fn,cls='quiet'){const b=el('button',label,cls);b.onclick=()=>label==='删除主题'?confirmDelete('删除这个主题及其全部讲解、原声、转写和反馈。',fn,b):act(fn);return b;}
 async function act(fn){try{await fn();}catch(e){notice(friendly(e.message));}}
-function friendly(code){const messages={REVIEW_BASIS_REQUIRED:'请填写复核说明，并粘贴材料中确实存在的原文作为依据；材料不足时可继续暂停。',QUESTION_UNCHANGED:'请修改题目，或选择保留原题后重新作答。',REVIEW_CHANGED:'题目或复核内容已改变，请重新预览后确认。',TRANSCRIPTION_TERMS_LIMIT:'术语最多 8 项，每项 24 字、合计 80 字；请用逗号分隔简短名称。',AUDIO_TOO_LARGE:'音频超过 25 MB，请压缩或裁剪后重新选择。',AUDIO_FORMAT_UNSUPPORTED:'请选择 WAV、MP3、M4A、MP4、WebM、OGG、FLAC 或 AAC 音频。',AUDIO_DECODE_FAILED:'浏览器无法读取这段音频，请转为 WAV 或 MP3 后重试。',DURATION_LIMIT:'每次讲解最长 3 分钟，请先裁剪音频。',EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先确认用于诊断的转写；建议回听检查否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请先完整回听这个过程候选，再保存过程证据。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
+function friendly(code){const messages={MATERIAL_SELECTION_REQUIRED:'请至少选择一份材料。',MATERIAL_SELECTION_TOO_LARGE:'本次材料组合最多 5,000 字、100 个位置区块，请缩小所选材料；不会自动截断。',MATERIAL_LIMIT:'一个主题目前最多保存 12 份材料。',ISSUE_EVIDENCE_REQUIRED:'请至少引用一段材料中实际存在的原句。',SELECT_MATERIAL_QUOTE:'请先在材料原文中选取最多 1,500 字。',STUDY_WORK_MISSING:'这张疑点卡关联的讲解或题目已删除，已返回当时的材料；疑点与引文仍保留。',STUDY_CONTEXT_MISSING:'原学习位置已不存在，当前记录仍保留。',INVALID_TEXT:'请填写完整的文字，并遵守输入框字数限制。',REVIEW_BASIS_REQUIRED:'请填写复核说明，并粘贴材料中确实存在的原文作为依据；材料不足时可继续暂停。',QUESTION_UNCHANGED:'请修改题目，或选择保留原题后重新作答。',REVIEW_CHANGED:'题目或复核内容已改变，请重新预览后确认。',TRANSCRIPTION_TERMS_LIMIT:'术语最多 8 项，每项 24 字、合计 80 字；请用逗号分隔简短名称。',AUDIO_TOO_LARGE:'音频超过 25 MB，请压缩或裁剪后重新选择。',AUDIO_FORMAT_UNSUPPORTED:'请选择 WAV、MP3、M4A、MP4、WebM、OGG、FLAC 或 AAC 音频。',AUDIO_DECODE_FAILED:'浏览器无法读取这段音频，请转为 WAV 或 MP3 后重试。',DURATION_LIMIT:'每次讲解最长 3 分钟，请先裁剪音频。',EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先确认用于诊断的转写；建议回听检查否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请先完整回听这个过程候选，再保存过程证据。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
 async function save(target=topic){if(!target||deleted.has(target.id))return;try{target.updatedAt=Date.now();await db.put(target);memoryOnly=false;reveal('storageRecovery',false);}catch{memoryOnly=true;reveal('storageRecovery');throw new Error('STORAGE_FAILED');}}
 async function api(path,body,headers={}){
   if(controller||record)throw new Error('REQUEST_IN_PROGRESS');
@@ -59,7 +61,7 @@ async function refreshCapabilities(){
 }
 async function updateBudget(){try{const response=await fetch('/api/status');if(!response.ok)throw new Error('BUDGET_UNAVAILABLE');const s=await response.json();$('budget').textContent=`本次账本：${s.ledger.requests} 次请求；已知费用估算 $${s.ledger.knownCostUSD.toFixed(6)}；含未结算预留 $${s.ledger.exposureUSD.toFixed(6)} / $5。现金新增上限 $10，不自动充值。`; }catch{$('budget').textContent='预算状态暂不可用；无法确认可用额度。';}}
 function renderTopic(){
-  reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.source.title;
+  reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.studyTitle??topic.source.title;materials.render();
   renderMaterial({textNode:$('sourceText'),locationNode:$('sourceLocation'),source:topic.source});reveal('sourceReturn',false);
   $('goals').replaceChildren(...(topic.goals??[]).map(g=>el('li',g.text)));
   chat.render();
@@ -480,7 +482,7 @@ async function exportTopic(target=topic){
 $('export').onclick=()=>act(exportTopic);
 $('recoveryExport').onclick=()=>act(exportTopic);
 $('topicExport').onclick=()=>act(async()=>{await flushDrafts();await exportTopic();});
-$('retrySave').onclick=()=>act(async()=>{if(chat.hasPendingDraft||practice.hasPendingDraft||voiceDrafts.pending)await flushDrafts();else await save();chat.render();if(current){diagnosisStates.delete(current);renderAttempt();}renderPractice();renderChatRecovery();notice('已重新保存到本机。');});
+$('retrySave').onclick=()=>act(async()=>{if(chat.hasPendingDraft||practice.hasPendingDraft||materials.hasPendingDraft||voiceDrafts.pending)await flushDrafts();else await save();chat.render();if(current){diagnosisStates.delete(current);renderAttempt();}renderPractice();renderChatRecovery();notice('已重新保存到本机。');});
 function abortPending(){controller?.abort();}
 $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;await voiceDrafts.discard();abortPending();deleted.add(current);topic.attempts=topic.attempts.filter(a=>a.id!==current.id);await save();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);current=null;reveal('attemptPanel',false);notice('这次原声及其关联转写、纠正和反馈已从本地删除。已导出副本和已在途的云请求不受此操作控制。');});
 function resumeTopic(target,point=resumePoint(target)){
@@ -495,7 +497,8 @@ async function continueTopic(id,point,hitKey){
     await flushDrafts();const target=await db.get(id);
     if(!target)return notice('这条学习记录已不存在，请重新打开学习记录。');
     const hit=hitKey&&resolveRecordHit(target,hitKey);
-    if(hit){point=hitDestination(hit);if(hit.target.kind==='practice'){target.activePracticeId=hit.target.roundId;target.taskUnavailable=null;}}
+    if(hit){if(hit.target.contextId)selectContext(target,hit.target.contextId);point=hitDestination(hit);if(hit.target.kind==='practice'){target.activePracticeId=hit.target.roundId;target.taskUnavailable=null;}}
+    if(point?.contextId)selectContext(target,point.contextId);
     if(point)target.resume=point;
     resumeTopic(target);await save();
     if(hit){await new Promise(requestAnimationFrame);locateHit(hit);reveal('searchReturn');}
@@ -521,16 +524,17 @@ function renderHistory(){
   for(const {topic:t,hits} of matches.slice(0,historyLimit)){
     const point=resumePoint(t),rounds=practiceRounds(t),row=el('div');
     const next=point.view==='attempt'?'继续核对与反馈':point.view==='practice'?'继续情境练习':'继续学习';
-    row.append(el('strong',t.source.title));
+    row.append(el('strong',t.studyTitle??t.source.title));
     if(hasDraft(t))row.append(el('span','有草稿','tag draft-tag'));
-    row.append(el('p',`${new Date(activityTime(t)).toLocaleString()} · ${t.attempts.length} 次讲解 · ${rounds.length} 道情境题${t.restoredAt?' · 恢复副本':''}`,'muted'));
+    row.append(el('p',`${new Date(activityTime(t)).toLocaleString()} · ${learningContexts(t).reduce((n,c)=>n+c.attempts.length,0)} 次讲解 · ${learningContexts(t).reduce((n,c)=>n+(c.practiceRounds?.length??0),0)} 道情境题${t.restoredAt?' · 恢复副本':''}`,'muted'));
     const hitButton=hit=>button(hit.snippet,()=>continueTopic(t.id,null,hit.key),'quiet history-hit history-snippet');
     row.append(...hits.slice(0,3).map(hitButton));
     if(hits.length>3){const more=el('details');more.append(el('summary',`其余 ${hits.length-3} 处匹配`));more.ontoggle=()=>{if(more.open&&more.children.length===1)more.append(...hits.slice(3).map(hitButton));};row.append(more);}
     const actions=el('div',undefined,'compact-actions');
     actions.append(button(next,()=>continueTopic(t.id),'quiet history-continue'),button('导出备份',async()=>{if(!canNavigate())return;const saved=await db.get(t.id);if(saved)await exportTopic(saved);}));
     actions.append(button('删除主题',async()=>{if(topic?.id===t.id)await discardDrafts();else await flushDrafts();abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');renderPractice();}await history();},'danger'));row.append(actions);
-    if(t.attempts.length){const details=el('details');details.append(el('summary',`讲解记录 · ${t.attempts.length}`));for(const a of t.attempts)details.append(button(`${a.kind==='partial'?'局部':'完整'}${a.inputMode==='text'?'文字':''} · ${new Date(a.createdAt).toLocaleTimeString()}`,()=>continueTopic(t.id,{view:'attempt',attemptId:a.id})));row.append(details);}
+    const attempts=learningContexts(t).flatMap(c=>c.attempts.map(a=>({a,contextId:c.source.id,label:c.source.title})));
+    if(attempts.length){const details=el('details');details.append(el('summary',`讲解记录 · ${attempts.length}`));for(const {a,contextId,label} of attempts)details.append(button(`${a.kind==='partial'?'局部':'完整'}${a.inputMode==='text'?'文字':''} · ${new Date(a.createdAt).toLocaleTimeString()}${t.materials?' · '+label:''}`,()=>continueTopic(t.id,{view:'attempt',attemptId:a.id,contextId})));row.append(details);}
     list.append(row);
   }
   if(!matches.length)list.append(el('p',historyRecords.length?'没有匹配的记录。':'还没有保存的学习记录。'));
@@ -565,6 +569,8 @@ function locateHit(hit){
   reveal('returnToPractice',false);
   const t=hit.target;
   if(t.kind==='message')return chat.locate(t.index);
+  if(t.kind==='material'){materials.showMaterial(t.materialId);return focusHit($('materialPreview'));}
+  if(t.kind==='studyIssue'){$('studyIssues').open=true;return focusHit([...$('studyIssueList').children].find(e=>e.dataset.issueId===t.issueId));}
   if(t.kind==='source'){$('sourceDetails').open=true;return focusHit($('sourceText'));}
   if(t.kind==='contextNote'){$('chatContext').open=true;return focusHit($('contextNote'));}
   if(t.kind==='title')return focusHit($('topicTitle'));
@@ -636,8 +642,9 @@ const voiceDrafts=createDraftSaver({save,onError:error=>act(()=>Promise.reject(e
 }});
 $('transcriptionTerms').oninput=()=>{if(!topic||capturePending||record)return;topic.transcriptionTerms=$('transcriptionTerms').value;voiceDrafts.mark(topic);};
 $('transcriptionTerms').onblur=()=>act(()=>voiceDrafts.flush());
-async function flushDrafts(){setupDraft.flush();await chat.flushDraft();await practice.flushDraft();await voiceDrafts.flush();}
-async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();await voiceDrafts.discard();}
+async function flushDrafts(){setupDraft.flush();await chat.flushDraft();await practice.flushDraft();await voiceDrafts.flush();await materials.flushDraft();}
+async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();await voiceDrafts.discard();await materials.discardDraft();}
+const materials=mountMaterialSet({getTopic:()=>topic,save,request:api,canStart:canNavigate,setBusy:value=>{processing=value;},beforeChange:flushDrafts,onSwitch:()=>resumeTopic(topic),act});
 const practice=mountPractice({getTopic:()=>topic,save,request:api,canStart:canNavigate,aiReady:()=>serviceCapabilities?.ai===true,requireAI:()=>{if(serviceCapabilities?.ai!==true)throw new Error('CREDENTIAL_MISSING');},
   setBusy:value=>{processing=value;},act,onFeedback:openFeedbackOrigin,onOpen:()=>{current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);}});
 mountBackup({getStore:()=>db,canStart:canNavigate,setBusy:value=>{processing=value;if(!value)renderChatRecovery();},
