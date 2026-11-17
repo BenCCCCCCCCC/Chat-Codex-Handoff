@@ -1,0 +1,9 @@
+{
+  "algorithm": "SHA256 of exact repository LF file bytes",
+  "files": {
+    "controlled-cases.json": "19ea5566fc6ed3b858d2d99850e5876598a9f81f6bede3893b7fa558c988c2c2",
+    "phase3b-manifest.json": "ea8ebd2d893c6946fac440cd000358c2dd014bbd89ecae6a82e476af2df83b5d",
+    "PROTOCOL.md": "35396aeb1aaee70f85ddea75d0334e1b5077f399088565c571276fa8f94f1c6d",
+    "review-template.json": "ffa1ad548c79194008b14e37580c65d8183378230cecf9c04306e0f2d6da40a5"
+  }
+}

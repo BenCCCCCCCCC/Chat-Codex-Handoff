@@ -20,11 +20,27 @@ export async function materialChecks({check,evaluate,until,reloadPage,click,call
     await input('issueQuestion','长度为 8 的队列为什么出现两个容量？');await input('issueCondition','若题面采用预留空位则为 7；另记计数则为 8，缺少约定时暂缓。');await click('saveStudyIssue');
     await until(`document.querySelector('#studyIssueList article')`);assert.equal(calls.length,before);
     setAIConfigured(true);await click('refreshCapabilities');await until(`!document.getElementById('confirm').disabled`);await click('confirm');await until(`document.querySelector('#feedback .finding')`);assert.equal(calls.length,before+1);
+    // A saved note alone does not affect feedback. Explicit selection binds a new
+    // result; the original report survives, and reverting reuses its exact result.
+    await evaluate(`document.getElementById('judgementChoices').open=true;document.querySelector('#judgementChoices input').click()`);
+    await until(`document.getElementById('resultBinding').textContent.includes('先前结果')`);await click('confirm');await until(`document.querySelector('[data-judgement="deferred"]')`);
+    assert.equal(await evaluate(`document.querySelectorAll('#feedback [data-status="incorrect"]').length`),0);assert.equal(calls.length,before+2);
+    await reloadPage();assert(await evaluate(`document.querySelector('[data-judgement="deferred"]')`));
+    await evaluate(`document.getElementById('judgementChoices').open=true;document.querySelector('#judgementChoices input').click()`);await until(`document.getElementById('resultBinding').textContent.startsWith('当前结果')`);
+    await click('confirm');assert.equal(calls.length,before+2);
+    await evaluate(`document.getElementById('studyIssues').open=true;[...document.querySelectorAll('#studyIssueList button')].find(b=>b.textContent==='另存新的处理').click()`);
+    await until(`document.getElementById('issueEditor').open&&!document.getElementById('saveStudyIssue').disabled`);
+    await input('issueStatus','condition');await input('issueCondition','本次采用另记元素个数的实现。');await click('saveStudyIssue');await until(`document.querySelectorAll('#judgementChoices input').length===2`);
+    await evaluate(`document.getElementById('judgementChoices').open=true;document.querySelectorAll('#judgementChoices input')[1].click()`);await until(`document.getElementById('resultBinding').textContent.includes('先前结果')`);
+    await click('confirm');await until(`document.querySelector('[data-judgement="judgeable"]')`);assert.equal(calls.length,before+3);
+    assert.equal(await evaluate(`document.querySelectorAll('#feedback .diagnosticTarget').length`),0);
+    await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await shot('condition-bound-feedback','attemptPanel');assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
     await click('historyButton');await input('historySearch','采用预留空位实现');await until(`document.querySelector('.history-hit')`);await evaluate(`document.querySelector('.history-hit').click()`);await until(`document.getElementById('history').hidden&&!document.getElementById('attemptPanel').hidden&&!document.getElementById('workspace').hasAttribute('aria-busy')`);
     assert.equal(await evaluate(`document.querySelector('#transcript textarea').value`),'采用预留空位实现，因此是 7 个。');
     await evaluate(`document.getElementById('studyIssues').open=true;document.querySelector('#studyIssueList button').click()`);await until(`document.querySelector('#transcript textarea')?.value==='题面没有说明实现约定，7 或 8 取决于条件。'`);
     await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore(),t=(await db.all())[0],b=await import('/backup.mjs');window.materialBackup=b.restoredCopy(b.decodeBackup(await b.encodeBackup(t)));await db.put(window.materialBackup);await db.delete(t.id);db.close();})()`);
     await reloadPage();assert(await evaluate(`document.querySelector('#feedback .finding')`));
+    assert(await evaluate(`document.querySelector('[data-judgement="judgeable"]')`));
     await evaluate(`document.getElementById('studyIssues').open=true`);assert.match(await evaluate(`document.getElementById('studyIssueList').textContent`),/结论暂缓/);
     await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await shot('materials-condition-history','studyIssues');assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));
     await click('historyButton');await click('deleteAll');await reloadPage();await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});

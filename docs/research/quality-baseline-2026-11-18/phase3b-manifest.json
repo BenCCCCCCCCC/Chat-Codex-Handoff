@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "recoveredAt": "2026-11-18",
+  "kind": "EXISTING_RECORDS_ZERO_NEW_API",
+  "visibility": "RAW_LEARNER_RECORDS_LOCAL_ONLY",
+  "localArtifactDirectory": "artifacts/study-teachback/phase3b-recovery-20261118/private",
+  "originalsFile": "phase3b-originals.json",
+  "originalsSHA256": "4d9b3141e0bbd2442944d916b0113d8a7b53896e0d04d20a43bd6f53e1eb98ca",
+  "originalsPublished": false,
+  "publicationBoundary": "Full learner transcript and report contents are retained locally. Uploading those raw records requires explicit authorization. This public manifest contains hashes and audit conclusions only.",
+  "recovery": {
+    "sourceRecovered": true,
+    "rawTranscriptRecovered": true,
+    "confirmedVersions": 2,
+    "completeReports": 2,
+    "sameConfirmedSpans": true,
+    "sourceMatchesEarlierExport": true,
+    "originalDatabaseUnchanged": true,
+    "method": "Readonly transaction on an isolated copy of this application origin only. Product expiry/startup code not loaded; no audio published."
+  },
+  "sourceSHA256": "adb57bfa0032cf3a31af18554b91242317d43ac4a3a059c0159fecc51a9d6569",
+  "canonicalObjectHash": "UTF-8 JSON, ensure_ascii=False, sort_keys=True, separators=(comma,colon), no trailing newline; NOT a recovered HTTP payload hash.",
+  "bindings": [
+    {
+      "reportSHA256": "527eea2cfe5d75d19f2151873ec85315d701b7b19414210e46012f82a10bb673",
+      "confirmedSpansSHA256": "857b37531456a5fe202b19f4919638438c5f57218f153623815117eea8725b10",
+      "semanticContentSHA256": "3181fdedcf883c0a0d18175b3673fe1f35f32bc0c890d075e3c6151b2783c138"
+    },
+    {
+      "reportSHA256": "f5a0ecb44b95e0dd5be0bae658d4440d47a854020b17cc35f70f4aeff5f7f7d9",
+      "confirmedSpansSHA256": "857b37531456a5fe202b19f4919638438c5f57218f153623815117eea8725b10",
+      "semanticContentSHA256": "3181fdedcf883c0a0d18175b3673fe1f35f32bc0c890d075e3c6151b2783c138"
+    }
+  ],
+  "attribution": {
+    "directRequestToReportBinding": false,
+    "settledSemanticEvents": 2,
+    "temporalGapsMilliseconds": [
+      7,
+      6
+    ],
+    "secondEventIsKnownRetry": false,
+    "ledgerSHA256": "9f23a117f27c0d279872885bdf074d48cbf369e0beec44480d2644c2b148c67e"
+  },
+  "actualModelInputRecovered": false,
+  "historicalSystemPromptRecovered": false,
+  "modelComparisonPerformed": false
+}

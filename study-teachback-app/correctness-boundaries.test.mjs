@@ -13,6 +13,7 @@ import {quotePlayback,playbackLabel} from './transcript-playback.mjs';
 import { localize } from './diagnostic-localization.mjs';
 import { diagnosticFixtures } from './diagnostic-fixtures.mjs';
 import { TEACH, teachingSchema } from './schemas.mjs';
+import {sameJudgement,judgementIssues,validateJudgementReport} from './judgement.mjs';
 
 const app=readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
 const book=()=>new Ledger(join(mkdtempSync(join(tmpdir(),'batch-c-')),'ledger.json'));
@@ -46,7 +47,7 @@ function confirmationHarness(){
   let saveGate=null;
   const context=vm.createContext({$,serviceCapabilities:{ai:true,imports:{office:true,pdf:true}},current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),
     uid:()=>crypto.randomUUID(),diagnosisStates:new WeakMap(),matchMedia:()=>({matches:true}),editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
-    transcriptTexts,updateTranscriptDraft,analysisTrace,renderComparison(){},renderPractice(){},renderRawPlayback(){},voiceDrafts:{flush:async()=>{},mark(){}},
+    transcriptTexts,updateTranscriptDraft,analysisTrace,sameJudgement,judgementIssues,validateJudgementReport,renderJudgementChoices(){},renderComparison(){},renderPractice(){},renderRawPlayback(){},voiceDrafts:{flush:async()=>{},mark(){}},
     blobURL:null,replayRequest:0,replayOriginal:null,URL:{createObjectURL:()=> 'blob:synthetic',revokeObjectURL(){}},
     notice:x=>notices.push(x),friendly:x=>x,act:async fn=>{try{await fn();}catch(e){notices.push(e.message);}},
     reveal(){},el:()=>({setAttribute(){},append(){}}),button:()=>({}),renderProcess(){},renderFeedback:r=>visible.push(r),updateBudget(){},
@@ -176,7 +177,7 @@ test('result save failure cannot cause another diagnosis; result remains inspect
 test('actual stale report retains findings but omits repair actions and uses bound version',()=>{
  const f=structuredClone(diagnosticFixtures.find(f=>f.id==='fluent-wrong')),buttons=[];
  const node=()=>({dataset:{},append(){}}),version={id:f.attempt.transcriptVersion,spans:f.attempt.spans,reviewed:true};
- const c=vm.createContext({current:{...f.attempt,source:f.source,reports:[]},latest:()=>version,attemptRequest:()=>({...f.attempt,transcriptVersion:'new-draft'}),localize,quotePlayback,playbackLabel,$:node,el:node,button:(label,fn)=>{buttons.push(label);return node();}});
+ const c=vm.createContext({current:{...f.attempt,source:f.source,reports:[]},latest:()=>version,attemptRequest:()=>({...f.attempt,transcriptVersion:'new-draft'}),localize,quotePlayback,playbackLabel,appendJudgementSummary(){},$:node,el:node,button:(label,fn)=>{buttons.push(label);return node();}});
  vm.runInContext(app.slice(app.indexOf('function renderFeedback('),app.indexOf("$('apply').onclick")),c);c.report={...f.report,channel:'content'};c.version=version;
  vm.runInContext('renderFeedback(report,{version,stale:true})',c);assert(!buttons.includes('再学这一点'));assert(!buttons.includes('再讲这一点'));
  buttons.length=0;vm.runInContext('renderFeedback(report,{version,stale:false})',c);assert(buttons.includes('再学这一点'));assert(buttons.includes('再讲这一点'));
