@@ -17,6 +17,7 @@
 - 本机 Edge 定向 3/3：既有材料路径、审查复现的 A→B 条件补入→继续修改→新反馈→旧反馈→备份，以及无 AI 录音→文字续接／中断片段转写→反馈→到期显示。浏览器采用合成媒体和 provider。已查看桌面及 390px 截图，无横向溢出；焦点落在继续的讲解文字，原有草稿未覆盖。
 - Windows PowerShell 5.1 实际启动器连续完成两次启动、读取产品健康／能力／页面、仅关闭自有服务的周期；清除该测试子进程的 API 凭据，确认无 AI。收据在本机 ignored `artifacts/study-teachback/daily-20261119/windows-lifecycle.json`。首次 stdin 命令未执行测试主体、未产生回执，改为显式脚本执行后得到上述结果。
 - 界面与 Node 日志在本机 ignored `artifacts/study-teachback/setup-flow-01/`；合成截图为 `material-continuation-desktop`、`material-continuation-mobile`、`daily-retention-mobile`。最终代码使用 PR 的 Windows CI 集中完整回归，文档更新不重跑。
+- 首次 CI 在 `b204df6` 为 204/209 Node，Edge 尚未执行：旧 VM 测试未提供新增的 `serviceCapabilities` 和到期显示依赖，造成 5 项失败。补齐测试环境并保留原断言；最终修复版 CI 回执另见 PR／MASTER，不将该次失败写成通过。
 - 真实 API 0 次，生产账本 SHA256 保持 `9f23a117f27c0d279872885bdf074d48cbf369e0beec44480d2644c2b148c67e`。没有访问或发布私人学习原件，没有公开部署。
 
 ## 未解决／未验证与接续
