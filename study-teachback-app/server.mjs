@@ -18,6 +18,7 @@ export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledg
   files['/question-review.mjs']='question-review.mjs';
   files['/question-review-ui.mjs']='question-review-ui.mjs';
   files['/material-set.mjs']='material-set.mjs';
+  files['/material-continuation.mjs']='material-continuation.mjs';
   files['/material-set-ui.mjs']='material-set-ui.mjs';
   files['/judgement.mjs']='judgement.mjs';files['/judgement-ui.mjs']='judgement-ui.mjs';files['/schemas.mjs']='schemas.mjs';
   files['/conditional-practice.mjs']='conditional-practice.mjs';files['/practice-evidence-ui.mjs']='practice-evidence-ui.mjs';

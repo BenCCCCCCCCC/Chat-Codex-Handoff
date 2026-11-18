@@ -1,13 +1,12 @@
-import {issueForAttempt,judgementIssues} from './judgement.mjs';
+import {issueForAttempt,judgementIssues,missingIssueMaterials} from './judgement.mjs';
 
-export function renderJudgementChoices({root,topic,attempt,disabled,change,create}){
+export function renderJudgementChoices({root,topic,attempt,disabled,change,create,continueIssue}){
   root.replaceChildren();
   const node=(tag,value)=>{const e=document.createElement(tag);e.textContent=value;return e;};
   root.append(node('summary','这次反馈的适用条件'),node('p','只选择影响这次讲解的疑点，最多 3 项。暂缓项不判对错；未选的笔记不影响本次分析。更换条件会保留旧反馈。'));
   const selected=judgementIssues(attempt.judgementIssues,attempt.source);
-  const choices=(topic.studyIssues??[]).filter(i=>i.contextId===attempt.source.id).flatMap(i=>{
-    try{return [issueForAttempt(i,topic)];}catch{return [];}
-  });
+  const choices=[],unavailable=[];
+  for(const issue of topic.studyIssues??[]){try{choices.push(issueForAttempt(issue,topic));}catch{unavailable.push(issue);}}
   for(const item of selected)if(!choices.some(i=>i.id===item.id))choices.push(item);
   for(const issue of choices){
     const row=node('div',''),label=node('label',''),input=document.createElement('input');input.type='checkbox';input.checked=selected.some(i=>i.id===issue.id);input.disabled=disabled;input.dataset.judgementIssue=issue.id;
@@ -15,7 +14,13 @@ export function renderJudgementChoices({root,topic,attempt,disabled,change,creat
     if(issue.condition)row.append(node('p',issue.condition));
     const evidence=node('details','');evidence.append(node('summary','核对材料前提'));for(const e of issue.evidence)evidence.append(node('p',e.title),node('blockquote',e.quote));row.append(evidence);root.append(row);
   }
-  if(!choices.length)root.append(node('p','还没有适用于本次材料组合的条件记录。'));
+  for(const issue of unavailable){
+    if(selected.some(i=>i.id===issue.id))continue;
+    const missing=missingIssueMaterials(issue,topic),row=node('div','');row.className='condition-unavailable';row.append(node('strong',issue.question));
+    row.append(node('p',missing.length?'需要补入：'+missing.map(id=>topic.materials?.find(m=>m.id===id)?.title??'历史材料').join('、'):'引用依据需要重新核对。'));
+    if(missing.length&&continueIssue){const b=node('button','补入依据并继续讲解');b.className='quiet';b.disabled=disabled;b.dataset.continueIssue=issue.id;b.onclick=()=>continueIssue(issue.id);row.append(b);}root.append(row);
+  }
+  if(!choices.length&&!unavailable.length)root.append(node('p','还没有条件记录。需要澄清材料前提时，可在这里记录。'));
   const add=node('button','记录或修订适用条件');add.type='button';add.className='quiet';add.disabled=disabled;add.onclick=create;root.append(add);
 }
 export function appendJudgementSummary(root,report,{onPractice,canPractice=true}={}){

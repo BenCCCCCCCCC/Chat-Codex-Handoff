@@ -67,7 +67,7 @@ function captureHarness(kind='valid') {
     createMediaStreamSource(){return {connect(){}};}
     async decodeAudioData(){if(kind==='decode')throw Error('DECODE_FAILED');return {duration:1,sampleRate:16000,getChannelData:()=>new Float32Array(16000)};}
   }
-  const context=vm.createContext({$,topic:target,current:null,pending:{kind:'full',focus:null,parentId:null},record:null,capturePending:false,controller:null,processing:false,memoryOnly:false,
+  const context=vm.createContext({$,serviceCapabilities:{ai:true},topic:target,current:null,pending:{kind:'full',focus:null,parentId:null},record:null,capturePending:false,controller:null,processing:false,memoryOnly:false,
     deleted:new Set(),db:{all:async()=>[target]},uid:()=> 'capture-id',navigator:{mediaDevices:{getUserMedia:async()=>{events.push('permission');if(kind==='denied')throw new DOMException('denied','NotAllowedError');if(kind==='late')await permission;return stream;}}},
     AudioContext:Audio,MediaRecorder:Recorder,Blob,Float32Array,structuredClone,replayWaves:new WeakMap(),performance:{now:()=>1000},setInterval:()=>1,clearInterval(){},
     OfflineAudioContext:class {createBufferSource(){return {connect(){},start(){}};}async startRendering(){return {getChannelData:()=>new Float32Array(16000)};}},

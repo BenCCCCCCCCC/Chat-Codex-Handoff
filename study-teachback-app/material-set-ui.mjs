@@ -2,6 +2,8 @@ import {autoTitle} from './core.mjs';
 import {materialList,initializeMaterials,addMaterial,selectMaterials,selectContext,saveStudyIssue} from './material-set.mjs';
 import {importedDocument,selectedProvenance,renderMaterial} from './source-provenance.mjs';
 import {createDraftSaver} from './draft-save.mjs';
+import {continueWithMaterials,continueStudyIssue,captureMaterialWork} from './material-continuation.mjs';
+import {missingIssueMaterials} from './judgement.mjs';
 
 export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeChange,onSwitch,onReference=()=>{},act}){
   const $=id=>document.getElementById(id),node=(tag,value)=>{const e=document.createElement(tag);e.textContent=value;return e;};
@@ -23,14 +25,14 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
     const topic=getTopic();if(!topic)return;
     const materials=materialList(topic),selected=topic.activeMaterialIds??[topic.source.id];
     $('materialSetSummary').textContent=`材料集 · ${materials.length} 份`;
-    $('activeMaterials').textContent='本次采用：'+materials.filter(m=>selected.includes(m.id)).map(m=>m.title).join('、');
+    $('activeMaterials').textContent='本次依据：'+materials.filter(m=>selected.includes(m.id)).map(m=>m.title).join('、');
     $('materialChoices').replaceChildren(...materials.map(m=>{
       const row=node('div',''),label=node('label',''),input=document.createElement('input'),read=node('button','查看原文');
       input.type='checkbox';input.value=m.id;input.checked=selected.includes(m.id);input.disabled=busy;
       label.append(input,node('span',m.title));read.className='quiet';read.type='button';read.onclick=()=>showMaterial(m.id);row.append(label,read);return row;
     }));
     $('materialTitle').value=topic.materialDraft?.title??'';$('materialText').value=topic.materialDraft?.text??'';
-    for(const id of ['materialTitle','materialText','materialFile','addMaterial','useMaterials','saveStudyIssue'])$(id).disabled=busy;
+    for(const id of ['materialTitle','materialText','materialFile','addMaterial','addAndContinue','continueMaterials','useMaterials','saveStudyIssue'])$(id).disabled=busy;
     if(previewId&&materials.some(m=>m.id===previewId))showMaterial(previewId);else{$('materialPreview').hidden=true;previewId=null;}
     const issue=topic.issueDraft??{};$('issueQuestion').value=issue.question??'';$('issueCondition').value=issue.condition??'';$('issueStatus').value=issue.status??'deferred';
     $('issueEvidence').replaceChildren(...materials.map(m=>{
@@ -38,7 +40,7 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
       input.value=issue.evidence?.find(e=>e.materialId===m.id)?.quote??'';input.placeholder='在“查看原文”中选中并引用，也可粘贴原句。';input.oninput=captureIssue;input.onblur=()=>act(()=>drafts.flush());label.append(input);return label;
     }));
     $('studyIssueList').replaceChildren(...(topic.studyIssues??[]).slice().reverse().map(item=>{
-      const card=node('article',''),open=node('button','继续这个疑点');card.dataset.issueId=item.id;card.append(node('h4',item.question),node('p',item.status==='deferred'?'结论暂缓，继续查证':'本次采用的条件（自查）：'+item.condition));
+      const card=node('article',''),open=node('button','回到记录时的学习');card.dataset.issueId=item.id;card.append(node('h4',item.question),node('p',item.status==='deferred'?'结论暂缓，继续查证':'采用的条件（自查）：'+item.condition));
       if(item.status==='deferred'&&item.condition)card.append(node('p',item.condition));
       for(const e of item.evidence){const m=materials.find(m=>m.id===e.materialId);card.append(node('p',m?.title??'历史材料'),node('blockquote',e.quote));}
       card.append(node('p',new Date(item.createdAt).toLocaleString()));open.className='quiet';open.onclick=()=>act(()=>change(async t=>{
@@ -47,9 +49,12 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
         t.resume=missing?{view:'learn'}:point;if(point.roundId&&!missing){t.activePracticeId=point.roundId;t.taskUnavailable=null;}
         try{await save(t);}finally{onSwitch();}if(missing)throw Error('STUDY_WORK_MISSING');
       }));
+      const missing=missingIssueMaterials(item,topic),use=node('button',missing.length?'补入依据并用于当前学习':'用于当前讲解');use.dataset.useIssue=item.id;use.disabled=busy;
+      card.append(node('p',missing.length?'尚未采用：'+missing.map(id=>materials.find(m=>m.id===id)?.title??'历史材料').join('、'):'所引材料已包含在本次依据中。'));
+      use.onclick=()=>act(()=>continueIssue(item.id));
       const revise=node('button','另存新的处理');revise.className='quiet';revise.onclick=()=>act(()=>change(async t=>{
         t.issueDraft={question:item.question,condition:item.condition,status:item.status,evidence:structuredClone(item.evidence)};await save(t);$('issueEditor').open=true;
-      }));card.append(open,revise);return card;
+      }));card.append(use,open,revise);return card;
     }));
     $('contextHistory').replaceChildren(...(topic.studyContexts??[]).map(c=>{
       const button=node('button',`${c.materialIds.map(id=>materials.find(m=>m.id===id)?.title).join(' + ')} · ${c.attempts.length} 次讲解 · ${c.practiceRounds?.length??0} 道题`);
@@ -69,6 +74,13 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
   for(const id of ['materialTitle','materialText']){$(id).oninput=captureMaterial;$(id).onblur=()=>act(()=>drafts.flush());}
   for(const id of ['issueQuestion','issueCondition','issueStatus']){$(id).oninput=captureIssue;$(id).onblur=()=>act(()=>drafts.flush());}
   $('addMaterial').onclick=()=>act(()=>change(async t=>{addMaterial(t,t.materialDraft??{title:'',text:''});await save(t);$('addMaterialDetails').open=false;}));
+  const work=t=>captureMaterialWork(t,{draft:!$('recording').hidden&&!$('textComposer').hidden});
+  async function continueIssue(id){await change(async t=>{continueStudyIssue(t,id,{work:work(t)});try{await save(t);}finally{onSwitch();}});if(getTopic().resume?.view==='attempt'){$('judgementChoices').open=true;$('voiceHeading').focus();}else $('explain').click();}
+  $('addAndContinue').onclick=()=>act(()=>change(async t=>{
+    const previous=work(t),m=addMaterial(t,t.materialDraft??{title:'',text:''});await save(t);
+    continueWithMaterials(t,[...t.activeMaterialIds,m.id],{work:previous});try{await save(t);}finally{onSwitch();}$('addMaterialDetails').open=false;
+  }));
+  $('continueMaterials').onclick=()=>{const ids=[...$('materialChoices').querySelectorAll('input:checked')].map(e=>e.value);act(()=>change(async t=>{continueWithMaterials(t,ids,{work:work(t)});try{await save(t);}finally{onSwitch();}}));};
   $('useMaterials').onclick=()=>{const ids=[...$('materialChoices').querySelectorAll('input:checked')].map(e=>e.value);act(()=>change(async t=>{selectMaterials(t,ids);try{await save(t);}finally{onSwitch();}}));};
   $('saveStudyIssue').onclick=()=>act(()=>change(async t=>{const d=t.issueDraft??{};saveStudyIssue(t,{...d,evidence:(d.evidence??[]).filter(e=>e.quote.trim())});try{await save(t);}finally{onSwitch();}$('issueEditor').open=false;}));
   $('quoteMaterial').onclick=()=>act(()=>{
@@ -94,5 +106,5 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
     const provenance=selectedProvenance(documentPreview,start,end);if(!provenance)throw Error('SELECT_MATERIAL_QUOTE');if(provenance.text.length>5000)throw Error('MATERIAL_SELECTION_TOO_LARGE');
     initializeMaterials(t);t.materialDraft={title:t.materialDraft?.title||autoTitle(provenance.text,documentPreview.fileName),text:provenance.text,provenance};await save(t);$('materialImportPreview').hidden=true;
   }));
-  return {render,showMaterial,flushDraft:()=>drafts.flush(),discardDraft:()=>drafts.discard(),get hasPendingDraft(){return drafts.pending;}};
+  return {render,showMaterial,continueIssue,flushDraft:()=>drafts.flush(),discardDraft:()=>drafts.discard(),get hasPendingDraft(){return drafts.pending;}};
 }

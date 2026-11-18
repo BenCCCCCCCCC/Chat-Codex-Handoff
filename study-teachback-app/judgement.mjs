@@ -16,8 +16,13 @@ export function judgementIssues(value,source){
   });
 }
 export function issueForAttempt(issue,topic){
-  return judgementIssues([{id:issue.id,sourceId:issue.contextId,question:issue.question,status:issue.status,condition:issue.condition,
+  requireValue(!missingIssueMaterials(issue,topic).length,'ISSUE_MATERIALS_REQUIRED');
+  return judgementIssues([{id:issue.id,sourceId:topic.source.id,question:issue.question,status:issue.status,condition:issue.condition,
     evidence:issue.evidence.map(e=>({...e,title:(topic.materials??[topic.source]).find(m=>m.id===e.materialId)?.title}))}],topic.source)[0];
+}
+export function missingIssueMaterials(issue,topic){
+  const selected=topic.activeMaterialIds??[topic.source.id];
+  return [...new Set(issue.evidence.map(e=>e.materialId))].filter(id=>!selected.includes(id));
 }
 export const sameJudgement=(report,issues)=>JSON.stringify(report.judgement?.issues??[])===JSON.stringify(issues??[]);
 const object=properties=>({type:'object',properties,required:Object.keys(properties),additionalProperties:false});

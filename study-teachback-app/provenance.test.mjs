@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
-import { autoTitle, setupContextValue } from './core.mjs';
+import { autoTitle, setupContextValue,RETENTION_MS } from './core.mjs';
 import { localize } from './diagnostic-localization.mjs';
 const source=readFileSync(process.env.STUDY_TEST_APP_SOURCE??new URL('./app.mjs',import.meta.url),'utf8');
 const teach=source.slice(source.indexOf('async function teach('),source.indexOf('let importPending'));
@@ -12,7 +12,7 @@ for(const [mode,outcome] of [['learn','success'],['repair','request']])test(`A1 
   const node=()=>({textContent:'',value:'',hidden:false,children:[],append(...v){this.children.push(...v);},replaceChildren(...v){this.children=v;},scrollIntoView(){},dataset:{}});
   const $=id=>{if(!nodes.has(id))nodes.set(id,node());return nodes.get(id);};
   let reject=outcome!=='success';
-  const context=vm.createContext({autoTitle,setupContextValue,$,renderMaterial(){},materials:{render(){}},setupDraft:{clear(){},sourceMetadata(){return {}; }},serviceCapabilities:{ai:true},topic:{id:'topic',source:{id:'source',title:'Synthetic',text:'Rule'},messages:[],goals:[],attempts:[]},
+  const context=vm.createContext({autoTitle,setupContextValue,RETENTION_MS,$,renderMaterial(){},materials:{render(){}},setupDraft:{clear(){},sourceMetadata(){return {}; }},serviceCapabilities:{ai:true},topic:{id:'topic',createdAt:1,source:{id:'source',title:'Synthetic',text:'Rule'},messages:[],goals:[],attempts:[]},
     current:{id:'attempt',source:{id:'source',title:'Synthetic',text:'Rule'},duration:1,kind:'full',assistance:'none',raw:{id:'raw',reviewed:true,spans:[{id:'s0',start:0,end:1,text:'Rule'}]}},record:null,capturePending:false,controller:null,processing:false,importPending:false,
     localize,appendJudgementSummary(){},processFor:()=>[],attemptRequest:a=>({id:a.id,sourceId:a.source.id,transcriptVersion:a.raw.id,duration:a.duration,kind:a.kind,assistance:a.assistance,reviewed:a.raw.reviewed,spans:a.raw.spans}),
     deleted:new Set(),structuredClone,uid:()=> 'synthetic-id',clearImport(){},repairFocus:x=>x,remediationFocus:()=> 'Condition',latest:a=>a.raw,
@@ -20,6 +20,7 @@ for(const [mode,outcome] of [['learn','success'],['repair','request']])test(`A1 
     notice(){},friendly:x=>x,canNavigate:()=>true,act:fn=>{const action=fn();actions.push(action);return action;},renderPractice(){},chat:{render(){},async flushDraft(){}},practice:{start(){},open(){}},memoryOnly:false,
     save:async()=>saved.push(structuredClone(context.topic)),
     api:async(path,body)=>{requests.push(structuredClone(body));if(reject){reject=false;throw Error(outcome==='quote'?'INVALID_SOURCE_QUOTE':'API_RESULT_UNAVAILABLE');}return {value:{message:'Synthetic tutor',goals:[],question:'Question'}};}});
+  vm.runInContext(source.slice(source.indexOf('function expiryLabel('),source.indexOf('let historyRecords=')),context);
   vm.runInContext(source.slice(source.indexOf('function renderTopic('),source.indexOf('let importPending')),context);
   vm.runInContext(source.slice(source.indexOf("$('learn').onclick"),source.indexOf("function prepare(")),context);
   vm.runInContext(source.slice(source.indexOf('function renderFeedback('),source.indexOf('async function exportTopic(')),context);
