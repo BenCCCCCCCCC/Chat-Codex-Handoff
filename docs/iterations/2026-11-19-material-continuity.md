@@ -2,6 +2,8 @@
 
 依据 MASTER `190f83e`、产品审查 `docs/master/reviews/2026-11-19-product-review.md` 和 Issue #39；产品基线 `7fddda1`，工作分支 `codex/material-continuity-39`。本批包含当前材料续学阶段，以及相邻的录音恢复／到期提示；最终提交、PR 和 CI 回执见 Issue #39 与 MASTER。
 
+交付 [PR #40](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/40)。最终验证头 `3102d9e9f60675198efb49df89769f345332ad8c` 的 [Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/44385555794) 为 **209/209 Node、74/74 Edge**，包括补材料后新反馈进入条件练习并返回精确反馈。此前测试环境修复的本机定向检查为 30/30。之后仅补写本段回执，复用同一产品与测试代码的 CI，不重跑。
+
 ## 已解决
 
 - 在 A 学习时引用 B 保存的条件不再因旧组合 ID 静默消失。条件按实际引用材料判断是否可采用；缺 B 时显示名称和“补入依据并继续讲解”。原有受影响记录直接可用，无需重抄。相同引文恰好出现在 A 中也不能冒充已经采用 B。
