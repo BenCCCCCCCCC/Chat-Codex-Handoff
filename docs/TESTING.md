@@ -13,6 +13,8 @@
 
 常用聚焦入口：
 
+材料续学及相邻日常恢复：`node study-teachback-app/run-offline-tests.mjs node setup-flow-01 --continuity-only` 与相同参数的 `browser` 模式。包含来源条件、历史／备份、片段判答约束及实际浏览器续学流程；最终完整回归集中在 PR CI。
+
 ```powershell
 node study-teachback-app/run-offline-tests.mjs boundaries diagnosis-state-ux-01
 node study-teachback-app/run-offline-tests.mjs diagnostic diagnosis-state-ux-01

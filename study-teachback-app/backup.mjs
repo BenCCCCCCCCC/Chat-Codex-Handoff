@@ -1,4 +1,5 @@
 import {validateQuestionReviews} from './question-review.mjs';
+import {validateContinuation} from './material-continuation.mjs';
 import {validatePracticeEvidence,validatePracticeContextLinks,practiceConditions,validateConditionRef,validateConditionalResult} from './conditional-practice.mjs';
 import {judgementIssues,validateJudgementReport} from './judgement.mjs';
 import {learningContexts,validateMaterialSet} from './material-set.mjs';
@@ -12,6 +13,7 @@ export const BACKUP_LIMIT = 128 * 1024 * 1024;
 const FORMAT = 'study-teachback-export-v1';
 const MATERIAL_FORMAT = 'study-teachback-export-v2';
 const CONDITIONS_FORMAT = 'study-teachback-export-v3';
+const CONTINUATION_FORMAT = 'study-teachback-export-v4';
 const check = value => { if (!value) throw Error('BACKUP_INVALID'); };
 const object = value => check(value && typeof value === 'object' && !Array.isArray(value));
 const string = (value, max=16000) => check(typeof value === 'string' && value.length <= max);
@@ -35,7 +37,8 @@ export async function encodeBackup(topic) {
     attempt.audio = {mime:attempt.audio.type, base64:btoa(binary)};
   }
   const conditional=learningContexts(topic).some(c=>c.practiceRequest?.conditionContext||c.practiceRounds?.some(r=>r.conditionContext));
-  return JSON.stringify({format:conditional?CONDITIONS_FORMAT:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
+  const continued=learningContexts(topic).some(c=>c.continuationIntent||c.attempts.some(a=>a.continuation||a.fragmentAcceptedAt||a.contentScope));
+  return JSON.stringify({format:continued?CONTINUATION_FORMAT:conditional?CONDITIONS_FORMAT:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
     notice:'导出副本不受应用内删除控制', topic:data}, null, 2);
 }
 
@@ -45,7 +48,7 @@ export function decodeBackup(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > BACKUP_LIMIT) throw Error('BACKUP_TOO_LARGE');
   try {
     const envelope = JSON.parse(text);
-    if (![FORMAT,MATERIAL_FORMAT,CONDITIONS_FORMAT].includes(envelope?.format)) throw Error('BACKUP_FORMAT');
+    if (![FORMAT,MATERIAL_FORMAT,CONDITIONS_FORMAT,CONTINUATION_FORMAT].includes(envelope?.format)) throw Error('BACKUP_FORMAT');
     const t = envelope.topic; object(t); identifier(t.id); date(t.createdAt); sourceValue(t.source);
     if (t.updatedAt != null) date(t.updatedAt);
     if (t.restoredAt != null) date(t.restoredAt);
@@ -74,6 +77,9 @@ export function decodeBackup(text) {
       check([undefined,'audio','text'].includes(a.inputMode));const typed=a.inputMode==='text';
       if(a.parentVersionId!=null)identifier(a.parentVersionId);
       if(a.feedbackRef)validateFeedbackReference(a.feedbackRef);
+      if(a.contentScope!=null)check(a.contentScope==='retained_fragment');
+      if(a.fragmentAcceptedAt!=null){date(a.fragmentAcceptedAt);check(!typed&&a.interrupted===true);}
+      if(a.continuation){validateContinuation(a.continuation);check(typed&&a.continuation.reason==='materials');}
       if(typed)check(a.audio==null&&a.duration==null&&!a.observation&&a.raw&&a.raw.origin==='USER_TEXT');
       if(a.transcriptionTerms!=null)termSnapshot(a.transcriptionTerms);
       sourceValue(a.source); check(a.source.id===t.source.id && a.source.text===t.source.text);
@@ -114,7 +120,7 @@ export function decodeBackup(text) {
         if (['content','delivery'].includes(report.channel)) {
           const {sourceId,attemptId,transcriptVersion,findings}=report;
           validateFindings({sourceId,attemptId,transcriptVersion,findings},a.source,
-            {id:a.id,transcriptVersion,spans:version.spans},report.channel,events);
+            {id:a.id,transcriptVersion,spans:version.spans,...(a.fragmentAcceptedAt?{interrupted:true}:{}),...(a.contentScope?{scope:a.contentScope}:{})},report.channel,events);
           if(report.channel==='content')validateJudgementReport(report,a.source,{id:a.id,transcriptVersion,spans:version.spans});
         } else {
           check(report.channel==='process');
@@ -170,6 +176,7 @@ export function decodeBackup(text) {
     if(t.taskUnavailable?.origin?.feedbackRef)validateFeedbackReference(t.taskUnavailable.origin.feedbackRef);
     if(t.taskUnavailable){object(t.taskUnavailable);object(t.taskUnavailable.target);string(t.taskUnavailable.target.id,200);string(t.taskUnavailable.reason,300);}
     validateMaterialSet(t);
+    if(t.continuationIntent){validateContinuation(t.continuationIntent);check(Array.isArray(t.continuationIntent.issueIds));t.continuationIntent.issueIds.forEach(identifier);}
     if(t.studyContexts)for(let i=0;i<t.studyContexts.length;i++){
       const context=t.studyContexts[i];
       // Archived contexts use the same bounded validator, including audio and feedback.

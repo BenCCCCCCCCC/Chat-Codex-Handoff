@@ -1,5 +1,6 @@
 import {text,identifier,repairFocus,requireValue} from './core.mjs';
 import {validateFeedbackReference,resolveFeedback} from './feedback-reference.mjs';
+import {learningContexts} from './material-set.mjs';
 export function validateTextDraft(d){
   requireValue(d&&typeof d.text==='string'&&d.text.length<=2000,'INVALID_TEXT');
   requireValue(['full','partial'].includes(d.kind)&&['none','keywords','source','unknown'].includes(d.assistance),'INVALID_ATTEMPT');
@@ -18,6 +19,13 @@ export function makeTextAttempt(topic,draft,{uid=()=>crypto.randomUUID(),now=Dat
     corrections:[],reports:[],status:'SAVED'};
 }
 export function comparisonFor(topic,attempt){
+  if(attempt.continuation?.attemptId){
+    const ref=attempt.continuation,parent=learningContexts(topic).find(c=>c.source.id===ref.sourceId)?.attempts.find(a=>a.id===ref.attemptId);
+    const before=[parent?.raw,...(parent?.corrections??[])].find(v=>v?.id===ref.versionId),after=attempt.corrections.at(-1)??attempt.raw;
+    if(!before||!after)return {reason:'原讲解或原文字版本已删除，当前续学文字与反馈仍保留。'};
+    return {before,after,parent,beforeReports:parent.reports.filter(r=>r.channel==='content'&&r.transcriptVersion===before.id),afterReports:attempt.reports.filter(r=>r.channel==='content'&&r.transcriptVersion===after.id),
+      note:'前后采用的材料不同，各自反馈只对应当时依据。承接文字不是一次新的独立作答。'+(ref.fromDraft?'左侧为当时保存版本，不包含未确认的编辑。':'')};
+  }
   if(!attempt.parentId)return null;
   const parent=topic.attempts.find(a=>a.id===attempt.parentId);
   if(!parent)return {reason:'原讲解已删除或不在此备份中，本次讲解仍保留。'};

@@ -2,7 +2,7 @@ import {sourceValue,identifier,text,requireValue} from './core.mjs';
 
 // Each material combination keeps the existing single-source learning record intact.
 // The topic remains the retention/export unit; switching never changes its age.
-const learningKeys=['source','goals','anchorVersion','messages','attempts','mode','resume','question','focus','chatDraft','contextNote','chatRequest','practiceRounds','activePracticeId','practiceRequest','taskUnavailable','textDraft','transcriptionTerms','apply'];
+const learningKeys=['source','goals','anchorVersion','messages','attempts','mode','resume','question','focus','chatDraft','contextNote','chatRequest','practiceRounds','activePracticeId','practiceRequest','taskUnavailable','textDraft','transcriptionTerms','apply','continuationIntent'];
 export const materialList=topic=>topic.materials??[topic.source];
 export const learningContexts=topic=>[topic,...(topic.studyContexts??[])];
 export function initializeMaterials(topic){

@@ -48,6 +48,7 @@ export function spanValue(s, duration) {
 export function attemptValue(a) {
   requireValue(a && [undefined,'audio','text'].includes(a.inputMode),'INVALID_ATTEMPT');
   const typed=a.inputMode==='text';
+  requireValue(a.scope==null||a.scope==='retained_fragment','INVALID_ATTEMPT');
   requireValue(typed?a.duration==null:Number.isFinite(a.duration)&&a.duration>0&&a.duration<=180,'INVALID_ATTEMPT');
   requireValue(Array.isArray(a.spans)&&a.spans.length>0&&a.spans.length<=(typed?1:150),'INVALID_ATTEMPT');
   const spans = a.spans.map(s => typed?textSpanValue(s):spanValue(s, a.duration));
@@ -55,7 +56,7 @@ export function attemptValue(a) {
   requireValue(['none','keywords','source','unknown'].includes(a.assistance), 'INVALID_ASSISTANCE');
   requireValue(['full','partial'].includes(a.kind), 'INVALID_ATTEMPT_KIND');
   return { id: identifier(a.id), sourceId: identifier(a.sourceId), transcriptVersion: identifier(a.transcriptVersion), ...(typed?{inputMode:'text'}:{duration:a.duration}), spans, assistance: a.assistance, kind: a.kind,
-    focus: a.kind === 'partial' ? repairFocus(a.focus) : null, reviewed: a.reviewed === true, interrupted: a.interrupted === true };
+    focus: a.kind === 'partial' ? repairFocus(a.focus) : null, reviewed: a.reviewed === true, interrupted: a.interrupted === true,...(a.fragmentAccepted===true?{fragmentAccepted:true}:{}),...(a.scope?{scope:a.scope}:{}) };
 }
 export function textSpanValue(s){
   requireValue(s&&s.start==null&&s.end==null,'INVALID_TEXT_SPAN');
@@ -64,9 +65,9 @@ export function textSpanValue(s){
 export function contentInput(source, attempt) {
   const s = sourceValue(source), a = attemptValue(attempt);
   requireValue(a.sourceId === s.id, 'SOURCE_MISMATCH');
-  requireValue(a.reviewed && !a.interrupted, 'ASR_REVIEW_REQUIRED');
+  requireValue(a.reviewed && (!a.interrupted || a.fragmentAccepted), 'ASR_REVIEW_REQUIRED');
   // Deliberately omit duration, pauses, energy and all delivery labels.
-  return { source: s, attempt: { id:a.id, sourceId:a.sourceId, transcriptVersion:a.transcriptVersion, ...(a.inputMode==='text'?{inputMode:'text'}:{}), assistance:a.assistance, kind:a.kind, focus:a.focus, spans:a.spans.map(({id,text})=>({id,text})) } };
+  return { source: s, attempt: { id:a.id, sourceId:a.sourceId, transcriptVersion:a.transcriptVersion, ...(a.inputMode==='text'?{inputMode:'text'}:{}), assistance:a.assistance, kind:a.kind, focus:a.focus,...(a.interrupted||a.scope==='retained_fragment'?{scope:'retained_fragment'}:{}), spans:a.spans.map(({id,text})=>({id,text})) } };
 }
 function exactKeys(v, names) { requireValue(v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === names.length && names.every(k=>Object.hasOwn(v,k)), 'INVALID_SCHEMA'); }
 export function validateTeaching(v, source) {
@@ -82,6 +83,7 @@ export function validateFindings(v, source, attempt, channel, events = []) {
   for (const f of v.findings) {
     exactKeys(f,['status','message','sourceQuote','spanId','quote','eventId','repair']);
     requireValue(['supported','missing','incorrect','unknown','observation'].includes(f.status),'INVALID_STATUS');
+    if(channel==='content'&&(attempt.interrupted||attempt.scope==='retained_fragment'))requireValue(f.status!=='missing','FRAGMENT_OMISSION_UNSUPPORTED');
     text(f.message,1000); if(!(f.status==='supported'&&f.repair===null))text(f.repair,1000); text(f.sourceQuote,600);
     remediationFocus(f,channel);
     requireValue(source.text.includes(f.sourceQuote),'INVALID_SOURCE_QUOTE');
