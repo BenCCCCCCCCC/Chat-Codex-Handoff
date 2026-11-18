@@ -95,3 +95,11 @@ GitHub 沿用 `docs/iterations/` 保存实施及运行结论，MASTER 链接准�
 规划已发布于 MASTER `21c8f104aa0de7a7669df016fde704c1de9ff15d`。当前任务另记 [Issue #39](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/39)，状态 Ready，供可用 Codex 领取。
 
 Chat 在隔离工作副本尝试官方 `codex exec --sandbox workspace-write`，初始化返回 `Read-only file system (os error 30)`；采用官方 ephemeral 模式也未初始化成功。官方 `codex cloud list` 返回 401 认证失效。没有执行任务 ID、实现改动或模型运行回执；未修改凭据或全局环境规避限制。此限制不代表用户原有 Windows Codex 不可用。现有 Codex 可直接读最新 MASTER 与 Issue 接续，本批实现不以修复 Chat 的 CLI 为前提。
+
+## Codex 实施回执 · 2026-11-19
+
+原审查的 Must Fix 1／2 已在 [PR #40](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/40) 解决并合并，产品基线 `3ca10f012dd9ea1ec1e64a372ecabadea8071342`。当前条件按引用材料可用，缺少材料可直接补入；补材料承接表达／问题，新反馈、条件练习与原证据回访连通。另完成无 AI 录音状态、文字续接／保留片段转写和实际到期提示。此段为实现方回执，不改写上文原审查的历史观察，也不替代后续产品审查。
+
+[实现与运行报告](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/3ca10f012dd9ea1ec1e64a372ecabadea8071342/docs/iterations/2026-11-19-material-continuity.md) 区分已解决、未解决和未验证。[最终 Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/44385555794) 在 `3102d9e` 通过 209/209 Node、74/74 Edge；最终文档提交复用该代码验证。首次 CI 的旧 VM 测试依赖失败与修复已保留。Windows 两轮实际服务启动／健康检查／关闭通过；物理麦克风、Explorer 双击完整日常流程及真实模型／学习收益尚未验证。真实 API 0 次，无原件外传、公开部署或保留政策变更。
+
+材料编辑／来源版本、长材料复用与有期限的转写维护继续留在 HANDOFF；本 Issue 已完成，不再是 Ready／等待执行状态。
