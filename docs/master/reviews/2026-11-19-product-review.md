@@ -89,3 +89,9 @@ Issue #3 的 4 份材料／14 个受控案例均围绕循环队列，适合验�
 本轮三项优先决定：先修条件可用性与材料续学；同步改善相邻界面；将后续日常可用性、完整材料和有日期的转写维护纳入既有产品路线。详细实现留给 Codex 判断。
 
 GitHub 沿用 `docs/iterations/` 保存实施及运行结论，MASTER 链接准确版本、已解决／未解决／未验证和下一步。无需每个小提交独立报告，不为报告再次运行测试。用户以产品决策为主，Chat 和 Codex 负责具体交接及持续推进。
+
+### 本轮执行入口回执
+
+规划已发布于 MASTER `21c8f104aa0de7a7669df016fde704c1de9ff15d`。当前任务另记 [Issue #39](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/issues/39)，状态 Ready，供可用 Codex 领取。
+
+Chat 在隔离工作副本尝试官方 `codex exec --sandbox workspace-write`，初始化返回 `Read-only file system (os error 30)`；采用官方 ephemeral 模式也未初始化成功。官方 `codex cloud list` 返回 401 认证失效。没有执行任务 ID、实现改动或模型运行回执；未修改凭据或全局环境规避限制。此限制不代表用户原有 Windows Codex 不可用。现有 Codex 可直接读最新 MASTER 与 Issue 接续，本批实现不以修复 Chat 的 CLI 为前提。
