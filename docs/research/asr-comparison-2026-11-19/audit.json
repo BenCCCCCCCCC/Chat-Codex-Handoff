@@ -1,0 +1,21 @@
+{
+  "kind": "OFFLINE_EVIDENCE_AUDIT_NO_API",
+  "manifestAndAllAudioHashesVerified": true,
+  "allOriginalResponseHashesVerified": true,
+  "publicProviderFieldsEqualOriginalResponses": true,
+  "uniqueRequests": 16,
+  "uniqueCaseModelPairs": 16,
+  "http200": 16,
+  "newLedgerReservations": 16,
+  "newLedgerSettlements": 16,
+  "newAttempts": 8,
+  "providerUsageSeconds": {
+    "whisper-1": 91,
+    "gpt-transcribe": 91
+  },
+  "knownEstimateUSD": 0.015925,
+  "productionLedgerSHA256": "4759437a42e4cf0f5da0a3b4ee9ca857838ecbf0fcd0b1c6df3a4a603d9df942",
+  "productionCodeChanged": false,
+  "reviewBeforeRevealCommit": "3cc7361c9b7227390f8195a8702aadf444e4a249",
+  "inputFreezeCommit": "7a2a3bae5302735ca2c3d00230f544ac0779137e"
+}

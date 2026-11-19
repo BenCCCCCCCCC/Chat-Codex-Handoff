@@ -1,0 +1,42 @@
+[
+  {
+    "id": "negation",
+    "A": "gpt-transcribe",
+    "B": "whisper-1"
+  },
+  {
+    "id": "numbers",
+    "A": "gpt-transcribe",
+    "B": "whisper-1"
+  },
+  {
+    "id": "terms",
+    "A": "gpt-transcribe",
+    "B": "whisper-1"
+  },
+  {
+    "id": "code_switch",
+    "A": "gpt-transcribe",
+    "B": "whisper-1"
+  },
+  {
+    "id": "self_repair",
+    "A": "gpt-transcribe",
+    "B": "whisper-1"
+  },
+  {
+    "id": "paraphrase",
+    "A": "whisper-1",
+    "B": "gpt-transcribe"
+  },
+  {
+    "id": "pause_quiet",
+    "A": "gpt-transcribe",
+    "B": "whisper-1"
+  },
+  {
+    "id": "unfinished",
+    "A": "gpt-transcribe",
+    "B": "whisper-1"
+  }
+]

@@ -90,6 +90,8 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).hr
     const p=preflight();console.log(JSON.stringify({...p,entries:p.entries.map(e=>({id:e.case.id,duration:e.duration,sha256:e.case.sha256}))},null,2));
   }else{
     if(process.argv[2]!=='--approved-budget-usd=0.30')throw Error('EXPLICIT_PLAN_AND_BUDGET_APPROVAL_REQUIRED');
+    // Seal the completed public batch too, including fresh checkouts without artifacts.
+    if(existsSync(join(ROOT,'evidence.json')))throw Error('BATCH_COMPLETED_NO_RETRY');
     const directory=fileURLToPath(new URL('../../../artifacts/study-teachback/asr-comparison-20261119/live/',import.meta.url));
     const ledgerPath=fileURLToPath(new URL('../../../study-teachback-app/runtime/usage.json',import.meta.url));
     const before=hash(readFileSync(ledgerPath));
