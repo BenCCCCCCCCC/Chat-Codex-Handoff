@@ -2,6 +2,8 @@
 
 依据 MASTER `d29caa2f20e1c62009472348a1080e634f9c08ca` 的 CURRENT_STATE／HANDOFF，产品起点 `3ca10f012dd9ea1ec1e64a372ecabadea8071342`。日期 2026-11-19（悉尼）。
 
+[PR #41](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/41) 交付上述提交；随后只更新本报告的 CI 回执，复用同一实现的验证结果，不因文档提交重复回归。合并后的准确基线记录在 MASTER。
+
 ## 交付
 
 - 材料可改名、修订、填写修改说明；每次保存追加不可变来源，版本号及历史入口可见。只改名称保留文件定位，改正文清除不再可信的旧页码。12 份限制按逻辑材料计数，修订不挤占新材料位置。
@@ -17,7 +19,7 @@
 - Node 初轮：ignored `artifacts/study-teachback/setup-flow-01/node-1795066746679-EWpiRM`。
 - Edge 最终本机轮：ignored `artifacts/study-teachback/setup-flow-01/browser-1795066874627-jcuKHk`。
 - 初轮 Edge 在人为恢复存储后直接点“保存新版”而失败：现有产品要求先点恢复栏“重试保存”。按实际恢复路径修正测试后通过，未放宽断言、未改绕过存储保护。失败回执：`browser-1795066823742-tp2sBi`。
-- 后续小改补充未沿用条件提示与历史整段回听文案，由最终 Windows CI 集中覆盖；不把早期定向结果称为最终提交完整通过。最终版本和 CI 回执将在合并前补齐。
+- 后续小改补充未沿用条件提示与历史整段回听文案，由最终 Windows CI 集中覆盖；不把早期定向结果称为最终提交完整通过。最终代码／测试提交 `20b40c46a6d02101656ed6adad92031e60d949a1` 已通过 [Windows CI #44467429766](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/44467429766)：214/214 Node、76/76 Edge，job `135368472963`。文件提取未改动，按范围跳过独立提取套件。
 - 生产账本 SHA256 前后均为 `9f23a117f27c0d279872885bdf074d48cbf369e0beec44480d2644c2b148c67e`。测试隔离网络，仅模拟凭据／回环服务／测试账本，真实产品 API 0 次。
 
 公开图片只来自本批代码创建的合成队列／蒸发样本，无学习者原件：
