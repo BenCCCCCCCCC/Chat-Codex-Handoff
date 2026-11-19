@@ -59,10 +59,10 @@ export function localize({ source, attempt, report, evidence = [], events = [] }
     const span = f.spanId === null ? null : attempt.spans.find(s => s.id === f.spanId);
     // Only co-located, independently identified process context is associated.
     // Missing content has no spoken span: it never borrows process timing.
-    const related = span ? process.filter(e => e.confirmation !== 'candidate' && (e.spanId === span.id || e.start !== null && e.start < span.end && e.end > span.start)) : [];
+    const related = span && attempt.timing!=='recording' ? process.filter(e => e.confirmation !== 'candidate' && (e.spanId === span.id || e.start !== null && e.start < span.end && e.end > span.start)) : [];
     return [{id:`target:${f.id}`,kind:'worth_verifying',focus,sourceId:source.id,attemptId:attempt.id,transcriptVersion:attempt.transcriptVersion,
       contentFindingIds:[f.id],processEvidenceIds:related.map(e=>e.id),
-      contentLocation:span ? (attempt.inputMode==='text'?{spanId:span.id,precision:'paragraph'}:{spanId:span.id,start:span.start,end:span.end,precision:'segment'}) : null,
+      contentLocation:span ? (attempt.inputMode==='text'||attempt.timing==='recording'?{spanId:span.id,precision:'paragraph'}:{spanId:span.id,start:span.start,end:span.end,precision:'segment'}) : null,
       processContext:related.map(e=>({evidenceId:e.id,relationship:'co_located_observation_not_knowledge_proof'}))}];
   });
   return {contentFindings:content,processEvidence:process,diagnosticTargets:targets};

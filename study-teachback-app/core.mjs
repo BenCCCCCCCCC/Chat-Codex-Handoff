@@ -48,6 +48,7 @@ export function spanValue(s, duration) {
 export function attemptValue(a) {
   requireValue(a && [undefined,'audio','text'].includes(a.inputMode),'INVALID_ATTEMPT');
   const typed=a.inputMode==='text';
+  requireValue(a.timing==null||!typed&&a.timing==='recording','INVALID_ATTEMPT');
   requireValue(a.scope==null||a.scope==='retained_fragment','INVALID_ATTEMPT');
   requireValue(typed?a.duration==null:Number.isFinite(a.duration)&&a.duration>0&&a.duration<=180,'INVALID_ATTEMPT');
   requireValue(Array.isArray(a.spans)&&a.spans.length>0&&a.spans.length<=(typed?1:150),'INVALID_ATTEMPT');
@@ -56,7 +57,7 @@ export function attemptValue(a) {
   requireValue(['none','keywords','source','unknown'].includes(a.assistance), 'INVALID_ASSISTANCE');
   requireValue(['full','partial'].includes(a.kind), 'INVALID_ATTEMPT_KIND');
   return { id: identifier(a.id), sourceId: identifier(a.sourceId), transcriptVersion: identifier(a.transcriptVersion), ...(typed?{inputMode:'text'}:{duration:a.duration}), spans, assistance: a.assistance, kind: a.kind,
-    focus: a.kind === 'partial' ? repairFocus(a.focus) : null, reviewed: a.reviewed === true, interrupted: a.interrupted === true,...(a.fragmentAccepted===true?{fragmentAccepted:true}:{}),...(a.scope?{scope:a.scope}:{}) };
+    focus: a.kind === 'partial' ? repairFocus(a.focus) : null, reviewed: a.reviewed === true, interrupted: a.interrupted === true,...(a.fragmentAccepted===true?{fragmentAccepted:true}:{}),...(a.scope?{scope:a.scope}:{}),...(a.timing?{timing:a.timing}:{}) };
 }
 export function textSpanValue(s){
   requireValue(s&&s.start==null&&s.end==null,'INVALID_TEXT_SPAN');
@@ -116,6 +117,7 @@ export function normalizeASR(data, duration) {
 // word boundary when timing is unusable, missing or ambiguous. Review remains required.
 export function replayAnchor(raw,segmentId,wordId=null){
   const s=raw.spans.find(s=>s.id===segmentId);requireValue(s,'INVALID_REFERENCE');
+  if(raw.timing?.level==='recording')return {level:'recording',start:0,end:s.end,reviewRequired:true,preciseWordAnchor:false};
   const w=wordId&&raw.words?.find(w=>w.id===wordId);
   if(w&&w.usable===true&&Number.isFinite(w.start)&&Number.isFinite(w.end)&&w.end>w.start&&w.start>=s.start&&w.end<=s.end)return {level:'word',start:w.start,end:w.end,reviewRequired:true};
   return {level:'segment',start:s.start,end:s.end,reviewRequired:true,preciseWordAnchor:false};

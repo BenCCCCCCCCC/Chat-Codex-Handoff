@@ -30,6 +30,8 @@ export function continueWithMaterials(topic,ids,{work=captureMaterialWork(topic)
     continued=makeTextAttempt({source},{text:work.text,kind:work.kind,focus:work.focus,assistance:'source'},{uid,now});
     continued.raw.reviewed=false;continued.judgementIssues=conditions;if(work.ref.retainedFragment)continued.contentScope='retained_fragment';
     continued.continuation={...structuredClone(work.ref),reason:'materials',intent:work.intent,contextNote:work.contextNote};
+    const unapplied=work.conditions.filter(i=>!conditions.some(c=>c.id===i.id)).map(i=>i.question);
+    if(unapplied.length)continued.continuation.unappliedConditions=unapplied;
   }
   if(!same)selectMaterials(topic,ids,{uid:()=>source.id});
   if(!existing){topic.goals=work.goals.filter(g=>source.text.includes(g.sourceQuote));topic.contextNote=work.contextNote;topic.chatDraft=work.intent;}
@@ -51,5 +53,6 @@ export function continuationOrigin(topic,ref){
 export function validateContinuation(ref){
   identifier(ref.sourceId);text(ref.sourceTitle,120);requireValue(typeof ref.fromDraft==='boolean','INVALID_CONTINUATION');
   if(ref.attemptId){identifier(ref.attemptId);identifier(ref.versionId);}
+  if(ref.unappliedConditions){requireValue(Array.isArray(ref.unappliedConditions)&&ref.unappliedConditions.length<=3,'INVALID_CONTINUATION');ref.unappliedConditions.forEach(q=>text(q,500));}
   requireValue(typeof ref.intent==='string'&&ref.intent.length<=2000&&typeof ref.contextNote==='string'&&ref.contextNote.length<=1000,'INVALID_CONTINUATION');
 }

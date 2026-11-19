@@ -1,5 +1,5 @@
 import {autoTitle} from './core.mjs';
-import {materialList,initializeMaterials,addMaterial,selectMaterials,selectContext,saveStudyIssue} from './material-set.mjs';
+import {materialList,currentMaterials,materialVersion,materialLabel,reviseMaterial,revisedMaterialSelection,initializeMaterials,addMaterial,selectMaterials,selectContext,saveStudyIssue} from './material-set.mjs';
 import {importedDocument,selectedProvenance,renderMaterial} from './source-provenance.mjs';
 import {createDraftSaver} from './draft-save.mjs';
 import {continueWithMaterials,continueStudyIssue,captureMaterialWork} from './material-continuation.mjs';
@@ -8,7 +8,7 @@ import {missingIssueMaterials} from './judgement.mjs';
 export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeChange,onSwitch,onReference=()=>{},act}){
   const $=id=>document.getElementById(id),node=(tag,value)=>{const e=document.createElement(tag);e.textContent=value;return e;};
   let busy=false,previewId=null,documentPreview=null;
-  const drafts=createDraftSaver({save,onStatus:s=>{$('materialDraftStatus').textContent=s==='saved'?'草稿已保存在本机':s==='saving'?'正在保存…':s==='error'?'草稿保存失败，请重试保存。':'';},onError:e=>act(()=>Promise.reject(e))});
+  const drafts=createDraftSaver({save,onStatus:s=>{$('materialRevisionStatus').textContent=$('materialDraftStatus').textContent=s==='saved'?'草稿已保存在本机':s==='saving'?'正在保存…':s==='error'?'草稿保存失败，请重试保存。':'';},onError:e=>act(()=>Promise.reject(e))});
   const lock=value=>{for(const root of ['materialSet','studyIssues','materialPreview'])for(const input of $(root).querySelectorAll('input,textarea,select,button'))input.disabled=value;};
   async function change(work){
     if(busy||!canStart())return;busy=true;setBusy(true);lock(true);
@@ -17,32 +17,52 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
   }
   function showMaterial(id){
     const material=materialList(getTopic()).find(m=>m.id===id);if(!material)return;
-    previewId=id;$('materialPreview').hidden=false;$('materialPreviewTitle').textContent=material.title;
+    previewId=id;$('materialPreview').hidden=false;$('materialPreviewTitle').textContent=materialLabel(getTopic(),id);
     renderMaterial({textNode:$('materialPreviewText'),locationNode:$('materialPreviewLocation'),source:material});
     onReference();
   }
   function render(){
     const topic=getTopic();if(!topic)return;
     const materials=materialList(topic),selected=topic.activeMaterialIds??[topic.source.id];
-    $('materialSetSummary').textContent=`材料集 · ${materials.length} 份`;
-    $('activeMaterials').textContent='本次依据：'+materials.filter(m=>selected.includes(m.id)).map(m=>m.title).join('、');
-    $('materialChoices').replaceChildren(...materials.map(m=>{
+    const latest=currentMaterials(topic);
+    $('materialSetSummary').textContent=`材料集 · ${latest.length} 份`;
+    $('activeMaterials').textContent='本次依据：'+selected.map(id=>materialLabel(topic,id)).join('、');
+    const historical=selected.filter(id=>!latest.some(m=>m.id===id));
+    $('materialVersionNotice').hidden=!historical.length;
+    $('materialVersionNotice').textContent=historical.length?'当前仍采用历史版本。旧反馈与条件按当时依据保留；选择新版接着学时，请重新核对适用条件。':'';
+    function rowFor(m){
       const row=node('div',''),label=node('label',''),input=document.createElement('input'),read=node('button','查看原文');
+      row.className='material-row';
       input.type='checkbox';input.value=m.id;input.checked=selected.includes(m.id);input.disabled=busy;
-      label.append(input,node('span',m.title));read.className='quiet';read.type='button';read.onclick=()=>showMaterial(m.id);row.append(label,read);return row;
+      label.append(input,node('span',materialLabel(topic,m.id)));read.className='quiet';read.type='button';read.dataset.readMaterial=m.id;read.onclick=()=>showMaterial(m.id);row.append(label,read);return row;
+    }
+    $('materialChoices').replaceChildren(...latest.map(m=>{
+      const group=node('section',''),row=rowFor(m),edit=node('button','改名或修订');group.className='material-group';edit.className='quiet';edit.dataset.editMaterial=m.id;
+      edit.onclick=()=>act(()=>change(async t=>{
+        if(t.materialRevisionDraft&&t.materialRevisionDraft.baseId!==m.id){$('materialEditor').open=true;throw Error('MATERIAL_DRAFT_EXISTS');}
+        initializeMaterials(t);t.materialRevisionDraft??={baseId:m.id,title:m.title,text:m.text,note:''};await save(t);$('materialEditor').open=true;
+      }));row.append(edit);group.append(row);
+      const versions=materials.filter(v=>materialVersion(topic,v.id).rootId===materialVersion(topic,m.id).rootId&&v.id!==m.id);
+      if(versions.length){const history=node('details','');history.open=versions.some(v=>selected.includes(v.id));history.append(node('summary',`历史版本 · ${versions.length}`));
+        for(const v of versions.slice().reverse()){history.append(rowFor(v));const info=materialVersion(topic,v.id);if(info.note)history.append(node('p',info.note));}group.append(history);
+      }
+      const info=materialVersion(topic,m.id);if(info.number>1)group.append(node('p',`${info.kind==='rename'?'重命名':'修订'} · ${new Date(info.createdAt).toLocaleString()}${info.note?' · '+info.note:''}`));
+      return group;
     }));
+    const revision=topic.materialRevisionDraft;$('materialEditor').hidden=!revision;
+    if(revision){$('materialEditorSummary').textContent='编辑：'+materialLabel(topic,revision.baseId);$('materialRevisionTitle').value=revision.title;$('materialRevisionText').value=revision.text;$('materialRevisionNote').value=revision.note;}
     $('materialTitle').value=topic.materialDraft?.title??'';$('materialText').value=topic.materialDraft?.text??'';
     for(const id of ['materialTitle','materialText','materialFile','addMaterial','addAndContinue','continueMaterials','useMaterials','saveStudyIssue'])$(id).disabled=busy;
     if(previewId&&materials.some(m=>m.id===previewId))showMaterial(previewId);else{$('materialPreview').hidden=true;previewId=null;}
     const issue=topic.issueDraft??{};$('issueQuestion').value=issue.question??'';$('issueCondition').value=issue.condition??'';$('issueStatus').value=issue.status??'deferred';
     $('issueEvidence').replaceChildren(...materials.map(m=>{
-      const label=node('label',m.title+' · 采用的原句'),input=document.createElement('textarea');input.rows=2;input.maxLength=1500;input.dataset.materialId=m.id;
+      const label=node('label',materialLabel(topic,m.id)+' · 采用的原句'),input=document.createElement('textarea');input.rows=2;input.maxLength=1500;input.dataset.materialId=m.id;
       input.value=issue.evidence?.find(e=>e.materialId===m.id)?.quote??'';input.placeholder='在“查看原文”中选中并引用，也可粘贴原句。';input.oninput=captureIssue;input.onblur=()=>act(()=>drafts.flush());label.append(input);return label;
     }));
     $('studyIssueList').replaceChildren(...(topic.studyIssues??[]).slice().reverse().map(item=>{
       const card=node('article',''),open=node('button','回到记录时的学习');card.dataset.issueId=item.id;card.append(node('h4',item.question),node('p',item.status==='deferred'?'结论暂缓，继续查证':'采用的条件（自查）：'+item.condition));
       if(item.status==='deferred'&&item.condition)card.append(node('p',item.condition));
-      for(const e of item.evidence){const m=materials.find(m=>m.id===e.materialId);card.append(node('p',m?.title??'历史材料'),node('blockquote',e.quote));}
+      for(const e of item.evidence)card.append(node('p',materialLabel(topic,e.materialId)),node('blockquote',e.quote));
       card.append(node('p',new Date(item.createdAt).toLocaleString()));open.className='quiet';open.onclick=()=>act(()=>change(async t=>{
         selectContext(t,item.contextId);const point=structuredClone(item.resume);
         const missing=point.view==='attempt'&&!t.attempts.some(a=>a.id===point.attemptId)||point.view==='practice'&&point.roundId&&!t.practiceRounds?.some(r=>r.id===point.roundId);
@@ -57,7 +77,7 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
       }));card.append(use,open,revise);return card;
     }));
     $('contextHistory').replaceChildren(...(topic.studyContexts??[]).map(c=>{
-      const button=node('button',`${c.materialIds.map(id=>materials.find(m=>m.id===id)?.title).join(' + ')} · ${c.attempts.length} 次讲解 · ${c.practiceRounds?.length??0} 道题`);
+      const button=node('button',`${c.materialIds.map(id=>materialLabel(topic,id)).join(' + ')} · ${c.attempts.length} 次讲解 · ${c.practiceRounds?.length??0} 道题`);
       button.className='quiet';button.onclick=()=>act(()=>change(async t=>{selectContext(t,c.id);try{await save(t);}finally{onSwitch();}}));return button;
     }));
   }
@@ -69,12 +89,24 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
   }
   function captureIssue(){
     if(busy)return;const topic=getTopic();initializeMaterials(topic);
-    topic.issueDraft={question:$('issueQuestion').value,condition:$('issueCondition').value,status:$('issueStatus').value,evidence:[...$('issueEvidence').querySelectorAll('textarea')].map(e=>({materialId:e.dataset.materialId,quote:e.value}))};drafts.mark(topic);
+    topic.issueDraft={question:$('issueQuestion').value,condition:$('issueCondition').value,status:$('issueStatus').value,evidence:[...$('issueEvidence').querySelectorAll('textarea')].map(e=>({materialId:e.dataset.materialId,quote:e.value})).filter(e=>e.quote.trim())};drafts.mark(topic);
   }
   for(const id of ['materialTitle','materialText']){$(id).oninput=captureMaterial;$(id).onblur=()=>act(()=>drafts.flush());}
   for(const id of ['issueQuestion','issueCondition','issueStatus']){$(id).oninput=captureIssue;$(id).onblur=()=>act(()=>drafts.flush());}
   $('addMaterial').onclick=()=>act(()=>change(async t=>{addMaterial(t,t.materialDraft??{title:'',text:''});await save(t);$('addMaterialDetails').open=false;}));
   const work=t=>captureMaterialWork(t,{draft:!$('recording').hidden&&!$('textComposer').hidden});
+  for(const id of ['materialRevisionTitle','materialRevisionText','materialRevisionNote']){
+    $(id).oninput=()=>{if(busy)return;const t=getTopic();if(!t.materialRevisionDraft)return;Object.assign(t.materialRevisionDraft,{title:$('materialRevisionTitle').value,text:$('materialRevisionText').value,note:$('materialRevisionNote').value});drafts.mark(t);};
+    $(id).onblur=()=>act(()=>drafts.flush());
+  }
+  $('cancelMaterialRevision').onclick=()=>act(()=>change(async t=>{delete t.materialRevisionDraft;await save(t);}));
+  for(const carry of [false,true])$(carry?'saveMaterialRevisionContinue':'saveMaterialRevision').onclick=()=>act(()=>change(async t=>{
+    // Save once: a failed continuation or storage write keeps the user's editor
+    // intact and cannot leave a half-adopted revision in the live workspace.
+    const copy=structuredClone(t),previous=work(t),m=reviseMaterial(copy,copy.materialRevisionDraft);
+    if(carry)continueWithMaterials(copy,revisedMaterialSelection(copy,m.id),{work:previous});
+    await save(copy);for(const key of Object.keys(t))delete t[key];Object.assign(t,copy);onSwitch();
+  }));
   async function continueIssue(id){await change(async t=>{continueStudyIssue(t,id,{work:work(t)});try{await save(t);}finally{onSwitch();}});if(getTopic().resume?.view==='attempt'){$('judgementChoices').open=true;$('voiceHeading').focus();}else $('explain').click();}
   $('addAndContinue').onclick=()=>act(()=>change(async t=>{
     const previous=work(t),m=addMaterial(t,t.materialDraft??{title:'',text:''});await save(t);

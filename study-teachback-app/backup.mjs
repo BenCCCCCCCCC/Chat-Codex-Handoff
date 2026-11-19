@@ -14,6 +14,7 @@ const FORMAT = 'study-teachback-export-v1';
 const MATERIAL_FORMAT = 'study-teachback-export-v2';
 const CONDITIONS_FORMAT = 'study-teachback-export-v3';
 const CONTINUATION_FORMAT = 'study-teachback-export-v4';
+const VERSIONS_FORMAT = 'study-teachback-export-v5';
 const check = value => { if (!value) throw Error('BACKUP_INVALID'); };
 const object = value => check(value && typeof value === 'object' && !Array.isArray(value));
 const string = (value, max=16000) => check(typeof value === 'string' && value.length <= max);
@@ -38,7 +39,8 @@ export async function encodeBackup(topic) {
   }
   const conditional=learningContexts(topic).some(c=>c.practiceRequest?.conditionContext||c.practiceRounds?.some(r=>r.conditionContext));
   const continued=learningContexts(topic).some(c=>c.continuationIntent||c.attempts.some(a=>a.continuation||a.fragmentAcceptedAt||a.contentScope));
-  return JSON.stringify({format:continued?CONTINUATION_FORMAT:conditional?CONDITIONS_FORMAT:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
+  const versioned=topic.materialVersions?.length||topic.materialRevisionDraft||learningContexts(topic).some(c=>c.attempts.some(a=>a.raw?.timing?.level==='recording'));
+  return JSON.stringify({format:versioned?VERSIONS_FORMAT:continued?CONTINUATION_FORMAT:conditional?CONDITIONS_FORMAT:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
     notice:'导出副本不受应用内删除控制', topic:data}, null, 2);
 }
 
@@ -48,7 +50,7 @@ export function decodeBackup(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > BACKUP_LIMIT) throw Error('BACKUP_TOO_LARGE');
   try {
     const envelope = JSON.parse(text);
-    if (![FORMAT,MATERIAL_FORMAT,CONDITIONS_FORMAT,CONTINUATION_FORMAT].includes(envelope?.format)) throw Error('BACKUP_FORMAT');
+    if (![FORMAT,MATERIAL_FORMAT,CONDITIONS_FORMAT,CONTINUATION_FORMAT,VERSIONS_FORMAT].includes(envelope?.format)) throw Error('BACKUP_FORMAT');
     const t = envelope.topic; object(t); identifier(t.id); date(t.createdAt); sourceValue(t.source);
     if (t.updatedAt != null) date(t.updatedAt);
     if (t.restoredAt != null) date(t.restoredAt);
@@ -91,6 +93,10 @@ export function decodeBackup(text) {
       if (a.duration != null) check(Number.isFinite(a.duration) && a.duration>=0);
       const versions = [...list(a.corrections)];
       if (a.raw) versions.unshift(a.raw);
+      if(a.raw?.timing){
+        check(!typed&&a.raw.timing.level==='recording'&&a.raw.timing.origin==='local_audio_duration'&&a.raw.alignment==='NO_PROVIDER_TIMESTAMPS');
+        check(Array.isArray(a.raw.words)&&a.raw.words.length===0&&versions.every(v=>v.spans.every(s=>s.start===0&&s.end===a.duration)));
+      }
       unique(versions);
       for (const v of versions) {
         if (v.text != null) string(v.text);
