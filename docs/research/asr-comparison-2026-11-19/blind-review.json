@@ -1,0 +1,128 @@
+{
+  "reviewer": "assistant_text_review",
+  "basis": "Frozen TTS script versus model-label-hidden outputs; no independent human listening or phonetic alignment",
+  "blindedSHA256": "b509d574abec6e79f30726b19379df77cc517fece96f80d79392c887e8f565ff",
+  "cases": [
+    {
+      "id": "negation",
+      "A": {
+        "outcome": "TERM_ERROR",
+        "reason": "三个否定／动作条件均保留，但队列写成对列。需修正术语后才可作为内容依据。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      },
+      "B": {
+        "outcome": "TERM_ERROR",
+        "reason": "三个动作条件仍可辨，但队首元素写成对手元素，改变了操作对象的文字表达，需要核对。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "id": "numbers",
+      "A": {
+        "outcome": "PASS",
+        "reason": "八→8、七→7、十→10、九→9 只是数字写法变化，长度与容量配对和预留空位条件保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      },
+      "B": {
+        "outcome": "PASS",
+        "reason": "数字转为阿拉伯数字，两个长度／容量关系和预留空位条件都保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "id": "terms",
+      "A": {
+        "outcome": "PASS",
+        "reason": "顺序队列、循环队列、头指针、尾指针都保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      },
+      "B": {
+        "outcome": "PASS",
+        "reason": "四个术语均与冻结脚本一致。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "id": "code_switch",
+      "A": {
+        "outcome": "PASS",
+        "reason": "count、front、rear 及不一定为空的条件都保留；合成拼接处被插入多个句号，可读性差，不能将其推断为真实语句停顿。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      },
+      "B": {
+        "outcome": "PASS",
+        "reason": "三个英文术语、相等不一定为空和查看count的关系保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "id": "self_repair",
+      "A": {
+        "outcome": "PASS",
+        "reason": "先说八个、明确不对、改为七个并说明预留空位，修正过程完整。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      },
+      "B": {
+        "outcome": "PASS",
+        "reason": "八到七的修正及不对、预留空位均保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "id": "paraphrase",
+      "A": {
+        "outcome": "PASS",
+        "reason": "液面进入空气、蒸发以及不是只有沸腾才变化均保留；水蒸气写成水蒸汽，记作字词差异，不当作否定条件反转。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      },
+      "B": {
+        "outcome": "PASS",
+        "reason": "与冻结脚本的三个关键意思一致，未改写成另一个教材解释。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "id": "pause_quiet",
+      "A": {
+        "outcome": "CRITICAL_NUMBER_ERROR",
+        "reason": "脚本长度为八时写成长度为80，而容量仍为7，不能按数字格式差异豁免；可能把八时连读理解为八十，音频未独立听审，原因未确认。",
+        "criticalNumericChange": true,
+        "unspokenConclusion": false
+      },
+      "B": {
+        "outcome": "CRITICAL_NUMBER_ERROR",
+        "reason": "同样将长度为八时写成长度为80，改变关键数量关系。预留空位和容量7保留；未观察到静音间新增解释。",
+        "criticalNumericChange": true,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "id": "unfinished",
+      "A": {
+        "outcome": "PASS",
+        "reason": "保留另一种实现还没的未完成意思，只添加结尾标点，没有替用户补全结论。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      },
+      "B": {
+        "outcome": "PASS",
+        "reason": "保留还没，未补写另一种实现或其结论。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    }
+  ],
+  "reviewedBeforeModelReveal": true
+}
