@@ -1,0 +1,4926 @@
+{
+  "kind": "APPROVED_SYNTHETIC_ASR_COMPARISON",
+  "authorization": "USER_APPROVED_SYNTHETIC_ONLY_16_CALLS_USD_0_30_NO_RETRY",
+  "inputFreezeCommit": "7a2a3bae5302735ca2c3d00230f544ac0779137e",
+  "startedAt": "2026-11-19T06:23:18.925Z",
+  "finishedAt": "2026-11-19T06:23:47.763Z",
+  "status": "COMPLETE_REVIEWED",
+  "config": {
+    "batch": "asr-comparison-2026-11-19",
+    "maxRequests": 16,
+    "budgetUSD": 0.3,
+    "reservationMinutes": 3,
+    "models": [
+      "whisper-1",
+      "gpt-transcribe"
+    ],
+    "prompt": "以下是普通话的简体中文转写。",
+    "timeoutMs": 60000,
+    "automaticRetries": 0,
+    "verifiedOn": "2026-11-19",
+    "prices": {
+      "whisper-1": 0.006,
+      "gpt-transcribe": 0.0045
+    }
+  },
+  "manifestSHA256": "7df9e2fecf04c53cd24c58dc517e30f67efe402fd4e27d9c3457cb803139cb22",
+  "configSHA256": "360168c14c2e63648df8009b0a19d56041c315a90aaeddb7c4ad4e406ff4af22",
+  "requestCount": 16,
+  "reservedUSD": 0.2520000000000001,
+  "knownEstimateUSD": 0.015925,
+  "exposureUSD": 0.015925,
+  "productionModel": "whisper-1",
+  "ledgerHashes": {
+    "before": "9f23a117f27c0d279872885bdf074d48cbf369e0beec44480d2644c2b148c67e",
+    "after": "4759437a42e4cf0f5da0a3b4ee9ca857838ecbf0fcd0b1c6df3a4a603d9df942"
+  },
+  "batchLedgerEvents": [
+    {
+      "type": "reserve",
+      "id": "e0573d64-45f8-4e15-88ee-109b55e35b1b",
+      "at": "2026-11-19T06:23:18.953Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "asr20261119-negation",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002,
+      "pricing": {
+        "date": "2026-09-11",
+        "rateUSD": 0.006,
+        "unit": "minute",
+        "timing": "provider",
+        "source": "https://developers.openai.com/api/docs/models/whisper-1"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "e0573d64-45f8-4e15-88ee-109b55e35b1b",
+      "at": "2026-11-19T06:23:22.181Z",
+      "usage": {
+        "seconds": 12.4226875
+      },
+      "requestId": "req_9757f9e4e8ec4909a691b0d56a56b70d",
+      "costUSD": 0.0013000000000000002,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "0e6aa244-b795-4235-bea3-dc485f7f66bc",
+      "at": "2026-11-19T06:23:22.185Z",
+      "model": "gpt-transcribe",
+      "kind": "asr",
+      "attemptId": "asr20261119-negation",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.013499999999999998,
+      "pricing": {
+        "date": "2026-11-19",
+        "rateUSD": 0.0045,
+        "unit": "minute",
+        "timing": "recording",
+        "source": "https://developers.openai.com/api/docs/models/gpt-transcribe"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "0e6aa244-b795-4235-bea3-dc485f7f66bc",
+      "at": "2026-11-19T06:23:24.002Z",
+      "usage": {
+        "seconds": 12.4226875
+      },
+      "requestId": "req_32fdb9a2f19647deb6711164eaf69324",
+      "costUSD": 0.000975,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "117a39eb-df0d-4859-9779-90d2dc3a250c",
+      "at": "2026-11-19T06:23:24.005Z",
+      "model": "gpt-transcribe",
+      "kind": "asr",
+      "attemptId": "asr20261119-numbers",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.013499999999999998,
+      "pricing": {
+        "date": "2026-11-19",
+        "rateUSD": 0.0045,
+        "unit": "minute",
+        "timing": "recording",
+        "source": "https://developers.openai.com/api/docs/models/gpt-transcribe"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "117a39eb-df0d-4859-9779-90d2dc3a250c",
+      "at": "2026-11-19T06:23:25.437Z",
+      "usage": {
+        "seconds": 12.7245625
+      },
+      "requestId": "req_6b4f123371564d2e976c9fab1a6670d9",
+      "costUSD": 0.000975,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "8aa80af4-7d11-48de-bc16-54f5602d344b",
+      "at": "2026-11-19T06:23:25.440Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "asr20261119-numbers",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002,
+      "pricing": {
+        "date": "2026-09-11",
+        "rateUSD": 0.006,
+        "unit": "minute",
+        "timing": "provider",
+        "source": "https://developers.openai.com/api/docs/models/whisper-1"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "8aa80af4-7d11-48de-bc16-54f5602d344b",
+      "at": "2026-11-19T06:23:27.486Z",
+      "usage": {
+        "seconds": 12.7245625
+      },
+      "requestId": "req_c27cd313ca7247b685ae3b66d1b93fb4",
+      "costUSD": 0.0013000000000000002,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "5e9cb280-389e-4ebd-b5c7-13ee668de41b",
+      "at": "2026-11-19T06:23:27.490Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "asr20261119-terms",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002,
+      "pricing": {
+        "date": "2026-09-11",
+        "rateUSD": 0.006,
+        "unit": "minute",
+        "timing": "provider",
+        "source": "https://developers.openai.com/api/docs/models/whisper-1"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "5e9cb280-389e-4ebd-b5c7-13ee668de41b",
+      "at": "2026-11-19T06:23:29.634Z",
+      "usage": {
+        "seconds": 9.466375
+      },
+      "requestId": "req_d9b9c39e6e8647bcb36592e9467bf477",
+      "costUSD": 0.001,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "283a2c95-3727-4eb1-9906-d1739364474a",
+      "at": "2026-11-19T06:23:29.638Z",
+      "model": "gpt-transcribe",
+      "kind": "asr",
+      "attemptId": "asr20261119-terms",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.013499999999999998,
+      "pricing": {
+        "date": "2026-11-19",
+        "rateUSD": 0.0045,
+        "unit": "minute",
+        "timing": "recording",
+        "source": "https://developers.openai.com/api/docs/models/gpt-transcribe"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "283a2c95-3727-4eb1-9906-d1739364474a",
+      "at": "2026-11-19T06:23:31.376Z",
+      "usage": {
+        "seconds": 9.466375
+      },
+      "requestId": "req_5fd370323587480c83f7816d9c87c7f5",
+      "costUSD": 0.0007499999999999999,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "14c1d4db-6a39-427c-a6d0-f683a8187bc9",
+      "at": "2026-11-19T06:23:31.381Z",
+      "model": "gpt-transcribe",
+      "kind": "asr",
+      "attemptId": "asr20261119-code_switch",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.013499999999999998,
+      "pricing": {
+        "date": "2026-11-19",
+        "rateUSD": 0.0045,
+        "unit": "minute",
+        "timing": "recording",
+        "source": "https://developers.openai.com/api/docs/models/gpt-transcribe"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "14c1d4db-6a39-427c-a6d0-f683a8187bc9",
+      "at": "2026-11-19T06:23:32.911Z",
+      "usage": {
+        "seconds": 15.8285625
+      },
+      "requestId": "req_a083e62430f843ef8c7993612f8118f2",
+      "costUSD": 0.0012,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "281a5693-f8bd-4bfb-8148-f582ce57d68c",
+      "at": "2026-11-19T06:23:32.915Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "asr20261119-code_switch",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002,
+      "pricing": {
+        "date": "2026-09-11",
+        "rateUSD": 0.006,
+        "unit": "minute",
+        "timing": "provider",
+        "source": "https://developers.openai.com/api/docs/models/whisper-1"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "281a5693-f8bd-4bfb-8148-f582ce57d68c",
+      "at": "2026-11-19T06:23:35.778Z",
+      "usage": {
+        "seconds": 15.8285625
+      },
+      "requestId": "req_f78e265da8e34e2da72f90c6e8df455f",
+      "costUSD": 0.0016,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "e2503575-b85f-402b-bd3c-6cd38c04538a",
+      "at": "2026-11-19T06:23:35.782Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "asr20261119-self_repair",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002,
+      "pricing": {
+        "date": "2026-09-11",
+        "rateUSD": 0.006,
+        "unit": "minute",
+        "timing": "provider",
+        "source": "https://developers.openai.com/api/docs/models/whisper-1"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "e2503575-b85f-402b-bd3c-6cd38c04538a",
+      "at": "2026-11-19T06:23:37.622Z",
+      "usage": {
+        "seconds": 9.1391875
+      },
+      "requestId": "req_24072e53b9584cc3af3b9057b798d9ce",
+      "costUSD": 0.001,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "2fccbeb3-ac0d-44c4-8588-11ab0ae6be49",
+      "at": "2026-11-19T06:23:37.626Z",
+      "model": "gpt-transcribe",
+      "kind": "asr",
+      "attemptId": "asr20261119-self_repair",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.013499999999999998,
+      "pricing": {
+        "date": "2026-11-19",
+        "rateUSD": 0.0045,
+        "unit": "minute",
+        "timing": "recording",
+        "source": "https://developers.openai.com/api/docs/models/gpt-transcribe"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "2fccbeb3-ac0d-44c4-8588-11ab0ae6be49",
+      "at": "2026-11-19T06:23:38.797Z",
+      "usage": {
+        "seconds": 9.1391875
+      },
+      "requestId": "req_3f91550e543244fc994455441dc1c968",
+      "costUSD": 0.0007499999999999999,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "6c5d397b-353a-4ca1-a0df-98150dc8b1a1",
+      "at": "2026-11-19T06:23:38.801Z",
+      "model": "gpt-transcribe",
+      "kind": "asr",
+      "attemptId": "asr20261119-paraphrase",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.013499999999999998,
+      "pricing": {
+        "date": "2026-11-19",
+        "rateUSD": 0.0045,
+        "unit": "minute",
+        "timing": "recording",
+        "source": "https://developers.openai.com/api/docs/models/gpt-transcribe"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "6c5d397b-353a-4ca1-a0df-98150dc8b1a1",
+      "at": "2026-11-19T06:23:39.831Z",
+      "usage": {
+        "seconds": 11.159875
+      },
+      "requestId": "req_5de8c6f5c2b945bea9ea2e2fb3c9467c",
+      "costUSD": 0.0009,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "af99b7e4-a035-4dba-858e-1ccb4658cb8d",
+      "at": "2026-11-19T06:23:39.836Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "asr20261119-paraphrase",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002,
+      "pricing": {
+        "date": "2026-09-11",
+        "rateUSD": 0.006,
+        "unit": "minute",
+        "timing": "provider",
+        "source": "https://developers.openai.com/api/docs/models/whisper-1"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "af99b7e4-a035-4dba-858e-1ccb4658cb8d",
+      "at": "2026-11-19T06:23:41.307Z",
+      "usage": {
+        "seconds": 11.159875
+      },
+      "requestId": "req_3e9bfea91aea40ac9b37a8a162d6afd3",
+      "costUSD": 0.0012000000000000001,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "2ddec8e0-44f5-49b2-b3b2-4753a3379bde",
+      "at": "2026-11-19T06:23:41.312Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "asr20261119-pause_quiet",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002,
+      "pricing": {
+        "date": "2026-09-11",
+        "rateUSD": 0.006,
+        "unit": "minute",
+        "timing": "provider",
+        "source": "https://developers.openai.com/api/docs/models/whisper-1"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "2ddec8e0-44f5-49b2-b3b2-4753a3379bde",
+      "at": "2026-11-19T06:23:43.970Z",
+      "usage": {
+        "seconds": 9.84625
+      },
+      "requestId": "req_0db05cd5402d4af28e2ed7161a4a23d9",
+      "costUSD": 0.001,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "62ccc3a3-d6a4-461b-9b85-ae3e34a4f742",
+      "at": "2026-11-19T06:23:43.974Z",
+      "model": "gpt-transcribe",
+      "kind": "asr",
+      "attemptId": "asr20261119-pause_quiet",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.013499999999999998,
+      "pricing": {
+        "date": "2026-11-19",
+        "rateUSD": 0.0045,
+        "unit": "minute",
+        "timing": "recording",
+        "source": "https://developers.openai.com/api/docs/models/gpt-transcribe"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "62ccc3a3-d6a4-461b-9b85-ae3e34a4f742",
+      "at": "2026-11-19T06:23:44.994Z",
+      "usage": {
+        "seconds": 9.84625
+      },
+      "requestId": "req_92b0144644284ee8aba2865670a0a805",
+      "costUSD": 0.0007499999999999999,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "e00b47a1-75b4-461c-9a2b-9a229f5878af",
+      "at": "2026-11-19T06:23:44.999Z",
+      "model": "gpt-transcribe",
+      "kind": "asr",
+      "attemptId": "asr20261119-unfinished",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.013499999999999998,
+      "pricing": {
+        "date": "2026-11-19",
+        "rateUSD": 0.0045,
+        "unit": "minute",
+        "timing": "recording",
+        "source": "https://developers.openai.com/api/docs/models/gpt-transcribe"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "e00b47a1-75b4-461c-9a2b-9a229f5878af",
+      "at": "2026-11-19T06:23:45.916Z",
+      "usage": {
+        "seconds": 6.864875
+      },
+      "requestId": "req_c2aa782949d5489f92bf66b1935fd9c5",
+      "costUSD": 0.000525,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    },
+    {
+      "type": "reserve",
+      "id": "99485071-f53a-4ed8-af3a-5972facfa920",
+      "at": "2026-11-19T06:23:45.920Z",
+      "model": "whisper-1",
+      "kind": "asr",
+      "attemptId": "asr20261119-unfinished",
+      "input": 0,
+      "output": 0,
+      "minutes": 3,
+      "reserveUSD": 0.018000000000000002,
+      "pricing": {
+        "date": "2026-09-11",
+        "rateUSD": 0.006,
+        "unit": "minute",
+        "timing": "provider",
+        "source": "https://developers.openai.com/api/docs/models/whisper-1"
+      }
+    },
+    {
+      "type": "settle",
+      "id": "99485071-f53a-4ed8-af3a-5972facfa920",
+      "at": "2026-11-19T06:23:47.759Z",
+      "usage": {
+        "seconds": 6.864875
+      },
+      "requestId": "req_5de0ea809f3f4325bd6376f136afc311",
+      "costUSD": 0.0007,
+      "costBasis": "conservative public-rate estimate, not invoice"
+    }
+  ],
+  "requests": [
+    {
+      "sequence": 1,
+      "caseId": "negation",
+      "model": "whisper-1",
+      "audioSHA256": "49564a599d86c3d5999dd426392b7cb81e76056fde2d4b1052d98eb2450c62df",
+      "duration": 12.4226875,
+      "reservationId": "e0573d64-45f8-4e15-88ee-109b55e35b1b",
+      "reserveUSD": 0.018000000000000002,
+      "startedAt": "2026-11-19T06:23:18.954Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_9757f9e4e8ec4909a691b0d56a56b70d",
+      "elapsedMs": 3224,
+      "responseSHA256": "a6848ec47e5785bbfb1956cb6b932ea0b127bb9ad465b832629fc782f8069827",
+      "provider": {
+        "text": "并不是队列满了才移动头指针。 出队后才移动头指针,只查看对手元素时,不移动头指针。",
+        "words": [
+          {
+            "word": "并",
+            "start": 0,
+            "end": 0.5400000214576721
+          },
+          {
+            "word": "不是",
+            "start": 0.5400000214576721,
+            "end": 1.0199999809265137
+          },
+          {
+            "word": "队",
+            "start": 1.0199999809265137,
+            "end": 1.3200000524520874
+          },
+          {
+            "word": "列",
+            "start": 1.3200000524520874,
+            "end": 1.4800000190734863
+          },
+          {
+            "word": "满",
+            "start": 1.4800000190734863,
+            "end": 1.7799999713897705
+          },
+          {
+            "word": "了",
+            "start": 1.7799999713897705,
+            "end": 2.119999885559082
+          },
+          {
+            "word": "才",
+            "start": 2.119999885559082,
+            "end": 2.3399999141693115
+          },
+          {
+            "word": "移",
+            "start": 2.3399999141693115,
+            "end": 2.5199999809265137
+          },
+          {
+            "word": "动",
+            "start": 2.5199999809265137,
+            "end": 2.740000009536743
+          },
+          {
+            "word": "头",
+            "start": 2.740000009536743,
+            "end": 3.0799999237060547
+          },
+          {
+            "word": "指",
+            "start": 3.0799999237060547,
+            "end": 3.299999952316284
+          },
+          {
+            "word": "针。",
+            "start": 3.299999952316284,
+            "end": 3.4800000190734863
+          },
+          {
+            "word": "出",
+            "start": 4.739999771118164,
+            "end": 4.739999771118164
+          },
+          {
+            "word": "队",
+            "start": 4.739999771118164,
+            "end": 4.960000038146973
+          },
+          {
+            "word": "后",
+            "start": 4.960000038146973,
+            "end": 5.28000020980835
+          },
+          {
+            "word": "才",
+            "start": 5.28000020980835,
+            "end": 5.659999847412109
+          },
+          {
+            "word": "移",
+            "start": 5.659999847412109,
+            "end": 5.800000190734863
+          },
+          {
+            "word": "动",
+            "start": 5.800000190734863,
+            "end": 5.980000019073486
+          },
+          {
+            "word": "头",
+            "start": 5.980000019073486,
+            "end": 6.320000171661377
+          },
+          {
+            "word": "指",
+            "start": 6.320000171661377,
+            "end": 6.519999980926514
+          },
+          {
+            "word": "针",
+            "start": 6.519999980926514,
+            "end": 7.159999847412109
+          },
+          {
+            "word": "只",
+            "start": 7.340000152587891,
+            "end": 7.539999961853027
+          },
+          {
+            "word": "查",
+            "start": 7.539999961853027,
+            "end": 7.739999771118164
+          },
+          {
+            "word": "看",
+            "start": 7.739999771118164,
+            "end": 8.0600004196167
+          },
+          {
+            "word": "对",
+            "start": 8.0600004196167,
+            "end": 8.319999694824219
+          },
+          {
+            "word": "手",
+            "start": 8.319999694824219,
+            "end": 8.579999923706055
+          },
+          {
+            "word": "元",
+            "start": 8.579999923706055,
+            "end": 8.920000076293945
+          },
+          {
+            "word": "素",
+            "start": 8.920000076293945,
+            "end": 9.0600004196167
+          },
+          {
+            "word": "时",
+            "start": 9.0600004196167,
+            "end": 9.4399995803833
+          },
+          {
+            "word": "不",
+            "start": 10.020000457763672,
+            "end": 10.15999984741211
+          },
+          {
+            "word": "移",
+            "start": 10.15999984741211,
+            "end": 10.279999732971191
+          },
+          {
+            "word": "动",
+            "start": 10.279999732971191,
+            "end": 10.460000038146973
+          },
+          {
+            "word": "头",
+            "start": 10.460000038146973,
+            "end": 10.819999694824219
+          },
+          {
+            "word": "指",
+            "start": 10.819999694824219,
+            "end": 11
+          },
+          {
+            "word": "针。",
+            "start": 11,
+            "end": 11.199999809265137
+          }
+        ],
+        "segments": [
+          {
+            "id": 0,
+            "seek": 0,
+            "start": 0,
+            "end": 3.4800000190734863,
+            "text": "并不是队列满了才移动头指针。",
+            "tokens": [
+              50364,
+              3509,
+              114,
+              7296,
+              10034,
+              253,
+              43338,
+              15868,
+              94,
+              2289,
+              18888,
+              8204,
+              119,
+              34961,
+              39862,
+              25922,
+              25153,
+              230,
+              1543,
+              50564
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.17760927975177765,
+            "compression_ratio": 1.2083333730697632,
+            "no_speech_prob": 0.23079970479011536
+          },
+          {
+            "id": 1,
+            "seek": 0,
+            "start": 4.739999771118164,
+            "end": 11.199999809265137,
+            "text": "出队后才移动头指针,只查看对手元素时,不移动头指针。",
+            "tokens": [
+              50564,
+              7781,
+              10034,
+              253,
+              13547,
+              18888,
+              8204,
+              119,
+              34961,
+              39862,
+              25922,
+              25153,
+              230,
+              11,
+              14003,
+              42623,
+              4200,
+              8713,
+              11389,
+              14812,
+              37204,
+              15729,
+              11,
+              1960,
+              8204,
+              119,
+              34961,
+              39862,
+              25922,
+              25153,
+              230,
+              1543,
+              50964
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.17760927975177765,
+            "compression_ratio": 1.2083333730697632,
+            "no_speech_prob": 0.23079970479011536
+          }
+        ],
+        "language": "chinese",
+        "duration": 12.420000076293945,
+        "usage": {
+          "type": "duration",
+          "seconds": 13
+        }
+      },
+      "costEstimateUSD": 0.0013000000000000002,
+      "normalized": {
+        "text": "并不是队列满了才移动头指针。 出队后才移动头指针,只查看对手元素时,不移动头指针。",
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 3.4800000190734863,
+            "text": "并不是队列满了才移动头指针。"
+          },
+          {
+            "id": "s1",
+            "start": 4.739999771118164,
+            "end": 11.199999809265137,
+            "text": "出队后才移动头指针,只查看对手元素时,不移动头指针。"
+          }
+        ],
+        "words": [
+          {
+            "id": "w0",
+            "start": 0,
+            "end": 0.5400000214576721,
+            "text": "并",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w1",
+            "start": 0.5400000214576721,
+            "end": 1.0199999809265137,
+            "text": "不是",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w2",
+            "start": 1.0199999809265137,
+            "end": 1.3200000524520874,
+            "text": "队",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w3",
+            "start": 1.3200000524520874,
+            "end": 1.4800000190734863,
+            "text": "列",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w4",
+            "start": 1.4800000190734863,
+            "end": 1.7799999713897705,
+            "text": "满",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w5",
+            "start": 1.7799999713897705,
+            "end": 2.119999885559082,
+            "text": "了",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w6",
+            "start": 2.119999885559082,
+            "end": 2.3399999141693115,
+            "text": "才",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w7",
+            "start": 2.3399999141693115,
+            "end": 2.5199999809265137,
+            "text": "移",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w8",
+            "start": 2.5199999809265137,
+            "end": 2.740000009536743,
+            "text": "动",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w9",
+            "start": 2.740000009536743,
+            "end": 3.0799999237060547,
+            "text": "头",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w10",
+            "start": 3.0799999237060547,
+            "end": 3.299999952316284,
+            "text": "指",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w11",
+            "start": 3.299999952316284,
+            "end": 3.4800000190734863,
+            "text": "针。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w12",
+            "start": 4.739999771118164,
+            "end": 4.739999771118164,
+            "text": "出",
+            "usable": false,
+            "timingQuality": "UNUSABLE_ZERO_DURATION"
+          },
+          {
+            "id": "w13",
+            "start": 4.739999771118164,
+            "end": 4.960000038146973,
+            "text": "队",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w14",
+            "start": 4.960000038146973,
+            "end": 5.28000020980835,
+            "text": "后",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w15",
+            "start": 5.28000020980835,
+            "end": 5.659999847412109,
+            "text": "才",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w16",
+            "start": 5.659999847412109,
+            "end": 5.800000190734863,
+            "text": "移",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w17",
+            "start": 5.800000190734863,
+            "end": 5.980000019073486,
+            "text": "动",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w18",
+            "start": 5.980000019073486,
+            "end": 6.320000171661377,
+            "text": "头",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w19",
+            "start": 6.320000171661377,
+            "end": 6.519999980926514,
+            "text": "指",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w20",
+            "start": 6.519999980926514,
+            "end": 7.159999847412109,
+            "text": "针",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w21",
+            "start": 7.340000152587891,
+            "end": 7.539999961853027,
+            "text": "只",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w22",
+            "start": 7.539999961853027,
+            "end": 7.739999771118164,
+            "text": "查",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w23",
+            "start": 7.739999771118164,
+            "end": 8.0600004196167,
+            "text": "看",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w24",
+            "start": 8.0600004196167,
+            "end": 8.319999694824219,
+            "text": "对",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w25",
+            "start": 8.319999694824219,
+            "end": 8.579999923706055,
+            "text": "手",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w26",
+            "start": 8.579999923706055,
+            "end": 8.920000076293945,
+            "text": "元",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w27",
+            "start": 8.920000076293945,
+            "end": 9.0600004196167,
+            "text": "素",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w28",
+            "start": 9.0600004196167,
+            "end": 9.4399995803833,
+            "text": "时",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w29",
+            "start": 10.020000457763672,
+            "end": 10.15999984741211,
+            "text": "不",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w30",
+            "start": 10.15999984741211,
+            "end": 10.279999732971191,
+            "text": "移",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w31",
+            "start": 10.279999732971191,
+            "end": 10.460000038146973,
+            "text": "动",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w32",
+            "start": 10.460000038146973,
+            "end": 10.819999694824219,
+            "text": "头",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w33",
+            "start": 10.819999694824219,
+            "end": 11,
+            "text": "指",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w34",
+            "start": 11,
+            "end": 11.199999809265137,
+            "text": "针。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          }
+        ],
+        "wordTiming": {
+          "status": "PARTIAL",
+          "count": 35,
+          "unusableWordIds": [
+            "w12"
+          ],
+          "missing": false
+        },
+        "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:22.183Z",
+      "scriptDifference": {
+        "edits": 2,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 2,
+        "referenceCharacters": 36,
+        "hypothesisCharacters": 36,
+        "cer": 0.05555555555555555,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "B",
+      "review": {
+        "outcome": "TERM_ERROR",
+        "reason": "三个动作条件仍可辨，但队首元素写成对手元素，改变了操作对象的文字表达，需要核对。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 2,
+      "caseId": "negation",
+      "model": "gpt-transcribe",
+      "audioSHA256": "49564a599d86c3d5999dd426392b7cb81e76056fde2d4b1052d98eb2450c62df",
+      "duration": 12.4226875,
+      "reservationId": "0e6aa244-b795-4235-bea3-dc485f7f66bc",
+      "reserveUSD": 0.013499999999999998,
+      "startedAt": "2026-11-19T06:23:22.186Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_32fdb9a2f19647deb6711164eaf69324",
+      "elapsedMs": 1813,
+      "responseSHA256": "c38bb4ad0a41aaebecc36116d7c5c7b38d81715bd4a1efcb8f4226f3706550f6",
+      "provider": {
+        "text": "并不是对列满了才移动头指针，出队后才移动头指针，只查看队首元素时，不移动头指针。",
+        "languages": [
+          {
+            "code": "zh"
+          }
+        ],
+        "usage": {
+          "type": "duration",
+          "seconds": 13
+        }
+      },
+      "costEstimateUSD": 0.000975,
+      "normalized": {
+        "text": "并不是对列满了才移动头指针，出队后才移动头指针，只查看队首元素时，不移动头指针。",
+        "spans": [
+          {
+            "id": "s0",
+            "text": "并不是对列满了才移动头指针，出队后才移动头指针，只查看队首元素时，不移动头指针。",
+            "start": 0,
+            "end": 12.4226875
+          }
+        ],
+        "words": [],
+        "wordTiming": {
+          "status": "UNAVAILABLE",
+          "count": 0,
+          "unusableWordIds": [],
+          "missing": true
+        },
+        "timing": {
+          "level": "recording",
+          "origin": "local_audio_duration"
+        },
+        "alignment": "NO_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:24.003Z",
+      "scriptDifference": {
+        "edits": 1,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 1,
+        "referenceCharacters": 36,
+        "hypothesisCharacters": 36,
+        "cer": 0.027777777777777776,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "A",
+      "review": {
+        "outcome": "TERM_ERROR",
+        "reason": "三个否定／动作条件均保留，但队列写成对列。需修正术语后才可作为内容依据。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 3,
+      "caseId": "numbers",
+      "model": "gpt-transcribe",
+      "audioSHA256": "9a11a1b67d08e4274b9b9644c8c1b0b357e447e8674db0f618cb7513983c5723",
+      "duration": 12.7245625,
+      "reservationId": "117a39eb-df0d-4859-9779-90d2dc3a250c",
+      "reserveUSD": 0.013499999999999998,
+      "startedAt": "2026-11-19T06:23:24.006Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_6b4f123371564d2e976c9fab1a6670d9",
+      "elapsedMs": 1428,
+      "responseSHA256": "49e674671f1bd133f0440ddbe740aaf0e3d5d783dde114a87f84e7056792113e",
+      "provider": {
+        "text": "数组长度是8，预留一个空位，只能存放7个元素。数组长度是10时，最多存放9个元素。",
+        "languages": [
+          {
+            "code": "zh"
+          }
+        ],
+        "usage": {
+          "type": "duration",
+          "seconds": 13
+        }
+      },
+      "costEstimateUSD": 0.000975,
+      "normalized": {
+        "text": "数组长度是8，预留一个空位，只能存放7个元素。数组长度是10时，最多存放9个元素。",
+        "spans": [
+          {
+            "id": "s0",
+            "text": "数组长度是8，预留一个空位，只能存放7个元素。数组长度是10时，最多存放9个元素。",
+            "start": 0,
+            "end": 12.7245625
+          }
+        ],
+        "words": [],
+        "wordTiming": {
+          "status": "UNAVAILABLE",
+          "count": 0,
+          "unusableWordIds": [],
+          "missing": true
+        },
+        "timing": {
+          "level": "recording",
+          "origin": "local_audio_duration"
+        },
+        "alignment": "NO_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:25.438Z",
+      "scriptDifference": {
+        "edits": 5,
+        "insertions": 1,
+        "deletions": 0,
+        "substitutions": 4,
+        "referenceCharacters": 35,
+        "hypothesisCharacters": 36,
+        "cer": 0.14285714285714285,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "A",
+      "review": {
+        "outcome": "PASS",
+        "reason": "八→8、七→7、十→10、九→9 只是数字写法变化，长度与容量配对和预留空位条件保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 4,
+      "caseId": "numbers",
+      "model": "whisper-1",
+      "audioSHA256": "9a11a1b67d08e4274b9b9644c8c1b0b357e447e8674db0f618cb7513983c5723",
+      "duration": 12.7245625,
+      "reservationId": "8aa80af4-7d11-48de-bc16-54f5602d344b",
+      "reserveUSD": 0.018000000000000002,
+      "startedAt": "2026-11-19T06:23:25.441Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_c27cd313ca7247b685ae3b66d1b93fb4",
+      "elapsedMs": 2042,
+      "responseSHA256": "4191e6253aa24df080f19f2d265dccbea10103c607dd1f87283d2ed6271d896c",
+      "provider": {
+        "text": "数组长度是8,预留一个空位,只能存放7个元素。 数组长度是10时,最多存放9个元素。",
+        "words": [
+          {
+            "word": "数",
+            "start": 0,
+            "end": 0.6399999856948853
+          },
+          {
+            "word": "组",
+            "start": 0.6399999856948853,
+            "end": 0.800000011920929
+          },
+          {
+            "word": "长",
+            "start": 0.800000011920929,
+            "end": 1.0800000429153442
+          },
+          {
+            "word": "度",
+            "start": 1.0800000429153442,
+            "end": 1.340000033378601
+          },
+          {
+            "word": "是",
+            "start": 1.340000033378601,
+            "end": 1.6200000047683716
+          },
+          {
+            "word": "8",
+            "start": 1.6200000047683716,
+            "end": 1.940000057220459
+          },
+          {
+            "word": "预",
+            "start": 2.5999999046325684,
+            "end": 2.5999999046325684
+          },
+          {
+            "word": "留",
+            "start": 2.5999999046325684,
+            "end": 2.8399999141693115
+          },
+          {
+            "word": "一个",
+            "start": 2.8399999141693115,
+            "end": 3.299999952316284
+          },
+          {
+            "word": "空",
+            "start": 3.299999952316284,
+            "end": 3.5399999618530273
+          },
+          {
+            "word": "位",
+            "start": 3.5399999618530273,
+            "end": 3.799999952316284
+          },
+          {
+            "word": "只",
+            "start": 4.440000057220459,
+            "end": 4.519999980926514
+          },
+          {
+            "word": "能",
+            "start": 4.519999980926514,
+            "end": 4.980000019073486
+          },
+          {
+            "word": "存",
+            "start": 4.980000019073486,
+            "end": 4.980000019073486
+          },
+          {
+            "word": "放",
+            "start": 4.980000019073486,
+            "end": 5.260000228881836
+          },
+          {
+            "word": "7",
+            "start": 5.260000228881836,
+            "end": 5.559999942779541
+          },
+          {
+            "word": "个",
+            "start": 5.559999942779541,
+            "end": 5.800000190734863
+          },
+          {
+            "word": "元",
+            "start": 5.800000190734863,
+            "end": 6.039999961853027
+          },
+          {
+            "word": "素。",
+            "start": 6.039999961853027,
+            "end": 6.199999809265137
+          },
+          {
+            "word": "数",
+            "start": 7.539999961853027,
+            "end": 7.539999961853027
+          },
+          {
+            "word": "组",
+            "start": 7.539999961853027,
+            "end": 7.739999771118164
+          },
+          {
+            "word": "长",
+            "start": 7.739999771118164,
+            "end": 8
+          },
+          {
+            "word": "度",
+            "start": 8,
+            "end": 8.300000190734863
+          },
+          {
+            "word": "是",
+            "start": 8.300000190734863,
+            "end": 8.5600004196167
+          },
+          {
+            "word": "10",
+            "start": 8.5600004196167,
+            "end": 8.819999694824219
+          },
+          {
+            "word": "时",
+            "start": 8.819999694824219,
+            "end": 9.140000343322754
+          },
+          {
+            "word": "最",
+            "start": 9.619999885559082,
+            "end": 9.779999732971191
+          },
+          {
+            "word": "多",
+            "start": 9.779999732971191,
+            "end": 10.020000457763672
+          },
+          {
+            "word": "存",
+            "start": 10.020000457763672,
+            "end": 10.239999771118164
+          },
+          {
+            "word": "放",
+            "start": 10.239999771118164,
+            "end": 10.5600004196167
+          },
+          {
+            "word": "9",
+            "start": 10.5600004196167,
+            "end": 10.84000015258789
+          },
+          {
+            "word": "个",
+            "start": 10.84000015258789,
+            "end": 11.100000381469727
+          },
+          {
+            "word": "元",
+            "start": 11.100000381469727,
+            "end": 11.319999694824219
+          },
+          {
+            "word": "素。",
+            "start": 11.319999694824219,
+            "end": 11.460000038146973
+          }
+        ],
+        "segments": [
+          {
+            "id": 0,
+            "seek": 0,
+            "start": 0,
+            "end": 6.199999809265137,
+            "text": "数组长度是8,预留一个空位,只能存放7个元素。",
+            "tokens": [
+              50364,
+              33188,
+              10115,
+              226,
+              32271,
+              13127,
+              1541,
+              23,
+              11,
+              12501,
+              226,
+              24456,
+              20182,
+              23322,
+              11160,
+              11,
+              14003,
+              8225,
+              39781,
+              12744,
+              22,
+              7549,
+              14812,
+              37204,
+              1543,
+              50714
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.1990460604429245,
+            "compression_ratio": 1.1382979154586792,
+            "no_speech_prob": 0.05182462930679321
+          },
+          {
+            "id": 1,
+            "seek": 0,
+            "start": 7.539999961853027,
+            "end": 11.460000038146973,
+            "text": "数组长度是10时,最多存放9个元素。",
+            "tokens": [
+              50714,
+              33188,
+              10115,
+              226,
+              32271,
+              13127,
+              1541,
+              3279,
+              15729,
+              11,
+              8661,
+              6392,
+              39781,
+              12744,
+              24,
+              7549,
+              14812,
+              37204,
+              1543,
+              50964
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.1990460604429245,
+            "compression_ratio": 1.1382979154586792,
+            "no_speech_prob": 0.05182462930679321
+          }
+        ],
+        "language": "chinese",
+        "duration": 12.720000267028809,
+        "usage": {
+          "type": "duration",
+          "seconds": 13
+        }
+      },
+      "costEstimateUSD": 0.0013000000000000002,
+      "normalized": {
+        "text": "数组长度是8,预留一个空位,只能存放7个元素。 数组长度是10时,最多存放9个元素。",
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 6.199999809265137,
+            "text": "数组长度是8,预留一个空位,只能存放7个元素。"
+          },
+          {
+            "id": "s1",
+            "start": 7.539999961853027,
+            "end": 11.460000038146973,
+            "text": "数组长度是10时,最多存放9个元素。"
+          }
+        ],
+        "words": [
+          {
+            "id": "w0",
+            "start": 0,
+            "end": 0.6399999856948853,
+            "text": "数",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w1",
+            "start": 0.6399999856948853,
+            "end": 0.800000011920929,
+            "text": "组",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w2",
+            "start": 0.800000011920929,
+            "end": 1.0800000429153442,
+            "text": "长",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w3",
+            "start": 1.0800000429153442,
+            "end": 1.340000033378601,
+            "text": "度",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w4",
+            "start": 1.340000033378601,
+            "end": 1.6200000047683716,
+            "text": "是",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w5",
+            "start": 1.6200000047683716,
+            "end": 1.940000057220459,
+            "text": "8",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w6",
+            "start": 2.5999999046325684,
+            "end": 2.5999999046325684,
+            "text": "预",
+            "usable": false,
+            "timingQuality": "UNUSABLE_ZERO_DURATION"
+          },
+          {
+            "id": "w7",
+            "start": 2.5999999046325684,
+            "end": 2.8399999141693115,
+            "text": "留",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w8",
+            "start": 2.8399999141693115,
+            "end": 3.299999952316284,
+            "text": "一个",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w9",
+            "start": 3.299999952316284,
+            "end": 3.5399999618530273,
+            "text": "空",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w10",
+            "start": 3.5399999618530273,
+            "end": 3.799999952316284,
+            "text": "位",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w11",
+            "start": 4.440000057220459,
+            "end": 4.519999980926514,
+            "text": "只",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w12",
+            "start": 4.519999980926514,
+            "end": 4.980000019073486,
+            "text": "能",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w13",
+            "start": 4.980000019073486,
+            "end": 4.980000019073486,
+            "text": "存",
+            "usable": false,
+            "timingQuality": "UNUSABLE_ZERO_DURATION"
+          },
+          {
+            "id": "w14",
+            "start": 4.980000019073486,
+            "end": 5.260000228881836,
+            "text": "放",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w15",
+            "start": 5.260000228881836,
+            "end": 5.559999942779541,
+            "text": "7",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w16",
+            "start": 5.559999942779541,
+            "end": 5.800000190734863,
+            "text": "个",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w17",
+            "start": 5.800000190734863,
+            "end": 6.039999961853027,
+            "text": "元",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w18",
+            "start": 6.039999961853027,
+            "end": 6.199999809265137,
+            "text": "素。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w19",
+            "start": 7.539999961853027,
+            "end": 7.539999961853027,
+            "text": "数",
+            "usable": false,
+            "timingQuality": "UNUSABLE_ZERO_DURATION"
+          },
+          {
+            "id": "w20",
+            "start": 7.539999961853027,
+            "end": 7.739999771118164,
+            "text": "组",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w21",
+            "start": 7.739999771118164,
+            "end": 8,
+            "text": "长",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w22",
+            "start": 8,
+            "end": 8.300000190734863,
+            "text": "度",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w23",
+            "start": 8.300000190734863,
+            "end": 8.5600004196167,
+            "text": "是",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w24",
+            "start": 8.5600004196167,
+            "end": 8.819999694824219,
+            "text": "10",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w25",
+            "start": 8.819999694824219,
+            "end": 9.140000343322754,
+            "text": "时",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w26",
+            "start": 9.619999885559082,
+            "end": 9.779999732971191,
+            "text": "最",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w27",
+            "start": 9.779999732971191,
+            "end": 10.020000457763672,
+            "text": "多",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w28",
+            "start": 10.020000457763672,
+            "end": 10.239999771118164,
+            "text": "存",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w29",
+            "start": 10.239999771118164,
+            "end": 10.5600004196167,
+            "text": "放",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w30",
+            "start": 10.5600004196167,
+            "end": 10.84000015258789,
+            "text": "9",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w31",
+            "start": 10.84000015258789,
+            "end": 11.100000381469727,
+            "text": "个",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w32",
+            "start": 11.100000381469727,
+            "end": 11.319999694824219,
+            "text": "元",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w33",
+            "start": 11.319999694824219,
+            "end": 11.460000038146973,
+            "text": "素。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          }
+        ],
+        "wordTiming": {
+          "status": "PARTIAL",
+          "count": 34,
+          "unusableWordIds": [
+            "w6",
+            "w13",
+            "w19"
+          ],
+          "missing": false
+        },
+        "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:27.487Z",
+      "scriptDifference": {
+        "edits": 5,
+        "insertions": 1,
+        "deletions": 0,
+        "substitutions": 4,
+        "referenceCharacters": 35,
+        "hypothesisCharacters": 36,
+        "cer": 0.14285714285714285,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "B",
+      "review": {
+        "outcome": "PASS",
+        "reason": "数字转为阿拉伯数字，两个长度／容量关系和预留空位条件都保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 5,
+      "caseId": "terms",
+      "model": "whisper-1",
+      "audioSHA256": "0a7b4b5882c2e4c802bf8ce49b343fab6177b2a34cb5d7ffb12423852544ba07",
+      "duration": 9.466375,
+      "reservationId": "5e9cb280-389e-4ebd-b5c7-13ee668de41b",
+      "reserveUSD": 0.018000000000000002,
+      "startedAt": "2026-11-19T06:23:27.491Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_d9b9c39e6e8647bcb36592e9467bf477",
+      "elapsedMs": 2140,
+      "responseSHA256": "b811aacf89390c93a949908b68bb419d65b93a1c53e655a7871b8204f2fd38ed",
+      "provider": {
+        "text": "我正在比较顺序队列和循环队列。 这里的两个术语是头指针和尾指针。",
+        "words": [
+          {
+            "word": "我",
+            "start": 0,
+            "end": 0.6399999856948853
+          },
+          {
+            "word": "正",
+            "start": 0.6399999856948853,
+            "end": 0.8600000143051147
+          },
+          {
+            "word": "在",
+            "start": 0.8600000143051147,
+            "end": 1.2799999713897705
+          },
+          {
+            "word": "比",
+            "start": 1.2799999713897705,
+            "end": 1.340000033378601
+          },
+          {
+            "word": "较",
+            "start": 1.340000033378601,
+            "end": 1.6200000047683716
+          },
+          {
+            "word": "顺",
+            "start": 1.6200000047683716,
+            "end": 1.899999976158142
+          },
+          {
+            "word": "序",
+            "start": 1.899999976158142,
+            "end": 2.0999999046325684
+          },
+          {
+            "word": "队",
+            "start": 2.0999999046325684,
+            "end": 2.3399999141693115
+          },
+          {
+            "word": "列",
+            "start": 2.3399999141693115,
+            "end": 2.440000057220459
+          },
+          {
+            "word": "和",
+            "start": 2.440000057220459,
+            "end": 2.9000000953674316
+          },
+          {
+            "word": "循",
+            "start": 2.9000000953674316,
+            "end": 3.200000047683716
+          },
+          {
+            "word": "环",
+            "start": 3.200000047683716,
+            "end": 3.380000114440918
+          },
+          {
+            "word": "队",
+            "start": 3.380000114440918,
+            "end": 3.640000104904175
+          },
+          {
+            "word": "列。",
+            "start": 3.640000104904175,
+            "end": 4
+          },
+          {
+            "word": "这里",
+            "start": 5.019999980926514,
+            "end": 5.119999885559082
+          },
+          {
+            "word": "的",
+            "start": 5.119999885559082,
+            "end": 5.460000038146973
+          },
+          {
+            "word": "两",
+            "start": 5.460000038146973,
+            "end": 5.679999828338623
+          },
+          {
+            "word": "个",
+            "start": 5.679999828338623,
+            "end": 5.980000019073486
+          },
+          {
+            "word": "术",
+            "start": 5.980000019073486,
+            "end": 6.179999828338623
+          },
+          {
+            "word": "语",
+            "start": 6.179999828338623,
+            "end": 6.28000020980835
+          },
+          {
+            "word": "是",
+            "start": 6.28000020980835,
+            "end": 6.639999866485596
+          },
+          {
+            "word": "头",
+            "start": 6.639999866485596,
+            "end": 6.920000076293945
+          },
+          {
+            "word": "指",
+            "start": 6.920000076293945,
+            "end": 7.139999866485596
+          },
+          {
+            "word": "针",
+            "start": 7.139999866485596,
+            "end": 7.260000228881836
+          },
+          {
+            "word": "和",
+            "start": 7.260000228881836,
+            "end": 7.659999847412109
+          },
+          {
+            "word": "尾",
+            "start": 7.659999847412109,
+            "end": 7.820000171661377
+          },
+          {
+            "word": "指",
+            "start": 7.820000171661377,
+            "end": 8.039999961853027
+          },
+          {
+            "word": "针。",
+            "start": 8.039999961853027,
+            "end": 8.239999771118164
+          }
+        ],
+        "segments": [
+          {
+            "id": 0,
+            "seek": 0,
+            "start": 0,
+            "end": 4,
+            "text": "我正在比较顺序队列和循环队列。",
+            "tokens": [
+              50364,
+              1654,
+              15789,
+              3581,
+              11706,
+              9830,
+              225,
+              10178,
+              118,
+              6346,
+              237,
+              10034,
+              253,
+              43338,
+              12565,
+              2172,
+              103,
+              8051,
+              107,
+              10034,
+              253,
+              43338,
+              1543,
+              50564
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.1665678322315216,
+            "compression_ratio": 0.96875,
+            "no_speech_prob": 0.009266912937164307
+          },
+          {
+            "id": 1,
+            "seek": 0,
+            "start": 5.019999980926514,
+            "end": 8.239999771118164,
+            "text": "这里的两个术语是头指针和尾指针。",
+            "tokens": [
+              50564,
+              35102,
+              1546,
+              36257,
+              7549,
+              1474,
+              107,
+              5233,
+              255,
+              1541,
+              39862,
+              25922,
+              25153,
+              230,
+              12565,
+              1530,
+              122,
+              25922,
+              25153,
+              230,
+              1543,
+              50764
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.1665678322315216,
+            "compression_ratio": 0.96875,
+            "no_speech_prob": 0.009266912937164307
+          }
+        ],
+        "language": "chinese",
+        "duration": 9.460000038146973,
+        "usage": {
+          "type": "duration",
+          "seconds": 10
+        }
+      },
+      "costEstimateUSD": 0.001,
+      "normalized": {
+        "text": "我正在比较顺序队列和循环队列。 这里的两个术语是头指针和尾指针。",
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 4,
+            "text": "我正在比较顺序队列和循环队列。"
+          },
+          {
+            "id": "s1",
+            "start": 5.019999980926514,
+            "end": 8.239999771118164,
+            "text": "这里的两个术语是头指针和尾指针。"
+          }
+        ],
+        "words": [
+          {
+            "id": "w0",
+            "start": 0,
+            "end": 0.6399999856948853,
+            "text": "我",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w1",
+            "start": 0.6399999856948853,
+            "end": 0.8600000143051147,
+            "text": "正",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w2",
+            "start": 0.8600000143051147,
+            "end": 1.2799999713897705,
+            "text": "在",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w3",
+            "start": 1.2799999713897705,
+            "end": 1.340000033378601,
+            "text": "比",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w4",
+            "start": 1.340000033378601,
+            "end": 1.6200000047683716,
+            "text": "较",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w5",
+            "start": 1.6200000047683716,
+            "end": 1.899999976158142,
+            "text": "顺",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w6",
+            "start": 1.899999976158142,
+            "end": 2.0999999046325684,
+            "text": "序",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w7",
+            "start": 2.0999999046325684,
+            "end": 2.3399999141693115,
+            "text": "队",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w8",
+            "start": 2.3399999141693115,
+            "end": 2.440000057220459,
+            "text": "列",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w9",
+            "start": 2.440000057220459,
+            "end": 2.9000000953674316,
+            "text": "和",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w10",
+            "start": 2.9000000953674316,
+            "end": 3.200000047683716,
+            "text": "循",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w11",
+            "start": 3.200000047683716,
+            "end": 3.380000114440918,
+            "text": "环",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w12",
+            "start": 3.380000114440918,
+            "end": 3.640000104904175,
+            "text": "队",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w13",
+            "start": 3.640000104904175,
+            "end": 4,
+            "text": "列。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w14",
+            "start": 5.019999980926514,
+            "end": 5.119999885559082,
+            "text": "这里",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w15",
+            "start": 5.119999885559082,
+            "end": 5.460000038146973,
+            "text": "的",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w16",
+            "start": 5.460000038146973,
+            "end": 5.679999828338623,
+            "text": "两",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w17",
+            "start": 5.679999828338623,
+            "end": 5.980000019073486,
+            "text": "个",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w18",
+            "start": 5.980000019073486,
+            "end": 6.179999828338623,
+            "text": "术",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w19",
+            "start": 6.179999828338623,
+            "end": 6.28000020980835,
+            "text": "语",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w20",
+            "start": 6.28000020980835,
+            "end": 6.639999866485596,
+            "text": "是",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w21",
+            "start": 6.639999866485596,
+            "end": 6.920000076293945,
+            "text": "头",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w22",
+            "start": 6.920000076293945,
+            "end": 7.139999866485596,
+            "text": "指",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w23",
+            "start": 7.139999866485596,
+            "end": 7.260000228881836,
+            "text": "针",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w24",
+            "start": 7.260000228881836,
+            "end": 7.659999847412109,
+            "text": "和",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w25",
+            "start": 7.659999847412109,
+            "end": 7.820000171661377,
+            "text": "尾",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w26",
+            "start": 7.820000171661377,
+            "end": 8.039999961853027,
+            "text": "指",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w27",
+            "start": 8.039999961853027,
+            "end": 8.239999771118164,
+            "text": "针。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          }
+        ],
+        "wordTiming": {
+          "status": "UNVERIFIED",
+          "count": 28,
+          "unusableWordIds": [],
+          "missing": false
+        },
+        "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:29.636Z",
+      "scriptDifference": {
+        "edits": 0,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 0,
+        "referenceCharacters": 29,
+        "hypothesisCharacters": 29,
+        "cer": 0,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "B",
+      "review": {
+        "outcome": "PASS",
+        "reason": "四个术语均与冻结脚本一致。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 6,
+      "caseId": "terms",
+      "model": "gpt-transcribe",
+      "audioSHA256": "0a7b4b5882c2e4c802bf8ce49b343fab6177b2a34cb5d7ffb12423852544ba07",
+      "duration": 9.466375,
+      "reservationId": "283a2c95-3727-4eb1-9906-d1739364474a",
+      "reserveUSD": 0.013499999999999998,
+      "startedAt": "2026-11-19T06:23:29.639Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_5fd370323587480c83f7816d9c87c7f5",
+      "elapsedMs": 1733,
+      "responseSHA256": "bf390a00aa5d866dba1ce039dc7e6e6f24a465c83cfd09c9530801cd44856d63",
+      "provider": {
+        "text": "我正在比较顺序队列和循环队列，这里的两个术语是头指针和尾指针。",
+        "languages": [
+          {
+            "code": "zh"
+          }
+        ],
+        "usage": {
+          "type": "duration",
+          "seconds": 10
+        }
+      },
+      "costEstimateUSD": 0.0007499999999999999,
+      "normalized": {
+        "text": "我正在比较顺序队列和循环队列，这里的两个术语是头指针和尾指针。",
+        "spans": [
+          {
+            "id": "s0",
+            "text": "我正在比较顺序队列和循环队列，这里的两个术语是头指针和尾指针。",
+            "start": 0,
+            "end": 9.466375
+          }
+        ],
+        "words": [],
+        "wordTiming": {
+          "status": "UNAVAILABLE",
+          "count": 0,
+          "unusableWordIds": [],
+          "missing": true
+        },
+        "timing": {
+          "level": "recording",
+          "origin": "local_audio_duration"
+        },
+        "alignment": "NO_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:31.379Z",
+      "scriptDifference": {
+        "edits": 0,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 0,
+        "referenceCharacters": 29,
+        "hypothesisCharacters": 29,
+        "cer": 0,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "A",
+      "review": {
+        "outcome": "PASS",
+        "reason": "顺序队列、循环队列、头指针、尾指针都保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 7,
+      "caseId": "code_switch",
+      "model": "gpt-transcribe",
+      "audioSHA256": "9639f7a36ad73d884428c06f87d61531181831b9a45a0bea0d141edd5ff480db",
+      "duration": 15.8285625,
+      "reservationId": "14c1d4db-6a39-427c-a6d0-f683a8187bc9",
+      "reserveUSD": 0.013499999999999998,
+      "startedAt": "2026-11-19T06:23:31.382Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_a083e62430f843ef8c7993612f8118f2",
+      "elapsedMs": 1527,
+      "responseSHA256": "ad50dd14aa30c4a1e3722ba2f4b1c636102b0352c5cc0ee41143b348046a16b2",
+      "provider": {
+        "text": "用。count。记录元素个数。front。和。rear。相等不一定为空，还要查看。count。",
+        "languages": [
+          {
+            "code": "zh"
+          }
+        ],
+        "usage": {
+          "type": "duration",
+          "seconds": 16
+        }
+      },
+      "costEstimateUSD": 0.0012,
+      "normalized": {
+        "text": "用。count。记录元素个数。front。和。rear。相等不一定为空，还要查看。count。",
+        "spans": [
+          {
+            "id": "s0",
+            "text": "用。count。记录元素个数。front。和。rear。相等不一定为空，还要查看。count。",
+            "start": 0,
+            "end": 15.8285625
+          }
+        ],
+        "words": [],
+        "wordTiming": {
+          "status": "UNAVAILABLE",
+          "count": 0,
+          "unusableWordIds": [],
+          "missing": true
+        },
+        "timing": {
+          "level": "recording",
+          "origin": "local_audio_duration"
+        },
+        "alignment": "NO_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:32.913Z",
+      "scriptDifference": {
+        "edits": 0,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 0,
+        "referenceCharacters": 38,
+        "hypothesisCharacters": 38,
+        "cer": 0,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "A",
+      "review": {
+        "outcome": "PASS",
+        "reason": "count、front、rear 及不一定为空的条件都保留；合成拼接处被插入多个句号，可读性差，不能将其推断为真实语句停顿。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 8,
+      "caseId": "code_switch",
+      "model": "whisper-1",
+      "audioSHA256": "9639f7a36ad73d884428c06f87d61531181831b9a45a0bea0d141edd5ff480db",
+      "duration": 15.8285625,
+      "reservationId": "281a5693-f8bd-4bfb-8148-f582ce57d68c",
+      "reserveUSD": 0.018000000000000002,
+      "startedAt": "2026-11-19T06:23:32.916Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_f78e265da8e34e2da72f90c6e8df455f",
+      "elapsedMs": 2859,
+      "responseSHA256": "5518a5260ecc170341e813923900770db88f7cd8ddf5d1ac9e3ab00dfdbf72fd",
+      "provider": {
+        "text": "用count记录元素个数 front和rear相等不一定为空,还要查看 count",
+        "words": [
+          {
+            "word": "用",
+            "start": 0,
+            "end": 0.6200000047683716
+          },
+          {
+            "word": "count",
+            "start": 0.6200000047683716,
+            "end": 2.4800000190734863
+          },
+          {
+            "word": "记",
+            "start": 2.4800000190734863,
+            "end": 3.299999952316284
+          },
+          {
+            "word": "录",
+            "start": 3.299999952316284,
+            "end": 3.5
+          },
+          {
+            "word": "元",
+            "start": 3.5,
+            "end": 3.819999933242798
+          },
+          {
+            "word": "素",
+            "start": 3.819999933242798,
+            "end": 4.019999980926514
+          },
+          {
+            "word": "个",
+            "start": 4.019999980926514,
+            "end": 4.360000133514404
+          },
+          {
+            "word": "数",
+            "start": 4.360000133514404,
+            "end": 4.539999961853027
+          },
+          {
+            "word": "front",
+            "start": 6.119999885559082,
+            "end": 6.820000171661377
+          },
+          {
+            "word": "和",
+            "start": 6.820000171661377,
+            "end": 7.519999980926514
+          },
+          {
+            "word": "re",
+            "start": 7.519999980926514,
+            "end": 8.800000190734863
+          },
+          {
+            "word": "ar",
+            "start": 8.800000190734863,
+            "end": 9.460000038146973
+          },
+          {
+            "word": "相",
+            "start": 9.460000038146973,
+            "end": 10.239999771118164
+          },
+          {
+            "word": "等",
+            "start": 10.239999771118164,
+            "end": 10.4399995803833
+          },
+          {
+            "word": "不",
+            "start": 10.4399995803833,
+            "end": 10.720000267028809
+          },
+          {
+            "word": "一定",
+            "start": 10.720000267028809,
+            "end": 11.079999923706055
+          },
+          {
+            "word": "为",
+            "start": 11.079999923706055,
+            "end": 11.420000076293945
+          },
+          {
+            "word": "空",
+            "start": 11.420000076293945,
+            "end": 11.619999885559082
+          },
+          {
+            "word": "还",
+            "start": 12.380000114440918,
+            "end": 12.420000076293945
+          },
+          {
+            "word": "要",
+            "start": 12.420000076293945,
+            "end": 12.640000343322754
+          },
+          {
+            "word": "查",
+            "start": 12.640000343322754,
+            "end": 12.859999656677246
+          },
+          {
+            "word": "看",
+            "start": 12.859999656677246,
+            "end": 13.460000038146973
+          },
+          {
+            "word": "count",
+            "start": 13.979999542236328,
+            "end": 14.680000305175781
+          }
+        ],
+        "segments": [
+          {
+            "id": 0,
+            "seek": 0,
+            "start": 0,
+            "end": 4.539999961853027,
+            "text": "用count记录元素个数",
+            "tokens": [
+              50414,
+              9254,
+              26050,
+              34756,
+              7391,
+              243,
+              14812,
+              37204,
+              7549,
+              33188,
+              50614
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.3524964451789856,
+            "compression_ratio": 0.875,
+            "no_speech_prob": 0.11266983300447464
+          },
+          {
+            "id": 1,
+            "seek": 0,
+            "start": 6.119999885559082,
+            "end": 13.460000038146973,
+            "text": "front和rear相等不一定为空,还要查看",
+            "tokens": [
+              50614,
+              11496,
+              12565,
+              265,
+              289,
+              15106,
+              10187,
+              1960,
+              24272,
+              13992,
+              23322,
+              11,
+              14852,
+              4275,
+              42623,
+              4200,
+              51064
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.3524964451789856,
+            "compression_ratio": 0.875,
+            "no_speech_prob": 0.11266983300447464
+          },
+          {
+            "id": 2,
+            "seek": 0,
+            "start": 13.979999542236328,
+            "end": 14.680000305175781,
+            "text": "count",
+            "tokens": [
+              51064,
+              26050,
+              51114
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.3524964451789856,
+            "compression_ratio": 0.875,
+            "no_speech_prob": 0.11266983300447464
+          }
+        ],
+        "language": "chinese",
+        "duration": 15.819999694824219,
+        "usage": {
+          "type": "duration",
+          "seconds": 16
+        }
+      },
+      "costEstimateUSD": 0.0016,
+      "normalized": {
+        "text": "用count记录元素个数 front和rear相等不一定为空,还要查看 count",
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 4.539999961853027,
+            "text": "用count记录元素个数"
+          },
+          {
+            "id": "s1",
+            "start": 6.119999885559082,
+            "end": 13.460000038146973,
+            "text": "front和rear相等不一定为空,还要查看"
+          },
+          {
+            "id": "s2",
+            "start": 13.979999542236328,
+            "end": 14.680000305175781,
+            "text": "count"
+          }
+        ],
+        "words": [
+          {
+            "id": "w0",
+            "start": 0,
+            "end": 0.6200000047683716,
+            "text": "用",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w1",
+            "start": 0.6200000047683716,
+            "end": 2.4800000190734863,
+            "text": "count",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w2",
+            "start": 2.4800000190734863,
+            "end": 3.299999952316284,
+            "text": "记",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w3",
+            "start": 3.299999952316284,
+            "end": 3.5,
+            "text": "录",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w4",
+            "start": 3.5,
+            "end": 3.819999933242798,
+            "text": "元",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w5",
+            "start": 3.819999933242798,
+            "end": 4.019999980926514,
+            "text": "素",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w6",
+            "start": 4.019999980926514,
+            "end": 4.360000133514404,
+            "text": "个",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w7",
+            "start": 4.360000133514404,
+            "end": 4.539999961853027,
+            "text": "数",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w8",
+            "start": 6.119999885559082,
+            "end": 6.820000171661377,
+            "text": "front",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w9",
+            "start": 6.820000171661377,
+            "end": 7.519999980926514,
+            "text": "和",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w10",
+            "start": 7.519999980926514,
+            "end": 8.800000190734863,
+            "text": "re",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w11",
+            "start": 8.800000190734863,
+            "end": 9.460000038146973,
+            "text": "ar",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w12",
+            "start": 9.460000038146973,
+            "end": 10.239999771118164,
+            "text": "相",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w13",
+            "start": 10.239999771118164,
+            "end": 10.4399995803833,
+            "text": "等",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w14",
+            "start": 10.4399995803833,
+            "end": 10.720000267028809,
+            "text": "不",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w15",
+            "start": 10.720000267028809,
+            "end": 11.079999923706055,
+            "text": "一定",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w16",
+            "start": 11.079999923706055,
+            "end": 11.420000076293945,
+            "text": "为",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w17",
+            "start": 11.420000076293945,
+            "end": 11.619999885559082,
+            "text": "空",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w18",
+            "start": 12.380000114440918,
+            "end": 12.420000076293945,
+            "text": "还",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w19",
+            "start": 12.420000076293945,
+            "end": 12.640000343322754,
+            "text": "要",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w20",
+            "start": 12.640000343322754,
+            "end": 12.859999656677246,
+            "text": "查",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w21",
+            "start": 12.859999656677246,
+            "end": 13.460000038146973,
+            "text": "看",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w22",
+            "start": 13.979999542236328,
+            "end": 14.680000305175781,
+            "text": "count",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          }
+        ],
+        "wordTiming": {
+          "status": "UNVERIFIED",
+          "count": 23,
+          "unusableWordIds": [],
+          "missing": false
+        },
+        "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:35.779Z",
+      "scriptDifference": {
+        "edits": 0,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 0,
+        "referenceCharacters": 38,
+        "hypothesisCharacters": 38,
+        "cer": 0,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "B",
+      "review": {
+        "outcome": "PASS",
+        "reason": "三个英文术语、相等不一定为空和查看count的关系保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 9,
+      "caseId": "self_repair",
+      "model": "whisper-1",
+      "audioSHA256": "a0201a903ed20015331e8be332945e1a85e92a9f9e9cd9c9f5a8af9e2ea5ff62",
+      "duration": 9.1391875,
+      "reservationId": "e2503575-b85f-402b-bd3c-6cd38c04538a",
+      "reserveUSD": 0.018000000000000002,
+      "startedAt": "2026-11-19T06:23:35.783Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_24072e53b9584cc3af3b9057b798d9ce",
+      "elapsedMs": 1836,
+      "responseSHA256": "296b2b24858ccbce8bad6d2fc7b5fb4575b32f56fc2157701c420c75843468bc",
+      "provider": {
+        "text": "可以放八个。 不对,这里预留了一个空位,应该是七个。",
+        "words": [
+          {
+            "word": "可以",
+            "start": 0,
+            "end": 0.6399999856948853
+          },
+          {
+            "word": "放",
+            "start": 0.6399999856948853,
+            "end": 1.059999942779541
+          },
+          {
+            "word": "八",
+            "start": 1.059999942779541,
+            "end": 1.3600000143051147
+          },
+          {
+            "word": "个。",
+            "start": 1.3600000143051147,
+            "end": 1.899999976158142
+          },
+          {
+            "word": "不对",
+            "start": 3.5399999618530273,
+            "end": 3.6600000858306885
+          },
+          {
+            "word": "这里",
+            "start": 4.360000133514404,
+            "end": 4.639999866485596
+          },
+          {
+            "word": "预",
+            "start": 4.639999866485596,
+            "end": 4.880000114440918
+          },
+          {
+            "word": "留",
+            "start": 4.880000114440918,
+            "end": 5.059999942779541
+          },
+          {
+            "word": "了",
+            "start": 5.059999942779541,
+            "end": 5.360000133514404
+          },
+          {
+            "word": "一个",
+            "start": 5.360000133514404,
+            "end": 5.739999771118164
+          },
+          {
+            "word": "空",
+            "start": 5.739999771118164,
+            "end": 5.980000019073486
+          },
+          {
+            "word": "位",
+            "start": 5.980000019073486,
+            "end": 6.21999979019165
+          },
+          {
+            "word": "应",
+            "start": 6.960000038146973,
+            "end": 7.019999980926514
+          },
+          {
+            "word": "该",
+            "start": 7.019999980926514,
+            "end": 7.21999979019165
+          },
+          {
+            "word": "是",
+            "start": 7.21999979019165,
+            "end": 7.539999961853027
+          },
+          {
+            "word": "七",
+            "start": 7.539999961853027,
+            "end": 7.739999771118164
+          },
+          {
+            "word": "个。",
+            "start": 7.739999771118164,
+            "end": 7.940000057220459
+          }
+        ],
+        "segments": [
+          {
+            "id": 0,
+            "seek": 0,
+            "start": 0,
+            "end": 1.899999976158142,
+            "text": "可以放八个。",
+            "tokens": [
+              50364,
+              6723,
+              12744,
+              33453,
+              7549,
+              1543,
+              50464
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.32113003730773926,
+            "compression_ratio": 0.887499988079071,
+            "no_speech_prob": 0.13655595481395721
+          },
+          {
+            "id": 1,
+            "seek": 0,
+            "start": 3.5399999618530273,
+            "end": 7.940000057220459,
+            "text": "不对,这里预留了一个空位,应该是七个。",
+            "tokens": [
+              50514,
+              41639,
+              11,
+              35102,
+              12501,
+              226,
+              24456,
+              2289,
+              20182,
+              23322,
+              11160,
+              11,
+              44297,
+              44646,
+              1541,
+              29920,
+              7549,
+              1543,
+              50764
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.32113003730773926,
+            "compression_ratio": 0.887499988079071,
+            "no_speech_prob": 0.13655595481395721
+          }
+        ],
+        "language": "chinese",
+        "duration": 9.130000114440918,
+        "usage": {
+          "type": "duration",
+          "seconds": 10
+        }
+      },
+      "costEstimateUSD": 0.001,
+      "normalized": {
+        "text": "可以放八个。 不对,这里预留了一个空位,应该是七个。",
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 1.899999976158142,
+            "text": "可以放八个。"
+          },
+          {
+            "id": "s1",
+            "start": 3.5399999618530273,
+            "end": 7.940000057220459,
+            "text": "不对,这里预留了一个空位,应该是七个。"
+          }
+        ],
+        "words": [
+          {
+            "id": "w0",
+            "start": 0,
+            "end": 0.6399999856948853,
+            "text": "可以",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w1",
+            "start": 0.6399999856948853,
+            "end": 1.059999942779541,
+            "text": "放",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w2",
+            "start": 1.059999942779541,
+            "end": 1.3600000143051147,
+            "text": "八",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w3",
+            "start": 1.3600000143051147,
+            "end": 1.899999976158142,
+            "text": "个。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w4",
+            "start": 3.5399999618530273,
+            "end": 3.6600000858306885,
+            "text": "不对",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w5",
+            "start": 4.360000133514404,
+            "end": 4.639999866485596,
+            "text": "这里",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w6",
+            "start": 4.639999866485596,
+            "end": 4.880000114440918,
+            "text": "预",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w7",
+            "start": 4.880000114440918,
+            "end": 5.059999942779541,
+            "text": "留",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w8",
+            "start": 5.059999942779541,
+            "end": 5.360000133514404,
+            "text": "了",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w9",
+            "start": 5.360000133514404,
+            "end": 5.739999771118164,
+            "text": "一个",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w10",
+            "start": 5.739999771118164,
+            "end": 5.980000019073486,
+            "text": "空",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w11",
+            "start": 5.980000019073486,
+            "end": 6.21999979019165,
+            "text": "位",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w12",
+            "start": 6.960000038146973,
+            "end": 7.019999980926514,
+            "text": "应",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w13",
+            "start": 7.019999980926514,
+            "end": 7.21999979019165,
+            "text": "该",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w14",
+            "start": 7.21999979019165,
+            "end": 7.539999961853027,
+            "text": "是",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w15",
+            "start": 7.539999961853027,
+            "end": 7.739999771118164,
+            "text": "七",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w16",
+            "start": 7.739999771118164,
+            "end": 7.940000057220459,
+            "text": "个。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          }
+        ],
+        "wordTiming": {
+          "status": "UNVERIFIED",
+          "count": 17,
+          "unusableWordIds": [],
+          "missing": false
+        },
+        "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:37.624Z",
+      "scriptDifference": {
+        "edits": 0,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 0,
+        "referenceCharacters": 21,
+        "hypothesisCharacters": 21,
+        "cer": 0,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "B",
+      "review": {
+        "outcome": "PASS",
+        "reason": "八到七的修正及不对、预留空位均保留。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 10,
+      "caseId": "self_repair",
+      "model": "gpt-transcribe",
+      "audioSHA256": "a0201a903ed20015331e8be332945e1a85e92a9f9e9cd9c9f5a8af9e2ea5ff62",
+      "duration": 9.1391875,
+      "reservationId": "2fccbeb3-ac0d-44c4-8588-11ab0ae6be49",
+      "reserveUSD": 0.013499999999999998,
+      "startedAt": "2026-11-19T06:23:37.627Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_3f91550e543244fc994455441dc1c968",
+      "elapsedMs": 1167,
+      "responseSHA256": "754e27bbc83115b319f8b49be416b9ae5a39ad433178de97bb12cbb053b8a295",
+      "provider": {
+        "text": "可以放八个。不对，这里预留了一个空位，应该是七个。",
+        "languages": [
+          {
+            "code": "zh"
+          }
+        ],
+        "usage": {
+          "type": "duration",
+          "seconds": 10
+        }
+      },
+      "costEstimateUSD": 0.0007499999999999999,
+      "normalized": {
+        "text": "可以放八个。不对，这里预留了一个空位，应该是七个。",
+        "spans": [
+          {
+            "id": "s0",
+            "text": "可以放八个。不对，这里预留了一个空位，应该是七个。",
+            "start": 0,
+            "end": 9.1391875
+          }
+        ],
+        "words": [],
+        "wordTiming": {
+          "status": "UNAVAILABLE",
+          "count": 0,
+          "unusableWordIds": [],
+          "missing": true
+        },
+        "timing": {
+          "level": "recording",
+          "origin": "local_audio_duration"
+        },
+        "alignment": "NO_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:38.799Z",
+      "scriptDifference": {
+        "edits": 0,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 0,
+        "referenceCharacters": 21,
+        "hypothesisCharacters": 21,
+        "cer": 0,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "A",
+      "review": {
+        "outcome": "PASS",
+        "reason": "先说八个、明确不对、改为七个并说明预留空位，修正过程完整。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 11,
+      "caseId": "paraphrase",
+      "model": "gpt-transcribe",
+      "audioSHA256": "ce65b227016a253a242b1162f0b2a9f7bfa3c817a1e85695594514273e1e3909",
+      "duration": 11.159875,
+      "reservationId": "6c5d397b-353a-4ca1-a0df-98150dc8b1a1",
+      "reserveUSD": 0.013499999999999998,
+      "startedAt": "2026-11-19T06:23:38.802Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_5de8c6f5c2b945bea9ea2e2fb3c9467c",
+      "elapsedMs": 1025,
+      "responseSHA256": "8723044fb98b0fb293affab5812d1df20644ca89a64f04decec6cd6a5a8d5c29",
+      "provider": {
+        "text": "水分子从液面进入空气，这就是蒸发。不是只有沸腾时，水才会变成水蒸气。",
+        "languages": [
+          {
+            "code": "zh"
+          }
+        ],
+        "usage": {
+          "type": "duration",
+          "seconds": 12
+        }
+      },
+      "costEstimateUSD": 0.0009,
+      "normalized": {
+        "text": "水分子从液面进入空气，这就是蒸发。不是只有沸腾时，水才会变成水蒸气。",
+        "spans": [
+          {
+            "id": "s0",
+            "text": "水分子从液面进入空气，这就是蒸发。不是只有沸腾时，水才会变成水蒸气。",
+            "start": 0,
+            "end": 11.159875
+          }
+        ],
+        "words": [],
+        "wordTiming": {
+          "status": "UNAVAILABLE",
+          "count": 0,
+          "unusableWordIds": [],
+          "missing": true
+        },
+        "timing": {
+          "level": "recording",
+          "origin": "local_audio_duration"
+        },
+        "alignment": "NO_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:39.833Z",
+      "scriptDifference": {
+        "edits": 0,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 0,
+        "referenceCharacters": 30,
+        "hypothesisCharacters": 30,
+        "cer": 0,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "B",
+      "review": {
+        "outcome": "PASS",
+        "reason": "与冻结脚本的三个关键意思一致，未改写成另一个教材解释。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 12,
+      "caseId": "paraphrase",
+      "model": "whisper-1",
+      "audioSHA256": "ce65b227016a253a242b1162f0b2a9f7bfa3c817a1e85695594514273e1e3909",
+      "duration": 11.159875,
+      "reservationId": "af99b7e4-a035-4dba-858e-1ccb4658cb8d",
+      "reserveUSD": 0.018000000000000002,
+      "startedAt": "2026-11-19T06:23:39.837Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_3e9bfea91aea40ac9b37a8a162d6afd3",
+      "elapsedMs": 1468,
+      "responseSHA256": "883d2d5af9421211bcac78cc2804d90af8253247bce72789ccf16f1bad3ea9df",
+      "provider": {
+        "text": "水分子从液面进入空气,这就是蒸发。 不是只有沸腾时,水才会变成水蒸汽。",
+        "words": [
+          {
+            "word": "水",
+            "start": 0,
+            "end": 0.6399999856948853
+          },
+          {
+            "word": "分",
+            "start": 0.6399999856948853,
+            "end": 0.8999999761581421
+          },
+          {
+            "word": "子",
+            "start": 0.8999999761581421,
+            "end": 1.1399999856948853
+          },
+          {
+            "word": "从",
+            "start": 1.1399999856948853,
+            "end": 1.5
+          },
+          {
+            "word": "液",
+            "start": 1.5,
+            "end": 1.7200000286102295
+          },
+          {
+            "word": "面",
+            "start": 1.7200000286102295,
+            "end": 1.9600000381469727
+          },
+          {
+            "word": "进",
+            "start": 1.9600000381469727,
+            "end": 2.259999990463257
+          },
+          {
+            "word": "入",
+            "start": 2.259999990463257,
+            "end": 2.5
+          },
+          {
+            "word": "空",
+            "start": 2.5,
+            "end": 2.759999990463257
+          },
+          {
+            "word": "气",
+            "start": 2.759999990463257,
+            "end": 3
+          },
+          {
+            "word": "这",
+            "start": 3.559999942779541,
+            "end": 3.700000047683716
+          },
+          {
+            "word": "就是",
+            "start": 3.700000047683716,
+            "end": 4.099999904632568
+          },
+          {
+            "word": "蒸",
+            "start": 4.099999904632568,
+            "end": 4.360000133514404
+          },
+          {
+            "word": "发。",
+            "start": 4.360000133514404,
+            "end": 4.71999979019165
+          },
+          {
+            "word": "不是",
+            "start": 5.800000190734863,
+            "end": 6
+          },
+          {
+            "word": "只有",
+            "start": 6,
+            "end": 6.579999923706055
+          },
+          {
+            "word": "沸",
+            "start": 6.579999923706055,
+            "end": 6.760000228881836
+          },
+          {
+            "word": "腾",
+            "start": 6.760000228881836,
+            "end": 6.920000076293945
+          },
+          {
+            "word": "时",
+            "start": 6.920000076293945,
+            "end": 7.420000076293945
+          },
+          {
+            "word": "水",
+            "start": 8.039999961853027,
+            "end": 8.100000381469727
+          },
+          {
+            "word": "才",
+            "start": 8.100000381469727,
+            "end": 8.4399995803833
+          },
+          {
+            "word": "会",
+            "start": 8.4399995803833,
+            "end": 8.720000267028809
+          },
+          {
+            "word": "变",
+            "start": 8.720000267028809,
+            "end": 8.880000114440918
+          },
+          {
+            "word": "成",
+            "start": 8.880000114440918,
+            "end": 9.260000228881836
+          },
+          {
+            "word": "水",
+            "start": 9.260000228881836,
+            "end": 9.539999961853027
+          },
+          {
+            "word": "蒸",
+            "start": 9.539999961853027,
+            "end": 9.739999771118164
+          },
+          {
+            "word": "汽。",
+            "start": 9.739999771118164,
+            "end": 9.920000076293945
+          }
+        ],
+        "segments": [
+          {
+            "id": 0,
+            "seek": 0,
+            "start": 0,
+            "end": 4.71999979019165,
+            "text": "水分子从液面进入空气,这就是蒸发。",
+            "tokens": [
+              50414,
+              15590,
+              6627,
+              7626,
+              35630,
+              35681,
+              110,
+              8833,
+              36700,
+              14028,
+              23322,
+              42204,
+              11,
+              5562,
+              5620,
+              42356,
+              116,
+              28926,
+              1543,
+              50614
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.20450818538665771,
+            "compression_ratio": 0.9514563083648682,
+            "no_speech_prob": 0.004681536927819252
+          },
+          {
+            "id": 1,
+            "seek": 0,
+            "start": 5.800000190734863,
+            "end": 9.920000076293945,
+            "text": "不是只有沸腾时,水才会变成水蒸汽。",
+            "tokens": [
+              50664,
+              7296,
+              35244,
+              3308,
+              116,
+              21184,
+              122,
+              15729,
+              11,
+              15590,
+              18888,
+              12949,
+              2129,
+              246,
+              11336,
+              15590,
+              42356,
+              116,
+              12800,
+              121,
+              1543,
+              50864
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.20450818538665771,
+            "compression_ratio": 0.9514563083648682,
+            "no_speech_prob": 0.004681536927819252
+          }
+        ],
+        "language": "chinese",
+        "duration": 11.149999618530273,
+        "usage": {
+          "type": "duration",
+          "seconds": 12
+        }
+      },
+      "costEstimateUSD": 0.0012000000000000001,
+      "normalized": {
+        "text": "水分子从液面进入空气,这就是蒸发。 不是只有沸腾时,水才会变成水蒸汽。",
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 4.71999979019165,
+            "text": "水分子从液面进入空气,这就是蒸发。"
+          },
+          {
+            "id": "s1",
+            "start": 5.800000190734863,
+            "end": 9.920000076293945,
+            "text": "不是只有沸腾时,水才会变成水蒸汽。"
+          }
+        ],
+        "words": [
+          {
+            "id": "w0",
+            "start": 0,
+            "end": 0.6399999856948853,
+            "text": "水",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w1",
+            "start": 0.6399999856948853,
+            "end": 0.8999999761581421,
+            "text": "分",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w2",
+            "start": 0.8999999761581421,
+            "end": 1.1399999856948853,
+            "text": "子",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w3",
+            "start": 1.1399999856948853,
+            "end": 1.5,
+            "text": "从",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w4",
+            "start": 1.5,
+            "end": 1.7200000286102295,
+            "text": "液",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w5",
+            "start": 1.7200000286102295,
+            "end": 1.9600000381469727,
+            "text": "面",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w6",
+            "start": 1.9600000381469727,
+            "end": 2.259999990463257,
+            "text": "进",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w7",
+            "start": 2.259999990463257,
+            "end": 2.5,
+            "text": "入",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w8",
+            "start": 2.5,
+            "end": 2.759999990463257,
+            "text": "空",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w9",
+            "start": 2.759999990463257,
+            "end": 3,
+            "text": "气",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w10",
+            "start": 3.559999942779541,
+            "end": 3.700000047683716,
+            "text": "这",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w11",
+            "start": 3.700000047683716,
+            "end": 4.099999904632568,
+            "text": "就是",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w12",
+            "start": 4.099999904632568,
+            "end": 4.360000133514404,
+            "text": "蒸",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w13",
+            "start": 4.360000133514404,
+            "end": 4.71999979019165,
+            "text": "发。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w14",
+            "start": 5.800000190734863,
+            "end": 6,
+            "text": "不是",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w15",
+            "start": 6,
+            "end": 6.579999923706055,
+            "text": "只有",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w16",
+            "start": 6.579999923706055,
+            "end": 6.760000228881836,
+            "text": "沸",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w17",
+            "start": 6.760000228881836,
+            "end": 6.920000076293945,
+            "text": "腾",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w18",
+            "start": 6.920000076293945,
+            "end": 7.420000076293945,
+            "text": "时",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w19",
+            "start": 8.039999961853027,
+            "end": 8.100000381469727,
+            "text": "水",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w20",
+            "start": 8.100000381469727,
+            "end": 8.4399995803833,
+            "text": "才",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w21",
+            "start": 8.4399995803833,
+            "end": 8.720000267028809,
+            "text": "会",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w22",
+            "start": 8.720000267028809,
+            "end": 8.880000114440918,
+            "text": "变",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w23",
+            "start": 8.880000114440918,
+            "end": 9.260000228881836,
+            "text": "成",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w24",
+            "start": 9.260000228881836,
+            "end": 9.539999961853027,
+            "text": "水",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w25",
+            "start": 9.539999961853027,
+            "end": 9.739999771118164,
+            "text": "蒸",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w26",
+            "start": 9.739999771118164,
+            "end": 9.920000076293945,
+            "text": "汽。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          }
+        ],
+        "wordTiming": {
+          "status": "UNVERIFIED",
+          "count": 27,
+          "unusableWordIds": [],
+          "missing": false
+        },
+        "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:41.309Z",
+      "scriptDifference": {
+        "edits": 1,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 1,
+        "referenceCharacters": 30,
+        "hypothesisCharacters": 30,
+        "cer": 0.03333333333333333,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "A",
+      "review": {
+        "outcome": "PASS",
+        "reason": "液面进入空气、蒸发以及不是只有沸腾才变化均保留；水蒸气写成水蒸汽，记作字词差异，不当作否定条件反转。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 13,
+      "caseId": "pause_quiet",
+      "model": "whisper-1",
+      "audioSHA256": "5e534b01e3124333a77486f9f6e7571dbaed31257c5cf72d2c0512711446d386",
+      "duration": 9.84625,
+      "reservationId": "2ddec8e0-44f5-49b2-b3b2-4753a3379bde",
+      "reserveUSD": 0.018000000000000002,
+      "startedAt": "2026-11-19T06:23:41.313Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_0db05cd5402d4af28e2ed7161a4a23d9",
+      "elapsedMs": 2654,
+      "responseSHA256": "19f10e524a282b80fda4db9619d8bc5a87cdbbe676719da580e2045b6b92420b",
+      "provider": {
+        "text": "采用预留空位的实现。 所以长度为80,容量是7。",
+        "words": [
+          {
+            "word": "采",
+            "start": 0,
+            "end": 0.5799999833106995
+          },
+          {
+            "word": "用",
+            "start": 0.5799999833106995,
+            "end": 0.9200000166893005
+          },
+          {
+            "word": "预",
+            "start": 0.9200000166893005,
+            "end": 1.1399999856948853
+          },
+          {
+            "word": "留",
+            "start": 1.1399999856948853,
+            "end": 1.3600000143051147
+          },
+          {
+            "word": "空",
+            "start": 1.3600000143051147,
+            "end": 1.6200000047683716
+          },
+          {
+            "word": "位",
+            "start": 1.6200000047683716,
+            "end": 1.7400000095367432
+          },
+          {
+            "word": "的",
+            "start": 1.7400000095367432,
+            "end": 2.1600000858306885
+          },
+          {
+            "word": "实",
+            "start": 2.1600000858306885,
+            "end": 2.259999990463257
+          },
+          {
+            "word": "现。",
+            "start": 2.259999990463257,
+            "end": 2.4800000190734863
+          },
+          {
+            "word": "所以",
+            "start": 5.659999847412109,
+            "end": 5.760000228881836
+          },
+          {
+            "word": "长",
+            "start": 5.760000228881836,
+            "end": 6.079999923706055
+          },
+          {
+            "word": "度",
+            "start": 6.079999923706055,
+            "end": 6.340000152587891
+          },
+          {
+            "word": "为",
+            "start": 6.340000152587891,
+            "end": 6.579999923706055
+          },
+          {
+            "word": "80",
+            "start": 6.579999923706055,
+            "end": 7.039999961853027
+          },
+          {
+            "word": "容",
+            "start": 7.900000095367432,
+            "end": 7.920000076293945
+          },
+          {
+            "word": "量",
+            "start": 7.920000076293945,
+            "end": 8.0600004196167
+          },
+          {
+            "word": "是",
+            "start": 8.0600004196167,
+            "end": 8.420000076293945
+          },
+          {
+            "word": "7。",
+            "start": 8.420000076293945,
+            "end": 8.640000343322754
+          }
+        ],
+        "segments": [
+          {
+            "id": 0,
+            "seek": 0,
+            "start": 0,
+            "end": 2.4800000190734863,
+            "text": "采用预留空位的实现。",
+            "tokens": [
+              50414,
+              5873,
+              229,
+              9254,
+              12501,
+              226,
+              24456,
+              23322,
+              11160,
+              1546,
+              24726,
+              20204,
+              1543,
+              50514
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.29273542761802673,
+            "compression_ratio": 0.8472222089767456,
+            "no_speech_prob": 0.0655832588672638
+          },
+          {
+            "id": 1,
+            "seek": 0,
+            "start": 5.659999847412109,
+            "end": 8.640000343322754,
+            "text": "所以长度为80,容量是7。",
+            "tokens": [
+              50614,
+              7239,
+              32271,
+              13127,
+              13992,
+              4702,
+              11,
+              25750,
+              26748,
+              1541,
+              22,
+              1543,
+              50814
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.29273542761802673,
+            "compression_ratio": 0.8472222089767456,
+            "no_speech_prob": 0.0655832588672638
+          }
+        ],
+        "language": "chinese",
+        "duration": 9.84000015258789,
+        "usage": {
+          "type": "duration",
+          "seconds": 10
+        }
+      },
+      "costEstimateUSD": 0.001,
+      "normalized": {
+        "text": "采用预留空位的实现。 所以长度为80,容量是7。",
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 2.4800000190734863,
+            "text": "采用预留空位的实现。"
+          },
+          {
+            "id": "s1",
+            "start": 5.659999847412109,
+            "end": 8.640000343322754,
+            "text": "所以长度为80,容量是7。"
+          }
+        ],
+        "words": [
+          {
+            "id": "w0",
+            "start": 0,
+            "end": 0.5799999833106995,
+            "text": "采",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w1",
+            "start": 0.5799999833106995,
+            "end": 0.9200000166893005,
+            "text": "用",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w2",
+            "start": 0.9200000166893005,
+            "end": 1.1399999856948853,
+            "text": "预",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w3",
+            "start": 1.1399999856948853,
+            "end": 1.3600000143051147,
+            "text": "留",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w4",
+            "start": 1.3600000143051147,
+            "end": 1.6200000047683716,
+            "text": "空",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w5",
+            "start": 1.6200000047683716,
+            "end": 1.7400000095367432,
+            "text": "位",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w6",
+            "start": 1.7400000095367432,
+            "end": 2.1600000858306885,
+            "text": "的",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w7",
+            "start": 2.1600000858306885,
+            "end": 2.259999990463257,
+            "text": "实",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w8",
+            "start": 2.259999990463257,
+            "end": 2.4800000190734863,
+            "text": "现。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w9",
+            "start": 5.659999847412109,
+            "end": 5.760000228881836,
+            "text": "所以",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w10",
+            "start": 5.760000228881836,
+            "end": 6.079999923706055,
+            "text": "长",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w11",
+            "start": 6.079999923706055,
+            "end": 6.340000152587891,
+            "text": "度",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w12",
+            "start": 6.340000152587891,
+            "end": 6.579999923706055,
+            "text": "为",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w13",
+            "start": 6.579999923706055,
+            "end": 7.039999961853027,
+            "text": "80",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w14",
+            "start": 7.900000095367432,
+            "end": 7.920000076293945,
+            "text": "容",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w15",
+            "start": 7.920000076293945,
+            "end": 8.0600004196167,
+            "text": "量",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w16",
+            "start": 8.0600004196167,
+            "end": 8.420000076293945,
+            "text": "是",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w17",
+            "start": 8.420000076293945,
+            "end": 8.640000343322754,
+            "text": "7。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          }
+        ],
+        "wordTiming": {
+          "status": "UNVERIFIED",
+          "count": 18,
+          "unusableWordIds": [],
+          "missing": false
+        },
+        "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:43.972Z",
+      "scriptDifference": {
+        "edits": 3,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 3,
+        "referenceCharacters": 20,
+        "hypothesisCharacters": 20,
+        "cer": 0.15,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "B",
+      "review": {
+        "outcome": "CRITICAL_NUMBER_ERROR",
+        "reason": "同样将长度为八时写成长度为80，改变关键数量关系。预留空位和容量7保留；未观察到静音间新增解释。",
+        "criticalNumericChange": true,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 14,
+      "caseId": "pause_quiet",
+      "model": "gpt-transcribe",
+      "audioSHA256": "5e534b01e3124333a77486f9f6e7571dbaed31257c5cf72d2c0512711446d386",
+      "duration": 9.84625,
+      "reservationId": "62ccc3a3-d6a4-461b-9b85-ae3e34a4f742",
+      "reserveUSD": 0.013499999999999998,
+      "startedAt": "2026-11-19T06:23:43.975Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_92b0144644284ee8aba2865670a0a805",
+      "elapsedMs": 1016,
+      "responseSHA256": "32c1bfdef68d4f3a5919ac008ad008a10b89f20feef2817222c9631451b09cfa",
+      "provider": {
+        "text": "采用预留空位的实现，所以长度为80，容量是7。",
+        "languages": [
+          {
+            "code": "zh"
+          }
+        ],
+        "usage": {
+          "type": "duration",
+          "seconds": 10
+        }
+      },
+      "costEstimateUSD": 0.0007499999999999999,
+      "normalized": {
+        "text": "采用预留空位的实现，所以长度为80，容量是7。",
+        "spans": [
+          {
+            "id": "s0",
+            "text": "采用预留空位的实现，所以长度为80，容量是7。",
+            "start": 0,
+            "end": 9.84625
+          }
+        ],
+        "words": [],
+        "wordTiming": {
+          "status": "UNAVAILABLE",
+          "count": 0,
+          "unusableWordIds": [],
+          "missing": true
+        },
+        "timing": {
+          "level": "recording",
+          "origin": "local_audio_duration"
+        },
+        "alignment": "NO_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:44.996Z",
+      "scriptDifference": {
+        "edits": 3,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 3,
+        "referenceCharacters": 20,
+        "hypothesisCharacters": 20,
+        "cer": 0.15,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "A",
+      "review": {
+        "outcome": "CRITICAL_NUMBER_ERROR",
+        "reason": "脚本长度为八时写成长度为80，而容量仍为7，不能按数字格式差异豁免；可能把八时连读理解为八十，音频未独立听审，原因未确认。",
+        "criticalNumericChange": true,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 15,
+      "caseId": "unfinished",
+      "model": "gpt-transcribe",
+      "audioSHA256": "62109bb7d12467b7f0de08e0fc72a68a406461c735bb66c8377a0710e8813ccb",
+      "duration": 6.864875,
+      "reservationId": "e00b47a1-75b4-461c-9a2b-9a229f5878af",
+      "reserveUSD": 0.013499999999999998,
+      "startedAt": "2026-11-19T06:23:45.000Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_c2aa782949d5489f92bf66b1935fd9c5",
+      "elapsedMs": 913,
+      "responseSHA256": "41aac23b89fb09462811a1c76da69caf44318e9ad67d5e4f2bb2963a863687d0",
+      "provider": {
+        "text": "这里只讲了预留空位。另一种实现还没。",
+        "languages": [
+          {
+            "code": "zh"
+          }
+        ],
+        "usage": {
+          "type": "duration",
+          "seconds": 7
+        }
+      },
+      "costEstimateUSD": 0.000525,
+      "normalized": {
+        "text": "这里只讲了预留空位。另一种实现还没。",
+        "spans": [
+          {
+            "id": "s0",
+            "text": "这里只讲了预留空位。另一种实现还没。",
+            "start": 0,
+            "end": 6.864875
+          }
+        ],
+        "words": [],
+        "wordTiming": {
+          "status": "UNAVAILABLE",
+          "count": 0,
+          "unusableWordIds": [],
+          "missing": true
+        },
+        "timing": {
+          "level": "recording",
+          "origin": "local_audio_duration"
+        },
+        "alignment": "NO_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:45.918Z",
+      "scriptDifference": {
+        "edits": 0,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 0,
+        "referenceCharacters": 16,
+        "hypothesisCharacters": 16,
+        "cer": 0,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "A",
+      "review": {
+        "outcome": "PASS",
+        "reason": "保留另一种实现还没的未完成意思，只添加结尾标点，没有替用户补全结论。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    },
+    {
+      "sequence": 16,
+      "caseId": "unfinished",
+      "model": "whisper-1",
+      "audioSHA256": "62109bb7d12467b7f0de08e0fc72a68a406461c735bb66c8377a0710e8813ccb",
+      "duration": 6.864875,
+      "reservationId": "99485071-f53a-4ed8-af3a-5972facfa920",
+      "reserveUSD": 0.018000000000000002,
+      "startedAt": "2026-11-19T06:23:45.921Z",
+      "status": "COMPLETE",
+      "httpStatus": 200,
+      "requestId": "req_5de0ea809f3f4325bd6376f136afc311",
+      "elapsedMs": 1835,
+      "responseSHA256": "21296c5f3abb3b27d9006126addfe013f27bf1aea39fe3d81aea7e544d44415f",
+      "provider": {
+        "text": "这里只讲了预留空位。 另一种实现还没。",
+        "words": [
+          {
+            "word": "这里",
+            "start": 0,
+            "end": 0.6399999856948853
+          },
+          {
+            "word": "只",
+            "start": 0.6399999856948853,
+            "end": 1.0399999618530273
+          },
+          {
+            "word": "讲",
+            "start": 1.0399999618530273,
+            "end": 1.2400000095367432
+          },
+          {
+            "word": "了",
+            "start": 1.2400000095367432,
+            "end": 1.6399999856948853
+          },
+          {
+            "word": "预",
+            "start": 1.6399999856948853,
+            "end": 1.6799999475479126
+          },
+          {
+            "word": "留",
+            "start": 1.6799999475479126,
+            "end": 1.899999976158142
+          },
+          {
+            "word": "空",
+            "start": 1.899999976158142,
+            "end": 2.1600000858306885
+          },
+          {
+            "word": "位。",
+            "start": 2.1600000858306885,
+            "end": 2.4800000190734863
+          },
+          {
+            "word": "另",
+            "start": 4.039999961853027,
+            "end": 4.079999923706055
+          },
+          {
+            "word": "一",
+            "start": 4.079999923706055,
+            "end": 4.28000020980835
+          },
+          {
+            "word": "种",
+            "start": 4.28000020980835,
+            "end": 4.579999923706055
+          },
+          {
+            "word": "实",
+            "start": 4.579999923706055,
+            "end": 4.860000133514404
+          },
+          {
+            "word": "现",
+            "start": 4.860000133514404,
+            "end": 5.099999904632568
+          },
+          {
+            "word": "还",
+            "start": 5.099999904632568,
+            "end": 5.440000057220459
+          },
+          {
+            "word": "没。",
+            "start": 5.440000057220459,
+            "end": 5.679999828338623
+          }
+        ],
+        "segments": [
+          {
+            "id": 0,
+            "seek": 0,
+            "start": 0,
+            "end": 2.4800000190734863,
+            "text": "这里只讲了预留空位。",
+            "tokens": [
+              50366,
+              35102,
+              14003,
+              39255,
+              2289,
+              12501,
+              226,
+              24456,
+              23322,
+              11160,
+              1543,
+              50502
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.48594653606414795,
+            "compression_ratio": 0.8307692408561707,
+            "no_speech_prob": 0.012623222544789314
+          },
+          {
+            "id": 1,
+            "seek": 0,
+            "start": 4.039999961853027,
+            "end": 5.679999828338623,
+            "text": "另一种实现还没。",
+            "tokens": [
+              50548,
+              22762,
+              2257,
+              39810,
+              24726,
+              20204,
+              14852,
+              10062,
+              1543,
+              50678
+            ],
+            "temperature": 0,
+            "avg_logprob": -0.48594653606414795,
+            "compression_ratio": 0.8307692408561707,
+            "no_speech_prob": 0.012623222544789314
+          }
+        ],
+        "language": "chinese",
+        "duration": 6.860000133514404,
+        "usage": {
+          "type": "duration",
+          "seconds": 7
+        }
+      },
+      "costEstimateUSD": 0.0007,
+      "normalized": {
+        "text": "这里只讲了预留空位。 另一种实现还没。",
+        "spans": [
+          {
+            "id": "s0",
+            "start": 0,
+            "end": 2.4800000190734863,
+            "text": "这里只讲了预留空位。"
+          },
+          {
+            "id": "s1",
+            "start": 4.039999961853027,
+            "end": 5.679999828338623,
+            "text": "另一种实现还没。"
+          }
+        ],
+        "words": [
+          {
+            "id": "w0",
+            "start": 0,
+            "end": 0.6399999856948853,
+            "text": "这里",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w1",
+            "start": 0.6399999856948853,
+            "end": 1.0399999618530273,
+            "text": "只",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w2",
+            "start": 1.0399999618530273,
+            "end": 1.2400000095367432,
+            "text": "讲",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w3",
+            "start": 1.2400000095367432,
+            "end": 1.6399999856948853,
+            "text": "了",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w4",
+            "start": 1.6399999856948853,
+            "end": 1.6799999475479126,
+            "text": "预",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w5",
+            "start": 1.6799999475479126,
+            "end": 1.899999976158142,
+            "text": "留",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w6",
+            "start": 1.899999976158142,
+            "end": 2.1600000858306885,
+            "text": "空",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w7",
+            "start": 2.1600000858306885,
+            "end": 2.4800000190734863,
+            "text": "位。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w8",
+            "start": 4.039999961853027,
+            "end": 4.079999923706055,
+            "text": "另",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w9",
+            "start": 4.079999923706055,
+            "end": 4.28000020980835,
+            "text": "一",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w10",
+            "start": 4.28000020980835,
+            "end": 4.579999923706055,
+            "text": "种",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w11",
+            "start": 4.579999923706055,
+            "end": 4.860000133514404,
+            "text": "实",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w12",
+            "start": 4.860000133514404,
+            "end": 5.099999904632568,
+            "text": "现",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w13",
+            "start": 5.099999904632568,
+            "end": 5.440000057220459,
+            "text": "还",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          },
+          {
+            "id": "w14",
+            "start": 5.440000057220459,
+            "end": 5.679999828338623,
+            "text": "没。",
+            "usable": true,
+            "timingQuality": "UNVERIFIED_POSITIVE_DURATION"
+          }
+        ],
+        "wordTiming": {
+          "status": "UNVERIFIED",
+          "count": 15,
+          "unusableWordIds": [],
+          "missing": false
+        },
+        "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+        "reviewRequired": true
+      },
+      "finishedAt": "2026-11-19T06:23:47.762Z",
+      "scriptDifference": {
+        "edits": 0,
+        "insertions": 0,
+        "deletions": 0,
+        "substitutions": 0,
+        "referenceCharacters": 16,
+        "hypothesisCharacters": 16,
+        "cer": 0,
+        "normalization": "NFKC; whitespace/punctuation removed; script and numbers unchanged"
+      },
+      "blindLabel": "B",
+      "review": {
+        "outcome": "PASS",
+        "reason": "保留还没，未补写另一种实现或其结论。",
+        "criticalNumericChange": false,
+        "unspokenConclusion": false
+      }
+    }
+  ],
+  "summary": [
+    {
+      "model": "whisper-1",
+      "successful": 8,
+      "reviewOutcomes": {
+        "TERM_ERROR": 1,
+        "PASS": 6,
+        "CRITICAL_NUMBER_ERROR": 1
+      },
+      "scriptDifference": {
+        "edits": 11,
+        "referenceCharacters": 225,
+        "rate": 0.04888888888888889
+      },
+      "latencyMs": {
+        "median": 2091,
+        "min": 1468,
+        "max": 3224
+      },
+      "costEstimateUSD": 0.0091,
+      "timing": [
+        {
+          "id": "negation",
+          "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+          "spans": 2,
+          "words": 35,
+          "unusableWords": 1
+        },
+        {
+          "id": "numbers",
+          "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+          "spans": 2,
+          "words": 34,
+          "unusableWords": 3
+        },
+        {
+          "id": "terms",
+          "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+          "spans": 2,
+          "words": 28,
+          "unusableWords": 0
+        },
+        {
+          "id": "code_switch",
+          "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+          "spans": 3,
+          "words": 23,
+          "unusableWords": 0
+        },
+        {
+          "id": "self_repair",
+          "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+          "spans": 2,
+          "words": 17,
+          "unusableWords": 0
+        },
+        {
+          "id": "paraphrase",
+          "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+          "spans": 2,
+          "words": 27,
+          "unusableWords": 0
+        },
+        {
+          "id": "pause_quiet",
+          "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+          "spans": 2,
+          "words": 18,
+          "unusableWords": 0
+        },
+        {
+          "id": "unfinished",
+          "alignment": "UNVERIFIED_PROVIDER_TIMESTAMPS",
+          "spans": 2,
+          "words": 15,
+          "unusableWords": 0
+        }
+      ]
+    },
+    {
+      "model": "gpt-transcribe",
+      "successful": 8,
+      "reviewOutcomes": {
+        "TERM_ERROR": 1,
+        "PASS": 6,
+        "CRITICAL_NUMBER_ERROR": 1
+      },
+      "scriptDifference": {
+        "edits": 9,
+        "referenceCharacters": 225,
+        "rate": 0.04
+      },
+      "latencyMs": {
+        "median": 1297.5,
+        "min": 913,
+        "max": 1813
+      },
+      "costEstimateUSD": 0.0068249999999999995,
+      "timing": [
+        {
+          "id": "negation",
+          "alignment": "NO_PROVIDER_TIMESTAMPS",
+          "spans": 1,
+          "words": 0,
+          "unusableWords": 0
+        },
+        {
+          "id": "numbers",
+          "alignment": "NO_PROVIDER_TIMESTAMPS",
+          "spans": 1,
+          "words": 0,
+          "unusableWords": 0
+        },
+        {
+          "id": "terms",
+          "alignment": "NO_PROVIDER_TIMESTAMPS",
+          "spans": 1,
+          "words": 0,
+          "unusableWords": 0
+        },
+        {
+          "id": "code_switch",
+          "alignment": "NO_PROVIDER_TIMESTAMPS",
+          "spans": 1,
+          "words": 0,
+          "unusableWords": 0
+        },
+        {
+          "id": "self_repair",
+          "alignment": "NO_PROVIDER_TIMESTAMPS",
+          "spans": 1,
+          "words": 0,
+          "unusableWords": 0
+        },
+        {
+          "id": "paraphrase",
+          "alignment": "NO_PROVIDER_TIMESTAMPS",
+          "spans": 1,
+          "words": 0,
+          "unusableWords": 0
+        },
+        {
+          "id": "pause_quiet",
+          "alignment": "NO_PROVIDER_TIMESTAMPS",
+          "spans": 1,
+          "words": 0,
+          "unusableWords": 0
+        },
+        {
+          "id": "unfinished",
+          "alignment": "NO_PROVIDER_TIMESTAMPS",
+          "spans": 1,
+          "words": 0,
+          "unusableWords": 0
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Frozen local TTS script, not independent human transcription",
+    "Assistant text review with hidden model labels, not human blinded listening",
+    "Synthetic fixtures do not establish real learner accuracy",
+    "Public-rate duration estimate, not provider invoice",
+    "No production switch"
+  ],
+  "sourceRunStatus": "COMPLETE_REVIEW_PENDING"
+}

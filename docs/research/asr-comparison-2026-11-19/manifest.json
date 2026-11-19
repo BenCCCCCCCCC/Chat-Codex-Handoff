@@ -1,0 +1,247 @@
+{
+  "batch": "asr-comparison-2026-11-19",
+  "kind": "LOCAL_TTS_SYNTHETIC_ONLY",
+  "voices": [
+    "Microsoft Huihui Desktop",
+    "Microsoft Zira Desktop"
+  ],
+  "sampleRate": 16000,
+  "casesSHA256": "af6b030aebc907d8799886c2192dcad83b599d4d1e0f9ea430117a96751f020f",
+  "cases": [
+    {
+      "id": "negation",
+      "category": "否定与条件",
+      "reference": "并不是队列满了才移动头指针。出队后才移动头指针；只查看队首元素时，不移动头指针。",
+      "parts": [
+        {
+          "text": "并不是队列满了才移动头指针。出队后才移动头指针；只查看队首元素时，不移动头指针。"
+        }
+      ],
+      "terms": [],
+      "critical": [
+        "不是满了才移动",
+        "出队后才移动",
+        "只查看时不移动"
+      ],
+      "file": "audio/negation.wav",
+      "sha256": "49564a599d86c3d5999dd426392b7cb81e76056fde2d4b1052d98eb2450c62df",
+      "duration": 12.4226875,
+      "peak": 0.502838134765625,
+      "rms": 0.05116695615167506,
+      "referenceType": "frozen_local_tts_script_not_independent_human_transcript"
+    },
+    {
+      "id": "numbers",
+      "category": "数字与边界",
+      "reference": "数组长度是八，预留一个空位，只能存放七个元素。数组长度是十时，最多存放九个元素。",
+      "parts": [
+        {
+          "text": "数组长度是八，预留一个空位，只能存放七个元素。数组长度是十时，最多存放九个元素。"
+        }
+      ],
+      "terms": [],
+      "critical": [
+        "长度八对应容量七",
+        "预留一个空位",
+        "长度十对应容量九"
+      ],
+      "file": "audio/numbers.wav",
+      "sha256": "9a11a1b67d08e4274b9b9644c8c1b0b357e447e8674db0f618cb7513983c5723",
+      "duration": 12.7245625,
+      "peak": 0.94464111328125,
+      "rms": 0.05394160738298744,
+      "referenceType": "frozen_local_tts_script_not_independent_human_transcript"
+    },
+    {
+      "id": "terms",
+      "category": "中文术语",
+      "reference": "我正在比较顺序队列和循环队列。这里的两个术语是头指针和尾指针。",
+      "parts": [
+        {
+          "text": "我正在比较顺序队列和循环队列。这里的两个术语是头指针和尾指针。"
+        }
+      ],
+      "terms": [
+        "顺序队列",
+        "循环队列",
+        "头指针",
+        "尾指针"
+      ],
+      "critical": [
+        "顺序队列",
+        "循环队列",
+        "头指针和尾指针"
+      ],
+      "file": "audio/terms.wav",
+      "sha256": "0a7b4b5882c2e4c802bf8ce49b343fab6177b2a34cb5d7ffb12423852544ba07",
+      "duration": 9.466375,
+      "peak": 0.706298828125,
+      "rms": 0.05408481306963146,
+      "referenceType": "frozen_local_tts_script_not_independent_human_transcript"
+    },
+    {
+      "id": "code_switch",
+      "category": "中英混合",
+      "reference": "用count记录元素个数。front和rear相等不一定为空，还要查看count。",
+      "parts": [
+        {
+          "text": "用"
+        },
+        {
+          "text": "count",
+          "english": true
+        },
+        {
+          "text": "记录元素个数。"
+        },
+        {
+          "text": "front",
+          "english": true
+        },
+        {
+          "text": "和"
+        },
+        {
+          "text": "rear",
+          "english": true
+        },
+        {
+          "text": "相等不一定为空，还要查看"
+        },
+        {
+          "text": "count",
+          "english": true
+        }
+      ],
+      "terms": [
+        "count",
+        "front",
+        "rear"
+      ],
+      "critical": [
+        "count记录个数",
+        "front和rear相等不一定为空",
+        "还要查看count"
+      ],
+      "file": "audio/code_switch.wav",
+      "sha256": "9639f7a36ad73d884428c06f87d61531181831b9a45a0bea0d141edd5ff480db",
+      "duration": 15.8285625,
+      "peak": 0.871063232421875,
+      "rms": 0.05085230639306207,
+      "referenceType": "frozen_local_tts_script_not_independent_human_transcript"
+    },
+    {
+      "id": "self_repair",
+      "category": "自我修正",
+      "reference": "可以放八个。不对，这里预留了一个空位，应该是七个。",
+      "parts": [
+        {
+          "text": "可以放八个。"
+        },
+        {
+          "pauseMs": 700
+        },
+        {
+          "text": "不对，这里预留了一个空位，应该是七个。"
+        }
+      ],
+      "terms": [],
+      "critical": [
+        "先说八个",
+        "保留不对这一修正",
+        "最终七个及预留空位"
+      ],
+      "file": "audio/self_repair.wav",
+      "sha256": "a0201a903ed20015331e8be332945e1a85e92a9f9e9cd9c9f5a8af9e2ea5ff62",
+      "duration": 9.1391875,
+      "peak": 0.8199462890625,
+      "rms": 0.051849272527261014,
+      "referenceType": "frozen_local_tts_script_not_independent_human_transcript"
+    },
+    {
+      "id": "paraphrase",
+      "category": "等义表达",
+      "reference": "水分子从液面进入空气，这就是蒸发。不是只有沸腾时，水才会变成水蒸气。",
+      "parts": [
+        {
+          "text": "水分子从液面进入空气，这就是蒸发。不是只有沸腾时，水才会变成水蒸气。"
+        }
+      ],
+      "terms": [
+        "蒸发"
+      ],
+      "critical": [
+        "液面进入空气",
+        "蒸发",
+        "不是只有沸腾时才变化"
+      ],
+      "file": "audio/paraphrase.wav",
+      "sha256": "ce65b227016a253a242b1162f0b2a9f7bfa3c817a1e85695594514273e1e3909",
+      "duration": 11.159875,
+      "peak": 0.63165283203125,
+      "rms": 0.04340038704694211,
+      "referenceType": "frozen_local_tts_script_not_independent_human_transcript"
+    },
+    {
+      "id": "pause_quiet",
+      "category": "停顿和弱音",
+      "reference": "采用预留空位的实现。所以长度为八时，容量是七。",
+      "parts": [
+        {
+          "text": "采用预留空位的实现。"
+        },
+        {
+          "pauseMs": 1800
+        },
+        {
+          "text": "所以长度为八时，容量是七。",
+          "gain": 0.3
+        }
+      ],
+      "terms": [],
+      "critical": [
+        "预留空位前提",
+        "长度八对应容量七",
+        "停顿中不添加词句"
+      ],
+      "file": "audio/pause_quiet.wav",
+      "sha256": "5e534b01e3124333a77486f9f6e7571dbaed31257c5cf72d2c0512711446d386",
+      "duration": 9.84625,
+      "peak": 0.49237060546875,
+      "rms": 0.027818412162364484,
+      "referenceType": "frozen_local_tts_script_not_independent_human_transcript"
+    },
+    {
+      "id": "unfinished",
+      "category": "未完成片段",
+      "reference": "这里只讲了预留空位。另一种实现还没",
+      "parts": [
+        {
+          "text": "这里只讲了预留空位。"
+        },
+        {
+          "pauseMs": 450
+        },
+        {
+          "text": "另一种实现还没"
+        }
+      ],
+      "terms": [],
+      "critical": [
+        "保留还没的未完成语义",
+        "不补写另一种实现",
+        "不补完未说的结论"
+      ],
+      "scope": "semantic_fragment_not_microphone_interruption",
+      "file": "audio/unfinished.wav",
+      "sha256": "62109bb7d12467b7f0de08e0fc72a68a406461c735bb66c8377a0710e8813ccb",
+      "duration": 6.864875,
+      "peak": 0.43487548828125,
+      "rms": 0.037836296202345104,
+      "referenceType": "frozen_local_tts_script_not_independent_human_transcript"
+    }
+  ],
+  "humanAudioAudit": false,
+  "liveCallsAtFreeze": 0,
+  "paidTTSCalls": 0
+}
