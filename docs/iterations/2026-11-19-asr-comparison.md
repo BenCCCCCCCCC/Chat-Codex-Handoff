@@ -8,6 +8,7 @@
 
 ## 验证与版本
 
+- 交付 [PR #42](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/42)；完整结果提交 `4b76fedd0c9f704a6cc0595592920482c94720dc`，其后仅补本回执链接与原方案的执行状态指引。
 - 调用前冻结：`7a2a3bae5302735ca2c3d00230f544ac0779137e`；模型身份揭示前的助手文本审阅：`3cc7361c9b7227390f8195a8702aadf444e4a249`。不存在独立人工逐字稿或人工听审。
 - 预算／防重复执行的离线场景 2/2 通过，路径 `artifacts/study-teachback/asr-comparison-20261119/offline-cylEPS`；初轮 `offline-h7wf5b` 因 0.252 的浮点严格相等断言误报，改为数值容差后通过，实际调用保护不变。离线模拟没有消费真实次数。
 - 真正执行记录：`artifacts/study-teachback/asr-comparison-20261119/live/run.json`；公开允许字段见 `evidence.json`，16 个请求 ID、16 次预留／结算、原响应哈希全部核对。
