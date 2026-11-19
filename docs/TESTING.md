@@ -32,3 +32,5 @@ node study-teachback-app/run-offline-tests.mjs browser diagnosis-state-ux-01 --r
 node study-teachback-app/run-offline-tests.mjs node setup-flow-01 --conditions-only
 node study-teachback-app/run-offline-tests.mjs browser setup-flow-01 --conditions-only
 ```
+
+材料来源版本／ASR 合同变更的定向入口：`node study-teachback-app/run-offline-tests.mjs node setup-flow-01 --versions-only` 和对应 `browser`。只用合成返回／本机 WAV，生产转写不切换、不调用真实 API；最终共享模块检查集中交由 Windows CI。

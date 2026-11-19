@@ -11,7 +11,7 @@ export async function continuityChecks({check,evaluate,until,reloadPage,shot,cdp
     const original=(await evaluate(read)).attempts[0],before=calls.length;
     await evaluate(`document.getElementById('materialSet').open=true;document.getElementById('addMaterialDetails').open=true`);
     await input('materialTitle','补充笔记B');await input('materialText',b);await click('addMaterial');await until(`document.querySelectorAll('#materialChoices input').length===2&&!document.getElementById('addMaterial').disabled`);
-    await evaluate(`document.querySelectorAll('#materialChoices button')[1].click()`);await click('quoteMaterial');await input('issueQuestion','采用预留空位还是另记count？');await input('issueStatus','condition');await input('issueCondition','本次另记count，不预留空位。');await click('saveStudyIssue');
+    await evaluate(`document.querySelectorAll('#materialChoices [data-read-material]')[1].click()`);await click('quoteMaterial');await input('issueQuestion','采用预留空位还是另记count？');await input('issueStatus','condition');await input('issueCondition','本次另记count，不预留空位。');await click('saveStudyIssue');
     await until(`document.querySelector('[data-continue-issue]')&&!document.querySelector('[data-continue-issue]').disabled`);
     assert.match(await evaluate(`document.getElementById('judgementChoices').textContent`),/需要补入：补充笔记B/);assert.equal(calls.length,before);
     await evaluate(`document.getElementById('judgementChoices').open=true;document.querySelector('[data-continue-issue]').click()`);

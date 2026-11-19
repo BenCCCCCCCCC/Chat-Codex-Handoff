@@ -44,11 +44,11 @@ function contextHasDraft(topic) {
 function fields(topic){
   if(!topic.materials)return contextFields(topic);
   return [field('主题',topic.studyTitle,{kind:'title'}),
-    ...topic.materials.map(m=>field('材料 · '+m.title,m.text,{kind:'material',materialId:m.id})),
+    ...topic.materials.map(m=>field('材料 · '+m.title,m.title+'\n'+m.text,{kind:'material',materialId:m.id})),
     ...(topic.studyIssues??[]).map(item=>field('学习疑点',item.question+'\n'+item.condition,{kind:'studyIssue',issueId:item.id})),
     ...learningContexts(topic).flatMap(c=>contextFields(c).map(f=>field(f.label,f.text,{...f.target,contextId:c.source.id})))];
 }
-export function hasDraft(topic){return !!topic.materialDraft?.text?.trim()||!!topic.issueDraft?.question?.trim()||learningContexts(topic).some(contextHasDraft);}
+export function hasDraft(topic){return !!topic.materialRevisionDraft||!!topic.materialDraft?.text?.trim()||!!topic.issueDraft?.question?.trim()||learningContexts(topic).some(contextHasDraft);}
 export function resolveRecordHit(topic,key) {return fields(topic).find(f=>f.key===key)??null;}
 export function searchRecords(records, query='', filter='all') {
   const terms=normalize(query).trim().split(/\s+/).filter(Boolean);

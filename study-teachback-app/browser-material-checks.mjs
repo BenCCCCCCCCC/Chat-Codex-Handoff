@@ -15,8 +15,8 @@ export async function materialChecks({check,evaluate,until,reloadPage,click,call
     await click('useMaterials');await until(`!document.getElementById('storageRecovery').hidden`);await evaluate(`IDBObjectStore.prototype.put=window.materialNativePut`);await click('retrySave');await until(`document.getElementById('storageRecovery').hidden`);
     assert(await evaluate(`document.getElementById('attemptPanel').hidden`));await reloadPage();assert(await evaluate(`document.getElementById('activeMaterials').textContent.includes('课堂笔记')`));assert(await evaluate(`document.getElementById('attemptPanel').hidden`));
     await click('explain');await input('textExplanation','题面没有说明实现约定，7 或 8 取决于条件。');await click('saveTextExplanation');await until(`!document.getElementById('attemptPanel').hidden`);
-    await evaluate(`document.getElementById('materialSet').open=true;document.querySelectorAll('#materialChoices button')[0].click();`);await click('quoteMaterial');
-    await evaluate(`document.querySelectorAll('#materialChoices button')[1].click()`);await click('quoteMaterial');
+    await evaluate(`document.getElementById('materialSet').open=true;document.querySelectorAll('#materialChoices [data-read-material]')[0].click();`);await click('quoteMaterial');
+    await evaluate(`document.querySelectorAll('#materialChoices [data-read-material]')[1].click()`);await click('quoteMaterial');
     await input('issueQuestion','长度为 8 的队列为什么出现两个容量？');await input('issueCondition','若题面采用预留空位则为 7；另记计数则为 8，缺少约定时暂缓。');await click('saveStudyIssue');
     await until(`document.querySelector('#studyIssueList article')`);assert.equal(calls.length,before);
     setAIConfigured(true);await click('refreshCapabilities');await until(`!document.getElementById('confirm').disabled`);await click('confirm');await until(`document.querySelector('#feedback .finding')`);assert.equal(calls.length,before+1);

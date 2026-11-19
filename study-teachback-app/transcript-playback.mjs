@@ -65,6 +65,7 @@ export function rawPlaybackParts(raw){
 // A corrected or ambiguous quote has no trustworthy word mapping. Keep its segment.
 export function quotePlayback(raw,confirmedSpan,quote){
   if(!confirmedSpan)return null;
+  if(raw?.timing?.level==='recording')return {level:'recording',start:0,end:raw.spans[0].end};
   const fallback={level:'segment',start:confirmedSpan.start,end:confirmedSpan.end};
   const span=raw?.spans?.find(s=>s.id===confirmedSpan.id);
   if(!span||span.text!==confirmedSpan.text||span.start!==confirmedSpan.start||span.end!==confirmedSpan.end||!quote)return fallback;
@@ -90,7 +91,7 @@ export function quotePlayback(raw,confirmedSpan,quote){
   return {level:contextual?'quote-context':'quote',start:Math.max(span.start,start-.3),end:Math.min(span.end,stop+.3)};
 }
 export function playbackLabel(anchor){
-  return `${anchor.level==='quote-context'?'原话邻近范围，非精确词时间':anchor.level==='quote'?'原话附近':anchor.level==='word'?'词级参考':anchor.level==='context'?'邻近范围，非独立词时间':'整段回听'} ${anchor.start.toFixed(1)}–${anchor.end.toFixed(1)} 秒`;
+  return `${anchor.level==='recording'?'整段录音，未提供词句时间':anchor.level==='quote-context'?'原话邻近范围，非精确词时间':anchor.level==='quote'?'原话附近':anchor.level==='word'?'词级参考':anchor.level==='context'?'邻近范围，非独立词时间':'整段回听'} ${anchor.start.toFixed(1)}–${anchor.end.toFixed(1)} 秒`;
 }
 export function renderRawPlayback(container,raw,onPlay,onStatus){
   container.replaceChildren();
