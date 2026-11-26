@@ -1,4 +1,5 @@
-﻿Set-StrictMode -Version 2
+param([switch]$StaleStateOnly)
+Set-StrictMode -Version 2
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'launch.ps1') -LoadOnly
 $evidence = Join-Path (Split-Path $PSScriptRoot) ('artifacts\study-teachback\local-launch-01\run-' + [Guid]::NewGuid().ToString('N'))
@@ -14,7 +15,8 @@ $originalKey = $env:OPENAI_API_KEY; $originalPath = $env:PATH; $originalOverride
 $originalCwd = Get-Location
 $app = $script:AppRoot
 $ledgerPath = Join-Path $app 'runtime\usage.json'
-$before = (Get-FileHash -LiteralPath $ledgerPath -Algorithm SHA256).Hash
+function LedgerFingerprint { if (Test-Path -LiteralPath $ledgerPath) { (Get-FileHash -LiteralPath $ledgerPath -Algorithm SHA256).Hash } else { 'ABSENT' } }
+$before = LedgerFingerprint
 $opened = New-Object System.Collections.Generic.List[string]
 $open = { param($target) $opened.Add($target) }
 $node = (Get-Command node.exe).Source
@@ -23,6 +25,48 @@ try {
     Assert (@(Get-PortOwners).Count -eq 0) 'TEST_PORT_OCCUPIED: Existing process left untouched; no tests started.'
     Assert (-not (Test-Path $script:StatePath)) 'TEST_OWNERSHIP_STATE_EXISTS'
     $env:OPENAI_API_KEY = [Guid]::NewGuid().ToString(); $env:STUDY_PYTHON = $null
+    if ($StaleStateOnly) {
+        $env:OPENAI_API_KEY = $null
+        $ghost = [int]::MaxValue
+        Assert (@(Get-CimInstance Win32_Process -Filter ('ProcessId = ' + $ghost) -ErrorAction Stop).Count -eq 0) 'FIXTURE_PID_PRESENT'
+        Check 'dead saved PID is archived unchanged and supports browser-free launch' {
+            $runtime = Split-Path -Parent $script:StatePath
+            New-Item -ItemType Directory -Force $runtime | Out-Null
+            @{processId=$ghost;started='638000000000000000';app=$app} | ConvertTo-Json | Set-Content -LiteralPath $script:StatePath
+            $beforeState = Get-Content -LiteralPath $script:StatePath -Raw
+            $knownArchives = @(Get-ChildItem -LiteralPath $runtime -Filter 'launcher.abandoned-*.json' -File | Select-Object -ExpandProperty FullName)
+            try {
+                $result = Start-StudySession -SkipBrowser -WaitForStop { Assert ($null -ne (Read-ProductStatus)) 'NO_READINESS_AFTER_ARCHIVE' }
+                Assert ($result -eq 'STARTED_AND_STOPPED') 'DID_NOT_START'
+                [array]$freshArchives = Get-ChildItem -LiteralPath $runtime -Filter 'launcher.abandoned-*.json' -File | Where-Object { $knownArchives -notcontains $_.FullName }
+                Assert ($freshArchives.Count -eq 1) 'ARCHIVE_COUNT'
+                Assert ((Get-Content -LiteralPath $freshArchives[0].FullName -Raw) -ceq $beforeState) 'ARCHIVE_CHANGED'
+                Assert (-not (Test-Path -LiteralPath $script:StatePath)) 'NEW_STATE_LEFT'
+                Assert (@(Get-PortOwners).Count -eq 0) 'OWNED_CHILD_LEFT'
+            } finally {
+                if ((Test-Path -LiteralPath $script:StatePath) -and (Get-Content -LiteralPath $script:StatePath -Raw) -ceq $beforeState) { Remove-Item -LiteralPath $script:StatePath }
+            }
+        }
+        Check 'live unowned PID and occupied port leave process and state alone' {
+            # Use this fixture-owned test process; never discover or kill an external process.
+            @{processId=$PID;started='638000000000000000';app=$app} | ConvertTo-Json | Set-Content -LiteralPath $script:StatePath
+            $beforeState = Get-Content -LiteralPath $script:StatePath -Raw
+            try {
+                Reject { Start-StudySession -SkipBrowser } 'STALE_LAUNCH_STATE'
+                Reject { Stop-OwnedServer } 'OWNERSHIP_UNVERIFIED'
+                Assert ((Get-Content -LiteralPath $script:StatePath -Raw) -ceq $beforeState) 'LIVE_STATE_TOUCHED'
+                $listener = New-Object System.Net.Sockets.TcpListener([Net.IPAddress]::Parse('127.0.0.1'),4317)
+                $listener.Start()
+                Reject { Start-StudySession -SkipBrowser } 'PORT_OCCUPIED_UNKNOWN'
+                Assert ($listener.Server.IsBound) 'UNKNOWN_LISTENER_TOUCHED'
+                Assert ((Get-Content -LiteralPath $script:StatePath -Raw) -ceq $beforeState) 'OCCUPIED_STATE_TOUCHED'
+            } finally {
+                if ($null -ne $listener) { $listener.Stop(); $listener = $null }
+                if ((Test-Path -LiteralPath $script:StatePath) -and (Get-Content -LiteralPath $script:StatePath -Raw) -ceq $beforeState) { Remove-Item -LiteralPath $script:StatePath }
+            }
+        }
+        return
+    }
     Check 'Windows PowerShell 5.1 execution' { Assert ($PSVersionTable.PSVersion.Major -eq 5 -and $PSVersionTable.PSVersion.Minor -eq 1) 'NOT_PS51' }
     Check 'actual source bytes and PS51 syntax have no Markdown or escaping pollution' {
         $tokens = $null; $parseErrors = $null
@@ -90,7 +134,7 @@ try {
         try { Reject { Stop-OwnedServer } 'OWNERSHIP_UNVERIFIED' } finally { Remove-Item -LiteralPath $script:StatePath }
     }
     Check 'ledger identical and launcher provider endpoints absent' {
-        Assert ((Get-FileHash -LiteralPath $ledgerPath -Algorithm SHA256).Hash -eq $before) 'LEDGER_CHANGED'
+        Assert ((LedgerFingerprint) -eq $before) 'LEDGER_CHANGED'
         $source = Get-Content (Join-Path $app 'launch.ps1') -Raw
         Assert ($source -notmatch '/api/(teach|asr|diagnose|register)|api.openai.com|\.env\b|ExecutionPolicy') 'FORBIDDEN_LAUNCH_OPERATION'
         Assert ($opened.Count -eq 2) 'UNEXPECTED_OPEN_COUNT'
@@ -99,5 +143,5 @@ try {
     if ($null -ne $external -and -not $external.HasExited) { $external.Kill(); $external.WaitForExit(); $external.Dispose() }
     if ($null -ne $listener) { $listener.Stop() }
     $env:OPENAI_API_KEY = $originalKey; $env:PATH = $originalPath; $env:STUDY_PYTHON = $originalOverride; Set-Location $originalCwd
-    @{powershell=$PSVersionTable.PSVersion.ToString();cases=@($results.ToArray());ledgerBefore=$before;ledgerAfter=(Get-FileHash $ledgerPath -Algorithm SHA256).Hash;providerCalls=0;browserOpen='Intercepted exact URL; no actual browser interaction';key='Temporary in-memory non-secret test value; not persisted or sent'} | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $evidence 'LAUNCH_TESTS.json') -Encoding UTF8
+    @{powershell=$PSVersionTable.PSVersion.ToString();cases=@($results.ToArray());ledgerBefore=$before;ledgerAfter=(LedgerFingerprint);providerCalls=0;browserOpen='Intercepted exact URL; no actual browser interaction';key='Temporary in-memory non-secret test value; not persisted or sent'} | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $evidence 'LAUNCH_TESTS.json') -Encoding UTF8
 }
