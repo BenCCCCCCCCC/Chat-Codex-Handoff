@@ -39,7 +39,7 @@
 
 保持控制窗口打开；正常停止设计为 Enter。Explorer 鼠标双击、可见控制台 Enter/Ctrl+C 的实际体验仍未验证。突然关窗后用 [Stop-Study.cmd](../Stop-Study.cmd) 做身份校验恢复。先完成学习请求再停止；停止不能撤回已发送的请求。
 
-服务身份由固定的应用标识／接口版本、UI 检查、Node 和精确绝对 `server.mjs` 命令行路径共同确认。未知端口占用者不会被终止；相对路径或不可验证进程会被拒绝。恢复校验 ignored `runtime/launcher.json` 中的 PID、启动时间和应用身份；陈旧状态需要人工检查。没有 service/daemon/autostart。
+服务身份由固定的应用标识／接口版本、UI 检查、Node 和精确绝对 `server.mjs` 命令行路径共同确认。未知端口占用者不会被终止；相对路径或不可验证进程会被拒绝。恢复校验 ignored `runtime/launcher.json` 中的 PID、启动时间和应用身份。重新启动时，只有本机端口已确认空闲、旧状态属于当前目录且 Windows 确认旧 PID 不存在，启动器才将原状态改名为 `runtime/launcher.abandoned-*.json`，然后继续启动。若出现 `STALE_LAUNCH_STATE`，关闭已确认属于这一份应用的窗口，再试一次；仍失败时，保留 `runtime/launcher.json` 原件并记录提示。不要结束身份不明的进程。没有 service/daemon/autostart。
 
 ## 已有显式安装前提（Windows，仓库根目录）
 
