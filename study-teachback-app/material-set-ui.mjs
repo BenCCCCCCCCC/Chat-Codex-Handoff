@@ -68,7 +68,7 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
       card.append(node('p',new Date(item.createdAt).toLocaleString()));open.className='quiet';open.onclick=()=>act(()=>change(async t=>{
         selectContext(t,item.contextId);const point=structuredClone(item.resume);
         const missing=point.view==='attempt'&&!t.attempts.some(a=>a.id===point.attemptId)||point.view==='practice'&&point.roundId&&!t.practiceRounds?.some(r=>r.id===point.roundId);
-        t.resume=missing?{view:'learn'}:point;if(point.roundId&&!missing){t.activePracticeId=point.roundId;t.taskUnavailable=null;}
+        t.resume=missing?{view:'learn'}:point;if(point.roundId&&!missing)t.activePracticeId=point.roundId;
         try{await save(t);}finally{onSwitch();}if(missing)throw Error('STUDY_WORK_MISSING');
       }));
       const missing=missingIssueMaterials(item,topic),use=node('button',missing.length?'补入依据并用于当前学习':'用于当前讲解');use.dataset.useIssue=item.id;use.disabled=busy;

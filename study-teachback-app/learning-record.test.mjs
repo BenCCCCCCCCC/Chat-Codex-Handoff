@@ -21,7 +21,11 @@ test('similar feedback from another report cannot inherit a re-explanation or pr
   const ref={sourceId:'s',attemptId:'a',transcriptVersion:'v',reportId:'r1',findingIndex:0};
   const attempt={id:'a',source,raw:version,corrections:[],reports:[report('r1'),report('r2')]};
   const again={id:'b',source,feedbackRef:ref,raw:{id:'w'},reports:[]};
-  const rows=learningRecord({attempts:[attempt,again],practiceRounds:[{origin:{feedbackRef:ref},answers:[]}]});
+  const context={attempts:[attempt,again],practiceRounds:[{origin:{feedbackRef:ref},answers:[]}]};
+  const rows=learningRecord(context);
   assert.equal(rows[0].report.id,'r2');assert.equal(rows[0].state,'待巩固');assert.equal(rows[0].repeat,undefined);
   assert.equal(rows[1].state,'历史反馈');assert.equal(rows[1].repeat.id,'b');
+  const pending=learningRecord({...context,taskUnavailable:{origin:{feedbackRef:ref}}});
+  assert.equal(pending[0].pendingCheck,false);assert.equal(pending[1].pendingCheck,true);
+  assert.equal(pending[1].state,'历史反馈 · 待检验');
 });

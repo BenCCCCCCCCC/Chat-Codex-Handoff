@@ -73,6 +73,18 @@ test('unsupported material keeps an explicit no-task result across reload withou
   assert.equal(h.topic.taskUnavailable.reason,reason);assert.equal(practiceRounds(h.topic).length,0);
 });
 
+test('browsing an old exercise does not dismiss the pending check',async()=>{
+  const c=taskSplitCases[3],old={id:'previous',answers:[{id:'saved-answer',text:'先检查条件。',status:'complete'}]};
+  const h=setup({id:'topic',createdAt:1,source:c.source,messages:[],attempts:[],practiceRounds:[structuredClone(old)]});
+  const target={attempt:c.attempt,report:c.report,findingIndex:0};
+  await h.flow.fromFeedback(target);const gap=structuredClone(h.topic.taskUnavailable);
+  await h.flow.select(old.id);const reopened=h.reload();
+  assert.deepEqual(activePractice(h.topic),old);assert.deepEqual(h.topic.taskUnavailable,gap);
+  await reopened.fromFeedback(target);
+  assert.equal(activePractice(h.topic),null);assert.deepEqual(h.topic.taskUnavailable,gap);
+  assert.deepEqual(practiceRounds(h.topic),[old]);assert.equal(h.calls.length,0);
+});
+
 test('a questionable real-material prompt pauses grading, preserves drafts and history, and only resumes after withdrawal',async()=>{
   const c=JSON.parse(readFileSync(new URL('../docs/research/fixtures/real-material-corpus.json',import.meta.url))).cases.find(c=>c.id==='mdn-border-box');
   const h=setup({id:'topic',createdAt:1,source:{id:c.id,title:c.title,text:c.text},messages:[],attempts:[],

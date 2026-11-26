@@ -1,7 +1,7 @@
 import {answerDisposition,practicePaused} from './question-review.mjs';
 import {sameJudgement} from './judgement.mjs';
+import {sameFeedbackReference} from './feedback-reference.mjs';
 
-const sameRef=(a,b)=>a&&b&&['sourceId','attemptId','transcriptVersion','reportId','findingIndex'].every(k=>a[k]===b[k]);
 const latest=a=>a.corrections?.at(-1)??a.raw;
 
 export function roundState(round){
@@ -32,11 +32,12 @@ export function learningRecord(context){
       const goal=attempt.source.anchors?.map(g=>g.text).join('、')??'';
       for(const [index,finding] of report.findings.entries()){
         const ref={sourceId:attempt.source.id,attemptId:attempt.id,transcriptVersion:report.transcriptVersion,reportId:report.id,findingIndex:index};
-        const linked=report.id?(context.practiceRounds??[]).filter(r=>sameRef(r.origin?.feedbackRef,ref)):[];
-        const repeats=report.id?context.attempts.filter(a=>!a.continuation&&sameRef(a.feedbackRef,ref)):[];
+        const linked=report.id?(context.practiceRounds??[]).filter(r=>sameFeedbackReference(r.origin?.feedbackRef,ref)):[];
+        const repeats=report.id?context.attempts.filter(a=>!a.continuation&&sameFeedbackReference(a.feedbackRef,ref)):[];
         const round=linked.at(-1),repeat=repeats.at(-1);
-        const state=!current?'历史反馈':round?roundState(round):finding.status==='unknown'?'依据待核对':finding.status==='supported'?'本次已表达':repeat?'已重讲，待情境检验':'待巩固';
-        entries.push({attempt,report,index,finding,ref,goal,state,round,repeat,current});
+        const pendingCheck=sameFeedbackReference(context.taskUnavailable?.origin?.feedbackRef,ref);
+        const state=pendingCheck?(current?'待检验':'历史反馈 · 待检验'):!current?'历史反馈':round?roundState(round):finding.status==='unknown'?'依据待核对':finding.status==='supported'?'本次已表达':repeat?'已重讲，待情境检验':'待巩固';
+        entries.push({attempt,report,index,finding,ref,goal,state,round,repeat,current,pendingCheck});
       }
       for(const assessment of report.judgement?.assessments??[]){
         if(assessment.decision!=='deferred')continue;
