@@ -52,7 +52,7 @@ function render(focus=true){
   $('demoExplanation').textContent=item.explanation;$('demoThinking').textContent=item.thinking;
   $('answerA').textContent=item.answers[0];$('answerB').textContent=item.answers[1];
   $('demoScenario').textContent=item.scenario;$('practiceA').textContent=item.choices[0];$('practiceB').textContent=item.choices[1];
-  $('demoHeading').textContent=['先抓住关键关系','用自己的话讲，不只复述','结论之后，还能查证据','换个情境，检查理解'][step];
+  $('demoHeading').textContent=['读材料','选择讲解','核对反馈','换个情境'][step];
   ['demoRead','demoExplain','demoResult','demoPractice'].forEach((id,i)=>$(id).hidden=i!==step);
   for(const mark of document.querySelectorAll('[data-demo-step]')){if(Number(mark.dataset.demoStep)===step)mark.setAttribute('aria-current','step');else mark.removeAttribute('aria-current');}
   for(const button of document.querySelectorAll('[data-sample]'))button.setAttribute('aria-pressed',String(Number(button.dataset.sample)===sample));

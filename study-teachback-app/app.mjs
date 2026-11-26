@@ -49,10 +49,10 @@ async function api(path,body,headers={}){
 function renderService(){
   const ai=serviceCapabilities?.ai===true;
   $('serviceHelp').hidden=ai&&serviceCapabilities.imports.office&&serviceCapabilities.imports.pdf;
-  $('serviceStatus').textContent=serviceCapabilities?(ai?'AI 已配置。':'AI 尚未配置；可以先保存材料、查看示例和已有记录。'):'正在检查可用功能；本机材料仍可保存。';
+  $('serviceStatus').textContent=serviceCapabilities?(ai?'AI 已配置。':'AI 尚未配置 · 查看设置'):'正在检查可用功能；本机材料仍可保存。';
   $('importCapabilities').textContent=serviceCapabilities?'TXT / MD 可直接导入。'+(!serviceCapabilities.imports.office?' DOCX / PPTX 需要本机 Python 环境。':'')+(!serviceCapabilities.imports.pdf?' PDF 需要本机 Python 和指定版本 pypdf。':''):'';
   $('learn').textContent=ai?'先和 AI 讨论':'保存材料，进入学习';
-  $('startHint').textContent=ai?'直接讲解先保存在本机。选择讨论会将选段发给 AI。':'文字讲解与材料可先保存到本机。配置 AI 后可诊断。';
+  $('startHint').textContent=ai?'讲解先存本机。讨论会把选段发给 AI。':'讲解先存本机。诊断需配置 AI。';
   $('send').disabled=!ai||!!controller;
   renderPractice();
 }
@@ -170,7 +170,7 @@ function prepare(kind='full',focus=null,parentId=null,feedbackRef=null){
   if(!canNavigate())return;showPreparation(kind,focus,parentId,feedbackRef);
 }
 function showPreparation(kind='full',focus=null,parentId=null,feedbackRef=null){
-  if(!topic)return;if(kind==='partial')focus=repairFocus(focus);pending={kind,focus,parentId,parentVersionId:feedbackRef?.transcriptVersion??topic.attempts.find(a=>a.id===parentId)?.corrections.at(-1)?.id??topic.attempts.find(a=>a.id===parentId)?.raw?.id??null,...(feedbackRef?{feedbackRef}:{})};renderTextComposer();$('transcriptionTerms').value=topic.transcriptionTerms??'';$('termDraftStatus').textContent='';reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'用自己的话说明这个概念、条件或过程。';$('recording').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});reveal('voiceComposer',false);reveal('textComposer');$('chooseText').setAttribute('aria-pressed','true');$('chooseVoice').setAttribute('aria-pressed','false');$('textExplanation').focus();$('timer').textContent='00:00';
+  if(!topic)return;if(kind==='partial')focus=repairFocus(focus);pending={kind,focus,parentId,parentVersionId:feedbackRef?.transcriptVersion??topic.attempts.find(a=>a.id===parentId)?.corrections.at(-1)?.id??topic.attempts.find(a=>a.id===parentId)?.raw?.id??null,...(feedbackRef?{feedbackRef}:{})};renderTextComposer();$('transcriptionTerms').value=topic.transcriptionTerms??'';$('termDraftStatus').textContent='';reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'';$('recording').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});reveal('voiceComposer',false);reveal('textComposer');$('chooseText').setAttribute('aria-pressed','true');$('chooseVoice').setAttribute('aria-pressed','false');$('textExplanation').focus();$('timer').textContent='00:00';
 }
 function setTextBusy(busy){
   for(const id of ['textExplanation','textAssistance','discardTextDraft','chooseText','chooseVoice'])$(id).disabled=busy;
@@ -181,7 +181,7 @@ function renderTextComposer(){
   $('textExplanation').value=d?.text??'';
   $('textAssistance').value=d?.assistance??'source';
   $('textComposer').open=true;
-  $('textDraftContext').textContent=d?(d.kind==='partial'?'继续上次针对这一点的草稿：'+d.focus:'继续上次完整讲解草稿'):'保存后可核对文字，再明确选择是否让 AI 分析。';
+  $('textDraftContext').textContent=d?(d.kind==='partial'?'继续上次针对这一点的草稿：'+d.focus:'继续上次完整讲解草稿'):'';
   $('textDraftStatus').textContent=d?'文字草稿已保存在本机':'';
   $('saveTextExplanation').disabled=!d?.text.trim();
   $('discardTextDraft').hidden=!d;
@@ -399,7 +399,7 @@ function renderAttempt(){
   replayRequest++;replayOriginal=null;if(blobURL)URL.revokeObjectURL(blobURL);blobURL=typed?null:URL.createObjectURL(a.audio);if(blobURL)$('player').src=blobURL;else $('player').removeAttribute('src');$('player').hidden=typed;$('audioDetails').hidden=typed;
   const soundIssue=a.interrupted?'录音中断':a.observation?.reason==='NEAR_SILENT'?'音量过低':a.observation?.reason==='CLIPPING'?'录音失真':null;
   $('audioStatus').textContent=`${a.duration?`${a.duration.toFixed(1)} 秒 · `:''}${soundIssue??'原声已保留'}${a.captureOrigin==='upload'?` · ${a.fileName} · 录制时的提示条件未知`:''}。${a.transcriptionTerms?.length?` 转写术语：${a.transcriptionTerms.join('、')}。`:''}`;
-  $('voiceState').textContent=a.fragmentAcceptedAt?'你选择了保留的录音片段；反馈只核对已录下的内容，不作为完整讲解评价。':typed?'已保存你的原始文字；诊断使用明确确认后的版本。':a.raw?'':soundIssue?`${soundIssue}，保留内容可回听；可用文字继续，或在核对后转写片段。`:a.status==='SAVED'?'试听后开始转写。':'转写未完成，原声已保留。';
+  $('voiceState').textContent=a.fragmentAcceptedAt?'你选择了保留的录音片段；反馈只核对已录下的内容，不作为完整讲解评价。':typed?'':a.raw?'':soundIssue?`${soundIssue}，保留内容可回听；可用文字继续，或在核对后转写片段。`:a.status==='SAVED'?'试听后开始转写。':'转写未完成，原声已保留。';
   $('continuationInfo').hidden=!a.continuation;
   if(a.continuation){
     const ref=a.continuation;$('attemptKind').textContent='承接文字';$('voiceState').textContent='从先前表达承接的文字，可继续修改；尚不代表一次新的独立作答。';
@@ -735,7 +735,7 @@ function locateHit(hit){
   $('searchReplay').onclick=()=>act(()=>play(span.start,span.end));
   reveal('searchExcerpt');focusHit($('searchExcerpt'));
 }
-$('searchExcerptClose').onclick=()=>act(async()=>{if(!canNavigate())return;if(topic.resume?.feedbackOrigin){delete topic.resume.feedbackOrigin;await save();}reveal('searchExcerpt',false);focusHit(editors.values().next().value??$('contentHeading'));});
+$('searchExcerptClose').onclick=()=>act(async()=>{if(!canNavigate())return;const changed=!!topic.resume?.feedbackOrigin;if(changed)delete topic.resume.feedbackOrigin;reveal('searchExcerpt',false);focusHit(editors.values().next().value??$('contentHeading'));if(changed)await save();});
 function canNavigate(){if(memoryOnly){notice(friendly('STORAGE_FAILED'));return false;}if(record||capturePending||controller||processing||importPending){notice(friendly('REQUEST_IN_PROGRESS'));return false;}return true;}
 async function newTopic(){
   if(importPending||!canNavigate())return false;

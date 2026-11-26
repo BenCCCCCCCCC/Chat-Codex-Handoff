@@ -10,7 +10,7 @@ import {selectedProvenance} from './source-provenance.mjs';
 const app=readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
 function harness(){
   const nodes=new Map(),requests=[],saved=[],notices=[];
-  const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',addEventListener(){}});return nodes.get(id);};
+  const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',addEventListener(){},focus(){}});return nodes.get(id);};
   const setupDraft=mountSetupDraft({$,storage:{getItem(){return null;},setItem(){},removeItem(){}}});
   const context=vm.createContext({...core,$,setupDraft,selectedProvenance,importDocument:null,serviceCapabilities:{ai:true},topic:null,importPending:false,controller:null,capturePending:false,record:null,processing:false,
     uid:()=> 'synthetic',structuredClone,deleted:new Set(),clearImport(){},renderTopic(){},notice:x=>notices.push(x),friendly:x=>x,act:fn=>fn(),

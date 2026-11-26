@@ -47,7 +47,7 @@ function confirmationHarness(){
   let saveGate=null;
   const context=vm.createContext({$,serviceCapabilities:{ai:true,imports:{office:true,pdf:true}},current:a,topic:{id:'topic',attempts:[a]},record:null,capturePending:false,processing:false,controller:null,deleted:new Set(),
     uid:()=>crypto.randomUUID(),diagnosisStates:new WeakMap(),matchMedia:()=>({matches:true}),editors:new Map(),revisedTranscript,validateFindings,AbortController,ArrayBuffer,
-    transcriptTexts,updateTranscriptDraft,analysisTrace,sameJudgement,judgementIssues,validateJudgementReport,renderJudgementChoices(){},renderComparison(){},renderPractice(){},renderRawPlayback(){},voiceDrafts:{flush:async()=>{},mark(){}},
+    transcriptTexts,updateTranscriptDraft,analysisTrace,sameJudgement,judgementIssues,validateJudgementReport,renderJudgementChoices(){},renderComparison(){},renderNextEvidence(){},renderPractice(){},renderRawPlayback(){},voiceDrafts:{flush:async()=>{},mark(){}},
     blobURL:null,replayRequest:0,replayOriginal:null,URL:{createObjectURL:()=> 'blob:synthetic',revokeObjectURL(){}},
     notice:x=>notices.push(x),friendly:x=>x,act:async fn=>{try{await fn();}catch(e){notices.push(e.message);}},
     reveal(){},el:()=>({setAttribute(){},append(){}}),button:()=>({}),renderProcess(){},renderFeedback:r=>visible.push(r),updateBudget(){},
