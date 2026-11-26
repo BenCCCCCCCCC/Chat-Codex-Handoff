@@ -6,6 +6,8 @@
 
 [八阶段验收与 AI 决策](V1_EXIT_GATES.md) 已纳入原 Chat 第六轮建议：可证伪需求与强对照、严重错判否决、回滚保留新证据。Windows 启动脚本 `-SkipBrowser` 在隔离副本免 Key 正常启停、`/demo` 200；尚未声称 Explorer 双击、物理录音、正式灰度或旧应用原地降级。[隔离本机快照换包演练](reviews/2026-11-26-local-rollback-receipt.md)已通过：旧包前置快照保留旧首答，重开候选保留新旧两答；不同数据结构原地降级未测。真人仍 0，未招募、未改生产模型或公开部署。以下 #49 段是上一轮基线。
 
+[文字诊断离线排练](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/e3416fccd2fed596a96ffb294719755895f47c59/docs/research/quality-baseline-2026-11-18/OFFLINE_REHEARSAL_2026-11-26.md)锁定 6 个合成样本；8 类拒绝与 4 项既有回归通过。两个手写语义错判可穿过结构校验，需定向独立盲评；本次未观察任何真实模型输出，0 请求、0 费用。原 Chat 第八轮覆盖此报告和回滚证据；实际 Sol 权限、兼容性及成本待实测。
+
 2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `57fad6f5438e801c6b10d12ca383901956ab7210`。可运行代码定在 `74f7d6112e531dfdf2b5736843b6875060f12a4f`。
 
 [第四轮审核](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a0feffba3992aff2dcb9ec677f7601848fd780ae/docs/master/reviews/2026-11-26-v1-review-queue.md)的唯一 P1 已复现并修复。[#49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49) 已合并，[Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45830711752) 通过。在干净 Edge 配置模拟 26 小时后重开，原题与原首答恢复。不同反馈可产生不同份数的题。两个主题重复同一道门禁题时，现在分别询问是否未见题目或答案、是否未另查资料；选择已见或不确定则转普通练习。旧 v6 的首答不补记见题自报。实际付费调用 0 次，真实参与者 0 人。[实页与验收记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/docs/iterations/2026-11-26-next-day-first-answer.md)
