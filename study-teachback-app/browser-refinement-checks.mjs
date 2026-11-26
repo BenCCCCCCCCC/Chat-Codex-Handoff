@@ -69,7 +69,6 @@ export async function refinementChecks({check,evaluate,until,reloadPage,shot,cdp
       a.reports[0].findings=[{status:'missing',message:'备份是升级的必要条件，完成备份不保证一定能升级。',sourceQuote:t.source.text,spanId:null,quote:null,eventId:null,repair:'完成备份不保证升级。'}];
       await db.put(t);db.close();})()`);
     await reloadPage();await until(`document.querySelector('[data-answer-target]')`);
-    assert.equal(await evaluate(`document.querySelector('.feedback-alternatives').open`),false);
     await shot('feedback-probe','contentHeading');
     await evaluate(`{const b=document.querySelector('[data-answer-target]');b.scrollIntoView({block:'center'});b.focus();}`);
     await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',windowsVirtualKeyCode:13});

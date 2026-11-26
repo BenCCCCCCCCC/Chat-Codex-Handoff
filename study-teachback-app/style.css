@@ -1,8 +1,8 @@
 :root {
-  --canvas:#f4f6fb; --surface:#fff; --ink:#202b45; --muted:#63708a;
-  --line:#dfe5f0; --control-line:#7e8da7; --accent:#315bc8; --accent-hover:#2448a7;
-  --accent-soft:#edf2ff; --warning:#77551b; --warning-soft:#fff7e6;
-  --record:#b74e39; --record-soft:#fff0eb; --danger:#ad3344; --danger-soft:#fff0f2; --focus:#315bc8;
+  --canvas:#f5f5f7; --surface:#fff; --ink:#1d1d1f; --muted:#5f6068;
+  --line:#dedee3; --control-line:#85858d; --accent:#0066cc; --accent-hover:#004f9e;
+  --accent-soft:#eaf3ff; --warning:#77551b; --warning-soft:#fff7e6;
+  --record:#b74e39; --record-soft:#fff0eb; --danger:#ad3344; --danger-soft:#fff0f2; --focus:#0066cc;
   --sidebar:214px; --font-ui:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
   font:1rem/1.65 var(--font-ui); color:var(--ink); background:var(--canvas); font-synthesis:none;
 }
@@ -147,3 +147,36 @@ body:has(#workspace:not([hidden]) #recording:not([hidden])) .dock{display:none}
 
 .continuation-info,.condition-unavailable{padding:14px 16px;border:1px solid #ccd7ef;border-radius:10px;background:#f2f5fc;margin:12px 0}.continuation-info p{margin-top:0}#materialChoices label{min-width:0;overflow-wrap:anywhere}#studyIssueList article>button{margin:6px 8px 0 0}
 .material-group{border-bottom:1px solid var(--line);padding:12px 0}.material-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.material-row label{flex:1 1 100%;margin:0}.material-row button{font-size:.8125rem;padding:7px 10px}.material-group>p,.material-group details>p{font-size:.75rem;color:var(--muted);overflow-wrap:anywhere}.material-group details{margin:8px 0 0;padding-left:12px;border-left:2px solid var(--line)}#materialEditor{margin:16px 0;padding:12px;background:var(--accent-soft);border-radius:10px}#materialEditor input,#materialEditor textarea{min-width:0;max-width:100%}#materialEditor .actions{gap:8px;flex-wrap:wrap}
+
+/* Global navigation stays compact so the desktop width belongs to the lesson. */
+.sidebar{position:static;width:auto;flex-direction:row;align-items:center;gap:32px;padding:10px max(20px,calc((100vw - 1216px)/2));background:#202124;color:#fff;border:0}
+.sidebar .brand{font-size:1.05rem;white-space:nowrap;gap:8px}.brand svg{width:23px;color:inherit}
+.sidebar nav{display:flex;margin:0;gap:4px}.sidebar .nav-item{width:auto;white-space:nowrap;color:#d9d9df;padding:6px 14px;min-height:36px;border-radius:24px}
+.sidebar .nav-item.active,.sidebar .nav-item:hover{color:#fff;background:#424247}.sidebar .nav-item>svg,.sidebar .nav-item>span{display:none}
+.sidebar-note{margin:0 0 0 auto;padding:0;color:#d5d5db;border:0;white-space:nowrap}.sidebar .local-dot{background:#89cba9}
+.app-shell{margin:0}.topbar{min-height:44px;padding:6px max(24px,calc((100vw - 1168px)/2));background:var(--surface)}
+main{max-width:1220px;padding:24px 32px 112px}.dock{left:0;padding:10px max(24px,calc((100vw - 1168px)/2))}
+body:has(#setup:not([hidden])) main>.journey{display:none}
+.welcome{margin:16px 0 28px;gap:24px}.intro h1{font-size:clamp(2rem,4vw,3.6rem);line-height:1.1;letter-spacing:-.055em;font-weight:700}.intro h1 br{display:block}.intro p{margin-top:14px;font-size:1rem}
+.demo-teaser{display:flex;align-items:center;gap:15px;background:#eaf1fa;padding:22px 24px;border-radius:16px;text-decoration:none;color:var(--ink)}
+.demo-teaser:hover{background:#dfeaf8}.demo-teaser small{display:block;color:var(--muted);font-size:.8rem}.demo-symbol{background:white;color:var(--accent);border-radius:50%;width:40px;height:40px;display:grid;place-items:center}
+.card{border-radius:16px;background:var(--surface)}.file-entry,.demo-source,#materialPanel{background:#fafafb}.setup-card .source-entry{grid-template-columns:minmax(0,1.4fr) minmax(200px,1fr)}
+button,.button-link{border-radius:12px}.dock button,.setup-bottom button,.resume-strip button{border-radius:24px}
+.resume-strip{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;background:white;border:1px solid var(--line);border-radius:16px;margin-bottom:20px}.resume-strip h2,.resume-strip p{margin:0}.resume-strip p{color:var(--muted);font-size:.875rem}
+#setup:has(.resume-strip:not([hidden])) .welcome h1{font-size:1.6rem}#setup:has(.resume-strip:not([hidden])) .intro br{display:none}
+.workspace-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}.workspace-heading h1{font-size:clamp(1.5rem,2.6vw,2.25rem);margin:0}.workspace-heading p{margin:0 0 4px}
+.workspace-heading nav{display:flex;flex-wrap:wrap;gap:4px}.workspace-heading a{padding:9px 12px;border-radius:20px;text-decoration:none;color:var(--accent);font-size:.875rem}.workspace-heading a:hover{background:var(--accent-soft)}
+#workspace[data-view=practice]>.workspace-heading{grid-column:1/-1;grid-row:1;margin:0}
+#workspace[data-view=practice] #materialPanel,#workspace[data-view=practice] #practicePanel{grid-row:2}
+#workspace[data-view=practice] #studyIssues{grid-row:3}
+#workspace .learning{min-height:320px}#workspace .columns{grid-template-columns:minmax(240px,.74fr) minmax(0,1.8fr)}
+.finding .feedback-alternatives{margin:12px 0}.finding .feedback-alternatives button:last-child{color:var(--accent);background:var(--accent-soft)}
+@media(min-width:901px){#materialPanel{max-height:calc(100vh - 140px);overflow:auto;scrollbar-gutter:stable}.workspace-heading,.resume-strip{scroll-margin-top:20px}}
+@media(max-width:760px){
+  .sidebar{justify-content:space-between;gap:4px;padding:8px;flex-wrap:wrap}.sidebar nav{flex-wrap:wrap}.sidebar .nav-item{padding:6px 8px;font-size:.75rem}.sidebar .brand{font-size:.9375rem}.sidebar-note{display:none}
+  main{padding:14px 16px 128px}.topbar{padding:6px 16px}.welcome{margin:8px 0 16px;display:block}.intro h1{font-size:2rem}.intro p{font-size:.875rem;margin:8px 0}
+  .demo-teaser{display:inline-flex;gap:8px;padding:4px 0;background:none;color:var(--accent);font-size:.8125rem}.demo-teaser small{display:inline;margin-left:8px;font-size:.75rem}.demo-symbol{width:24px;height:24px}
+  .setup-card .source-entry,#workspace .columns{grid-template-columns:1fr}.setup-bottom .compact-actions{display:grid;grid-template-columns:1fr 1fr}
+  .workspace-heading{display:block}.workspace-heading nav{margin:8px 0}.workspace-heading a{padding:7px 12px;background:white}.resume-strip{padding:14px;align-items:start}
+  .dock{padding:8px 16px max(8px,env(safe-area-inset-bottom))}.dock .compact-actions{width:100%}.dock button{min-width:0;flex:1}
+}
