@@ -7,6 +7,8 @@ test('only the eligible first answer closes a gap, and review suspends that conc
   const round={draft:'',answers:[answer]};
   assert.equal(roundState(round),'本题答对，参考情况未核实');
   Object.assign(round,{checkMode:'submitted',closedAnswerId:'first'});
+  assert.equal(roundState(round),'首答正确 · 此前是否见题未记录');
+  answer.selfReportedUnseen=true;
   assert.equal(roundState(round),'本次独立检验通过');
   round.review={status:'held'};
   assert.equal(roundState(round),'题目待核对');

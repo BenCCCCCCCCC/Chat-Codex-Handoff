@@ -182,7 +182,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       const round=activePractice(topic);
       if(round?.checkMode==='closed'){round.checkMode='assisted';await save(topic);}
     }),
-    answer: ({unassisted=false}={}) => run(async topic => {
+    answer: ({unassisted=false,unseen=false}={}) => run(async topic => {
       const round = activePractice(topic), text = round?.draft?.trim();
       if (!round || practicePaused(round) || !text) return;
       if (text.length > 2000) throw new Error('INPUT_TOO_LARGE');
@@ -190,13 +190,15 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       if(round.task){
         topic.resume = {view:'practice'};
         if (!await checkLocalTask(topic,round)) return;
-        if(round.checkMode==='closed'&&!unassisted)return;
+        if(round.checkMode==='closed'&&!(unassisted&&unseen))return;
         const assessment=assessBoundedTask(round.task,topic.source,round.taskTarget,text);
         if(!round.answers.some(a=>a.choiceId===text&&a.status==='complete'&&answerDisposition(round,a)==='current')){
           round.answers.push({id:uid(),text:round.task.exercise.choices.find(c=>c.id===text).label,
             choiceId:text,createdAt:now(),completedAt:now(),status:'complete',result:assessment.message,assessment});
           if(round.checkMode==='closed'){
-            round.checkMode='submitted';round.closedAnswerId=round.answers.at(-1).id;
+            const first=round.answers.at(-1);
+            first.selfReportedUnseen=true;
+            round.checkMode='submitted';round.closedAnswerId=first.id;
           }
         }
         round.draft='';await save(topic);return;

@@ -3,7 +3,7 @@ export function mountClosedCheck({flow,flushDraft,markDraft,getTopic,act}){
   const $=id=>document.getElementById(id),dialog=$('closedCheck');
   let active=null;
   function buttons(){
-    $('closedSubmit').disabled=flow.busy||!active?.draft||!$('closedAttest').checked;
+    $('closedSubmit').disabled=flow.busy||!active?.draft||!$('closedUnseen').checked||!$('closedAttest').checked;
     $('closedLeave').disabled=flow.busy;
   }
   function render(round,visible){
@@ -15,6 +15,7 @@ export function mountClosedCheck({flow,flushDraft,markDraft,getTopic,act}){
       active=round;
       $('closedScenario').textContent=round.task.exercise.assumptions.join(' ');
       $('closedQuestion').textContent=round.question;
+      $('closedUnseen').checked=false;
       $('closedAttest').checked=false;
       const field=$('closedChoices');
       field.replaceChildren(Object.assign(document.createElement('legend'),{textContent:'你的判断'}));
@@ -28,10 +29,11 @@ export function mountClosedCheck({flow,flushDraft,markDraft,getTopic,act}){
     if(!dialog.open){dialog.showModal();$('closedQuestion').focus();}
     buttons();
   }
+  $('closedUnseen').onchange=buttons;
   $('closedAttest').onchange=buttons;
   $('closedSubmit').onclick=()=>act(async()=>{
     if(!active||$('closedSubmit').disabled)return;
-    await flushDraft();await flow.answer({unassisted:true});
+    await flushDraft();await flow.answer({unassisted:$('closedAttest').checked,unseen:$('closedUnseen').checked});
   });
   const leave=()=>act(async()=>{await flushDraft();await flow.leaveCheck();});
   $('closedLeave').onclick=leave;

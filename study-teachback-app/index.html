@@ -131,7 +131,13 @@
   </div>
 </dialog>
 <dialog id="recordDialog" aria-labelledby="dossierTitle"><div class="sectionHead"><h2 id="dossierTitle">理解档案</h2><button id="recordClose" class="quiet">返回学习</button></div><p id="recordContext" class="muted"></p><div id="recordItems"></div></dialog>
-<dialog id="closedCheck" aria-labelledby="closedQuestion"><p class="panel-label">独立检验 · 首次作答</p><p id="closedScenario"></p><h2 id="closedQuestion" tabindex="-1"></h2><fieldset id="closedChoices"><legend>你的判断</legend></fieldset><label class="check-attest"><input type="checkbox" id="closedAttest">本次作答未另外查看材料、答案或提示</label><div class="actions"><button id="closedSubmit" disabled>提交判断</button><button class="quiet" id="closedLeave">转为普通练习</button></div></dialog>
+<dialog id="closedCheck" aria-labelledby="closedQuestion">
+  <p class="panel-label">独立检验 · 首次作答</p><p id="closedScenario"></p><h2 id="closedQuestion" tabindex="-1"></h2>
+  <fieldset id="closedChoices"><legend>你的判断</legend></fieldset>
+  <label class="check-attest"><input type="checkbox" id="closedUnseen">此前没见过这道题或它的答案</label>
+  <label class="check-attest"><input type="checkbox" id="closedAttest">本次作答未另外查看材料、答案或提示</label>
+  <div class="actions"><button id="closedSubmit" disabled>提交判断</button><button class="quiet" id="closedLeave">见过或不确定？转普通练习</button></div>
+</dialog>
 <dialog id="deleteDialog" aria-labelledby="deleteTitle" aria-describedby="deleteScope"><h2 id="deleteTitle">确认删除</h2><p id="deleteScope"></p><p class="muted">不会删除导出副本或撤回已发送的云请求；费用账本独立保留。</p><div class="actions"><button id="deleteCancel" class="quiet" autofocus>取消</button><button id="deleteConfirm" class="danger">确认删除</button></div></dialog>
 <dialog id="backupDialog" aria-labelledby="backupTitle" aria-describedby="backupPolicy"><h2 id="backupTitle">恢复学习备份</h2><label for="backupFile">选择导出的 JSON 文件</label><input id="backupFile" type="file" accept=".json,application/json"><p id="backupSummary" class="prewrap"></p><p id="backupPolicy" class="muted">仅在本机读取。恢复为新副本，保留 7 天，已有记录不变。</p><p id="backupStatus" role="status"></p><div class="actions"><button id="backupCancel" class="quiet">取消</button><button id="backupConfirm" disabled>恢复副本</button></div></dialog>
 <dialog id="reviewConfirmDialog" aria-labelledby="reviewPreviewTitle"><h2 id="reviewPreviewTitle"></h2><h3>原题与原情境</h3><p id="reviewPreviewOriginal" class="prewrap"></p><h3>接下来作答的题目</h3><p id="reviewPreviewQuestion" class="prewrap"></p><h3>你的复核说明与材料依据</h3><p id="reviewPreviewNote" class="prewrap"></p><blockquote id="reviewPreviewBasis"></blockquote><p>原题、原回答及先前反馈均保留。旧判断不作为答错记录，也不带入新回答的 AI 判断。此操作只保存在本机，不会请求 AI。</p><div class="actions"><button id="reviewCancel" class="quiet" autofocus>返回修改</button><button id="reviewConfirm">确认</button></div></dialog>

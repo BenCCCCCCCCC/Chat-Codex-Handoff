@@ -12,7 +12,9 @@ export function roundState(round){
   if(answer.status!=='complete')return '已作答，待反馈';
   if(answer.conditionResult?.decision==='deferred')return '条件待核对';
   if(answer.assessment?.verdict==='incorrect')return '继续修正';
-  if(round.checkMode==='submitted'&&answer.id===round.closedAnswerId&&answer.assessment?.verdict==='correct')return '本次独立检验通过';
+  if(round.checkMode==='submitted'&&answer.id===round.closedAnswerId&&answer.assessment?.verdict==='correct'){
+    return answer.selfReportedUnseen===true?'本次独立检验通过':'首答正确 · 此前是否见题未记录';
+  }
   return answer.assessment?.verdict==='correct'?'本题答对，参考情况未核实':'已作答，查看反馈';
 }
 
