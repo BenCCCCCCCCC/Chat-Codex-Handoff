@@ -14,8 +14,8 @@ test('only the eligible first answer closes a gap, and review suspends that conc
   assert.equal(roundState(round),'待作答');
 });
 test('similar feedback from another report cannot inherit a re-explanation or practice result',()=>{
-  const source={id:'s',text:'须签到。'},version={id:'v'},finding={status:'missing',sourceQuote:'须签到。',message:'遗漏签到'};
-  const report=id=>({id,channel:'content',transcriptVersion:'v',findings:[finding]});
+  const source={id:'s',text:'须签到。'},version={id:'v',reviewed:true},finding={status:'missing',sourceQuote:'须签到。',message:'遗漏签到'};
+  const report=id=>({id,attemptId:'a',sourceId:'s',channel:'content',transcriptVersion:'v',findings:[finding]});
   const ref={sourceId:'s',attemptId:'a',transcriptVersion:'v',reportId:'r1',findingIndex:0};
   const attempt={id:'a',source,raw:version,corrections:[],reports:[report('r1'),report('r2')]};
   const again={id:'b',source,feedbackRef:ref,raw:{id:'w'},reports:[]};
