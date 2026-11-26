@@ -1,6 +1,8 @@
 # 知而能讲 · 当前状态
 
-2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `86dd8b668122174f5e12edf5cda5c99dd04777e2`。
+2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `90a711b3dc98a9cd084c630b4aefc961680cec86`。
+
+[#47](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/47) 已处理 #46 审核中的两项 Must Fix。390px Edge 在 4,026 字材料中段同时显示原句和返回按钮，点击可回到原反馈。改动已诊断讲解后，旧报告可读，重新诊断恢复主按钮并说明发送内容。模型调用 0 次。[窄屏原文](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/docs/iterations/v1-experience/long-source-return.png) · [修改后状态](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/docs/iterations/v1-experience/revised-diagnosis.png) · [Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45824578826)。
 
 ## 2026-11-26 · 工程执行
 
