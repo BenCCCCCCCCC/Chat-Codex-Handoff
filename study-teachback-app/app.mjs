@@ -15,7 +15,7 @@ import { openStore } from './storage.mjs';
 import { confirmLocalProcess, localize, processEvidence } from './diagnostic-localization.mjs';
 import {activityTime, resumePoint, practiceRounds} from './practice.mjs';
 import {mountPractice} from './practice-ui.mjs';
-import {feedbackReference,resolveFeedback} from './feedback-reference.mjs';
+import {feedbackReference,resolveFeedback,sameFeedbackReference} from './feedback-reference.mjs';
 import {encodeBackup} from './backup.mjs';
 import {mountBackup} from './backup-ui.mjs';
 import {mountChat} from './chat-ui.mjs';
@@ -646,9 +646,12 @@ async function continueTopic(id,point,hitKey){
     await flushDrafts();const target=await db.get(id);
     if(!target)return notice('这条学习记录已不存在，请重新打开学习记录。');
     const hit=hitKey&&resolveRecordHit(target,hitKey);
-    if(hit){if(hit.target.contextId)selectContext(target,hit.target.contextId);point=hitDestination(hit);if(hit.target.kind==='practice'){target.activePracticeId=hit.target.roundId;target.taskUnavailable=null;}}
+    if(hit){if(hit.target.contextId)selectContext(target,hit.target.contextId);point=hitDestination(hit);if(hit.target.kind==='practice')point.roundId=hit.target.roundId;}
     if(point?.contextId)selectContext(target,point.contextId);
-    if(point?.roundId){target.activePracticeId=point.roundId;target.taskUnavailable=null;point={view:'practice'};}
+    if(point?.pendingFeedbackRef){
+      if(!sameFeedbackReference(target.taskUnavailable?.origin?.feedbackRef,point.pendingFeedbackRef))return notice('这条反馈已没有待检验项。');
+      target.activePracticeId=null;point={view:'practice'};
+    }else if(point?.roundId){target.activePracticeId=point.roundId;point={view:'practice'};}
     if(point)target.resume=point;
     if(point||hit)resumeTopic(target);else resumeLastActivity(target);
     await save();
@@ -714,6 +717,7 @@ $('openRecord').onclick=()=>act(async()=>{
     const actions=el('div',undefined,'compact-actions');
     actions.append(button('查看原讲解',()=>jump({view:'attempt',attemptId:e.attempt.id,...(e.ref?.reportId?{feedbackOrigin:{origin:{feedbackRef:e.ref},fromRecord:true}}:{})})));
     if(e.repeat)actions.append(button('查看重讲',async()=>{await jump({view:'attempt',attemptId:e.repeat.id});$('attemptComparison').open=true;focusHit($('attemptComparison'));}));
+    if(e.pendingCheck)actions.append(button('继续待检验',()=>jump({view:'practice',pendingFeedbackRef:e.ref})));
     if(e.round)actions.append(button('查看这道题',()=>jump({view:'practice',roundId:e.round.id})));
     card.append(actions);list.append(card);
   }

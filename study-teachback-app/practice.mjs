@@ -19,11 +19,9 @@ export function practiceRounds(topic) {
   return topic.practiceRounds;
 }
 
-export function activePractice(topic) {
-  if(topic?.taskUnavailable)return null;
-  const rounds = practiceRounds(topic);
-  return rounds.find(r => r.id === topic?.activePracticeId) ?? rounds.at(-1) ?? null;
-}
+const selectedPractice=(topic,rounds)=>rounds?.find(r=>r.id===topic?.activePracticeId) ??
+  (topic?.taskUnavailable?null:rounds?.at(-1)??null);
+export function activePractice(topic) { return selectedPractice(topic,practiceRounds(topic)); }
 
 export function activityTime(topic) {
   return Math.max(topic.updatedAt ?? 0, topic.createdAt ?? 0,
@@ -117,7 +115,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
     fromConditions: ref=>run(async topic=>{
       const match=resolveConditionFeedback(topic,ref);if(!match.context)throw Error('INVALID_PRACTICE_CONDITIONS');
       const rounds=topic.practiceRounds??[],existing=latestQuestion(rounds,rounds.findLast(r=>JSON.stringify(r.conditionContext?.ref)===JSON.stringify(ref)));
-      if(existing){topic.activePracticeId=existing.id;topic.taskUnavailable=null;topic.resume={view:'practice'};await save(topic);return;}
+      if(existing){topic.activePracticeId=existing.id;topic.resume={view:'practice'};await save(topic);return;}
       await generateConditional(topic,match.context);
     }),
     again: ()=>run(async topic=>{
@@ -130,14 +128,14 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
         (r.origin?.feedbackRef?JSON.stringify(r.origin.feedbackRef)===JSON.stringify(target.feedbackRef):resolveFeedback(topic,r.origin,r.taskTarget).report?.id===target.feedbackRef.reportId));
       const existing=latestQuestion(rounds,rounds.find(same));
       topic.resume={view:'practice'};
-      if(existing){topic.taskUnavailable=null;topic.practiceRequest=null;topic.activePracticeId=existing.id;await save(topic);return;}
+      if(existing){topic.practiceRequest=null;topic.activePracticeId=existing.id;await save(topic);return;}
       // Keep an unavailable result visible when the same feedback is reopened.
       if(topic.taskUnavailable&&JSON.stringify(topic.taskUnavailable.target)===JSON.stringify(context.target)&&JSON.stringify(topic.taskUnavailable.origin?.feedbackRef)===JSON.stringify(target.feedbackRef)){
         topic.activePracticeId=null;await save(topic);return;
       }
       const task=boundedTask(context);
       const origin={targetId:context.target.id,sourceId:topic.source.id,attemptId:context.target.attemptId,transcriptVersion:context.target.transcriptVersion,...(target.feedbackRef?{feedbackRef:target.feedbackRef}:{})};
-      topic.taskUnavailable=null;topic.practiceRequest=null;
+      topic.practiceRequest=null;
       if(task.exercise){
         const seen=learningContexts(topic).some(c=>c.practiceRounds?.some(r=>
           r.question===task.exercise.question&&JSON.stringify(r.task?.exercise?.assumptions??[])===JSON.stringify(task.exercise.assumptions)));
@@ -151,7 +149,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       await save(topic);
     }),
     start: () => run(async topic => {
-      const previousRound=topic.taskUnavailable?null:topic.practiceRounds?.find(r=>r.id===topic.activePracticeId)??topic.practiceRounds?.at(-1);
+      const previousRound=selectedPractice(topic,topic.practiceRounds);
       const conditions=topic.resume?.view==='practice'?(topic.practiceRequest?.conditionContext??previousRound?.conditionContext):null;
       if(conditions)return generateConditional(topic,conditions);
       requireAI();
@@ -271,7 +269,6 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       if (busy || !canStart()) return;
       const topic = getTopic();
       if (!practiceRounds(topic).some(r => r.id === id)) return;
-      topic.taskUnavailable=null;
       topic.activePracticeId = id; topic.resume = {view:'practice'};
       changed(); await save(topic);
     }

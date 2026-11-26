@@ -1,5 +1,8 @@
 import {identifier} from './core.mjs';
 
+export const sameFeedbackReference=(a,b)=>!!(a?.reportId&&b?.reportId&&
+  ['sourceId','attemptId','transcriptVersion','reportId','findingIndex'].every(k=>a[k]===b[k]));
+
 export function validateFeedbackReference(ref){
   for(const key of ['sourceId','attemptId','transcriptVersion','reportId'])identifier(ref?.[key]);
   if(!Number.isInteger(ref.findingIndex)||ref.findingIndex<0||ref.findingIndex>2)throw Error('INVALID_FEEDBACK_REFERENCE');

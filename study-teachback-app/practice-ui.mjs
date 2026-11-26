@@ -22,12 +22,13 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
   const closed=mountClosedCheck({flow,flushDraft,markDraft:t=>drafts.mark(t),getTopic,act});
   function render() {
     const topic = getTopic(), round = activePractice(topic), rounds = practiceRounds(topic);
+    const gap=round?null:topic?.taskUnavailable;
     onChanged();
     const held=round?.review?.status==='held',paused=practicePaused(round),replaced=round?.review?.status==='replaced';
     const conditionContext=round?.conditionContext??topic?.practiceRequest?.conditionContext;
-    const origin=conditionContext?{conditionRef:conditionContext.ref}:round?.origin??topic?.taskUnavailable?.origin,target=round?.taskTarget??topic?.taskUnavailable?.target;
+    const origin=conditionContext?{conditionRef:conditionContext.ref}:round?.origin??gap?.origin,target=round?.taskTarget??gap?.target;
     const destination=topic&&(origin?.conditionRef?resolveConditionFeedback(topic,origin.conditionRef):resolveFeedback(topic,origin,target));
-    const gap=topic?.taskUnavailable,canContinueGap=!!(gap?.origin?.feedbackRef&&destination?.finding);
+    const canContinueGap=!!(gap?.origin?.feedbackRef&&destination?.finding);
     $('practiceContinueGap').hidden=!canContinueGap;
     $('practiceContinueGap').disabled=flow.busy;
     $('practiceReturn').hidden=!origin;
@@ -38,7 +39,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     $('practiceNew').disabled = flow.busy;
     $('practiceNew').disabled ||= !aiReady();
     $('practiceNew').hidden = !!gap||!!round?.task&&!topic?.practiceRequest?.conditionContext;
-    $('practiceNew').textContent = topic?.taskUnavailable ? '另开情境练习 · AI' : '换一道题 · AI';
+    $('practiceNew').textContent = gap ? '另开情境练习 · AI' : '换一道题 · AI';
     if(conditionContext)$('practiceNew').textContent=topic?.practiceRequest?.conditionContext?'重试按原条件出题 · AI':'按同样条件换一题 · AI';
     $('startPractice').disabled = flow.busy||!round&&!topic?.practiceRequest&&!topic?.taskUnavailable&&!aiReady();
     $('startPractice').textContent=round?'继续已有练习':gap?'继续待检验':topic?.practiceRequest?'查看出题状态':aiReady()?'情境练习':'新情境需配置 AI';
@@ -183,7 +184,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     await onFeedback(context?{conditionRef:context.ref}:saved?.origin,r?.taskTarget??saved?.target);
   });
   $('practiceContinueGap').onclick=()=>act(async()=>{
-    const gap=getTopic()?.taskUnavailable;
+    const topic=getTopic(),gap=activePractice(topic)?null:topic?.taskUnavailable;
     if(!gap||!canStart())return;
     const message=await onContinueGap(gap);
     if(message)$('practiceStatus').textContent=message;
