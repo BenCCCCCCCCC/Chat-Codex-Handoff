@@ -69,3 +69,29 @@
 - README 与介绍页在 E 同步实际能力，明确独立检验是有限规则题、自报参考情况；已预写示例与真实模型分开。
 
 **User Decision Needed：** 无新增即时决策。维持既有 ASR 生产切换、付费调用、全文保存/数据政策及原件外传、公开发布边界。未改产品代码、未发起 CI、未合并 PR；本次只写 MASTER 审核记录。
+
+
+## 2026-11-26 · #45 本地候选增量审核（第二轮）
+
+**审核范围：** [#44](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/44) 已合并 `13b9cdc43f6dcbf3ddb66cd4c4713792d53855cc`，最终头 `3997213ea8cb781de0d4e3c4d36a007e12ffd03e` 的 [CI 45804569677](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45804569677) success。新增 [#45](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/45) 已合并，远端产品头 [a178fb4](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/a178fb427e14597e76124934b69ddc15dae17779)，最终 PR 头 `84bf29ff8b411c493c324e07c79cac8b2a261f73`。[候选报告](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/docs/iterations/2026-11-26-local-candidate.md) 的实现基点 f258b9b 首次 CI 失败；后续变更为测试、文档、截图，最终 [CI 45807391200](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45807391200) Windows job 139866105993 的 Node、提取、Edge 均 success。只认可最终头的工程证据，不重跑。读到 CURRENT_STATE 仍为 #44；#45 合并事实以远端为准，Codex 可按正常回执更新状态，不覆盖其并发文档。
+
+### 上一轮三项 Must Fix 的处理情况
+
+- **下一步动作已落实。** #45 diff 中 app.mjs 的 renderNextEvidence 以当前草稿、待确认讲解、原报告/题目状态决定继续文字、核对原声、局部重讲、作答、总结等动作；查看依据变为次级。报告有隔离 Edge 从遗漏到独立首答、刷新及 v6 恢复证据。已看到桌面工作台与反馈截图中“重讲这一点”成为主色按钮，旧底栏降级。不再要求重做该动作映射。
+- **普通旧题不再静默作为独立题。** #45 增加提示并报告实际走查普通题→重讲→独立入口，答对仍为普通作答；未见错误升级证据。下述提示持续性是剩余体验问题，不等于原状态逻辑未修。
+- **窄屏首屏已修。** [390px 新首页](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/docs/iterations/v1-experience/mobile-home.png) 直接讲解固定在屏幕底部、材料粘贴框缩短；此前首屏埋主动作的问题关闭。检查后续布局时不要重新引入这一断点。
+
+### Must Fix（有代码依据的小修，不阻断独立 UI 批次）
+
+**普通题身份不能只靠进入时的一次文案。** [practice-ui.mjs L200–208](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/study-teachback-app/practice-ui.mjs#L200-L208) 仅在 fromFeedback 的调用返回后临时写入 practiceOriginStatus；[L23–33](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/study-teachback-app/practice-ui.mjs#L23-L33) 每次 render 会覆盖为普通历史反馈来源说明，[L70–90](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/study-teachback-app/practice-ui.mjs#L70-L90) 的标题仍可能为“理解检验”。因此重绘/重开后没有稳定的普通/独立身份说明。以现有 round.checkMode、task、answerDisposition 等信息在 render 中派生题目类型，普通题明确普通练习，已提交独立首答与待复核保持各自状态；不要另存重复字段或强制生成新题。只需复用已有普通题复用场景，加一次重开/渲染观察，不跑全套。不主张已复现错误计分。
+
+### Next（与已链接的 desktop-ui-direction 合并，不另开 UI 任务）
+
+- **继续设计减法的证据：** [桌面反馈](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/docs/iterations/v1-experience/desktop-feedback.png) 中焦点虽已到核对讲解文字，反馈本体仍在空聊天、材料卡、整宽疑点卡下方，固定底栏覆盖视口底部；用户已经进入诊断时仍需滚动找结果。下一轮按既有设计方向将当前阶段正文置于主区，把聊天/材料/疑点收为可按需切换的辅助内容，底栏只保留必要动作并留足滚动空间。桌面前后用同一反馈状态截图比较，实际点引用→返回→重讲一次；无需重新做首页或逐像素测试。
+- **免费示例更真实但要避免误解。** [demo-course.png](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/docs/iterations/v1-experience/demo-course.png) 课程题材与迁移题优于旧日常例。[demo.mjs](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/study-teachback-app/demo.mjs) 仅检查重讲非空、固定判选择题，现有顶部预写提示保留，建议在重讲输入处就地加一句“示例不评价自由文字；下题仅核对选择”，避免用户以为写任何内容都被 AI 判为正确。不是要求接入真实模型。
+- **C/E/F 已有具体交付，不重复规划。** 长文件重新导入选段进入新材料版本，报告有超过 5000 字 TXT 尾段及旧版本备份恢复证据，未扩大持久化范围。README 已缩短并提供候选使用说明、90 秒脚本、本地反馈显式导出（代码仅包含版本/环节/影响/用户说明）。启动器 ready、免 Key demo 200、浏览器取得音轨 live→ended 有报告；Explorer 双击、实际麦克风录音质量与归档音频听审仍未验。
+- **D 准备已完成一份具体方案**：[形成性研究](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/docs/research/v1-formative-study.md) 5–8 人、两工具交替、同时间、24–48 小时自由解释、三项评分、记录救援与分母，现参与者 0。下一步先冻结各工具与材料顺序对应关系和未见平行题（统计例数字与免费示例重复，方案已要求更换已见题；执行前落实），以真实使用困难/严重误判驱动改进，不宣称教学有效或已完成商业发布。
+
+**User Decision Needed：** 无新增即时事项。已获批的 ASR 比较仍封存，待听审与生产切换取舍；真实研究/付费/外传/公开发行维持原授权边界。继续本机候选和现有 UI 批次即可。
+
+本轮实际读取 #45 diff、最终 CI/job、README/报告/研究方案与 5 张合成页面截图，未独立运行 Windows 页面，无真实学习者或新模型效果验证。仅回写 MASTER 审核，无产品代码修改、第二个 Codex、CI 触发或 PR 合并。
