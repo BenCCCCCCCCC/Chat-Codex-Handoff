@@ -195,3 +195,20 @@
 **方向和放行：** 保留当前桌面练习的一个阅读正文与就近主动作；材料隐藏时正文使用主区、居中/对齐可读宽度（如约 640–760px 上限，按内容与窗口调整，不当固定像素验收）；显示材料时才分栏。回访首页使用一条从既有状态派生的“继续：[具体问题/动作]”，点击直接进入同题、原报告/草稿，不增加第二套进度或重复入口。正文仅保留题面、作答区/本轮结果、一个下一动作；原文/原话、来源版本及历史首答通过短证据入口按需展开，返回仍聚焦原题。未见/无辅助两项自报、实际发送范围/过时/待复核及其他影响判断的提示保留在适当动作旁，不为视觉减法删除。以一个已有 1280px 普通练习恢复场景验证收起/展开材料前后图、提交或继续草稿、查证→返回焦点与原题/版本/答案不变；同一场景在 390px 基本重排与键盘操作，不重复全套。后续产品评估看首次正确动作和多余滚动/找回次数，不以截图美观代替用户观察。待有 PR/SHA、真实页面及报告后原 Chat 再做证据复核；不将本段视为任务已完成。
 
 **Must Fix / Next / User Decision Needed：** 当前无新增已复现的产品 P0；1、2 是产品/模型/发布决定前的门槛补差，3 承接正在安排的桌面任务，普通决策无需请示。下一步 Codex 自主执行已有桌面维护与允许的离线验证；真正启动六人研究、NotebookLM 等新服务的数据交互、额外付费调用、生产转写、对外发行或改变留存需另行授权。本轮仅在已有 MASTER 审核队列追加评审意见，未改产品代码、未启动 Codex、未运行 Windows、未重复 #49 验收/CI、未招募/调用模型/发布。
+
+
+## 2026-11-26 · #50 普通练习阅读列独立证据复核（第七轮）
+
+**范围：** [PR #50](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/50) 当前 open、未合并，base `57fad6f5438e801c6b10d12ca383901956ab7210`，精确 head [217d222](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/217d2225f74fa34bb69d9e34cb682c11e18b86a4)。核对实际 diff（1 提交、6 文件：CSS +10/-2、20 行报告及四张 PNG）与 [报告](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/217d2225f74fa34bb69d9e34cb682c11e18b86a4/docs/iterations/2026-11-26-practice-reading-column.md)，实际打开全部四图。仅审本 PR，不重跑 #49。
+
+- **成因已纠正：** 原样式更高特异性的练习材料定位将材料移至第二行，非 DOM 隐藏；正文自动落入第一行窄列。diff 移除两处旧材料定位约束，保留共享 grid 的材料第一行第一列；[CSS L256–268](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/217d2225f74fa34bb69d9e34cb682c11e18b86a4/study-teachback-app/style.css#L256-L268) 在桌面根据直接子级材料可见且 details open 决定双列或 max-width 54rem 的单列，收起仍保留 summary 和重新展开入口。移动端原单列规则 L294–300 保留。不涉及 JS、数据、题目或模型修改。
+- **实页核对：** [改前1280](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/217d2225f74fa34bb69d9e34cb682c11e18b86a4/docs/iterations/v1-experience/practice-reading-before.png) 窄正文及大片空置，[展开1280](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/217d2225f74fa34bb69d9e34cb682c11e18b86a4/docs/iterations/v1-experience/practice-reading-open.png) 左材料与右题面顶部对齐（报告 255/770px），[收起1280](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/217d2225f74fa34bb69d9e34cb682c11e18b86a4/docs/iterations/v1-experience/practice-reading-closed.png) 正文居中、材料入口仍在（报告 864px），[收起390](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/217d2225f74fa34bb69d9e34cb682c11e18b86a4/docs/iterations/v1-experience/practice-reading-390.png) 单列可见题面、普通练习与返回原反馈按钮（报告正文358px、文档390px）。截图与测量一致，达到本 P1 布局目标；不据静态图声称键盘行为或独立复测。
+- **恢复/查证：** 报告明确隔离 Edge 关闭再重开同一配置，自动断言题目和回答 ID 及普通练习身份不变，键盘 Enter 返回原反馈。配比合成题与四图一致；认可该定向工程证据，但本 Chat 未运行 Windows、未独立操作键盘，截图本身不能证明具体焦点/反馈 ID 或真人次日学习。报告记录产品 API POST、供应商请求均 0。脚本 -SkipBrowser 启停、健康检查及 /demo 200 仅为脚本运行证据，不是 Explorer 双击、物理录音或灰度/无损回滚。
+
+**CI：** [45848545298](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45848545298) 由精确 head 的 workflow 查询关联。Run 45848545298=in_progress/未终态；Windows job 140008500971=in_progress/未终态；Node completed/success，Edge in_progress/未终态，提取 skipped。未新触发或重跑 CI。
+
+**Must Fix：** 目前无代码/实页证据支持新增必修。产品/代码审查无阻塞，条件性支持合并此 SHA；必须等对应 Windows CI 进入 success 终态且 PR 头未变后才放行。
+
+**Next：** CI 终态核对后由 Codex/负责人按既有规则决定合并，若成功关闭第五轮的阅读列 P1，不追加全量回归或额外界面任务。若 CI 失败，先查实际受影响路径。其他 V1 放行门槛、真实用户、回滚仍独立待验证，不属于本 PR。
+
+**User Decision Needed：** 无新增即时决策。仅写审核队列，未修改产品代码、启动 Codex、点击合并、招募、付费或发布。
