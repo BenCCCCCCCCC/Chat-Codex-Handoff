@@ -56,4 +56,21 @@ export async function textChecks({check,evaluate,until,reloadPage,click,calls,sh
     assert.equal(calls.length,before+2);await click('historyButton');await click('deleteAll');await reloadPage();
     await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
   });
+  await check('two topic writers using the same revision cannot both overwrite the record',async()=>{
+    const result=await evaluate(`(async()=>{
+      const {openStore}=await import('/storage.mjs'),name='guard-'+crypto.randomUUID();
+      const a=await openStore(name),b=await openStore(name),id='synthetic',now=Date.now();
+      const initial={id,createdAt:now,updatedAt:now};
+      await a.putCurrent(initial,null,true);
+      const outcomes=await Promise.allSettled([
+        a.putCurrent({...initial,updatedAt:now+1,note:'first'},now),
+        b.putCurrent({...initial,updatedAt:now+1,note:'second'},now)
+      ]);
+      const stored=await a.get(id);
+      a.close();b.close();indexedDB.deleteDatabase(name);
+      return {winners:outcomes.flatMap((r,i)=>r.status==='fulfilled'?[['first','second'][i]]:[]),
+        rejections:outcomes.filter(r=>r.status==='rejected').map(r=>r.reason.message),stored:stored.note};
+    })()`);
+    assert.deepEqual(result.winners,[result.stored]);assert.deepEqual(result.rejections,['STORAGE_CHANGED']);
+  });
 }
