@@ -1,5 +1,7 @@
 # 知而能讲 · 当前状态
 
+2026-11-27｜产品头 [036a361](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/036a361dfaeee6075b9f8c32d112072466933387)，[PR #51](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/51) 已合并。免费示例的“开始自己的学习”进新材料，“学习首页”保留选择，普通启动仍续学；已有草稿、旧题及原答不改。原 Chat 第十一轮续审认可原运行时，实现不变，仅 1208fb7 补 VM 测试夹具后 [Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45868278893) 通过。[两张实页与验收](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/84885dc8283718a5b332a147be958ef770f8a98a/docs/iterations/2026-11-26-demo-own-study.md)。无真实 AI 调用、付费或发布。
+
 2026-11-26（第二批）｜产品头 [8d8f2d7](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4)。[PR #50](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/50) 合并，验证实现 217d2225，原 Chat 第七轮独立核对 diff、四图后无必修，匹配 [Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45848545298) Node / Edge 通过。1280px 普通练习正文由 255px 到展开材料 770px、收起时 864px；390px 无横向溢出，隔离配置重开保留原题/原答及键盘返回原反馈。原因是旧样式把材料推到第二行，不是 DOM 消失。只改样式与证据，无模型、用户数据变更，也无付费。[四图与验收](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/217d2225f74fa34bb69d9e34cb682c11e18b86a4/docs/iterations/2026-11-26-practice-reading-column.md)。
  
 [本轮 Windows 候选源码 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4.zip) 固定至 #50 合并树，版本号仍为 1.0.0-rc.1。仓库 README 保留上一份已验证 ZIP；本链接是本轮增量候选，不是正式发布。

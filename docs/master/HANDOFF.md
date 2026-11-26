@@ -6,6 +6,8 @@
 
 ## 2026-11-26 · V1.0 完整 0→1 产品路线（当前执行入口）
 
+入口切片 [#51](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/51) 已合并至 [036a361](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/036a361dfaeee6075b9f8c32d112072466933387)，原 Chat 续审与 [Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45868278893) 已闭环。下一步只核实并接续“多段材料→同一缺口→有依据的练习或明确待检验”；沿用原反馈和来源，保留独立性，不改模型或存储边界。
+
 第四轮审核的唯一 P1 已在两个主题的同一门禁题上复现。原版只确认“本次未查阅”就能再次记为独立通过。修复后，未见题和无辅助需分别自报；已见或不确定可沿用所选答案转普通练习。旧 v6 仅保留当时已有的证据。[审核原文](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a0feffba3992aff2dcb9ec677f7601848fd780ae/docs/master/reviews/2026-11-26-v1-review-queue.md) · [PR #49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49)
 
 复核入口为[定向走查与三张实页](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/ee0e0b434712d08d6f8d0b2654bd8759e5e0439e/docs/iterations/2026-11-26-next-day-first-answer.md)。在同一干净 Edge 配置关闭再启动、日期偏移 26 小时后，旧题与原首答恢复；配比规则在另一份合成反馈下从三份换为四份。免费示例重开回到读材料。此为工程验收；D 批人工回访、锁定自由解释及盲评仍待真实研究。产品代码 `74f7d6112e531dfdf2b5736843b6875060f12a4f`。
