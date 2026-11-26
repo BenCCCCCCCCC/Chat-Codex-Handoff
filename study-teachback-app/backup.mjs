@@ -41,7 +41,7 @@ export async function encodeBackup(topic) {
   const conditional=learningContexts(topic).some(c=>c.practiceRequest?.conditionContext||c.practiceRounds?.some(r=>r.conditionContext));
   const continued=learningContexts(topic).some(c=>c.continuationIntent||c.attempts.some(a=>a.continuation||a.fragmentAcceptedAt||a.contentScope));
   const versioned=topic.materialVersions?.length||topic.materialRevisionDraft||learningContexts(topic).some(c=>c.attempts.some(a=>a.raw?.timing?.level==='recording'));
-  const learning=learningContexts(topic).some(c=>c.selectedGoal||c.repairRef||c.practiceRounds?.some(r=>r.checkMode));
+  const learning=topic.materialRevisionDraft?.provenance||learningContexts(topic).some(c=>c.selectedGoal||c.repairRef||c.practiceRounds?.some(r=>r.checkMode));
   return JSON.stringify({format:learning?LEARNING_FORMAT:versioned?VERSIONS_FORMAT:continued?CONTINUATION_FORMAT:conditional?CONDITIONS_FORMAT:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
     notice:'导出副本不受应用内删除控制', topic:data}, null, 2);
 }

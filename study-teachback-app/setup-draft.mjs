@@ -21,7 +21,7 @@ export function mountSetupDraft({$,storage,now=Date.now}){
     try{
       if(state)storage.setItem(SETUP_DRAFT_KEY,JSON.stringify(state));
       else storage.removeItem(SETUP_DRAFT_KEY);
-      dirty=false;status(state?'新建草稿已保存在本机 · 从创建起保留七天':'');
+      dirty=false;status(state?'草稿已保存 · 自创建日起 7 天':'');
     }catch{
       status('新建草稿尚未保存。请重试保存，或复制文字后再离开。');
       throw Error('SETUP_DRAFT_SAVE_FAILED');
@@ -39,7 +39,7 @@ export function mountSetupDraft({$,storage,now=Date.now}){
   function restore(){
     const value=state?.fields??empty();
     for(const key of fields)$(key).value=value[key];
-    status(dirty?'新建草稿尚未保存。请重试保存，或复制文字后再离开。':state?'新建草稿已保存在本机 · 从创建起保留七天':'');
+    status(dirty?'新建草稿尚未保存。请重试保存，或复制文字后再离开。':state?'草稿已保存 · 自创建日起 7 天':'');
   }
   try{
     const raw=storage.getItem(SETUP_DRAFT_KEY);

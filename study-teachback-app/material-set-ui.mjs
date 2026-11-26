@@ -8,6 +8,7 @@ import {missingIssueMaterials} from './judgement.mjs';
 export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeChange,onSwitch,onReference=()=>{},act}){
   const $=id=>document.getElementById(id),node=(tag,value)=>{const e=document.createElement(tag);e.textContent=value;return e;};
   let busy=false,previewId=null,documentPreview=null;
+  function clearFilePreview(){documentPreview=null;$('materialExtracted').value='';$('materialRegion').replaceChildren();$('materialImportPreview').hidden=true;}
   const drafts=createDraftSaver({save,onStatus:s=>{$('materialRevisionStatus').textContent=$('materialDraftStatus').textContent=s==='saved'?'草稿已保存在本机':s==='saving'?'正在保存…':s==='error'?'草稿保存失败，请重试保存。':'';},onError:e=>act(()=>Promise.reject(e))});
   const lock=value=>{for(const root of ['materialSet','studyIssues','materialPreview'])for(const input of $(root).querySelectorAll('input,textarea,select,button'))input.disabled=value;};
   async function change(work){
@@ -23,6 +24,7 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
   }
   function render(){
     const topic=getTopic();if(!topic)return;
+    if(documentPreview&&(documentPreview.topicId!==topic.id||documentPreview.contextId!==topic.source.id||documentPreview.baseId&&documentPreview.baseId!==topic.materialRevisionDraft?.baseId))clearFilePreview();
     const materials=materialList(topic),selected=topic.activeMaterialIds??[topic.source.id];
     const latest=currentMaterials(topic);
     $('materialSetSummary').textContent=`材料集 · ${latest.length} 份`;
@@ -96,7 +98,7 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
   $('addMaterial').onclick=()=>act(()=>change(async t=>{addMaterial(t,t.materialDraft??{title:'',text:''});await save(t);$('addMaterialDetails').open=false;}));
   const work=t=>captureMaterialWork(t,{draft:!$('recording').hidden&&!$('textComposer').hidden});
   for(const id of ['materialRevisionTitle','materialRevisionText','materialRevisionNote']){
-    $(id).oninput=()=>{if(busy)return;const t=getTopic();if(!t.materialRevisionDraft)return;Object.assign(t.materialRevisionDraft,{title:$('materialRevisionTitle').value,text:$('materialRevisionText').value,note:$('materialRevisionNote').value});drafts.mark(t);};
+    $(id).oninput=()=>{if(busy)return;const t=getTopic();if(!t.materialRevisionDraft)return;Object.assign(t.materialRevisionDraft,{title:$('materialRevisionTitle').value,text:$('materialRevisionText').value,note:$('materialRevisionNote').value});if(t.materialRevisionDraft.provenance?.text!==t.materialRevisionDraft.text)delete t.materialRevisionDraft.provenance;drafts.mark(t);};
     $(id).onblur=()=>act(()=>drafts.flush());
   }
   $('cancelMaterialRevision').onclick=()=>act(()=>change(async t=>{delete t.materialRevisionDraft;await save(t);}));
@@ -123,20 +125,32 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
     if(!quote||quote.length>1500)throw Error('SELECT_MATERIAL_QUOTE');
     const input=[...$('issueEvidence').querySelectorAll('textarea')].find(e=>e.dataset.materialId===previewId);input.value=quote;$('studyIssues').open=$('issueEditor').open=true;captureIssue();input.focus();
   });
-  $('materialFile').onchange=()=>act(async()=>{
-    const file=$('materialFile').files[0];if(!file)return;
-    await change(async()=>{
+  for(const id of ['materialFile','revisionFile'])$(id).onchange=()=>act(async()=>{
+    const file=$(id).files[0];if(!file)return;
+    await change(async t=>{
+      clearFilePreview();$(id).value='';
       if(file.size>10*1024*1024)throw Error('FILE_TOO_LARGE');
       const result=await request('/api/extract',await file.arrayBuffer(),{'X-Source-Format':file.name.split('.').pop().toLowerCase()});
-      documentPreview=importedDocument(result.blocks,file.name);$('materialExtracted').value=documentPreview.text;$('materialImportPreview').hidden=false;
-      $('materialImportStatus').textContent='核对后选择本次保留的片段；每份最多 5,000 字，原文件不保存。';
+      documentPreview={...importedDocument(result.blocks,file.name),topicId:t.id,contextId:t.source.id,baseId:id==='revisionFile'?t.materialRevisionDraft.baseId:null};
+      $(id).after($('materialImportPreview'));$('materialExtracted').value=documentPreview.text;$('materialImportPreview').hidden=false;
+      const region=$('materialRegion');region.replaceChildren(node('option','在完整预览中选段'),...documentPreview.regions.map(r=>node('option',r.label)));
+      $('materialImportStatus').textContent=file.name+' · 在下方选择最多 5,000 字，确认后只保留选段和定位。';
     });
-    $('materialFile').value='';
   });
+  $('materialRegion').onchange=()=>{
+    const region=documentPreview?.regions[$('materialRegion').selectedIndex-1];if(!region)return;
+    const input=$('materialExtracted');input.focus();input.setSelectionRange(region.start,region.end);
+  };
   for(const all of [false,true])$(all?'materialUseAll':'materialUseSelection').onclick=()=>act(()=>change(async t=>{
     const p=$('materialExtracted'),start=all?0:p.selectionStart,end=all?p.value.length:p.selectionEnd;
     const provenance=selectedProvenance(documentPreview,start,end);if(!provenance)throw Error('SELECT_MATERIAL_QUOTE');if(provenance.text.length>5000)throw Error('MATERIAL_SELECTION_TOO_LARGE');
-    initializeMaterials(t);t.materialDraft={title:t.materialDraft?.title||autoTitle(provenance.text,documentPreview.fileName),text:provenance.text,provenance};await save(t);$('materialImportPreview').hidden=true;
+    if(documentPreview.baseId){
+      if(t.materialRevisionDraft?.baseId!==documentPreview.baseId)throw Error('MATERIAL_VERSION_CHANGED');
+      Object.assign(t.materialRevisionDraft,{text:provenance.text,provenance});
+    }else{
+      initializeMaterials(t);t.materialDraft={title:t.materialDraft?.title||autoTitle(provenance.text,documentPreview.fileName),text:provenance.text,provenance};
+    }
+    await save(t);clearFilePreview();
   }));
-  return {render,showMaterial,continueIssue,flushDraft:()=>drafts.flush(),discardDraft:()=>drafts.discard(),get hasPendingDraft(){return drafts.pending;}};
+  return {render,showMaterial,continueIssue,clearFilePreview,flushDraft:()=>drafts.flush(),discardDraft:()=>drafts.discard(),get hasPendingDraft(){return drafts.pending;}};
 }

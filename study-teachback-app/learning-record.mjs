@@ -43,7 +43,7 @@ export function learningRecord(context){
       }
     }
   }
-  const priority=e=>!e.current?3:['本次已表达','本次独立检验通过'].includes(e.state)?2:0;
+  const priority=e=>!e.current?3:e.state==='本次已表达'?2:e.state==='本次独立检验通过'?1:0;
   return entries.sort((a,b)=>priority(a)-priority(b)||(b.report.createdAt??0)-(a.report.createdAt??0));
 }
 export function goalSource(topic){

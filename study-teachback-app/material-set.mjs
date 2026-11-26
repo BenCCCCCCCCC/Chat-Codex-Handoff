@@ -17,15 +17,17 @@ export function reviseMaterial(topic,draft,{uid=()=>crypto.randomUUID(),now=Date
   const base=materialList(topic).find(m=>m.id===draft.baseId);
   requireValue(base&&currentMaterials(topic).some(m=>m.id===base.id),'MATERIAL_VERSION_CHANGED');
   const title=text(draft.title.trim(),120),value=text(draft.text.trim(),5000);
-  requireValue(title!==base.title||value!==base.text,'MATERIAL_UNCHANGED');
+  const relocated=!!draft.provenance&&JSON.stringify(draft.provenance)!==JSON.stringify(base.provenance);
+  requireValue(title!==base.title||value!==base.text||relocated,'MATERIAL_UNCHANGED');
   const source={id:uid(),title,text:value};
   // Edited text is a new local selection; old page offsets are no longer true.
-  if(value===base.text&&base.provenance)source.provenance=structuredClone(base.provenance);
+  if(draft.provenance)source.provenance=structuredClone(draft.provenance);
+  else if(value===base.text&&base.provenance)source.provenance=structuredClone(base.provenance);
   sourceValue(source);requireValue(!materialList(topic).some(m=>m.id===source.id),'INVALID_MATERIAL_SET');
   const note=draft.note?.trim()??'';requireValue(typeof note==='string'&&note.length<=500,'INVALID_MATERIAL_SET');
   const parent=materialVersion(topic,base.id),createdAt=now();requireValue(Number.isFinite(createdAt)&&createdAt>0,'INVALID_MATERIAL_SET');
   initializeMaterials(topic);topic.materials.push(source);
-  (topic.materialVersions??=[]).push({id:source.id,rootId:parent.rootId,parentId:base.id,number:parent.number+1,createdAt,kind:value===base.text?'rename':'revision',note});
+  (topic.materialVersions??=[]).push({id:source.id,rootId:parent.rootId,parentId:base.id,number:parent.number+1,createdAt,kind:value===base.text&&!relocated?'rename':'revision',note});
   delete topic.materialRevisionDraft;return source;
 }
 export const learningContexts=topic=>[topic,...(topic.studyContexts??[])];
@@ -113,7 +115,7 @@ export function validateMaterialSet(topic){
     for(const field of ['id','title','text','provenance'])requireValue(JSON.stringify(c.source[field])===JSON.stringify(expected[field]),'INVALID_MATERIAL_SET');
   }
   if(topic.materialDraft){const d=topic.materialDraft;requireValue(typeof d.title==='string'&&d.title.length<=120&&typeof d.text==='string'&&d.text.length<=5000,'INVALID_MATERIAL_SET');if(d.provenance)sourceValue({id:'draft',...d,title:d.title||'未命名'});}
-  if(topic.materialRevisionDraft){const d=topic.materialRevisionDraft;requireValue(ids.has(d.baseId)&&typeof d.title==='string'&&d.title.length<=120&&typeof d.text==='string'&&d.text.length<=5000&&typeof d.note==='string'&&d.note.length<=500,'INVALID_MATERIAL_SET');}
+  if(topic.materialRevisionDraft){const d=topic.materialRevisionDraft;requireValue(ids.has(d.baseId)&&typeof d.title==='string'&&d.title.length<=120&&typeof d.text==='string'&&d.text.length<=5000&&typeof d.note==='string'&&d.note.length<=500,'INVALID_MATERIAL_SET');if(d.provenance)sourceValue({id:'draft',title:d.title||'未命名',text:d.text,provenance:d.provenance});}
   if(topic.issueDraft){
     const d=topic.issueDraft;requireValue(typeof d.question==='string'&&d.question.length<=500&&typeof d.condition==='string'&&d.condition.length<=1000&&['deferred','condition'].includes(d.status),'INVALID_STUDY_ISSUE');
     requireValue(Array.isArray(d.evidence)&&d.evidence.length<=12&&d.evidence.every(e=>ids.has(e.materialId)&&typeof e.quote==='string'&&e.quote.length<=1500),'INVALID_STUDY_ISSUE');

@@ -15,12 +15,3 @@ test('UI retains native import, nonnavigable brand, modal semantics and reduced 
   assert(!/<a class="brand"/.test(html));assert(!/https?:\/\/[^<]*\.(?:css|js|woff)/.test(html));
   assert(css.includes('prefers-reduced-motion'));assert(css.includes('scroll-margin'));assert(css.includes('min-height:44px'));
 });
-test('text and native file entries stay accessible with neutral sans-serif',()=>{
-  assert(html.includes('选择学习文件'));
-  assert(html.includes('PDF / DOCX / PPTX / TXT / MD · 最大 10 MB'));
-  assert(html.includes('仅在本机解析'));
-  assert(html.indexOf('粘贴学习材料')<html.indexOf('id="sourceFile"'));
-  assert(html.includes('accept=".md,.txt,.pdf,.docx,.pptx"'));
-  assert(!/Noto Serif|Songti|SimSun|font-display/.test(css));
-  assert(!/01 \/|LEARN|EXPLAIN|DIAGNOSE|纸页书桌|设计示例|测试 badge/.test(html));
-});

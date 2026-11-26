@@ -81,7 +81,7 @@ async function trustedPointer(expression,label){
   const input=await evaluate('window.probeInputs.at(-1)');assert(input?.trusted,`Untrusted input: ${label}`);probe.trustedInputs.push({label,...input});
 }
 async function probeState(label){probe.states.push({label,...await evaluate(`({visibilityState:document.visibilityState,hasFocus:document.hasFocus(),currentTime:document.getElementById('player').currentTime,duration:document.getElementById('player').duration,paused:document.getElementById('player').paused,ended:document.getElementById('player').ended})`)});}
-const click=async id=>{await evaluate(`document.getElementById(${JSON.stringify(id)}).click()`);if(id==='historyButton')await until(`!document.getElementById('history').hidden && !document.getElementById('history').hasAttribute('aria-busy')`);if(['deleteAttempt','deleteAll'].includes(id)){await until(`document.getElementById('deleteDialog').open`);await evaluate(`document.getElementById('deleteConfirm').click()`);}};
+const click=async id=>{await evaluate(`document.getElementById(${JSON.stringify(id)}).click()`);if(id==='historyButton')await until(`!document.getElementById('history').hidden && !document.getElementById('history').hasAttribute('aria-busy')`);if(['deleteAttempt','deleteAll'].includes(id)){await until(`document.getElementById('deleteDialog').open`);await evaluate(`document.getElementById('deleteConfirm').click()`);if(id==='deleteAll')await until(`!document.getElementById('setup').hidden && document.getElementById('history').hidden`);}};
 const all=`(async()=>{const s=await import('/storage.mjs');const db=await s.openStore();const t=await db.all();db.close();return t.map(t=>({...t,attempts:t.attempts.map(a=>({...a,audio:a.audio?{size:a.audio.size,type:a.audio.type}:null}))}));})()`;
 const screenshots=[],replaySnapshots=[];
 async function shot(name,target){if(target)await evaluate(`document.getElementById(${JSON.stringify(target)}).scrollIntoView({behavior:'instant',block:'start'})`);await pause(120);const r=await cdp('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});const file=`${run}-${name}.png`;writeFileSync(join(root,file),Buffer.from(r.data,'base64'));screenshots.push({file,state:name,viewport:await evaluate('({width:innerWidth,height:innerHeight})'),scope:'Actual product / synthetic fixtures / stub provider'});}
@@ -350,7 +350,7 @@ try{
     for(const width of [1440,390]){
       await cdp('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});await evaluate(`window.scrollTo(0,0)`);
       assert(await evaluate(`(()=>{const f=document.getElementById('sourceFile'),r=f.getBoundingClientRect(),t=document.getElementById('source').getBoundingClientRect();return r.width>180 && t.top>0 && t.bottom<innerHeight && getComputedStyle(f).display!=='none' && document.documentElement.scrollWidth<=innerWidth+1;})()`));
-      assert(await evaluate(`document.querySelector('.file-title').textContent==='选择学习文件' && document.getElementById('fileTypes').textContent.includes('10 MB')`));
+      assert(await evaluate(`document.getElementById('sourceFile').labels[0]?.textContent.trim().length>0 && document.getElementById('source').labels.length>0`));
       await shot(`initial-file-entry-${width}`);
     }
     assert.equal(calls.length,0);

@@ -8,7 +8,7 @@ import {importedDocument,selectedProvenance} from './source-provenance.mjs';
 const app=readFileSync(new URL('./app.mjs',import.meta.url),'utf8');
 function harness(text){
   const nodes=new Map(),calls=[],notices=[];
-  const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',selectionStart:0,selectionEnd:0,hidden:true,addEventListener(){}});return nodes.get(id);};
+  const $=id=>{if(!nodes.has(id))nodes.set(id,{value:'',textContent:'',selectionStart:0,selectionEnd:0,hidden:true,addEventListener(){},focus(){}});return nodes.get(id);};
   const setupDraft=mountSetupDraft({$,storage:{getItem(){return null;},setItem(){},removeItem(){}}});
   const context=vm.createContext({$,setupDraft,serviceCapabilities:{ai:true},autoTitle,setupContextValue,controller:null,capturePending:false,record:null,processing:false,topic:null,uid:()=> 'id',act:fn=>fn(),notice:x=>notices.push(x),reveal:(id,show=true)=>{$(id).hidden=!show;},save:async()=>{},renderTopic(){},teach:async()=>calls.push('teach'),api:async path=>{calls.push(path);return {blocks:[{text}]};}});
   Object.assign(context,{importedDocument,selectedProvenance});

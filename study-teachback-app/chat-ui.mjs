@@ -14,7 +14,7 @@ export function mountChat({getTopic,save,act,focusHit}) {
   function scrollState() {$('chatLatest').hidden=end===known&&nearEnd();}
   function messageNode(message,index) {
     const node=document.createElement('div');node.dataset.messageIndex=index;node.tabIndex=-1;
-    node.className=`message ${message.role}`;node.textContent=message.text;return node;
+    node.className=`message ${message.role}`;node.setAttribute('role','group');node.setAttribute('aria-label',message.role==='user'?'你的讲解':'AI 回复');node.textContent=message.text;return node;
   }
   const nodes=(start,stop)=>getTopic().messages.slice(start,stop).map((m,i)=>messageNode(m,start+i));
   function controls() {
