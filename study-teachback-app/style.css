@@ -191,7 +191,7 @@ button,.button-link{border-radius:12px}.dock button,.setup-bottom button,.resume
 #workspace[data-view=practice] .next-evidence{display:none}
 @media(min-width:1100px){#workspace .columns{grid-template-columns:minmax(220px,.93fr) minmax(350px,1.9fr) minmax(204px,.78fr);gap:16px}.columns>.card{padding:22px}.next-evidence{position:sticky;top:16px}}
 @media(min-width:761px) and (max-width:1099px){.next-evidence{grid-column:1/-1}}
-body:has(#feedback .finding) #confirm,body:has(#feedback .finding) #fullAgain,body:has(#feedback .finding) #dock #explain{background:var(--surface);border-color:var(--line);color:var(--ink)}
+body:has(#feedback .finding) #fullAgain,body:has(#feedback .finding) #dock #explain{background:var(--surface);border-color:var(--line);color:var(--ink)}
 .finding[data-status=incorrect] .feedback-alternatives button:last-child,.finding[data-status=missing] .feedback-alternatives button:last-child{background:var(--accent);color:white}
 @media(max-width:760px){
   body:has(#setup:not([hidden])):not([data-history=true]) #setupActions{position:fixed;bottom:0;left:0;right:0;z-index:5;padding:8px 16px max(8px,env(safe-area-inset-bottom));background:white;border-top:1px solid var(--line);gap:4px;margin:0}
@@ -269,7 +269,12 @@ body:has(#setup:not([hidden])) #main{max-width:880px}
 .lesson-body .practice-panel{border-top:0}
 #workspace #attemptPanel .review-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1fr);gap:20px}
 #workspace #attemptPanel.awaiting-transcript .review-grid{grid-template-columns:minmax(0,1fr)}
-#sourceDrawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(440px,100%);max-width:100%;height:100%;max-height:100%;border:0;border-left:1px solid var(--line);padding:30px 24px;overflow:auto}
+#sourceDrawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(440px,100%);max-width:100%;height:100%;max-height:100%;border:0;border-left:1px solid var(--line);padding:0;overflow:hidden}
+#sourceDrawer[open]{display:flex;flex-direction:column}
+.drawer-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;padding:16px 24px;border-bottom:1px solid var(--line)}
+.drawer-heading h2{min-width:0;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drawer-heading button{flex:none;min-height:44px}
+.drawer-body{min-height:0;overflow:auto;overscroll-behavior:contain;padding:8px 24px 16px}
 #sourceDrawer::backdrop{background:#1d1d1f45}
 #drawerText{line-height:1.9;margin:24px 0;overflow-wrap:anywhere}
 #sourceDrawer mark{background:#ffdf98;color:#251e11}
@@ -288,5 +293,5 @@ body:has(#setup:not([hidden])) #main{max-width:880px}
 
 .finding h4{font-size:1.08rem;line-height:1.55;margin:6px 0 12px}
 .more-attempt>summary{font-size:.8125rem;color:var(--muted)}
-#attemptPanel:has(.finding) #confirm{align-self:start;width:auto;background:transparent;border:0;color:var(--accent);padding-inline:0}
-#attemptPanel:has(.finding) .diagnosisState{background:transparent;color:var(--muted);padding:0;margin:6px 0}
+.diagnosisState:empty{display:none}
+#attemptPanel #confirm.view-result{align-self:start;width:auto;background:transparent;border:0;color:var(--accent);padding-inline:0}

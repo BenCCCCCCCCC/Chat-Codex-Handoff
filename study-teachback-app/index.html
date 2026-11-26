@@ -120,7 +120,16 @@
 </main>
 <div class="dock" id="dock" hidden><div><strong>下一步</strong></div><div class="compact-actions"><button id="startPractice" class="quiet">情境练习</button><button id="explain">我来讲讲 <span aria-hidden="true">↗</span></button></div></div>
 </div>
-<dialog id="sourceDrawer" aria-labelledby="drawerTitle"><h2 id="drawerTitle"></h2><p id="drawerLocation" class="muted"></p><p id="drawerText" class="prewrap"></p><button id="sourceReturn" class="quiet" hidden>返回这条反馈</button></dialog>
+<dialog id="sourceDrawer" aria-labelledby="drawerTitle">
+  <header class="drawer-heading">
+    <h2 id="drawerTitle"></h2>
+    <button id="sourceReturn" class="quiet" hidden>返回反馈</button>
+  </header>
+  <div class="drawer-body">
+    <p id="drawerLocation" class="muted"></p>
+    <p id="drawerText" class="prewrap"></p>
+  </div>
+</dialog>
 <dialog id="recordDialog" aria-labelledby="dossierTitle"><div class="sectionHead"><h2 id="dossierTitle">理解档案</h2><button id="recordClose" class="quiet">返回学习</button></div><p id="recordContext" class="muted"></p><div id="recordItems"></div></dialog>
 <dialog id="closedCheck" aria-labelledby="closedQuestion"><p class="panel-label">独立检验 · 首次作答</p><p id="closedScenario"></p><h2 id="closedQuestion" tabindex="-1"></h2><fieldset id="closedChoices"><legend>你的判断</legend></fieldset><label class="check-attest"><input type="checkbox" id="closedAttest">本次作答未另外查看材料、答案或提示</label><div class="actions"><button id="closedSubmit" disabled>提交判断</button><button class="quiet" id="closedLeave">转为普通练习</button></div></dialog>
 <dialog id="deleteDialog" aria-labelledby="deleteTitle" aria-describedby="deleteScope"><h2 id="deleteTitle">确认删除</h2><p id="deleteScope"></p><p class="muted">不会删除导出副本或撤回已发送的云请求；费用账本独立保留。</p><div class="actions"><button id="deleteCancel" class="quiet" autofocus>取消</button><button id="deleteConfirm" class="danger">确认删除</button></div></dialog>
