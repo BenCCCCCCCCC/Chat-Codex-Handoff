@@ -1,0 +1,229 @@
+{
+  "version": "diagnosis-config-preflight-v1",
+  "status": "OFFLINE_MOCK_ONLY_NOT_AUTHORIZED_TO_SEND",
+  "runtimeCommit": "8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4",
+  "offlineMappingCommit": "e3416fccd2fed596a96ffb294719755895f47c59",
+  "artifacts": {
+    "controlled-cases.json": "19ea5566fc6ed3b858d2d99850e5876598a9f81f6bede3893b7fa558c988c2c2",
+    "PROTOCOL.md": "35396aeb1aaee70f85ddea75d0334e1b5077f399088565c571276fa8f94f1c6d",
+    "review-template.json": "ffa1ad548c79194008b14e37580c65d8183378230cecf9c04306e0f2d6da40a5"
+  },
+  "instructionsSHA256": "d8d2026f6ef6032b2ab2827d81f5907b3e2c9b2ba330bd86cb1502db627f7a80",
+  "schemaSHA256": "2572449df1c5fb8c796ea24460bc903eaaa8dc4792d98932db910a1206d3fb80",
+  "cases": {
+    "count-adopted": "b4939b7d442eb37c17ab908897aa82a9676c42c4164177fab8335e9246caf58e",
+    "defer-one-continue-other": "21d2e89aed9c389b15b7127de2104851bea7437690acc07dcccd2f5c7576f51c",
+    "fluent-wrong": "7b02d8f897ec775b797a763d86f732e2d3af13e3568d166a42e1a71aa7ccbebd",
+    "insufficient-evidence": "1327d07b0bb70a3a9fe2747d5f39a7abf933a5048a2c773d82324436e56d72b3",
+    "required-omission": "f41f456e164c850ca7ccf9a902c180e085d211ebf0d25a1141286509f09d8dcf",
+    "verbose-correct": "30f3fb9bc0f44f061ccc9272b61f77423a3120019da4c45078e8e6ac5cbe99df"
+  },
+  "constraints": {
+    "deadlineMsToComplete": 60000,
+    "bodyByteLimit": 14000,
+    "hiddenTokenPadding": 2048,
+    "reservedInputTokensPerSlot": 16048,
+    "maxConcurrent": 1,
+    "retryCount": 0,
+    "textOnly": true,
+    "store": false,
+    "background": false,
+    "serviceTier": "default",
+    "stream": false,
+    "promptCacheTtl": "30m",
+    "contextPremiumStartsAboveInputTokens": 272000
+  },
+  "proposedProfiles": {
+    "luna": {
+      "model": "gpt-5.6-luna",
+      "versionConfirmedInProject": null,
+      "reasoningEffort": "none",
+      "maxTotalOutputTokens": 1800,
+      "standardShortInputUsdPerMillion": 0.2,
+      "standardShortDefaultCacheWriteUsdPerMillion": 0.25,
+      "standardShortOutputUsdPerMillion": 1.2,
+      "source": "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
+    },
+    "sol": {
+      "model": "gpt-6.2-sol",
+      "versionConfirmedInProject": null,
+      "reasoningEffort": "medium",
+      "maxTotalOutputTokens": 6000,
+      "standardShortInputUsdPerMillion": 2,
+      "standardShortDefaultCacheWriteUsdPerMillion": 2.5,
+      "standardShortOutputUsdPerMillion": 10,
+      "source": "https://developers.openai.com/api/docs/models/gpt-6.2-sol"
+    }
+  },
+  "pricing": {
+    "verifiedUTCDate": "2026-11-26",
+    "basis": "OpenAI Responses Standard short context, USD, 30m cache-write amount is total input rate, charge every bounded input token at the higher applicable rate for reservation; no cache-read credit.",
+    "cacheDocumentation": "https://developers.openai.com/api/docs/guides/prompt-caching",
+    "costUnitsPerUsd": 1000000000,
+    "worstCaseReservedUnitsByProfile": {
+      "luna": 6172000,
+      "sol": 100120000
+    },
+    "aggregate24SlotReservedUnits": 1275504000,
+    "reservationDoesNotAuthorizeSpend": true
+  },
+  "stops": [
+    "missing user authorization or project model/config/pricing unverified before any real call",
+    "schema/permission/config incompatibility; no silent profile/schema alteration",
+    "unknown usage/price, timeout without trustworthy usage, usage over cap or price over frozen reserve; keep full unsettled reservation",
+    "next slot cannot be reserved inside the frozen total, network or provenance ambiguity",
+    "no auto retry; stopping keeps original slot identity and not-sent suffix"
+  ],
+  "calibrations": {
+    "nonhumanAuthorNegativeControls": "completedPreviouslyNotHumanNotModel",
+    "independentHumanCalibration": "pending",
+    "humanRubricReview": "pending",
+    "promptSchemaAcceptanceInProject": "not_run"
+  },
+  "slots": [
+    {
+      "slotId": "E01",
+      "caseId": "count-adopted",
+      "replicate": 1,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E02",
+      "caseId": "count-adopted",
+      "replicate": 1,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E03",
+      "caseId": "defer-one-continue-other",
+      "replicate": 1,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E04",
+      "caseId": "defer-one-continue-other",
+      "replicate": 1,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E05",
+      "caseId": "fluent-wrong",
+      "replicate": 1,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E06",
+      "caseId": "fluent-wrong",
+      "replicate": 1,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E07",
+      "caseId": "insufficient-evidence",
+      "replicate": 1,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E08",
+      "caseId": "insufficient-evidence",
+      "replicate": 1,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E09",
+      "caseId": "required-omission",
+      "replicate": 1,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E10",
+      "caseId": "required-omission",
+      "replicate": 1,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E11",
+      "caseId": "verbose-correct",
+      "replicate": 1,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E12",
+      "caseId": "verbose-correct",
+      "replicate": 1,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E13",
+      "caseId": "count-adopted",
+      "replicate": 2,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E14",
+      "caseId": "count-adopted",
+      "replicate": 2,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E15",
+      "caseId": "defer-one-continue-other",
+      "replicate": 2,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E16",
+      "caseId": "defer-one-continue-other",
+      "replicate": 2,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E17",
+      "caseId": "fluent-wrong",
+      "replicate": 2,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E18",
+      "caseId": "fluent-wrong",
+      "replicate": 2,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E19",
+      "caseId": "insufficient-evidence",
+      "replicate": 2,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E20",
+      "caseId": "insufficient-evidence",
+      "replicate": 2,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E21",
+      "caseId": "required-omission",
+      "replicate": 2,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E22",
+      "caseId": "required-omission",
+      "replicate": 2,
+      "profile": "luna"
+    },
+    {
+      "slotId": "E23",
+      "caseId": "verbose-correct",
+      "replicate": 2,
+      "profile": "sol"
+    },
+    {
+      "slotId": "E24",
+      "caseId": "verbose-correct",
+      "replicate": 2,
+      "profile": "luna"
+    }
+  ]
+}
