@@ -225,7 +225,7 @@ $('saveTextExplanation').onclick=()=>act(async()=>{
     delete target.continuationIntent;
     target.attempts.push(a);delete target.textDraft;target.resume={view:'attempt',attemptId:a.id};current=a;
     try{await save(target);}finally{reveal('recording',false);renderAttempt();}
-    focusHit($('voiceHeading'));notice('文字讲解已保存在本机，尚未发送给 AI。');
+    focusHit($('voiceHeading'));notice(isFirstTextReview(a)?'':'文字讲解已保存在本机，尚未发送给 AI。');
   }catch(e){
     if(e.message==='INVALID_FEEDBACK_REFERENCE')return notice('原反馈无法核对，文字草稿已保留。');
     throw e;
@@ -397,15 +397,28 @@ function diagnosisView(a){
   return {draft,report,version,current:!!matching,changed:!same(latest(a)),...(diagnosisStates.get(a)??{})};
 }
 function focusDiagnosis(){const heading=$('contentHeading');heading.focus();heading.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
+function isFirstTextReview(a){
+  return a.inputMode==='text'&&a.kind==='full'&&!a.parentId&&!a.continuation&&!memoryOnly&&!a.reports.length&&!a.corrections.length;
+}
+function placeRepeatAtReview(show,secondary=false){
+  const repeat=$('fullAgain'),group=$(show?'reviewActions':'moreAttemptActions');
+  if(repeat.parentElement!==group){if(show)group.append(repeat);else group.prepend(repeat);}
+  repeat.textContent=show?'再讲一遍':'重新完整讲';
+  repeat.classList.toggle('quiet',show&&secondary);
+}
 function updateDiagnosisState(){
   const a=current;if(!a?.raw)return;renderNextEvidence();const v=diagnosisView(a);
+  const ai=serviceCapabilities?.ai===true,local=isFirstTextReview(a)&&!v.pending&&!v.error&&!v.saveFailed;
+  placeRepeatAtReview(local,ai);
+  $('confirm').hidden=local&&!ai;
   $('confirm').classList.toggle('view-result',v.current&&!v.pending&&!v.saveFailed);
   $('confirm').disabled=!!v.pending||!!v.saveFailed||!v.current&&serviceCapabilities?.ai!==true;for(const e of editors.values())e.readOnly=!!v.pending;
   $('confirm').textContent=!v.current&&serviceCapabilities?.ai!==true?'配置 AI 后可分析':v.pending?'诊断中…':v.current?'查看反馈':v.error?'确认当前文字并再次诊断':v.report||v.changed?'确认修改并重新诊断':'确认并诊断';
   $('diagnosisState').classList.toggle('sr-only',v.current&&!v.pending&&!v.error&&!v.saveFailed);
   const binding=v.version?'版本 '+v.version.id.slice(0,8)+' · '+new Date(v.report.createdAt).toLocaleString():'';
   const stateMessage=v.pending?'当前文字与适用条件已确认，正在诊断…':v.error||(
-    v.current?'诊断完成':v.report?'文字或适用条件已修改，先前结果已过时。':''
+    v.current?'诊断完成':v.report?'文字或适用条件已修改，先前结果已过时。':
+    local?'文字讲解已保存在本机，尚未发送给 AI。'+(ai?'':'配置 AI 后可分析。'):''
   );
   const sendHint=!v.current&&!v.pending&&!v.saveFailed&&serviceCapabilities?.ai===true?'确认后会把材料选段和确认文字发给 AI。':'';
   $('diagnosisState').textContent=stateMessage+sendHint;
@@ -437,6 +450,7 @@ function renderAttempt(){
   reveal('transcriptHeading',!!a.raw);reveal('rawTranscriptDetails',!!a.raw);reveal('contentPane',!!a.raw);reveal('processDetails',!!a.raw&&!typed&&!a.interrupted);$('attemptPanel').classList.toggle('awaiting-transcript',!a.raw);
   $('rawTranscriptLabel').textContent=typed?'最初保存的文字':'原始转写与回听';$('rawPlaybackStatus').textContent='';renderRawPlayback($('rawText'),a.raw,anchor=>act(()=>play(anchor.start,anchor.end)),label=>{$('rawPlaybackStatus').textContent=label;});$('transcript').replaceChildren();$('feedback').replaceChildren();$('observations').replaceChildren();$('processFeedback').replaceChildren();
   reveal('retryAsr',!typed&&!a.raw&&(!soundIssue||a.interrupted));reveal('confirm',!!a.raw);reveal('reviewHelp',!!a.raw&&!typed);reveal('reviewHint',!!a.raw);reveal('diagnosisState',!!a.raw);reveal('resultBinding',!!a.raw);
+  if(!a.raw)placeRepeatAtReview(false);
   if(a.raw){$('reviewHint').textContent=(a.raw.timing?.level==='recording'?'未提供词句时间，只能回听整段录音；文字分段不表示音频位置。':a.raw.wordTiming?.status==='PARTIAL'?'部分词时间不可用，回听会扩大范围。':'')+'重点核对数字、术语、否定与条件。诊断只使用确认后的文字，回听可选。';const v=latest(a),texts=transcriptTexts(a);v.spans.forEach((s,i)=>{const row=el('div',undefined,'spanRow'),editor=el('textarea');editor.setAttribute('aria-label',typed?'核对文字讲解':a.raw.timing?.level==='recording'?'核对转写文字（无词句时间）':`核对文字 ${s.start.toFixed(1)} 至 ${s.end.toFixed(1)} 秒`);editor.value=texts[i];editor.rows=2;editor.maxLength=2000;editor.oninput=()=>{updateTranscriptDraft(a,v.spans.map(span=>({id:span.id,text:editors.get(span.id).value})));voiceDrafts.mark(topic);const state=diagnosisStates.get(a);if(state&&!state.pending&&!state.saveFailed)diagnosisStates.delete(a);updateDiagnosisState();};editor.onblur=()=>act(()=>voiceDrafts.flush());editors.set(s.id,editor);const b=!typed&&button(a.raw.timing?.level==='recording'?'回听整段录音（无词句时间）':`回听 ${s.start.toFixed(1)}–${s.end.toFixed(1)} 秒`,()=>play(s.start,s.end,()=>{b.textContent='已回听 ✓';}));if(b)row.append(b);row.append(editor);$('transcript').append(row);});
     for(const report of a.reports.filter(r=>r.transcriptVersion===v.id)){
       if(report.channel==='delivery')$('processFeedback').append(el('p','历史过程报告（旧格式，未作为定位证据）','muted'),...report.findings.map(f=>el('p',f.message)));
