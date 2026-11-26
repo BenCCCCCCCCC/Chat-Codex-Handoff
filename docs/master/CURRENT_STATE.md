@@ -1,5 +1,9 @@
 # 知而能讲 · 当前状态
 
+2026-11-27｜产品头 [97befee](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/97befee09dcded6f23d8cf078e97cd8c2b4f8f05)，[PR #53](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/53) 已合并。A/B 反馈不再混用同一草稿；改变当前目标也不改变旧反馈的文字重讲来源。原 Chat 复审关闭唯一必修，[Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45874302851) 通过。[实页与复审](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/787bfc0e4c1d85312a25ffc28b6223ed022b6e6e/docs/iterations/2026-11-27-feedback-draft-scope.md)。
+
+干净 787bfc0 候选源码 ZIP 在含中文、空格目录经 Windows PowerShell 5.1 启动逻辑（不打开系统默认浏览器），隔离 Edge 390px 通过免 Key TXT 导入、首讲本机保存、关窗重开同记录及备份恢复为独立副本；结束后端口无监听，启动状态文件已清理。仅一次本机提取，无诊断、真模型、真实参与者或正式发布。未验证 Explorer 双击或物理麦克风。下一步只处理实页发现的首讲核对区提示与本机动作。
+
 2026-11-27｜产品头 [15a25a3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/15a25a3f136b2d70e28e08064f816e62120106d5)，[PR #52](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/52) 已合并。原 Chat 第十二轮核对 diff、双图与报告，没有必修项；[对应 Windows Node / Edge](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45869579086) 均通过。实页证实：单段规则题仍可本机评分，多段材料无合适题时可沿原反馈本机重讲，刷新恢复、保存后仍待检验，无题无分、不计独立通过。保护另一份草稿仅经源码核对，未单独走实页。无真实模型调用、费用、参与者或发布。[实页与范围](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/6b162390d2b3376d2557d98cf12a6f9008d70896/docs/iterations/2026-11-27-multi-segment-gap.md)。
 
 2026-11-27｜产品头 [036a361](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/036a361dfaeee6075b9f8c32d112072466933387)，[PR #51](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/51) 已合并。免费示例的“开始自己的学习”进新材料，“学习首页”保留选择，普通启动仍续学；已有草稿、旧题及原答不改。原 Chat 第十一轮续审认可原运行时，实现不变，仅 1208fb7 补 VM 测试夹具后 [Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45868278893) 通过。[两张实页与验收](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/84885dc8283718a5b332a147be958ef770f8a98a/docs/iterations/2026-11-26-demo-own-study.md)。无真实 AI 调用、付费或发布。
