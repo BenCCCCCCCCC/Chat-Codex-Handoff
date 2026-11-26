@@ -1,12 +1,14 @@
 # 知而能讲 · 当前状态
 
-2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `13b9cdc43f6dcbf3ddb66cd4c4713792d53855cc`。
+2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `a178fb427e14597e76124934b69ddc15dae17779`。
 
 ## 2026-11-26 · 工程执行
 
 首页与直接讲解已合并 [#43](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/43)，[Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45802970164) 通过。来源目标、同点重讲、独立检验与理解档案已合并 [#44](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/44)，[Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45804569677) 通过。隔离 Edge 从门禁条件遗漏走到异情境首答、备份恢复、题目质疑。[批次证据](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/13b9cdc43f6dcbf3ddb66cd4c4713792d53855cc/docs/iterations/2026-11-26-understanding-record.md)。
 
-正在处理 [A/B 审核](reviews/2026-11-26-v1-review-queue.md) 中的下一步入口、普通题复用提示和窄屏主动作，同时准备重新选段、免 Key 示例、研究方案及本机候选交付。
+本地候选 **1.0.0-rc.1** 已合并 [#45](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/45)，[Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45807391200) 全部通过。完成了 A/B 首轮审核修正、长文件重新选段、免 Key 两门课程、反馈本地导出、研究方案及演示脚本。[本地候选回执](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/docs/iterations/2026-11-26-local-candidate.md) · [形成性走查协议](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/docs/research/v1-formative-study.md)。
+
+按用户新指引，Apple-inspired 首体验与 ChatGPT Desktop 工作台已在 #45 接入。后续 [#46](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/46) 收起同权卡片和重复说明，引用按需展开，已在隔离 Edge 实测桌面、窄屏、Esc 返回焦点及同题恢复，等待 Windows CI。真人研究参与者 0 人，生产 ASR 和公开发行待另行决定。
 
 ## 2026-11-26 · 当前 MASTER 决定：完整 V1.0 0→1 路线
 
