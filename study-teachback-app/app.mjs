@@ -220,13 +220,15 @@ $('saveTextExplanation').onclick=()=>act(async()=>{
   if(!canNavigate()||!topic.textDraft?.text.trim())return;
   processing=true;setTextBusy(true);const target=topic;
   try{
-    await flushDrafts();const a=makeTextAttempt(target,target.textDraft);
+    await flushDrafts();const a=makeTextAttempt(target,target.textDraft,{source:goalSource(target)});
     if(target.continuationIntent?.issueIds?.length)a.judgementIssues=target.continuationIntent.issueIds.map(id=>issueForAttempt(target.studyIssues.find(i=>i.id===id),target));
     delete target.continuationIntent;
-    if(target.selectedGoal)a.source=structuredClone(goalSource(target));
     target.attempts.push(a);delete target.textDraft;target.resume={view:'attempt',attemptId:a.id};current=a;
     try{await save(target);}finally{reveal('recording',false);renderAttempt();}
     focusHit($('voiceHeading'));notice('文字讲解已保存在本机，尚未发送给 AI。');
+  }catch(e){
+    if(e.message==='INVALID_FEEDBACK_REFERENCE')return notice('原反馈无法核对，文字草稿已保留。');
+    throw e;
   }finally{processing=false;setTextBusy(false);}
 });
 function renderComparison(){
@@ -704,7 +706,7 @@ $('saveGoal').onclick=()=>act(async()=>{
     $('goalStatus').textContent='请填写目标，并粘贴当前材料中可核对的原句。';return;
   }
   topic.selectedGoal={id:uid(),text,sourceQuote};await save();renderTopic();
-  $('goalStatus').textContent='后续讲解将围绕此目标核对。';
+  $('goalStatus').textContent='新讲解将采用此目标；原反馈的文字重讲沿用当时目标。';
 });
 $('historySearch').oninput=$('historyFilter').onchange=()=>{historyLimit=20;renderHistory();};
 $('historyClear').onclick=()=>{$('historySearch').value='';$('historyFilter').value='all';historyLimit=20;renderHistory();$('historySearch').focus();};

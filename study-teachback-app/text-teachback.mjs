@@ -10,11 +10,16 @@ export function validateTextDraft(d){
   if(d.feedbackRef){validateFeedbackReference(d.feedbackRef);requireValue(d.parentId===d.feedbackRef.attemptId&&d.parentVersionId===d.feedbackRef.transcriptVersion,'INVALID_FEEDBACK_REFERENCE');}
   return d;
 }
-export function makeTextAttempt(topic,draft,{uid=()=>crypto.randomUUID(),now=Date.now}={}){
+export function makeTextAttempt(topic,draft,{uid=()=>crypto.randomUUID(),now=Date.now,source=topic.source}={}){
   validateTextDraft(draft);const value=text(draft.text.trim(),2000),createdAt=now();
+  if(draft.feedbackRef){
+    const origin=resolveFeedback(topic,{feedbackRef:draft.feedbackRef}).attempt?.source;
+    requireValue(origin&&source.id===origin.id&&source.text===origin.text,'INVALID_FEEDBACK_REFERENCE');
+    source=origin;
+  }
   return {id:uid(),createdAt,inputMode:'text',kind:draft.kind,focus:draft.focus??null,parentId:draft.parentId??null,
     parentVersionId:draft.parentVersionId??null,...(draft.feedbackRef?{feedbackRef:structuredClone(draft.feedbackRef)}:{}),
-    assistance:draft.assistance,source:structuredClone(topic.source),
+    assistance:draft.assistance,source:structuredClone(source),
     raw:{id:uid(),createdAt,origin:'USER_TEXT',text:value,spans:[{id:'p0',text:value}],reviewed:true},
     corrections:[],reports:[],status:'SAVED'};
 }
