@@ -9,7 +9,7 @@ export function mountMaterialSet({getTopic,save,request,canStart,setBusy,beforeC
   const $=id=>document.getElementById(id),node=(tag,value)=>{const e=document.createElement(tag);e.textContent=value;return e;};
   let busy=false,previewId=null,documentPreview=null;
   function clearFilePreview(){documentPreview=null;$('materialExtracted').value='';$('materialRegion').replaceChildren();$('materialImportPreview').hidden=true;}
-  const drafts=createDraftSaver({save,onStatus:s=>{$('materialRevisionStatus').textContent=$('materialDraftStatus').textContent=s==='saved'?'草稿已保存在本机':s==='saving'?'正在保存…':s==='error'?'草稿保存失败，请重试保存。':'';},onError:e=>act(()=>Promise.reject(e))});
+  const drafts=createDraftSaver({save,onStatus:s=>{$('materialRevisionStatus').textContent=$('materialDraftStatus').textContent=s==='saved'?'草稿已保存在本机':s==='saving'?'正在保存…':s==='error'?'草稿未保存。':'';},onError:e=>act(()=>Promise.reject(e))});
   const lock=value=>{for(const root of ['materialSet','studyIssues','materialPreview'])for(const input of $(root).querySelectorAll('input,textarea,select,button'))input.disabled=value;};
   async function change(work){
     if(busy||!canStart())return;busy=true;setBusy(true);lock(true);
