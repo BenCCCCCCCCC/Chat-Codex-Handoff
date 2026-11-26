@@ -760,6 +760,7 @@ function showFeedbackOrigin(origin,target){
   if(!match.report){notice(match.reason);return false;}
   const {report,version,finding}=match;
   $('searchExcerptTitle').textContent=(topic.resume?.feedbackOrigin?.fromRecord?'当时反馈':'练习原反馈')+' · 只读 · 版本 '+version.id.slice(0,8);
+  $('returnToPractice').textContent=!activePractice(topic)&&sameFeedbackReference(origin.feedbackRef,topic.taskUnavailable?.origin?.feedbackRef)?'回到待检验':'回到这道练习';
   if(origin.conditionRef){
     $('searchExcerptText').textContent=[...match.context.issues.flatMap(i=>['当时采用的条件：'+i.condition,...i.evidence.map(e=>e.title+'：'+e.quote)]),...report.judgement.assessments.filter(a=>origin.conditionRef.issueIds.includes(a.issueId)).map(a=>a.reason),...report.findings.map(f=>f.message),'该版本完整文字：'+version.spans.map(s=>s.text).join('\n')].join('\n\n');
     reveal('searchReplay',false);reveal('searchExcerpt');reveal('returnToPractice');focusHit($('searchExcerpt'));return true;

@@ -3,9 +3,26 @@ import {mountClosedCheck} from './closed-check.mjs';
 import {mountQuestionReview} from './question-review-ui.mjs';
 import {activePractice, practiceRounds, createPracticeFlow} from './practice.mjs';
 import {createDraftSaver} from './draft-save.mjs';
-import {resolveFeedback} from './feedback-reference.mjs';
+import {resolveFeedback,sameFeedbackReference} from './feedback-reference.mjs';
+import {goalSource} from './learning-record.mjs';
 import {resolveConditionFeedback} from './conditional-practice.mjs';
 import {mountPracticeEvidence} from './practice-evidence-ui.mjs';
+
+function pendingGapAction(topic,gap,destination){
+  const ref=gap?.origin?.feedbackRef;
+  if(!ref||!destination?.finding)return null;
+  const original=destination.attempt.source;
+  const sameSource=source=>source?.id===original.id&&source.text===original.text&&
+    (source.anchorVersion??null)===(original.anchorVersion??null);
+  const rephrased=topic.attempts.some(attempt=>{
+    if(attempt.kind!=='partial'||attempt.continuation||attempt.parentId!==ref.attemptId||
+      attempt.parentVersionId!==ref.transcriptVersion||!sameFeedbackReference(attempt.feedbackRef,ref)||
+      !sameSource(attempt.source)||attempt.interrupted&&!attempt.fragmentAcceptedAt)return false;
+    const version=attempt.corrections?.at(-1)??attempt.raw;
+    return version?.reviewed===true&&version.spans?.some(span=>span.text?.trim());
+  });
+  return {rephrased,reviewBasis:rephrased||!sameSource(goalSource(topic))};
+}
 
 export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen, onFeedback,onContinueGap,onChanged=()=>{},requireAI,aiReady=()=>true}) {
   const $ = id => document.getElementById(id);
@@ -25,17 +42,22 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     const gap=round?null:topic?.taskUnavailable;
     onChanged();
     const held=round?.review?.status==='held',paused=practicePaused(round),replaced=round?.review?.status==='replaced';
-    const conditionContext=round?.conditionContext??topic?.practiceRequest?.conditionContext;
+    const conditionContext=round?.conditionContext??(!gap?topic?.practiceRequest?.conditionContext:null);
     const origin=conditionContext?{conditionRef:conditionContext.ref}:round?.origin??gap?.origin,target=round?.taskTarget??gap?.target;
     const destination=topic&&(origin?.conditionRef?resolveConditionFeedback(topic,origin.conditionRef):resolveFeedback(topic,origin,target));
-    const canContinueGap=!!(gap?.origin?.feedbackRef&&destination?.finding);
-    $('practiceContinueGap').hidden=!canContinueGap;
+    const gapAction=pendingGapAction(topic,gap,destination);
+    const finding=gap&&(destination?.finding?.message??gap.target?.explanation);
+    $('practiceGapFinding').textContent=finding||'';
+    $('practiceGapFinding').hidden=!finding;
+    $('practiceContinueGap').hidden=!gapAction;
     $('practiceContinueGap').disabled=flow.busy;
-    $('practiceReturn').hidden=!origin;
+    $('practiceContinueGap').textContent=gapAction?.reviewBasis?'回看依据':'再讲这一点';
+    $('practiceReturn').hidden=!origin||!!gapAction?.reviewBasis;
     $('practiceReturn').disabled=flow.busy||!destination?.report;
-    $('practiceOriginStatus').textContent=origin?(destination.report?'来自一次历史反馈；返回不会修改当前讲解。':destination.reason):'';
+    $('practiceOriginStatus').textContent=origin?(destination.report?(gap?'':'来自一次历史反馈；返回不会修改当前讲解。'):destination.reason):'';
     $('practicePanel').hidden = !topic || !(round || topic.practiceRequest || topic.taskUnavailable);
     $('practicePanel').dataset.active = String(topic?.resume?.view === 'practice');
+    $('practicePanel').toggleAttribute('data-pending-check',!!gap);
     $('practiceNew').disabled = flow.busy;
     $('practiceNew').disabled ||= !aiReady();
     $('practiceNew').hidden = !!gap||!!round?.task&&!topic?.practiceRequest?.conditionContext;
@@ -63,6 +85,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
       $('practiceQuestionSelect').prepend(placeholder);
     }
     $('practiceQuestionSelect').hidden = !rounds.length || rounds.length===1&&!!round;
+    $('practiceReferences').hidden=$('practiceQuestionSelect').hidden&&$('practiceReturn').hidden&&!$('practiceOriginStatus').textContent;
     $('practiceBody').hidden = !round;
     $('practiceForm').hidden=!!round?.conditionContext&&!round.work;
     closed.render(round,topic?.resume?.view==='practice');
@@ -101,9 +124,10 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     $('practiceStatus').textContent = flow.busy ? '正在处理…' :
       replaced ? '题目已修订，原回答和先前反馈保留为历史，不作为答错记录。' :
       held ? (round.review.origin==='local_check' ? '题目与材料记录不一致，已暂停判断。' : round.review.origin==='condition_check'?'条件或题面仍需核对，本次暂缓，不计作答错。':'题目待核对，暂不判断你的回答。') :
+      gap ? (gapAction?.rephrased?'已保存这点的重讲，仍待检验。':'')+'暂未生成合适的检验题。' :
       topic?.practiceRequest?.status==='deferred' ? '出题暂缓：'+topic.practiceRequest.reason :
       topic?.practiceRequest ? '上次出题未完成或结果未知，记录仍保留。可先继续讲解或已有练习；配置 AI 后可明确选择重试。' :
-      gap ? '暂未生成合适的检验题，继续讲不计作独立检验。'+(canContinueGap?' '+destination.finding.message:'') : '';
+      '';
     $('practicePendingConditions').hidden=!topic?.practiceRequest?.conditionContext;
     $('practicePendingConditions').textContent=topic?.practiceRequest?.conditionContext?'待处理的新题采用：'+topic.practiceRequest.conditionContext.issues.map(i=>i.condition).join('；')+'。下方已有题目仍保留各自条件。':'';
     $('practiceAnswers').replaceChildren(...(round?.answers ?? []).map((answer, i) => {
@@ -150,7 +174,8 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
       $('practicePanel').scrollIntoView({behavior:'instant',block:'start'});
       const round=activePractice(getTopic());
       if($('closedCheck').open)return;
-      (round?.review?.status==='held'?$('reviewNote'):round?.review?.status==='replaced'?$('practiceHeading'):round?.task ? ($('practiceChoices').querySelector('input:checked')??$('practiceChoices').querySelector('input')) : round ? $('practiceDraft') : $('practiceHeading')).focus();
+      const gapButton=$('practiceContinueGap');
+      (round?.review?.status==='held'?$('reviewNote'):round?.review?.status==='replaced'?$('practiceHeading'):round?.task ? ($('practiceChoices').querySelector('input:checked')??$('practiceChoices').querySelector('input')) : round ? $('practiceDraft') : !gapButton.hidden&&!gapButton.disabled?gapButton:$('practiceHeading')).focus();
     });
   }
   async function start() {
@@ -180,12 +205,15 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     evidenceUI.note('origin');
     await flushDraft();
     const t=getTopic(),r=activePractice(t),saved=r??t.taskUnavailable;
-    const context=r?.conditionContext??t.practiceRequest?.conditionContext;
+    const context=r?.conditionContext??(r||!t.taskUnavailable?t.practiceRequest?.conditionContext:null);
     await onFeedback(context?{conditionRef:context.ref}:saved?.origin,r?.taskTarget??saved?.target);
   });
   $('practiceContinueGap').onclick=()=>act(async()=>{
     const topic=getTopic(),gap=activePractice(topic)?null:topic?.taskUnavailable;
     if(!gap||!canStart())return;
+    const next=pendingGapAction(topic,gap,resolveFeedback(topic,gap.origin,gap.target));
+    if(!next)return;
+    if(next.reviewBasis){await flushDraft();return onFeedback(gap.origin,gap.target);}
     const message=await onContinueGap(gap);
     if(message)$('practiceStatus').textContent=message;
   });
