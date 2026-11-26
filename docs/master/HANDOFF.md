@@ -4,6 +4,10 @@
 
 ## 2026-11-26 · V1.0 完整 0→1 产品路线（当前执行入口）
 
+第四轮审核的唯一 P1 已在两个主题的同一门禁题上复现。原版只确认“本次未查阅”就能再次记为独立通过。修复后，未见题和无辅助需分别自报；已见或不确定可沿用所选答案转普通练习。旧 v6 仅保留当时已有的证据。[审核原文](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a0feffba3992aff2dcb9ec677f7601848fd780ae/docs/master/reviews/2026-11-26-v1-review-queue.md) · [PR #49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49)
+
+复核入口为[定向走查与三张实页](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/ee0e0b434712d08d6f8d0b2654bd8759e5e0439e/docs/iterations/2026-11-26-next-day-first-answer.md)。在同一干净 Edge 配置关闭再启动、日期偏移 26 小时后，旧题与原首答恢复；配比规则在另一份合成反馈下从三份换为四份。免费示例重开回到读材料。此为工程验收；D 批人工回访、锁定自由解释及盲评仍待真实研究。产品代码 `74f7d6112e531dfdf2b5736843b6875060f12a4f`。
+
 第三轮审核的两项界面修复已合并 [#47](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/47)，Windows CI 通过。[审核原文](reviews/2026-11-26-v1-review-queue.md)
 
 D/E 本批已合并 [#48](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/48)。[研究执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/research/v1-fieldwork/README.md)有现场记录、主备延迟题指纹、盲评及匿名汇总表。未公开题本在研究工作机仓库的 `artifacts/study-teachback/v1-study-private/`。下一步由研究负责人核定 6 人招募与预算上限 ¥330、工具数据设置和记录删除时间，再进行独立审题与真实场次。实际参与者 0 人。作品展示可直接用[产品案例与免 Key 动图](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/portfolio/README.md)；候选代码基线 [90a711b](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/90a711b3dc98a9cd084c630b4aefc961680cec86)。后续 UX 改动优先依据现场卡点和新审核。核对 [CURRENT_STATE](CURRENT_STATE.md)、本分支审核队列及产品 PR 讨论后再领取。

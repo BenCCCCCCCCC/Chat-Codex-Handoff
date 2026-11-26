@@ -1,6 +1,8 @@
 # 知而能讲 · 当前状态
 
-2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `839176a8c2b55155256e6928fab1b4d6b5ce69c7`。可运行代码定在 `90a711b3dc98a9cd084c630b4aefc961680cec86`。
+2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `57fad6f5438e801c6b10d12ca383901956ab7210`。可运行代码定在 `74f7d6112e531dfdf2b5736843b6875060f12a4f`。
+
+[第四轮审核](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a0feffba3992aff2dcb9ec677f7601848fd780ae/docs/master/reviews/2026-11-26-v1-review-queue.md)的唯一 P1 已复现并修复。[#49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49) 已合并，[Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45830711752) 通过。在干净 Edge 配置模拟 26 小时后重开，原题与原首答恢复。不同反馈可产生不同份数的题。两个主题重复同一道门禁题时，现在分别询问是否未见题目或答案、是否未另查资料；选择已见或不确定则转普通练习。旧 v6 的首答不补记见题自报。实际付费调用 0 次，真实参与者 0 人。[实页与验收记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/docs/iterations/2026-11-26-next-day-first-answer.md)
 
 [#48](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/48) 已交付[形成性走查执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/research/v1-fieldwork/README.md)、[31 秒实页演示与作品集](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/portfolio/README.md)及[Windows 候选回执](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/iterations/2026-11-26-review-delivery.md)。干净源码包在含中文和空格的目录启动并停止，免 Key 示例返回 200。回访换题、盲号及排除口径已用合成记录排练。两领域私有题本已冻结，实际参与者 0 人，实际研究支出 ¥0。启动真人研究的待决提案为 6 人、酬谢最多 ¥300、实时文字调用最多 ¥30。需明确负责人、渠道、服务数据设置和删除期限。
 
