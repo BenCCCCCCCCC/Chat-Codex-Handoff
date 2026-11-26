@@ -8,7 +8,9 @@
 
 当前产品头 [c101706](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c10170669c397f352b7529d531432acb3bb9175d)。已合并 [#57](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/57)：旧题、原首答和待检验并存，刷新后从精确匹配档案返回原缺口。[隔离实页与边界](reviews/2026-11-27-pending-check-edge.md)，无新题、分数、独立通过或真实请求。此前 #51–55 及 #56 README 的各自证据见 [CURRENT_STATE](CURRENT_STATE.md)。
 
-交付线正在一次性验收 [c101706 源码 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/c10170669c397f352b7529d531432acb3bb9175d.zip)：隔离 Windows 启停、免 Key 合成端到端、重开和备份／反馈导出；结论待回执。先不重复跑旧包、不要求用户操作，不增加开放题。[六人形成性验证执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/15a25a3f136b2d70e28e08064f816e62120106d5/docs/research/v1-fieldwork/README.md) 暂保留，不另招募、不调用付费模型；工程走查不算学习迁移或正式发布。
+**本地文字版里程碑已交付。** c101706 实测原件是从 HTTPS Git 精确提交生成的 `git archive` ZIP，并已交给用户。[Windows 整包回执](reviews/2026-11-27-final-package-acceptance.md)覆盖免 Key 学习、重开、备份／反馈导出与停服；[同提交 GitHub 源码快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/c10170669c397f352b7529d531432acb3bb9175d.zip)不是实测 ZIP 原件，也不替换 README 的体验包。
+
+**下一阶段只补缺失的证据。** 设备路径可在具备条件时定向验证 Explorer 双击及麦克风，不重跑本次免 Key 文本路径、不让用户代测。产品价值沿用[六人形成性验证执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/15a25a3f136b2d70e28e08064f816e62120106d5/docs/research/v1-fieldwork/README.md)，观察同一缺口修正与次日独立迁移；真实文字诊断仍要独立盲评，不能用演示代替。未授权招募、新的真实模型调用或公开发行前，不启动这些步骤，不为补齐表面范围增加功能。
 
 第四轮审核的唯一 P1 已在两个主题的同一门禁题上复现。原版只确认“本次未查阅”就能再次记为独立通过。修复后，未见题和无辅助需分别自报；已见或不确定可沿用所选答案转普通练习。旧 v6 仅保留当时已有的证据。[审核原文](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a0feffba3992aff2dcb9ec677f7601848fd780ae/docs/master/reviews/2026-11-26-v1-review-queue.md) · [PR #49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49)
 
