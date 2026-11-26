@@ -148,3 +148,21 @@
 **User Decision Needed**：本轮无新增需立即决策。现有 6 人、¥330 研究提案仍待另行批准，当前不招募、不付费、不外传、不改生产 ASR、不发布。
 
 本轮仅维护 MASTER 审核队列；未启动第二 Codex、未改产品代码、未运行本机应用、未触发 CI 或合并。
+
+
+## 2026-11-26 · #49 独立首答证据增量复核（第五轮）
+
+**范围与基线**：[PR #49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49) 已合并，远端产品头 [57fad6f](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/57fad6f5438e801c6b10d12ca383901956ab7210)，实现 `74f7d6112e531dfdf2b5736843b6875060f12a4f`，最终 PR 头 `ee0e0b434712d08d6f8d0b2654bd8759e5e0439e`。相对第四轮 839176a 的 12 个变化文件已核对实际 diff；CURRENT_STATE 与 HANDOFF 已同步。最终 PR 头的 [CI 45830711752](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45830711752) success，Windows job 139946425274 的 Node/Edge 均 success，文件提取按影响跳过。已打开[报告](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/docs/iterations/2026-11-26-next-day-first-answer.md)及三张实页图片；其中前两张属于修复前的次日走查，第三张为双自报修复后的状态。未独立运行 Windows。
+
+### Must Fix：关闭第四轮 P1；本轮无新增必修
+
+- [闭卷入口](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/study-teachback-app/closed-check.mjs) 和 [作答逻辑](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/study-teachback-app/practice.mjs#L181-L204) 均要求未见题与无辅助两项自报才提交独立首答；转普通练习保留选项，不增加跨主题追踪。修复后[实页](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/docs/iterations/v1-experience/seen-before-submit.png) 清楚显示已选择答案、仅勾无辅助时主提交禁用，转普通练习仍可点击。认可报告的双主题复现和修正路径；外部实际见题情况仍靠自报。
+- [learning-record.mjs L7–18](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/study-teachback-app/learning-record.mjs#L7-L18)、practice-ui.mjs 与 [backup.mjs L164–175](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/study-teachback-app/backup.mjs#L164-L175) 核对到新增证据仅属于 closedAnswerId，旧 v6 无该字段时不会补记未见题，档案明确标记旧首答见题情况未记录。报告有新旧 v6 往返及重开保留首答 ID 的证据。关闭 P1，不再要求重复验证该修正。
+- 模拟 26 小时重开及配比题从三份变四份：前者验证同一配置恢复，后者由另一份反馈触发，不是自动按日换题，也不是实际延迟学习效果。免 Key 示例重开归零且不生成正式主题，符合当前定位；正式诊断仍需 Key。本轮没有修改首次讲解、引文返回和 #47 的重诊断机制，沿用既有证据，不重复验收。#47 两处已报告修复，#48 已交付研究执行包与案例展示，不重新领取。
+
+### Next（只记录新发现的实页摩擦，非发布阻断）
+
+- [重开实页](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/docs/iterations/v1-experience/next-day-resume.png) 的 1280px 普通练习正文仅约 255px 宽，右侧大面积空置，题干、反馈和操作过度挤压。该图为修复前基线；#49 未改工作区 CSS。现有 [index.html L60–71](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/study-teachback-app/index.html#L60-L71) 中 .lesson-body 是网格子项，[style.css L255–259](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/study-teachback-app/style.css#L255-L259) 固定双列但正文未显式分配列；材料隐藏时可能自动占第一窄列。下一次有实际维护窗口时，先核对当前候选的同一普通练习恢复画面；若仍存在，材料隐藏时令正文独占可用主区，保留舒适最大行宽和原反馈返回，材料显示时才用双列。仅需同一桌面画面对照和窄屏基本重排；不为此重构其他页面或全量回归。闭卷 modal 的新截图层级清楚，两个确认有直接证据意义，不为减文案合并或去掉。
+- D 的真正缺口仍是独立审题及真实参与者的未见题自由解释、盲评和对照，而不是更多代码模拟。候选可作为研究基线，不再为没有新证据的情形新增功能任务。后续研究提案仍保留既有授权边界。
+
+**User Decision Needed**：无新即时决策。已知研究提案 6 人、最多 ¥330 尚未批准；不招募、不付费、不切换生产 ASR、不扩大数据政策、不公开发布。真实参与者 0，未宣称学习效果或比较优势。本轮只回写 MASTER 审核，无产品代码改动、第二 Codex、CI 触发或 PR 合并。
