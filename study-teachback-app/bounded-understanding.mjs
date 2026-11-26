@@ -17,6 +17,16 @@ export function boundedTask({source,target}){
   });
   // The whole evidence quote must express exactly this relation. A trailing
   // exception or a second rule is intentionally not accepted.
+  const deadline=quote.match(/^门禁要求同时满足两个条件[：:]已实名[，,]并在([01]?\d|2[0-3])[:：]([0-5]\d)前签到。?$/u);
+  if(deadline){
+    const minutes=Number(deadline[1])*60+Number(deadline[2])+5;
+    if(minutes<24*60){
+      const late=String(Math.floor(minutes/60)).padStart(2,'0')+':'+String(minutes%60).padStart(2,'0');
+      return exercise('apply_rule',`小王已实名，${late}才签到。他能通过这次门禁吗？`,
+        [],'不能。签到晚于规定时间。','实名和按时签到都需要满足。',
+        ['能，因为已经实名','不能，因为签到晚于规定时间','无法判断，因为不知道实名时间'],1);
+    }
+  }
   const condition=quote.match(/^只有([^，,。；;.\n]{1,60})才([^，,。；;.\n]{1,60})[。.]?$/u);
   if(condition&&/^(完成|满足|达到|持有|获得|取得|通过|具备|拥有)/u.test(condition[1])){
     const a=condition[1],b=condition[2];

@@ -58,7 +58,7 @@ export function mountQuestionReview({getTopic,flow,drafts,canStart,act}){
   $('reviewRevise').onclick=()=>act(()=>showPreview('revise'));
   $('reviewCancel').onclick=()=>{if(!confirming)dialog.close();};
   dialog.oncancel=event=>{if(confirming)event.preventDefault();};
-  dialog.onclose=()=>{preview=null;$('practiceHeading').focus();};
+  dialog.onclose=()=>{if(dialog.open)return;preview=null;$('practiceHeading').focus();};
   $('reviewConfirm').onclick=()=>act(async()=>{
     if(confirming||!preview||!canStart())return;
     const topic=getTopic(),round=activePractice(topic);
