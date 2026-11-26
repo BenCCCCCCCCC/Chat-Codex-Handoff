@@ -377,12 +377,16 @@ function diagnosisView(a){
 function focusDiagnosis(){const heading=$('contentHeading');heading.focus();heading.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
 function updateDiagnosisState(){
   const a=current;if(!a?.raw)return;renderNextEvidence();const v=diagnosisView(a);
-  reveal('sourceReturn',false);
+  $('confirm').classList.toggle('view-result',v.current&&!v.pending&&!v.saveFailed);
   $('confirm').disabled=!!v.pending||!!v.saveFailed||!v.current&&serviceCapabilities?.ai!==true;for(const e of editors.values())e.readOnly=!!v.pending;
-  $('confirm').textContent=!v.current&&serviceCapabilities?.ai!==true?'配置 AI 后可分析':v.pending?'诊断中…':v.current?'查看反馈':v.changed?'确认修改并重新诊断':v.error?'确认当前文字并再次诊断':'确认并诊断';
+  $('confirm').textContent=!v.current&&serviceCapabilities?.ai!==true?'配置 AI 后可分析':v.pending?'诊断中…':v.current?'查看反馈':v.error?'确认当前文字并再次诊断':v.report||v.changed?'确认修改并重新诊断':'确认并诊断';
   $('diagnosisState').classList.toggle('sr-only',v.current&&!v.pending&&!v.error&&!v.saveFailed);
   const binding=v.version?'版本 '+v.version.id.slice(0,8)+' · '+new Date(v.report.createdAt).toLocaleString():'';
-  $('diagnosisState').textContent=v.pending?'当前文字与适用条件已确认，正在诊断…':v.error?v.error:v.current?'诊断完成':v.report?'文字或适用条件已修改，先前结果已过时':'诊断将把材料选段和确认文字发给 AI。';
+  const stateMessage=v.pending?'当前文字与适用条件已确认，正在诊断…':v.error||(
+    v.current?'诊断完成':v.report?'文字或适用条件已修改，先前结果已过时。':''
+  );
+  const sendHint=!v.current&&!v.pending&&!v.saveFailed&&serviceCapabilities?.ai===true?'确认后会把材料选段和确认文字发给 AI。':'';
+  $('diagnosisState').textContent=stateMessage+sendHint;
   $('resultBinding').textContent=v.report?(v.pending?'先前结果（新诊断进行中）':v.current?'当前结果':'先前结果，仅供查看，不适用于当前文字或条件')+' · '+binding:'';
   renderJudgementChoices({root:$('judgementChoices'),topic,attempt:a,disabled:!!v.pending||processing,change:(issue,checked)=>act(async()=>{
     if(!canNavigate())return;processing=true;updateDiagnosisState();
