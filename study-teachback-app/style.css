@@ -250,3 +250,43 @@ body:has(#setup:not([hidden])) #main{max-width:880px}
 .setup-card:not(:has(#setupDraftStatus:not(:empty))) #clearSetupDraft{display:none}
 .draft-tools{justify-content:flex-end}#clearSetupDraft{border:0;background:transparent;color:var(--muted);font-weight:400;padding:4px;min-height:32px}
 .setup-card .setup-bottom{margin:6px 0 12px}
+
+/* The lesson and its next action share one reading column. */
+#workspace,#workspace[data-view=practice]{display:block}
+#workspace[hidden],body[data-history=true] #workspace{display:none}
+#workspace .columns,#workspace[data-view=practice] .columns{display:grid;grid-template-columns:minmax(200px,24%) minmax(0,1fr);gap:clamp(20px,3vw,44px);align-items:start}
+#workspace .lesson-body{min-width:0}
+#workspace .card{border:0;border-radius:0;box-shadow:none}
+#workspace #materialPanel{grid-column:1;grid-row:1;background:transparent;border-right:1px solid var(--line);padding:8px 20px 16px 0}
+#materialShelf>summary{color:var(--ink);font-weight:650;font-size:1rem}
+.lesson-body>.card,#workspace .learning{background:transparent;padding:20px 0;min-height:0;margin:0}
+.lesson-body>.card+.card,.lesson-body>.study-issues{border-top:1px solid var(--line)}
+#workspace #recording{max-width:none;margin:0}
+.next-evidence{position:static;display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;background:transparent;border:0;border-bottom:1px solid var(--line);padding:8px 0 18px}
+.next-evidence h3,.next-evidence .panel-label,.next-evidence button{margin:0}
+.next-evidence h3{flex:1 1 180px}.next-evidence h3:empty{display:none}.next-evidence button{min-height:40px;padding:8px 14px}
+#workspace:has(#recording:not([hidden])) .next-evidence,#workspace[data-view=practice] .next-evidence{display:none}
+.lesson-body .practice-panel{border-top:0}
+#workspace #attemptPanel .review-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1fr);gap:20px}
+#workspace #attemptPanel.awaiting-transcript .review-grid{grid-template-columns:minmax(0,1fr)}
+#sourceDrawer{position:fixed;inset:0 0 0 auto;margin:0;width:min(440px,100%);max-width:100%;height:100%;max-height:100%;border:0;border-left:1px solid var(--line);padding:30px 24px;overflow:auto}
+#sourceDrawer::backdrop{background:#1d1d1f45}
+#drawerText{line-height:1.9;margin:24px 0;overflow-wrap:anywhere}
+#sourceDrawer mark{background:#ffdf98;color:#251e11}
+#setup:has(#homeResume:not([hidden])) .welcome{text-align:left}
+#setup:has(#homeResume:not([hidden])) .welcome h1{font-size:1.35rem}
+@media(max-width:1000px){
+  #workspace #attemptPanel .review-grid{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  #workspace .columns,#workspace[data-view=practice] .columns{display:block}
+  #workspace #materialPanel{border:0;border-bottom:1px solid var(--line);padding:6px 0 12px;margin-bottom:10px;max-height:none}
+  #workspace .workspace-heading{margin-bottom:10px}
+  .next-evidence{padding:6px 0 12px}.next-evidence h3{flex-basis:70%}
+  #sourceDrawer{inset:auto 0 0;width:100%;height:auto;max-height:85dvh;border-radius:18px 18px 0 0;border-top:1px solid var(--line);padding-bottom:max(20px,env(safe-area-inset-bottom))}
+}
+
+.finding h4{font-size:1.08rem;line-height:1.55;margin:6px 0 12px}
+.more-attempt>summary{font-size:.8125rem;color:var(--muted)}
+#attemptPanel:has(.finding) #confirm{align-self:start;width:auto;background:transparent;border:0;color:var(--accent);padding-inline:0}
+#attemptPanel:has(.finding) .diagnosisState{background:transparent;color:var(--muted);padding:0;margin:6px 0}

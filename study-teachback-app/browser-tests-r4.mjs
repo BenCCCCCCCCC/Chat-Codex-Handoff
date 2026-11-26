@@ -459,11 +459,11 @@ try{
   });
   await check('delete dialog cancel and Escape preserve data and restore focus',async()=>{
     const before=JSON.stringify(await evaluate(all));
-    await evaluate(`document.getElementById('deleteAttempt').click()`);await until(`document.getElementById('deleteDialog').open`);
+    await evaluate(`document.querySelector('.more-attempt summary').click();document.getElementById('deleteAttempt').focus();document.getElementById('deleteAttempt').click()`);await until(`document.getElementById('deleteDialog').open`);
     assert.equal(await evaluate(`document.activeElement.id`),'deleteCancel');await shot('delete-confirmation');
     await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
     await until(`!document.getElementById('deleteDialog').open`);assert.equal(JSON.stringify(await evaluate(all)),before);
-    assert.equal(await evaluate(`document.activeElement.id`),'deleteAttempt');
+    await until(`document.activeElement.id==='deleteAttempt'`);
     await evaluate(`document.getElementById('deleteAttempt').click()`);await click('deleteCancel');await until(`!document.getElementById('deleteDialog').open`);assert.equal(JSON.stringify(await evaluate(all)),before);
   });
   await check('per-attempt delete removes linked objects and preserves other attempts',async()=>{const before=(await evaluate(all))[0];await click('deleteAttempt');await until(`document.getElementById('notice').textContent.includes('这次原声')`);const after=(await evaluate(all))[0];assert.equal(after.attempts.length,before.attempts.length-1);assert(!after.attempts.some(a=>a.id===before.attempts.at(-1).id));assert.equal(after.attempts[0].id,before.attempts[0].id);});

@@ -1,6 +1,10 @@
 // Search opens the stored version without changing the learner's current draft.
 export function focusHit(node) {
   if(!node)return;
+  for(let child=node;child.parentElement;child=child.parentElement){
+    const parent=child.parentElement;
+    if(parent.tagName==='DETAILS'&&child.tagName!=='SUMMARY')parent.open=true;
+  }
   document.querySelector('.search-hit')?.classList.remove('search-hit');
   node.classList.add('search-hit');
   if(!node.matches('input,textarea,button,select,a[href],[tabindex]'))node.tabIndex=-1;

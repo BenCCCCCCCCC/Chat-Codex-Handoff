@@ -67,7 +67,16 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     $('practiceAssumptions').hidden = !$('practiceAssumptions').textContent;
     $('practiceIntroduction').textContent = round?.introduction ?? '';
     $('practiceIntroduction').hidden = !round?.introduction;
-    $('practiceHeading').textContent = round?.revision?'修订题':round?.conditionContext?'按条件练习':round?.task || topic?.taskUnavailable ? '理解检验' : round?.origin ? '旧建议练习' : '情境练习';
+    let heading=round?.origin?'旧建议练习':'情境练习';
+    if(topic?.taskUnavailable)heading='暂时没有合适的题';
+    if(round?.task){
+      const first=round.answers.find(a=>a.id===round.closedAnswerId);
+      heading=round.checkMode==='closed'?'独立检验':round.checkMode==='submitted'&&first&&answerDisposition(round,first)==='current'?'独立首答记录':'普通练习';
+    }
+    if(round?.conditionContext)heading='按条件练习';
+    if(round?.revision)heading='修订题';
+    if(paused&&!replaced)heading='题目待核对';
+    $('practiceHeading').textContent=heading;
     $('practiceDraft').value = round?.draft ?? '';
     $('practiceDraft').hidden = $('practiceDraftLabel').hidden = !!round?.task;
     $('practiceChoices').hidden = !round?.task;

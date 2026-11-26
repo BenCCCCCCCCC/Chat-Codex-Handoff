@@ -13,6 +13,10 @@ for(const control of document.querySelectorAll('[data-prompt]')){
 document.querySelector('.workspace-heading a[href="#phase"]').onclick=()=>{
   if($('practicePanel').dataset.active==='true')$('backToChat').click();
 };
+const narrowWindow=matchMedia('(max-width:760px)');
+const fitMaterialShelf=()=>{$('materialShelf').open=!narrowWindow.matches;};
+fitMaterialShelf();narrowWindow.addEventListener('change',fitMaterialShelf);
+document.querySelector('.workspace-heading a[href="#materialPanel"]').onclick=()=>{$('materialShelf').open=true;};
 function reflectStage(){
   const history=!$('history').hidden, working=!$('workspace').hidden;
   const step=!working?0:!$('recording').hidden?2:!$('attemptPanel').hidden?3:$('practicePanel').dataset.active==='true'?4:1;

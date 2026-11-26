@@ -52,6 +52,7 @@ export function renderMaterial({textNode,locationNode,source,quote=null}){
   }
   textNode.append(document.createTextNode(source.text.slice(cursor)));
   const labels=quote?[...new Set(matches.flatMap(m=>m.labels))]:[...new Set(provenance?.regions.map(r=>r.label)??[])];
+  locationNode.hidden=!provenance&&!quote;
   locationNode.textContent=(provenance?`${provenance.fileName} · ${labels.join(' / ')}`:'手动输入或历史材料 · 未记录原文件页码')+
     (quote?(matches.length>1?` · 引文出现 ${matches.length} 处，均已标出`:matches.length?' · 已定位反馈引文':' · 此材料中未找到引文'):'');
   return first??textNode;
