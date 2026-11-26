@@ -34,7 +34,8 @@ export async function questionReviewChecks({check,evaluate,until,reloadPage,clic
     await evaluate(`document.querySelector('#practiceAnswers details').open=true;document.getElementById('questionReviewHistory').open=true;`);await shot('question-original-history-mobile','practiceAnswers');
     assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));
     await evaluate(`[...document.querySelectorAll('#questionVersions button')].find(b=>b.textContent==='继续修订后的题目').click()`);await until(`!document.getElementById('practiceSubmit').hidden`);
-    await click('practiceFlag');await fill('reviewNote','重新对照原文，题目必要前提明确，重新回答。');await fill('reviewBasis',topic.source.text);await click('reviewRetain');await until(`document.getElementById('reviewConfirmDialog').open`);await click('reviewConfirm');
+    await click('practiceFlag');await until(`!document.getElementById('questionReview').hidden&&!document.getElementById('reviewNote').disabled`);
+    await fill('reviewNote','重新对照原文，题目必要前提明确，重新回答。');await fill('reviewBasis',topic.source.text);await click('reviewRetain');await until(`document.getElementById('reviewConfirmDialog').open`);await click('reviewConfirm');
     await until(`!document.getElementById('reviewConfirmDialog').open&&!document.getElementById('practiceSubmit').hidden`);
     assert.equal(await evaluate(`document.querySelector('#practiceAnswers strong')`),null);
     await fill('practiceDraft','不可以，因为没有满足必要前提。');await evaluate(`document.getElementById('practiceForm').requestSubmit()`);await until(`document.querySelectorAll('#practiceAnswers article').length===2&&document.querySelector('#practiceAnswers strong')`);
