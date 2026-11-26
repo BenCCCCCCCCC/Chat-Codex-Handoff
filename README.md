@@ -6,7 +6,7 @@
 
 ## 开始使用
 
-1. 在装有 Node.js 24 和 Edge 的 Windows 电脑上取得产品分支。已有本仓库时可直接进入仓库目录。
+1. 在装有 Node.js 24 和 Edge 的 Windows 电脑上[下载已验证候选的源码 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/90a711b3dc98a9cd084c630b4aefc961680cec86.zip)，解压后进入含有 `Start-Study.cmd` 的目录。已有本仓库也可使用下面的产品分支。
 2. 双击 [Start-Study.cmd](Start-Study.cmd)。浏览器会打开本机工作台。导航中的 **免费示例** 提供循环队列和条件概率两节预写课程。
 3. 用自己的材料练习时，粘贴一段笔记或选择文件，点 **直接讲解**。文字先存本机。可选录音或上传音频。要讨论、转写、诊断或生成开放练习，在启动服务前配置自己的 `OPENAI_API_KEY`，这些操作会消耗 API 额度。
 
@@ -39,7 +39,7 @@ cd Chat-Codex-Handoff
 
 ## 版本与验证
 
-[桌面工作台与窄屏引文](docs/iterations/2026-11-26-focused-workspace.md) · [候选更新、截图及 90 秒演示](docs/iterations/2026-11-26-local-candidate.md) · [形成性研究方案](docs/research/v1-formative-study.md) · [同输入诊断质量协议](docs/research/quality-baseline-2026-11-18/PROTOCOL.md)。本轮使用合成材料和隔离供应商验证工程路径。真实学习者的次日迁移效果尚待研究。
+[产品案例与 31 秒实页演示](docs/portfolio/README.md) · [候选交付记录](docs/iterations/2026-11-26-review-delivery.md) · [研究执行包](docs/research/v1-fieldwork/README.md) · [同输入诊断质量协议](docs/research/quality-baseline-2026-11-18/PROTOCOL.md)。本轮使用合成材料和隔离供应商验证工程路径。真实学习者的次日迁移效果尚待研究。
 
 开发按改动范围选择检查，仓库提供 `npm test`、`npm run test:browser`、`npm run test:extract`。使用隔离账本、Edge 配置和模拟响应。服务端固定模型、持久化和数据边界详见[技术说明](study-teachback-app/README.md)和[验证约定](docs/TESTING.md)。
 
