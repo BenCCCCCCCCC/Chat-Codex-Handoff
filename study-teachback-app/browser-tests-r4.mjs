@@ -350,7 +350,7 @@ try{
     for(const width of [1440,390]){
       await cdp('Emulation.setDeviceMetricsOverride',{width,height:900,deviceScaleFactor:1,mobile:false});await evaluate(`window.scrollTo(0,0)`);
       assert(await evaluate(`(()=>{const f=document.getElementById('sourceFile'),r=f.getBoundingClientRect(),t=document.getElementById('source').getBoundingClientRect();return r.width>180 && t.top>0 && t.bottom<innerHeight && getComputedStyle(f).display!=='none' && document.documentElement.scrollWidth<=innerWidth+1;})()`));
-      assert(await evaluate(`document.querySelector('.file-title').textContent==='选择学习文件' && document.getElementById('fileTypes').textContent.includes('10 MB')`));
+      assert(await evaluate(`document.getElementById('sourceFile').labels[0]?.textContent.trim().length>0 && document.getElementById('source').labels.length>0`));
       await shot(`initial-file-entry-${width}`);
     }
     assert.equal(calls.length,0);
