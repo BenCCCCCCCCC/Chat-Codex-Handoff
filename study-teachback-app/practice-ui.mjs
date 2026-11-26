@@ -7,7 +7,7 @@ import {resolveFeedback} from './feedback-reference.mjs';
 import {resolveConditionFeedback} from './conditional-practice.mjs';
 import {mountPracticeEvidence} from './practice-evidence-ui.mjs';
 
-export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen, onFeedback,onChanged=()=>{},requireAI,aiReady=()=>true}) {
+export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen, onFeedback,onContinueGap,onChanged=()=>{},requireAI,aiReady=()=>true}) {
   const $ = id => document.getElementById(id);
   const node = (tag, text, cls) => {
     const e = document.createElement(tag); e.textContent = text;
@@ -27,6 +27,9 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     const conditionContext=round?.conditionContext??topic?.practiceRequest?.conditionContext;
     const origin=conditionContext?{conditionRef:conditionContext.ref}:round?.origin??topic?.taskUnavailable?.origin,target=round?.taskTarget??topic?.taskUnavailable?.target;
     const destination=topic&&(origin?.conditionRef?resolveConditionFeedback(topic,origin.conditionRef):resolveFeedback(topic,origin,target));
+    const gap=topic?.taskUnavailable,canContinueGap=!!(gap?.origin?.feedbackRef&&destination?.finding);
+    $('practiceContinueGap').hidden=!canContinueGap;
+    $('practiceContinueGap').disabled=flow.busy;
     $('practiceReturn').hidden=!origin;
     $('practiceReturn').disabled=flow.busy||!destination?.report;
     $('practiceOriginStatus').textContent=origin?(destination.report?'来自一次历史反馈；返回不会修改当前讲解。':destination.reason):'';
@@ -34,11 +37,11 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     $('practicePanel').dataset.active = String(topic?.resume?.view === 'practice');
     $('practiceNew').disabled = flow.busy;
     $('practiceNew').disabled ||= !aiReady();
-    $('practiceNew').hidden = !!round?.task&&!topic?.practiceRequest?.conditionContext;
+    $('practiceNew').hidden = !!gap||!!round?.task&&!topic?.practiceRequest?.conditionContext;
     $('practiceNew').textContent = topic?.taskUnavailable ? '另开情境练习 · AI' : '换一道题 · AI';
     if(conditionContext)$('practiceNew').textContent=topic?.practiceRequest?.conditionContext?'重试按原条件出题 · AI':'按同样条件换一题 · AI';
     $('startPractice').disabled = flow.busy||!round&&!topic?.practiceRequest&&!topic?.taskUnavailable&&!aiReady();
-    $('startPractice').textContent=round?'继续已有练习':topic?.practiceRequest?'查看出题状态':aiReady()?'情境练习':'新情境需配置 AI';
+    $('startPractice').textContent=round?'继续已有练习':gap?'继续待检验':topic?.practiceRequest?'查看出题状态':aiReady()?'情境练习':'新情境需配置 AI';
     $('apply').disabled=flow.busy||!aiReady();$('apply').textContent=aiReady()?'试一个新情境 · AI':'新情境需配置 AI';
     $('practiceQuestionSelect').disabled = flow.busy;
     $('practiceDraft').disabled = flow.busy||replaced;
@@ -68,7 +71,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     $('practiceIntroduction').textContent = round?.introduction ?? '';
     $('practiceIntroduction').hidden = !round?.introduction;
     let heading=round?.origin?'旧建议练习':'情境练习';
-    if(topic?.taskUnavailable)heading='暂时没有合适的题';
+    if(gap)heading='待检验';
     if(round?.task){
       const first=round.answers.find(a=>a.id===round.closedAnswerId);
       heading=round.checkMode==='closed'?'独立检验':'普通练习';
@@ -99,7 +102,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
       held ? (round.review.origin==='local_check' ? '题目与材料记录不一致，已暂停判断。' : round.review.origin==='condition_check'?'条件或题面仍需核对，本次暂缓，不计作答错。':'题目待核对，暂不判断你的回答。') :
       topic?.practiceRequest?.status==='deferred' ? '出题暂缓：'+topic.practiceRequest.reason :
       topic?.practiceRequest ? '上次出题未完成或结果未知，记录仍保留。可先继续讲解或已有练习；配置 AI 后可明确选择重试。' :
-      topic?.taskUnavailable ? '暂未生成合适的检验题。可以返回对话继续学习。' : '';
+      gap ? '暂未生成合适的检验题，继续讲不计作独立检验。'+(canContinueGap?' '+destination.finding.message:'') : '';
     $('practicePendingConditions').hidden=!topic?.practiceRequest?.conditionContext;
     $('practicePendingConditions').textContent=topic?.practiceRequest?.conditionContext?'待处理的新题采用：'+topic.practiceRequest.conditionContext.issues.map(i=>i.condition).join('；')+'。下方已有题目仍保留各自条件。':'';
     $('practiceAnswers').replaceChildren(...(round?.answers ?? []).map((answer, i) => {
@@ -178,6 +181,12 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     const t=getTopic(),r=activePractice(t),saved=r??t.taskUnavailable;
     const context=r?.conditionContext??t.practiceRequest?.conditionContext;
     await onFeedback(context?{conditionRef:context.ref}:saved?.origin,r?.taskTarget??saved?.target);
+  });
+  $('practiceContinueGap').onclick=()=>act(async()=>{
+    const gap=getTopic()?.taskUnavailable;
+    if(!gap||!canStart())return;
+    const message=await onContinueGap(gap);
+    if(message)$('practiceStatus').textContent=message;
   });
   $('practiceForm').onsubmit = event => {
     event.preventDefault();

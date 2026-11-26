@@ -725,6 +725,24 @@ async function openFeedbackOrigin(origin,target){
   topic.resume={view:'attempt',attemptId:match.attempt.id,feedbackOrigin:{origin,target}};
   await save();resumeTopic(topic);
 }
+async function continuePracticeGap(gap){
+  if(!canNavigate())return;
+  processing=true;
+  try{
+    await flushDrafts();
+    const {origin,target}=gap,ref=origin?.feedbackRef;
+    const match=resolveFeedback(topic,origin,target),source=goalSource(topic);
+    if(!ref||!match.finding)return '这点仍待检验，但原反馈已无法定位。';
+    if(source.id!==match.attempt.source.id||source.text!==match.attempt.source.text||
+      (source.anchorVersion??null)!==(match.attempt.source.anchorVersion??null))return '这点仍待检验。请先回到原材料和原重点。';
+    if(topic.textDraft&&JSON.stringify(topic.textDraft.feedbackRef)!==JSON.stringify(ref))return '这点仍待检验。请先完成或清空另一份文字草稿。';
+    topic.textDraft??={kind:'partial',focus:repairFocus(match.finding.repair),parentId:ref.attemptId,
+      parentVersionId:ref.transcriptVersion,feedbackRef:structuredClone(ref),text:'',assistance:'source'};
+    topic.resume={view:'attempt',attemptId:ref.attemptId};
+    await save();
+    resumeLastActivity(topic);
+  }finally{processing=false;}
+}
 $('returnToPractice').onclick=()=>act(()=>practice.open());
 function locateHit(hit){
   reveal('returnToPractice',false);
@@ -849,7 +867,7 @@ async function flushDrafts(){setupDraft.flush();await chat.flushDraft();await pr
 async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();await voiceDrafts.discard();await materials.discardDraft();}
 const materials=mountMaterialSet({getTopic:()=>topic,save,request:api,canStart:canNavigate,setBusy:value=>{processing=value;if(current?.raw)updateDiagnosisState();},beforeChange:flushDrafts,onSwitch:()=>resumeTopic(topic),onReference:()=>practice.noteReference('material'),act});
 const practice=mountPractice({getTopic:()=>topic,save,request:api,canStart:canNavigate,aiReady:()=>serviceCapabilities?.ai===true,requireAI:()=>{if(serviceCapabilities?.ai!==true)throw new Error('CREDENTIAL_MISSING');},
-  onChanged:renderNextEvidence,setBusy:value=>{processing=value;},act,onFeedback:openFeedbackOrigin,onOpen:()=>{current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);}});
+  onChanged:renderNextEvidence,setBusy:value=>{processing=value;},act,onFeedback:openFeedbackOrigin,onContinueGap:continuePracticeGap,onOpen:()=>{current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);}});
 mountBackup({getStore:()=>db,canStart:canNavigate,setBusy:value=>{processing=value;if(!value)renderChatRecovery();},
   beforeRestore:flushDrafts,onRestore:target=>{resumeTopic(target);notice('备份已恢复为新副本。');}});
 function renderPractice(){practice.render();}
