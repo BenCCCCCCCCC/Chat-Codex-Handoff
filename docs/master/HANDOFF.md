@@ -1,10 +1,10 @@
 # 知而能讲 · Codex 工作交接
 
-更新：2026-11-19（悉尼）。目标：学生带自己的材料，讲清概念、核对依据、修正理解，下次从同一个问题继续。最新基线见 [CURRENT_STATE](CURRENT_STATE.md)。
+更新于 2026-11-26。目标：学生带自己的材料，讲清概念、核对依据、修正理解，下次从同一个问题继续。最新基线见 [CURRENT_STATE](CURRENT_STATE.md)。
 
 ## 2026-11-26 · V1.0 完整 0→1 产品路线（当前执行入口）
 
-用户要求由 AI 接管推进，从成熟 UI/UX、AI 产品经理与招聘评审视角补全 0→1；允许审视和优化原架构、界面和核心流程，参考 Apple 现有网页的视觉语言，减少防御性和冗余测试。以现有个人学习／作品展示 Windows 本地产品为基础，不重做已有成熟能力。当前产品基线 `d1d662d2376b5618b03fadff214d4680ebf86e57`，分支 `prototype/study-teachback-v0.1`；本节优先于下文 11-19 的执行顺序，下文保留事实、历史待办和决策边界。
+用户要求由 AI 接管推进，从成熟 UI/UX、AI 产品经理与招聘评审视角补全 0→1；允许审视和优化原架构、界面和核心流程，参考 Apple 现有网页的视觉语言，减少防御性和冗余测试。以现有个人学习／作品展示 Windows 本地产品为基础，不重做已有成熟能力。规划起点 `d1d662d2376b5618b03fadff214d4680ebf86e57`，分支 `prototype/study-teachback-v0.1`；本节优先于下文 11-19 的执行顺序，下文保留事实、历史待办和决策边界。
 
 ### 产品目标与竞争假设
 
@@ -52,7 +52,7 @@ A 为当前直接执行批次，A/B 可在明确模块边界下连续交付；C 
 
 沿用既有 GitHub 自主实现/提交/推送/合并约定，不新增公开发布、账号/云服务、付费预算、联网遥测或数据政策授权。用户已要求切换 ASR 前再确认；[官方文档](https://developers.openai.com/api/docs/guides/speech-to-text) 仍显示 `whisper-1` 于 2027-02-26 停止服务，候选 `gpt-transcribe`；已完成比较额度不可重用。生产迁移（含整段回听）、长材料全文保存和新的真实 API 实验集中呈报；等待期间继续 A/B 离线工作。外部用户研究先准备材料，参与者原件不外传。商业化、云同步、教师端、付费订阅、移动原生客户端不是当前本地 V1.0 必要范围。
 
-**执行回执**：A 纵向切片已在 [PR #43](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/43) 实现并本机验证。接续 B 的证据闭环；合并与集中 CI 状态见 CURRENT_STATE。
+A/B 工程已交付 [#43](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/43)、[#44](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/44)。正在使用审核意见验证下一步入口、已见题提示和窄屏主按钮，随后完成 C/D/E/F 可离线执行部分。
 
 [ChatGPT 并行产品审核](reviews/2026-11-26-v1-review-queue.md)：先给首批审核方向，等可核对的 PR/SHA、报告和页面证据再写验收结论。正常任务无需等待审核，用户不负责转述。
 

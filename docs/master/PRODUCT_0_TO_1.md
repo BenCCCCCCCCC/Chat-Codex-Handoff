@@ -1,6 +1,6 @@
 # 知而能讲 · 0→1 产品闭环与 Codex 执行单
 
-2026-11-26｜**规划已交接，用户确认 Codex 已开始；验收以最新主状态及实现回执为准。** 对齐主路线提交 `bea85058403a2a94bd0bd9218b099b448d0a91b2`；产品分支 `prototype/study-teachback-v0.1`，核对基线 `d1d662d2376b5618b03fadff214d4680ebf86e57`（#42）。开工先读最新 [CURRENT_STATE](CURRENT_STATE.md) 和 [HANDOFF](HANDOFF.md)，比对远端，已有实现按验收补差，不重复领取。
+2026-11-26｜**P0-A 和 P0-B 已合并，P0-C 与 A/B 审核修正进行中。** 对齐主路线提交 `bea85058403a2a94bd0bd9218b099b448d0a91b2`；产品分支 `prototype/study-teachback-v0.1`，核对基线 `d1d662d2376b5618b03fadff214d4680ebf86e57`（#42）。开工先读最新 [CURRENT_STATE](CURRENT_STATE.md) 和 [HANDOFF](HANDOFF.md)，比对远端，已有实现按验收补差，不重复领取。
 
 本文是 [HANDOFF 的 V1.0 A–F 主路线](HANDOFF.md)的核心学习闭环执行细则，不是第二套路线。下文 P0-A/B/C 对应主路线 A 的首个纵向切片、B 的学习闭合、C/E 的本地验收；D/F 按主路线做研究准备与反馈记录。先做通可运行路径，再按既有主路线完善视觉与结构。跳转、状态与验收动作可往返，不强制线性。
 

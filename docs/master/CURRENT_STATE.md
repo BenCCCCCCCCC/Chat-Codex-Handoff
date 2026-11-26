@@ -1,22 +1,18 @@
 # 知而能讲 · 当前状态
 
-2026-11-19（悉尼）。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `d1d662d2376b5618b03fadff214d4680ebf86e57`；唯一规划入口 `meta/master-state`。
+2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `13b9cdc43f6dcbf3ddb66cd4c4713792d53855cc`。
 
 ## 2026-11-26 · 工程执行
 
-A 首个纵向切片已推送 [PR #43](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/43)，依据 MASTER `2d57e1d`。隔离 Edge 已走通直接讲解、跨首页草稿恢复、确认诊断及练习返回原反馈。[走查与截图](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/e8989168ba2ac74eb9772b8e39e224b8b96e5734/docs/iterations/2026-11-26-learning-home.md)。PR 等待 Windows CI，B 批继续实现同一问题的重讲与作答证据。
+首页与直接讲解已合并 [#43](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/43)，[Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45802970164) 通过。来源目标、同点重讲、独立检验与理解档案已合并 [#44](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/44)，[Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45804569677) 通过。隔离 Edge 从门禁条件遗漏走到异情境首答、备份恢复、题目质疑。[批次证据](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/13b9cdc43f6dcbf3ddb66cd4c4713792d53855cc/docs/iterations/2026-11-26-understanding-record.md)。
+
+正在处理 [A/B 审核](reviews/2026-11-26-v1-review-queue.md) 中的下一步入口、普通题复用提示和窄屏主动作，同时准备重新选段、免 Key 示例、研究方案及本机候选交付。
 
 ## 2026-11-26 · 当前 MASTER 决定：完整 V1.0 0→1 路线
 
 用户要求从成熟 UI/UX、AI 产品经理、HR 视角完善全产品闭环，参考 Apple 官网设计语言，降低防御性并交接 Codex。已读取现有产品 README、设计研究、工作台/材料管理截图、现有质量协议和 ASR 比较；复核官方产品、Apple 设计资料及近邻开源项目。**继续知而能讲 Windows 本地个人学习／作品展示产品；当前优先体验/架构重构与理解档案核心，保留已有功能。** 完整产品架构、Apple-inspired 设计规范、A–F 批次及评价/交付见 [HANDOFF](HANDOFF.md) 首节。本节取代下文旧待办的优先级，保留原有事实和数据/付费/发布决定。
 
-- Completed：MASTER 0→1 缺口审查、竞品刷新、产品定位、架构与交付路线；准备直接由 Codex 领取。
-- Verified：远端产品分支仍为 `d1d662d2376b5618b03fadff214d4680ebf86e57`；原工程证据见下文。当前官方 Whisper 关闭日仍为 2027-02-26；公开竞品资料覆盖口头诊断及个性化学习，不能当作实测竞争结果。
-- Likely：以来源可核对的理解证据、待巩固与独立检验组织学习，可比通用聊天更直接；需真实验证。Apple 风格分为展示页和高效日常工作台，不照搬大面积营销布局。
-- Not Done：新 UI/领域模型/学习闭环实现与验收、真实用户价值、外部研究、V1.0 发布候选、作品集。尚未看到该批产品代码、验收回执、额外付费或生产切换。
-- Unknown：真实用户需求优先级、相对通用助手收益、独立评审的诊断质量、实际麦克风和真实课程使用效果。
-- In progress（用户确认）：Codex 已开始执行，远端尚未确认新实现 PR/SHA。产品审核已在 [ChatGPT 并行审核记录](reviews/2026-11-26-v1-review-queue.md)接入；不据口头状态替代验收。
-- Next：按 HANDOFF 批次 A 执行；在真实代码/UI 走查后，交付一个完整首页→学习工作台→讲解／诊断路径并定义后续 Concept/Gap/Evidence 合同，然后连续推进 B。已有转写维护和长材料待办按 C 批并行处理，无需因待决事项阻塞其他工作。
+- 待验证的产品假设是自主学习者能沿同一问题修正，并在次日独立解决新情境。已有浏览器结果仅覆盖工程流程。
 - Decision boundaries：七天保留、只保存选段、12 逻辑材料和 5000 字限制保持；全文保存、生产 ASR 切换、新付费调用、公开部署/发行、学习者原件外传或新数据政策须另行批准。普通设计/实现/验证自行推进，复用 CI，减少冗余回归。
 
 ## 2026-11-19 基线记录（事实及约束仍有效）
