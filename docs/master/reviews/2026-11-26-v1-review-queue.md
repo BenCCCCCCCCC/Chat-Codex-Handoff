@@ -290,3 +290,16 @@
 **需批准或核对获准项目：** 一次集中确认原 24 槽、具体项目、实际预算上限和停止规则、模型档位/版本、费率与缓存/服务数据处理条件；前轮 US$1.275504 仍仅是原假设下的条件性预留，须落实可执行费用约束。实际授权前不读 Key、不发送请求；供应商实际 schema/档位兼容性只在获批首个正式槽验证，不额外探针、不热改或补跑。若实际条件无法核对则保持暂停。
 
 **Must Fix：** 无新增已证实的离线账本缺陷。本轮关闭此离线子项，不再重复排练。**Next：** 仅完成上述免费准备和明确实际比较授权，不增加工程范围。**User Decision Needed：** 真实 24 槽付费比较仍需单独批准；六人研究、生产模型/ASR 切换、正式灰度及公开发布均仍未放行。本次为 mock 重启报告，真实请求 0、费用 0、独立人评尚未完成。仅追加原审核队列；未改代码、执行脚本、读 Key、调用模型、启动 Codex、招募或发布。
+
+
+## 2026-11-27 · 全局产品主线审核（第十一轮）
+
+**整体判断：** 基于 #50 合并头 `8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4`、当前 HANDOFF、基础调研专题已记录的“低操作成本查证修正、次日未见题迁移”设计方向（未重新取得完整 Word），现有本地启动/导入、来源版本、证据 ID、草稿与历史/备份、确定性状态和受控模型职责值得保留；应优先打通用户主动选择新学/续学及真实课件下同一缺口的验证链，不换栈、不重复第7–10轮模型/工程排练。次日重开是续学，不是已验证的延迟学习收益。
+
+**两项风险：**
+1. P0 入口 Must Fix（代码已核，Windows 待复验）：[demo.html L9、L28](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/demo.html#L9-L28) 两个链接都到 /，[app.mjs L853–858](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/app.mjs#L853-L858) 无新建草稿且有历史时自动续上次活动。示例用户明确要开始自己的学习却回旧题。认可 Codex 正在做的显式新建意图，复用 [newTopic L749–756](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/app.mjs#L749-L756) 与已有新建草稿/保存路径；普通启动保留自动恢复，显式新建/首页不被其覆盖，不清除已有主题或草稿，不隐式发送 AI 请求。无需另派任务。
+2. P1 核心价值断点（代码能力限制已核，真实长材料用户路径待核）：[bounded-understanding.mjs L4–12、L58](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/bounded-understanding.mjs#L4-L12) 要求整份 source.text 等于命中引文且只认有限语法；[practice.mjs L127–175](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/practice.mjs#L127-L175) 未匹配进入 taskUnavailable，而普通新情境请求 focus:null、source_visible，未带原缺口 origin。故真实多句课件即使成功诊断/重讲，也可能无法继续同一缺口的独立检验；不能以普通练习答完或恢复原题代替未见迁移。保留安全的规则题与不可判边界，不扩充一堆正则或声称开放题都能独立评分。
+
+**Next：** 承接当前显式新建修复，下一条产品切片聚焦“自己的多句材料→同一缺口修正→有依据的下一步→可继续的验证”。只在现有规则不适用时，保留原 feedbackRef/来源版本/目标与待检验状态，提供明确的针对性开放练习入口（需要模型时显式确认；无 Key 可留草稿或明确待检验）；不虚构题目、评分或完成状态，不新增模型/存储架构，不要求本轮自动按日换题。已有来源/反馈/首答 ID 与备份合同沿用；实际模型调用和用户研究仍按既有授权。
+
+**一个实际入口验收：** 用隔离 Edge、有旧主题 A 的候选，从免费示例点“开始自己的学习”，直接进入新建材料 B（含一条规则和另一句相关说明，不是单句规则夹具），保存文字并用隔离模拟反馈完成一次同缺口重讲；当规则不能出题时，用户仍可沿该缺口进入可继续的练习/待检验路径，不被导回无关对话或误记独立通过；关闭重开后恢复 B 的准确位置，再从记录返回 A，A 的旧证据不变，B 可按原备份机制导出。先验入口→新主题；后续切片仅补实际断点。此为一个纵向验收建议，尚未执行，非已交付。无需付费或重跑全套。原 Chat 未运行本机页面、未改产品代码，Codex 仍是唯一实现者；本轮仅写原审核队列，未扩大数据、费用或发布范围。
