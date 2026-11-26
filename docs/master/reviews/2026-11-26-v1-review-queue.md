@@ -123,3 +123,28 @@
 **User Decision Needed：** 尚无新授权；真正启动参与者研究、额外付费模型对照、生产 ASR 切换、扩大保存/外传或公开发布时按既有边界集中给方案。当前无具体新增预算或招募决定包，不催促审批。
 
 本轮仅回写 MASTER 审核记录，无产品代码修改、第二 Codex、CI 触发或 PR 合并。
+
+
+## 2026-11-26 · 独立候选验收：免 Key 与延迟迁移证据（第四轮）
+
+**目标版本**：[合并产品头 839176a](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/839176a8c2b55155256e6928fab1b4d6b5ce69c7)，实际代码 [90a711b](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/90a711b3dc98a9cd084c630b4aefc961680cec86)，MASTER 读取时 `0fc2ea38ee90795e6e23c303f85982a0a56b3904`。核对 [#48](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/48) 已合并，PR 头 `f417912594d8017df906ff9fb74b5adc85d9c545`；[90a711b…839176a](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/compare/90a711b3dc98a9cd084c630b4aefc961680cec86...839176a8c2b55155256e6928fab1b4d6b5ce69c7) 只含 README、研究文件、报告、作品集及 GIF，无应用代码。沿用 #47 已有 Windows CI，不重验 #46–48 的界面与交付。本轮仅远端源码、提交及报告审查，未独立运行 Windows、未触发 CI。
+
+### 验收：分开三条证据线
+
+- 免 Key 首次体验：[交付回执](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/iterations/2026-11-26-review-delivery.md) 记录干净 ZIP 启停、/demo 200、隔离 Edge 循环队列六画面。[demo.html L18–29](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/study-teachback-app/demo.html#L18-L29) 明确预写示例、自由文字不评分、输入仅留本页；demo.mjs 无持久化/API，选择题按固定选项评分。它是免配置产品预览，不是次日学习记录或独立效果测量。无需为此扩建 demo。
+- 正式学习记录：[B 批记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/docs/iterations/2026-11-26-understanding-record.md) 已报告模拟反馈→原文→重讲→本机新情境首答→刷新/v6 恢复→题目质疑后撤下通过。独立性基于应用内闭卷与自报；选择题正确不等于自由解释正确或长期掌握。已有验收不重复。
+- 次日换题：[执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/research/v1-fieldwork/README.md)、[题本指纹](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/research/v1-fieldwork/forms.md)、[现场记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/research/v1-fieldwork/session.md)、[汇总口径](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/research/v1-fieldwork/results.md) 已区分主/备题、答前见题才替换、答后发现见题则排除、参考/提示/超窗、锁首答及盲评三项；报告合成 TABLETOP 已演练换题与参考排除。私有题面及锚点不能从指纹审查语义，未独立听审或双评，参与者 0。这里是人工研究流程，不是应用内自动次日复习功能。无需重新写研究方案。
+
+### Must Fix / P1（本轮唯一新增可离线核对的缺口）：已见题与首次独立检验的证据边界
+
+**代码证据**：[practice.mjs L127–151](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/study-teachback-app/practice.mjs#L127-L151) 新闭卷题的 seen 仅在 `learningContexts(topic)` 中查同题面/假设；[material-set.mjs L33](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/study-teachback-app/material-set.mjs#L33) 的范围仅当前主题和其材料组合；[bounded-understanding.mjs L20–27](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/study-teachback-app/bounded-understanding.mjs#L20-L27) 对同一门禁原文固定生成同一题。[index.html L134](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/study-teachback-app/index.html#L134) 只要求“本次作答未另外查看材料、答案或提示”，没有要求声明此前见过题面/答案；[closed-check.mjs L31–35](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/study-teachback-app/closed-check.mjs#L31-L35) 满足该自报即提交独立首答；[learning-record.mjs L7–16](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/study-teachback-app/learning-record.mjs#L7-L16) 正确的 closedAnswerId 派生“本次独立检验通过”。同主题旧题保护 #45–46 已有，不要求重做；跨主题已见但本次没看资料的回答可能符合当前自报，无法凭此作为未见迁移证据。这是新颖性语义缺口，不是断言选择题评分错误，也不是学习者作弊。
+
+**本机最小复现（待 Codex 实测，不把静态推演称为 Windows 已复现）**：复用 #44 的隔离 Edge/模拟诊断门禁材料“门禁要求同时满足两个条件：已实名，并在18:00前签到。”。主题 A：同一缺口重讲→独立题（已实名、18:05）→提交正确首答。另建主题 B，使用相同材料及受控遗漏反馈，走同一重讲→独立入口。预期会得到相同题面、选项与假设，B 因主题内无记录可进入闭卷，勾选本次未另外查阅并作答后可显示独立通过。无需真实 API，不用真的等待一天；两个主题代表不同学习记录。以代码和一次定向实页确认或反证；如实测已另有拦截，记录并关闭 P1，不强行造改动。
+
+**目标与最小验收**：明确分开“首次看见本题（含答案）”与“本次未另查提示”；优先沿用现有闭卷自报及转普通练习入口，让已见/不确定者能继续普通题而不被呈现为未见迁移。可按实际实现选择简短联合自报或独立选项，不新增全局见题追踪、跨到期索引或自动换题机制。若需保存新语义，评估既有合同；不能将历史 v6 的无辅助自报倒推为未见。复用一条两主题定向走查，核对已见/不确定不进入未见独立结论，明确未见且自报无辅助的正常首次答仍可提交，重开保持实际证据；已有题和首答不覆盖。不需要全套测试。研究中的私有主/备用题规则不变，应用内本题首答与 D 批 24–48 小时自由解释仍分别统计。
+
+**Next**：先按上述唯一 P1 做离线复现及有必要的最小修正；无新增大规模 UI 重构、安装或作品集任务。保留 #48 冻结的研究执行包与真实研究待决边界。当前没有 P0 或候选发布阻断结论，未验收真实迁移效果。
+
+**User Decision Needed**：本轮无新增需立即决策。现有 6 人、¥330 研究提案仍待另行批准，当前不招募、不付费、不外传、不改生产 ASR、不发布。
+
+本轮仅维护 MASTER 审核队列；未启动第二 Codex、未改产品代码、未运行本机应用、未触发 CI 或合并。
