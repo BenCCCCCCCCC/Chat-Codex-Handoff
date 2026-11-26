@@ -49,8 +49,8 @@ function renderService(){
   $('serviceHelp').hidden=ai&&serviceCapabilities.imports.office&&serviceCapabilities.imports.pdf;
   $('serviceStatus').textContent=serviceCapabilities?(ai?'AI 已配置。':'AI 尚未配置；可以先保存材料、查看示例和已有记录。'):'正在检查可用功能；本机材料仍可保存。';
   $('importCapabilities').textContent=serviceCapabilities?'TXT / MD 可直接导入。'+(!serviceCapabilities.imports.office?' DOCX / PPTX 需要本机 Python 环境。':'')+(!serviceCapabilities.imports.pdf?' PDF 需要本机 Python 和指定版本 pypdf。':''):'';
-  $('learn').textContent=ai?'开始学习 ↗':'保存材料，进入学习';
-  $('startHint').textContent=ai?'开始后，将所选文字发送给 AI。':'仅保存在本机；配置 AI 后可继续提问和分析。';
+  $('learn').textContent=ai?'先和 AI 讨论':'保存材料，进入学习';
+  $('startHint').textContent=ai?'直接讲解先保存在本机。选择讨论会将选段发给 AI。':'文字讲解与材料可先保存到本机。配置 AI 后可诊断。';
   $('send').disabled=!ai||!!controller;
   renderPractice();
 }
@@ -65,7 +65,7 @@ async function refreshCapabilities(){
 }
 async function updateBudget(){try{const response=await fetch('/api/status');if(!response.ok)throw new Error('BUDGET_UNAVAILABLE');const s=await response.json();$('budget').textContent=`本次账本：${s.ledger.requests} 次请求；已知费用估算 $${s.ledger.knownCostUSD.toFixed(6)}；含未结算预留 $${s.ledger.exposureUSD.toFixed(6)} / $5。现金新增上限 $10，不自动充值。`; }catch{$('budget').textContent='预算状态暂不可用；无法确认可用额度。';}}
 function renderTopic(){
-  reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.studyTitle??topic.source.title;$('topicExpiry').textContent=expiryLabel(topic);$('continuedIntent').hidden=!topic.continuationIntent;$('continuedIntent').textContent=topic.continuationIntent?'继续学习：'+(topic.continuationIntent.intent||'已补充材料，可保存文字讲解，再按所选条件分析。'):'';materials.render();
+  reveal('setup',false);reveal('workspace');reveal('dock');$('workTitle').textContent=$('topicTitle').textContent=topic.studyTitle??topic.source.title;$('topicExpiry').textContent=expiryLabel(topic);$('continuedIntent').hidden=!topic.continuationIntent;$('continuedIntent').textContent=topic.continuationIntent?'继续学习：'+(topic.continuationIntent.intent||'已补充材料，可保存文字讲解，再按所选条件分析。'):'';materials.render();
   renderMaterial({textNode:$('sourceText'),locationNode:$('sourceLocation'),source:topic.source});reveal('sourceReturn',false);
   $('goals').replaceChildren(...(topic.goals??[]).map(g=>el('li',g.text)));
   chat.render();
@@ -147,7 +147,9 @@ function useImported(all){
   setupDraft.replaceMaterial(selected,autoTitle(selected,$('selectedFile').textContent),sourceMeta);updateCounts();notice('材料已替换，可以撤销。点击“开始学习”才会发送给模型。');
 }
 $('useSelection').onclick=()=>act(()=>useImported(false));$('useAll').onclick=()=>act(()=>useImported(true));
-$('learn').onclick=()=>act(async()=>{
+$('learn').onclick=()=>act(()=>startTopic(false));
+$('directExplain').onclick=()=>act(()=>startTopic(true));
+async function startTopic(explainFirst){
   if(importPending||controller||capturePending||record||processing)return;
   if(!$('source').value.trim())return notice('请先放入这一轮的学习材料。');
   if($('source').value.length>5000)return notice('这一轮最多 5,000 字，请缩小材料。');
@@ -155,9 +157,10 @@ $('learn').onclick=()=>act(async()=>{
   topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim()||autoTitle($('source').value),text:$('source').value.trim(),...setupDraft.sourceMetadata()},setupContext,goals:[],messages:[],attempts:[],mode:'learn'};
   processing=true;
   try{await save(topic);setupDraft.clear();clearImport();}finally{processing=false;}
+  if(explainFirst){renderTopic();showPreparation();notice('材料已保存在本机。');return;}
   if(serviceCapabilities?.ai!==true){renderTopic();notice('材料已保存在本机。可查看和整理，配置 AI 后再发送问题。');return;}
   await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。','learn',null,{internalStarter:true});
-});
+}
 $('chatForm').onsubmit=e=>{e.preventDefault();if(!canNavigate())return;act(async()=>{const message=$('chat').value.trim();if(!message)return;await chat.flushDraft();const retry=topic.chatRequest?.status!=='complete'&&!topic.chatRequest?.internalStarter&&topic.chatRequest?.message===message;await teach(message,topic.mode==='repair'?'repair':'learn',topic.focus??null,{retry});});};
 $('chatRetry').onclick=()=>act(async()=>{if(canNavigate())await teach('', 'learn',null,{retry:true});});
 function prepare(kind='full',focus=null,parentId=null,feedbackRef=null){
@@ -470,7 +473,7 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
   const overview=el('div',undefined,'feedback-overview');
   const supportedCount=report.findings.filter(f=>f.status==='supported').length;let supportedGroup;
   for(const status of ['incorrect','missing','unknown','supported']){const count=report.findings.filter(f=>f.status===status).length;if(count&&!(status==='supported'&&supportedCount>1))overview.append(el('span',`${labels[status]} ${count}`));}
-  $('feedback').append(overview);
+  if(report.findings.length>1)$('feedback').append(overview);
   // Keep the original finding index for evidence IDs while grouping by status.
   for(const [index,f] of [...report.findings.entries()].sort((a,b)=>order[a[1].status]-order[b[1].status])){const card=el('article',undefined,'finding');card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message));
     const evidence=el('details');evidence.append(el('summary','查看材料与原话'),el('blockquote',`材料：${f.sourceQuote}`));
@@ -481,6 +484,7 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
       $('sourceReturn').onclick=()=>focusHit(card);reveal('sourceReturn');focusHit(node);
     }));
     if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId),anchor=current.inputMode!=='text'&&quotePlayback(current.raw,span,f.quote);evidence.append(el('blockquote',`本次原话：${f.quote}`));if(anchor){const replay=button(playbackLabel(anchor),()=>play(anchor.start,anchor.end));replay.dataset.replay=anchor.level;evidence.append(replay);}}else if(current.inputMode!=='text')evidence.append(el('p','未表达的内容没有音频位置。','muted'));
+    if(!f.spanId&&current.inputMode==='text')evidence.append(el('p','这项内容未在本次讲解中找到对应原话。','muted'));
     card.append(evidence);
     const target=targets.find(t=>t.contentFindingIds.includes(`content:${current.id}:${report.transcriptVersion}:${index}`));
     const condition=report.judgement?.assessments.find(a=>a.findingIndexes.includes(index));
@@ -491,9 +495,9 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
       const taskTarget={attempt:{...attemptRequest(current),transcriptVersion:version.id,spans:version.spans,reviewed:version.reviewed===true},
         report:{sourceId:report.sourceId,attemptId:report.attemptId,transcriptVersion:report.transcriptVersion,findings:report.findings},findingIndex:index};
       const answer=button('检验理解',async()=>{if(!canNavigate())return;await flushDrafts();await practice.fromFeedback({...taskTarget,feedbackRef:feedbackReference(current,report,index)});},'quiet diagnosticTarget');answer.dataset.answerTarget=target.id;
-      const alternatives=el('details',undefined,'feedback-alternatives');alternatives.append(el('summary','其他方式'));
+      const alternatives=el('div',undefined,'compact-actions feedback-alternatives');
       alternatives.append(button('再学这一点',async()=>{topic.focus=target.focus;await teach('请针对这一点帮助我理解，不要直接给整篇背诵稿。','repair',target.focus,{internalStarter:true});$('messages').scrollIntoView({behavior:'smooth'});}),button('再讲这一点',()=>prepare('partial',target.focus,current.id,feedbackReference(current,report,index))));
-      card.append(answer,alternatives);}
+      card.append(alternatives,answer);}
     if(f.status==='supported'&&supportedCount>1){
       if(!supportedGroup){supportedGroup=el('details',undefined,'supported-findings');supportedGroup.append(el('summary',`已表达 ${supportedCount} 项`));$('feedback').append(supportedGroup);}
       supportedGroup.append(card);
@@ -521,6 +525,26 @@ $('continuationOrigin').onclick=()=>act(async()=>{
   if(!canNavigate()||!current?.continuation)return;await flushDrafts();const ref=current.continuation,old=continuationOrigin(topic,ref);if(!old.attempt)return;
   selectContext(topic,ref.sourceId);topic.resume={view:'attempt',attemptId:old.attempt.id};await save();resumeTopic(topic);
 });
+function resumeLastActivity(target){
+  const point=resumePoint(target);
+  resumeTopic(target,point);
+  if(target.textDraft&&point.view!=='practice'&&!point.feedbackOrigin){
+    const draft=target.textDraft;
+    showPreparation(draft.kind,draft.focus,draft.parentId,draft.feedbackRef);
+  }else if(point.view==='attempt'&&!point.feedbackOrigin){
+    focusHit($('attemptHeading'));
+  }
+}
+function renderHome(records){
+  const last=records[0];
+  reveal('homeResume',!!last);
+  if(!last)return;
+  $('resumeTitle').textContent=last.studyTitle??last.source.title;
+  const point=resumePoint(last);
+  $('resumeDetail').textContent=point.view==='practice'?'继续上次情境题':last.textDraft?'继续未完成的文字讲解':point.view==='attempt'?'核对上次讲解与反馈':'回到材料与讨论';
+  $('resumeLast').onclick=()=>act(()=>continueTopic(last.id));
+}
+async function refreshHome(){renderHome((await db.all()).sort((a,b)=>activityTime(b)-activityTime(a)));}
 async function continueTopic(id,point,hitKey){
   if(!canNavigate())return;
   processing=true;$('workspace').setAttribute('aria-busy','true');
@@ -531,7 +555,8 @@ async function continueTopic(id,point,hitKey){
     if(hit){if(hit.target.contextId)selectContext(target,hit.target.contextId);point=hitDestination(hit);if(hit.target.kind==='practice'){target.activePracticeId=hit.target.roundId;target.taskUnavailable=null;}}
     if(point?.contextId)selectContext(target,point.contextId);
     if(point)target.resume=point;
-    resumeTopic(target);await save();
+    if(point||hit)resumeTopic(target);else resumeLastActivity(target);
+    await save();
     if(hit){await new Promise(requestAnimationFrame);locateHit(hit);reveal('searchReturn');}
   }finally{processing=false;$('workspace').removeAttribute('aria-busy');renderChatRecovery();}
 }
@@ -564,7 +589,7 @@ function renderHistory(){
     if(hits.length>3){const more=el('details');more.append(el('summary',`其余 ${hits.length-3} 处匹配`));more.ontoggle=()=>{if(more.open&&more.children.length===1)more.append(...hits.slice(3).map(hitButton));};row.append(more);}
     const actions=el('div',undefined,'compact-actions');
     actions.append(button(next,()=>continueTopic(t.id),'quiet history-continue'),button('导出备份',async()=>{if(!canNavigate())return;const saved=await db.get(t.id);if(saved)await exportTopic(saved);}));
-    actions.append(button('删除主题',async()=>{if(topic?.id===t.id)await discardDrafts();else await flushDrafts();abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');renderPractice();}await history();},'danger'));row.append(actions);
+    actions.append(button('删除主题',async()=>{if(topic?.id===t.id)await discardDrafts();else await flushDrafts();abortPending();deleted.add(t.id);await db.delete(t.id);if(topic?.id===t.id){topic=null;current=null;$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('setup');renderPractice();}await refreshHome();await history();},'danger'));row.append(actions);
     const attempts=learningContexts(t).flatMap(c=>c.attempts.map(a=>({a,contextId:c.source.id,label:c.source.title})));
     if(attempts.length){const details=el('details');details.append(el('summary',`讲解记录 · ${attempts.length}`));for(const {a,contextId,label} of attempts)details.append(button(`${a.kind==='partial'?'局部':'完整'}${a.inputMode==='text'?'文字':''} · ${new Date(a.createdAt).toLocaleTimeString()}${t.materials?' · '+label:''}`,()=>continueTopic(t.id,{view:'attempt',attemptId:a.id,contextId})));row.append(details);}
     list.append(row);
@@ -637,7 +662,7 @@ async function newTopic(){
   try{
     await flushDrafts();abortPending();clearImport();topic=null;current=null;
     reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('recording',false);reveal('attemptPanel',false);reveal('searchReturn',false);reveal('setup');
-    setupDraft.restore();updateCounts();renderPractice();notice('');$('source').focus();return true;
+    setupDraft.restore();updateCounts();renderPractice();await refreshHome();notice('');$('source').focus({preventScroll:true});window.scrollTo(0,0);return true;
   }finally{processing=false;}
 }
 $('newTopic').onclick=()=>act(newTopic);$('revise').onclick=()=>act(async()=>{
@@ -652,7 +677,7 @@ $('newTopic').onclick=()=>act(newTopic);$('revise').onclick=()=>act(async()=>{
   }
   updateCounts();
 });
-$('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');await discardDrafts();abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();setupDraft.clear();clearImport();updateCounts();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
+$('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');await discardDrafts();abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();setupDraft.clear();clearImport();updateCounts();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);renderHome([]);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
 // Presentation-only confirmation: cancellation never reaches the original destructive handler.
 function confirmDelete(scope,action,trigger){
   if(record||capturePending||processing){notice(friendly('REQUEST_IN_PROGRESS'));return;}
@@ -693,4 +718,4 @@ $('clearSetupDraft').onclick=()=>confirmDelete('清空尚未开始的新建草�
 updateCounts();
 $('refreshCapabilities').onclick=()=>act(refreshCapabilities);
 renderService();
-await act(async()=>{db=await openStore();await refreshCapabilities();await updateBudget();const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));if(all.length&&!setupDraft.hasContent())resumeTopic(all[0]);});
+await act(async()=>{db=await openStore();await refreshCapabilities();await updateBudget();const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));renderHome(all);if(all.length&&!setupDraft.hasContent())resumeLastActivity(all[0]);});
