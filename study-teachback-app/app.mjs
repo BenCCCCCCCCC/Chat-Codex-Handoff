@@ -27,6 +27,9 @@ import {mountSetupDraft} from './setup-draft.mjs';
 import {importedDocument,selectedProvenance,renderMaterial} from './source-provenance.mjs';
 const $=id=>document.getElementById(id), uid=()=>crypto.randomUUID();
 let db,topic=null,current=null,pending=null,controller=null,record=null,blobURL=null,playEnd=null,deleted=new Set(),memoryOnly=false,processing=false,capturePending=false;
+let storageConflict=false;
+const saveQueues=new WeakMap(),newTopics=new WeakSet();
+const storageConflictMessage='本机记录已在另一页面更新或不再可用，本页未覆盖。请导出当前记录，确认备份已下载后再刷新或关闭；未导出的修改会丢失。';
 let serviceCapabilities=null;
 const editors=new Map();
 const diagnosisStates=new WeakMap();
@@ -37,8 +40,29 @@ const reveal=(id,show=true)=>{$(id).hidden=!show;};
 function el(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
 function button(label,fn,cls='quiet'){const b=el('button',label,cls);b.onclick=()=>label==='删除主题'?confirmDelete('删除这个主题及其全部讲解、原声、转写和反馈。',fn,b):act(fn);return b;}
 async function act(fn){try{await fn();}catch(e){notice(friendly(e.message));}}
-function friendly(code){const messages={MATERIAL_DRAFT_EXISTS:'请先保存或放弃正在编辑的材料版本，草稿仍保留。',MATERIAL_VERSION_CHANGED:'该材料已有更新版本，请先核对最新版本再修订。',MATERIAL_UNCHANGED:'名称和文字没有变化，无需保存新版本。',FRAGMENT_OMISSION_UNSUPPORTED:'录音只保留了部分内容，本次结果却按未录内容判断遗漏，已拒绝该结果；原声与文字仍保留。',CONTINUATION_TOO_LONG:'当前文字超过 2,000 字，原记录仍保留。请先选择一个重点，用文字草稿继续。',ISSUE_MATERIALS_REQUIRED:'请先补入该条件引用的材料。',INVALID_PRACTICE_CONDITIONS:'本题的条件或来源无法核对，已保留原记录；请返回条件反馈重新选择。',ANSWER_SESSION_LOCKED:'这次回答已经保存；请原样重试，或另起一次作答保留新回答。',JUDGEMENT_LIMIT:'每次反馈最多选择 3 个相关疑点，请取消无关或重复的记录。',INVALID_JUDGEMENT:'条件与结果的关联无法核对，未保存为有效反馈。',DEFERRED_JUDGEMENT:'返回结果试图判断已暂缓的项目，已拒绝保存；原始讲解和先前反馈仍保留。',MATERIAL_SELECTION_REQUIRED:'请至少选择一份材料。',MATERIAL_SELECTION_TOO_LARGE:'本次材料组合最多 5,000 字、100 个位置区块，请缩小所选材料；不会自动截断。',MATERIAL_LIMIT:'一个主题目前最多保存 12 份材料。',ISSUE_EVIDENCE_REQUIRED:'请至少引用一段材料中实际存在的原句。',SELECT_MATERIAL_QUOTE:'请先在材料原文中选取最多 1,500 字。',STUDY_WORK_MISSING:'这张疑点卡关联的讲解或题目已删除，已返回当时的材料；疑点与引文仍保留。',STUDY_CONTEXT_MISSING:'原学习位置已不存在，当前记录仍保留。',INVALID_TEXT:'请填写完整的文字，并遵守输入框字数限制。',REVIEW_BASIS_REQUIRED:'请填写复核说明，并粘贴材料中确实存在的原文作为依据；材料不足时可继续暂停。',QUESTION_UNCHANGED:'请修改题目，或选择保留原题后重新作答。',REVIEW_CHANGED:'题目或复核内容已改变，请重新预览后确认。',TRANSCRIPTION_TERMS_LIMIT:'术语最多 8 项，每项 24 字、合计 80 字；请用逗号分隔简短名称。',AUDIO_TOO_LARGE:'音频超过 25 MB，请压缩或裁剪后重新选择。',AUDIO_FORMAT_UNSUPPORTED:'请选择 WAV、MP3、M4A、MP4、WebM、OGG、FLAC 或 AAC 音频。',AUDIO_DECODE_FAILED:'浏览器无法读取这段音频，请转为 WAV 或 MP3 后重试。',DURATION_LIMIT:'每次讲解最长 3 分钟，请先裁剪音频。',EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先确认用于诊断的转写；建议回听检查否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请先完整回听这个过程候选，再保存过程证据。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
-async function save(target=topic){if(!target||deleted.has(target.id))return;try{target.updatedAt=Date.now();await db.put(target);memoryOnly=false;reveal('storageRecovery',false);}catch{memoryOnly=true;reveal('storageRecovery');throw new Error('STORAGE_FAILED');}}
+function friendly(code){if(code==='STORAGE_FAILED'&&storageConflict)return storageConflictMessage;const messages={MATERIAL_DRAFT_EXISTS:'请先保存或放弃正在编辑的材料版本，草稿仍保留。',MATERIAL_VERSION_CHANGED:'该材料已有更新版本，请先核对最新版本再修订。',MATERIAL_UNCHANGED:'名称和文字没有变化，无需保存新版本。',FRAGMENT_OMISSION_UNSUPPORTED:'录音只保留了部分内容，本次结果却按未录内容判断遗漏，已拒绝该结果；原声与文字仍保留。',CONTINUATION_TOO_LONG:'当前文字超过 2,000 字，原记录仍保留。请先选择一个重点，用文字草稿继续。',ISSUE_MATERIALS_REQUIRED:'请先补入该条件引用的材料。',INVALID_PRACTICE_CONDITIONS:'本题的条件或来源无法核对，已保留原记录；请返回条件反馈重新选择。',ANSWER_SESSION_LOCKED:'这次回答已经保存；请原样重试，或另起一次作答保留新回答。',JUDGEMENT_LIMIT:'每次反馈最多选择 3 个相关疑点，请取消无关或重复的记录。',INVALID_JUDGEMENT:'条件与结果的关联无法核对，未保存为有效反馈。',DEFERRED_JUDGEMENT:'返回结果试图判断已暂缓的项目，已拒绝保存；原始讲解和先前反馈仍保留。',MATERIAL_SELECTION_REQUIRED:'请至少选择一份材料。',MATERIAL_SELECTION_TOO_LARGE:'本次材料组合最多 5,000 字、100 个位置区块，请缩小所选材料；不会自动截断。',MATERIAL_LIMIT:'一个主题目前最多保存 12 份材料。',ISSUE_EVIDENCE_REQUIRED:'请至少引用一段材料中实际存在的原句。',SELECT_MATERIAL_QUOTE:'请先在材料原文中选取最多 1,500 字。',STUDY_WORK_MISSING:'这张疑点卡关联的讲解或题目已删除，已返回当时的材料；疑点与引文仍保留。',STUDY_CONTEXT_MISSING:'原学习位置已不存在，当前记录仍保留。',INVALID_TEXT:'请填写完整的文字，并遵守输入框字数限制。',REVIEW_BASIS_REQUIRED:'请填写复核说明，并粘贴材料中确实存在的原文作为依据；材料不足时可继续暂停。',QUESTION_UNCHANGED:'请修改题目，或选择保留原题后重新作答。',REVIEW_CHANGED:'题目或复核内容已改变，请重新预览后确认。',TRANSCRIPTION_TERMS_LIMIT:'术语最多 8 项，每项 24 字、合计 80 字；请用逗号分隔简短名称。',AUDIO_TOO_LARGE:'音频超过 25 MB，请压缩或裁剪后重新选择。',AUDIO_FORMAT_UNSUPPORTED:'请选择 WAV、MP3、M4A、MP4、WebM、OGG、FLAC 或 AAC 音频。',AUDIO_DECODE_FAILED:'浏览器无法读取这段音频，请转为 WAV 或 MP3 后重试。',DURATION_LIMIT:'每次讲解最长 3 分钟，请先裁剪音频。',EXTRACTOR_SETUP_REQUIRED:'本机文档提取环境未配置，请按 README 完成产品 Python 环境设置。材料没有发送给模型。',EXTRACTOR_DEPENDENCY_REQUIRED:'本机文档提取依赖缺失或版本不符，请按 README 安装指定版本 pypdf。材料没有发送给模型。',FILE_TOO_LARGE:'文件超过 10 MB，请选择更小的材料。',TEXT_ENCODING_UNSUPPORTED:'文本编码不受支持，请另存为 UTF-8 或 UTF-16。',NO_EXTRACTABLE_TEXT:'未提取到文字；扫描 PDF/图片需要先转换为可选取文本。本应用不执行 OCR。',INVALID_DOCUMENT:'文件无法安全解析，请检查格式或复制文字。',DOCUMENT_LIMIT:'材料超过本次提取限制，请拆分文档。',ENCRYPTED_DOCUMENT:'不支持加密文件，请使用未加密的低风险材料。',EXTRACTION_TIMEOUT:'本机提取超时，请缩小文件。',ASR_REVIEW_REQUIRED:'请先确认用于诊断的转写；建议回听检查否定词、数字、条件和术语。',BUDGET_STOP:'本次 API 预算已达到停止条件。原始讲解已保留。',ATTEMPT_LIMIT:'本次讲解的转写次数或总次数已达上限。原始讲解仍可回放。',CREDENTIAL_MISSING:'服务端尚未配置 API 凭据；请由开发者配置，学习数据仍保留。',REQUEST_IN_PROGRESS:'上一个请求仍在完成，请稍后再试。',NOT_HEARD:'请先完整回听这个过程候选，再保存过程证据。',STORAGE_FAILED:'本机存储失败，当前内容仅在此页内存中。请立即导出或重试保存，不要关闭页面。',NO_AUDIO:'没有收到可用录音，请检查麦克风。',SOUND_EVIDENCE_INSUFFICIENT:'声音证据不足，保留原声供回听。'};return messages[code]??`处理未完成（${/^[A-Z0-9_]+$/.test(code)?code:'LOCAL_ERROR'}）。原始学习记录不会因此删除。`;}
+async function save(target=topic,{create=false}={}){
+  if(!target||deleted.has(target.id))return;
+  if(create)newTopics.add(target);
+  const write=(saveQueues.get(target)??Promise.resolve()).catch(()=>{}).then(async()=>{
+    if(deleted.has(target.id))return;
+    const expected=target.updatedAt??null,updatedAt=Math.max(Date.now(),(expected??0)+1);
+    try{
+      await db.putCurrent(structuredClone({...target,updatedAt}),expected,newTopics.has(target));
+      target.updatedAt=updatedAt;newTopics.delete(target);
+      if(target.id===topic?.id){memoryOnly=false;storageConflict=false;reveal('storageRecovery',false);}
+    }catch(e){
+      if(target.id===topic?.id){
+        memoryOnly=true;storageConflict=e?.message==='STORAGE_CHANGED';
+        $('storageRecoveryStatus').textContent=storageConflict?storageConflictMessage:'存储未完成。请重试保存或立即导出；关闭页面可能丢失尚未保存的内容。';
+        reveal('retrySave',!storageConflict);reveal('storageRecovery');
+      }
+      throw new Error('STORAGE_FAILED');
+    }
+  });
+  saveQueues.set(target,write);
+  try{await write;}finally{if(saveQueues.get(target)===write)saveQueues.delete(target);}
+}
 async function api(path,body,headers={}){
   if(controller||record)throw new Error('REQUEST_IN_PROGRESS');
   if(path!=='/api/extract'&&serviceCapabilities?.ai!==true)throw Object.assign(new Error('CREDENTIAL_MISSING'),{notSent:true});
@@ -169,7 +193,7 @@ async function startTopic(explainFirst){
   const setupContext=setupContextValue({focus:$('setupFocus').value,known:$('setupKnown').value});
   topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim()||autoTitle($('source').value),text:$('source').value.trim(),...setupDraft.sourceMetadata()},setupContext,goals:[],messages:[],attempts:[],mode:'learn'};
   processing=true;
-  try{await save(topic);setupDraft.clear();clearImport();}finally{processing=false;}
+  try{await save(topic,{create:true});setupDraft.clear();clearImport();}finally{processing=false;}
   if(explainFirst){renderTopic();showPreparation();notice('材料已保存在本机。');return;}
   if(serviceCapabilities?.ai!==true){renderTopic();notice('材料已保存在本机。可查看和整理，配置 AI 后再发送问题。');return;}
   await teach('请先帮我理解这段材料，从核心关系开始，问我一个简短问题。','learn',null,{internalStarter:true});
@@ -579,7 +603,7 @@ async function exportTopic(target=topic){
 $('export').onclick=()=>act(exportTopic);
 $('recoveryExport').onclick=()=>act(exportTopic);
 $('topicExport').onclick=()=>act(async()=>{await flushDrafts();await exportTopic();});
-$('retrySave').onclick=()=>act(async()=>{if(chat.hasPendingDraft||practice.hasPendingDraft||materials.hasPendingDraft||voiceDrafts.pending)await flushDrafts();else await save();chat.render();if(current){diagnosisStates.delete(current);renderAttempt();}renderPractice();renderChatRecovery();notice('已重新保存到本机。');});
+$('retrySave').onclick=()=>act(async()=>{if(storageConflict)return;if(chat.hasPendingDraft||practice.hasPendingDraft||materials.hasPendingDraft||voiceDrafts.pending)await flushDrafts();else await save();chat.render();if(current){diagnosisStates.delete(current);renderAttempt();}renderPractice();renderChatRecovery();notice('已重新保存到本机。');});
 function abortPending(){controller?.abort();}
 $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;await voiceDrafts.discard();abortPending();deleted.add(current);topic.attempts=topic.attempts.filter(a=>a.id!==current.id);await save();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);current=null;reveal('attemptPanel',false);notice('这次原声及其关联转写、纠正和反馈已从本地删除。已导出副本和已在途的云请求不受此操作控制。');});
 function resumeTopic(target,point=resumePoint(target)){
@@ -844,8 +868,8 @@ for(const link of document.querySelectorAll('a[href="/demo"]'))link.onclick=e=>{
 const chat=mountChat({getTopic:()=>topic,save,act,focusHit});
 const voiceDrafts=createDraftSaver({save,onError:error=>act(()=>Promise.reject(error)),onStatus:status=>{
   $('termDraftStatus').textContent=status==='error'?'术语未保存':status==='saving'?'正在保存…':status==='saved'?'已保存':'';
-  $('textDraftStatus').textContent=status==='error'?'文字草稿尚未保存，请重试保存。':status==='saving'?'正在保存草稿…':topic?.textDraft?'文字草稿已保存在本机':'';
-  $('voiceDraftStatus').textContent=status==='error'?'核对草稿未保存':status==='saving'?'正在保存核对草稿…':current?.transcriptDraft?'核对草稿已保存 · 尚未确认':'';
+  $('textDraftStatus').textContent=status==='error'?(storageConflict?storageConflictMessage:'文字草稿尚未保存，请重试保存。'):status==='saving'?'正在保存草稿…':topic?.textDraft?'文字草稿已保存在本机':'';
+  $('voiceDraftStatus').textContent=status==='error'?(storageConflict?storageConflictMessage:'核对草稿未保存'):status==='saving'?'正在保存核对草稿…':current?.transcriptDraft?'核对草稿已保存 · 尚未确认':'';
 }});
 $('transcriptionTerms').oninput=()=>{if(!topic||capturePending||record)return;topic.transcriptionTerms=$('transcriptionTerms').value;voiceDrafts.mark(topic);};
 $('transcriptionTerms').onblur=()=>act(()=>voiceDrafts.flush());

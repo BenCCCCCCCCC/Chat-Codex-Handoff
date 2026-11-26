@@ -28,7 +28,7 @@
   </ol>
   <div id="notice" role="status" aria-live="polite"></div>
   <details id="serviceHelp" class="service-help"><summary id="serviceStatus" role="status"></summary><p id="importCapabilities" class="muted"></p><details><summary>配置 AI 与文档导入</summary><p>AI 功能需要在启动服务的终端中设置 OPENAI_API_KEY，然后重新启动本应用。密钥只交给本机服务，请勿填入学习材料。DOCX／PPTX 需要产品 Python 环境，PDF 另需 pypdf 6.18.0，安装步骤见项目 README。未配置的功能不影响本机草稿、文字导入、示例和历史记录。</p></details><button id="refreshCapabilities" class="quiet">重新检查配置</button></details>
-  <section id="storageRecovery" class="card" hidden><p>存储未完成。请重试保存或立即导出；关闭页面可能丢失尚未保存的内容。</p><button id="retrySave">重试保存</button><button id="recoveryExport">导出当前记录</button></section>
+  <section id="storageRecovery" class="card" hidden><p id="storageRecoveryStatus" role="status">存储未完成。请重试保存或立即导出；关闭页面可能丢失尚未保存的内容。</p><button id="retrySave">重试保存</button><button id="recoveryExport">导出当前记录</button></section>
   <section id="setup">
     <section id="homeResume" class="resume-strip" hidden aria-label="继续上次学习"><div><p class="panel-label">上次学到这里</p><h2 id="resumeTitle"></h2><p id="resumeDetail"></p></div><button id="resumeLast">继续学习 →</button></section>
     <div class="welcome"><h1 id="newMaterialHeading" tabindex="-1">今天想讲清什么？</h1></div>
