@@ -67,7 +67,7 @@ async function refreshCapabilities(){
 }
 async function updateBudget(){try{const response=await fetch('/api/status');if(!response.ok)throw new Error('BUDGET_UNAVAILABLE');const s=await response.json();$('budget').textContent=`本次账本：${s.ledger.requests} 次请求；已知费用估算 $${s.ledger.knownCostUSD.toFixed(6)}；含未结算预留 $${s.ledger.exposureUSD.toFixed(6)} / $5。现金新增上限 $10，不自动充值。`; }catch{$('budget').textContent='预算状态暂不可用；无法确认可用额度。';}}
 function renderTopic(){
-  reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.studyTitle??topic.source.title;$('topicExpiry').textContent=expiryLabel(topic);$('continuedIntent').hidden=!topic.continuationIntent;$('continuedIntent').textContent=topic.continuationIntent?'继续学习：'+(topic.continuationIntent.intent||'已补充材料，可保存文字讲解，再按所选条件分析。'):'';materials.render();
+  reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.studyTitle??topic.source.title;$('topicExpiry').textContent=expiryLabel(topic).split(' · ')[0];$('continuedIntent').hidden=!topic.continuationIntent;$('continuedIntent').textContent=topic.continuationIntent?'继续学习：'+(topic.continuationIntent.intent||'已补充材料，可保存文字讲解，再按所选条件分析。'):'';materials.render();
   renderMaterial({textNode:$('sourceText'),locationNode:$('sourceLocation'),source:topic.source});reveal('sourceReturn',false);
   $('goals').replaceChildren(...(topic.selectedGoal?[topic.selectedGoal]:topic.goals??[]).map(g=>el('li',g.text)));
   reveal('repairReturn',!!topic.repairRef&&topic.mode==='repair');
@@ -379,9 +379,10 @@ function updateDiagnosisState(){
   const a=current;if(!a?.raw)return;renderNextEvidence();const v=diagnosisView(a);
   reveal('sourceReturn',false);
   $('confirm').disabled=!!v.pending||!!v.saveFailed||!v.current&&serviceCapabilities?.ai!==true;for(const e of editors.values())e.readOnly=!!v.pending;
-  $('confirm').textContent=!v.current&&serviceCapabilities?.ai!==true?'配置 AI 后可分析':v.pending?'诊断中…':v.current?'查看当前诊断结果':v.changed?'确认修改并重新诊断':v.error?'确认当前文字并再次诊断':'确认使用当前文字，开始诊断';
+  $('confirm').textContent=!v.current&&serviceCapabilities?.ai!==true?'配置 AI 后可分析':v.pending?'诊断中…':v.current?'查看反馈':v.changed?'确认修改并重新诊断':v.error?'确认当前文字并再次诊断':'确认并诊断';
+  $('diagnosisState').classList.toggle('sr-only',v.current&&!v.pending&&!v.error&&!v.saveFailed);
   const binding=v.version?'版本 '+v.version.id.slice(0,8)+' · '+new Date(v.report.createdAt).toLocaleString():'';
-  $('diagnosisState').textContent=v.pending?'当前文字与适用条件已确认，正在诊断…':v.error?v.error:v.current?'诊断完成':v.report?'文字或适用条件已修改，先前结果已过时':a.inputMode==='text'?'文字已保存，可以继续修改或重新讲解。':'当前文字待确认；回听可选。';
+  $('diagnosisState').textContent=v.pending?'当前文字与适用条件已确认，正在诊断…':v.error?v.error:v.current?'诊断完成':v.report?'文字或适用条件已修改，先前结果已过时':'诊断将把材料选段和确认文字发给 AI。';
   $('resultBinding').textContent=v.report?(v.pending?'先前结果（新诊断进行中）':v.current?'当前结果':'先前结果，仅供查看，不适用于当前文字或条件')+' · '+binding:'';
   renderJudgementChoices({root:$('judgementChoices'),topic,attempt:a,disabled:!!v.pending||processing,change:(issue,checked)=>act(async()=>{
     if(!canNavigate())return;processing=true;updateDiagnosisState();
@@ -480,7 +481,7 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
   for(const status of ['incorrect','missing','unknown','supported']){const count=report.findings.filter(f=>f.status===status).length;if(count&&!(status==='supported'&&supportedCount>1))overview.append(el('span',`${labels[status]} ${count}`));}
   if(report.findings.length>1)$('feedback').append(overview);
   // Keep the original finding index for evidence IDs while grouping by status.
-  for(const [index,f] of [...report.findings.entries()].sort((a,b)=>order[a[1].status]-order[b[1].status])){const card=el('article',undefined,'finding');card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('p',f.message));
+  for(const [index,f] of [...report.findings.entries()].sort((a,b)=>order[a[1].status]-order[b[1].status])){const card=el('article',undefined,'finding');card.dataset.status=f.status;card.append(el('strong',labels[f.status]),el('h4',f.message));
     const evidence=el('details');evidence.append(el('summary','查看材料与原话'),el('blockquote',`材料：${f.sourceQuote}`));
     const material=current.source;
     evidence.append(button('查看材料位置',async()=>{
@@ -490,9 +491,12 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
         topic.resume={view:'attempt',attemptId:current.id,feedbackOrigin:{origin:{feedbackRef:ref},fromRecord:true}};
         await save();
       }
-      $('sourceDetails').open=true;
-      const node=renderMaterial({textNode:$('sourceText'),locationNode:$('sourceLocation'),source:material,quote:f.sourceQuote});
-      $('sourceReturn').onclick=()=>focusHit(card);reveal('sourceReturn');focusHit(node);
+      const drawer=$('sourceDrawer');
+      $('drawerTitle').textContent=material.title;
+      const node=renderMaterial({textNode:$('drawerText'),locationNode:$('drawerLocation'),source:material,quote:f.sourceQuote});
+      $('sourceReturn').onclick=()=>drawer.close();
+      drawer.onclose=()=>{if(drawer.open)return;reveal('sourceReturn',false);focusHit(card.isConnected?card:$('contentHeading'));};
+      reveal('sourceReturn');drawer.showModal();focusHit(node);
     }));
     if(f.spanId){const span=version.spans.find(s=>s.id===f.spanId),anchor=current.inputMode!=='text'&&quotePlayback(current.raw,span,f.quote);evidence.append(el('blockquote',`本次原话：${f.quote}`));if(anchor){const replay=button(playbackLabel(anchor),()=>play(anchor.start,anchor.end));replay.dataset.replay=anchor.level;evidence.append(replay);}}else if(current.inputMode!=='text')evidence.append(el('p','未表达的内容没有音频位置。','muted'));
     if(!f.spanId&&current.inputMode==='text')evidence.append(el('p','这项内容未在本次讲解中找到对应原话。','muted'));
@@ -561,6 +565,7 @@ function resumeLastActivity(target){
 function renderHome(records){
   const last=records[0];
   reveal('homeResume',!!last);
+  document.querySelector('#setup .welcome h1').textContent=last?'新主题':'今天想讲清什么？';
   if(!last)return;
   $('resumeTitle').textContent=last.studyTitle??last.source.title;
   const point=resumePoint(last);
@@ -794,7 +799,8 @@ function renderNextEvidence(){
   const e=!draft&&!waiting&&entries.find(entry=>entry.current);
   $('nextState').textContent=draft?'讲解草稿':waiting?(last.raw?'讲解待确认':'原声待核对'):e?.state??'待讲解';
   $('nextFocus').textContent=e?.finding?.message??e?.reason??topic.selectedGoal?.text??topic.setupContext?.focus??'';
-  if(!$('nextFocus').textContent)$('nextFocus').textContent='用自己的话解释材料里的关键条件。';
+  const sameGap=e?.state==='待巩固'&&e.attempt.id===current?.id&&e.finding?.repair&&!e.report.judgement;
+  $('nextEvidence').hidden=!$('attemptPanel').hidden&&(!!waiting&&last.id===current?.id||sameGap);
   const proof=async()=>{
     await continueTopic(topic.id,{view:'attempt',attemptId:e.attempt.id,...(e.ref?.reportId?{feedbackOrigin:{origin:{feedbackRef:e.ref},fromRecord:true}}:{})});
     if(!e.ref?.reportId)focusHit($('contentHeading'));

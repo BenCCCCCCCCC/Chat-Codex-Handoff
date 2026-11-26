@@ -23,10 +23,11 @@ export async function sourceChecks({check,evaluate,until,reloadPage,shot,cdp,cli
     await evaluate(`{const b=[...document.querySelectorAll('#feedback button')].find(b=>b.textContent==='查看材料位置');b.closest('details').open=true;b.focus();}`);
     await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',windowsVirtualKeyCode:13});
     await cdp('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
-    assert.equal(await evaluate(`document.querySelector('#sourceText mark').textContent`),'Rule B is the exception.');
-    assert.match(await evaluate(`document.getElementById('sourceLocation').textContent`),/幻灯片 2/);
-    await shot('source-page-mobile','materialPanel');assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));
-    await click('sourceReturn');assert(await evaluate(`document.activeElement.classList.contains('finding')`));
+    await until(`document.getElementById('sourceDrawer').open`);
+    assert.equal(await evaluate(`document.querySelector('#drawerText mark').textContent`),'Rule B is the exception.');
+    assert.match(await evaluate(`document.getElementById('drawerLocation').textContent`),/幻灯片 2/);
+    await shot('source-page-mobile','sourceDrawer');assert(await evaluate(`document.documentElement.scrollWidth<=innerWidth+1`));
+    await click('sourceReturn');await until(`!document.getElementById('sourceDrawer').open && document.activeElement.classList.contains('finding')`);
     await click('revise');await until(`!document.getElementById('setup').hidden`);
     await evaluate(`{const e=document.getElementById('source');e.value+=' Edited.';e.dispatchEvent(new Event('input'));}`);await click('learn');await until(`!document.getElementById('workspace').hidden`);
     assert(await evaluate(`(async()=>{const db=await(await import('/storage.mjs')).openStore();const all=await db.all();db.close();const old=all.find(t=>t.attempts.length),newer=all.find(t=>!t.attempts.length);return newer.source.revisionOf===old.source.id&&!newer.source.provenance&&old.source.provenance.regions.length===2&&old.attempts[0].source.text===old.source.text;})()`));

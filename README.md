@@ -39,7 +39,7 @@ cd Chat-Codex-Handoff
 
 ## 版本与验证
 
-[候选更新、截图及 90 秒演示](docs/iterations/2026-11-26-local-candidate.md) · [形成性研究方案](docs/research/v1-formative-study.md) · [同输入诊断质量协议](docs/research/quality-baseline-2026-11-18/PROTOCOL.md)。本轮使用合成材料和隔离供应商验证工程路径。真实学习者的次日迁移效果尚待研究。
+[桌面工作台与窄屏引文](docs/iterations/2026-11-26-focused-workspace.md) · [候选更新、截图及 90 秒演示](docs/iterations/2026-11-26-local-candidate.md) · [形成性研究方案](docs/research/v1-formative-study.md) · [同输入诊断质量协议](docs/research/quality-baseline-2026-11-18/PROTOCOL.md)。本轮使用合成材料和隔离供应商验证工程路径。真实学习者的次日迁移效果尚待研究。
 
 开发按改动范围选择检查，仓库提供 `npm test`、`npm run test:browser`、`npm run test:extract`。使用隔离账本、Edge 配置和模拟响应。服务端固定模型、持久化和数据边界详见[技术说明](study-teachback-app/README.md)和[验证约定](docs/TESTING.md)。
 
