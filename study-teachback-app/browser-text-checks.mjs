@@ -29,6 +29,12 @@ export async function textChecks({check,evaluate,until,reloadPage,click,calls,sh
     assert.equal(calls.length,before);await shot('local-text-resumed','attemptPanel');
     setAIConfigured(true);await reloadPage();await click('confirm');await until(`document.querySelector('#feedback .finding')`);
     assert.deepEqual(calls.slice(before).map(c=>c.kind),['content']);
+    await click('explain');
+    await evaluate(`{const e=document.getElementById('textExplanation');e.value='先保留这份完整讲解。';e.dispatchEvent(new Event('input'));}`);
+    await evaluate(`[...document.querySelectorAll('#feedback button')].find(b=>b.textContent==='再讲这一点').click()`);
+    assert(await evaluate(`document.getElementById('recordTitle').textContent==='我来讲讲'&&document.getElementById('textExplanation').value==='先保留这份完整讲解。'&&document.getElementById('textDraftContext').textContent.includes('保存或清空')`));
+    await click('discardTextDraft');await click('deleteConfirm');
+    await until(`document.activeElement.id==='textExplanation'&&!document.getElementById('textExplanation').value`);
     await evaluate(`[...document.querySelectorAll('#feedback button')].find(b=>b.textContent==='再讲这一点').click()`);
     await evaluate(`document.getElementById('textComposer').open=true;const e=document.getElementById('textExplanation');e.value='只有土壤干燥才浇水；湿润时先不浇。';e.dispatchEvent(new Event('input'));`);
     await click('saveTextExplanation');await until(`!document.getElementById('attemptComparison').hidden`);

@@ -4,6 +4,7 @@ import {makeTextAttempt,comparisonFor} from './text-teachback.mjs';
 import {attemptValue,contentInput,revisedTranscript} from './core.mjs';
 import {encodeBackup,decodeBackup} from './backup.mjs';
 import {createServer} from './server.mjs';
+import {feedbackReference} from './feedback-reference.mjs';
 const source={id:'source',title:'Conditions',text:'Only enter when open.'};
 const request=a=>({id:a.id,sourceId:a.source.id,inputMode:a.inputMode,transcriptVersion:a.raw.id,spans:a.raw.spans,kind:a.kind,assistance:a.assistance,focus:a.focus,reviewed:true});
 test('text attempts have no audio/time and pin comparison to the original version across edits and backup',async()=>{
@@ -35,4 +36,18 @@ test('text diagnosis uses the existing explicit semantic route and refuses sound
     assert.equal((await send('content')).status,200);assert.equal(calls,1);
     assert.equal((await send('delivery')).status,422);assert.equal(calls,1);
   }finally{await new Promise(r=>server.close(r));}
+});
+test('a text follow-up uses the referenced source snapshot, not a newly selected goal',()=>{
+  const topic={source,attempts:[]};
+  const earlier={...source,anchorVersion:'old-goal',anchors:[{text:'When can we enter?',sourceQuote:source.text}]};
+  const selected={...source,anchorVersion:'new-goal',anchors:[{text:'What is open?',sourceQuote:source.text}]};
+  const full={text:'Enter at any time.',kind:'full',assistance:'source'};
+  const first=makeTextAttempt(topic,full,{source:earlier});topic.attempts.push(first);
+  const report={id:'original-report',channel:'content',transcriptVersion:first.raw.id,findings:[{status:'incorrect'}]};
+  first.reports.push(report);
+  const draft={...full,text:'Enter only when open.',kind:'partial',focus:'Explain the condition.',parentId:first.id,
+    parentVersionId:first.raw.id,feedbackRef:feedbackReference(first,report,0)};
+  assert.deepEqual(makeTextAttempt(topic,draft,{source:selected}).source,earlier);
+  assert.deepEqual(makeTextAttempt(topic,full,{source:selected}).source,selected);
+  assert.throws(()=>makeTextAttempt(topic,draft,{source:{...selected,text:'Changed material.'}}),/INVALID_FEEDBACK_REFERENCE/);
 });
