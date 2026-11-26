@@ -12,9 +12,10 @@ export async function textChecks({check,evaluate,until,reloadPage,click,calls,sh
     assert.equal(await evaluate(`document.getElementById('textExplanation').value`),'土壤湿润时也要浇水。');
     await evaluate(`window.textNativePut=IDBObjectStore.prototype.put;IDBObjectStore.prototype.put=function(){throw new DOMException('test quota','QuotaExceededError');}`);
     await evaluate(`document.getElementById('saveTextExplanation').click();document.getElementById('saveTextExplanation').click()`);
-    await until(`!document.getElementById('storageRecovery').hidden`);await evaluate(`IDBObjectStore.prototype.put=window.textNativePut`);await click('retrySave');await until(`document.getElementById('storageRecovery').hidden`);
+    await until(`!document.getElementById('storageRecovery').hidden`);assert(!await evaluate(`document.getElementById('diagnosisState').textContent.includes('保存在本机')`));await evaluate(`IDBObjectStore.prototype.put=window.textNativePut`);await click('retrySave');await until(`document.getElementById('storageRecovery').hidden`);
     await until(`!document.getElementById('attemptPanel').hidden`);assert.equal(calls.length,before);
     assert(await evaluate(`document.getElementById('confirm').disabled&&document.getElementById('confirm').textContent.includes('配置 AI')`));
+    assert(await evaluate(`document.getElementById('confirm').hidden&&document.getElementById('reviewActions').contains(document.getElementById('fullAgain'))&&document.getElementById('diagnosisState').textContent.includes('尚未发送给 AI')`));
     assert(await evaluate(`document.getElementById('player').hidden&&document.getElementById('processDetails').hidden&&!document.querySelector('#transcript button')`));
     assert(!await evaluate(`document.getElementById('diagnosisState').textContent.includes('回听')`));
     assert(await evaluate(`document.getElementById('apply').disabled&&document.getElementById('apply').textContent.includes('配置 AI')`));
@@ -27,7 +28,11 @@ export async function textChecks({check,evaluate,until,reloadPage,click,calls,sh
     await click('historyButton');assert.equal(await evaluate(`document.querySelector('.history-continue').textContent`),'继续核对与反馈');
     await evaluate(`document.querySelector('.history-continue').click()`);await until(`document.getElementById('history').hidden`);
     assert.equal(calls.length,before);await shot('local-text-resumed','attemptPanel');
-    setAIConfigured(true);await reloadPage();await click('confirm');await until(`document.querySelector('#feedback .finding')`);
+    setAIConfigured(true);await reloadPage();
+    assert(await evaluate(`!document.getElementById('confirm').hidden&&!document.getElementById('confirm').disabled&&document.getElementById('diagnosisState').textContent.includes('发送给 AI')`));
+    assert.equal(calls.length,before);
+    await click('confirm');await until(`document.querySelector('#feedback .finding')`);
+    assert(!await evaluate(`document.getElementById('diagnosisState').textContent.includes('尚未发送给 AI')`));
     assert.deepEqual(calls.slice(before).map(c=>c.kind),['content']);
     await click('explain');
     await evaluate(`{const e=document.getElementById('textExplanation');e.value='先保留这份完整讲解。';e.dispatchEvent(new Event('input'));}`);
