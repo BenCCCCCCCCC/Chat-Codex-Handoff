@@ -2,6 +2,10 @@
 
 2026-11-19（悉尼）。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `d1d662d2376b5618b03fadff214d4680ebf86e57`；唯一规划入口 `meta/master-state`。
 
+## 2026-11-26 · 工程执行
+
+A 首个纵向切片已推送 [PR #43](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/43)，依据 MASTER `2d57e1d`。隔离 Edge 已走通直接讲解、跨首页草稿恢复、确认诊断及练习返回原反馈。[走查与截图](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/e8989168ba2ac74eb9772b8e39e224b8b96e5734/docs/iterations/2026-11-26-learning-home.md)。PR 等待 Windows CI，B 批继续实现同一问题的重讲与作答证据。
+
 ## 2026-11-26 · 当前 MASTER 决定：完整 V1.0 0→1 路线
 
 用户要求从成熟 UI/UX、AI 产品经理、HR 视角完善全产品闭环，参考 Apple 官网设计语言，降低防御性并交接 Codex。已读取现有产品 README、设计研究、工作台/材料管理截图、现有质量协议和 ASR 比较；复核官方产品、Apple 设计资料及近邻开源项目。**继续知而能讲 Windows 本地个人学习／作品展示产品；当前优先体验/架构重构与理解档案核心，保留已有功能。** 完整产品架构、Apple-inspired 设计规范、A–F 批次及评价/交付见 [HANDOFF](HANDOFF.md) 首节。本节取代下文旧待办的优先级，保留原有事实和数据/付费/发布决定。
