@@ -180,18 +180,28 @@ function prepare(kind='full',focus=null,parentId=null,feedbackRef=null){
   if(!canNavigate())return;showPreparation(kind,focus,parentId,feedbackRef);
 }
 function showPreparation(kind='full',focus=null,parentId=null,feedbackRef=null){
-  if(!topic)return;if(kind==='partial')focus=repairFocus(focus);pending={kind,focus,parentId,parentVersionId:feedbackRef?.transcriptVersion??topic.attempts.find(a=>a.id===parentId)?.corrections.at(-1)?.id??topic.attempts.find(a=>a.id===parentId)?.raw?.id??null,...(feedbackRef?{feedbackRef}:{})};renderTextComposer();$('transcriptionTerms').value=topic.transcriptionTerms??'';$('termDraftStatus').textContent='';reveal('recording');$('recordTitle').textContent=kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=focus??'';$('recording').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});reveal('voiceComposer',false);reveal('textComposer');$('chooseText').setAttribute('aria-pressed','true');$('chooseVoice').setAttribute('aria-pressed','false');$('textExplanation').focus();$('timer').textContent='00:00';
+  if(!topic)return;
+  if(kind==='partial')focus=repairFocus(focus);
+  const parent=topic.attempts.find(a=>a.id===parentId);
+  const requested={kind,focus,parentId,parentVersionId:feedbackRef?.transcriptVersion??parent?.corrections.at(-1)?.id??parent?.raw?.id??null,...(feedbackRef?{feedbackRef}:{})};
+  const draft=topic.textDraft;
+  // The visible prompt and the stored draft must refer to the same feedback.
+  const saved=draft&&{kind:draft.kind,focus:draft.focus??null,parentId:draft.parentId??null,parentVersionId:draft.parentVersionId??null,
+    ...(draft.feedbackRef?{feedbackRef:draft.feedbackRef}:{})};
+  const different=!!(saved&&(kind==='partial'||parentId||feedbackRef)&&JSON.stringify(saved)!==JSON.stringify(requested));
+  pending=saved??requested;
+  renderTextComposer(different);$('transcriptionTerms').value=topic.transcriptionTerms??'';$('termDraftStatus').textContent='';reveal('recording');$('recordTitle').textContent=pending.kind==='partial'?'只讲这一点':'我来讲讲';$('recordFocus').textContent=pending.focus??'';$('recording').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});reveal('voiceComposer',false);reveal('textComposer');$('chooseText').setAttribute('aria-pressed','true');$('chooseVoice').setAttribute('aria-pressed','false');$('textExplanation').focus();$('timer').textContent='00:00';
 }
 function setTextBusy(busy){
   for(const id of ['textExplanation','textAssistance','discardTextDraft','chooseText','chooseVoice'])$(id).disabled=busy;
   $('saveTextExplanation').disabled=busy||!topic?.textDraft?.text.trim();
 }
-function renderTextComposer(){
+function renderTextComposer(different=false){
   const d=topic.textDraft;
   $('textExplanation').value=d?.text??'';
   $('textAssistance').value=d?.assistance??'source';
   $('textComposer').open=true;
-  $('textDraftContext').textContent=d?(d.kind==='partial'?'继续上次针对这一点的草稿：'+d.focus:'继续上次完整讲解草稿'):'';
+  $('textDraftContext').textContent=different?'已恢复原草稿。要讲新的一点，先保存或清空这份草稿。':d?(d.kind==='partial'?'已恢复上次局部讲解草稿':'已恢复上次完整讲解草稿'):'';
   $('textDraftStatus').textContent=d?'文字草稿已保存在本机':'';
   $('saveTextExplanation').disabled=!d?.text.trim();
   $('discardTextDraft').hidden=!d;
@@ -205,7 +215,7 @@ $('textExplanation').oninput=$('textAssistance').onchange=captureTextDraft;
 $('textExplanation').onblur=()=>act(()=>voiceDrafts.flush());
 $('discardTextDraft').onclick=()=>confirmDelete('清空尚未保存为讲解的文字草稿。已保存的讲解和反馈不受影响。',async()=>{
   await voiceDrafts.flush();delete topic.textDraft;await save();renderTextComposer();
-},$('discardTextDraft'));
+},$('discardTextDraft'),$('textExplanation'));
 $('saveTextExplanation').onclick=()=>act(async()=>{
   if(!canNavigate()||!topic.textDraft?.text.trim())return;
   processing=true;setTextBusy(true);const target=topic;
@@ -735,12 +745,14 @@ async function continuePracticeGap(gap){
     if(!ref||!match.finding)return '这点仍待检验，但原反馈已无法定位。';
     if(source.id!==match.attempt.source.id||source.text!==match.attempt.source.text||
       (source.anchorVersion??null)!==(match.attempt.source.anchorVersion??null))return '这点仍待检验。请先回到原材料和原重点。';
-    if(topic.textDraft&&JSON.stringify(topic.textDraft.feedbackRef)!==JSON.stringify(ref))return '这点仍待检验。请先完成或清空另一份文字草稿。';
-    topic.textDraft??={kind:'partial',focus:repairFocus(match.finding.repair),parentId:ref.attemptId,
+    const focus=repairFocus(match.finding.repair);
+    topic.textDraft??={kind:'partial',focus,parentId:ref.attemptId,
       parentVersionId:ref.transcriptVersion,feedbackRef:structuredClone(ref),text:'',assistance:'source'};
-    topic.resume={view:'attempt',attemptId:ref.attemptId};
+    const attemptId=topic.textDraft.parentId??ref.attemptId;
+    topic.resume=topic.attempts.some(a=>a.id===attemptId)?{view:'attempt',attemptId}:{view:'learn'};
     await save();
-    resumeLastActivity(topic);
+    resumeTopic(topic);
+    showPreparation('partial',focus,ref.attemptId,ref);
   }finally{processing=false;}
 }
 $('returnToPractice').onclick=()=>act(()=>practice.open());
@@ -797,11 +809,11 @@ $('newTopic').onclick=()=>act(newTopic);$('revise').onclick=()=>act(async()=>{
 });
 $('deleteAll').onclick=()=>act(async()=>{if(record)throw new Error('RECORDING_ACTIVE');await discardDrafts();abortPending();for(const t of await db.all())deleted.add(t.id);await db.clear();setupDraft.clear();clearImport();updateCounts();if(topic)deleted.add(topic.id);topic=null;current=null;memoryOnly=false;reveal('storageRecovery',false);$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('setup');reveal('attemptPanel',false);renderHome([]);notice('全部本地学习对象已删除。费用账本不含正文，独立保留以防重置预算。导出副本不受此操作控制。');});
 // Presentation-only confirmation: cancellation never reaches the original destructive handler.
-function confirmDelete(scope,action,trigger){
+function confirmDelete(scope,action,trigger,fallback=null){
   if(record||capturePending||processing){notice(friendly('REQUEST_IN_PROGRESS'));return;}
   const dialog=$('deleteDialog');if(dialog.open)return;
   $('deleteScope').textContent=scope;dialog.returnValue='';
-  const restore=()=>{const target=trigger?.isConnected&&trigger.getClientRects().length?trigger:!$('history').hidden?$('historyTitle'):$('source');target.focus();};
+  const restore=()=>{const target=trigger?.isConnected&&trigger.getClientRects().length?trigger:fallback?.getClientRects().length?fallback:!$('history').hidden?$('historyTitle'):$('source');target.focus();};
   $('deleteCancel').onclick=()=>dialog.close('cancel');
   $('deleteConfirm').onclick=()=>{dialog.onclose=null;dialog.close('confirm');act(async()=>{await action.call(trigger);restore();});};
   dialog.onclose=()=>{dialog.onclose=null;restore();};
