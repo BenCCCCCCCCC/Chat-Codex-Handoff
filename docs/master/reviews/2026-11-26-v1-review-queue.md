@@ -241,3 +241,33 @@
 它支持继续安全的本机离线候选使用、同结构换包准备；不支持旧版直接打开新版 profile、跨 schema 原地降级、合并两份分叉状态、真实付费账本回滚、真实灰度/公开发行或 AI 模型切换。第六轮提出的新增材料版本/讲解报告/草稿与模拟严重错误断路，本次回执仅覆盖新增第二条普通答题证据，未分别验证；脚本启停也非 Explorer 双击。无需为了完整表格重做本轮；后续只有实际数据结构、账本或发布路径改变时，对受影响的真实用户结果补定向演练。阶段 07 仍须按发布对象、授权和实际数据兼容性单列，不把此子门槛当整体放行。
 
 **决策总结：** 暂无新增已证实的产品代码 Must Fix；必须补的是实际模型比较的预检/盲评放行证据。三项下一动作仅为：保留并校准两个语义严重项；准备一次隔离比较预检包；关闭同结构快照子项并保留其边界。当前真实参与者 0、此次模型实际输出 0、费用 0。无新即时审批；24 次真实调用须在明确配置和硬预算后单独批准。本轮仅追加原 MASTER 审核队列，未修改产品代码、启用额外 Codex、触发 CI、招募、付费、更换模型或发布。
+
+
+## 2026-11-26 · 模型比较预检包独立复核（第九轮）
+
+**范围：** 只复核第八轮唯一后继产物 [b646f47](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/b646f47a0de08c37e4146def1ecbf52eb7447957) 的 [MODEL_COMPARISON_PREFLIGHT.md](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b646f47a0de08c37e4146def1ecbf52eb7447957/docs/research/quality-baseline-2026-11-18/MODEL_COMPARISON_PREFLIGHT.md)、[run-manifest.json](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b646f47a0de08c37e4146def1ecbf52eb7447957/docs/research/quality-baseline-2026-11-18/run-manifest.json)、[model-comparison-preflight.mjs](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b646f47a0de08c37e4146def1ecbf52eb7447957/docs/research/quality-baseline-2026-11-18/model-comparison-preflight.mjs)。研究提交仅新增三份研究文件；远端产品仍为 8d8f2d7，MASTER 读取点 `478f5117ca6cd4487fee2031dfaaa18d18f516ee`。不重审 #50、不开发、不新建执行任务。
+
+### Offline preflight：PASS_OFFLINE_ONLY（认可，关闭第八轮离线预检子项）
+
+- **24 槽与指纹：** 独立枚举 manifest 得到 E01–E24 全部唯一、6 案例×2 配置×2 次，两轮各按案号顺序并反转 Luna/Sol，12 槽/配置。逐一对照 e3416fc：六个输入哈希及共同 instructions/schema 哈希全一致。另以独立 SHA-256 计算核对 manifest 的 LF 哈希 `832bd32efebd04b1d8a2869c58a7cfd9421cfcfd1eba165d3bb437a67692699b` 与 PROTOCOL、controlled-cases、review-template 三份原始文件，4/4 相符。[脚本 L39–84](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b646f47a0de08c37e4146def1ecbf52eb7447957/docs/research/quality-baseline-2026-11-18/model-comparison-preflight.mjs#L39-L84) 用实际本地规范化/校验函数重建输入并断言指纹，报告记录 6/6 成功；原 Chat 未重跑该 Windows 脚本，不把静态对照及文件哈希称作独立重建六个运行时 payload。
+- **无出站范围：** [L8–38](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b646f47a0de08c37e4146def1ecbf52eb7447957/docs/research/quality-baseline-2026-11-18/model-comparison-preflight.mjs#L8-L38) 要求 scoped Node 权限、输出为指定新空目录，禁止子进程/worker/addon/WASI；覆盖浏览器式传输、getBuiltinModule，并将后续模块解析限定四个本地模块。net/dns/http/provider import 及 fetch 五个探针在进程内被阻断，未发送 DNS/TCP/HTTP 或回环请求；没有实际 provider、凭据加载、联网发送器。认可受审代码的程序内隔离，不是对任意代码的系统防火墙、网络抓包或目标 API 项目合规证明。
+- **断路：** [L112–155](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b646f47a0de08c37e4146def1ecbf52eb7447957/docs/research/quality-baseline-2026-11-18/model-comparison-preflight.mjs#L112-L155) 先预留再调用纯函数，E01/E02 mock 输入相同且不携带配置/槽号；E03 未知 usage 时保留 Luna 的全额 US$0.006172，后续 21 槽均不发送、无重试。独立复算两个模拟结算加未释放预留为 US$0.010480。只验证所述三次 mock，journal 为内存，60 秒是模拟超时值；不是耐崩溃账本、真实超时/不合格 JSON 计费或网络断路实测。
+- **盲评分离：** [L149–160](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b646f47a0de08c37e4146def1ecbf52eb7447957/docs/research/quality-baseline-2026-11-18/model-comparison-preflight.mjs#L149-L160) 给 24 槽生成随机唯一盲号并洗牌，评审侧只导出两条 mock、caseId/可用性及空值评审字段；原始返回、配置、重复、槽位映射、预算留 operator。预检证明交付格式，不证明独立人工盲评或访问权限隔离。真实输出若含自报身份，仅对评审副本去标识，保留原件；不得向评审交付 operator 目录。实际独立参照校准及评分仍 pending。
+
+### 预算核对：US$1.275504 算术与公开标准费率一致，非无条件硬上限
+
+[manifest L21–75](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b646f47a0de08c37e4146def1ecbf52eb7447957/docs/research/quality-baseline-2026-11-18/run-manifest.json#L21-L75)、[脚本 L85–108](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b646f47a0de08c37e4146def1ecbf52eb7447957/docs/research/quality-baseline-2026-11-18/model-comparison-preflight.mjs#L85-L108) 一致锁定短上下文、Standard、文本、串行、60s、30m TTL，最大编码体 14,000 字节＋2,048 隐藏包装预留＝每槽 16,048 输入 token（本地估算）。Luna 输出上限 1,800；Sol medium 6,000，均为包含推理/可见输出的总量。独立按整数单位复算：
+
+| 配置 | 普通输入/30m 写入/输出（USD/百万 token） | 单槽预留 | 12 槽 |
+| --- | --- | --- | --- |
+| gpt-5.6-luna | 0.20 / 0.25 / 1.20 | 0.006172 | 0.074064 |
+| gpt-6.2-sol | 2.00 / 2.50 / 10.00 | 0.100120 | 1.201440 |
+| 合计 | | | 1.275504 |
+
+重新核对公开 [Luna 模型费率](https://developers.openai.com/api/docs/models/gpt-5.6-luna?trk=public_post_comment-text)、[Sol 模型费率](https://developers.openai.com/api/docs/models/gpt-6.2-sol)、[短上下文定价](https://developers.openai.com/api/docs/pricing?context-length=short)、[Prompt caching 官方指南](https://developers.openai.com/api/docs/guides/prompt-caching?site_locale=en) 与[推理上限说明](https://developers.openai.com/api/docs/guides/reasoning)。30m 写入为普通输入价的 1.25 倍**总费率**，不是普通输入上再加一笔；无缓存命中折扣的全量预留在上述假设下保守且正确。12h 写入为 2.5 倍，地区/FedRAMP 等端点可能有额外溢价，不能沿用这一金额。TTL 是缓存最短生命周期，不是删除期限；store:false 亦不证明零保留。项目实际费率、endpoint、tier、权限、数据设置仍未实证。16,048 也非供应商公布的可计费 token 硬限制；超界后停止后续槽并保留未知暴露，不能撤回当前已发请求的费用。真实执行前须锁定可用的保守计费边界/上限及授权；不以预检估算当账户级消费硬封顶、实际账单或付款许可。
+
+### Must Fix / Next / User Decision Needed
+
+- **Must Fix：** 无新增离线预检缺陷。两个手写严重语义负控继续纳入评审；不加 regex，不重跑 #50 或上述预检。
+- **Next（只保留既有真实比较放行前置，不另造任务）：** 非出题评审先完成六例评分锚点独立校准，冻结严重项/可用性口径；真实运行须落实报告已经明确的隔离发送、耐崩溃预留与断路、原始响应保存及盲评导出，在实际项目核对模型/参数/费率/缓存及数据处理条件和可执行的成本上限。核对实际运行树及输入指纹；不能直接把本内存 mock 接上网络。账户实际 schema/档位兼容性只能在获批后的首个计入槽位证实，遇不兼容/未知计费即停，不另开探针、不偷偷换档、不补跑。保持原 24 槽与配置，配置或费率条件不成立则先停止，不扩大比较或修改产品。真实调用还须用户明确批准对应预算和停止条件；当前只认可离线准备，未授权真实执行。
+- **User Decision Needed：** 当前不执行或申请新额度；六人形成性研究（既有 ¥330 提案）、实际模型比较、生产切换、正式灰度及公开发布均仍未放行，彼此独立。模型比较不能替代真实用户价值或次日迁移证据。本轮实际模型请求 0，实际支出 0，参与者 0。原 Chat 只读报告和源码、独立核对哈希与算术，未运行 Windows、重跑脚本、改产品代码、启动 Codex、招募、付费、更换模型或发布；仅写本审核队列。
