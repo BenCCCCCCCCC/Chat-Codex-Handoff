@@ -2,13 +2,13 @@
 
 **本轮执行与验收：** [八阶段 0→1 与 AI 决策门槛](V1_EXIT_GATES.md)。Codex 执行，原 Chat 审核和建议；继续沿用本地候选与证据边界。
 
-更新于 2026-11-26。目标：学生带自己的材料，讲清概念、核对依据、修正理解，下次从同一个问题继续。最新基线见 [CURRENT_STATE](CURRENT_STATE.md)。
+更新于 2026-11-27。目标：学生带自己的材料，讲清概念、核对依据、修正理解，下次从同一个问题继续。最新基线见 [CURRENT_STATE](CURRENT_STATE.md)。
 
 ## 2026-11-26 · V1.0 完整 0→1 产品路线（当前执行入口）
 
-入口切片 [#51](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/51) 与多段材料待检验切片 [#52](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/52) 已合并，最新产品头为 [15a25a3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/15a25a3f136b2d70e28e08064f816e62120106d5)。原 Chat 审核完成，[#52 的 Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45869579086) 均通过。没有题时只支持针对原反馈重讲，仍待检验；暂不加开放题。
+当前产品头 [bd6b569](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/bd6b569f8d39f4f71ff74590db40d328bcf61955)。[#51](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/51)／[#52](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/52) 是已合并历史：新建与续学分开，无适合题仍可围绕原反馈本机重讲，不算检验。[#53](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/53) 固定草稿与原目标，[#54](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/54) 给首次保存后的本机下一步，[#55](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/55) 防另一页覆盖原首答。[#56](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/56) 只更新 README。证据仍各自归属，不作公开发行或真人验证结论。
 
-下一步复用[六人形成性验证执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/15a25a3f136b2d70e28e08064f816e62120106d5/docs/research/v1-fieldwork/README.md)的记录页，先在隔离本机无 Key 走一条路径：原创多段材料、标明合成的反馈、首次自主查源和重讲、24–48 小时后自主找回原缺口。项目本人可先自用，不计研究样本；如另请他人，先落实批准的负责人、渠道、同意与删除日期。不采集录音、录屏或他人的原件，不把离线可用性算作 AI 质量、独立迁移或六人对照结果。现未招募，也未开启收费调用。
+下一步自行用隔离 Edge 和合成反馈复验「待检验→查看旧题→档案回到原缺口」，不要求用户操作，不增加开放题。无题仍无评分或独立通过。[六人形成性验证执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/15a25a3f136b2d70e28e08064f816e62120106d5/docs/research/v1-fieldwork/README.md) 保留为未来真人研究协议，不另招募、不调用付费模型；工程走查不算学习迁移。
 
 第四轮审核的唯一 P1 已在两个主题的同一门禁题上复现。原版只确认“本次未查阅”就能再次记为独立通过。修复后，未见题和无辅助需分别自报；已见或不确定可沿用所选答案转普通练习。旧 v6 仅保留当时已有的证据。[审核原文](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a0feffba3992aff2dcb9ec677f7601848fd780ae/docs/master/reviews/2026-11-26-v1-review-queue.md) · [PR #49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49)
 

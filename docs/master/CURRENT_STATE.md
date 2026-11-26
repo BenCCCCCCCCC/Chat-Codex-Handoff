@@ -1,8 +1,10 @@
 # 知而能讲 · 当前状态
 
+2026-11-27｜当前产品头 [bd6b569](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/bd6b569f8d39f4f71ff74590db40d328bcf61955)。[PR #55](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/55) 已合并，包含已独立合并的 [#56](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/56) README 更新。原 Chat 认可 924d2e5 的运行时与两页实证；最终 22d3964 只等已有复核控件启用，不改运行时或原断言。[最终 Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45882063672) Node／Edge 通过。旧页不能覆盖原首答；其未写入草稿可导出，确认备份已下载后再刷新或关闭。普通材料写入故障则仍可重试。两条隔离 Edge 路径通过，无真实调用、费用或发布。[验收与实页](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/924d2e50ce181d91e479f12d02568ca7a48ff951/docs/iterations/2026-11-27-prevent-stale-page-overwrite.md)。
+
 2026-11-27｜产品头 [c81c5fc](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c81c5fccce4e9ece63af00b30b27e2342c3d9994)，[PR #54](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/54) 已合并。原 Chat 第十四轮认可 b051b16 的产品行为；首轮 Node 失败是模拟 DOM 缺少 prepend，仅在 ecdb26c 补夹具，原断言、运行时及实页不变。[最终 Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45875960516) 通过。390px 首讲保存后当屏可见本机状态和「再讲一遍」；无 Key 不显示禁用诊断按钮。模拟配置后只有主动确认才发一次本机 mock，提前说明发送范围；无真实模型、费用或真人。[前后实页与范围](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b051b163a1b96179456d338c6f0a579871501220/docs/iterations/2026-11-27-first-save-local-next.md)。
 
-[最新可下载源码快照 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/c81c5fccce4e9ece63af00b30b27e2342c3d9994.zip) 是 GitHub 按当前合并头生成的源码，不是公开发行，也未重新打包验收。实际做过干净包启动、重开、备份恢复与停服的是 #53 候选 787bfc0；#54 新界面按上方实页与对应 Node／Edge CI 验证，不把两项证据合并称为同一个包的实测。
+[最新可下载源码快照 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/bd6b569f8d39f4f71ff74590db40d328bcf61955.zip) 是 GitHub 按当前合并头生成的源码，不是公开发行，也未重新打包验收。实际做过干净包启动、重开、备份恢复与停服的是 #53 候选 787bfc0；后续 #54、#55 分别由各自定向实页和 Node／Edge CI 验证，并非对同一 ZIP 重做交付验收。
 
 2026-11-27｜产品头 [97befee](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/97befee09dcded6f23d8cf078e97cd8c2b4f8f05)，[PR #53](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/53) 已合并。A/B 反馈不再混用同一草稿；改变当前目标也不改变旧反馈的文字重讲来源。原 Chat 复审关闭唯一必修，[Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45874302851) 通过。[实页与复审](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/787bfc0e4c1d85312a25ffc28b6223ed022b6e6e/docs/iterations/2026-11-27-feedback-draft-scope.md)。
 
