@@ -6,7 +6,7 @@
 
 ## 开始使用
 
-1. 在装有 Node.js 24 和 Edge 的 Windows 电脑上[下载已验证候选的源码 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/90a711b3dc98a9cd084c630b4aefc961680cec86.zip)，解压后进入含有 `Start-Study.cmd` 的目录。已有本仓库也可使用下面的产品分支。
+1. 在装有 Node.js 24 和 Edge 的 Windows 电脑上[下载已验证候选的源码 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/74f7d6112e531dfdf2b5736843b6875060f12a4f.zip)，解压后进入含有 `Start-Study.cmd` 的目录。已有本仓库也可使用下面的产品分支。
 2. 双击 [Start-Study.cmd](Start-Study.cmd)。浏览器会打开本机工作台。导航中的 **免费示例** 提供循环队列和条件概率两节预写课程。
 3. 用自己的材料练习时，粘贴一段笔记或选择文件，点 **直接讲解**。文字先存本机。可选录音或上传音频。要讨论、转写、诊断或生成开放练习，在启动服务前配置自己的 `OPENAI_API_KEY`，这些操作会消耗 API 额度。
 
@@ -28,7 +28,7 @@ cd Chat-Codex-Handoff
 | 换个情境，先作答再看依据 | 具体题面、首答和参考情况。题目有疑问时可暂停判断 |
 | 回到首页或打开理解档案 | 上次的草稿、未完成的题，或本轮总结 |
 
-独立检验只覆盖可在本机核对的有限规则。新题遮住材料和旧反馈，学习者提交首答时自报是否额外查阅。见过的题会标明普通练习。前提未定时可暂缓该项。开放题支持明确调用 AI 生成与反馈。更换材料版本后仍可回到旧报告。[理解档案与验证](docs/iterations/2026-11-26-understanding-record.md)
+独立检验只覆盖可在本机核对的有限规则。新题遮住材料和旧反馈；提交独立首答时分别确认此前未见题目或答案、本次未另查资料。见过或不确定时可转普通练习。前提未定时可暂缓该项。开放题支持明确调用 AI 生成与反馈。更换材料版本后仍可回到旧报告。[理解档案与验证](docs/iterations/2026-11-26-understanding-record.md)
 
 ## 常见问题
 
