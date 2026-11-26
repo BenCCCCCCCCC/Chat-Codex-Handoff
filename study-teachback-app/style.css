@@ -100,7 +100,6 @@ body[data-history=true] #searchReturn{display:none}
 body[data-history=true] #workspace,body[data-history=true] #setup,body[data-history=true] #dock,body[data-history=true] .journey{display:none}
 #workspace[data-view=practice]{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
 #workspace[data-view=practice] .columns{display:contents}
-#workspace[data-view=practice] #materialPanel{grid-column:1;grid-row:1}
 #workspace[data-view=practice] .learning{display:none}
 #workspace[data-view=practice] #practicePanel{grid-column:2;grid-row:1}
 #workspace[data-view=learn] #practicePanel{display:none}
@@ -167,7 +166,7 @@ button,.button-link{border-radius:12px}.dock button,.setup-bottom button,.resume
 .workspace-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}.workspace-heading h1{font-size:clamp(1.5rem,2.6vw,2.25rem);margin:0}.workspace-heading p{margin:0 0 4px}
 .workspace-heading nav{display:flex;flex-wrap:wrap;gap:4px}.workspace-heading a{padding:9px 12px;border-radius:20px;text-decoration:none;color:var(--accent);font-size:.875rem}.workspace-heading a:hover{background:var(--accent-soft)}
 #workspace[data-view=practice]>.workspace-heading{grid-column:1/-1;grid-row:1;margin:0}
-#workspace[data-view=practice] #materialPanel,#workspace[data-view=practice] #practicePanel{grid-row:2}
+#workspace[data-view=practice] #practicePanel{grid-row:2}
 #workspace[data-view=practice] #studyIssues{grid-row:3}
 #workspace .learning{min-height:320px}#workspace .columns{grid-template-columns:minmax(240px,.74fr) minmax(0,1.8fr)}
 .finding .feedback-alternatives{margin:12px 0}.finding .feedback-alternatives button:last-child{color:var(--accent);background:var(--accent-soft)}
@@ -258,6 +257,15 @@ body:has(#setup:not([hidden])) #main{max-width:880px}
 #workspace .lesson-body{min-width:0}
 #workspace .card{border:0;border-radius:0;box-shadow:none}
 #workspace #materialPanel{grid-column:1;grid-row:1;background:transparent;border-right:1px solid var(--line);padding:8px 20px 16px 0}
+/* A closed or unavailable material shelf must not reserve a reading column. */
+@media(min-width:761px){
+  #workspace .columns:not(:has(> #materialPanel:not([hidden]) > #materialShelf[open])){
+    display:block;max-width:54rem;margin-inline:auto
+  }
+  #workspace #materialPanel:has(> #materialShelf:not([open])){
+    border:0;border-bottom:1px solid var(--line);padding:4px 0 10px;margin:0 0 8px;max-height:none;scrollbar-gutter:auto
+  }
+}
 #materialShelf>summary{color:var(--ink);font-weight:650;font-size:1rem}
 .lesson-body>.card,#workspace .learning{background:transparent;padding:20px 0;min-height:0;margin:0}
 .lesson-body>.card+.card,.lesson-body>.study-issues{border-top:1px solid var(--line)}
