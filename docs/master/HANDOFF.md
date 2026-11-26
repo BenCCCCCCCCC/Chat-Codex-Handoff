@@ -6,7 +6,9 @@
 
 ## 2026-11-26 · V1.0 完整 0→1 产品路线（当前执行入口）
 
-入口切片 [#51](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/51) 已合并至 [036a361](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/036a361dfaeee6075b9f8c32d112072466933387)，原 Chat 续审与 [Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45868278893) 已闭环。下一步只核实并接续“多段材料→同一缺口→有依据的练习或明确待检验”；沿用原反馈和来源，保留独立性，不改模型或存储边界。
+入口切片 [#51](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/51) 与多段材料待检验切片 [#52](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/52) 已合并，最新产品头为 [15a25a3](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/15a25a3f136b2d70e28e08064f816e62120106d5)。原 Chat 审核完成，[#52 的 Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45869579086) 均通过。没有题时只支持针对原反馈重讲，仍待检验；暂不加开放题。
+
+下一步复用[六人形成性验证执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/15a25a3f136b2d70e28e08064f816e62120106d5/docs/research/v1-fieldwork/README.md)的记录页，先在隔离本机无 Key 走一条路径：原创多段材料、标明合成的反馈、首次自主查源和重讲、24–48 小时后自主找回原缺口。项目本人可先自用，不计研究样本；如另请他人，先落实批准的负责人、渠道、同意与删除日期。不采集录音、录屏或他人的原件，不把离线可用性算作 AI 质量、独立迁移或六人对照结果。现未招募，也未开启收费调用。
 
 第四轮审核的唯一 P1 已在两个主题的同一门禁题上复现。原版只确认“本次未查阅”就能再次记为独立通过。修复后，未见题和无辅助需分别自报；已见或不确定可沿用所选答案转普通练习。旧 v6 仅保留当时已有的证据。[审核原文](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a0feffba3992aff2dcb9ec677f7601848fd780ae/docs/master/reviews/2026-11-26-v1-review-queue.md) · [PR #49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49)
 
