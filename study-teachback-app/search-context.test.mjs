@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {searchRecords,resolveRecordHit} from './record-search.mjs';
+import {searchRecords,resolveRecordHit,pendingChecks,pendingCheckInContext} from './record-search.mjs';
 import {hitDestination,transcriptHit} from './search-focus.mjs';
 import {semantic} from './provider.mjs';
 import {TEACH,teachingSchema} from './schemas.mjs';
@@ -18,6 +18,23 @@ test('search keeps individual message and transcript-version locators without ch
   assert.equal(transcriptHit(a,hit.target).span.text,'不要浇水');
   assert.deepEqual(topic,before);
   assert.equal(resolveRecordHit({...topic,attempts:[]},hit.key),null);
+});
+
+test('pending is separate from exercise history and validates the exact retained feedback in an inactive context',()=>{
+  const ref={sourceId:'old-source',attemptId:'first',transcriptVersion:'old-text',reportId:'old-report',findingIndex:0};
+  const source={id:ref.sourceId,title:'Old material',text:'Old rules'};
+  const report={channel:'content',id:ref.reportId,sourceId:ref.sourceId,attemptId:ref.attemptId,transcriptVersion:ref.transcriptVersion,findings:[{message:'Exact gap'}]};
+  const attempt={id:ref.attemptId,source,raw:{id:ref.transcriptVersion,reviewed:true,spans:[]},corrections:[],reports:[report]};
+  const inactive={source,attempts:[attempt],practiceRounds:[],taskUnavailable:{origin:{feedbackRef:ref}}};
+  const todo={id:'todo',source:{id:'new-source',title:'Newer',text:'New rules'},attempts:[],studyContexts:[inactive]};
+  const other={id:'other',source:{id:'other-source',title:'Other',text:'Other rules'},attempts:[],apply:{question:'An old question'}};
+  assert.deepEqual(searchRecords([other,todo],'','pending').map(r=>r.topic.id),['todo']);
+  assert.deepEqual(searchRecords([other,todo],'','practice').map(r=>r.topic.id),['other']);
+  assert.deepEqual(pendingChecks(todo),[{contextId:source.id,sourceTitle:source.title,ref,label:'Exact gap'}]);
+  assert.equal(pendingCheckInContext(inactive,{...ref,transcriptVersion:'newer-text'}),null);
+  assert.equal(pendingCheckInContext({...inactive,attempts:[]}),null);
+  assert.equal(pendingCheckInContext({...inactive,attempts:[{...attempt,reports:[{...report,sourceId:'wrong-source'}]}]}),null);
+  assert.equal(todo.source.id,'new-source');
 });
 
 test('provider trims oldest complete history entries within the fixed budget and returns actual usage and request trace',async()=>{

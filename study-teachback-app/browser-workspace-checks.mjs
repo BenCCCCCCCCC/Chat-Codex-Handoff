@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {taskSplitCases} from './task-split-fixtures.mjs';
 
 export async function workspaceChecks({check,evaluate,until,click,reloadPage,shot,cdp,all,calls,pause,setDelay}){
   const input=(id,text)=>evaluate(`{const e=document.getElementById(${JSON.stringify(id)});e.value=${JSON.stringify(text)};e.dispatchEvent(new Event('input',{bubbles:true}));}`);
@@ -8,6 +9,50 @@ export async function workspaceChecks({check,evaluate,until,click,reloadPage,sho
     await evaluate(`document.querySelector('.history-continue').click()`);
     await until(`document.getElementById('history').hidden && !document.getElementById('workspace').hasAttribute('aria-busy')`);
   };
+
+  await check('global history resumes the exact pending gap in a former material context without an exercise',async()=>{
+    const c=structuredClone(taskSplitCases[0]),now=Date.now(),before=calls.length;
+    const report={...c.report,id:'pending-original-report',channel:'content',createdAt:now};
+    const ref={sourceId:c.source.id,attemptId:c.attempt.id,transcriptVersion:c.attempt.transcriptVersion,reportId:report.id,findingIndex:0};
+    const attempt={id:ref.attemptId,kind:'full',inputMode:'text',status:'SAVED',source:c.source,createdAt:now,raw:{id:ref.transcriptVersion,origin:'USER_TEXT',text:c.attempt.spans[0].text,spans:c.attempt.spans,reviewed:true},corrections:[],reports:[report]};
+    const repeat={...attempt,id:'pending-repeat',kind:'partial',parentId:attempt.id,parentVersionId:ref.transcriptVersion,feedbackRef:ref,reports:[],raw:{...attempt.raw,id:'pending-repeat-version',text:'已复述原材料的必要条件。',spans:[{id:'p0',text:'已复述原材料的必要条件。'}]}};
+    const active={id:'pending-new-source',title:'新版备份说明',text:'这是另一个材料版本。'};
+    const topic={id:'pending-global',createdAt:now,studyTitle:'系统备份',source:active,goals:[],attempts:[],messages:[],mode:'learn',resume:{view:'learn'},updatedAt:now-1000,
+      materials:[c.source,active],activeMaterialIds:[active.id],studyContexts:[{id:c.source.id,materialIds:[c.source.id],source:c.source,goals:[],messages:[],attempts:[attempt,repeat],practiceRounds:[],
+        taskUnavailable:{origin:{feedbackRef:ref},target:c.context.target,reason:'暂未生成合适的检验题。'}}]};
+    const other={id:'no-global-gap',createdAt:now,source:{id:'no-gap-source',title:'其他主题',text:'与备份无关。'},goals:[],attempts:[],messages:[],mode:'learn',updatedAt:now};
+    const install="(async()=>{const db=await(await import('/storage.mjs')).openStore();await db.clear();await db.put("+JSON.stringify(topic)+");await db.put("+JSON.stringify(other)+");db.close();})()";
+    const enter=async()=>{await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',windowsVirtualKeyCode:13});await cdp('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});};
+    const select=async value=>evaluate("{const e=document.getElementById('historyFilter');e.value="+JSON.stringify(value)+";e.dispatchEvent(new Event('change'));}");
+    for(const width of [1280,390]){
+      await cdp('Emulation.setDeviceMetricsOverride',{width,height:width===390?844:1000,deviceScaleFactor:1,mobile:width===390});
+      await evaluate(install);await reloadPage();await click('historyButton');await select('practice');
+      assert.equal(await evaluate("document.querySelectorAll('.history-pending').length"),0);
+      await select('pending');assert.equal(await evaluate("document.querySelectorAll('#historyList > div').length"),1);
+      await input('historySearch','系统备份');
+      assert(await evaluate("(()=>{const b=document.querySelector('.history-pending');b.focus();const r=b.getBoundingClientRect();return document.activeElement===b&&r.width>0&&r.left>=0&&r.right<=innerWidth&&document.documentElement.scrollWidth<=innerWidth;})()"));
+      await shot('global-pending-'+width,'history');await enter();
+      await until("document.getElementById('history').hidden && !document.getElementById('searchReturn').hidden && document.activeElement.id==='practiceContinueGap'");
+      assert.equal(await evaluate("document.getElementById('practiceContinueGap').textContent"),'回看依据');
+      assert.equal(await evaluate("document.getElementById('practiceGapFinding').textContent"),report.findings[0].message);
+      assert.match(await evaluate("document.getElementById('practiceStatus').textContent"),/已保存这点的重讲/);
+      const saved=(await evaluate(all)).find(t=>t.id===topic.id);
+      assert.deepEqual(saved.activeMaterialIds,[c.source.id]);assert.deepEqual(saved.taskUnavailable.origin.feedbackRef,ref);
+      assert.deepEqual(saved.attempts[1].feedbackRef,ref);assert.equal(saved.attempts[1].parentVersionId,attempt.raw.id);assert.equal(saved.practiceRounds.length,0);
+      await enter();
+      await until("!document.getElementById('searchExcerpt').hidden && !document.getElementById('searchReturn').hidden");
+      const excerpt=await evaluate("document.getElementById('searchExcerptText').textContent");
+      assert(excerpt.includes(c.source.text)&&excerpt.includes(c.attempt.spans[0].text)&&excerpt.includes(report.findings[0].message));
+      await evaluate("document.getElementById('searchReturn').focus()");await enter();
+      await until("!document.getElementById('history').hidden && document.activeElement.matches('.history-pending')");
+      assert.equal(await evaluate("document.getElementById('historyFilter').value"),'pending');
+      assert.equal(await evaluate("document.getElementById('historySearch').value"),'系统备份');
+    }
+    await evaluate("(async()=>{const db=await(await import('/storage.mjs')).openStore();const value=await db.get("+JSON.stringify(topic.id)+");delete value.taskUnavailable;await db.put(value);db.close();})()");
+    await enter();await until("document.getElementById('notice').textContent.includes('没有可继续的待检验项')");
+    assert(await evaluate("!document.getElementById('history').hidden && document.activeElement.matches('.history-pending')"));
+    assert.equal(calls.length,before);await cdp('Emulation.setDeviceMetricsOverride',{width:1280,height:1000,deviceScaleFactor:1,mobile:false});
+  });
   await check('workspace drafts survive immediate navigation, topic switches, reload and a failed write',async()=>{
     const before=calls.length;
     await evaluate(`(async()=>{

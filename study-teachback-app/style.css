@@ -95,6 +95,7 @@ body[data-history=true] #searchReturn{display:none}
 .draft-tag{margin-left:12px;font-size:.6875rem}
 #historyList details{margin:4px 0 0}
 #historyList .compact-actions{gap:4px}
+.history-pending-item{border-top:1px solid var(--line);padding:12px 0;overflow-wrap:anywhere}.history-pending-item p{margin:4px 0}
 #historyList .danger{margin-left:auto}
 #question:empty,#practiceStatus:empty{display:none}
 body[data-history=true] #workspace,body[data-history=true] #setup,body[data-history=true] #dock,body[data-history=true] .journey{display:none}

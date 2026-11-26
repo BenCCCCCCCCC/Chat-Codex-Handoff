@@ -1,5 +1,6 @@
 import {answerDisposition} from './question-review.mjs';
 import {learningContexts} from './material-set.mjs';
+import {resolveFeedback,sameFeedbackReference} from './feedback-reference.mjs';
 import {evidenceSummary} from './conditional-practice.mjs';
 const normalize=value=>String(value??'').normalize('NFKC').toLocaleLowerCase();
 const field=(label,text,target)=>({label,text,target,key:JSON.stringify(target)});
@@ -50,11 +51,22 @@ function fields(topic){
 }
 export function hasDraft(topic){return !!topic.materialRevisionDraft||!!topic.materialDraft?.text?.trim()||!!topic.issueDraft?.question?.trim()||learningContexts(topic).some(contextHasDraft);}
 export function resolveRecordHit(topic,key) {return fields(topic).find(f=>f.key===key)??null;}
+export function pendingCheckInContext(context,ref=context.taskUnavailable?.origin?.feedbackRef){
+  if(!sameFeedbackReference(context.taskUnavailable?.origin?.feedbackRef,ref))return null;
+  const {attempt,report,version,finding}=resolveFeedback(context,{feedbackRef:ref});
+  if(!finding||!version?.reviewed||report.sourceId!==ref.sourceId||report.attemptId!==ref.attemptId||
+    context.source.id!==ref.sourceId||attempt.interrupted&&!attempt.fragmentAcceptedAt)return null;
+  return {contextId:context.source.id,sourceTitle:context.source.title,ref,label:finding.message};
+}
+export const pendingChecks=topic=>learningContexts(topic).flatMap(c=>{
+  const item=pendingCheckInContext(c);return item?[item]:[];
+});
 export function searchRecords(records, query='', filter='all') {
   const terms=normalize(query).trim().split(/\s+/).filter(Boolean);
   return records.flatMap(topic=>{
     if(filter==='draft'&&!hasDraft(topic) || filter==='audio'&&!learningContexts(topic).some(c=>c.attempts.length) ||
-      filter==='practice'&&!learningContexts(topic).some(c=>c.practiceRounds?.length||c.apply))return [];
+      filter==='practice'&&!learningContexts(topic).some(c=>c.practiceRounds?.length||c.apply) ||
+      filter==='pending'&&!pendingChecks(topic).length)return [];
     const content=fields(topic);
     if(!terms.every(term=>content.some(({text})=>normalize(text).includes(term))))return [];
     const hits=terms.length?content.filter(({text})=>terms.some(term=>normalize(text).includes(term))).map(f=>{

@@ -13,13 +13,13 @@ import {transcriptionTerms} from './transcription-terms.mjs';
 import {audioFile,prepareAudio} from './audio-input.mjs';
 import { openStore } from './storage.mjs';
 import { confirmLocalProcess, localize, processEvidence } from './diagnostic-localization.mjs';
-import {activityTime, resumePoint, practiceRounds} from './practice.mjs';
+import {activityTime, resumePoint} from './practice.mjs';
 import {mountPractice} from './practice-ui.mjs';
 import {feedbackReference,resolveFeedback,sameFeedbackReference} from './feedback-reference.mjs';
 import {encodeBackup} from './backup.mjs';
 import {mountBackup} from './backup-ui.mjs';
 import {mountChat} from './chat-ui.mjs';
-import {searchRecords,hasDraft,resolveRecordHit} from './record-search.mjs';
+import {searchRecords,hasDraft,resolveRecordHit,pendingChecks,pendingCheckInContext} from './record-search.mjs';
 import {createDraftSaver} from './draft-save.mjs';
 import {transcriptTexts,updateTranscriptDraft,analysisTrace} from './voice-review.mjs';
 import {focusHit,hitDestination,transcriptHit} from './search-focus.mjs';
@@ -606,8 +606,17 @@ $('topicExport').onclick=()=>act(async()=>{await flushDrafts();await exportTopic
 $('retrySave').onclick=()=>act(async()=>{if(storageConflict)return;if(chat.hasPendingDraft||practice.hasPendingDraft||materials.hasPendingDraft||voiceDrafts.pending)await flushDrafts();else await save();chat.render();if(current){diagnosisStates.delete(current);renderAttempt();}renderPractice();renderChatRecovery();notice('已重新保存到本机。');});
 function abortPending(){controller?.abort();}
 $('deleteAttempt').onclick=()=>act(async()=>{if(!current)return;await voiceDrafts.discard();abortPending();deleted.add(current);topic.attempts=topic.attempts.filter(a=>a.id!==current.id);await save();$('player').pause();if(blobURL)URL.revokeObjectURL(blobURL);current=null;reveal('attemptPanel',false);notice('这次原声及其关联转写、纠正和反馈已从本地删除。已导出副本和已在途的云请求不受此操作控制。');});
-function resumeTopic(target,point=resumePoint(target)){
-  topic=target;target.resume=point;current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);reveal('history',false);reveal('searchReturn',false);renderTopic();
+let pendingHistoryReturn;
+function showHistoryReturn(){
+  $('searchReturn').textContent='返回学习记录';
+  $('searchReturn').onclick=()=>act(()=>history(pendingHistoryReturn));
+  reveal('searchReturn');
+}
+function resumeTopic(target,point=resumePoint(target),preservePendingReturn=false){
+  topic=target;target.resume=point;current=null;$('player').pause();reveal('recording',false);reveal('attemptPanel',false);reveal('history',false);
+  if(!preservePendingReturn)pendingHistoryReturn=null;
+  reveal('searchReturn',false);$('searchReturn').textContent='返回搜索';$('searchReturn').onclick=()=>act(history);renderTopic();
+  if(pendingHistoryReturn)showHistoryReturn();
   if(point.view==='attempt'){current=target.attempts.find(a=>a.id===point.attemptId);if(current)renderAttempt();if(point.feedbackOrigin){showFeedbackOrigin(point.feedbackOrigin.origin,point.feedbackOrigin.target);if(point.feedbackOrigin.fromRecord)reveal('returnToPractice',false);}}
   if(point.view==='practice')practice.focusPanel();
   $('goalEditor').open=false;
@@ -647,41 +656,61 @@ async function continueTopic(id,point,hitKey){
     if(!target)return notice('这条学习记录已不存在，请重新打开学习记录。');
     const hit=hitKey&&resolveRecordHit(target,hitKey);
     if(hit){if(hit.target.contextId)selectContext(target,hit.target.contextId);point=hitDestination(hit);if(hit.target.kind==='practice')point.roundId=hit.target.roundId;}
-    if(point?.contextId)selectContext(target,point.contextId);
+    const pendingReturn=point?.pendingReturn;
     if(point?.pendingFeedbackRef){
-      if(!sameFeedbackReference(target.taskUnavailable?.origin?.feedbackRef,point.pendingFeedbackRef))return notice('这条反馈已没有待检验项。');
+      const context=point.contextId?learningContexts(target).find(c=>c.source.id===point.contextId):target;
+      if(!context||!pendingCheckInContext(context,point.pendingFeedbackRef))return notice('这条反馈已没有可继续的待检验项。');
+      if(point.contextId)selectContext(target,point.contextId);
       target.activePracticeId=null;point={view:'practice'};
-    }else if(point?.roundId){target.activePracticeId=point.roundId;point={view:'practice'};}
+    }else{
+      if(point?.contextId)selectContext(target,point.contextId);
+      if(point?.roundId){target.activePracticeId=point.roundId;point={view:'practice'};}
+    }
     if(point)target.resume=point;
     if(point||hit)resumeTopic(target);else resumeLastActivity(target);
     await save();
     if(hit){await new Promise(requestAnimationFrame);locateHit(hit);reveal('searchReturn');}
+    if(pendingReturn){pendingHistoryReturn=pendingReturn;showHistoryReturn();}
   }finally{processing=false;$('workspace').removeAttribute('aria-busy');renderChatRecovery();}
 }
 function expiryLabel(t){return '保留至 '+new Date((t.restoredAt??t.createdAt)+RETENTION_MS).toLocaleString()+' · 继续学习不会延长，请及时导出备份';}
 let historyRecords=[],historyLimit=20;
-async function history(){
+const pendingHistoryButtons=new Map();
+async function history(pendingReturn){
   if(!canNavigate())return;
   processing=true;$('history').setAttribute('aria-busy','true');
   try{
     await flushDrafts();
-    historyRecords=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));historyLimit=20;
-    reveal('history');renderHistory();$('historyTitle').focus();
-    $('history').scrollIntoView({behavior:'smooth'});
+    historyRecords=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));historyLimit=pendingReturn?.limit??20;
+    if(pendingReturn){$('historyFilter').value=pendingReturn.filter;$('historySearch').value=pendingReturn.query;}
+    reveal('history');renderHistory();
+    const origin=pendingHistoryButtons.get(pendingReturn?.key);
+    if(origin)origin.focus();
+    else {$('historyTitle').focus();$('history').scrollIntoView({behavior:'smooth'});}
   }finally{processing=false;$('history').removeAttribute('aria-busy');}
 }
 function renderHistory(){
   const matches=searchRecords(historyRecords,$('historySearch').value,$('historyFilter').value);
-  const list=$('historyList');list.replaceChildren();
+  const list=$('historyList');list.replaceChildren();pendingHistoryButtons.clear();
   $('historyCount').textContent=`${matches.length} 条记录`;
   $('historyClear').hidden=!$('historySearch').value&&$('historyFilter').value==='all';
   $('historyMore').hidden=matches.length<=historyLimit;
   for(const {topic:t,hits} of matches.slice(0,historyLimit)){
-    const point=resumePoint(t),rounds=practiceRounds(t),row=el('div');
+    const point=resumePoint(t),row=el('div'),pending=pendingChecks(t);
     const next=point.view==='attempt'?'继续核对与反馈':point.view==='practice'?'继续情境练习':'继续学习';
     row.append(el('strong',t.studyTitle??t.source.title),el('p',expiryLabel(t),'muted expiry-label'));
     if(hasDraft(t))row.append(el('span','有草稿','tag draft-tag'));
     row.append(el('p',`${new Date(activityTime(t)).toLocaleString()} · ${learningContexts(t).reduce((n,c)=>n+c.attempts.length,0)} 次讲解 · ${learningContexts(t).reduce((n,c)=>n+(c.practiceRounds?.length??0),0)} 道情境题${t.restoredAt?' · 恢复副本':''}`,'muted'));
+    for(const item of pending){
+      const {sourceId,attemptId,transcriptVersion,reportId,findingIndex}=item.ref;
+      const key=JSON.stringify([t.id,item.contextId,sourceId,attemptId,transcriptVersion,reportId,findingIndex]),line=el('article',undefined,'history-pending-item');
+      line.append(el('span','待检验','tag'),el('p',item.label));
+      if(t.materials)line.append(el('p',item.sourceTitle,'muted'));
+      const action=button('继续待检验',()=>continueTopic(t.id,{contextId:item.contextId,pendingFeedbackRef:item.ref,
+        pendingReturn:{key,query:$('historySearch').value,filter:$('historyFilter').value,limit:historyLimit}}),'history-pending');
+      action.setAttribute('aria-label','继续待检验：'+item.label+(t.materials?' · '+item.sourceTitle:''));
+      pendingHistoryButtons.set(key,action);line.append(action);row.append(line);
+    }
     const hitButton=hit=>button(hit.snippet,()=>continueTopic(t.id,null,hit.key),'quiet history-hit history-snippet');
     row.append(...hits.slice(0,3).map(hitButton));
     if(hits.length>3){const more=el('details');more.append(el('summary',`其余 ${hits.length-3} 处匹配`));more.ontoggle=()=>{if(more.open&&more.children.length===1)more.append(...hits.slice(3).map(hitButton));};row.append(more);}
@@ -778,7 +807,7 @@ async function openFeedbackOrigin(origin,target){
   if(!match.report)return notice(match.reason);
   if(!origin.conditionRef)origin.feedbackRef??=feedbackReference(match.attempt,match.report,match.index);
   topic.resume={view:'attempt',attemptId:match.attempt.id,feedbackOrigin:{origin,target}};
-  await save();resumeTopic(topic);
+  await save();resumeTopic(topic,undefined,true);
 }
 async function continuePracticeGap(gap){
   if(!canNavigate())return;
@@ -796,7 +825,7 @@ async function continuePracticeGap(gap){
     const attemptId=topic.textDraft.parentId??ref.attemptId;
     topic.resume=topic.attempts.some(a=>a.id===attemptId)?{view:'attempt',attemptId}:{view:'learn'};
     await save();
-    resumeTopic(topic);
+    resumeTopic(topic,undefined,true);
     showPreparation('partial',focus,ref.attemptId,ref);
   }finally{processing=false;}
 }
