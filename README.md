@@ -6,7 +6,12 @@
 
 ## 开始使用
 
-1. 在装有 Node.js 24 和 Edge 的 Windows 电脑上[下载已验证候选的源码 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/74f7d6112e531dfdf2b5736843b6875060f12a4f.zip)，解压后进入含有 `Start-Study.cmd` 的目录。已有本仓库也可使用下面的产品分支。
+- **想在 Windows 本机体验：** [下载已实测启动和备份恢复的候选源码 ZIP（#53）](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/787bfc0e4c1d85312a25ffc28b6223ed022b6e6e.zip)。
+- **想查看最新改动：** 打开[当前状态](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/CURRENT_STATE.md)，下载页首的最新源码快照。各快照的验证范围以该页为准。
+
+两者都是本地候选，尚未正式发行。
+
+1. 在装有 Node.js 24 和 Edge 的 Windows 电脑上解压 ZIP，进入含有 `Start-Study.cmd` 的目录。已有本仓库也可使用下面的产品分支。
 2. 双击 [Start-Study.cmd](Start-Study.cmd)。浏览器会打开本机工作台。导航中的 **免费示例** 提供循环队列和条件概率两节预写课程。
 3. 用自己的材料练习时，粘贴一段笔记或选择文件，点 **直接讲解**。文字先存本机。可选录音或上传音频。要讨论、转写、诊断或生成开放练习，在启动服务前配置自己的 `OPENAI_API_KEY`，这些操作会消耗 API 额度。
 
