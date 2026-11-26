@@ -271,3 +271,22 @@
 - **Must Fix：** 无新增离线预检缺陷。两个手写严重语义负控继续纳入评审；不加 regex，不重跑 #50 或上述预检。
 - **Next（只保留既有真实比较放行前置，不另造任务）：** 非出题评审先完成六例评分锚点独立校准，冻结严重项/可用性口径；真实运行须落实报告已经明确的隔离发送、耐崩溃预留与断路、原始响应保存及盲评导出，在实际项目核对模型/参数/费率/缓存及数据处理条件和可执行的成本上限。核对实际运行树及输入指纹；不能直接把本内存 mock 接上网络。账户实际 schema/档位兼容性只能在获批后的首个计入槽位证实，遇不兼容/未知计费即停，不另开探针、不偷偷换档、不补跑。保持原 24 槽与配置，配置或费率条件不成立则先停止，不扩大比较或修改产品。真实调用还须用户明确批准对应预算和停止条件；当前只认可离线准备，未授权真实执行。
 - **User Decision Needed：** 当前不执行或申请新额度；六人形成性研究（既有 ¥330 提案）、实际模型比较、生产切换、正式灰度及公开发布均仍未放行，彼此独立。模型比较不能替代真实用户价值或次日迁移证据。本轮实际模型请求 0，实际支出 0，参与者 0。原 Chat 只读报告和源码、独立核对哈希与算术，未运行 Windows、重跑脚本、改产品代码、启动 Codex、招募、付费、更换模型或发布；仅写本审核队列。
+
+
+## 2026-11-26 · 离线账本重启独立复核（第十轮）
+
+**范围：** [53d752b](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/53d752b9d9d75bd4933f4fe8090ee769c6bea474) 相对 b646f47 仅新增 [MODEL_COMPARISON_JOURNAL.md](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/53d752b9d9d75bd4933f4fe8090ee769c6bea474/docs/research/quality-baseline-2026-11-18/MODEL_COMPARISON_JOURNAL.md) 与 [model-comparison-journal.mock.mjs](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/53d752b9d9d75bd4933f4fe8090ee769c6bea474/docs/research/quality-baseline-2026-11-18/model-comparison-journal.mock.mjs)；manifest、预检与产品代码不变，远端产品仍为 8d8f2d7。MASTER 读取点 `6b4332a9f83c1b8d9c829462e7ea262277cf183f`。本轮只审这两份新增产物，不复核 #50 或第九轮预检。
+
+### 审核结论：认可 PASS_PROCESS_RESTART_OFFLINE_ONLY，关闭离线账本的本次中断恢复子项
+
+- **预留先于 mock 边界：** [L28–41、L43–73、L85–90](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/53d752b9d9d75bd4933f4fe8090ee769c6bea474/docs/research/quality-baseline-2026-11-18/model-comparison-journal.mock.mjs#L28-L90) 核验固定 manifest 指纹、预算及槽身份，SQLite 使用 BEGIN IMMEDIATE、synchronous=FULL。reserveNext 在事务内核对已有未知/待结/已知失败、累计暴露与下一槽，条件更新为 reserved_maybe_dispatched；tx 成功 COMMIT 返回后才进入 pureMock，回调只接 inputSHA256。事务异常不进入回调。没有真实请求发送器或读 Key。
+- **实际进程重启及禁止重发：** 报告记录 Linux 云工作区 Node 24.22.3 两个独立进程。[L92–112](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/53d752b9d9d75bd4933f4fe8090ee769c6bea474/docs/research/quality-baseline-2026-11-18/model-comparison-journal.mock.mjs#L92-L112) 首进程在已提交预留且进入 mock 后写边界见证，exit(77) 未结算；第二进程断言 E01 状态、盲号、预留时间、金额与见证相同，将其持久化为 unknown；后续 tryNextMock 返回 false，回调 0 次，后 23 槽 not_sent，E01 全额 6,172,000 十亿分之一美元（US$0.006172）仍计入暴露。原始响应为 null，未伪造。接受报告的这一条实际进程中断证据；不是断电/磁盘损坏/Windows 重启、真实供应商收费或网络超时的验证。本 Chat 只审源码及回执，未独立运行或取得原 SQLite 文件。
+- **结算和盲评边界：** [L74–89](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/53d752b9d9d75bd4933f4fe8090ee769c6bea474/docs/research/quality-baseline-2026-11-18/model-comparison-journal.mock.mjs#L74-L89) 对 mock 原字符串、usage 范围、推理/输出关系、金额和结果类别设条件；合法已知失败可结算并停止，不支持/未知结果留全额。此次在结算前退出，未执行正常/失败结算分支，不把这些静态逻辑称为运行验证。[L113–124](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/53d752b9d9d75bd4933f4fe8090ee769c6bea474/docs/research/quality-baseline-2026-11-18/model-comparison-journal.mock.mjs#L113-L124) 操作员文件保存全槽及盲号映射，评审文件为空（无可评输出）；已有非空 mock 导出沿用第九轮证据。SQLite/见证及 operator 目录均属操作员，目录不是 ACL，不能将完整目录交评审；此次无真实输出、无人评分。
+
+### 真实调用前只保留必要前置（不另开离线任务）
+
+**可免费准备：** ① 非出题独立评审完成六例评分校准，先不看作者判分/配置/映射，保留分歧并冻结严重语义项及可用性判据；不重做手写负控或加 regex。② 在既有比较方案内完成独立实际发送路径的最小执行准备和离线核验：复用冻结 manifest、运行时输入/提示/schema 指纹、隔离持久预留及停止逻辑，原始结果/可信 usage/请求归因与结算原子关联、未知或账本异常停止，禁止隐性重发。报告已明确该 mock 不是实际发送器；无须另造 mock 账本或重跑本次中断。实际运行须绑定单一获准 run ID 与唯一持久账本、操作员及恢复路径；[L22–24](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/53d752b9d9d75bd4933f4fe8090ee769c6bea474/docs/research/quality-baseline-2026-11-18/model-comparison-journal.mock.mjs#L22-L24) 只验证同一路径的空目录/现存数据库，不能防止在另一个空目录新建同 manifest 账本；数据库丢失或路径不明时不得另建账本接续原实验。这是实际运行的必要边界，不是本次单库 mock 的失败。评审仅取得去标识的可评副本，原件/映射/账本访问与删除期限须明确。
+
+**需批准或核对获准项目：** 一次集中确认原 24 槽、具体项目、实际预算上限和停止规则、模型档位/版本、费率与缓存/服务数据处理条件；前轮 US$1.275504 仍仅是原假设下的条件性预留，须落实可执行费用约束。实际授权前不读 Key、不发送请求；供应商实际 schema/档位兼容性只在获批首个正式槽验证，不额外探针、不热改或补跑。若实际条件无法核对则保持暂停。
+
+**Must Fix：** 无新增已证实的离线账本缺陷。本轮关闭此离线子项，不再重复排练。**Next：** 仅完成上述免费准备和明确实际比较授权，不增加工程范围。**User Decision Needed：** 真实 24 槽付费比较仍需单独批准；六人研究、生产模型/ASR 切换、正式灰度及公开发布均仍未放行。本次为 mock 重启报告，真实请求 0、费用 0、独立人评尚未完成。仅追加原审核队列；未改代码、执行脚本、读 Key、调用模型、启动 Codex、招募或发布。
