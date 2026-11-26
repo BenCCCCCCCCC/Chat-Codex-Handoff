@@ -20,7 +20,9 @@
 - 工程层：沿用原生前端、Node、Python、IndexedDB 与本机启动方式，先读代码和真实界面再确定模块边界；拆分 UI/状态、领域逻辑、存储与迁移、来源索引、上下文和模型适配、费用/请求管理。避免无收益换栈或整库重写，允许为实际复杂度做重构。历史 v1–v5 备份继续可读，新语义如确需版本变更则显式迁移与兼容。七天到期不续期、12 份逻辑材料、单份及组合 5000 字和只保存选段／定位的原政策仍有效；理解档案与待巩固也不跨越该保留期。长文件先实现受限的重新导入／重新选段方案，全文持久化另行决定。
 - 产品闭环层：需求访谈、竞品对照、任务分析 → 可用性原型 → 开发 → 真实任务评价 → 本地版本交付 → 自愿反馈、问题分级 → 优先级再规划。埋点先定义事件和分母，采用当前留存边界内的本地统计或显式导出脱敏研究记录；不增加联网遥测，不以调用量作价值指标。
 
-### 视觉与交互方向：Apple-inspired，不复制 Apple
+### 视觉与交互方向：Apple 介绍页 × ChatGPT Desktop 工作台
+
+**最新 UI 要求**：[桌面工作台的设计减法与验收](reviews/2026-11-26-desktop-ui-direction.md)。Apple 官网参考留给介绍和首次体验；正式工作台参考 ChatGPT Desktop 的稳定导航、正文主区、就近动作和按需显示的辅助内容。保留工程模块，弱化界面卡片化；删重复标签、模块自述与无动作的长文案，保留证据、风险、状态和无障碍。基于当前候选版本增量实施，先覆盖回访首页、材料工作台、诊断到局部重讲；不要另开并行实现重做 #45。
 
 参考 [Apple 官网](https://www.apple.com/)、[Mac](https://www.apple.com/mac/) 的短文案、明确焦点、统一节奏与克制的主按钮；[Apple HIG design principles](https://developer.apple.com/design/human-interface-guidelines/design-principles)、[layout](https://developer.apple.com/design/human-interface-guidelines/layout)、[typography](https://developer.apple.com/design/human-interface-guidelines/typography)、[UI design tips](https://developer.apple.com/design/tips/) 用于可读性、对齐、反馈及响应式。官网/首体验可用大标题、产品价值叙事、精致模块与轻动效；日常工作台保持高效信息密度，不堆大面积 Hero、巨型卡片、无意义玻璃拟态或动效。使用原创视觉，不复制 Apple 商标、商品图、专有字体/图标资源；Windows 系统字体栈（Segoe UI、微软雅黑等）、合法自有/开源图标。建议初始 token：白 #FFFFFF、暖中性浅灰 #F5F5F7、正文 #1D1D1F、次级 #616168、主色 #0066CC（以实际对比度为准），8px 节奏、12–20px 圆角、细边界、轻阴影，16px 正文；状态带文字不只靠色。视觉方案不是强制逐像素规格，由 Codex 基于可用性优化。
 
