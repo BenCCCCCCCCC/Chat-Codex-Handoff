@@ -38,3 +38,32 @@
 **User Decision Needed：** 当前无新增需即时决定的事项。沿用生产 ASR 切换、额外真实 API 预算、全文保存/数据政策及外传、公开发布的既有边界；普通 UI/领域合同选择由 Codex 自主完成。
 
 **后续接力：** 新 PR/SHA 或报告出现后，对实际 diff、对应截图/可运行路径和验证证据做一次 delta review；若已有更新，不重复 A/B 任务或本轮建议。评审完成即回写本记录，不因等审核停下独立工作。
+
+
+## 2026-11-26 · A/B 实现增量审核（第一轮）
+
+**状态：A 首条工程切片已合并，B PR 尚未合并；产品体验/质量部分审核，不是整个 V1.0 验收。** 本次实际读取：
+- [PR #43](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/43)，审核头 `a001479eddce5f9aac500783d09f1c5e34daa8f9`，合并后产品基线 [bab617e](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/bab617e861dc7cb3f861fcaddc0478884b52b74f)。[A 实现报告](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a001479eddce5f9aac500783d09f1c5e34daa8f9/docs/iterations/2026-11-26-learning-home.md)、[Windows CI 45802970164](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45802970164) success。
+- [PR #44](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/44)，[原实现报告及截图](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/98e51f35e6c928e8baa90f9a28c9d9feea3fd2db/docs/iterations/2026-11-26-understanding-record.md)，原头 `98e51f35e6c928e8baa90f9a28c9d9feea3fd2db`，本次又审查到修正头 [c0ce181](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c0ce18133e4dfb4735343eca65c9c0ef1b2ad48c)。[原 CI 45803437840](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45803437840) Node 通过、Edge 失败（旧按钮白名单多出一个控件，日志 1!==0）。c0ce181 已删除锁定按钮文案的旧断言、修正重复 DOM id，并要求档案只接受确认文字与正确报告绑定；[新 CI 45803989739](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45803989739) 查询时进行中。不再重复要求已提交的修正；后续确认新 CI 结果即可，不额外重跑全量。
+- 已实际打开 A 原/新首页、390px 首页、诊断，以及 B 桌面档案、390px 暂缓截图，审查相关代码 diff（首页、恢复、证据绑定、独立题入口和状态推导）。本次没有访问独立运行中的 Windows 应用；动作行为来自 Codex 隔离 Edge 报告与代码/CI，截图为合成资料/模拟反馈，不能证明真实 AI 质量或学习收益。
+
+### 实质进步（可认可的范围）
+
+- **首次讲解**：A 的 `startTopic(true)` 先本机保存再打开讲解准备，和 AI 讨论分离，报告记录确认前零模拟模型请求。新首页标题传达产品价值，石墨黑、浅灰、蓝色主按钮、顶部导航比旧表单更接近目标；不是只换色。
+- **核对与恢复**：A 报告覆盖查看引文后返回、草稿跨首页续写、刷新恢复题目；B 在来源核对处保存 report/finding 定位，局部重讲绑定原反馈，首页继续卡显示具体题目或缺口。B 报告的合成门禁例覆盖初讲漏掉时间→查证→重讲→题目→首答→v6 恢复→题目质疑，手机档案截图明确撤下通过状态。认可这一条工程闭环已经实现并有局部验证，不等于所有学科或用户均可走通。
+- **理解档案**：截图可看见来源、初讲未表达、局部重讲、题面和作答；`learning-record.mjs` 通过精确引用而非文本相似性关联。闭卷 modal 遮蔽应用内材料，另有参考自报，状态只针对本次首答；不宣称外部辅助已客观排除或长期掌握。既有规则题范围依然有限。
+
+### Must Fix / 当前有依据的体验缺口（并入 B/C 的顺手修复，不阻断独立工作）
+
+1. **当前学习重点必须推动下一步，而不只是另一个查看入口。** [c0ce181 app.mjs L786–798](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/c0ce18133e4dfb4735343eca65c9c0ef1b2ad48c/study-teachback-app/app.mjs#L786-L798) 的 `renderNextEvidence` 有当前项时无论状态一律“查看该项证据”并跳旧报告；没项时只“选择学习目标”。因此显示“待提交作答”“已重讲，待情境检验”时仍不直接继续题目；所有项已表达/通过时也不明确结案。复用现有状态和入口：待讲解→直接讲解（目标可选），待巩固→补学/重讲，已重讲→检验，待作答→同一题/草稿，题目/条件待核对→对应复核，已完成→本轮总结/下一目标；查看证据保留为次级入口。无需新增平行进度字段。以当前已有门禁例检查两三个转换即可。
+2. **独立检验入口不能静默打开普通旧题。** [c0ce181 practice.mjs L127–147](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/c0ce18133e4dfb4735343eca65c9c0ef1b2ad48c/study-teachback-app/practice.mjs#L127-L147) 中 `fromFeedback` 优先复用 existing，`closedBook` 只影响新建且未见题。原先先点“检验理解”/做普通题，重讲后再点“独立检验”会进入普通旧题；这是可从代码确认的语义/入口不一致，不是已经复现的错误判通过。保持既有证据，不能升级旧答为独立。若已有普通题/重复题或无新题，入口明确“继续普通练习”或提示本次无未见的独立题；能生成不同题且有可靠规则时才开启独立检验，不为覆盖率编造题、不暗中调用付费服务。用一次普通题→重讲→独立入口的受影响路径核对。
+3. **窄屏首屏仍埋主动作。** [A 390px 截图](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a001479eddce5f9aac500783d09f1c5e34daa8f9/docs/iterations/v1-experience/home-mobile.png) 显示 390×844 窗口已被营销标题、大输入框和上传块占满，最关键“直接讲解”在屏外。桌面截图主动作也在表单底部；诊断页可见“查看当前诊断结果”“重新完整讲”“我来讲讲”等同色竞争，而当前缺口才是主任务。将窄屏导入/粘贴压缩为紧凑选择区，材料就绪时保持清晰主动作（例如在输入附近或窄屏固定操作区），辅助说明和清空草稿后置；反馈完成态让“再讲这一点/下一动作”成为焦点，弱化查看已显示结果与通用底栏。仅检查一张相同窄屏首屏与一次正常操作，不为逐像素增加测试。
+
+### Next（按主路线接续）
+
+- P0 优先把上述三个实际断点并入已有 B/C；保留现有历史、v6、暂停状态和 API 费用控制。B 原运行截图只是旧实现头，c0ce181 的绑定修复用最终 CI 与既有走查证据确认，不宣称已独立运行。
+- C 批先做普通学习者日常路径：本地启动、配置时机、真实录音权限可用时走查、长文件重新选段（不改变保存范围）；新首页继续卡/当前学习重点形成一个可完成的日常任务。理解档案 modal 作为查阅入口已可用，暂不扩成图谱/大屏；后续可在工作台显示“本轮已完成/待巩固”的简短总结，帮助返回具体任务。
+- D 的研究准备优先衡量真实首次讲解完成率、定位/修正时间、无辅助新题解释而非单一选择题猜中；合成门禁例只证明工程。无需等实际付费研究才推进 C/E 的本地交付。
+- README 与介绍页在 E 同步实际能力，明确独立检验是有限规则题、自报参考情况；已预写示例与真实模型分开。
+
+**User Decision Needed：** 无新增即时决策。维持既有 ASR 生产切换、付费调用、全文保存/数据政策及原件外传、公开发布边界。未改产品代码、未发起 CI、未合并 PR；本次只写 MASTER 审核记录。
