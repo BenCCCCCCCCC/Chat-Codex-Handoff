@@ -6,9 +6,9 @@
 
 ## 2026-11-26 · V1.0 完整 0→1 产品路线（当前执行入口）
 
-当前产品头 [bd6b569](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/bd6b569f8d39f4f71ff74590db40d328bcf61955)。[#51](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/51)／[#52](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/52) 是已合并历史：新建与续学分开，无适合题仍可围绕原反馈本机重讲，不算检验。[#53](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/53) 固定草稿与原目标，[#54](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/54) 给首次保存后的本机下一步，[#55](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/55) 防另一页覆盖原首答。[#56](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/56) 只更新 README。证据仍各自归属，不作公开发行或真人验证结论。
+当前产品头 [c101706](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c10170669c397f352b7529d531432acb3bb9175d)。已合并 [#57](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/57)：旧题、原首答和待检验并存，刷新后从精确匹配档案返回原缺口。[隔离实页与边界](reviews/2026-11-27-pending-check-edge.md)，无新题、分数、独立通过或真实请求。此前 #51–55 及 #56 README 的各自证据见 [CURRENT_STATE](CURRENT_STATE.md)。
 
-下一步自行用隔离 Edge 和合成反馈复验「待检验→查看旧题→档案回到原缺口」，不要求用户操作，不增加开放题。无题仍无评分或独立通过。[六人形成性验证执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/15a25a3f136b2d70e28e08064f816e62120106d5/docs/research/v1-fieldwork/README.md) 保留为未来真人研究协议，不另招募、不调用付费模型；工程走查不算学习迁移。
+交付线正在一次性验收 [c101706 源码 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/c10170669c397f352b7529d531432acb3bb9175d.zip)：隔离 Windows 启停、免 Key 合成端到端、重开和备份／反馈导出；结论待回执。先不重复跑旧包、不要求用户操作，不增加开放题。[六人形成性验证执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/15a25a3f136b2d70e28e08064f816e62120106d5/docs/research/v1-fieldwork/README.md) 暂保留，不另招募、不调用付费模型；工程走查不算学习迁移或正式发布。
 
 第四轮审核的唯一 P1 已在两个主题的同一门禁题上复现。原版只确认“本次未查阅”就能再次记为独立通过。修复后，未见题和无辅助需分别自报；已见或不确定可沿用所选答案转普通练习。旧 v6 仅保留当时已有的证据。[审核原文](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a0feffba3992aff2dcb9ec677f7601848fd780ae/docs/master/reviews/2026-11-26-v1-review-queue.md) · [PR #49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49)
 
