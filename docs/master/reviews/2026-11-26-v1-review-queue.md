@@ -303,3 +303,12 @@
 **Next：** 承接当前显式新建修复，下一条产品切片聚焦“自己的多句材料→同一缺口修正→有依据的下一步→可继续的验证”。只在现有规则不适用时，保留原 feedbackRef/来源版本/目标与待检验状态，提供明确的针对性开放练习入口（需要模型时显式确认；无 Key 可留草稿或明确待检验）；不虚构题目、评分或完成状态，不新增模型/存储架构，不要求本轮自动按日换题。已有来源/反馈/首答 ID 与备份合同沿用；实际模型调用和用户研究仍按既有授权。
 
 **一个实际入口验收：** 用隔离 Edge、有旧主题 A 的候选，从免费示例点“开始自己的学习”，直接进入新建材料 B（含一条规则和另一句相关说明，不是单句规则夹具），保存文字并用隔离模拟反馈完成一次同缺口重讲；当规则不能出题时，用户仍可沿该缺口进入可继续的练习/待检验路径，不被导回无关对话或误记独立通过；关闭重开后恢复 B 的准确位置，再从记录返回 A，A 的旧证据不变，B 可按原备份机制导出。先验入口→新主题；后续切片仅补实际断点。此为一个纵向验收建议，尚未执行，非已交付。无需付费或重跑全套。原 Chat 未运行本机页面、未改产品代码，Codex 仍是唯一实现者；本轮仅写原审核队列，未扩大数据、费用或发布范围。
+
+
+## 2026-11-27 · 第十一轮续审回执｜#51 入口修复，CI 待修
+
+[PR #51](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/51) 精确实现 [84885dc](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/84885dc8283718a5b332a147be958ef770f8a98a)（未合并，基线仍 8d8f2d7）。接续本轮 P0，原 Chat 已独立查看 diff、[报告及两张 Windows Edge 实页](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/84885dc8283718a5b332a147be958ef770f8a98a/docs/iterations/2026-11-26-demo-own-study.md)；本次接力复查远端状态未变，归档既有结论而非重复执行。产品入口设计可接受：new 进入新材料并聚焦标题，home 保留首页选择，默认 / 保留自动续学与草稿优先；进入主题时 replaceState 清除 entry，已有草稿恢复和旧题旧答保留的定向路线见报告。原 Chat 未独立运行 Windows 页面。无实际学习效果结论。
+
+**Must Fix：** [该 SHA 的 Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45867977434) Node regression 失败，Edge regression 跳过。已查看日志及 [provenance.test.mjs L15–31](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/84885dc8283718a5b332a147be958ef770f8a98a/study-teachback-app/provenance.test.mjs#L15-L31)：两项 A1 learn/success、repair/request 报 URL is not defined；新增 renderTopic 使用浏览器 URL/location/history，而 VM 上下文未注入相应环境，截取范围也遗漏 requestedStudyEntry。仅修正既有 VM 测试环境与函数加载，保留原断言；待修正 SHA 的 Node/Edge CI 成功，不把当前红灯称已验收或自行合并。没有已证实的浏览器功能 Must Fix。
+
+**Next：** 入口合并门槛通过后沿第十一轮既定多句材料→同一缺口→针对性练习/待检验切片继续；不重开旧模型评测、重复回归或新建执行任务。**User Decision Needed：** 无新增审批；既有实际付费、数据、生产模型与发布边界不变。未修改产品或发起真实请求。
