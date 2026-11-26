@@ -1,6 +1,6 @@
 {
   "name": "zhi-er-neng-jiang",
-  "version": "0.1.0",
+  "version": "1.0.0-rc.1",
   "private": true,
   "description": "Source-grounded study and in-app teach-back for personal learning.",
   "engines": { "node": ">=24" },

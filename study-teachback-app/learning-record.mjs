@@ -23,7 +23,9 @@ export function learningRecord(context){
   for(const attempt of context.attempts??[]){
     const lastReport=(attempt.reports??[]).findLast(r=>r.channel==='content'&&r.transcriptVersion===latest(attempt)?.id&&sameJudgement(r,attempt.judgementIssues));
     for(const report of attempt.reports??[]){
-      if(report.channel!=='content')continue;
+      const version=[attempt.raw,...(attempt.corrections??[])].find(v=>v?.id===report.transcriptVersion);
+      if(report.channel!=='content'||!version?.reviewed||attempt.interrupted&&!attempt.fragmentAcceptedAt||
+        report.sourceId!==attempt.source.id||report.attemptId!==attempt.id)continue;
       const current=report===lastReport&&!attempt.transcriptDraft&&(!context.selectedGoal||context.selectedGoal.id===attempt.source.anchorVersion);
       const goal=attempt.source.anchors?.map(g=>g.text).join('、')??'';
       for(const [index,finding] of report.findings.entries()){
@@ -41,7 +43,7 @@ export function learningRecord(context){
       }
     }
   }
-  const priority=e=>!e.current?3:['本次已表达','本次独立检验通过'].includes(e.state)?2:0;
+  const priority=e=>!e.current?3:e.state==='本次已表达'?2:e.state==='本次独立检验通过'?1:0;
   return entries.sort((a,b)=>priority(a)-priority(b)||(b.report.createdAt??0)-(a.report.createdAt??0));
 }
 export function goalSource(topic){

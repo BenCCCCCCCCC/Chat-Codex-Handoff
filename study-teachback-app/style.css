@@ -191,3 +191,10 @@ button,.button-link{border-radius:12px}.dock button,.setup-bottom button,.resume
 #workspace[data-view=practice] .next-evidence{display:none}
 @media(min-width:1100px){#workspace .columns{grid-template-columns:minmax(220px,.93fr) minmax(350px,1.9fr) minmax(204px,.78fr);gap:16px}.columns>.card{padding:22px}.next-evidence{position:sticky;top:16px}}
 @media(min-width:761px) and (max-width:1099px){.next-evidence{grid-column:1/-1}}
+body:has(#feedback .finding) #confirm,body:has(#feedback .finding) #fullAgain,body:has(#feedback .finding) #dock #explain{background:var(--surface);border-color:var(--line);color:var(--ink)}
+.finding[data-status=incorrect] .feedback-alternatives button:last-child,.finding[data-status=missing] .feedback-alternatives button:last-child{background:var(--accent);color:white}
+@media(max-width:760px){
+  body:has(#setup:not([hidden])):not([data-history=true]) #setupActions{position:fixed;bottom:0;left:0;right:0;z-index:5;padding:8px 16px max(8px,env(safe-area-inset-bottom));background:white;border-top:1px solid var(--line);gap:4px;margin:0}
+  #setupActions p{font-size:.73rem;margin:0}#setupActions .compact-actions{width:100%}
+  .setup-card .paste-area textarea{min-height:92px;height:104px}.setup-card .file-entry{padding:10px}.setup-card .file-entry input{margin:0}
+}

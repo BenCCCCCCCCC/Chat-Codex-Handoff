@@ -147,14 +147,14 @@ function useImported(all){
   if(selected.length>5000)return notice('这一轮最多 5,000 字，请缩小选段；不会自动截断材料。');
   const provenance=importDocument?.text===preview.value?selectedProvenance(importDocument,all?0:preview.selectionStart,all?preview.value.length:preview.selectionEnd):null;
   const sourceMeta={...(provenance?{provenance}:{}),...(importDocument?.revisionOf?{revisionOf:importDocument.revisionOf}:{})};
-  setupDraft.replaceMaterial(selected,autoTitle(selected,$('selectedFile').textContent),sourceMeta);updateCounts();notice('材料已替换，可以撤销。点击“开始学习”才会发送给模型。');
+  setupDraft.replaceMaterial(selected,autoTitle(selected,$('selectedFile').textContent),sourceMeta);updateCounts();notice('材料已替换，可以撤销。直接讲解会把材料保存在本机。');
 }
 $('useSelection').onclick=()=>act(()=>useImported(false));$('useAll').onclick=()=>act(()=>useImported(true));
 $('learn').onclick=()=>act(()=>startTopic(false));
 $('directExplain').onclick=()=>act(()=>startTopic(true));
 async function startTopic(explainFirst){
   if(importPending||controller||capturePending||record||processing)return;
-  if(!$('source').value.trim())return notice('请先放入这一轮的学习材料。');
+  if(!$('source').value.trim()){$('source').focus();return notice('请先放入这一轮的学习材料。');}
   if($('source').value.length>5000)return notice('这一轮最多 5,000 字，请缩小材料。');
   const setupContext=setupContextValue({focus:$('setupFocus').value,known:$('setupKnown').value});
   topic={id:uid(),createdAt:Date.now(),source:{id:uid(),title:$('title').value.trim()||autoTitle($('source').value),text:$('source').value.trim(),...setupDraft.sourceMetadata()},setupContext,goals:[],messages:[],attempts:[],mode:'learn'};
@@ -376,7 +376,7 @@ function diagnosisView(a){
 }
 function focusDiagnosis(){const heading=$('contentHeading');heading.focus();heading.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
 function updateDiagnosisState(){
-  const a=current;if(!a?.raw)return;const v=diagnosisView(a);
+  const a=current;if(!a?.raw)return;renderNextEvidence();const v=diagnosisView(a);
   reveal('sourceReturn',false);
   $('confirm').disabled=!!v.pending||!!v.saveFailed||!v.current&&serviceCapabilities?.ai!==true;for(const e of editors.values())e.readOnly=!!v.pending;
   $('confirm').textContent=!v.current&&serviceCapabilities?.ai!==true?'配置 AI 后可分析':v.pending?'诊断中…':v.current?'查看当前诊断结果':v.changed?'确认修改并重新诊断':v.error?'确认当前文字并再次诊断':'确认使用当前文字，开始诊断';
@@ -395,7 +395,7 @@ function updateDiagnosisState(){
   $('feedback').replaceChildren();if(v.report&&v.version)renderFeedback(v.report,{version:v.version,stale:!v.current||!!v.pending});
 }
 function renderAttempt(){
-  if(!current)return;$('explain').textContent=topic.textDraft?'继续文字草稿':'我来讲讲 ↗';const a=current,typed=a.inputMode==='text';editors.clear();reveal('attemptComparison',false);reveal('attemptPanel');reveal('searchExcerpt',false);reveal('analysisDetails',false);$('voiceDraftStatus').textContent=a.transcriptDraft?'核对草稿已保存 · 尚未确认':'';$('attemptKind').textContent=(a.kind==='partial'?'局部':'完整')+(typed?'文字讲解':a.captureOrigin==='upload'?'上传音频':'录音');
+  if(!current)return;renderNextEvidence();$('explain').textContent=topic.textDraft?'继续文字草稿':'我来讲讲 ↗';const a=current,typed=a.inputMode==='text';editors.clear();reveal('attemptComparison',false);reveal('attemptPanel');reveal('searchExcerpt',false);reveal('analysisDetails',false);$('voiceDraftStatus').textContent=a.transcriptDraft?'核对草稿已保存 · 尚未确认':'';$('attemptKind').textContent=(a.kind==='partial'?'局部':'完整')+(typed?'文字讲解':a.captureOrigin==='upload'?'上传音频':'录音');
   replayRequest++;replayOriginal=null;if(blobURL)URL.revokeObjectURL(blobURL);blobURL=typed?null:URL.createObjectURL(a.audio);if(blobURL)$('player').src=blobURL;else $('player').removeAttribute('src');$('player').hidden=typed;$('audioDetails').hidden=typed;
   const soundIssue=a.interrupted?'录音中断':a.observation?.reason==='NEAR_SILENT'?'音量过低':a.observation?.reason==='CLIPPING'?'录音失真':null;
   $('audioStatus').textContent=`${a.duration?`${a.duration.toFixed(1)} 秒 · `:''}${soundIssue??'原声已保留'}${a.captureOrigin==='upload'?` · ${a.fileName} · 录制时的提示条件未知`:''}。${a.transcriptionTerms?.length?` 转写术语：${a.transcriptionTerms.join('、')}。`:''}`;
@@ -516,15 +516,16 @@ function renderFeedback(report,{version=latest(current),stale=false}={}){
     }else $('feedback').append(card);
   }
 }
-$('checkOriginal').onclick=()=>act(async()=>{
-  if(!canNavigate())return;
-  const ref=current?.feedbackRef,match=resolveFeedback(topic,{feedbackRef:ref});
+$('checkOriginal').onclick=()=>act(()=>checkFromReference(current?.feedbackRef));
+async function checkFromReference(ref){
+  if(!canNavigate()||!ref)return;
+  const match=resolveFeedback(topic,{feedbackRef:ref});
   if(!match.finding||!['missing','incorrect'].includes(match.finding.status))return notice('请回到当时反馈核对适用条件。');
   const attempt={...attemptRequest(match.attempt),transcriptVersion:match.version.id,spans:match.version.spans,reviewed:true};
   await flushDrafts();
   const {sourceId,attemptId,transcriptVersion,findings}=match.report;
   await practice.fromFeedback({attempt,report:{sourceId,attemptId,transcriptVersion,findings},findingIndex:ref.findingIndex,feedbackRef:ref},{closedBook:true});
-});
+}
 $('apply').onclick=()=>act(async()=>{if(!canNavigate())return;await flushDrafts();await practice.start();});
 $('startPractice').onclick=()=>act(async()=>{if(!canNavigate())return;await flushDrafts();await practice.open();});
 async function exportTopic(target=topic){
@@ -740,7 +741,7 @@ async function newTopic(){
   if(importPending||!canNavigate())return false;
   processing=true;
   try{
-    await flushDrafts();abortPending();clearImport();topic=null;current=null;
+    await flushDrafts();abortPending();clearImport();materials.clearFilePreview();topic=null;current=null;
     reveal('workspace',false);reveal('dock',false);reveal('history',false);reveal('recording',false);reveal('attemptPanel',false);reveal('searchReturn',false);reveal('setup');
     setupDraft.restore();updateCounts();renderPractice();await refreshHome();notice('');$('source').focus({preventScroll:true});window.scrollTo(0,0);return true;
   }finally{processing=false;}
@@ -785,17 +786,44 @@ $('transcriptionTerms').oninput=()=>{if(!topic||capturePending||record)return;to
 $('transcriptionTerms').onblur=()=>act(()=>voiceDrafts.flush());
 function renderNextEvidence(){
   if(!topic)return;
-  const e=learningRecord(topic).find(entry=>entry.current);
-  $('nextState').textContent=e?.state??'待讲解';
+  const entries=learningRecord(topic);
+  const last=topic.attempts?.at(-1);
+  const waiting=last&&(!topic.selectedGoal||last.source.anchorVersion===topic.selectedGoal.id)&&
+    (last.transcriptDraft||!last.reports?.some(r=>r.channel==='content'&&r.attemptId===last.id&&r.sourceId===last.source.id&&r.transcriptVersion===latest(last)?.id&&sameJudgement(r,last.judgementIssues)));
+  const draft=topic.textDraft;
+  const e=!draft&&!waiting&&entries.find(entry=>entry.current);
+  $('nextState').textContent=draft?'讲解草稿':waiting?(last.raw?'讲解待确认':'原声待核对'):e?.state??'待讲解';
   $('nextFocus').textContent=e?.finding?.message??e?.reason??topic.selectedGoal?.text??topic.setupContext?.focus??'';
   if(!$('nextFocus').textContent)$('nextFocus').textContent='用自己的话解释材料里的关键条件。';
-  $('nextAction').textContent=e?'查看该项证据':'选择学习目标';
-  $('nextAction').onclick=()=>act(async()=>{
-    if(!canNavigate())return;
-    if(!e){$('sourceDetails').open=$('goalEditor').open=true;return focusHit($('goalText'));}
+  const proof=async()=>{
     await continueTopic(topic.id,{view:'attempt',attemptId:e.attempt.id,...(e.ref?.reportId?{feedbackOrigin:{origin:{feedbackRef:e.ref},fromRecord:true}}:{})});
     if(!e.ref?.reportId)focusHit($('contentHeading'));
-  });
+  };
+  $('nextProof').hidden=!e;$('nextProof').onclick=()=>act(proof);
+  let label,action;
+  if(draft){
+    label='继续文字草稿';action=()=>prepare(draft.kind,draft.focus,draft.parentId,draft.feedbackRef);
+  }else if(waiting){
+    label=last.raw?'核对这次讲解':'试听这次原声';
+    action=async()=>{await continueTopic(topic.id,{view:'attempt',attemptId:last.id});focusHit($('voiceHeading'));};
+  }else if(!e){
+    label='开始讲解';action=()=>prepare();
+  }else if(e.state==='本次独立检验通过'||e.state==='本次已表达'){
+    label=e.state==='本次独立检验通过'?'查看本轮总结':'查看本次表达';action=()=>$('openRecord').click();
+  }else if(e.round){
+    label=e.state==='题目待核对'?'继续核对题目':e.state==='待提交作答'?'继续作答草稿':'回到这道题';
+    action=async()=>{await continueTopic(topic.id,{view:'practice',roundId:e.round.id});if(e.state==='题目待核对')focusHit($('reviewHeading'));};
+  }else if(e.repeat&&e.ref?.reportId&&['missing','incorrect'].includes(e.finding?.status)){
+    label='做新情境检验';action=()=>checkFromReference(e.ref);
+  }else if(e.state==='待巩固'&&e.ref?.reportId&&e.finding?.repair&&!e.report.judgement){
+    label='重讲这一点';action=()=>prepare('partial',e.finding.repair,e.attempt.id,e.ref);
+  }else if(e.issue){
+    label='核对适用条件';action=async()=>{await continueTopic(topic.id,{view:'attempt',attemptId:e.attempt.id});$('judgementChoices').open=true;focusHit($('judgementChoices'));};
+  }else{
+    label='核对反馈依据';action=proof;
+  }
+  $('nextAction').textContent=label;
+  $('nextAction').onclick=()=>act(async()=>{if(canNavigate())await action();});
 }
 async function flushDrafts(){setupDraft.flush();await chat.flushDraft();await practice.flushDraft();await voiceDrafts.flush();await materials.flushDraft();}
 async function discardDrafts(){await chat.discardDraft();await practice.discardDraft();await voiceDrafts.discard();await materials.discardDraft();}
@@ -812,4 +840,10 @@ $('clearSetupDraft').onclick=()=>confirmDelete('清空尚未开始的新建草�
 updateCounts();
 $('refreshCapabilities').onclick=()=>act(refreshCapabilities);
 renderService();
-await act(async()=>{db=await openStore();await refreshCapabilities();await updateBudget();const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));renderHome(all);if(all.length&&!setupDraft.hasContent())resumeLastActivity(all[0]);});
+await act(async()=>{
+  db=await openStore();
+  const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));
+  renderHome(all);
+  if(all.length&&!setupDraft.hasContent())resumeLastActivity(all[0]);
+  await refreshCapabilities();await updateBudget();
+});

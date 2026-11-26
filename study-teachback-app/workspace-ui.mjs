@@ -28,6 +28,13 @@ function reflectStage(){
   $('newStudy').classList.toggle('active',!history&&!working);
   $('historyButton').classList.toggle('active',history);
 }
+$('downloadFeedback').onclick=()=>{
+  const note=$('feedbackNote').value.trim();
+  if(!note){$('feedbackNote').focus();return;}
+  const report={version:'1.0.0-rc.1',stage:$('feedbackStage').value,impact:$('feedbackImpact').value,note};
+  const link=document.createElement('a'),url=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));
+  link.href=url;link.download='study-feedback.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
 const stageObserver=new MutationObserver(reflectStage);
 for(const id of ['setup','workspace','recording','attemptPanel','history'])stageObserver.observe($(id),{attributes:true,attributeFilter:['hidden']});
 stageObserver.observe($('practicePanel'),{attributes:true,attributeFilter:['data-active']});

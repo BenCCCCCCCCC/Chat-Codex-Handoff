@@ -200,7 +200,13 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
   async function fromFeedback(target,options){
     if(!canStart())return;
     await flushDraft();
-    try{await flow.fromFeedback(target,options);}finally{focusPanel();}
+    try{
+      await flow.fromFeedback(target,options);
+      const round=activePractice(getTopic());
+      if(options?.closedBook&&round&&round.checkMode!=='closed'){
+        $('practiceOriginStatus').textContent=round.checkMode==='submitted'?'这是已提交的检验，可查看当时的首答。':'本题已出现过，当前为普通练习。这个问题暂时没有新的独立题。';
+      }
+    }finally{focusPanel();}
   }
   async function fromConditions(ref){if(!canStart())return;await flushDraft();try{await flow.fromConditions(ref);}finally{if(getTopic()?.resume?.view==='practice')focusPanel();}}
   return {render, start, open, fromFeedback, fromConditions, noteReference:evidenceUI.note, flushDraft, focusPanel, locate, discardDraft:()=>drafts.discard(), get hasPendingDraft(){return drafts.pending;}};
