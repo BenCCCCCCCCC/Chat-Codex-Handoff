@@ -343,3 +343,16 @@
 **Next（沿 A–F，非新增任务）：** ① 优先在现有工作台收口当前任务与主动作，Apple/ChatGPT Desktop 仅借层级、稳定导航和就近操作；保持来源查证及档案可达，不模仿外观，不堆面板；仅按新变化验 1280/390px、键盘和原任务返回。② 复用六人方案及既有盲评预检，补独立评分校准，区分操作摩擦、诊断质量与 24–48h 未见自由解释；不新增评测框架、账号/云同步、Agent、模型或泛化评分。③ 交付说明明确实测 ZIP 与同提交源码入口、免 Key 能力、备份及保留期；Explorer 双击和物理麦克风在具备设备条件时定向核对，不重复本次文字整包路径。普通取舍由 Codex 自主推进，不要求负责人代测。
 
 **User Decision Needed：** 无新审批事项；真实付费模型试验、真人招募、数据政策或外传、生产 ASR 切换及公开发布仍按既有授权边界暂停。仅独立源码/截图/回执/CI 审核及归档，未自行运行 Windows 页面、重复回归、启动 Codex、修改产品代码或合并，不宣称真实学习效果。
+
+## 2026-11-27 · 第十八轮归档｜#58–59 最终合并与 CI
+
+**范围：** 从上次已记录的 c101706 接续，仅归档原 Chat 第十八轮两条独立审核及新增的最终 CI／合并状态。产品分支实际头 [e352839](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/e3528391095496de56fb3021ba0c21e3c63232fe)，与 CURRENT_STATE、HANDOFF 和[合并回执](2026-11-27-round-18-receipt.md)一致；远端比较无后续提交，查询无面向产品分支的开放 PR。
+
+- [#58](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/58)：原审精确 [2fadbf5](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/2fadbf5e91a523bb27bcc75b4ce9c0e24414bb5d) 无新增必修。残留启动状态须精确归属、有效结构、旧 PID 确认不存在且端口空闲才原地改名保留；查询异常拒绝处理，保留未知进程保护。隔离 PS5.1 定向 2/2；互斥机制按源码审查，未单独实测并发、跨会话或 Explorer。对应 [CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45884819478) job 140132781594 success，Node 通过、Edge 按影响跳过；已合并 [844975b](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/844975b9a097a9441d527e3c8e702f090dd74756)。
+- [#59](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/59)：原审精确 [672576d](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/672576da23f39f0ef65a735584e5baedefcec5f4) 的 diff、[1280/390px 两张实页及定向回执](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/672576da23f39f0ef65a735584e5baedefcec5f4/docs/iterations/2026-11-27-pending-check-hierarchy.md) 无新增必修。无同反馈已确认重讲时只突出「再讲这一点」，准确关联的重讲保存后只突出「回看依据」并明确仍待检验；匹配使用完整反馈引用、父讲解、版本及来源快照。保留旧题、讨论与全局入口，报告确认键盘返回原缺口及主动作，0 POST／供应商请求；未新增存储、评分或发送机制。本次新增核对 [最终 Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45884887160) job 140133011262 已结束，Node、Edge 与回执保存均 success；实现 head 未变，合并至 e352839，合并差异仅该支线七文件。此前条件式放行已满足。该界面收口不等于多段材料新情境检验已闭合或真人可用性通过。
+
+**Must Fix：** 无新增有证据的阻断。#58、#59 原审放行条件已满足且远端已合并，不重审 #55/#57，不重跑旧回归或整包。
+
+**Next：** 第十七轮待检验主操作收口切片已交付。沿既有 A–F 和 V1_EXIT_GATES，优先补缺失证据；不继续无依据扩建功能。已实际验收且交付的是 c101706 的 git archive ZIP 原件，e352839 仅为含定向验收增量的源码候选。Explorer 双击、物理麦克风在有设备条件时定向核对；复用既有评分校准、六人研究与延迟独立检验协议，真实执行待授权。免 Key 自有材料仍不能生成新诊断，未验证真实模型质量或学习迁移。
+
+**User Decision Needed：** 无新增审批事项；真实付费、招募、数据政策／外传、生产 ASR 切换及公开发行仍按既有边界。本轮仅核对远端证据并归档原审，不独立运行 Windows，不改产品、合并、启动第二个 Codex 或创建实施任务。
