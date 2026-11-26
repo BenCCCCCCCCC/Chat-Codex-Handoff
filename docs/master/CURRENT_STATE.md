@@ -1,6 +1,6 @@
 # 知而能讲 · 当前状态
 
-2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `a178fb427e14597e76124934b69ddc15dae17779`。
+2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `86dd8b668122174f5e12edf5cda5c99dd04777e2`。
 
 ## 2026-11-26 · 工程执行
 
@@ -8,7 +8,9 @@
 
 本地候选 **1.0.0-rc.1** 已合并 [#45](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/45)，[Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45807391200) 全部通过。完成了 A/B 首轮审核修正、长文件重新选段、免 Key 两门课程、反馈本地导出、研究方案及演示脚本。[本地候选回执](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/docs/iterations/2026-11-26-local-candidate.md) · [形成性走查协议](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a178fb427e14597e76124934b69ddc15dae17779/docs/research/v1-formative-study.md)。
 
-按用户新指引，Apple-inspired 首体验与 ChatGPT Desktop 工作台已在 #45 接入。后续 [#46](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/46) 收起同权卡片和重复说明，引用按需展开，已在隔离 Edge 实测桌面、窄屏、Esc 返回焦点及同题恢复，等待 Windows CI。真人研究参与者 0 人，生产 ASR 和公开发行待另行决定。
+Apple-inspired 首体验和 ChatGPT Desktop 工作台已合并 [#46](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/46)，[最终 Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45809045738) 通过。正文优先当前学习动作，同一缺口只显示一次，桌面右侧／手机底部原文可用 Esc 返回同一反馈。普通题的身份从作答记录推导，刷新仍为普通练习。已核对 320 至 1280 像素和 320 像素下 200% 文本的重排。[实页与证据](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/docs/iterations/2026-11-26-focused-workspace.md)。
+
+本地候选工程交付结束。当前参与者 0 人。真实学习效果、普通助手同输入实测、归档语音独立听审、Explorer 鼠标双击及麦克风录音质量仍待验证。新增付费、招募、生产 ASR 切换和公开发行在具体授权后进行。
 
 ## 2026-11-26 · 当前 MASTER 决定：完整 V1.0 0→1 路线
 
