@@ -169,6 +169,7 @@ export function decodeBackup(text) {
         for (const answer of round.answers) {
           string(answer.text,2000); check(['pending','unknown','complete'].includes(answer.status));
           if (answer.result != null) string(answer.result);
+          if(answer.selfReportedUnseen!==undefined)check(answer.selfReportedUnseen===true&&round.checkMode==='submitted'&&round.closedAnswerId===answer.id);
           if(answer.assessment){
             check(round.task);
             check(JSON.stringify(answer.assessment)===JSON.stringify(assessBoundedTask(round.task,t.source,round.taskTarget,answer.choiceId)));

@@ -71,7 +71,10 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     if(topic?.taskUnavailable)heading='暂时没有合适的题';
     if(round?.task){
       const first=round.answers.find(a=>a.id===round.closedAnswerId);
-      heading=round.checkMode==='closed'?'独立检验':round.checkMode==='submitted'&&first&&answerDisposition(round,first)==='current'?'独立首答记录':'普通练习';
+      heading=round.checkMode==='closed'?'独立检验':'普通练习';
+      if(round.checkMode==='submitted'&&first&&answerDisposition(round,first)==='current'){
+        heading=first.selfReportedUnseen===true?'独立首答记录':'首答记录';
+      }
     }
     if(round?.conditionContext)heading='按条件练习';
     if(round?.revision)heading='修订题';
@@ -118,7 +121,11 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     const scored=round?.answers.some(a=>a.status==='complete'&&answerDisposition(round,a)==='current');
     if(round?.checkMode==='submitted'&&!paused){
       const answer=round.answers.find(a=>a.id===round.closedAnswerId);
-      if(answer&&answerDisposition(round,answer)==='current')$('practiceStatus').textContent=answer.assessment.verdict==='correct'?'本次独立检验通过 · 首答正确，自报未另查提示。':'本次独立检验需要修正 · 可返回原反馈。';
+      if(answer&&answerDisposition(round,answer)==='current'){
+        const verdict=answer.assessment.verdict==='correct'?'首答正确':'首答需要修正';
+        const exposure=answer.selfReportedUnseen===true?'自报此前未见题':'此前是否见题未记录';
+        $('practiceStatus').textContent=verdict+' · '+exposure+'，本次自报未另查提示。';
+      }
     }
     $('practiceRubric').hidden = !round?.task || !scored || paused;
     $('practiceRubric').open=false;
