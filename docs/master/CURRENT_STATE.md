@@ -1,6 +1,8 @@
 # 知而能讲 · 当前状态
 
-2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `90a711b3dc98a9cd084c630b4aefc961680cec86`。
+2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `839176a8c2b55155256e6928fab1b4d6b5ce69c7`。可运行代码定在 `90a711b3dc98a9cd084c630b4aefc961680cec86`。
+
+[#48](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/48) 已交付[形成性走查执行包](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/research/v1-fieldwork/README.md)、[31 秒实页演示与作品集](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/portfolio/README.md)及[Windows 候选回执](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/839176a8c2b55155256e6928fab1b4d6b5ce69c7/docs/iterations/2026-11-26-review-delivery.md)。干净源码包在含中文和空格的目录启动并停止，免 Key 示例返回 200。回访换题、盲号及排除口径已用合成记录排练。两领域私有题本已冻结，实际参与者 0 人，实际研究支出 ¥0。启动真人研究的待决提案为 6 人、酬谢最多 ¥300、实时文字调用最多 ¥30。需明确负责人、渠道、服务数据设置和删除期限。
 
 [#47](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/47) 已处理 #46 审核中的两项 Must Fix。390px Edge 在 4,026 字材料中段同时显示原句和返回按钮，点击可回到原反馈。改动已诊断讲解后，旧报告可读，重新诊断恢复主按钮并说明发送内容。模型调用 0 次。[窄屏原文](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/docs/iterations/v1-experience/long-source-return.png) · [修改后状态](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/90a711b3dc98a9cd084c630b4aefc961680cec86/docs/iterations/v1-experience/revised-diagnosis.png) · [Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45824578826)。
 
