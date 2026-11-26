@@ -6,7 +6,9 @@
 
 ## 2026-11-26 · V1.0 完整 0→1 产品路线（当前执行入口）
 
-当前产品头 [c101706](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c10170669c397f352b7529d531432acb3bb9175d)。已合并 [#57](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/57)：旧题、原首答和待检验并存，刷新后从精确匹配档案返回原缺口。[隔离实页与边界](reviews/2026-11-27-pending-check-edge.md)，无新题、分数、独立通过或真实请求。此前 #51–55 及 #56 README 的各自证据见 [CURRENT_STATE](CURRENT_STATE.md)。
+**当前产品头 [e352839](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/e3528391095496de56fb3021ba0c21e3c63232fe)。** [第十八轮合并回执](reviews/2026-11-27-round-18-receipt.md)记载两个独立增量：#58 仅在确认本副本归属、端口空闲且旧 PID 不存在时归档残留标记；#59 按重讲进度只突出一个下一步，保存重讲仍不算检验通过。[最新源码候选 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/e3528391095496de56fb3021ba0c21e3c63232fe.zip)仅有定向验收，不替代已交付的 c101706 整包实测原件。
+
+#57 时产品头 [c101706](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c10170669c397f352b7529d531432acb3bb9175d)。已合并 [#57](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/57)：旧题、原首答和待检验并存，刷新后从精确匹配档案返回原缺口。[隔离实页与边界](reviews/2026-11-27-pending-check-edge.md)，无新题、分数、独立通过或真实请求。此前 #51–55 及 #56 README 的各自证据见 [CURRENT_STATE](CURRENT_STATE.md)。
 
 **本地文字版里程碑已交付。** c101706 实测原件是从 HTTPS Git 精确提交生成的 `git archive` ZIP，并已交给用户。[Windows 整包回执](reviews/2026-11-27-final-package-acceptance.md)覆盖免 Key 学习、重开、备份／反馈导出与停服；[同提交 GitHub 源码快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/c10170669c397f352b7529d531432acb3bb9175d.zip)不是实测 ZIP 原件，也不替换 README 的体验包。
 
