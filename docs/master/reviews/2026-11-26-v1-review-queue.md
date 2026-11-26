@@ -95,3 +95,31 @@
 **User Decision Needed：** 无新增即时事项。已获批的 ASR 比较仍封存，待听审与生产切换取舍；真实研究/付费/外传/公开发行维持原授权边界。继续本机候选和现有 UI 批次即可。
 
 本轮实际读取 #45 diff、最终 CI/job、README/报告/研究方案与 5 张合成页面截图，未独立运行 Windows 页面，无真实学习者或新模型效果验证。仅回写 MASTER 审核，无产品代码修改、第二个 Codex、CI 触发或 PR 合并。
+
+
+## 2026-11-26 · #46 聚焦工作台增量审核（第三轮）
+
+**审核范围与结论：** [PR #46](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/46) 已合并，PR 头 `4cbae9056adccaa7f667e790b3d6e6acf4745bfb`，产品远端头 [86dd8b6](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/86dd8b668122174f5e12edf5cda5c99dd04777e2)，CURRENT_STATE 已同步。本轮只审查相对 a178fb4 的 15 个变化文件、[实页报告](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/docs/iterations/2026-11-26-focused-workspace.md)、桌面反馈及手机引文两张实际截图、研究协议增量；[CI 45809045738](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45809045738) 对应 PR 头为 success，Windows job 139871780147 的 Node 与 Edge 均 success，文件提取专项按影响跳过。未独立运行 Windows 页面，认可工程证据，不推断学习效果。
+
+### 上轮审核关闭项
+
+- **普通题身份持续性：** [practice-ui.mjs L70–79](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/study-teachback-app/practice-ui.mjs#L70-L79) 已改为按 checkMode、closedAnswerId 和 answerDisposition 每次渲染派生，暂停判断优先，报告说明已见普通题仍为普通练习。关闭上轮一次性提示丢失的 Must Fix，不重复要求重做。
+- **反馈优先及减少卡片：** [桌面实页](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/docs/iterations/v1-experience/focused-feedback.png) 的当前缺口、核对文字和主修正动作均在视口上部，讨论降至下方，材料边栏去卡片；同一缺口不再另占一个重点卡。回访标题改为“新主题”，续学保留在前。达到本批设计减法的主要目的，不把风格完成度等同可用性实测。
+- **查证与续学：** [app.mjs L487–500](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/study-teachback-app/app.mjs#L487-L500) 先保存精确反馈恢复引用，再打开同版本原文 modal；关闭回到原卡。实际[手机引文截图](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/docs/iterations/v1-experience/source-mobile.png) 可见高亮与返回；报告及更新后的 Edge 源定位检查覆盖回读页码、返回焦点，报告另有 Esc、重讲、18:05 新情境首答、恢复和质疑。认可这一条工程主线；首次讲解依旧沿用 #45 固定入口与已有行为，本轮未独立重测首次入口。
+- **免费示例与研究准备：** 重讲处已提示自由文字不评分。研究协议已补齐 S/N 交叉顺序、回访逆序和新的平行情境题，关闭上轮研究准备的两项建议；实际启动前仍应确保参与者未看过公开仓库中的题目及答案（如有接触，另用未公开等价题），不能把公开题天然视为未见题。参与者仍为 0。
+
+### Must Fix（下一次必要的小修，无需新架构或全量回归）
+
+1. **原文抽屉需要始终找得到退出。** [index.html L123](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/study-teachback-app/index.html#L123) 把唯一可点击返回按钮放在完整原文之后；[style.css L272–286](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/study-teachback-app/style.css#L272-L286) 抽屉自身滚动且手机最多 85dvh，[app.mjs L496–499](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/study-teachback-app/app.mjs#L496-L499) 聚焦命中原句而非按钮。短门禁截图正常；接近 5000 字的选段中，命中开头或中段时手机用户可能必须滚到文末才可返回，Esc 不是触屏普遍可用的替代。把“返回反馈”移至固定/粘性抽屉头部或固定操作区，继续走现有 close/focusHit 回原卡机制，确保高亮不被遮挡。只用一次长原文窄屏引用→返回检查；这是由 DOM/样式确认的可发现性风险，未宣称在手机实际复现。
+2. **修改讲解后，重新诊断应恢复主操作与发送说明。** [app.mjs L379–396](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/study-teachback-app/app.mjs#L379-L396) 对旧报告存在但文字/条件改变的情况仍渲染 stale findings，且诊断状态文案只写旧结果过时；[style.css L291–292](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/86dd8b668122174f5e12edf5cda5c99dd04777e2/study-teachback-app/style.css#L291-L292) 只要存在 finding 就把确认按钮降为文本链接，既包括已完成的“查看反馈”，也包括需发新请求的“确认修改并重新诊断”。依据现有 diagnosisView 的 current/pending 状态区别查看与重新诊断；当确需新请求时恢复主按钮，并就地说明将发送材料选段与确认文字（重试同理，不新增弹窗或重复提示）。仅检查编辑已诊断文本→旧报告仍可读→重新诊断入口，不发真实 API。现有过时标记和请求逻辑不需重做；未见错误计分证据。
+
+### Next
+
+- 工程候选现阶段可冻结为形成性走查基线；上述两处在既有维护中顺手修正并绑定实际版本即可，不另立大批 UI 重构，不再重复已通过 A/B 的测试。
+- 后续视觉优化依赖真实任务观察。桌面截图仍保留底栏及下方聊天，但缺口已在主区可操作，不将其判为阻塞；等实际观察是否造成重复点击、滚动或模式混淆再决定收起。优先看初次使用者能否自主完成一次纠错，研究中的次日自由解释应区分概念、条件和理由，不能仅用选择题通过代替。
+- D 是当前最大的产品证据缺口。已准备研究与顺序，尚未开展；可先准备任务记录表、未见题替换方案、匿名结果模板、待审阅的预算/招募方案。本机物理麦克风、Explorer 双击、独立听审如有合适环境再核对，不重复旧模拟运行。
+- V1.0 当前仍为本地候选，作品集可展示产品机制、真实工程截图与已知限制，不宣称用户验证或已对外发布。
+
+**User Decision Needed：** 尚无新授权；真正启动参与者研究、额外付费模型对照、生产 ASR 切换、扩大保存/外传或公开发布时按既有边界集中给方案。当前无具体新增预算或招募决定包，不催促审批。
+
+本轮仅回写 MASTER 审核记录，无产品代码修改、第二 Codex、CI 触发或 PR 合并。
