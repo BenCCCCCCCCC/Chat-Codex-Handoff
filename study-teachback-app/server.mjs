@@ -11,6 +11,7 @@ import {practiceConditions,conditionalPracticeSchema,CONDITIONAL_PRACTICE,valida
 
 const files={'/bounded-understanding.mjs':'bounded-understanding.mjs','/understanding-task.mjs':'understanding-task.mjs','/transcription-terms.mjs':'transcription-terms.mjs','/transcript-playback.mjs':'transcript-playback.mjs','/audio-input.mjs':'audio-input.mjs','/voice-review.mjs':'voice-review.mjs','/search-focus.mjs':'search-focus.mjs','/chat-ui.mjs':'chat-ui.mjs','/draft-save.mjs':'draft-save.mjs','/record-search.mjs':'record-search.mjs','/':'index.html','/app.mjs':'app.mjs','/core.mjs':'core.mjs','/storage.mjs':'storage.mjs','/style.css':'style.css','/workspace-ui.mjs':'workspace-ui.mjs','/practice.mjs':'practice.mjs','/practice-ui.mjs':'practice-ui.mjs','/backup.mjs':'backup.mjs','/backup-ui.mjs':'backup-ui.mjs','/demo':'demo.html','/demo.mjs':'demo.mjs','/diagnostic-localization.mjs':'diagnostic-localization.mjs'};
 export function createServer({semanticCall=semantic,asrCall=transcribe,book=ledger,extractCall=extractSource,capabilityCall=extractionCapabilities,keyConfigured=()=>!!process.env.OPENAI_API_KEY}={}) {
+  for(const file of ['closed-check.mjs','learning-record.mjs'])files['/'+file]=file;
   files['/setup-draft.mjs']='setup-draft.mjs';
   files['/source-provenance.mjs']='source-provenance.mjs';
   files['/feedback-reference.mjs']='feedback-reference.mjs';

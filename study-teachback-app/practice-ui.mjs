@@ -1,4 +1,5 @@
 import {practicePaused,answerDisposition} from './question-review.mjs';
+import {mountClosedCheck} from './closed-check.mjs';
 import {mountQuestionReview} from './question-review-ui.mjs';
 import {activePractice, practiceRounds, createPracticeFlow} from './practice.mjs';
 import {createDraftSaver} from './draft-save.mjs';
@@ -6,7 +7,7 @@ import {resolveFeedback} from './feedback-reference.mjs';
 import {resolveConditionFeedback} from './conditional-practice.mjs';
 import {mountPracticeEvidence} from './practice-evidence-ui.mjs';
 
-export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen, onFeedback,requireAI,aiReady=()=>true}) {
+export function mountPractice({getTopic, save, request, canStart, setBusy, act, onOpen, onFeedback,onChanged=()=>{},requireAI,aiReady=()=>true}) {
   const $ = id => document.getElementById(id);
   const node = (tag, text, cls) => {
     const e = document.createElement(tag); e.textContent = text;
@@ -18,8 +19,10 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
   const flow = createPracticeFlow({getTopic, save, request, canStart, setBusy, requireAI, changed:render});
   const evidenceUI=mountPracticeEvidence({getTopic,flow,drafts,canStart,act});
   const reviewUI=mountQuestionReview({getTopic,flow,drafts,canStart,act});
+  const closed=mountClosedCheck({flow,flushDraft,markDraft:t=>drafts.mark(t),getTopic,act});
   function render() {
     const topic = getTopic(), round = activePractice(topic), rounds = practiceRounds(topic);
+    onChanged();
     const held=round?.review?.status==='held',paused=practicePaused(round),replaced=round?.review?.status==='replaced';
     const conditionContext=round?.conditionContext??topic?.practiceRequest?.conditionContext;
     const origin=conditionContext?{conditionRef:conditionContext.ref}:round?.origin??topic?.taskUnavailable?.origin,target=round?.taskTarget??topic?.taskUnavailable?.target;
@@ -58,6 +61,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     $('practiceQuestionSelect').hidden = !rounds.length || rounds.length===1&&!!round;
     $('practiceBody').hidden = !round;
     $('practiceForm').hidden=!!round?.conditionContext&&!round.work;
+    closed.render(round,topic?.resume?.view==='practice');
     $('practiceQuestion').textContent = round?.question ?? '';
     $('practiceAssumptions').textContent = round?.task?.exercise.assumptions.join('\n') ?? '';
     $('practiceAssumptions').hidden = !$('practiceAssumptions').textContent;
@@ -103,6 +107,10 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
       return item;
     }));
     const scored=round?.answers.some(a=>a.status==='complete'&&answerDisposition(round,a)==='current');
+    if(round?.checkMode==='submitted'&&!paused){
+      const answer=round.answers.find(a=>a.id===round.closedAnswerId);
+      if(answer&&answerDisposition(round,answer)==='current')$('practiceStatus').textContent=answer.assessment.verdict==='correct'?'本次独立检验通过 · 首答正确，自报未另查提示。':'本次独立检验需要修正 · 可返回原反馈。';
+    }
     $('practiceRubric').hidden = !round?.task || !scored || paused;
     $('practiceRubric').open=false;
     $('practiceRubricBody').replaceChildren();
@@ -121,6 +129,7 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     queueMicrotask(()=>{
       $('practicePanel').scrollIntoView({behavior:'instant',block:'start'});
       const round=activePractice(getTopic());
+      if($('closedCheck').open)return;
       (round?.review?.status==='held'?$('reviewNote'):round?.review?.status==='replaced'?$('practiceHeading'):round?.task ? ($('practiceChoices').querySelector('input:checked')??$('practiceChoices').querySelector('input')) : round ? $('practiceDraft') : $('practiceHeading')).focus();
     });
   }
@@ -188,10 +197,10 @@ export function mountPractice({getTopic, save, request, canStart, setBusy, act, 
     if(['result','evidence'].includes(target.part)&&answer?.querySelector('details'))answer.querySelector('details').open=true;
     focusHit(answer??$(target.part==='draft'?(activePractice(getTopic())?.task?'practiceChoices':'practiceDraft'):'practiceQuestion'));
   }
-  async function fromFeedback(target){
+  async function fromFeedback(target,options){
     if(!canStart())return;
     await flushDraft();
-    try{await flow.fromFeedback(target);}finally{focusPanel();}
+    try{await flow.fromFeedback(target,options);}finally{focusPanel();}
   }
   async function fromConditions(ref){if(!canStart())return;await flushDraft();try{await flow.fromConditions(ref);}finally{if(getTopic()?.resume?.view==='practice')focusPanel();}}
   return {render, start, open, fromFeedback, fromConditions, noteReference:evidenceUI.note, flushDraft, focusPanel, locate, discardDraft:()=>drafts.discard(), get hasPendingDraft(){return drafts.pending;}};

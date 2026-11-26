@@ -1,3 +1,4 @@
+import {learningContexts} from './material-set.mjs';
 import {taskContext} from './understanding-task.mjs';
 import {resolveFeedback} from './feedback-reference.mjs';
 import {practicePaused,answerDisposition,beginReview,resolveQuestionReview,revisedQuestion,latestQuestion} from './question-review.mjs';
@@ -123,7 +124,7 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       const round=activePractice(topic);if(!round?.conditionContext||practicePaused(round)||round.work&&!round.work.answerId)return;
       beginAnswerWork(round,{uid,now});topic.resume={view:'practice'};await save(topic);
     }),
-    fromFeedback: target => run(async topic => {
+    fromFeedback: (target,{closedBook=false}={}) => run(async topic => {
       const context=taskContext(topic.source,target.attempt,target.report,target.findingIndex),rounds=practiceRounds(topic);
       const same=r=>JSON.stringify(r.taskTarget)===JSON.stringify(context.target)&&(!target.feedbackRef||
         (r.origin?.feedbackRef?JSON.stringify(r.origin.feedbackRef)===JSON.stringify(target.feedbackRef):resolveFeedback(topic,r.origin,r.taskTarget).report?.id===target.feedbackRef.reportId));
@@ -138,9 +139,11 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       const origin={targetId:context.target.id,sourceId:topic.source.id,attemptId:context.target.attemptId,transcriptVersion:context.target.transcriptVersion,...(target.feedbackRef?{feedbackRef:target.feedbackRef}:{})};
       topic.taskUnavailable=null;topic.practiceRequest=null;
       if(task.exercise){
+        const seen=learningContexts(topic).some(c=>c.practiceRounds?.some(r=>
+          r.question===task.exercise.question&&JSON.stringify(r.task?.exercise?.assumptions??[])===JSON.stringify(task.exercise.assumptions)));
         const round={id:uid(),createdAt:now(),question:task.exercise.question,introduction:'',assistance:'source_visible',
           draft:'',answers:[],task,taskTarget:context.target,
-          origin};
+          ...(closedBook&&!seen?{checkMode:'closed'}:{}),origin};
         rounds.push(round);topic.activePracticeId=round.id;
       }else{
         topic.taskUnavailable={target:context.target,origin,reason:task.unavailableReason};topic.activePracticeId=null;
@@ -175,7 +178,11 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
         await failed(topic, operation, error);
       }
     }),
-    answer: () => run(async topic => {
+    leaveCheck: () => run(async topic=>{
+      const round=activePractice(topic);
+      if(round?.checkMode==='closed'){round.checkMode='assisted';await save(topic);}
+    }),
+    answer: ({unassisted=false}={}) => run(async topic => {
       const round = activePractice(topic), text = round?.draft?.trim();
       if (!round || practicePaused(round) || !text) return;
       if (text.length > 2000) throw new Error('INPUT_TOO_LARGE');
@@ -183,10 +190,14 @@ export function createPracticeFlow({getTopic, canStart, setBusy, save, request, 
       if(round.task){
         topic.resume = {view:'practice'};
         if (!await checkLocalTask(topic,round)) return;
+        if(round.checkMode==='closed'&&!unassisted)return;
         const assessment=assessBoundedTask(round.task,topic.source,round.taskTarget,text);
         if(!round.answers.some(a=>a.choiceId===text&&a.status==='complete'&&answerDisposition(round,a)==='current')){
           round.answers.push({id:uid(),text:round.task.exercise.choices.find(c=>c.id===text).label,
             choiceId:text,createdAt:now(),completedAt:now(),status:'complete',result:assessment.message,assessment});
+          if(round.checkMode==='closed'){
+            round.checkMode='submitted';round.closedAnswerId=round.answers.at(-1).id;
+          }
         }
         round.draft='';await save(topic);return;
       }

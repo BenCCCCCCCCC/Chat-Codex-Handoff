@@ -5,7 +5,7 @@ import {judgementIssues,validateJudgementReport} from './judgement.mjs';
 import {learningContexts,validateMaterialSet} from './material-set.mjs';
 import {validateTextDraft} from './text-teachback.mjs';
 import {validateFeedbackReference} from './feedback-reference.mjs';
-import {sourceValue, identifier, setupContextValue, spanValue, textSpanValue, validateFindings} from './core.mjs';
+import {sourceValue, identifier, text as boundedText, setupContextValue, spanValue, textSpanValue, validateFindings} from './core.mjs';
 import {termSnapshot} from './transcription-terms.mjs';
 import {validateBoundedTask,assessBoundedTask} from './bounded-understanding.mjs';
 
@@ -15,6 +15,7 @@ const MATERIAL_FORMAT = 'study-teachback-export-v2';
 const CONDITIONS_FORMAT = 'study-teachback-export-v3';
 const CONTINUATION_FORMAT = 'study-teachback-export-v4';
 const VERSIONS_FORMAT = 'study-teachback-export-v5';
+const LEARNING_FORMAT = 'study-teachback-export-v6';
 const check = value => { if (!value) throw Error('BACKUP_INVALID'); };
 const object = value => check(value && typeof value === 'object' && !Array.isArray(value));
 const string = (value, max=16000) => check(typeof value === 'string' && value.length <= max);
@@ -40,7 +41,8 @@ export async function encodeBackup(topic) {
   const conditional=learningContexts(topic).some(c=>c.practiceRequest?.conditionContext||c.practiceRounds?.some(r=>r.conditionContext));
   const continued=learningContexts(topic).some(c=>c.continuationIntent||c.attempts.some(a=>a.continuation||a.fragmentAcceptedAt||a.contentScope));
   const versioned=topic.materialVersions?.length||topic.materialRevisionDraft||learningContexts(topic).some(c=>c.attempts.some(a=>a.raw?.timing?.level==='recording'));
-  return JSON.stringify({format:versioned?VERSIONS_FORMAT:continued?CONTINUATION_FORMAT:conditional?CONDITIONS_FORMAT:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
+  const learning=learningContexts(topic).some(c=>c.selectedGoal||c.repairRef||c.practiceRounds?.some(r=>r.checkMode));
+  return JSON.stringify({format:learning?LEARNING_FORMAT:versioned?VERSIONS_FORMAT:continued?CONTINUATION_FORMAT:conditional?CONDITIONS_FORMAT:topic.materials?MATERIAL_FORMAT:FORMAT, exportedAt:new Date().toISOString(),
     notice:'导出副本不受应用内删除控制', topic:data}, null, 2);
 }
 
@@ -50,11 +52,13 @@ export function decodeBackup(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > BACKUP_LIMIT) throw Error('BACKUP_TOO_LARGE');
   try {
     const envelope = JSON.parse(text);
-    if (![FORMAT,MATERIAL_FORMAT,CONDITIONS_FORMAT,CONTINUATION_FORMAT,VERSIONS_FORMAT].includes(envelope?.format)) throw Error('BACKUP_FORMAT');
+    if (![FORMAT,MATERIAL_FORMAT,CONDITIONS_FORMAT,CONTINUATION_FORMAT,VERSIONS_FORMAT,LEARNING_FORMAT].includes(envelope?.format)) throw Error('BACKUP_FORMAT');
     const t = envelope.topic; object(t); identifier(t.id); date(t.createdAt); sourceValue(t.source);
     if (t.updatedAt != null) date(t.updatedAt);
     if (t.restoredAt != null) date(t.restoredAt);
     setupContextValue(t.setupContext);
+    if(t.selectedGoal){identifier(t.selectedGoal.id);boundedText(t.selectedGoal.text,200);check(t.source.text.includes(boundedText(t.selectedGoal.sourceQuote,600)));}
+    if(t.repairRef)validateFeedbackReference(t.repairRef);
     if(t.textDraft)validateTextDraft(t.textDraft);
     for (const goal of list(t.goals)) { string(goal.text,200); string(goal.sourceQuote,600); check(t.source.text.includes(goal.sourceQuote)); }
     if(t.chatDraft!=null)string(t.chatDraft,2000);
@@ -157,6 +161,11 @@ export function decodeBackup(text) {
           check(round.task.targetId===round.origin?.targetId&&round.question===round.task.exercise.question);
         }
         unique(list(round.answers));
+        if(round.checkMode){
+          check(round.task&&['closed','assisted','submitted'].includes(round.checkMode));
+          if(round.checkMode==='closed')check(!round.answers.length);
+          if(round.checkMode==='submitted')check(round.answers[0]?.id===round.closedAnswerId&&round.answers[0]?.status==='complete'&&round.answers[0]?.assessment?.method==='local_rule_check');
+        }
         for (const answer of round.answers) {
           string(answer.text,2000); check(['pending','unknown','complete'].includes(answer.status));
           if (answer.result != null) string(answer.result);
