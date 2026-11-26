@@ -812,4 +812,10 @@ $('clearSetupDraft').onclick=()=>confirmDelete('清空尚未开始的新建草�
 updateCounts();
 $('refreshCapabilities').onclick=()=>act(refreshCapabilities);
 renderService();
-await act(async()=>{db=await openStore();await refreshCapabilities();await updateBudget();const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));renderHome(all);if(all.length&&!setupDraft.hasContent())resumeLastActivity(all[0]);});
+await act(async()=>{
+  db=await openStore();
+  const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));
+  renderHome(all);
+  if(all.length&&!setupDraft.hasContent())resumeLastActivity(all[0]);
+  await refreshCapabilities();await updateBudget();
+});
