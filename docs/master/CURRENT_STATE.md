@@ -1,5 +1,9 @@
 # 知而能讲 · 当前状态
 
+2026-11-26（第二批）｜产品头 [8d8f2d7](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4)。[PR #50](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/50) 合并，验证实现 217d2225，原 Chat 第七轮独立核对 diff、四图后无必修，匹配 [Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45848545298) Node / Edge 通过。1280px 普通练习正文由 255px 到展开材料 770px、收起时 864px；390px 无横向溢出，隔离配置重开保留原题/原答及键盘返回原反馈。原因是旧样式把材料推到第二行，不是 DOM 消失。只改样式与证据，无模型、用户数据变更，也无付费。[四图与验收](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/217d2225f74fa34bb69d9e34cb682c11e18b86a4/docs/iterations/2026-11-26-practice-reading-column.md)。
+ 
+[八阶段验收与 AI 决策](V1_EXIT_GATES.md) 已纳入原 Chat 第六轮建议：可证伪需求与强对照、严重错判否决、回滚保留新证据。Windows 启动脚本 `-SkipBrowser` 在隔离副本免 Key 正常启停、`/demo` 200；尚未声称 Explorer 双击、物理录音、正式灰度或旧应用原地降级。本轮本机回滚演练待回执。真人仍 0，未招募、未改生产模型或公开部署。以下 #49 段是上一轮基线。
+
 2026-11-26。产品分支 `prototype/study-teachback-v0.1`，已合并基线 `57fad6f5438e801c6b10d12ca383901956ab7210`。可运行代码定在 `74f7d6112e531dfdf2b5736843b6875060f12a4f`。
 
 [第四轮审核](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a0feffba3992aff2dcb9ec677f7601848fd780ae/docs/master/reviews/2026-11-26-v1-review-queue.md)的唯一 P1 已复现并修复。[#49](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/49) 已合并，[Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45830711752) 通过。在干净 Edge 配置模拟 26 小时后重开，原题与原首答恢复。不同反馈可产生不同份数的题。两个主题重复同一道门禁题时，现在分别询问是否未见题目或答案、是否未另查资料；选择已见或不确定则转普通练习。旧 v6 的首答不补记见题自报。实际付费调用 0 次，真实参与者 0 人。[实页与验收记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/57fad6f5438e801c6b10d12ca383901956ab7210/docs/iterations/2026-11-26-next-day-first-answer.md)
