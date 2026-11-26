@@ -66,7 +66,17 @@ async function refreshCapabilities(){
   }
 }
 async function updateBudget(){try{const response=await fetch('/api/status');if(!response.ok)throw new Error('BUDGET_UNAVAILABLE');const s=await response.json();$('budget').textContent=`本次账本：${s.ledger.requests} 次请求；已知费用估算 $${s.ledger.knownCostUSD.toFixed(6)}；含未结算预留 $${s.ledger.exposureUSD.toFixed(6)} / $5。现金新增上限 $10，不自动充值。`; }catch{$('budget').textContent='预算状态暂不可用；无法确认可用额度。';}}
+function requestedStudyEntry(url){
+  const entry=url.searchParams.get('entry');
+  return entry==='home'||entry==='new'?entry:null;
+}
 function renderTopic(){
+  // Only an explicit choice to open a topic consumes the one-page entry intent.
+  const url=new URL(window.location.href);
+  if(requestedStudyEntry(url)){
+    url.searchParams.delete('entry');
+    window.history.replaceState(window.history.state,'',url);
+  }
   reveal('setup',false);reveal('workspace');reveal('dock');$('topicTitle').textContent=topic.studyTitle??topic.source.title;$('topicExpiry').textContent=expiryLabel(topic).split(' · ')[0];$('continuedIntent').hidden=!topic.continuationIntent;$('continuedIntent').textContent=topic.continuationIntent?'继续学习：'+(topic.continuationIntent.intent||'已补充材料，可保存文字讲解，再按所选条件分析。'):'';materials.render();
   renderMaterial({textNode:$('sourceText'),locationNode:$('sourceLocation'),source:topic.source});reveal('sourceReturn',false);
   $('goals').replaceChildren(...(topic.selectedGoal?[topic.selectedGoal]:topic.goals??[]).map(g=>el('li',g.text)));
@@ -854,6 +864,8 @@ await act(async()=>{
   db=await openStore();
   const all=(await db.all()).sort((a,b)=>activityTime(b)-activityTime(a));
   renderHome(all);
-  if(all.length&&!setupDraft.hasContent())resumeLastActivity(all[0]);
+  const entry=requestedStudyEntry(new URL(window.location.href));
+  if(!entry&&all.length&&!setupDraft.hasContent())resumeLastActivity(all[0]);
+  if(entry==='new')document.getElementById('newMaterialHeading').focus();
   await refreshCapabilities();await updateBudget();
 });
