@@ -1,5 +1,9 @@
 # 知而能讲 · 当前状态
 
+2026-11-27｜产品头 [c81c5fc](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c81c5fccce4e9ece63af00b30b27e2342c3d9994)，[PR #54](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/54) 已合并。原 Chat 第十四轮认可 b051b16 的产品行为；首轮 Node 失败是模拟 DOM 缺少 prepend，仅在 ecdb26c 补夹具，原断言、运行时及实页不变。[最终 Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45875960516) 通过。390px 首讲保存后当屏可见本机状态和「再讲一遍」；无 Key 不显示禁用诊断按钮。模拟配置后只有主动确认才发一次本机 mock，提前说明发送范围；无真实模型、费用或真人。[前后实页与范围](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/b051b163a1b96179456d338c6f0a579871501220/docs/iterations/2026-11-27-first-save-local-next.md)。
+
+[最新可下载源码快照 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/c81c5fccce4e9ece63af00b30b27e2342c3d9994.zip) 是 GitHub 按当前合并头生成的源码，不是公开发行，也未重新打包验收。实际做过干净包启动、重开、备份恢复与停服的是 #53 候选 787bfc0；#54 新界面按上方实页与对应 Node／Edge CI 验证，不把两项证据合并称为同一个包的实测。
+
 2026-11-27｜产品头 [97befee](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/97befee09dcded6f23d8cf078e97cd8c2b4f8f05)，[PR #53](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/53) 已合并。A/B 反馈不再混用同一草稿；改变当前目标也不改变旧反馈的文字重讲来源。原 Chat 复审关闭唯一必修，[Windows Node / Edge CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45874302851) 通过。[实页与复审](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/787bfc0e4c1d85312a25ffc28b6223ed022b6e6e/docs/iterations/2026-11-27-feedback-draft-scope.md)。
 
 干净 787bfc0 候选源码 ZIP 在含中文、空格目录经 Windows PowerShell 5.1 启动逻辑（不打开系统默认浏览器），隔离 Edge 390px 通过免 Key TXT 导入、首讲本机保存、关窗重开同记录及备份恢复为独立副本；结束后端口无监听，启动状态文件已清理。仅一次本机提取，无诊断、真模型、真实参与者或正式发布。未验证 Explorer 双击或物理麦克风。下一步只处理实页发现的首讲核对区提示与本机动作。
@@ -10,7 +14,7 @@
 
 2026-11-26（第二批）｜产品头 [8d8f2d7](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4)。[PR #50](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/50) 合并，验证实现 217d2225，原 Chat 第七轮独立核对 diff、四图后无必修，匹配 [Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45848545298) Node / Edge 通过。1280px 普通练习正文由 255px 到展开材料 770px、收起时 864px；390px 无横向溢出，隔离配置重开保留原题/原答及键盘返回原反馈。原因是旧样式把材料推到第二行，不是 DOM 消失。只改样式与证据，无模型、用户数据变更，也无付费。[四图与验收](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/217d2225f74fa34bb69d9e34cb682c11e18b86a4/docs/iterations/2026-11-26-practice-reading-column.md)。
  
-[本轮 Windows 候选源码 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4.zip) 固定至 #50 合并树，版本号仍为 1.0.0-rc.1。仓库 README 保留上一份已验证 ZIP；本链接是本轮增量候选，不是正式发布。
+[#50 当轮 Windows 候选源码 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4.zip) 固定至 #50 合并树，版本号仍为 1.0.0-rc.1。仓库 README 保留当时已验证 ZIP；本链接是历史增量候选，不是正式发布。
 
 [八阶段验收与 AI 决策](V1_EXIT_GATES.md) 已纳入原 Chat 第六轮建议：可证伪需求与强对照、严重错判否决、回滚保留新证据。Windows 启动脚本 `-SkipBrowser` 在隔离副本免 Key 正常启停、`/demo` 200；尚未声称 Explorer 双击、物理录音、正式灰度或旧应用原地降级。[隔离本机快照换包演练](reviews/2026-11-26-local-rollback-receipt.md)已通过：旧包前置快照保留旧首答，重开候选保留新旧两答；不同数据结构原地降级未测。真人仍 0，未招募、未改生产模型或公开部署。以下 #49 段是上一轮基线。
 
