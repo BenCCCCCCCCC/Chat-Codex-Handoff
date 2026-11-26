@@ -212,3 +212,32 @@
 **Next：** CI 终态核对后由 Codex/负责人按既有规则决定合并，若成功关闭第五轮的阅读列 P1，不追加全量回归或额外界面任务。若 CI 失败，先查实际受影响路径。其他 V1 放行门槛、真实用户、回滚仍独立待验证，不属于本 PR。
 
 **User Decision Needed：** 无新增即时决策。仅写审核队列，未修改产品代码、启动 Codex、点击合并、招募、付费或发布。
+
+
+## 2026-11-26 · 离线 AI 质量与本机回滚放行复核（第八轮）
+
+**范围与基线：** MASTER 读取点 `635b986b32b65e451ce0d210b5440ef7fe84ccde`。产品远端 [8d8f2d7](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4)；#50 已合并，精确实现 217d222 的 [Windows CI 45848545298](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45848545298) completed/success，关闭第七轮等待 CI 的条件及桌面 P1，不重审布局。研究提交 [e3416fc](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/e3416fccd2fed596a96ffb294719755895f47c59) 相对产品头只有新增 54 行 [OFFLINE_REHEARSAL_2026-11-26.md](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/e3416fccd2fed596a96ffb294719755895f47c59/docs/research/quality-baseline-2026-11-18/OFFLINE_REHEARSAL_2026-11-26.md)，不含产品或评测执行代码；远端产品头仍是 8d8f2d7，不把研究提交视为产品合并。已读 [模型决策](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/635b986b32b65e451ce0d210b5440ef7fe84ccde/docs/master/reviews/2026-11-26-model-comparison-decision.md)、[快照回执](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/635b986b32b65e451ce0d210b5440ef7fe84ccde/docs/master/reviews/2026-11-26-local-rollback-receipt.md)、[最新门槛](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/635b986b32b65e451ce0d210b5440ef7fe84ccde/docs/master/V1_EXIT_GATES.md) 及相关源码。本 Chat 未运行 Windows/排练脚本，未见本机私有原回执；下列执行数来自所读报告，结构判断来自源码。
+
+### 1. Must Fix（付费/切换门槛，不是新产品缺陷）：两项负控均留作严重语义盲评，不新增猜测式硬门禁
+
+报告明确是手写占位 6/6 本地 200、8/8 定向拒绝、两项结构合法语义错误均被接受、5 个注入 fetcher 回退场景及既有 judgement 测试 4/4。真实 Luna/Sol 调用、费用、独立人工评审均为 0；这不能推出 6/6 模型正确或 2/2 真实模型错判。八项确定性拒绝保留，不重复加测或重跑。
+
+- **暂缓问题被移到顶层**（defer-one-continue-other）：[judgement.mjs L29–62](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/judgement.mjs#L29-L62) 已能可靠阻止明确 deferred issue 被判为 judgeable、或在其 assessment/findingIndexes 中出现判断，但顶层 finding 没有可信的命题归属；同一材料、同一答句可包含独立的 FIFO 错误。按引用重合、数字或关键词屏蔽会误伤正常多条件回答，要求所有 findings 都绑定暂缓项也会阻塞合法的无关判断。只有已有可信的明确范围/命题 ID 时才可硬拒绝“明确属于 deferred issue 的判断”；模型自行给 ID 不能证明语义归属。当前不扩大 schema，不以 regex 假装修复。盲评硬判据：暂缓唯一容量（不判 8 错），仍须判出后入先出的错误；全题暂缓也不合格。
+- **撤回句被当最终观点**（verbose-correct）：[schemas.mjs L9](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/schemas.mjs#L9) 已要求最终立场；[core.mjs L80–101](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/core.mjs#L80-L101) 校验的是精确引用、span 与版本，不能证明引用仍是最终主张。用“收回/不/改为”或最后数字的 regex 会误伤局部自纠、多个条件、引用他人观点及仍错误的最终结论。只有用户已明确确认某个最终命题/精确排除范围时，才可对该明确结构作窄约束；目前不强制新增用户标注步骤。盲评硬判据：最终 9 和预留理由正确，不给撤回的十个另判错；同时用 fluent-wrong 配对检验最终仍说十个时必须指出关键错误。不能因有自纠词就全部放过。
+- 原 Chat 按 [controlled-cases.json](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/docs/research/quality-baseline-2026-11-18/controlled-cases.json) 核对上述参照及其余四例的材料、目标和答案：count-adopted 的等义 8、fluent-wrong 的限定 10 格容量错误、insufficient-evidence 的线程安全暂缓、required-omission 的正确 9 但缺明确要求的理由，与作者参照方向一致。这只是看过作者答案后的独立源码/材料复核，非隐藏配置的评审、非教师双评或真实模型输出。可免费先让非出题评审按原材料校准六例（重点是两个负控与配对正确例），记录分歧并先冻结合格定义和严重项；不新增样本集。
+
+### 2. Next：付费前唯一最小可执行准备 = 可离线验收的隔离比较预检包
+
+报告已锁六个语义输入哈希、共同 instructions/schema 哈希、两个配置两次的顺序；但明确说尚非可执行线上清单。相对 8d8f2d7 的研究提交只见报告，没有可在仓库核对的隔离发送器、冻结配置/总预算及盲评导出回执。现有 [provider.mjs L22–57](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/provider.mjs#L22-L57) 固定 Luna/none/1800/60 秒，[ledger.mjs L37–49、53–70](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/study-teachback-app/ledger.mjs#L37-L70) 拒绝非 Luna 的 semantic 预留且费用按 Luna 算；直接替换模型字符串会混淆计价和部署配置。模型决策的示例成本不是已核实硬上限。
+
+**仅准备一个研究目录内的预检入口和 manifest**（建议路径，尚未创建：`docs/research/quality-baseline-2026-11-18/model-comparison-preflight.mjs` 及同目录 `run-manifest.json`；复用已有 [PROTOCOL.md](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/docs/research/quality-baseline-2026-11-18/PROTOCOL.md)、[review-template.json](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/8d8f2d7cef5b729f1c17b175d16f41511eeaf9e4/docs/research/quality-baseline-2026-11-18/review-template.json) 与 e3416fc 的映射，不复制数据或改生产代码）。在无真实 Key/出站的 mock 模式中核对六例实际 input/instructions/schema 哈希一致，列出 6×2×2=24 个固定槽位（首轮基线先、次轮候选先）；锁 Luna 与 Sol medium 实际拟用配置、共同等待口径、各自总输出上限（含推理）、费用表/日期和最坏预留计算，独立评测账本与停止条件，保持原始响应、盲号和映射隔离。实际模型快照/可用档/strict schema 接受及账户权限仍待授权后首个正式槽位证实，预检不消费额外一次真实请求。任何不兼容、未知费用或预算无法约束即暂停，保留槽位，不补跑/静默改配置。盲评模板增加/明确严重可呈现错误、原始被拒错误、合格/不可用/失败及费用/耗时的独立字段；所有 24 槽位为分母，零严重错误不是零风险。先用一条两配置 mock 及一条失败/未结算样例确认路由、盲号和预算逻辑；不机械模拟全套网络组合、不建评测平台。
+
+**放行条件：** 无出站回执、实际哈希一致、24 槽位清单、冻结判据/独立参照校准记录、最坏预算可计算和失败不重试；然后才可把具体金额/配置/停止条件作为一次明确的 User Decision Needed 提案。未批准前真实请求为 0，不认为预检能证明真实供应商兼容。若获批后有任何呈现给用户的严重语义错误，该配置不得用于切换/扩大灰度；程序拦截的错误计不可用，不能只比较成功样本。不要用生产的 1800 上限照搬 Sol，或以估算平均费用代替硬预算。不比较第三模型、不改变 ASR、不招募；真实用户迁移仍为另一条证据线。
+
+### 3. Next：承认同结构隔离快照换包子门槛，暂停重复回滚测试
+
+[本地快照回执](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/635b986b32b65e451ce0d210b5440ef7fe84ccde/docs/master/reviews/2026-11-26-local-rollback-receipt.md) 记录旧包 74f7d61→候选 217d222（合并树 8d8f2d7）→旧包/更新前独立 profile→候选/更新后独立 profile，旧题、旧答、原时间与原反馈关联保持，新版可回查新旧两答；三份测试账本一致，服务关闭，无产品 API POST/真实调用。没有导入成新副本或重置期限，符合“旧状态可回退、新状态不被覆盖”的**同数据结构、隔离快照换包**子门槛。基于协调者核对的回执认可此项工程演练，不宣称本 Chat 已检查私有截图或本地原件。
+
+它支持继续安全的本机离线候选使用、同结构换包准备；不支持旧版直接打开新版 profile、跨 schema 原地降级、合并两份分叉状态、真实付费账本回滚、真实灰度/公开发行或 AI 模型切换。第六轮提出的新增材料版本/讲解报告/草稿与模拟严重错误断路，本次回执仅覆盖新增第二条普通答题证据，未分别验证；脚本启停也非 Explorer 双击。无需为了完整表格重做本轮；后续只有实际数据结构、账本或发布路径改变时，对受影响的真实用户结果补定向演练。阶段 07 仍须按发布对象、授权和实际数据兼容性单列，不把此子门槛当整体放行。
+
+**决策总结：** 暂无新增已证实的产品代码 Must Fix；必须补的是实际模型比较的预检/盲评放行证据。三项下一动作仅为：保留并校准两个语义严重项；准备一次隔离比较预检包；关闭同结构快照子项并保留其边界。当前真实参与者 0、此次模型实际输出 0、费用 0。无新即时审批；24 次真实调用须在明确配置和硬预算后单独批准。本轮仅追加原 MASTER 审核队列，未修改产品代码、启用额外 Codex、触发 CI、招募、付费、更换模型或发布。
