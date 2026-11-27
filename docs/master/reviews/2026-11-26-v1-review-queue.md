@@ -401,3 +401,16 @@
 **Next：** 沿既有 B/D 与 PRD P0 诊断可信度，先利用已有私有回执做独立人工复核和逐槽审计（请求身份、输入/提示/schema、完整响应/使用量、最慢值、盲评原判与分歧、预算及授权边界）；保留私有数据位置，不公开原件，不重复本次 24 次调用。若需在 MASTER 留证，仅保留授权范围内的脱敏核对结论和版本指纹；独立人评未完成即标未定。后续获准试验优先不同领域新材料与无条件首讲，区分带条件路径与全局配置；真实题目与学习者研究按现有授权另行决定，不新增任务或评测框架。
 
 **User Decision Needed：** 无新增可直接执行的审批；回执所述本次 24 槽视为已结束，不沿用未花完上限启动下一次。任何新真实付费、生产模型切换、真人招募、数据政策/外传及公开发布须另行明确授权。此次仅核对远端证据并记录实质模型风险，未修改产品代码、启动 Codex、合并或重复回归。
+
+## 2026-11-27 · 第二十一轮差量归档｜#61 研究口径与作品入口
+
+**范围：** 自第二十轮已记录的产品头 [ef325a7](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/ef325a7385a198b0a68116fd5d79472314bce97d) 接续；[PR #61](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/61) 实现 head [59c7789](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/59c77892da26383b91c3659ed5a2550a8897b6d4) 已合并至当前实际产品头 [c0e1f05](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c0e1f05457736f1a4310130e3a1aa8c9e1ae007c)。[精确差量](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/compare/ef325a7385a198b0a68116fd5d79472314bce97d...c0e1f05457736f1a4310130e3a1aa8c9e1ae007c) 只有 README、作品集 README、研究执行包 README、session、results 五个 Markdown；无开放产品 PR、无运行时/模型/存储或新页面变更。已独立核对 PR 实际补丁、合并差量和新版表单，PR head 无 Actions run；纯文档无需重复 Node/Edge。原 Chat 的六组合成分类与 diff --check 通过为 PR 回执所述，未独立重跑。
+
+- 作品集保留 31 秒预写反馈说明并链接固定动图；README 区分 ef325a7 源码快照及同提交本机原件的第十九轮定向验证、c101706 旧整包走查、#53 历史快照。当前文档头不等于新增可运行候选，未验证 GitHub 自动 ZIP 的字节或实页，不扩大旧包验收范围。
+- [现场记录](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/c0e1f05457736f1a4310130e3a1aa8c9e1ae007c/docs/research/v1-fieldwork/session.md) 与 [汇总表](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/c0e1f05457736f1a4310130e3a1aa8c9e1ae007c/docs/research/v1-fieldwork/results.md) 预先固定主要摩擦指标为同一原句的额外查找次数；首个连续查找不计，连续滚动/展开不拆计，未找到/救援/超时/无有效反馈不作可比较零次；两条件均独立查证和限时改讲才配对，只有次数少且关键条件补齐、质量不降才计改善。未配对仍保留全任务分母；两侧均零且质量相同为持平。保持 [V1_EXIT_GATES](../V1_EXIT_GATES.md) 至少四可比较配对及至少 4/6 招募者改善的双门槛；预约回访与自发回访分开。认可这是研究准备改进，非真人价值证明。初讲已正确、无需纠错时如实记无适用缺口/不可比较，不能逼造错误或用其他指标补算；不同材料的交叉配对仅支持形成性判断。真实执行仍需核对需求访谈门槛、对照设置与材料难度，保留全分母及分歧。
+
+**Must Fix：** 无新增已证实工程阻断。第二十轮 AI 语义质量风险与复杂课件独立检验覆盖仍未放行，本轮不重开既有 UI 验收。
+
+**Next：** 沿已记录 A–F 与 [PRD 竞品机会池](2026-11-27-prd-competitive-analysis.md) 复用现有协议。该主指标只衡量查证摩擦，不代表反馈正确性、总体效率、自然留存或学习迁移；原有独立质量及延迟首答结果仍单列。真人目前为零，尚无新原始模型证据，先补已授权范围内的现有证据核对，不重复已封存调用或扩建功能。无需重新打包或回归未变更的产品路径。
+
+**User Decision Needed：** 无新增审批；既有真实付费、招募、数据政策/外传、生产切换及公开发行边界不变。本次只维护审核队列，未执行 Windows、修改产品、合并、启动第二个 Codex 或创建实施任务。
