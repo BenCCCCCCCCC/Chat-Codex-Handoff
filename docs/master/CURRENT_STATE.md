@@ -1,5 +1,7 @@
 # 知而能讲 · 当前状态
 
+**2026-11-27｜第 21 轮 AI 能力边界。** [#62](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/62) 已合并，[能力边界与放行标准](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/docs/research/ai-capability-boundaries.md)区分程序校验、模型语义和学生独立通过。原项目 Chat 三视角复审；Node 定向 12 项通过、零对外请求。结构拒收伪造引文和暂缓项判定；真引文配错标签仍可能被接收且不给修正入口，是语义风险，未修复。未改提示词、运行时、模型或候选 ZIP。
+
 **2026-11-27｜作品原件与真人走查文档同步。** [#61](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/61) 只改文档。作品集标明 31 秒预写反馈动图，并区分 [ef325a7 源码快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/ef325a7385a198b0a68116fd5d79472314bce97d.zip) 对应的[定向验证](reviews/2026-11-27-round-19-receipt.md)与 [c101706 整包走查](reviews/2026-11-27-final-package-acceptance.md)。[现场表单](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/c0e1f05457736f1a4310130e3a1aa8c9e1ae007c/docs/research/v1-fieldwork/README.md) 固定同一原句的额外查找次数；保留未完成分母，预约回访与自发返回分别统计。原项目 Chat 双视角审核，6 个合成配对分类通过；真人仍为 0，未改可运行候选。
 
 **2026-11-27｜第 20 轮带条件文字诊断实验。** 24 次真实请求均完成；项目 Chat 先按盲号评审。Luna 8 可用、2 需改、2 严重；Sol 12 可用。模型差异只适用于这 6 个合成题，不切换配置。严重例固定进后续验收，另测无条件首讲及新材料。[实验回执](reviews/2026-11-27-scoped-text-diagnosis-model-comparison.md)。
