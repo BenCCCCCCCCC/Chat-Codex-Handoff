@@ -30,6 +30,8 @@ D/E 本批已合并 [#48](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pul
 
 外部核查（2026-11-26，公开资料而非登录实测）：[ChatGPT Study Mode](https://help.openai.com/en/articles/11780217-using-study-mode-in-chatgpt) 已覆盖材料、引导与反馈；[Gemini Study Notebooks](https://blog.google/innovation-and-ai/products/gemini-app/gemini-study-notebooks/) 已有诊断、个性化学习和进度；[Gemini Notebook](https://blog.google/innovation-and-ai/products/gemini-notebook/three-tips-study-gemini-notebook/) 已有材料驱动学习与多题型；[Gemini exam help](https://blog.google/products-and-platforms/products/education/helping-students-and-parents-prepare-for-the-final-exams-period/) 明确支持口头解释并找逻辑缺口。GitHub 近邻：[curio](https://github.com/jo2234/curio)、[learning-tutor](https://github.com/jadrianlg16/learning-tutor)、[lucid](https://github.com/hexa3/lucid) 声称覆盖 teach-back、证据或学习状态；借鉴方法，未验证可替代本产品，未执行第三方代码。不要宣称费曼式 AI 教学、自动出题或知识档案为独有创新。
 
+**PRD 竞品补充与后续迭代机会：** [竞品分析、差异化定位与优先级](reviews/2026-11-27-prd-competitive-analysis.md)（2026-11-27，产品基线 ef325a7）。直接竞品包含 Feynman AI 与 Meomy，强对照包含 ChatGPT Study Mode、Gemini Study Notebooks；费曼教回、语音、引用及进度均非独有。以可查证的具体理解缺口、局部修正、未见独立应用和准确续学作为差异化假设。机会池纳入 A–F：P0 首次价值激活、诊断可信度、复杂材料检验覆盖；P1 结果驱动回访与学习证据积累；P2 以真实摩擦为依据扩展材料适用性。已有功能不重复实施，D/F 优先验证用户价值；不另派执行任务、不改变已冻结研究或数据、费用、发布授权。
+
 ### 0→1 产品及技术架构
 
 - 体验层：产品介绍／首次引导与免费示例；首页（继续学习、新主题、待巩固）；主题学习空间（材料、知识点、阅读／对话、讲解、诊断、练习）；待巩固与理解档案；学习记录、设置、帮助、备份恢复。学习动作可自由往返，不强制线性五步。
