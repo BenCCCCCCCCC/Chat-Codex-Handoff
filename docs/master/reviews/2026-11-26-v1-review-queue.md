@@ -356,3 +356,17 @@
 **Next：** 第十七轮待检验主操作收口切片已交付。沿既有 A–F 和 V1_EXIT_GATES，优先补缺失证据；不继续无依据扩建功能。已实际验收且交付的是 c101706 的 git archive ZIP 原件，e352839 仅为含定向验收增量的源码候选。Explorer 双击、物理麦克风在有设备条件时定向核对；复用既有评分校准、六人研究与延迟独立检验协议，真实执行待授权。免 Key 自有材料仍不能生成新诊断，未验证真实模型质量或学习迁移。
 
 **User Decision Needed：** 无新增审批事项；真实付费、招募、数据政策／外传、生产 ASR 切换及公开发行仍按既有边界。本轮仅核对远端证据并归档原审，不独立运行 Windows，不改产品、合并、启动第二个 Codex 或创建实施任务。
+
+## 2026-11-27 · 第十九轮归档｜#60 最终合并与 Beta 准备边界
+
+**范围：** 自队列第十八轮 e352839 接续。当前实际产品头 [ef325a7](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/ef325a7385a198b0a68116fd5d79472314bce97d)，无面向产品分支的开放 PR。归档原 Chat 第十九轮四角色审核、两角色代码复审及学习评测盲评；本次新增仅核对最终合并、CI、合并文件一致性与[第十九轮差量回执](2026-11-27-round-19-receipt.md)。
+
+- [#60](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/60) 原 Chat 设计/工程复审精确 head [962f384](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/962f3847da6e782ef50a76b8b6d102a3fb2844d5) 无新增 Must Fix。[定向报告](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/962f3847da6e782ef50a76b8b6d102a3fb2844d5/docs/iterations/2026-11-27-global-pending-check.md) Node 8/8、Edge workspace 4/4：全局待检验可续接非当前材料组合且无题的原缺口；完整反馈引用在上下文选择前复核，回看依据后恢复筛选/查询/焦点，失效不跳；已有练习筛选、存储协议、评分和模型链路不变。原审未独立取得截图原件或运行 Windows。本次核实 [Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45912968101) job 140225435150 的 Node、Edge 和回执保存均 success，PR 已合并，七个变更文件在原审核 head 和合并头的 blob 一致；原有条件式放行已满足。
+- 差量 ZIP：Codex 回执记录 ef325a7 的 14,716,368 B git archive 原件在中文/空格路径、PS5.1 与隔离 Edge 验证启动残留归档、1280/390 无题待检验精确查证/返回及正常停服，0 POST/外部浏览器请求。c101706 的导入、备份等整包证据独立保留；不把差量验收称作重跑全包，不把 GitHub 自动 ZIP、Explorer 双击、物理麦克风称已实测。原 Chat 本次仅读回执，未运行本机或核验 ZIP 字节。
+- 学习证据：合成初讲→修正→模拟 28h 新情境与缺访记录仅是流程准备。原 Chat 12 段手写反馈盲评为 6 可用、5 严重、1 额外待预注册候选（S7A4：虚假确认理由完整并关闭缺口）；回执称与主持人参照一致，未独立读取私有答案。此为 AI 辅助评审校准，不是实际模型准确率或真人双评；候选严重项不追加入冻结口径。
+
+**Must Fix：** 无新增可证实阻断；#60 合并及 CI 门槛已关闭。第十九轮全局回访入口切片和差量候选包验证已完成，不重复实施或回归。
+
+**Next：** 保留 A–F 和 V1_EXIT_GATES 的受控 Beta 准备范围。已有离线证据链和 AI 辅助校准不再重复；未见独立自由解释的 24–48h 迁移、真人可用性和真实模型语义质量仍待实际授权验证。仅据新阻断调整产品，普通取舍由 Codex 自主推进；不新增待检验队列、模型、评测框架或持久化协议。
+
+**User Decision Needed：** 无新增审批事项。真实付费、真人招募、数据政策/外传、生产 ASR 与公开发行继续暂停。本轮仅核对远端并归档既有独立审核，未修改产品、合并、启动 Codex 或重跑测试。
