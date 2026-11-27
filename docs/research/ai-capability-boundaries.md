@@ -33,3 +33,5 @@
 - 离线用合成界面材料覆盖：Esc 关闭面板、焦点回原按钮、草稿能否恢复依赖会话模式。带条件两组、普通首讲正反两组、两个结构拒收及一个已知语义负控。与原判断用例合跑，Node 报告 **12 项通过**（含新套件父项），隔离器报告外部请求尝试为 0。
 - 负控用真实原句却把错误的“回页首”标成已表达：响应成功，修正目标为空。这个发现是未解决的模型质量风险。测试没有修改运行时、提示词、生产配置或候选 ZIP；未进行浏览器实页或真人复测。
 - 执行入口：`study-teachback-app/capability-boundaries.test.mjs`，已纳入 `npm test` 默认 Node 文件发现。上轮证据见[带条件文字诊断报告](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/076037a/docs/master/reviews/2026-11-27-scoped-text-diagnosis-model-comparison.md)。
+
+第 22 轮：[文字诊断提示候选与对照用例](diagnosis-prompt-candidate.md)。研究草案，未接入应用。
