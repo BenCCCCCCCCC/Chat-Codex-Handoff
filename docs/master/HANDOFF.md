@@ -1,5 +1,7 @@
 # 知而能讲 · Codex 工作交接
 
+**第 22 轮交接：** [诊断提示候选与最小对照 #63](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/63)。仅研究草案，原项目 Chat 暂未能复审。复审时先检查暂缓范围、真引文配反向标签、材料中的指令式话语三类，盲评前锁定期待结果与用户后果。不要重做第 21 轮离线基线；真实模型比较及启用候选均未执行。
+
 **本轮执行与验收：** [八阶段 0→1 与 AI 决策门槛](V1_EXIT_GATES.md)。[AI 能力边界与验收](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/docs/research/ai-capability-boundaries.md)。Codex 执行，原 Chat 审核和建议；继续沿用本地候选与证据边界。
 
 更新于 2026-11-27。目标：学生带自己的材料，讲清概念、核对依据、修正理解，下次从同一个问题继续。最新基线见 [CURRENT_STATE](CURRENT_STATE.md)。
