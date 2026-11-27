@@ -6,10 +6,10 @@
 
 ## 开始使用
 
-- **想在 Windows 本机体验：** [下载已实测启动和备份恢复的候选源码 ZIP（#53）](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/787bfc0e4c1d85312a25ffc28b6223ed022b6e6e.zip)。
-- **想查看最新改动：** 打开[当前状态](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/CURRENT_STATE.md)，下载页首的最新源码快照。各快照的验证范围以该页为准。
+- **在 Windows 本机体验：** [下载 `ef325a7` 源码快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/ef325a7385a198b0a68116fd5d79472314bce97d.zip)。同一提交的本机打包原件已做待检验续接、启动恢复和正常停服的[第 19 轮定向验证](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/reviews/2026-11-27-round-19-receipt.md)。
+- **查看验证范围：** [较早的 `c101706` 整包工程走查](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/reviews/2026-11-27-final-package-acceptance.md) · [当前状态](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/CURRENT_STATE.md) · [历史源码快照 #53](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/787bfc0e4c1d85312a25ffc28b6223ed022b6e6e.zip)。
 
-两者都是本地候选，尚未正式发行。
+以上为本地候选，尚未正式发行。
 
 1. 在装有 Node.js 24 和 Edge 的 Windows 电脑上解压 ZIP，进入含有 `Start-Study.cmd` 的目录。已有本仓库也可使用下面的产品分支。
 2. 双击 [Start-Study.cmd](Start-Study.cmd)。浏览器会打开本机工作台。导航中的 **免费示例** 提供循环队列和条件概率两节预写课程。
