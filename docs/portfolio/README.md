@@ -4,7 +4,7 @@
 
 ![循环队列的六个实页画面：读两种约定、选出初讲、核对引用、补回条件、回答长度 12 的新题、回看经过。](queue-walkthrough.gif)
 
-这段 31 秒动图来自 Windows Edge 的免 Key 互动示例。示例采用预写反馈，学习者可以自己输入重讲，选择题按选项核对。[静态课程画面](../iterations/v1-experience/demo-course.png) · [在 Windows 上体验](../../README.md#开始使用)
+这段 31 秒动图来自 Windows Edge 的免 Key 互动示例。反馈预先写好；学习者可自己重讲，选择题按选项核对。[动图原文件](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/ef325a7385a198b0a68116fd5d79472314bce97d/docs/portfolio/queue-walkthrough.gif) · [静态课程画面](../iterations/v1-experience/demo-course.png) · [在 Windows 上体验](../../README.md#开始使用)
 
 ## 从一堆入口，到手上的这条反馈
 
@@ -18,4 +18,4 @@
 
 ## 还要向学习者求证什么
 
-工程走查已经把同一处遗漏从初讲串到新题首答。接下来最值得观察的是，学生能否在没有主持人提示时自行完成这次修正，以及隔一天还能否解释新条件。已准备两工具交叉任务、未公开的平行题和按概念、应用、理由分开的盲评表。目前真实参与者为 0 人。[研究执行包](../research/v1-fieldwork/README.md) · [Windows 候选交付记录](../iterations/2026-11-26-review-delivery.md)
+工程走查已经把同一处遗漏从初讲串到新题首答。接下来最值得观察的是，学生能否在没有主持人提示时自行完成这次修正，以及隔一天还能否解释新条件。已准备两工具交叉任务、未公开的平行题和按概念、应用、理由分开的盲评表。目前真实参与者为 0 人。[研究执行包](../research/v1-fieldwork/README.md) · [第 19 轮 Windows 定向验证](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/meta/master-state/docs/master/reviews/2026-11-27-round-19-receipt.md)
