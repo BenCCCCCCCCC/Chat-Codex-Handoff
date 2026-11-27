@@ -1,12 +1,12 @@
 # 知而能讲 · Codex 工作交接
 
-**本轮执行与验收：** [八阶段 0→1 与 AI 决策门槛](V1_EXIT_GATES.md)。Codex 执行，原 Chat 审核和建议；继续沿用本地候选与证据边界。
+**本轮执行与验收：** [八阶段 0→1 与 AI 决策门槛](V1_EXIT_GATES.md)。[AI 能力边界与验收](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/docs/research/ai-capability-boundaries.md)。Codex 执行，原 Chat 审核和建议；继续沿用本地候选与证据边界。
 
 更新于 2026-11-27。目标：学生带自己的材料，讲清概念、核对依据、修正理解，下次从同一个问题继续。最新基线见 [CURRENT_STATE](CURRENT_STATE.md)。
 
 ## 2026-11-26 · V1.0 完整 0→1 产品路线（当前执行入口）
 
-**当前产品头 [e352839](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/e3528391095496de56fb3021ba0c21e3c63232fe)。** [第十八轮合并回执](reviews/2026-11-27-round-18-receipt.md)记载两个独立增量：#58 仅在确认本副本归属、端口空闲且旧 PID 不存在时归档残留标记；#59 按重讲进度只突出一个下一步，保存重讲仍不算检验通过。[最新源码候选 ZIP](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/e3528391095496de56fb3021ba0c21e3c63232fe.zip)仅有定向验收，不替代已交付的 c101706 整包实测原件。
+**第 18 轮产品头 [e352839](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/e3528391095496de56fb3021ba0c21e3c63232fe)。** [第十八轮合并回执](reviews/2026-11-27-round-18-receipt.md)记载两个独立增量：#58 仅在确认本副本归属、端口空闲且旧 PID 不存在时归档残留标记；#59 按重讲进度只突出一个下一步，保存重讲仍不算检验通过。[第 18 轮源码快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/e3528391095496de56fb3021ba0c21e3c63232fe.zip)仅有定向验收，不替代已交付的 c101706 整包实测原件。
 
 #57 时产品头 [c101706](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c10170669c397f352b7529d531432acb3bb9175d)。已合并 [#57](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/57)：旧题、原首答和待检验并存，刷新后从精确匹配档案返回原缺口。[隔离实页与边界](reviews/2026-11-27-pending-check-edge.md)，无新题、分数、独立通过或真实请求。此前 #51–55 及 #56 README 的各自证据见 [CURRENT_STATE](CURRENT_STATE.md)。
 
