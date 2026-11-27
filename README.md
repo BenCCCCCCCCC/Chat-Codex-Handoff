@@ -23,6 +23,8 @@ cd Chat-Codex-Handoff
 
 服务地址是 `http://127.0.0.1:4317/`。终端也可运行 `npm start`。示例、粘贴和 TXT/MD 导入只需 Node。DOCX/PPTX 提取另需本机 Python，PDF 还需指定版本的 pypdf。控制窗口按 Enter 可正常停止，异常关闭可使用 [Stop-Study.cmd](Stop-Study.cmd)。[安装、配置与文件支持](study-teachback-app/README.md)
 
+[AI 能力边界与验收](docs/research/ai-capability-boundaries.md)：哪些判断交给 AI，哪些由程序校验，哪些错误会阻止模型切换。
+
 ## 一次学习如何留下证据
 
 | 你做什么 | 下次能找回什么 |
