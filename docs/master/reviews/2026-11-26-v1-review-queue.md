@@ -427,3 +427,15 @@
 **Next：** 承接 Codex 已记录的候选提示词方向，复用现有冻结语义判据及 B/D 质量协议；只在离线可核对范围先审查标签—引文—原话—判断—动作一致性与逐命题暂缓，不把注入手写正确结果或 CI 当成模型质量。后续实际比较需要具体授权且控制变量；若真实评估发现严重错误，按原门槛否决，确认真实纠错路径覆盖后才谈扩大使用。保持 A–F、竞品机会池和已有界面路径，不新增第二执行任务。普通首讲的真实输出、复杂材料的独立检验覆盖、真人回访及学习迁移仍未验证。
 
 **User Decision Needed：** 无新增立即审批。生产文字模型或 ASR 切换、新付费、真人研究、数据外传及发布仍遵循现有授权。仅审核并维护 MASTER 记录，未修改产品、启动 Codex、合并、运行 Windows 页面或重复回归。
+
+## 2026-11-27 · #63 草稿差量审核｜文字诊断提示候选
+
+**范围：** 接续 #62 实际产品头 [40ee949](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/40ee949d49dc2bf181ab58db8d3b94be75a321f9)。远端产品头未变；唯一面向产品分支的开放 PR 为草稿 [#63](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/63)，精确 head [a24474e](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/a24474e68cdbf19b87202cf71034ae7353fc8eb4)。独立核对实际补丁仅增加 33 行 [候选与对照研究文档](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/a24474e68cdbf19b87202cf71034ae7353fc8eb4/docs/research/diagnosis-prompt-candidate.md) 及能力边界文档链接两行；未接入运行时、无新模型调用/截图/页面证据，head 无 PR Actions run。12 项离线基线及零外部请求是 #62 已记录的手写响应测试，本轮不重复验收或运行。HANDOFF 明示原项目 Chat 桌面复审未成功；本次仅远端文本独立复审，不称现场复审。
+
+**判断：** 三组成对用例（适用范围、普通首讲正反、材料内指令式话语）合理，分别检查暂缓不吞掉独立错误、真实引文不能支持反向标签、材料内容不能改变诊断职责。候选是语义规则片段而非完整可运行提示，现有 [CONTENT/BASE 与 schema](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/study-teachback-app/schemas.mjs)、[JUDGEMENT 与归属校验](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/study-teachback-app/judgement.mjs) 已包含不少同义规则；不能依据新增文字推断质量提高。无运行时变更，首讲入口、查证返回、重开、工作台层级及复杂材料独立检验不重验。已知假 supported 让修正入口消失仍是未解语义风险。
+
+**Must Fix（正式模型对照前的冻结条件，不是草稿工程阻断）：** 候选文案“unknown，如需要，只请确认…”须与现有 findingsSchema 和 validateFindings 保持一致：unknown 必须有非空 repair，只有 supported 的 repair 为 null；将未知前提的可执行确认与按 issueId 暂缓（findings=[]）分开。合并文字时不能丢掉 fragment 禁 missing、partial 仅 focus、目标/最终撤回、等义、非空字段和全局最多三条（含 assessment 内 findings）及 status=condition 仍须核对依据、可暂缓的原约束。带条件路由包含 deferred-only，不是只在确认某条件时才选 JUDGEMENT；A 组锁定选用标准模式及来源依据，B 组只改该 issue 状态/必要条件说明，不把独立焦点错移入 assessments；三组应锁定真实输入 JSON、两版本完整提示与哈希、相同配置/schema、预期逐命题结果及动作。第三组的课堂台词不得成为知识依据；用单一变更对照，不为迎合某个词新增硬编码拦截。上述是候选集成/盲评前的明确条件，不要求在研究草稿阶段改产品或触发真实调用。
+
+**Next：** 沿已领 #63、原 B/D 及能力边界门槛，Codex 在原草稿中收口上述兼容性与冻结材料，复用旧的理由缺失、最终自我修正等既有冻结判据，避免重建评测体系。现有原提示本来就有不可信数据指令和逐命题规则，对照必须仅改变实际提示版本并固定其他参数；没有授权不派发，不把手写结果、CI 或候选设计当实模改进。真实关键反向误判仍否决受影响路径切换。旧模型比较和此前 UI 不重跑，不扩大复杂材料本机题覆盖或假定学习迁移已闭合。
+
+**User Decision Needed：** 无新增立即审批。当前可保留为研究草稿；任何实际付费对照、生产提示/模型切换、数据外传和公开发布仍按既有授权执行。本次未修改产品分支、合并、另派任务、启动第二执行者、重跑 CI 或发起真实模型请求。
