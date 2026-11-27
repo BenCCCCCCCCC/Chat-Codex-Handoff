@@ -2,6 +2,8 @@
 
 **2026-11-27｜第 22 轮文字诊断候选。** [草稿 #63](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/63) 已同步；覆盖带条件、普通首讲、材料含指令式话语三组成对用例。运行时未改，现有离线结构基线 12 项通过、对外请求 0。桌面访问未成功，原项目 Chat 复审待补；候选未跑真实模型。原定复审只接续此 PR，不另起同一轮。
 
+**留存设计备忘｜168 小时边界。** 固定版本 `ef325a7` 的原存储模块用合成数据和内存存储适配器验过：首次保存或恢复后，168 小时前仍可用，到点下次打开时清理；编辑不续期。此为策略检查，非浏览器复测或真人回访。未来周留存分开记自主打开、原缺口是否仍可用、是否继续该缺口；记下实际间隔，过期/未知单列，不算成「回来但无意继续」。当前六人方案保持不变：主指标是找同一原句的额外查找次数，计划内 24–48 小时迁移与自主同缺口回访分别统计。
+
 **2026-11-27｜第 21 轮 AI 能力边界。** [#62](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/62) 已合并，[能力边界与放行标准](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/docs/research/ai-capability-boundaries.md)区分程序校验、模型语义和学生独立通过。原项目 Chat 三视角复审；Node 定向 12 项通过、零对外请求。结构拒收伪造引文和暂缓项判定；真引文配错标签仍可能被接收且不给修正入口，是语义风险，未修复。未改提示词、运行时、模型或候选 ZIP。
 
 **2026-11-27｜作品原件与真人走查文档同步。** [#61](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/61) 只改文档。作品集标明 31 秒预写反馈动图，并区分 [ef325a7 源码快照](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/archive/ef325a7385a198b0a68116fd5d79472314bce97d.zip) 对应的[定向验证](reviews/2026-11-27-round-19-receipt.md)与 [c101706 整包走查](reviews/2026-11-27-final-package-acceptance.md)。[现场表单](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/c0e1f05457736f1a4310130e3a1aa8c9e1ae007c/docs/research/v1-fieldwork/README.md) 固定同一原句的额外查找次数；保留未完成分母，预约回访与自发返回分别统计。原项目 Chat 双视角审核，6 个合成配对分类通过；真人仍为 0，未改可运行候选。
