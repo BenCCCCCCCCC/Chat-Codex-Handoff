@@ -414,3 +414,16 @@
 **Next：** 沿已记录 A–F 与 [PRD 竞品机会池](2026-11-27-prd-competitive-analysis.md) 复用现有协议。该主指标只衡量查证摩擦，不代表反馈正确性、总体效率、自然留存或学习迁移；原有独立质量及延迟首答结果仍单列。真人目前为零，尚无新原始模型证据，先补已授权范围内的现有证据核对，不重复已封存调用或扩建功能。无需重新打包或回归未变更的产品路径。
 
 **User Decision Needed：** 无新增审批；既有真实付费、招募、数据政策/外传、生产切换及公开发行边界不变。本次只维护审核队列，未执行 Windows、修改产品、合并、启动第二个 Codex 或创建实施任务。
+
+## 2026-11-27 · #62 差量审核｜AI 能力边界与语义负控
+
+**范围：** 自队列 #61 的 [c0e1f05](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/c0e1f05457736f1a4310130e3a1aa8c9e1ae007c) 接续。[PR #62](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/pull/62) 实现 [7d54346](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/7d54346afd08812ddde04bb24cdffeb925a29ce3) 已合并至实际产品头 [40ee949](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/40ee949d49dc2bf181ab58db8d3b94be75a321f9)，无开放产品 PR。[合并差量](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/compare/c0e1f05457736f1a4310130e3a1aa8c9e1ae007c...40ee949d49dc2bf181ab58db8d3b94be75a321f9) 仅 README 两行、35 行能力边界文档、100 行新增测试；三文件在 PR head 与合并头的 blob 逐一相同。核对实际补丁及 [Windows CI](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/actions/runs/45948168879)（head 7d54346，job 140337567230）Node regression success，提取与 Edge 按影响跳过，回执保存成功。原本机定向 12 项（含套件父项）及外部请求 0 取自报告，未另重跑。本轮未改运行时、提示词、模型、存储或页面，无新截图、实页、产品 ZIP 或学习效果证据。
+
+- [AI 能力边界与放行标准](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/docs/research/ai-capability-boundaries.md) 区分四类反馈、结构与语义验证，以及独立检验与本次讲解。明确正确结论缺少明确要求的理由应标遗漏，保留正确部分；暂缓仅限对应命题。符合既有价值门槛，不重复设新体系。
+- [capability-boundaries.test.mjs](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/study-teachback-app/capability-boundaries.test.mjs) 采用实际本机 HTTP /api/diagnose 路由、注入手写语义返回，断言普通首讲与带条件请求选择不同 prompt/schema；正确的混合暂缓结果保留独立焦点错误的单个修正目标，正确结论与缺理由分开，虚构引文/暂缓项带判定分别拒绝。新增负控在真实原句支持“焦点返回原按钮”、原话却为“焦点跳到页首”时，手写错误 supported 仍返回成功且 diagnosticTargets 长度为 0。该测试通过意味着**现有语义缺陷被锁定为可复现负控，而非已修复**；并非真实模型产生了该输出。它具体说明为何错误可能让用户无从进入同点重讲或新情境检验，但未独立观察真实页面中的该状态。与第二十轮严重错判风险一致，不将结构校验说成语义正确性证明。
+
+**Must Fix（沿用 AI 价值放行门槛，非本 PR 新代码回归）：** 不将错误 supported／漏掉独立可判命题视作通过，不放行受影响路径的生产切换或扩大使用。#62 文档与测试工程范围已合并、CI 通过，无新工程阻断；保留此负控至语义问题真正解决。不得通过删断言、单纯词匹配、降低严重项口径或换模型掩盖。无需重跑已验 UI、整包或先前 24 槽。
+
+**Next：** 承接 Codex 已记录的候选提示词方向，复用现有冻结语义判据及 B/D 质量协议；只在离线可核对范围先审查标签—引文—原话—判断—动作一致性与逐命题暂缓，不把注入手写正确结果或 CI 当成模型质量。后续实际比较需要具体授权且控制变量；若真实评估发现严重错误，按原门槛否决，确认真实纠错路径覆盖后才谈扩大使用。保持 A–F、竞品机会池和已有界面路径，不新增第二执行任务。普通首讲的真实输出、复杂材料的独立检验覆盖、真人回访及学习迁移仍未验证。
+
+**User Decision Needed：** 无新增立即审批。生产文字模型或 ASR 切换、新付费、真人研究、数据外传及发布仍遵循现有授权。仅审核并维护 MASTER 记录，未修改产品、启动 Codex、合并、运行 Windows 页面或重复回归。
