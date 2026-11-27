@@ -439,3 +439,13 @@
 **Next：** 沿已领 #63、原 B/D 及能力边界门槛，Codex 在原草稿中收口上述兼容性与冻结材料，复用旧的理由缺失、最终自我修正等既有冻结判据，避免重建评测体系。现有原提示本来就有不可信数据指令和逐命题规则，对照必须仅改变实际提示版本并固定其他参数；没有授权不派发，不把手写结果、CI 或候选设计当实模改进。真实关键反向误判仍否决受影响路径切换。旧模型比较和此前 UI 不重跑，不扩大复杂材料本机题覆盖或假定学习迁移已闭合。
 
 **User Decision Needed：** 无新增立即审批。当前可保留为研究草稿；任何实际付费对照、生产提示/模型切换、数据外传和公开发布仍按既有授权执行。本次未修改产品分支、合并、另派任务、启动第二执行者、重跑 CI 或发起真实模型请求。
+
+## 2026-11-27 · 留存口径补充｜168 小时边界
+
+**差量范围：** #63 草稿仍为 [a24474e](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/a24474e68cdbf19b87202cf71034ae7353fc8eb4)，产品头仍为 [40ee949](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/40ee949d49dc2bf181ab58db8d3b94be75a321f9)，无其他开放 PR。上次审核后新增 [MASTER 8b13742](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/commit/8b13742a5ed9b25f20bbb7d53ba4390231819226) 仅在 CURRENT_STATE 记录存储策略与留存测量备忘；无运行时变更。独立核对其 diff 与两个产品版本中相同 blob 的 [core.mjs L2](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/study-teachback-app/core.mjs#L2)、[storage.mjs L20–21](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/study-teachback-app/storage.mjs#L20-L21)、[backup.mjs L210](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/study-teachback-app/backup.mjs#L210)、[app.mjs L676](https://github.com/BenCCCCCCCCC/Chat-Codex-Handoff/blob/40ee949d49dc2bf181ab58db8d3b94be75a321f9/study-teachback-app/app.mjs#L676)：打开数据库时按 restoredAt 或 createdAt 加 7 天（168h）清理，等于截止时也清理；编辑不续期，恢复产生新副本与新保留时间。当前源码支持该备忘，但不能推断开着的窗口到点自动清理或供应商删除；内存适配器合成验证为原备忘所述，未独立运行，不重跑浏览器或 CI。
+
+**Must Fix：** 无新增工程阻断，#63 前次候选冻结条件保持。
+
+**Next：** 认可在现有 D/F 机会池中分别记录自愿回访、原缺口可用性、同缺口续学；应记录实际经过时长、到期/未知、恢复副本与约定回访，分母不混用。D7 如与 168h 清理窗口冲突，则原缺口续学不可观测，不以缺失记录推断流失；自愿回访如有合法独立观察仍可单列。六人方案、主要查证摩擦指标及 24–48h 未见迁移不改。未见真实回访或新的模型输出，首讲、查证返回、重开、工作台及独立检验不重复验收。无新增待执行任务。
+
+**User Decision Needed：** 无新增审批。仅记录已存在的七天策略，不变更数据政策、增加遥测或扩大权限。未修改产品代码、发起模型调用、启动第二个 Codex 或合并。
